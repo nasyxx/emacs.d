@@ -1,0 +1,15 @@
+emojis
+straight
+var
+.emacs.desktop*
+.historian
+.session
+.smex-items
+.zsh_history
+custom.el
+ditaa0_9.jar
+history
+plantuml.jar
+projectile-bookmarks.eld
+recentf
+.cache
