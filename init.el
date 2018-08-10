@@ -237,7 +237,7 @@
                '(ns-appearance . dark))
 
   (add-to-list 'default-frame-alist
-               '(alpha . (80 . 50)))
+               '(alpha . (80 . 75)))
   (global-set-key (kbd "M-¥") (lambda () (interactive) (insert "\\"))))
 
 (defun stop-minimizing-window ()
@@ -1044,7 +1044,8 @@ instead."
 ;; all the icons
 
 (use-package all-the-icons
-  :defer t
+  :demand t
+  :init (setq inhibit-compacting-font-caches t)
   :straight t)
 
 
@@ -1055,35 +1056,81 @@ instead."
   :straight t
   :hook ((after-init . mode-line-bell-mode)))
 
+
+(use-package powerline
+  :straight t)
+
+
 (use-package spaceline-config
   :demand t
+  :init
+  (setq-default
+   mode-line-format '("%e" (:eval (spaceline-ml-main)))
+   powerline-default-separator 'contour
+   powerline-gui-use-vcs-glyph t
+   powerline-height 22
+   spaceline-highlight-face-func 'spaceline-highlight-face-modified
+   spaceline-workspace-numbers-unicode t
+   spaceline-window-numbers-unicode t
+   spaceline-separator-dir-left '(left . right)
+   spaceline-separator-dir-right '(right . left)
+   spaceline-flycheck-bullet "❀ %s")
+  (spaceline-info-mode 1)
   :straight spaceline
-  :init (setq powerline-default-separator 'wave)
-  :config (spaceline-spacemacs-theme)
-  ;; (spaceline-toggle-workspace-number-on)
-  )
+  :config
+  (spaceline-define-segment nasy:version-control
+    "Version control information."
+    (when vc-mode
+      (let ((branch (mapconcat 'concat (cdr (split-string vc-mode "[:-]")) "-")))
+        (powerline-raw
+         (s-trim (concat "  "
+                         branch
+                         (when (buffer-file-name)
+                           (pcase (vc-state (buffer-file-name))
+                             (`up-to-date " ✓")
+                             (`edited " ❓")
+                             (`added " ➕")
+                             (`unregistered " ■")
+                             (`removed " ✘")
+                             (`needs-merge " ↓")
+                             (`needs-update " ↑")
+                             (`ignored " ✦")
+                             (_ " ⁇")))))))))
+
+  (spaceline-define-segment
+    nasy-time "Time"
+    (format-time-string "%b %d, %Y - %H:%M")
+    :tight t)
+
+  (spaceline-compile
+    `(((major-mode buffer-modified buffer-size) :face highlight-face)
+      (anzu)
+      ((nasy:version-control projectile-root) :separator " in ")
+      (buffer-id)
+      ((flycheck-error flycheck-warning flycheck-info)
+       :local-map (make-mode-line-mouse-map 'mouse-1 (lambda () (interactive) (flycheck-list-errors))))
+      (selection-info))
+    `((which-function)
+      (global :face highlight-face)
+      (line-column)
+      (minor-modes)
+      (buffer-position hud)
+      (nasy-time))))
 
 ;; (use-package spaceline-all-the-icons
 ;;   :demand t
 ;;   :straight t
 ;;   :after spaceline-config
-;;   :init (setq spaceline-all-the-icons-highlight-file-name t
-;;               spaceline-all-the-icons-separator-type "cup"
+;;   :init (setq spaceline-all-the-icons-separator-type 'wave
 ;;               spaceline-all-the-icons-slim-render t
 ;;               spaceline-all-the-icons-window-number-always-visible t
 ;;               spaceline-all-the-icons-icon-set-git-ahead 'commit
-;;               spaceline-all-the-icons-icon-set-modified 'toggle
-;;               ;; spaceline-all-the-icons-icon-set-sun-time 'sun/moon
-;;               )
-;;   :hook ((after-init . spaceline-all-the-icons-theme)
-;;          ;; (after-init . spaceline-all-the-icons--setup-neotree)
-;;          (after-init . spaceline-all-the-icons--setup-git-ahead))
+;;               spaceline-all-the-icons-icon-set-modified 'toggle)
+;;   :hook ((after-init . spaceline-all-the-icons-theme))
 ;;   :config
-;;     ;; (spaceline-toggle-all-the-icons-sunrise-on)
 ;;   (spaceline-toggle-all-the-icons-buffer-position-on)
 ;;   (spaceline-toggle-all-the-icons-dedicated-on)
-;;   ;; (spaceline-toggle-all-the-icons-fullscreen-on)
-;;   (spaceline-toggle-all-the-icons-git-status-on))
+;;   (spaceline-toggle-all-the-icons-bookmark-on))
 
 
 (use-package doom-themes
