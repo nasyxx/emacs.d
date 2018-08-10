@@ -1039,14 +1039,15 @@ instead."
   :straight t)
 
 
-(use-package mode-icons
-  :demand t
-  :straight t
-  :init (setq mode-icons-change-mode-name t
-              mode-icons-desaturate-active t
-              mode-icons-grayscale-transform nil)
-  :hook ((after-init . mode-icons-mode))
-  :config (push '("\\` ?CMP\\'" #xf1ad FontAwesome) mode-icons))
+;; (use-package mode-icons
+;;   :demand t
+;;   :straight t
+;;   :init (setq mode-icons-change-mode-name t
+;;               mode-icons-desaturate-inactive nil
+;;               mode-icons-desaturate-active nil
+;;               mode-icons-grayscale-transform nil)
+;;   :hook ((after-init . mode-icons-mode))
+;;   :config (push '("\\` ?CMP\\'" #xf1ad FontAwesome) mode-icons))
 
 
 ;; Mode Line
