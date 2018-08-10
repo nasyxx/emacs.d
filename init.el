@@ -984,37 +984,27 @@ instead."
   (defun re-builder-pinyin (str)
     (or (pinyin-to-utf8 str)
         (ivy--regex-plus str)
-        (ivy--regex-ignore-order)
-        ))
+        (ivy--regex-ignore-order)))
 
   (setq ivy-re-builders-alist
-        '(
-          (t . re-builder-pinyin)
-          ))
+        '((t . re-builder-pinyin)))
 
   (defun my-pinyinlib-build-regexp-string (str)
     (progn
-      (cond ((equal str ".*")
-             ".*")
-            (t
-             (pinyinlib-build-regexp-string str t))))
-    )
+      (cond ((equal str ".*") ".*")
+            (t (pinyinlib-build-regexp-string str t)))))
   (defun my-pinyin-regexp-helper (str)
-    (cond ((equal str " ")
-           ".*")
-          ((equal str "")
-           nil)
-          (t
-           str)))
+    (cond ((equal str " ") ".*")
+          ((equal str "") nil)
+          (t str)))
 
   (defun pinyin-to-utf8 (str)
-    (cond ((equal 0 (length str))
-           nil)
+    (cond ((equal 0 (length str)) nil)
           ((equal (substring str 0 1) "!")
            (mapconcat 'my-pinyinlib-build-regexp-string
-                      (remove nil (mapcar 'my-pinyin-regexp-helper (split-string
-                                                                    (replace-in-string str "!" "") "")))
-                      ""))
+                      (remove nil
+                              (mapcar 'my-pinyin-regexp-helper
+                                      (split-string (replace-in-string str "!" "") ""))) ""))
           nil)))
 
 
@@ -1047,6 +1037,16 @@ instead."
   :demand t
   :init (setq inhibit-compacting-font-caches t)
   :straight t)
+
+
+(use-package mode-icons
+  :demand t
+  :straight t
+  :init (setq mode-icons-change-mode-name t
+              mode-icons-desaturate-active t
+              mode-icons-grayscale-transform nil)
+  :hook ((after-init . mode-icons-mode))
+  :config (push '("\\` ?CMP\\'" #xf1ad FontAwesome) mode-icons))
 
 
 ;; Mode Line
@@ -1097,18 +1097,44 @@ instead."
                              (`ignored " ✦")
                              (_ " ⁇")))))))))
 
-  (spaceline-define-segment
-    nasy-time "Time"
+  (spaceline-define-segment nasy-time
+    "Time"
     (format-time-string "%b %d, %Y - %H:%M")
-    :tight t)
+    :tight-right t)
+
+  (spaceline-define-segment flycheck-status
+    "An `all-the-icons' representaiton of `flycheck-status'"
+    (let* ((text
+            (pcase flycheck-last-status-change
+              (`finished (if flycheck-current-errors
+                             (let ((count (let-alist (flycheck-count-errors flycheck-current-errors)
+                                            (+ (or .warning 0) (or .error 0)))))
+                               (format "✖ %s Issue%s" count (if (eq 1 count) "" "s")))
+                           "✔ No Issues"))
+              (`running     "⟲ Running")
+              (`no-checker  "⚠ No Checker")
+              (`not-checked "✖ Disabled")
+              (`errored     "⚠ Error")
+              (`interrupted "⛔ Interrupted")
+              (`suspicious  "")))
+           (f (cond
+               ((string-match "⚠" text) `(:height 0.9 :foreground ,(face-attribute 'spaceline-flycheck-warning :foreground)))
+               ((string-match "✖ [0-9]" text) `(:height 0.9 :foreground ,(face-attribute 'spaceline-flycheck-error :foreground)))
+               ((string-match "✖ Disabled" text) `(:height 0.9 :foreground ,(face-attribute 'font-lock-comment-face :foreground)))
+               (t '(:height 0.9 :inherit)))))
+      (propertize (format "%s" text)
+                  'face f
+                  'help-echo "Show Flycheck Errors"
+                  'mouse-face '(:box 1)
+                  'local-map (make-mode-line-mouse-map 'mouse-1 (lambda () (interactive) (flycheck-list-errors)))))
+    :when active)
 
   (spaceline-compile
     `(((major-mode buffer-modified buffer-size) :face highlight-face)
       (anzu)
       ((nasy:version-control projectile-root) :separator " in ")
       (buffer-id)
-      ((flycheck-error flycheck-warning flycheck-info)
-       :local-map (make-mode-line-mouse-map 'mouse-1 (lambda () (interactive) (flycheck-list-errors))))
+      ((flycheck-status (flycheck-error flycheck-warning flycheck-info)))
       (selection-info))
     `((which-function)
       (global :face highlight-face)
@@ -1116,21 +1142,6 @@ instead."
       (minor-modes)
       (buffer-position hud)
       (nasy-time))))
-
-;; (use-package spaceline-all-the-icons
-;;   :demand t
-;;   :straight t
-;;   :after spaceline-config
-;;   :init (setq spaceline-all-the-icons-separator-type 'wave
-;;               spaceline-all-the-icons-slim-render t
-;;               spaceline-all-the-icons-window-number-always-visible t
-;;               spaceline-all-the-icons-icon-set-git-ahead 'commit
-;;               spaceline-all-the-icons-icon-set-modified 'toggle)
-;;   :hook ((after-init . spaceline-all-the-icons-theme))
-;;   :config
-;;   (spaceline-toggle-all-the-icons-buffer-position-on)
-;;   (spaceline-toggle-all-the-icons-dedicated-on)
-;;   (spaceline-toggle-all-the-icons-bookmark-on))
 
 
 (use-package doom-themes
