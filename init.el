@@ -2133,7 +2133,7 @@ typical word processor."
 
   (spaceline-define-segment nasy-time
     "Time"
-    (format-time-string "%b %d, %Y - %H:%M")
+    (format-time-string "%b %d, %Y - %H:%M ")
     :tight-right t)
 
   (spaceline-define-segment flycheck-status
