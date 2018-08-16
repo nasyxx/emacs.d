@@ -171,7 +171,8 @@
 (use-package exec-path-from-shell
   :demand *is-a-mac*
   :straight t
-  :init (setq shell-file-name "/bin/zsh")
+  :init (setq shell-file-name "/bin/zsh"
+              shell-command-switch "-ic")
   :config (progn
             (when nil (message "PATH: %s, INFO: %s" (getenv "PATH")
                                (getenv "ENVIRONMENT_SETUP_DONE"))
@@ -483,7 +484,7 @@ Call a second time to restore the original window configuration."
  case-fold-search t
  column-number-mode t
  cursor-in-non-selected-windows t
- cursor-type 'bar
+ ;; cursor-type 'bar
  dired-dwim-target t
  ediff-split-window-function 'split-window-horizontally
  ediff-window-setup-function 'ediff-setup-windows-plain
@@ -508,7 +509,7 @@ Call a second time to restore the original window configuration."
 
 (global-auto-revert-mode t)
 
-(add-hook 'focus-out-hook #'garbage-collect)
+(blink-cursor-mode t)
 
 
 (use-package diminish
@@ -584,8 +585,8 @@ This is useful when followed by an immediate kill."
 
 ;; parens
 
-(setq show-paren-style 'mixed)
-;; (add-hook 'after-init-hook 'show-paren-mode)
+(setq show-paren-style 'expression)
+(add-hook 'after-init-hook 'show-paren-mode)
 
 
 (use-package smartparens-config
@@ -767,7 +768,8 @@ This is helpful for writeroom-mode, in particular."
                (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t)))
   :init
   (setq fill-column 80
-        visual-fill-column-width 140)
+        visual-fill-column-width 100
+        word-wrap t)
   :hook ((visual-line-mode . visual-fill-column-mode)
          ;; (after-init . global-visual-line-mode)
          (visual-fill-column-mode . maybe-adjust-visual-fill-column)))
@@ -936,9 +938,25 @@ This is helpful for writeroom-mode, in particular."
 ;; outline-magic
 
 (use-package outline-magic
+  :demand t
   :straight t
+  :preface
+  ;; https://www.emacswiki.org/emacs/python-magic.el
+  (defun py-outline-level ()
+    (let (buffer-invisibility-spec)
+      (save-excursion
+        (skip-chars-forward "    ")
+        (current-column))))
+
+  (defun python-outline-hook ()
+    (setq outline-regexp "[ \t]+\\(class\\|def\\|if\\|elif\\|else\\|while\\|for\\|try\\|except\\|with\\) ")
+    (setq outline-level 'py-outline-level)
+    (outline-minor-mode t)
+    (hide-body))
   :bind (:map outline-minor-mode-map
-              ("<C-tab>" . outline-cycle)))
+              ("<C-tab>" . outline-cycle))
+  :hook ((python-mode . python-outline-hook))
+  :diminish outline-minor-mode)
 
 
 ;; projectile
@@ -1070,6 +1088,68 @@ instead."
                                       (split-string (replace-in-string str "!" "") ""))) ""))
           nil)))
 
+;; Treemacs
+;;----------------------------------------------------------------------------
+
+(use-package treemacs
+  :defer t
+  :straight t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :config
+  (progn
+    (setq treemacs-collapse-dirs              (if (executable-find "python3") 3 0)
+          treemacs-deferred-git-apply-delay   0.5
+          treemacs-display-in-side-window     t
+          treemacs-file-event-delay           5000
+          treemacs-file-follow-delay          0.2
+          treemacs-follow-after-init          t
+          treemacs-follow-recenter-distance   0.1
+          treemacs-goto-tag-strategy          'refetch-index
+          treemacs-indentation                2
+          treemacs-indentation-string         " "
+          treemacs-is-never-other-window      nil
+          treemacs-no-png-images              nil
+          treemacs-project-follow-cleanup     nil
+          treemacs-persist-file               (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-recenter-after-file-follow nil
+          treemacs-recenter-after-tag-follow  nil
+          treemacs-show-hidden-files          t
+          treemacs-silent-filewatch           nil
+          treemacs-silent-refresh             nil
+          treemacs-sorting                    'alphabetic-desc
+          treemacs-space-between-root-nodes   t
+          treemacs-tag-follow-cleanup         t
+          treemacs-tag-follow-delay           1.5
+          treemacs-width                      35)
+
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    (treemacs-resize-icons 44)
+
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode t)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null (executable-find "python3"))))
+      (`(t . t)
+       (treemacs-git-mode 'extended))
+      (`(t . _)
+       (treemacs-git-mode 'simple))))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+
+(use-package treemacs-projectile
+  :after treemacs projectile
+  :straight t)
+
 
 ;; auto insert
 ;;----------------------------------------------------------------------------
@@ -1118,30 +1198,17 @@ instead."
 ;; pretty
 ;;----------------------------------------------------------------------------
 
-(use-package pretty-symbols
+(use-package pretty-mode
   :demand t
   :straight t
-  :preface
-  ;; https://www.emacswiki.org/emacs/python-magic.el
-  (defun py-outline-level ()
-    (let (buffer-invisibility-spec)
-      (save-excursion
-        (skip-chars-forward "    ")
-        (current-column))))
-
-  (defun python-outline-hook ()
-    (setq outline-regexp "[ \t]*# \\|[ \t]+\\(class\\|def\\|if\\|elif\\|else\\|while\\|for\\|try\\|except\\|with\\) ")
-    (setq outline-level 'py-outline-level)
-    (outline-minor-mode t)
-    (hide-body))
-
-  :hook ((after-init . global-prettify-symbols-mode)
-         (python-mode . python-outline-hook)
+  :hook (((prog-mode text-mode) . turn-on-pretty-mode)
+         (after-init . global-prettify-symbols-mode)
          (python-mode . (lambda ()
                           (mapc (lambda (pair) (push pair prettify-symbols-alist))
                                 '(;; Syntax
                                   ("def" .      #x2131)
-                                  ("not" .      #x2757)
+                                  ;; ("not" .      #x2757)
+                                  ("not" .      #xac)
                                   ("in" .       #x2208)
                                   ("not in" .   #x2209)
                                   ("return" .   #x27fc)
@@ -1172,16 +1239,74 @@ instead."
                                   ("Set" .      #x2126)
                                   ("Iterable" . #x1d50a)
                                   ("Any" .      #x2754)
-                                  ("Union" .    #x22c3)))))))
+                                  ("Union" .    #x22c3)))))
+         (haskell-mode . (lambda ()
+                          (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                                '(;; Syntax
+                                  ("not" .      #x2757)
+                                  ("in" .       #x2208)
+                                  ("elem" .     #x2208)
+                                  ("not in" .   #x2209)
+                                  ("notElem" .  #x2209)
+                                  ;; Types
+                                  ("String" .   #x1d54a)
+                                  ("Int" .      #x2124)
+                                  ("Float" .    #x211d)
+                                  ("True" .     #x1d54b)
+                                  ("False" .    #x1d53d)
+                                  ;; Functions
+                                  ("sum" .      #x2211))))))
+  :config
+  ;; pretty python mode
+  (pretty-deactivate-groups '( :sets-relations  ;; break int in python mode
+                               :logic           ;; break for in python mode
+                               )
+                            'python-mode)
+  (pretty-add-keywords 'python-mode '(
+                                      ("->" .       #X2192)  ;; →
+                                      ;; ("def" .      #x2131)
+                                      ;; ;; ("not" .      #x2757)
+                                      ;; ("not" .      #xac)
+                                      ;; ("in" .       #x2208)
+                                      ;; ("not in" .   #x2209)
+                                      ;; ("return" .   #x27fc)
+                                      ;; ("yield" .    #x27fb)
+                                      ;; ("for" .      #x2200)
+                                      ;; ;; Extend Functions
+                                      ;; ("any" .      #x2754)
+                                      ;; ("all" .      #x2201)
+                                      ;; ("sum" .      #x2211)
+                                      ;; ("dict" .     #x1d507)
+                                      ;; ("list" .     #x2112)
+                                      ;; ("tuple" .    #x2a02)
+                                      ;; ("set" .      #x2126)
+                                      ;; ;; Base Types
+                                      ;; ("int" .      #x2124)
+                                      ;; ("float" .    #x211d)
+                                      ;; ("str" .      #x1d54a)
+                                      ;; ("True" .     #x1d54b)
+                                      ;; ("False" .    #x1d53d)
+                                      ;; ;; Extend Types
+                                      ;; ("Int" .      #x2124)
+                                      ;; ("Float" .    #x211d)
+                                      ;; ("String" .   #x1d54a)
+                                      ;; ;; Mypy
+                                      ;; ("Dict" .     #x1d507)
+                                      ;; ("List" .     #x2112)
+                                      ;; ("Tuple" .    #x2a02)
+                                      ;; ("Set" .      #x2126)
+                                      ;; ("Iterable" . #x1d50a)
+                                      ;; ("Any" .      #x2754)
+                                      ;; ("Union" .    #x22c3)
+                                      ))
+  (pretty-activate-groups
+   '(:sub-and-superscripts :greek :arithmetic-nary)))
+
 
 (use-package ipretty
   :defer t
   :straight t
   :hook ((after-init . ipretty-mode)))
-
-(use-package pretty-mode
-  :straight t
-  :hook ((after-init . global-pretty-mode)))
 
 ;; https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
 ;; This works when using emacs --daemon + emacsclient
@@ -1313,12 +1438,15 @@ instead."
 (defun add-fira-code-symbol-keywords ()
   (font-lock-add-keywords nil fira-code-font-lock-keywords-alist))
 
-(add-hook 'prog-mode-hook
-          #'add-fira-code-symbol-keywords)
+;; (add-hook 'prog-mode-hook
+;;           #'add-fira-code-symbol-keywords)
 
 
 ;; Languages
 ;;----------------------------------------------------------------------------
+
+(use-package toml-mode
+   :straight t)
 
 ;; lsp-mode
 
@@ -1327,7 +1455,7 @@ instead."
   :straight t
   :init (setq lsp-document-sync-method ''full
               lsp-inhibit-message t
-              lsp-print-io t
+              ;; lsp-print-io t
               lsp-hover-text-function 'lsp--text-document-signature-help))
 
 (use-package lsp-imenu
@@ -1380,47 +1508,51 @@ instead."
   :mode ("\\.py\\'" . python-mode)
   :interpreter (("python" . python-mode)
                 ("python3" . python-mode))
-  ;; :preface
-  ;; (lsp-define-stdio-client lsp-python "python3"
-  ;;                        #'projectile-project-root
-  ;;                        '("pyls"))
-  ;; :hook ((python-mode . lsp-python-enable)
-  ;;        (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil
-  ;;                                   lsp-ui-sideline-enable nil)))
-  ;;        (python-mode . (lambda () (nasy:local-push-company-backend 'company-lsp)))
-  ;;        (python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
-  ;;                                                                company-gtags
-  ;;                                                                company-etags
-  ;;                                                                company-keywords)))))
+  :preface
+  (lsp-define-stdio-client lsp-python "python3"
+                           #'projectile-project-root
+                           '("pyenv_pyls"))
+  :hook ((python-mode . lsp-python-enable)
+         (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil
+                                    lsp-ui-sideline-enable nil)))
+         (python-mode . (lambda () (nasy:local-push-company-backend 'company-lsp)))
+         (python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
+                                                                      company-gtags
+                                                                      company-etags
+                                                                      company-keywords)))))
   :init (setq-default python-indent-offset 4
                       indent-tabs-mode nil
                       python-indent-guess-indent-offset nil
                       python-shell-completion-native-enable nil
                       python-shell-interpreter "ipython3"
                       python-shell-interpreter-args "-i --simple-prompt --classic"
+                      py-ipython-command-args "-i --simple-prompt --classic"
                       py-python-command "python3"
                       flycheck-python-pycompile-executable "python3"
+                      python-mode-modeline-display "Python"
                       python-skeleton-autoinsert t))
 
 
-(use-package anaconda-mode
-  :straight t
-  :hook ((python-mode . anaconda-mode)
-         (python-mode . anaconda-eldoc-mode)))
+;; (use-package anaconda-mode
+;;   :straight t
+;;   :hook ((python-mode . anaconda-mode)
+;;          (python-mode . anaconda-eldoc-mode)))
 
-(use-package company-anaconda
-  :straight t
-  :hook ((python-mode . (lambda () (nasy:local-push-company-backend 'company-anaconda)))
-         (python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
-                                                                 company-gtags
-                                                                 company-etags
-                                                                 company-keywords))))))
+;; (use-package company-anaconda
+;;   :straight t
+;;   :hook ((python-mode . (lambda () (nasy:local-push-company-backend 'company-anaconda)))
+;;          (python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
+;;                                                                  company-gtags
+;;                                                                  company-etags
+;;                                                                  company-keywords))))))
 
 ;; (use-package elpy
+;;   :demand t
+;;   :after python
 ;;   :straight t
-;;   :init (setq elpy-rpc-backend "jedi"
-;;               elpy-rpc-python-command "python3")
-;;   (elpy-enable)
+;;   :init (elpy-enable)
+;;   (setq elpy-rpc-backend "jedi"
+;;         elpy-rpc-python-command "python3")
 ;;   :hook ((python-mode . elpy-mode)
 ;;          (elpy-mode . (lambda () (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))))))
 
@@ -2020,11 +2152,11 @@ typical word processor."
               (`interrupted "⛔ Interrupted")
               (`suspicious  "")))
            (f (cond
-               ((string-match "⚠" text) `(:height 0.9 :foreground ,(face-attribute 'spaceline-flycheck-warning :foreground)))
-               ((string-match "✖ [0-9]" text) `(:height 0.9 :foreground ,(face-attribute 'spaceline-flycheck-error :foreground)))
-               ((string-match "✖ Disabled" text) `(:height 0.9 :foreground ,(face-attribute 'font-lock-comment-face :foreground)))
+               ((string-match "⚠" text) `(:height 0.9 :background ,(face-attribute 'spaceline-flycheck-warning :foreground)))
+               ((string-match "✖ [0-9]" text) `(:height 0.9 :background ,(face-attribute 'spaceline-flycheck-error :foreground)))
+               ((string-match "✖ Disabled" text) `(:height 0.9 :background ,(face-attribute 'font-lock-comment-face :foreground)))
                (t '(:height 0.9 :inherit)))))
-      (propertize (format "%s" text)
+      (propertize (format " %s " text)
                   'face f
                   'help-echo "Show Flycheck Errors"
                   'mouse-face '(:box 1)
@@ -2036,14 +2168,17 @@ typical word processor."
       (anzu)
       ((nasy:version-control projectile-root) :separator " in ")
       (buffer-id)
-      ((flycheck-status (flycheck-error flycheck-warning flycheck-info)))
-      (selection-info))
+      ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :face powerline-active0 :when active)
+      ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :face mode-line-inactive :when (not active))
+      (selection-info :face powerline-active0 :when active))
     `((which-function)
-      (global :face highlight-face)
-      (line-column)
+      (global)
+      (line-column :face powerline-active0 :when active)
+      (line-column :when (not active))
       (minor-modes)
       (buffer-position hud)
-      (nasy-time))))
+      (nasy-time :face spaceline-modified :when active)
+      (nasy-time :when (not active)))))
 
 
 (use-package doom-themes
@@ -2053,8 +2188,9 @@ typical word processor."
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
   :config
-  (load-theme 'doom-challenger-deep t)
-  (doom-themes-treemacs-config)
+  (load-theme 'doom-dracula t)
+  ;; (doom-themes-treemacs-config)
+  (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 
 ;; custom file
