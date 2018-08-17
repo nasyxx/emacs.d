@@ -49,8 +49,7 @@
 
 (use-package benchmark-init
   :demand t
-  :straight t
-  :hook ((after-init . benchmark-init/deactivate)))
+  :straight t)
 
 ;; Reload the init-file
 ;;----------------------------------------------------------------------------
@@ -291,6 +290,21 @@
 (setq calendar-latitude 24.8801
       calendar-longitude 102.8329)
 
+;; dashboard
+
+(use-package dashboard
+  :straight t
+  :init (setq dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+              dashboard-startup-banner 'official
+              dashboard-items '((recents   . 5)
+                                (bookmarks . 5)
+                                (projects  . 5)
+                                (agenda    . 5)
+                                (registers . 5)))
+  :config
+  (dashboard-setup-startup-hook)
+  (when (get-buffer "*dashboard*")
+    (setq initial-buffer-choice #'(lambda () (get-buffer "*dashboard*")))))
 
 ;; Require packages
 ;;----------------------------------------------------------------------------
@@ -663,13 +677,19 @@ This is useful when followed by an immediate kill."
   :hook ((dired-mode . diff-hl-dired-mode)))
 
 
+;; shell
+
+(use-package shell)
+
+
 ;; recentf
 
 (use-package recentf
   :demand t
   :hook ((after-init . recentf-mode))
   :init (setq-default
-         recentf-max-saved-items 1000
+         recentf-save-file "~/.emacs.d/recentf"
+         recentf-max-saved-items 100
          recentf-exclude '("/tmp/" "/ssh:")))
 
 ;; smex
@@ -701,6 +721,16 @@ This is useful when followed by an immediate kill."
          ("C-c m e" . mc/edit-ends-of-lines)
          ("C-c m a" . mc/edit-beginnings-of-lines)))
 
+
+;; mmm-mode
+
+(use-package mmm-auto
+  :demand t
+  :straight mmm-mode
+  :init (setq mmm-global-mode 'buffers-with-submode-classes
+              mmm-submode-decoration-level 2))
+
+
 ;; whitespace
 
 (use-package whitespace
@@ -731,7 +761,7 @@ This is useful when followed by an immediate kill."
 (use-package whitespace-cleanup-mode
   :demand t
   :straight t
-  :init (setq whitespace-cleanup-mode-only-if-initially-clean nil)
+  ;; :init (setq whitespace-cleanup-mode-only-if-initially-clean nil)
   :hook ((after-init . global-whitespace-cleanup-mode))
   :diminish (whitespace-cleanup-mode)
   :bind (("<remap> <just-one-space>" . cycle-spacing)))
@@ -886,13 +916,13 @@ This is helpful for writeroom-mode, in particular."
          ("C-z" . company-try-hard)))
 
 
-(use-package company-posframe
-  :after company
-  :straight t
-  :init (push '(company-posframe-mode . nil)
-              desktop-minor-mode-table)
-  :hook ((after-init . company-posframe-mode))
-  :diminish company-posframe-mode)
+;; (use-package company-posframe
+;;   :after company
+;;   :straight t
+;;   :init (push '(company-posframe-mode . nil)
+;;               desktop-minor-mode-table)
+;;   :hook ((after-init . company-posframe-mode))
+;;   :diminish company-posframe-mode)
 
 
 (use-package company-quickhelp
@@ -1019,81 +1049,164 @@ instead."
 ;;     #'counsel-projectile-rg))
 
 
+;; helm settings
+;;----------------------------------------------------------------------------
+
+(use-package helm
+  :demand t
+  :straight t
+  :bind (("M-x" . helm-M-x)
+         ("C-x c o" . helm-occur)
+         ("<f1> SPC" . helm-all-mark-rings) ; I modified the keybinding
+         ("M-y" . helm-show-kill-ring)
+         ("C-x c x" . helm-register)    ; C-x r SPC and C-x r j
+         ("C-x c g" . helm-google-suggest)
+         ("C-x c M-:" . helm-eval-expression-with-eldoc)
+         ("C-x C-f" . helm-find-files)
+         ("C-x b" . helm-mini)      ; *<major-mode> or /<dir> or !/<dir-not-desired> or @<regexp>
+         :map helm-map
+         ("<tab>" . helm-execute-persistent-action) ; rebind tab to run persistent action
+         ("C-i" . helm-execute-persistent-action) ; make TAB works in terminal
+         ("C-z" . helm-select-action) ; list actions using C-z
+         :map shell-mode-map
+         ("C-c C-l" . helm-comint-input-ring) ; in shell mode
+         :map minibuffer-local-map
+         ("C-c C-l" . helm-minibuffer-history))
+  :init
+  (require 'helm-config)
+
+  (setq helm-M-x-fuzzy-match        t
+        helm-buffers-fuzzy-matching t
+        helm-recentf-fuzzy-match    t
+        helm-imenu-fuzzy-match      t
+        helm-locate-fuzzy-match     t
+        helm-apropos-fuzzy-match    t
+        helm-lisp-fuzzy-completion  t)
+
+  (when (executable-find "curl")
+    (setq helm-google-suggest-use-curl-p t))
+
+  (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+        helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+        helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+        helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+        helm-ff-file-name-history-use-recentf t
+        helm-echo-input-in-header-line        t)
+
+  :config
+
+  (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+
+  (helm-mode 1)
+  (helm-autoresize-mode 1)
+
+  (setq helm-follow-mode-persistent t
+        helm-allow-mouse t
+        helm-move-to-line-cycle-in-source nil))
+
+(use-package helm-eshell
+  :after helm
+  :bind (:map eshell-mode-map
+              ("C-c C-l" . helm-eshell-history)))
+
+(use-package helm-descbinds
+  :straight t
+  :after helm
+  :config
+  (helm-descbinds-mode))
+
+(use-package helm-projectile
+  :straight t
+  :hook ((after-init . helm-projectile-on))
+  :init
+  (setq projectile-completion-system 'helm))
+
+(use-package helm-ag
+  :straight t
+  :bind (("C-s" . helm-do-ag-this-file))
+  :init (setq helm-ag-base-command "rg --no-heading --smart-case"
+              helm-ag-fuzzy-match t
+              helm-ag-use-grep-ignore-list t
+              helm-ag-use-agignore t))
+
+(use-package helm-dash
+  :straight t
+  :init (setq helm-dash-docsets-path "~/.docsets"))
 
 ;; ivy settings
 ;;----------------------------------------------------------------------------
 
-(use-package ivy
-  :defer t
-  :straight t
-  :diminish ivy-mode
-  :hook ((after-init . ivy-mode))
-  :config (setq-default ivy-use-virtual-buffers t
-                        ivy-dynamic-exhibit-delay-ms 150
-                        ivy-count-format ""
-                        ivy-virtual-abbreviate 'fullpath)
-  :bind (:map ivy-minibuffer-map
-              ("RET" . ivy-alt-done)
-              ("C-j" . ivy-immediate-done)
-              ("C-RET" . ivy-immediate-done)
-              ("<up>" . ivy-previous-line-or-history)))
+;; (use-package ivy
+;;   :defer t
+;;   :straight t
+;;   :diminish ivy-mode
+;;   :hook ((after-init . ivy-mode))
+;;   :config (setq-default ivy-use-virtual-buffers t
+;;                         ivy-dynamic-exhibit-delay-ms 150
+;;                         ivy-count-format ""
+;;                         ivy-virtual-abbreviate 'fullpath)
+;;   :bind (:map ivy-minibuffer-map
+;;               ("RET" . ivy-alt-done)
+;;               ("C-j" . ivy-immediate-done)
+;;               ("C-RET" . ivy-immediate-done)
+;;               ("<up>" . ivy-previous-line-or-history)))
 
-(use-package ivy-historian
-  :defer t
-  :straight t
-  :hook ((after-init . ivy-historian-mode)))
+;; (use-package ivy-historian
+;;   :defer t
+;;   :straight t
+;;   :hook ((after-init . ivy-historian-mode)))
 
-(use-package swiper
-  :defer t
-  :after ivy
-  :straight t
-  :bind (("C-s" . swiper)
-         :map ivy-mode-map
-              ("M-s /". swiper-at-point))
-  :preface
-  (defun swiper-at-point (sym)
-    "Use `swiper' to search for the symbol at point."
-    (interactive (list (thing-at-point 'symbol)))
-    (swiper sym)))
+;; (use-package swiper
+;;   :defer t
+;;   :after ivy
+;;   :straight t
+;;   :bind (("C-s" . swiper)
+;;          :map ivy-mode-map
+;;               ("M-s /". swiper-at-point))
+;;   :preface
+;;   (defun swiper-at-point (sym)
+;;     "Use `swiper' to search for the symbol at point."
+;;     (interactive (list (thing-at-point 'symbol)))
+;;     (swiper sym)))
 
-(use-package ivy-xref
-  :defer t
-  :straight t
-  :init
-  (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
+;; (use-package ivy-xref
+;;   :defer t
+;;   :straight t
+;;   :init
+;;   (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
 
-;; ivy-support-chinese-pinyin
-;; https://github.com/pengpengxp/swiper/wiki/ivy-support-chinese-pinyin
+;; ;; ivy-support-chinese-pinyin
+;; ;; https://github.com/pengpengxp/swiper/wiki/ivy-support-chinese-pinyin
 
-(use-package pinyinlib
-  :demand t
-  :straight t
-  :config
-  (defun re-builder-pinyin (str)
-    (or (pinyin-to-utf8 str)
-        (ivy--regex-plus str)
-        (ivy--regex-ignore-order)))
+;; (use-package pinyinlib
+;;   :demand t
+;;   :straight t
+;;   :config
+;;   (defun re-builder-pinyin (str)
+;;     (or (pinyin-to-utf8 str)
+;;         (ivy--regex-plus str)
+;;         (ivy--regex-ignore-order)))
 
-  (setq ivy-re-builders-alist
-        '((t . re-builder-pinyin)))
+;;   (setq ivy-re-builders-alist
+;;         '((t . re-builder-pinyin)))
 
-  (defun my-pinyinlib-build-regexp-string (str)
-    (progn
-      (cond ((equal str ".*") ".*")
-            (t (pinyinlib-build-regexp-string str t)))))
-  (defun my-pinyin-regexp-helper (str)
-    (cond ((equal str " ") ".*")
-          ((equal str "") nil)
-          (t str)))
+;;   (defun my-pinyinlib-build-regexp-string (str)
+;;     (progn
+;;       (cond ((equal str ".*") ".*")
+;;             (t (pinyinlib-build-regexp-string str t)))))
+;;   (defun my-pinyin-regexp-helper (str)
+;;     (cond ((equal str " ") ".*")
+;;           ((equal str "") nil)
+;;           (t str)))
 
-  (defun pinyin-to-utf8 (str)
-    (cond ((equal 0 (length str)) nil)
-          ((equal (substring str 0 1) "!")
-           (mapconcat 'my-pinyinlib-build-regexp-string
-                      (remove nil
-                              (mapcar 'my-pinyin-regexp-helper
-                                      (split-string (replace-in-string str "!" "") ""))) ""))
-          nil)))
+;;   (defun pinyin-to-utf8 (str)
+;;     (cond ((equal 0 (length str)) nil)
+;;           ((equal (substring str 0 1) "!")
+;;            (mapconcat 'my-pinyinlib-build-regexp-string
+;;                       (remove nil
+;;                               (mapcar 'my-pinyin-regexp-helper
+;;                                       (split-string (replace-in-string str "!" "") ""))) ""))
+;;           nil)))
 
 ;; Treemacs
 ;;----------------------------------------------------------------------------
@@ -2047,6 +2160,9 @@ typical word processor."
   :after pdf-tools
   :straight t)
 
+(use-package toc-org
+  :straight t
+  :hook ((org-mode . org-toc-enable)))
 
 ;; Themes
 ;;----------------------------------------------------------------------------
@@ -2102,6 +2218,15 @@ typical word processor."
   :straight t)
 
 
+(use-package nyan-mode
+  :demand t
+  :straight t
+  :init (setq nyan-animate-nyancat t
+              nyan-bar-length 16
+              nyan-wavy-trail t)
+  :config (nyan-mode 1))
+
+
 (use-package spaceline-config
   :demand t
   :init
@@ -2116,6 +2241,7 @@ typical word processor."
    spaceline-separator-dir-left '(left . right)
    spaceline-separator-dir-right '(right . left)
    spaceline-flycheck-bullet "❀ %s")
+  (spaceline-helm-mode 1)
   (spaceline-info-mode 1)
   :straight spaceline
   :config
@@ -2170,22 +2296,26 @@ typical word processor."
                   'local-map (make-mode-line-mouse-map 'mouse-1 (lambda () (interactive) (flycheck-list-errors)))))
     :when active)
 
-  (spaceline-compile
-    `(((major-mode buffer-modified buffer-size) :face highlight-face)
-      (anzu)
-      ((nasy:version-control projectile-root) :separator " in ")
-      (buffer-id)
-      ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :face powerline-active0 :when active)
-      ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :face mode-line-inactive :when (not active))
-      (selection-info :face powerline-active0 :when active))
-    `((which-function)
-      (global)
-      (line-column :face powerline-active0 :when active)
-      (line-column :when (not active))
-      (minor-modes)
-      (buffer-position hud)
-      (nasy-time :face spaceline-modified :when active)
-      (nasy-time :when (not active)))))
+  (add-hook
+   'after-init-hook
+   (lambda () (spaceline-compile
+           `(((buffer-modified major-mode buffer-size) :face highlight-face)
+             (anzu)
+             ((nasy:version-control projectile-root) :separator " in ")
+             (buffer-id)
+             ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :face powerline-active0 :when active)
+             ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :face mode-line-inactive :when (not active))
+             (selection-info :face powerline-active0 :when active)
+             (nyan-cat :tight t :face mode-line-inactive))
+           `((which-function)
+             (global :when active)
+             (line-column :face powerline-active0 :when active)
+             (line-column :when (not active))
+             ;; (minor-modes)
+             (buffer-position
+              hud)
+             (nasy-time :face spaceline-modified :when active)
+             (nasy-time :when (not active)))))))
 
 
 (use-package doom-themes
@@ -2196,7 +2326,7 @@ typical word processor."
         doom-themes-enable-italic t)
   :config
   (load-theme 'doom-dracula t)
-  ;; (doom-themes-treemacs-config)
+  (doom-themes-treemacs-config)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 
@@ -2205,5 +2335,7 @@ typical word processor."
 
 (when (file-exists-p custom-file)
   (load custom-file))
+
+(add-hook 'after-init-hook #'benchmark-init/deactivate)
 
 ;;; init.el ends here
