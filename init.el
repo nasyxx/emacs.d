@@ -32,8 +32,8 @@
 ;; Adjust garbage collection thresholds during startup, and thereafter
 ;;----------------------------------------------------------------------------
 
-(let ((normal-gc-cons-threshold (* 20 1024 1024))
-      (init-gc-cons-threshold (* 128 1024 1024)))
+(let ((normal-gc-cons-threshold (* 1024 1024 1024))
+      (init-gc-cons-threshold (* 2048 1024 1024)))
   (setq gc-cons-threshold init-gc-cons-threshold)
   (add-hook 'after-init-hook
             (lambda ()
@@ -91,6 +91,13 @@
 
 ;; Compile
 ;;----------------------------------------------------------------------------
+
+(use-package async
+  :straight t
+  :config
+  (autoload 'dired-async-mode "dired-async.el" nil t)
+  (dired-async-mode 1)
+  (async-bytecomp-package-mode 1))
 
 (use-package auto-compile
   :demand t
@@ -879,13 +886,13 @@ This is helpful for writeroom-mode, in particular."
          ("C-z" . company-try-hard)))
 
 
-;; (use-package company-posframe
-;;   :after company
-;;   :straight t
-;;   :init (push '(company-posframe-mode . nil)
-;;               desktop-minor-mode-table)
-;;   :hook ((after-init . company-posframe-mode))
-;;   :diminish company-posframe-mode)
+(use-package company-posframe
+  :after company
+  :straight t
+  :init (push '(company-posframe-mode . nil)
+              desktop-minor-mode-table)
+  :hook ((after-init . company-posframe-mode))
+  :diminish company-posframe-mode)
 
 
 (use-package company-quickhelp
@@ -967,7 +974,7 @@ This is helpful for writeroom-mode, in particular."
   :diminish
   :bind (("C-c TAB" . projectile-find-other-file)
          ("M-?" . counsel-search-project))
-  :bind-keymap ("C-c p" . projectile-command-map)
+  ;; :bind-keymap ("C-c p" . projectile-command-map)
   :hook ((after-init . projectile-global-mode))
   :init (setq projectile-require-project-root nil
               projectile-keymap-prefix (kbd "C-c C-p"))
@@ -1003,13 +1010,13 @@ instead."
   :hook ((after-init . counsel-mode)))
 
 
-(use-package counsel-projectile
-  :after (counsel projectile)
-  :straight t
-  :config
-  (counsel-projectile-mode)
-  (define-key counsel-projectile-mode-map [remap projectile-ag]
-    #'counsel-projectile-rg))
+;; (use-package counsel-projectile
+;;   :after (counsel projectile)
+;;   :straight t
+;;   :config
+;;   (counsel-projectile-mode)
+;;   (define-key counsel-projectile-mode-map [remap projectile-ag]
+;;     #'counsel-projectile-rg))
 
 
 
