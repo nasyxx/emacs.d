@@ -1306,7 +1306,7 @@ instead."
       "    |  ___|______|______|______|______|______|____\n\n"
       "author   : Nasy https://nasy.moe\n"
       "date     : " (format-time-string "%b %e, %Y") \n
-      "email    : Nasy <nasyxx+python@gmail.com>"
+      "email    : Nasy <nasyxx+python@gmail.com>" \n
       "filename : " (file-name-nondirectory (buffer-file-name)) \n
       "project  : " (file-name-nondirectory (directory-file-name (projectile-project-root))) \n
       "license  : GPL-3.0+\n\n"
@@ -1631,7 +1631,7 @@ instead."
   :preface
   (lsp-define-stdio-client lsp-python "python3"
                            #'projectile-project-root
-                           '("pyenv_pyls"))
+                           '("pyls"))
   :hook ((python-mode . lsp-python-enable)
          (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil
                                     lsp-ui-sideline-enable nil)))
