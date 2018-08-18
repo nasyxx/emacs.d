@@ -1572,11 +1572,7 @@ instead."
 
 (use-package lsp-mode
   :demand t
-  :straight t
-  :init (setq lsp-document-sync-method ''full
-              lsp-inhibit-message t
-              ;; lsp-print-io t
-              lsp-hover-text-function 'lsp--text-document-signature-help))
+  :straight t)
 
 (use-package lsp-imenu
   :after lsp-mode
@@ -1631,7 +1627,7 @@ instead."
   :preface
   (lsp-define-stdio-client lsp-python "python3"
                            #'projectile-project-root
-                           '("pyls"))
+                           '("pyenv_pyls"))  ;; pyenv_pyls defined as `pyenv exec python -m pyls` since jedi does not support python3.7 .
   :hook ((python-mode . lsp-python-enable)
          (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil
                                     lsp-ui-sideline-enable nil)))
