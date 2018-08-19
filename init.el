@@ -17,6 +17,9 @@
 
 ;; For straight
 ;;----------------------------------------------------------------------------
+
+(setq straight-recipes-gnu-elpa-use-mirror t)
+
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (Bootstrap-version 4))
@@ -85,8 +88,6 @@
 ;;----------------------------------------------------------------------------
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; Compile
 ;;----------------------------------------------------------------------------
@@ -537,6 +538,11 @@ Call a second time to restore the original window configuration."
   :straight t)
 
 
+(use-package which-func
+  :demand t
+  :hook ((after-init . which-function-mode)))
+
+
 (use-package disable-mouse
   :straight t
   :bind (([mouse-4] . (lambda ()
@@ -622,7 +628,7 @@ This is useful when followed by an immediate kill."
   (smartparens-global-mode)
 
   ;; disable annoying blink-matching-paren
-  (setq blink-matching-paren nil))
+  (setq blink-matching-paren t))
 
 
 (use-package rainbow-delimiters
@@ -998,45 +1004,47 @@ This is helpful for writeroom-mode, in particular."
 ;; projectile
 ;;----------------------------------------------------------------------------
 (use-package projectile
-  :defer 5
+  :defer t
   :straight t
   :diminish
   :bind (("C-c TAB" . projectile-find-other-file)
-         ("M-?" . counsel-search-project))
-  ;; :bind-keymap ("C-c p" . projectile-command-map)
+         ;; ("M-?" . counsel-search-project)
+	 )
+  :bind-keymap ("C-c C-p" . projectile-command-map)
   :hook ((after-init . projectile-global-mode))
-  :init (setq projectile-require-project-root nil
-              projectile-keymap-prefix (kbd "C-c C-p"))
-  :config (let ((search-function
-                 (cond
-                  ((executable-find "rg") 'counsel-rg)
-                  ((executable-find "ag") 'counsel-ag)
-                  ((executable-find "pt") 'counsel-pt)
-                  ((executable-find "ack") 'counsel-ack))))
-            (when search-function
-              (defun counsel-search-project (initial-input &optional use-current-dir)
-                "Search using `counsel-rg' or similar from the project root for INITIAL-INPUT.
-If there is no project root, or if the prefix argument
-USE-CURRENT-DIR is set, then search from the current directory
-instead."
-                (interactive (list (thing-at-point 'symbol)
-                                   current-prefix-arg))
-                (let ((current-prefix-arg)
-                      (dir (if use-current-dir
-                               default-directory
-                             (condition-case err
-                                 (projectile-project-root)
-                               (error default-directory)))))
-                  (funcall search-function initial-input dir))))))
+  :init (setq projectile-require-project-root nil)
+  :config
+;;   (let ((search-function
+;;          (cond
+;;           ((executable-find "rg") 'counsel-rg)
+;;           ((executable-find "ag") 'counsel-ag)
+;;           ((executable-find "pt") 'counsel-pt)
+;;           ((executable-find "ack") 'counsel-ack))))
+;;     (when search-function
+;;       (defun counsel-search-project (initial-input &optional use-current-dir)
+;;         "Search using `counsel-rg' or similar from the project root for INITIAL-INPUT.
+;; If there is no project root, or if the prefix argument
+;; USE-CURRENT-DIR is set, then search from the current directory
+;; instead."
+;;         (interactive (list (thing-at-point 'symbol)
+;;                            current-prefix-arg))
+;;         (let ((current-prefix-arg)
+;;               (dir (if use-current-dir
+;;                        default-directory
+;;                      (condition-case err
+;;                          (projectile-project-root)
+;;                        (error default-directory)))))
+;;           (funcall search-function initial-input dir)))))
+  (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map))
 
 
-(use-package counsel
-  :defer t
-  :straight t
-  :diminish (counsel-mode)
-  :init
-  (setq-default counsel-mode-override-describe-bindings t)
-  :hook ((after-init . counsel-mode)))
+;; (use-package counsel
+;;   :defer t
+;;   :straight t
+;;   :diminish (counsel-mode)
+;;   :init
+;;   (setq-default counsel-mode-override-describe-bindings t)
+;;   :hook ((after-init . counsel-mode)))
 
 
 ;; (use-package counsel-projectile
@@ -1044,64 +1052,66 @@ instead."
 ;;   :straight t
 ;;   :config
 ;;   (counsel-projectile-mode)
-;;   (define-key counsel-projectile-mode-map [remap projectile-ag]
-;;     #'counsel-projectile-rg))
+;;   ;; (define-key counsel-projectile-mode-map [remap projectile-ag]
+;;   ;;   #'counsel-projectile-rg)
+;;   )
 
 
 ;; helm settings
 ;;----------------------------------------------------------------------------
 
 (use-package helm
-  :demand t
-  :straight t
-  :bind (("M-x" . helm-M-x)
-         ("C-x c o" . helm-occur)
-         ("<f1> SPC" . helm-all-mark-rings) ; I modified the keybinding
-         ("M-y" . helm-show-kill-ring)
-         ("C-x c x" . helm-register)    ; C-x r SPC and C-x r j
-         ("C-x c g" . helm-google-suggest)
-         ("C-x c M-:" . helm-eval-expression-with-eldoc)
-         ("C-x C-f" . helm-find-files)
-         ("C-x b" . helm-mini)      ; *<major-mode> or /<dir> or !/<dir-not-desired> or @<regexp>
-         :map helm-map
-         ("<tab>" . helm-execute-persistent-action) ; rebind tab to run persistent action
-         ("C-i" . helm-execute-persistent-action) ; make TAB works in terminal
-         ("C-z" . helm-select-action) ; list actions using C-z
-         :map shell-mode-map
-         ("C-c C-l" . helm-comint-input-ring) ; in shell mode
-         :map minibuffer-local-map
-         ("C-c C-l" . helm-minibuffer-history))
-  :init
-  (require 'helm-config)
+   :demand t
+   :straight t
+   :bind (("M-x" . helm-M-x)
+	  ("C-o" . helm-occur)
+	  ("<f1> SPC" . helm-all-mark-rings) ; I modified the keybinding
+	  ("M-y" . helm-show-kill-ring)
+	  ("C-x c x" . helm-register)    ; C-x r SPC and C-x r j
+	  ("C-x c g" . helm-google-suggest)
+	  ("C-x c M-:" . helm-eval-expression-with-eldoc)
+	  ("C-x C-f" . helm-find-files)
+	  ("C-x b" . helm-mini)      ; *<major-mode> or /<dir> or !/<dir-not-desired> or @<regexp>
+	  :map helm-map
+	  ("<tab>" . helm-execute-persistent-action) ; rebind tab to run persistent action
+	  ("C-i" . helm-execute-persistent-action) ; make TAB works in terminal
+	  ("C-z" . helm-select-action) ; list actions using C-z
+	  :map shell-mode-map
+	  ("C-c C-l" . helm-comint-input-ring) ; in shell mode
+	  :map minibuffer-local-map
+	  ("C-c C-l" . helm-minibuffer-history))
+   :init
+   (require 'helm-config)
 
-  (setq helm-M-x-fuzzy-match        t
-        helm-buffers-fuzzy-matching t
-        helm-recentf-fuzzy-match    t
-        helm-imenu-fuzzy-match      t
-        helm-locate-fuzzy-match     t
-        helm-apropos-fuzzy-match    t
-        helm-lisp-fuzzy-completion  t)
+   (setq helm-M-x-fuzzy-match        t
+	 helm-buffers-fuzzy-matching t
+	 helm-recentf-fuzzy-match    t
+	 helm-imenu-fuzzy-match      t
+	 helm-locate-fuzzy-match     t
+	 helm-apropos-fuzzy-match    t
+	 helm-lisp-fuzzy-completion  t)
 
-  (when (executable-find "curl")
-    (setq helm-google-suggest-use-curl-p t))
+   (when (executable-find "curl")
+     (setq helm-google-suggest-use-curl-p t))
 
-  (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
-        helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
-        helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
-        helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
-        helm-ff-file-name-history-use-recentf t
-        helm-echo-input-in-header-line        t)
+   (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+	 helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+	 helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+	 helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+	 helm-ff-file-name-history-use-recentf t
+	 helm-echo-input-in-header-line        t)
 
-  :config
+   :config
 
-  (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 
-  (helm-mode 1)
-  (helm-autoresize-mode 1)
+   (helm-mode 1)
+   (helm-autoresize-mode 1)
 
-  (setq helm-follow-mode-persistent t
-        helm-allow-mouse t
-        helm-move-to-line-cycle-in-source nil))
+   (setq-default helm-follow-mode-persistent t
+	         helm-allow-mouse t
+	         helm-move-to-line-cycle-in-source nil
+	         helm-source-names-using-follow '("Buffers" "kill-buffer" "Occur")))
 
 (use-package helm-eshell
   :after helm
@@ -1122,7 +1132,6 @@ instead."
 
 (use-package helm-ag
   :straight t
-  :bind (("C-s" . helm-do-ag-this-file))
   :init (setq helm-ag-base-command "rg --no-heading --smart-case"
               helm-ag-fuzzy-match t
               helm-ag-use-grep-ignore-list t
@@ -1132,6 +1141,12 @@ instead."
   :straight t
   :init (setq helm-dash-docsets-path "~/.docsets"))
 
+(use-package helm-swoop
+  :straight t
+  :bind (("C-s" . helm-swoop))
+  :init (setq helm-swoop-move-to-line-cycle t
+              helm-swoop-use-line-number-face t
+              helm-swoop-use-fuzzy-match t))
 ;; ivy settings
 ;;----------------------------------------------------------------------------
 
@@ -1319,7 +1334,7 @@ instead."
     '("Haskell Language"
       "{-\n"
       " Excited without bugs, have fun (\"▔□▔)/hi~♡ Nasy.\n"
-      " -----------------------------------------------\n"
+      " ------------------------------------------------\n"
       " |             *         *\n"
       " |                  .                .\n"
       " |           .\n"
@@ -1375,7 +1390,6 @@ instead."
                                   ;; Extend Functions
                                   ("any" .      #x2754)
                                   ("all" .      #x2201)
-                                  ("sum" .      #x2211)
                                   ("dict" .     #x1d507)
                                   ("list" .     #x2112)
                                   ("tuple" .    #x2a02)
@@ -1411,27 +1425,15 @@ instead."
                                   ("Int" .      #x2124)
                                   ("Float" .    #x211d)
                                   ("True" .     #x1d54b)
-                                  ("False" .    #x1d53d)
-                                  ;; Functions
-                                  ("sum" .      #x2211))))))
+                                  ("False" .    #x1d53d))))))
   :config
-  ;; pretty python mode
-  ;; (pretty-deactivate-groups '( :sets-relations  ;; break int in python mode
-  ;;                              :logic           ;; break for in python mode
-  ;;                              )
-  ;;                           'python-mode)
-  ;; (pretty-add-keywords 'python-mode '(
-  ;;                                     ("->" .       #X2192)  ;; →
-  ;;                                     ))
+  (pretty-activate-groups
+   '(:sub-and-superscripts :greek :arithmetic))
 
   (pretty-deactivate-groups
    '(:equality :ordering :ordering-double :ordering-triple
                :arrows :arrows-twoheaded :punctuation
-               :logic :sets))
-
-  (pretty-activate-groups
-   '(:sub-and-superscripts :greek :arithmetic-nary))
-  )
+               :logic :sets :arithmetic-double :arithmetic-triple)))
 
 
 (use-package ipretty
@@ -1447,7 +1449,7 @@ instead."
 ;; I haven't found one statement that makes both of the above situations work, so I use both for now
 
 (defun pretty-fonts-set-fontsets (CODE-FONT-ALIST)
-  "Utility to associate many unicode points with specified fonts."
+  "Utility to associate many unicode points with specified `CODE-FONT-ALIST'."
   (--each CODE-FONT-ALIST
     (-let (((font . codes) it))
       (--each codes
@@ -1455,7 +1457,7 @@ instead."
         (set-fontset-font t `(,it . ,it) font)))))
 
 (defun pretty-fonts--add-kwds (FONT-LOCK-ALIST)
-  "Exploits `font-lock-add-keywords' to apply regex-unicode replacements."
+  "Exploits `font-lock-add-keywords'(`FONT-LOCK-ALIST') to apply regex-unicode replacements."
   (font-lock-add-keywords
    nil (--map (-let (((rgx uni-point) it))
                `(,rgx (0 (progn
@@ -1466,7 +1468,7 @@ instead."
              FONT-LOCK-ALIST)))
 
 (defmacro pretty-fonts-set-kwds (FONT-LOCK-HOOKS-ALIST)
-  "Set regex-unicode replacements to many modes."
+  "Set regex-unicode replacements to many modes(`FONT-LOCK-HOOKS-ALIST')."
   `(--each ,FONT-LOCK-HOOKS-ALIST
      (-let (((font-locks . mode-hooks) it))
        (--each mode-hooks
@@ -1559,7 +1561,7 @@ instead."
     ("[^\\+<>]\\(\\+\\)[^\\+<>]"   #Xe16d)
     ("[^:=]\\(:\\)[^:=]"           #Xe16c)
     ("\\(<=\\)"                    #Xe157))
-  "Fira font ligatures and their regexes")
+  "Fira font ligatures and their regexes.")
 
 (pretty-fonts-set-kwds
  '((pretty-fonts-fira-font prog-mode-hook org-mode-hook)))
@@ -1577,21 +1579,25 @@ instead."
   :straight t)
 
 (use-package lsp-imenu
+  :demand t
   :after lsp-mode
   :hook ((lsp-after-open . lsp-enable-imenu)))
 
 (use-package lsp-ui
+  :demand t
   :after lsp-mode
   :straight t
   :hook ((lsp-mode . lsp-ui-mode))
   :init
-  (setq lsp-ui-doc-position 'at-point
-        lsp-ui-sideline-update-mode 'point
-        lsp-ui-sideline-delay 1
-        lsp-ui-sideline-ignore-duplicate t
-        lsp-ui-doc-header t
-        lsp-ui-doc-include-signature t
-        lsp-ui-peek-always-show t)
+  (setq-default lsp-ui-doc-position 'at-point
+		lsp-ui-doc-header nil
+		lsp-ui-doc-include-signature nil
+		lsp-ui-flycheck-enable nil
+		lsp-ui-sideline-enable nil  ;; not really good at all.
+		lsp-ui-sideline-update-mode 'point
+		lsp-ui-sideline-delay 1
+		lsp-ui-sideline-ignore-duplicate t
+		lsp-ui-peek-always-show t)
   :config
   (define-key lsp-ui-mode-map [remap xref-find-definitions]
     #'lsp-ui-peek-find-definitions)
@@ -1615,13 +1621,11 @@ instead."
 ;;            :files ("jsonrpc.el")))
 
 ;; (use-package eglot
-;;   :defer t
 ;;   :straight t)
 
 ;; python
 
 (use-package python
-  ;; :straight python-mode
   :commands python-mode
   :mode ("\\.py\\'" . python-mode)
   :interpreter (("python" . python-mode)
@@ -1692,9 +1696,39 @@ instead."
 
 ;; haskell
 
-(use-package lsp-haskell
+(use-package haskell-mode
   :straight t
-  :hook ((haskell-mode . lsp-haskell-enable)))
+  :hook ((haskell-mode . haskell-auto-insert-module-template)
+         (haskell-mode . haskell-collapse-mode))
+  :bind (("C-x a a" . align))
+  :init (use-package lsp-haskell
+          :straight t
+          :hook ((haskell-mode . lsp-haskell-enable)))
+
+  (setq haskell-mode-stylish-haskell-path "stylish-haskell"
+        haskell-process-suggest-haskell-docs-imports t
+        haskell-process-suggest-hayoo-imports t
+        haskell-process-suggest-hoogle-imports t
+        haskell-process-suggest-remove-import-lines t
+        haskell-stylish-on-save t
+        haskell-tags-on-save t)
+
+  (add-to-list 'align-rules-list
+             '(haskell-types
+               (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
+               (modes quote (haskell-mode literate-haskell-mode))))
+  (add-to-list 'align-rules-list
+               '(haskell-assignment
+                 (regexp . "\\(\\s-+\\)=\\s-+")
+                 (modes quote (haskell-mode literate-haskell-mode))))
+  (add-to-list 'align-rules-list
+               '(haskell-arrows
+                 (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
+                 (modes quote (haskell-mode literate-haskell-mode))))
+  (add-to-list 'align-rules-list
+               '(haskell-left-arrows
+                 (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
+                 (modes quote (haskell-mode literate-haskell-mode)))))
 
 
 ;; lisp
@@ -2192,18 +2226,6 @@ typical word processor."
   :init (setq inhibit-compacting-font-caches t)
   :straight t)
 
-
-;; (use-package mode-icons
-;;   :demand t
-;;   :straight t
-;;   :init (setq mode-icons-change-mode-name t
-;;               mode-icons-desaturate-inactive nil
-;;               mode-icons-desaturate-active nil
-;;               mode-icons-grayscale-transform nil)
-;;   :hook ((after-init . mode-icons-mode))
-;;   :config (push '("\\` ?CMP\\'" #xf1ad FontAwesome) mode-icons))
-
-
 ;; Mode Line
 
 (use-package mode-line-bell
@@ -2305,10 +2327,10 @@ typical word processor."
              ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :face mode-line-inactive :when (not active))
              (selection-info :face powerline-active0 :when active)
              (nyan-cat :tight t :face mode-line-inactive))
-           `((which-function)
-             (global :when active)
-             (line-column :face powerline-active0 :when active)
+           `((line-column :face powerline-active0 :when active)
              (line-column :when (not active))
+             (which-function)
+             (global :when active)
              ;; (minor-modes)
              (buffer-position
               hud)
@@ -2330,7 +2352,10 @@ typical word processor."
 
 ;; custom file
 ;;----------------------------------------------------------------------------
-
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(setq config-file (expand-file-name "config.el" user-emacs-directory))
+(when (file-exists-p config-file)
+  (load config-file))
 (when (file-exists-p custom-file)
   (load custom-file))
 
