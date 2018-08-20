@@ -8,9 +8,10 @@
 
 ;;; Code:
 
-(setq-default user-mail-address "nasyxx@gmail.com"
-              use-pyenv t  ;; `t' if you'd like to use pyenv when using pyls
-              )
+(setq-default
+ ;; user-mail-address ""
+ use-pyenv t  ;; `t' if you'd like to use pyenv when using pyls
+ )
 
 (defun nasy:set-face ()
   "Set custom face."
