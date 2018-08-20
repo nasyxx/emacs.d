@@ -1015,6 +1015,13 @@ This is helpful for writeroom-mode, in particular."
   :diminish outline-minor-mode)
 
 
+;; htmlize
+
+(use-package htmlize
+  :defer t
+  :straight t)
+
+
 ;; projectile
 ;;----------------------------------------------------------------------------
 (use-package projectile
@@ -2211,6 +2218,7 @@ typical word processor."
   :straight t)
 
 (use-package toc-org
+  :straight t
   :hook ((org-mode . org-toc-enable)))
 
 ;; Themes

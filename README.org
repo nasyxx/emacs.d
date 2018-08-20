@@ -15,11 +15,11 @@
 
 My personal emacs configuration for macOS.
 
-[[screenshot.png]]
+[[./screenshot.png]]
 
 * Custom Configuration
 
-To add your own customization, use <kbd>M-x customize</kbd> etc. and/or create a file ~/.emacs.d/config/user-config.el which looks like this:
+To add your own customization, use ~M-x customize~ etc. and/or create a file ~~/.emacs.d/config/user-config.el~ which looks like this:
 
 #+BEGIN_SRC elisp
 ... your code here ...
@@ -27,8 +27,8 @@ To add your own customization, use <kbd>M-x customize</kbd> etc. and/or create a
 (provide 'user-config)
 #+END_SRC
 
-*NOTICE:* 
+*NOTICE:*
 
-- Functions added to ~nasy:config-after-hook~ will run functions after init.
-- Functions added to ~nasy:config-before-hook~ will run functions before load ~custom.el~.
+- Functions added to ~nasy:config-before-hook~ will run before load ~custom.el~.
+- Functions added to ~nasy:config-after-hook~ will run after init.
 
