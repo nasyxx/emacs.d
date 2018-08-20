@@ -3,7 +3,7 @@
 #+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
 #+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
 #+TITLE: README
-#+DATE: <2018-08-17 Fri>
+#+DATE: <2018-08-20 Mon>
 #+AUTHOR: Nasy
 #+EMAIL: nasyxx@gmail.com
 #+LANGUAGE: en
@@ -19,11 +19,16 @@ My personal emacs configuration for macOS.
 
 * Custom Configuration
 
-Copy ~config.el~ to ~user-config.el~ and edit it.
+To add your own customization, use <kbd>M-x customize</kbd> etc. and/or create a file ~/.emacs.d/config/user-config.el which looks like this:
 
-#+BEGIN_SRC sh
-cp config.el user-config.el
+#+BEGIN_SRC elisp
+... your code here ...
+
+(provide 'user-config)
 #+END_SRC
 
-*NOTICE:* You have to update ~user-config.el~ yourself.
+*NOTICE:* 
+
+- Functions added to ~nasy:config-after-hook~ will run functions after init.
+- Functions added to ~nasy:config-before-hook~ will run functions before load ~custom.el~.
 

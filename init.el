@@ -52,7 +52,8 @@
 
 (use-package benchmark-init
   :demand t
-  :straight t)
+  :straight t
+  :hook ((after-init . benchmark-init/deactivate)))
 
 ;; Reload the init-file
 ;;----------------------------------------------------------------------------
@@ -93,14 +94,14 @@
 ;; Some config.
 ;;----------------------------------------------------------------------------
 
-(defvar nasy:config-hook '()
-  "Hooks to run config functions.")
+(defvar nasy:config-before-hook nil
+  "Hooks to run config functions before load custom.el.")
 
+(defvar nasy:config-after-hook nil
+  "Hooks to run config functions after." )
 
-(defun run-config-hooks ()
-  "Run config hooks."
-  (run-hooks 'nasy:config-hook))
-
+(add-hook 'nasy:config-after-hook #'(lambda () (message "Hi~ Hoop you have fun with this config.")))
+(add-hook 'after-init-hook #'(lambda () (run-hooks 'nasy:config-after-hook)))
 
 (require 'nasy-config nil t)
 (require 'user-config nil t)
@@ -2368,13 +2369,11 @@ typical word processor."
 
 ;; custom file
 ;;----------------------------------------------------------------------------
-(run-config-hooks)
+(run-hooks 'nasy:config-before-hook)
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (when (file-exists-p custom-file)
   (load custom-file))
-
-(add-hook 'after-init-hook #'benchmark-init/deactivate)
 
 ;;; init.el ends here
