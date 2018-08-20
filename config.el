@@ -29,5 +29,28 @@
   "Nasy config setting."
   (progn (nasy:set-face)))
 
+
+;; sunrise-sunset
+
+(setq calendar-latitude 24.8801
+      calendar-longitude 102.8329)
+
+
+;; Key Bindings
+;;----------------------------------------------------------------------------
+
+;; Cursor Movement
+
+(when *is-a-mac*  ;; init.el:16 (defconst *is-a-mac* (eq system-type 'darwin))
+  (global-set-key (kbd "s-<up>") 'beginning-of-buffer)
+  (global-set-key (kbd "s-<down>") 'end-of-buffer))
+
+
+;; Text Operations
+
+(global-set-key (kbd "S-<backspace>") (lambda ()
+                                        (interactive)
+                                        (kill-line 0)))
+
 (provide 'config)
 ;;; config.el ends here
