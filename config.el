@@ -42,10 +42,8 @@
 ;; Cursor Movement
 
 (when *is-a-mac*  ;; init.el:16 (defconst *is-a-mac* (eq system-type 'darwin))
-  (global-set-key (kbd "S-<left>") 'move-beginning-of-line)
-  (global-set-key (kbd "S-<right>") 'move-end-of-line)
-  (global-set-key (kbd "S-<up>") 'beginning-of-buffer)
-  (global-set-key (kbd "S-<down>") 'end-of-buffer))
+  (global-set-key (kbd "s-<up>") 'beginning-of-buffer)
+  (global-set-key (kbd "s-<down>") 'end-of-buffer))
 
 
 ;; Text Operations
