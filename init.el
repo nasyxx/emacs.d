@@ -2371,7 +2371,7 @@ typical word processor."
         doom-themes-enable-italic t)
   :config
   (load-theme 'doom-dracula t)
-  (doom-themes-treemacs-config)
+  ;; (doom-themes-treemacs-config)  ;; The doom theme havn't finished it yet.
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 
