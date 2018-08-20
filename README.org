@@ -16,3 +16,14 @@
 My personal emacs configuration for macOS.
 
 [[screenshot.png]]
+
+* Custom Configuration
+
+Copy ~config.el~ to ~user-config.el~ and edit it.
+
+#+BEGIN_SRC sh
+cp config.el user-config.el
+#+END_SRC
+
+*NOTICE:* You have to update ~user-config.el~ yourself.
+

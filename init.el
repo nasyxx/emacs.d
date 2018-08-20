@@ -93,11 +93,13 @@
 ;; Some config.
 ;;----------------------------------------------------------------------------
 
-(setq config-file (expand-file-name "config.el" user-emacs-directory))
+(setq config-file      (expand-file-name "config.el" user-emacs-directory)
+      user-config-file (expand-file-name "user-config.el" user-emacs-directory))
 
-(when (file-exists-p config-file)
-  (load config-file))
-
+(if (file-exists-p user-config-file)
+    (load user-config-file)
+  (when (file-exists-p config-file)
+    (load config-file)))
 
 ;; Compile
 ;;----------------------------------------------------------------------------
@@ -1644,7 +1646,9 @@ This is helpful for writeroom-mode, in particular."
   :preface
   (lsp-define-stdio-client lsp-python "python3"
                            #'projectile-project-root
-                           '("pyenv_pyls"))  ;; pyenv_pyls defined as `pyenv exec python -m pyls` since jedi does not support python3.7 .
+                           (if use-pyenv
+                               '("pyenv" "exec" "pyls")
+                             '("pyls")))
   :hook ((python-mode . lsp-python-enable)
          (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil
                                     lsp-ui-sideline-enable nil)))
@@ -2365,8 +2369,12 @@ typical word processor."
 ;; custom file
 ;;----------------------------------------------------------------------------
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p config-file)
-  (nasy:config))
+
+(if (file-exists-p user-config-file)
+    (nasy:config) ;; or some function that you name as prefix.
+  (when (file-exists-p config-file)
+    (nasy:config)))
+
 (when (file-exists-p custom-file)
   (load custom-file))
 

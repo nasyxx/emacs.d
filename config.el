@@ -9,7 +9,7 @@
 ;;; Code:
 
 (setq-default user-mail-address "nasyxx@gmail.com"
-              use-pyenv "pyenv_pyls"  ;; if you'd like to use pyenv when using pyls
+              use-pyenv t  ;; if you'd like to use pyenv when using pyls
               )
 
 (defun nasy:set-face ()
