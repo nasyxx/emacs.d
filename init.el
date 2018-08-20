@@ -298,11 +298,6 @@
       scroll-preserve-screen-position 'always)
 
 
-;; sunrise-sunset
-
-(setq calendar-latitude 24.8801
-      calendar-longitude 102.8329)
-
 ;; dashboard
 
 (use-package dashboard
