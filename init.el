@@ -87,19 +87,24 @@
 ;; Expand load-path
 ;;----------------------------------------------------------------------------
 
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
 
 
 ;; Some config.
 ;;----------------------------------------------------------------------------
 
-(setq config-file      (expand-file-name "config.el" user-emacs-directory)
-      user-config-file (expand-file-name "user-config.el" user-emacs-directory))
+(defvar nasy:config-hook '()
+  "Hooks to run config functions.")
 
-(if (file-exists-p user-config-file)
-    (load user-config-file)
-  (when (file-exists-p config-file)
-    (load config-file)))
+
+(defun run-config-hooks ()
+  "Run config hooks."
+  (run-hooks 'nasy:config-hook))
+
+
+(require 'nasy-config nil t)
+(require 'user-config nil t)
+
 
 ;; Compile
 ;;----------------------------------------------------------------------------
@@ -2363,12 +2368,9 @@ typical word processor."
 
 ;; custom file
 ;;----------------------------------------------------------------------------
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(run-config-hooks)
 
-(if (file-exists-p user-config-file)
-    (nasy:config) ;; or some function that you name as prefix.
-  (when (file-exists-p config-file)
-    (nasy:config)))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (when (file-exists-p custom-file)
   (load custom-file))
