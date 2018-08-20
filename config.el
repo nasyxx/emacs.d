@@ -10,7 +10,6 @@
 
 (setq-default user-mail-address "nasyxx@gmail.com"
               use-pyenv t  ;; if you'd like to use pyenv when using pyls
-              global-linum-mode t ;; Line number
               )
 
 (defun nasy:set-face ()
