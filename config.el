@@ -10,6 +10,7 @@
 
 (setq-default user-mail-address "nasyxx@gmail.com"
               use-pyenv t  ;; if you'd like to use pyenv when using pyls
+              global-linum-mode t ;; Line number
               )
 
 (defun nasy:set-face ()
@@ -28,6 +29,16 @@
 (defun nasy:config ()
   "Nasy config setting."
   (progn (nasy:set-face)))
+
+;; Key Bindings
+(global-set-key (kbd "s-<left>") 'move-beginning-of-line)
+(global-set-key (kbd "s-<right>") 'move-end-of-line)
+(global-set-key (kbd "s-<up>") 'beginning-of-buffer)
+(global-set-key (kbd "s-<down>") 'end-of-buffer)
+
+(global-set-key (kbd "s-<backspace>") (lambda ()
+                                        (interactive)
+                                        (kill-line 0)))
 
 (provide 'config)
 ;;; config.el ends here
