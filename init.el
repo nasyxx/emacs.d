@@ -89,6 +89,16 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+
+;; Some config.
+;;----------------------------------------------------------------------------
+
+(setq config-file (expand-file-name "config.el" user-emacs-directory))
+
+(when (file-exists-p config-file)
+  (load config-file))
+
+
 ;; Compile
 ;;----------------------------------------------------------------------------
 
@@ -638,6 +648,7 @@ This is useful when followed by an immediate kill."
 ;; highlight indention
 
 (use-package highlight-indent-guides
+  :demand t
   :straight t
   :init (setq highlight-indent-guides-method 'column)
   :hook ((prog-mode . highlight-indent-guides-mode)))
@@ -1771,15 +1782,17 @@ This is helpful for writeroom-mode, in particular."
   :defer t
   :straight t)
 
+
+(use-package org
+  :straight org-plus-contrib
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)))
+
+
 (use-package org-cliplink
   :defer t
   :straight t)
 
-
-(use-package org
-  :straight t
-  :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)))
 
 (use-package org-clock
   :after org
@@ -1819,11 +1832,11 @@ This is helpful for writeroom-mode, in particular."
                                   "tell application \"org-clock-statusbar\" to clock out")))))
 
 (use-package org-pomodoro
-  :straight t
   :after org-agenda
   :init (setq org-pomodoro-keep-killed-pomodoro-time t)
   :bind (:map org-agenda-mode-map
               ("P" . org-pomodoro)))
+
 
 (use-package org-wc
   :straight t)
@@ -2193,7 +2206,6 @@ typical word processor."
   :straight t)
 
 (use-package toc-org
-  :straight t
   :hook ((org-mode . org-toc-enable)))
 
 ;; Themes
@@ -2353,9 +2365,8 @@ typical word processor."
 ;; custom file
 ;;----------------------------------------------------------------------------
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(setq config-file (expand-file-name "config.el" user-emacs-directory))
 (when (file-exists-p config-file)
-  (load config-file))
+  (nasy:config))
 (when (file-exists-p custom-file)
   (load custom-file))
 
