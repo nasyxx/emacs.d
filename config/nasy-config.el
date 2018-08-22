@@ -34,6 +34,8 @@
 
   (global-set-key (kbd "C-z") 'stop-minimizing-window))
 
+(setq-default nasy:theme 'doom-dracula)
+
 
 ;; Some default settings
 ;;----------------------------------------------------------------------------

@@ -116,6 +116,19 @@
 (require 'user-config nil t)
 
 
+;; Theme
+;;----------------------------------------------------------------------------
+
+(use-package doom-themes
+  :demand t
+  :straight t
+  :config
+  (load-theme nasy:theme t)
+  ;; (doom-themes-treemacs-config)  ;; The doom theme havn't finished it yet.
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
+
+
 ;; Compile
 ;;----------------------------------------------------------------------------
 
@@ -2187,18 +2200,6 @@ typical word processor."
              (nasy-time :face spaceline-modified :when active)
              (nasy-time :when (not active)))))))
 
-
-(use-package doom-themes
-  :demand t
-  :straight t
-  :init
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  :config
-  (load-theme 'doom-dracula t)
-  ;; (doom-themes-treemacs-config)  ;; The doom theme havn't finished it yet.
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
 
 ;; custom file
 ;;----------------------------------------------------------------------------
