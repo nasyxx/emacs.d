@@ -18,7 +18,7 @@
 
 (defconst emacs-start-init-time (current-time))
 
-(add-hook 'after-init-hook #'(lambda () (message "After init in %.2fms"
+(add-hook 'after-init-hook #'(lambda () (message "After init-hook in %.2fms"
                                             (benchmark-init/time-subtract-millis
                                              (current-time)
                                              emacs-start-init-time))))
@@ -306,7 +306,7 @@
                                 (projects  . 5)
                                 (agenda    . 5)
                                 (registers . 5)))
-  :hook ((after-init . dashboard-setup-startup-hook)))
+  :config (dashboard-setup-startup-hook))
 
 
 ;; Windows
@@ -552,6 +552,9 @@ Call a second time to restore the original window configuration."
   :straight t
   :config ((after-init . (lambda () (which-key-mode +1)))))
 
+
+(use-package dash
+  :straight t)
 
 ;; isearch
 ;;----------------------------------------------------------------------------
@@ -2055,7 +2058,7 @@ typical word processor."
   :hook ((org-mode . org-toc-enable)))
 
 
-;; Themes
+;; Themes and modeline
 ;;----------------------------------------------------------------------------
 
 (use-package emojify
@@ -2206,7 +2209,7 @@ typical word processor."
 (when (file-exists-p custom-file)
   (load custom-file))
 
-(message "Start init in %.2fms"
+(message "Start init hook in %.2fms"
          (benchmark-init/time-subtract-millis
           (current-time)
           emacs-start-init-time))
