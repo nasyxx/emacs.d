@@ -8,13 +8,20 @@
 ;; Nasy's emacs.d init file.  For macOS and Emacs 26.
 
 ;;; Code:
-(setq debug-on-error t)
-(setq message-log-max t)
+(setq debug-on-error t
+      message-log-max t
+      load-prefer-newer t)
 (setq-default lexical-binding t
               ad-redefinition-action 'accept)
 
 (defconst *is-a-mac* (eq system-type 'darwin))
 
+(defconst emacs-start-init-time (current-time))
+
+(add-hook 'after-init-hook #'(lambda () (message "After init in %.2fms"
+                                            (benchmark-init/time-subtract-millis
+                                             (current-time)
+                                             emacs-start-init-time))))
 ;; For straight
 ;;----------------------------------------------------------------------------
 
@@ -35,8 +42,8 @@
 ;; Adjust garbage collection thresholds during startup, and thereafter
 ;;----------------------------------------------------------------------------
 
-(let ((normal-gc-cons-threshold (* 1024 1024 1024))
-      (init-gc-cons-threshold (* 2048 1024 1024)))
+(let ((normal-gc-cons-threshold (* 256 1024 1024))
+      (init-gc-cons-threshold (* 512 1024 1024)))
   (setq gc-cons-threshold init-gc-cons-threshold)
   (add-hook 'after-init-hook
             (lambda ()
@@ -54,6 +61,7 @@
   :demand t
   :straight t
   :hook ((after-init . benchmark-init/deactivate)))
+
 
 ;; Reload the init-file
 ;;----------------------------------------------------------------------------
@@ -88,6 +96,7 @@
 ;; Expand load-path
 ;;----------------------------------------------------------------------------
 
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
 
 
@@ -113,14 +122,12 @@
 (use-package async
   :straight t
   :config
-  (autoload 'dired-async-mode "dired-async.el" nil t)
   (dired-async-mode 1)
   (async-bytecomp-package-mode 1))
 
 (use-package auto-compile
   :demand t
   :straight t
-  :init (setq load-prefer-newer t)
   :config
   (auto-compile-on-load-mode)
   (auto-compile-on-save-mode))
@@ -128,8 +135,9 @@
 (setq-default compilation-scroll-output t)
 
 (use-package alert
+  :demand t
   :straight t
-  :init
+  :preface
   (defun alert-after-compilation-finish (buf result)
     "Use `alert' to report compilation RESULT if BUF is hidden."
     (when (buffer-live-p buf)
@@ -148,6 +156,7 @@
   :preface
   (defvar last-compilation-buffer nil
     "The last buffer in which compilation took place.")
+
   (defadvice compilation-start (after save-compilation-buffer activate)
     "Save the compilation buffer to find it later."
     (setq last-compilation-buffer next-error-last-buffer))
@@ -175,12 +184,19 @@
     (when (eq major-mode 'compilation-mode)
       (ansi-color-apply-on-region compilation-filter-start (point-max)))))
 
+;; Shell
+;;----------------------------------------------------------------------------
+
+(require 'shell)
+
 (use-package cmd-to-echo
   :defer t
   :straight t)
 
-;; Shell
-;;----------------------------------------------------------------------------
+
+(use-package command-log-mode
+  :demand t
+  :straight t)
 
 
 (defadvice shell-command-on-region
@@ -196,8 +212,45 @@
 (use-package exec-path-from-shell
   :demand *is-a-mac*
   :straight t
-  :init (setq shell-file-name "/bin/zsh"
-              shell-command-switch "-ic")
+  :preface
+  ;; Non-Forking Shell Command To String
+  ;; https://github.com/bbatsov/projectile/issues/1044
+  ;;--------------------------------------------------------------------------
+
+  (defun call-process-to-string (program &rest args)
+    (with-temp-buffer
+      (apply 'call-process program nil (current-buffer) nil args)
+      (buffer-string)))
+
+  (defun get-call-process-args-from-shell-command (command)
+    (cl-destructuring-bind
+        (the-command . args) (split-string command " ")
+      (let ((binary-path (executable-find the-command)))
+        (when binary-path
+          (cons binary-path args)))))
+
+  (defun shell-command-to-string (command)
+    (let ((call-process-args
+           (imalison:get-call-process-args-from-shell-command command)))
+      (if call-process-args
+          (apply 'call-process-to-string call-process-args)
+        (shell-command-to-string command))))
+
+  (defun try-call-process (command)
+    (let ((call-process-args
+           (get-call-process-args-from-shell-command command)))
+      (if call-process-args
+          (apply 'call-process-to-string call-process-args))))
+
+  (advice-add 'shell-command-to-string :before-until 'try-call-process)
+
+  (defun call-with-quick-shell-command (fn &rest args)
+    (noflet ((shell-command-to-string (&rest args)
+                                      (or (apply 'try-call-process args) (apply this-fn args))))
+            (apply fn args)))
+
+  (advice-add 'projectile-find-file :around 'call-with-quick-shell-command)
+  :init (setq shell-command-switch "-ic")
   :config (progn
             (when nil (message "PATH: %s, INFO: %s" (getenv "PATH")
                                (getenv "ENVIRONMENT_SETUP_DONE"))
@@ -211,72 +264,8 @@
             (exec-path-from-shell-initialize)))
 
 
-;; Non-Forking Shell Command To String
-;; https://github.com/bbatsov/projectile/issues/1044
-;;----------------------------------------------------------------------------
-
-(defun call-process-to-string (program &rest args)
-  (with-temp-buffer
-    (apply 'call-process program nil (current-buffer) nil args)
-    (buffer-string)))
-
-(defun get-call-process-args-from-shell-command (command)
-  (cl-destructuring-bind
-      (the-command . args) (split-string command " ")
-    (let ((binary-path (executable-find the-command)))
-      (when binary-path
-        (cons binary-path args)))))
-
-(defun shell-command-to-string (command)
-  (let ((call-process-args
-         (imalison:get-call-process-args-from-shell-command command)))
-    (if call-process-args
-        (apply 'call-process-to-string call-process-args)
-      (shell-command-to-string command))))
-
-(defun try-call-process (command)
-  (let ((call-process-args
-         (get-call-process-args-from-shell-command command)))
-    (if call-process-args
-        (apply 'call-process-to-string call-process-args))))
-
-(advice-add 'shell-command-to-string :before-until 'try-call-process)
-
-(defun call-with-quick-shell-command (fn &rest args)
-  (noflet ((shell-command-to-string (&rest args)
-                                    (or (apply 'try-call-process args) (apply this-fn args))))
-    (apply fn args)))
-
-(advice-add 'projectile-find-file :around 'call-with-quick-shell-command)
-
-
-
-;; UI
-;;----------------------------------------------------------------------------
-
-;; Frame initializes and GUI disables
-
-(when *is-a-mac*
-  (add-to-list 'default-frame-alist
-               '(ns-transparent-titlebar . t))
-
-  (add-to-list 'default-frame-alist
-               '(ns-appearance . dark))
-
-  (add-to-list 'default-frame-alist
-               '(alpha . (80 . 75)))
-  (global-set-key (kbd "M-¥") (lambda () (interactive) (insert "\\"))))
-
-(defun stop-minimizing-window ()
-  "Stop minimizing window under macOS."
-  (interactive)
-  (unless (and *is-a-mac*
-               window-system)
-    (suspend-frame)))
-
-(global-set-key (kbd "C-z") 'stop-minimizing-window)
-
 ;; Disable some features
+;;----------------------------------------------------------------------------
 
 (setq use-file-dialog nil
       use-dialog-box nil
@@ -290,14 +279,15 @@
 
 
 ;; scratch message
+;;----------------------------------------------------------------------------
 
 (use-package scratch
   :demand t
-  :straight t
-  :init (setq-default initial-scratch-message
-                      (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")))
+  :straight t)
+
 
 ;; nice scrolling
+;;----------------------------------------------------------------------------
 
 (setq scroll-margin 0
       scroll-conservatively 100000
@@ -305,26 +295,18 @@
 
 
 ;; dashboard
+;;----------------------------------------------------------------------------
 
 (use-package dashboard
+  :demand t
   :straight t
-  :init (setq dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
-              dashboard-startup-banner 'official
+  :init (setq dashboard-startup-banner 'official
               dashboard-items '((recents   . 5)
                                 (bookmarks . 5)
                                 (projects  . 5)
                                 (agenda    . 5)
-                                (registers . 5))
-              initial-buffer-choice #'(lambda () (get-buffer "*dashboard*")))
-  :config
-  (dashboard-setup-startup-hook))
-
-;; Require packages
-;;----------------------------------------------------------------------------
-
-(use-package command-log-mode
-  :demand t
-  :straight t)
+                                (registers . 5)))
+  :hook ((after-init . dashboard-setup-startup-hook)))
 
 
 ;; Windows
@@ -369,12 +351,12 @@
 ;; Functions
 ;;----------------------------------------------------------------------------
 
-(defun insert-current-date ()
+(defun nasy:insert-current-date ()
   "Insert current date."
   (interactive)
   (insert (shell-command-to-string "echo -n $(date +'%b %d, %Y')")))
 
-(defun insert-current-filename ()
+(defun nasy:insert-current-filename ()
   "Insert current buffer filename."
   (interactive)
   (insert (file-relative-name buffer-file-name)))
@@ -508,21 +490,17 @@ Call a second time to restore the original window configuration."
 
 ;; Editor
 ;;----------------------------------------------------------------------------
-
 ;; some default settings
 
 (setq-default
- blink-cursor-interval 0.6
  bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory)
  buffers-menu-max-size 30
  case-fold-search t
  column-number-mode t
  cursor-in-non-selected-windows t
- ;; cursor-type 'bar
  dired-dwim-target t
  ediff-split-window-function 'split-window-horizontally
  ediff-window-setup-function 'ediff-setup-windows-plain
- fill-column 80
  indent-tabs-mode nil
  line-move-visual t
  make-backup-files nil
@@ -531,8 +509,6 @@ Call a second time to restore the original window configuration."
  save-interprogram-paste-before-kill t
  set-mark-command-repeat-pop t
  tab-always-indent 'complete
- tab-width 8
- tooltip-delay 1.5
  truncate-lines nil
  truncate-partial-width-windows nil)
 
@@ -572,12 +548,13 @@ Call a second time to restore the original window configuration."
 
 
 (use-package which-key
-  :demand t
+  :defer t
   :straight t
-  :config (which-key-mode +1))
+  :config ((after-init . (lambda () (which-key-mode +1)))))
 
 
 ;; isearch
+;;----------------------------------------------------------------------------
 
 (use-package isearch
   :preface
@@ -613,7 +590,9 @@ This is useful when followed by an immediate kill."
     ;; to match ivy conventions
     (define-key isearch-mode-map (kbd "C-c C-o") 'isearch-occur)))
 
+
 ;; grep
+;;----------------------------------------------------------------------------
 
 (setq-default grep-highlight-matches t
               grep-scroll-output t)
@@ -623,52 +602,45 @@ This is useful when followed by an immediate kill."
 
 
 ;; parens
+;;----------------------------------------------------------------------------
 
-(setq show-paren-style 'expression)
 (add-hook 'after-init-hook 'show-paren-mode)
 
 
 (use-package smartparens-config
-  :demand t
+  :defer t
   :straight smartparens
-  :init
-  (setq sp-base-key-bindings 'paredit)
-  (setq sp-autoskip-closing-pair 'always)
-  (setq sp-hybrid-kill-entire-symbol nil)
-  :config
-  (sp-use-paredit-bindings)
-  (show-smartparens-global-mode)
-  (smartparens-global-mode)
-
-  ;; disable annoying blink-matching-paren
-  (setq blink-matching-paren t))
+  :hook ((after-init . show-smartparens-global-mode)
+         (after-init . smartparens-global-mode))
+  :init (setq sp-autoskip-closing-pair 'always
+              sp-hybrid-kill-entire-symbol nil))
 
 
 (use-package rainbow-delimiters
+  :defer t
   :straight t
-  :hook ((prog-mode . rainbow-delimiters-mode)))
+  :hook (((prog-mode text-mode) . rainbow-delimiters-mode)))
+
 
 ;; highlight indention
+;;----------------------------------------------------------------------------
 
 (use-package highlight-indent-guides
-  :demand t
+  :defer t
   :straight t
-  :init (setq highlight-indent-guides-method 'column)
-  :hook ((prog-mode . highlight-indent-guides-mode)))
+  :hook (((prog-mode text-mode) . highlight-indent-guides-mode)))
 
-
-;; nicer naming of buffers for files with identical names
 
 ;; dired
+;;----------------------------------------------------------------------------
 
 (use-package dired
-  :demand t
+  :defer t
   :init
   (let ((gls (executable-find "gls")))
     (when gls (setq insert-directory-program gls)))
-  :config
-  (setq dired-recursive-deletes 'top)
-  (define-key dired-mode-map [mouse-2] 'dired-find-file)
+  :config (setq dired-recursive-deletes 'top)
+  (define-key dired-mode-map [mouse-2]       'dired-find-file)
   (define-key dired-mode-map (kbd "C-c C-p") 'wdired-change-to-wdired-mode))
 
 
@@ -676,17 +648,16 @@ This is useful when followed by an immediate kill."
   :defer t
   :after dired
   :straight t
-  :config
-  (diredfl-global-mode))
+  :hook ((after-init . diredfl-global-mode)))
 
 
 (use-package uniquify
-  :demand t
-  :config
-  (setq uniquify-buffer-name-style 'reverse
-        uniquify-separator " • "
+  :defer t
+  :init  ;; nicer naming of buffers for files with identical names
+  (setq uniquify-buffer-name-style   'reverse
+        uniquify-separator           " • "
         uniquify-after-kill-buffer-p t
-        uniquify-ignore-buffers-re "^\\*"))
+        uniquify-ignore-buffers-re   "^\\*"))
 
 
 (use-package diff-hl
@@ -696,22 +667,19 @@ This is useful when followed by an immediate kill."
   :hook ((dired-mode . diff-hl-dired-mode)))
 
 
-;; shell
-
-(use-package shell)
-
-
 ;; recentf
+;;----------------------------------------------------------------------------
 
 (use-package recentf
-  :demand t
+  :defer t
   :hook ((after-init . recentf-mode))
   :init (setq-default
-         recentf-save-file "~/.emacs.d/recentf"
+         recentf-save-file       "~/.emacs.d/recentf"
          recentf-max-saved-items 100
-         recentf-exclude '("/tmp/" "/ssh:")))
+         recentf-exclude         '("/tmp/" "/ssh:")))
 
 ;; smex
+;;----------------------------------------------------------------------------
 
 (use-package smex
   :defer t
@@ -719,20 +687,24 @@ This is useful when followed by an immediate kill."
   :init (setq-default smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
   :bind (("<remap> <execute-extended-command>" . smex)))
 
+
 ;; subword
+;;----------------------------------------------------------------------------
 
 (use-package subword
-  :demand t
+  :defer t
   :diminish (subword-mode))
 
+
 ;; multiple cursors
+;;----------------------------------------------------------------------------
 
 (use-package multiple-cursors
   :defer t
   :straight t
-  :bind (("C-<" . mc/mark-previous-like-this)
-         ("C->" . mc/mark-next-like-this)
-         ("C-+" . mc/mark-next-like-this)
+  :bind (("C-<"     . mc/mark-previous-like-this)
+         ("C->"     . mc/mark-next-like-this)
+         ("C-+"     . mc/mark-next-like-this)
          ("C-c C-<" . mc/mark-all-like-this)
          ;; From active region to multiple cursors:
          ("C-c m r" . set-rectangular-region-anchor)
@@ -742,6 +714,7 @@ This is useful when followed by an immediate kill."
 
 
 ;; mmm-mode
+;;----------------------------------------------------------------------------
 
 (use-package mmm-auto
   :demand t
@@ -751,9 +724,10 @@ This is useful when followed by an immediate kill."
 
 
 ;; whitespace
+;;----------------------------------------------------------------------------
 
 (use-package whitespace
-  :demand t
+  :defer t
   :preface
   (defun no-trailing-whitespace ()
     "Turn off display of trailing whitespace in this buffer."
@@ -770,27 +744,24 @@ This is useful when followed by an immediate kill."
                   compilation-mode-hook
                   twittering-mode-hook
                   minibuffer-setup-hook))
-    (add-hook hook #'no-trailing-whitespace))
-
-  (setq whitespace-style
-        '(face spaces tabs newline space-mark tab-mark newline-mark lines-tail empty)
-        whitespace-line-column 80))
+    (add-hook hook #'no-trailing-whitespace)))
 
 
 (use-package whitespace-cleanup-mode
-  :demand t
+  :defer t
   :straight t
-  ;; :init (setq whitespace-cleanup-mode-only-if-initially-clean nil)
   :hook ((after-init . global-whitespace-cleanup-mode))
   :diminish (whitespace-cleanup-mode)
   :bind (("<remap> <just-one-space>" . cycle-spacing)))
 
+
 ;; large file
+;;----------------------------------------------------------------------------
 
 (use-package vlf
-  :demand t
+  :defer t
   :straight t
-  :preface
+  :init
   (defun ffap-vlf ()
     "Find file at point with VLF."
     (interactive)
@@ -801,33 +772,33 @@ This is useful when followed by an immediate kill."
 
 
 ;; text-scale
+;;----------------------------------------------------------------------------
 
 (use-package default-text-scale
   :straight t)
 
+
 ;; unfill
+;;----------------------------------------------------------------------------
 
 (use-package unfill
   :straight t)
 
 
 ;; visual fill column
+;;----------------------------------------------------------------------------
 
 (use-package visual-fill-column
-  :demand t
+  :defer t
   :straight t
-  :preface (defun maybe-adjust-visual-fill-column ()
-             "Readjust visual fill column when the global font size is modified.
+  :preface
+  (defun maybe-adjust-visual-fill-column ()
+    "Readjust visual fill column when the global font size is modified.
 This is helpful for writeroom-mode, in particular."
-             (if visual-fill-column-mode
-                 (add-hook 'after-setting-font-hook 'visual-fill-column--adjust-window nil t)
-               (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t)))
-  :init
-  (setq fill-column 80
-        visual-fill-column-width 100
-        word-wrap t)
+    (if visual-fill-column-mode
+        (add-hook 'after-setting-font-hook 'visual-fill-column--adjust-window nil t)
+      (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t)))
   :hook ((visual-line-mode . visual-fill-column-mode)
-         ;; (after-init . global-visual-line-mode)
          (visual-fill-column-mode . maybe-adjust-visual-fill-column)))
 
 
@@ -860,18 +831,6 @@ This is helpful for writeroom-mode, in particular."
   :after flycheck
   :straight t)
 
-;; (use-package flycheck-color-mode-line
-;;   :after flycheck
-;;   :straight t
-;;   :hook ((flycheck-mode . flycheck-color-mode-line-mode)))
-
-
-;; (use-package flycheck-posframe
-;;   :after flycheck
-;;   :straight t
-;;   :hook ((flycheck-mode . flycheck-posframe-mode)
-;;          (flycheck-mode . flycheck-posframe-configure-pretty-defaults)))
-
 
 ;; company
 ;;----------------------------------------------------------------------------
@@ -880,12 +839,8 @@ This is helpful for writeroom-mode, in particular."
   :defer t
   :straight t
   :init
-  (setq-default tab-always-indent 'complete
-                company-minimum-prefix-length .2
-                company-idle-delay .5
+  (setq-default company-minimum-prefix-length .2
                 company-transformers '(company-sort-by-backend-importance)
-                ;; company-transformers '(company-sort-by-occurrence)
-                ;; company-transformers nil
                 company-require-match nil
                 company-tooltip-align-annotations t
                 company-dabbrev-other-buffers 'all
@@ -895,12 +850,12 @@ This is helpful for writeroom-mode, in particular."
   :hook ((after-init . global-company-mode))
   :bind (("M-C-/" . company-complete)
          :map company-mode-map
-         ("M-/" . company-complete)
-         ;; ("<tab>" . company-complete)
+         ("M-/"   . company-complete)
          :map company-active-map
+         ("M-/"   . company-complete)
          ("<tab>" . company-other-backend)
-         ("C-n" . company-select-next)
-         ("C-p" . company-select-previous))
+         ("C-n"   . company-select-next)
+         ("C-p"   . company-select-previous))
   :config
   (defvar my-prev-whitespace-mode nil)
   (make-variable-buffer-local 'my-prev-whitespace-mode)
@@ -928,20 +883,10 @@ This is helpful for writeroom-mode, in particular."
   (diminish 'company-mode "CMP"))
 
 (use-package company-try-hard
-  :demand t
+  :defer t
   :straight t
-  :bind (("C-z" . company-try-hard)
-         :map company-active-map
+  :bind (:map company-active-map
          ("C-z" . company-try-hard)))
-
-
-;; (use-package company-posframe
-;;   :after company
-;;   :straight t
-;;   :init (push '(company-posframe-mode . nil)
-;;               desktop-minor-mode-table)
-;;   :hook ((after-init . company-posframe-mode))
-;;   :diminish company-posframe-mode)
 
 
 (use-package company-quickhelp
@@ -959,13 +904,14 @@ This is helpful for writeroom-mode, in particular."
 
 
 (use-package company-flx
-  :demand t
+  :defer t
   :straight t
   :after company
-  :config (company-flx-mode +1))
+  :hook ((after-init . (lambda () (company-flx-mode +1)))))
 
 
 ;; version control
+;;----------------------------------------------------------------------------
 
 (use-package git-gutter
   :straight t
@@ -973,8 +919,8 @@ This is helpful for writeroom-mode, in particular."
   :hook (after-init . global-git-gutter-mode)
   :bind (("C-x C-g" . git-gutter)
          ("C-x v =" . git-gutter:popup-hunk)
-         ("C-x p" . git-gutter:previous-hunk)
-         ("C-x n" . git-gutter:next-hunk))
+         ("C-x p"   . git-gutter:previous-hunk)
+         ("C-x n"   . git-gutter:next-hunk))
  :init (setq git-gutter:visual-line t
              git-gutter:disabled-modes '(asm-mode image-mode)
              git-gutter:modified-sign "■"
@@ -983,6 +929,7 @@ This is helpful for writeroom-mode, in particular."
 
 
 ;; anzu
+;;----------------------------------------------------------------------------
 
 (use-package anzu
   :defer t
@@ -992,9 +939,10 @@ This is helpful for writeroom-mode, in particular."
 
 
 ;; outline-magic
+;;----------------------------------------------------------------------------
 
 (use-package outline-magic
-  :demand t
+  :defer t
   :straight t
   :preface
   ;; https://www.emacswiki.org/emacs/python-magic.el
@@ -1009,6 +957,7 @@ This is helpful for writeroom-mode, in particular."
     (setq outline-level 'py-outline-level)
     (outline-minor-mode t)
     (hide-body))
+
   :bind (:map outline-minor-mode-map
               ("<C-tab>" . outline-cycle))
   :hook ((python-mode . python-outline-hook))
@@ -1016,6 +965,7 @@ This is helpful for writeroom-mode, in particular."
 
 
 ;; htmlize
+;;----------------------------------------------------------------------------
 
 (use-package htmlize
   :defer t
@@ -1024,6 +974,7 @@ This is helpful for writeroom-mode, in particular."
 
 ;; projectile
 ;;----------------------------------------------------------------------------
+
 (use-package projectile
   :defer t
   :straight t
@@ -1033,74 +984,34 @@ This is helpful for writeroom-mode, in particular."
 	 )
   :bind-keymap ("C-c C-p" . projectile-command-map)
   :hook ((after-init . projectile-global-mode))
-  :init (setq projectile-require-project-root nil)
-  :config
-;;   (let ((search-function
-;;          (cond
-;;           ((executable-find "rg") 'counsel-rg)
-;;           ((executable-find "ag") 'counsel-ag)
-;;           ((executable-find "pt") 'counsel-pt)
-;;           ((executable-find "ack") 'counsel-ack))))
-;;     (when search-function
-;;       (defun counsel-search-project (initial-input &optional use-current-dir)
-;;         "Search using `counsel-rg' or similar from the project root for INITIAL-INPUT.
-;; If there is no project root, or if the prefix argument
-;; USE-CURRENT-DIR is set, then search from the current directory
-;; instead."
-;;         (interactive (list (thing-at-point 'symbol)
-;;                            current-prefix-arg))
-;;         (let ((current-prefix-arg)
-;;               (dir (if use-current-dir
-;;                        default-directory
-;;                      (condition-case err
-;;                          (projectile-project-root)
-;;                        (error default-directory)))))
-;;           (funcall search-function initial-input dir)))))
-  (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map))
-
-
-;; (use-package counsel
-;;   :defer t
-;;   :straight t
-;;   :diminish (counsel-mode)
-;;   :init
-;;   (setq-default counsel-mode-override-describe-bindings t)
-;;   :hook ((after-init . counsel-mode)))
-
-
-;; (use-package counsel-projectile
-;;   :after (counsel projectile)
-;;   :straight t
-;;   :config
-;;   (counsel-projectile-mode)
-;;   ;; (define-key counsel-projectile-mode-map [remap projectile-ag]
-;;   ;;   #'counsel-projectile-rg)
-;;   )
+  :init (setq projectile-require-project-root nil))
 
 
 ;; helm settings
 ;;----------------------------------------------------------------------------
 
 (use-package helm
-   :demand t
+   :defer t
    :straight t
-   :bind (("M-x" . helm-M-x)
-	  ("C-o" . helm-occur)
-	  ("<f1> SPC" . helm-all-mark-rings) ; I modified the keybinding
-	  ("M-y" . helm-show-kill-ring)
-	  ("C-x c x" . helm-register)    ; C-x r SPC and C-x r j
-	  ("C-x c g" . helm-google-suggest)
+   :bind (("M-x"       . helm-M-x)
+	  ("C-o"       . helm-occur)
+	  ("<f1> SPC"  . helm-all-mark-rings) ; I modified the keybinding
+	  ("M-y"       . helm-show-kill-ring)
+	  ("C-x c x"   . helm-register)    ; C-x r SPC and C-x r j
+	  ("C-x c g"   . helm-google-suggest)
 	  ("C-x c M-:" . helm-eval-expression-with-eldoc)
-	  ("C-x C-f" . helm-find-files)
-	  ("C-x b" . helm-mini)      ; *<major-mode> or /<dir> or !/<dir-not-desired> or @<regexp>
+	  ("C-x C-f"   . helm-find-files)
+	  ("C-x b"     . helm-mini)      ; *<major-mode> or /<dir> or !/<dir-not-desired> or @<regexp>
 	  :map helm-map
 	  ("<tab>" . helm-execute-persistent-action) ; rebind tab to run persistent action
-	  ("C-i" . helm-execute-persistent-action) ; make TAB works in terminal
-	  ("C-z" . helm-select-action) ; list actions using C-z
+	  ("C-i"   . helm-execute-persistent-action) ; make TAB works in terminal
+	  ("C-z"   . helm-select-action) ; list actions using C-z
 	  :map shell-mode-map
 	  ("C-c C-l" . helm-comint-input-ring) ; in shell mode
 	  :map minibuffer-local-map
 	  ("C-c C-l" . helm-minibuffer-history))
+   :hook ((after-init . (lambda () (helm-mode 1)))
+          (after-init . (lambda () (helm-autoresize-mode 1))))
    :init
    (require 'helm-config)
 
@@ -1123,27 +1034,20 @@ This is helpful for writeroom-mode, in particular."
 	 helm-echo-input-in-header-line        t)
 
    :config
+   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages))
 
-   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-
-   (helm-mode 1)
-   (helm-autoresize-mode 1)
-
-   (setq-default helm-follow-mode-persistent t
-	         helm-allow-mouse t
-	         helm-move-to-line-cycle-in-source nil
-	         helm-source-names-using-follow '("Buffers" "kill-buffer" "Occur")))
 
 (use-package helm-eshell
   :after helm
   :bind (:map eshell-mode-map
               ("C-c C-l" . helm-eshell-history)))
 
+
 (use-package helm-descbinds
   :straight t
   :after helm
-  :config
-  (helm-descbinds-mode))
+  :hook ((after-init . helm-descbinds-mode)))
+
 
 (use-package helm-projectile
   :straight t
@@ -1151,97 +1055,26 @@ This is helpful for writeroom-mode, in particular."
   :init
   (setq projectile-completion-system 'helm))
 
+
 (use-package helm-ag
   :straight t
-  :init (setq helm-ag-base-command "rg --no-heading --smart-case"
-              helm-ag-fuzzy-match t
+  :init (setq helm-ag-fuzzy-match t
               helm-ag-use-grep-ignore-list t
               helm-ag-use-agignore t))
+
 
 (use-package helm-dash
   :straight t
   :init (setq helm-dash-docsets-path "~/.docsets"))
 
+
 (use-package helm-swoop
   :straight t
   :bind (("C-s" . helm-swoop))
-  :init (setq helm-swoop-move-to-line-cycle t
+  :init (setq helm-swoop-move-to-line-cycle   t
               helm-swoop-use-line-number-face t
-              helm-swoop-use-fuzzy-match t))
-;; ivy settings
-;;----------------------------------------------------------------------------
+              helm-swoop-use-fuzzy-match      t))
 
-;; (use-package ivy
-;;   :defer t
-;;   :straight t
-;;   :diminish ivy-mode
-;;   :hook ((after-init . ivy-mode))
-;;   :config (setq-default ivy-use-virtual-buffers t
-;;                         ivy-dynamic-exhibit-delay-ms 150
-;;                         ivy-count-format ""
-;;                         ivy-virtual-abbreviate 'fullpath)
-;;   :bind (:map ivy-minibuffer-map
-;;               ("RET" . ivy-alt-done)
-;;               ("C-j" . ivy-immediate-done)
-;;               ("C-RET" . ivy-immediate-done)
-;;               ("<up>" . ivy-previous-line-or-history)))
-
-;; (use-package ivy-historian
-;;   :defer t
-;;   :straight t
-;;   :hook ((after-init . ivy-historian-mode)))
-
-;; (use-package swiper
-;;   :defer t
-;;   :after ivy
-;;   :straight t
-;;   :bind (("C-s" . swiper)
-;;          :map ivy-mode-map
-;;               ("M-s /". swiper-at-point))
-;;   :preface
-;;   (defun swiper-at-point (sym)
-;;     "Use `swiper' to search for the symbol at point."
-;;     (interactive (list (thing-at-point 'symbol)))
-;;     (swiper sym)))
-
-;; (use-package ivy-xref
-;;   :defer t
-;;   :straight t
-;;   :init
-;;   (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
-
-;; ;; ivy-support-chinese-pinyin
-;; ;; https://github.com/pengpengxp/swiper/wiki/ivy-support-chinese-pinyin
-
-;; (use-package pinyinlib
-;;   :demand t
-;;   :straight t
-;;   :config
-;;   (defun re-builder-pinyin (str)
-;;     (or (pinyin-to-utf8 str)
-;;         (ivy--regex-plus str)
-;;         (ivy--regex-ignore-order)))
-
-;;   (setq ivy-re-builders-alist
-;;         '((t . re-builder-pinyin)))
-
-;;   (defun my-pinyinlib-build-regexp-string (str)
-;;     (progn
-;;       (cond ((equal str ".*") ".*")
-;;             (t (pinyinlib-build-regexp-string str t)))))
-;;   (defun my-pinyin-regexp-helper (str)
-;;     (cond ((equal str " ") ".*")
-;;           ((equal str "") nil)
-;;           (t str)))
-
-;;   (defun pinyin-to-utf8 (str)
-;;     (cond ((equal 0 (length str)) nil)
-;;           ((equal (substring str 0 1) "!")
-;;            (mapconcat 'my-pinyinlib-build-regexp-string
-;;                       (remove nil
-;;                               (mapcar 'my-pinyin-regexp-helper
-;;                                       (split-string (replace-in-string str "!" "") ""))) ""))
-;;           nil)))
 
 ;; Treemacs
 ;;----------------------------------------------------------------------------
@@ -1300,6 +1133,7 @@ This is helpful for writeroom-mode, in particular."
         ("C-x t B"   . treemacs-bookmark)
         ("C-x t C-t" . treemacs-find-file)
         ("C-x t M-t" . treemacs-find-tag)))
+
 
 (use-package treemacs-projectile
   :after treemacs projectile
@@ -1789,7 +1623,6 @@ This is helpful for writeroom-mode, in particular."
 ;; Org-mode
 ;;----------------------------------------------------------------------------
 
-
 (use-package grab-mac-link
   :defer t
   :straight t)
@@ -2221,20 +2054,9 @@ typical word processor."
   :straight t
   :hook ((org-mode . org-toc-enable)))
 
+
 ;; Themes
 ;;----------------------------------------------------------------------------
-
-;; Font
-
-(add-to-list 'initial-frame-alist
-             '(font . "OperatorMonoLig Nerd Font-14"))
-(add-to-list 'default-frame-alist
-             '(font . "OperatorMonoLig Nerd Font-14"))
-
-
-;; Now I use emojify
-;; (when (member "Apple Color Emoji" (font-family-list))
-;;   (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
 (use-package emojify
   :straight t
@@ -2383,5 +2205,10 @@ typical word processor."
 
 (when (file-exists-p custom-file)
   (load custom-file))
+
+(message "Start init in %.2fms"
+         (benchmark-init/time-subtract-millis
+          (current-time)
+          emacs-start-init-time))
 
 ;;; init.el ends here

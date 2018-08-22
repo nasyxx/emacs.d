@@ -8,10 +8,82 @@
 
 ;;; Code:
 
+
+;; Ui settings
+;;----------------------------------------------------------------------------
+
+(when *is-a-mac*
+  (add-to-list 'default-frame-alist
+               '(ns-transparent-titlebar . t))
+
+  (add-to-list 'default-frame-alist
+               '(ns-appearance . dark))
+
+  (add-to-list 'default-frame-alist
+               '(alpha . (80 . 75)))
+
+  (add-to-list 'default-frame-alist
+               '(font . "OperatorMonoLig Nerd Font-14"))
+
+  (defun stop-minimizing-window ()
+  "Stop minimizing window under macOS."
+  (interactive)
+  (unless (and *is-a-mac*
+               window-system)
+    (suspend-frame)))
+
+  (global-set-key (kbd "C-z") 'stop-minimizing-window))
+
+
+;; Some default settings
+;;----------------------------------------------------------------------------
+
 (setq-default
+ ;; calendar-latitude  24.8801
+ ;; calendar-longitude 102.8329
  ;; user-mail-address ""
- use-pyenv t  ;; `t' if you'd like to use pyenv when using pyls
- )
+ blink-cursor-interval             .6
+ blink-matching-paren              t
+ company-idle-delay                .5
+ ;; cursor-type 'bar
+ fill-column                       80
+ helm-ag-base-command              "rg --no-heading --smart-case"  ;; brew install rg
+ highlight-indent-guides-method    'column
+ shell-file-name                   "/bin/zsh"
+ show-paren-style                  'expression
+ sp-base-key-bindings              'paredit
+ tab-width                         8
+ tooltip-delay                     1.5
+ use-pyenv                         t  ;; `t' if you'd like to use pyenv when using pyls
+ visual-fill-column-width          100
+ whitespace-line-column            80
+ whitespace-style                  '(face spaces tabs newline
+                                     space-mark tab-mark newline-mark
+                                     lines-tail empty)
+ word-wrap                         t
+)
+
+
+(setq-default
+ initial-scratch-message     (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+ dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+ initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))
+)
+
+
+(defun nasy:config-after ()
+  "Set default after init."
+  (setq-default
+   helm-allow-mouse                  t
+   helm-follow-mode-persistent       t
+   helm-move-to-line-cycle-in-source nil
+   helm-source-names-using-follow    '("Buffers" "kill-buffer" "Occur")))
+
+
+(add-hook 'nasy:config-after-hook  #'nasy:config-after)
+
+;; Custom face
+;;----------------------------------------------------------------------------
 
 (defun nasy:set-face ()
   "Set custom face."
@@ -29,27 +101,21 @@
 (add-hook 'nasy:config-before-hook #'nasy:set-face)
 
 
-;; sunrise-sunset
-
-(setq calendar-latitude  24.8801
-      calendar-longitude 102.8329)
-
-
-;; Key Bindings for macOS
+;; Key Bindings
 ;;----------------------------------------------------------------------------
 
-;; Cursor Movement
-
 (when *is-a-mac*  ;; init.el:16 (defconst *is-a-mac* (eq system-type 'darwin))
+  ;; Cursor Movement
   (global-set-key (kbd "s-<up>")   'beginning-of-buffer)
-  (global-set-key (kbd "s-<down>") 'end-of-buffer))
-
-
-;; Text Operations
-
-(global-set-key (kbd "s-<backspace>") (lambda ()
-                                       (interactive)
-                                       (kill-line 0)))
+  (global-set-key (kbd "s-<down>") 'end-of-buffer)
+  ;; Text Operations
+  (global-set-key (kbd "M-¥") (lambda ()
+                                (interactive)
+                                (insert "\\")))
+  (global-set-key (kbd "s-<backspace>") (lambda ()
+                                         (interactive)
+                                         (kill-line 0)))
+)
 
 (provide 'nasy-config)
 ;;; nasy-config.el ends here
