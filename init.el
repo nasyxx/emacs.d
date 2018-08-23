@@ -1009,6 +1009,7 @@ This is helpful for writeroom-mode, in particular."
 (use-package helm
    :defer t
    :straight t
+   :diminish helm-mode
    :bind (("M-x"       . helm-M-x)
 	  ("C-o"       . helm-occur)
 	  ("<f1> SPC"  . helm-all-mark-rings) ; I modified the keybinding
@@ -1493,6 +1494,13 @@ This is helpful for writeroom-mode, in particular."
 
 ;; (use-package eglot
 ;;   :straight t)
+
+;; C/C++/OBJC
+
+(use-package lsp-clangd
+  :straight t
+  :hook (((c-mode c++-mode objc-mode) . lsp-clangd-c-enable)))
+
 
 ;; python
 
