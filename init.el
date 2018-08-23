@@ -1054,6 +1054,19 @@ This is helpful for writeroom-mode, in particular."
    (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages))
 
 
+(use-package helm-org
+  :defer
+  :config
+  (cl-defun helm-org-headings-in-buffer ()
+    (interactive)
+    (helm :sources (helm-source-org-headings-for-files
+                    (list (projectile-completing-read
+                           "File to look at headings from: "
+                           (projectile-all-project-files))))
+          :candidate-number-limit 99999
+          :buffer "*helm org inbuffer*")))
+
+
 (use-package helm-eshell
   :after helm
   :bind (:map eshell-mode-map
