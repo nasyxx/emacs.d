@@ -1512,12 +1512,12 @@ This is helpful for writeroom-mode, in particular."
 ;; C/C++/OBJC
 
 (use-package lsp-clangd
-  :disabled t
   :straight t
   :hook (((c-mode c++-mode objc-mode) . lsp-clangd-c-enable)))
 
 
 (use-package cquery
+  :disabled t
   :commands lsp-cquery-enable
   :straight t
   :init (setq cquery-executable        "/usr/local/bin/cquery"
