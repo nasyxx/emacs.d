@@ -22,7 +22,10 @@ My personal emacs configuration for macOS.
 To add your own customization, use ~M-x customize~ etc. and/or create a file ~~/.emacs.d/config/user-config.el~ which looks like this:
 
 #+BEGIN_SRC elisp
-... your code here ...
+(setq-default 
+ calendar-latitude  24.8801
+ calendar-longitude 102.8329
+ user-mail-address  "nasyxx+emacs@gmail.com")
 
 (provide 'user-config)
 #+END_SRC
