@@ -1000,7 +1000,11 @@ This is helpful for writeroom-mode, in particular."
 	 )
   :bind-keymap ("C-c C-p" . projectile-command-map)
   :hook ((after-init . projectile-global-mode))
-  :init (setq projectile-require-project-root nil))
+  :init (setq projectile-require-project-root nil)
+  :config (setq projectile-project-root-files-top-down-recurring
+                (append '("compile_commands.json"
+                          ".cquery")
+                        projectile-project-root-files-top-down-recurring)))
 
 
 ;; helm settings
@@ -1501,18 +1505,24 @@ This is helpful for writeroom-mode, in particular."
 
 ;; eglot
 
-;; (straight-register-package
-;;  '(jsonrpc :repo "https://github.com/nasyxx/temp-jsonrpc.el.git"
-;;            :files ("jsonrpc.el")))
-
-;; (use-package eglot
-;;   :straight t)
+(use-package eglot
+  :disabled t
+  :straight t)
 
 ;; C/C++/OBJC
 
 (use-package lsp-clangd
+  :disabled t
   :straight t
   :hook (((c-mode c++-mode objc-mode) . lsp-clangd-c-enable)))
+
+
+(use-package cquery
+  :commands lsp-cquery-enable
+  :straight t
+  :init (setq cquery-executable        "/usr/local/bin/cquery"
+              cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t)))
+  :hook (((c-mode c++-mode) . lsp-cquery-enable)))
 
 
 ;; python
