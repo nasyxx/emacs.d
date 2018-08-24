@@ -8,6 +8,7 @@
 
 ;;; Code:
 
+(defconst *is-a-mac* (eq system-type 'darwin))
 
 ;; Ui settings
 ;;----------------------------------------------------------------------------
@@ -44,37 +45,56 @@
  ;; calendar-latitude  24.8801
  ;; calendar-longitude 102.8329
  ;; user-mail-address ""
- blink-cursor-interval             .6
- blink-matching-paren              t
- company-idle-delay                .5
+ 
+ ;;---cursor-----------------------------------------------------------------
+ blink-cursor-interval                           .6
+ blink-matching-paren                            t
  ;; cursor-type 'bar
- fill-column                       80
- helm-ag-base-command              "rg --no-heading --smart-case"  ;; brew install rg
- highlight-indent-guides-method    'column
- shell-file-name                   "/bin/zsh"
- show-paren-style                  'expression
- sp-base-key-bindings              'paredit
- tab-width                         8
- tooltip-delay                     1.5
- use-pyenv                         t  ;; `t' if you'd like to use pyenv when using pyls
- visual-fill-column-width          100
- whitespace-line-column            80
- whitespace-style                  '(face spaces tabs newline
-                                     space-mark tab-mark newline-mark
-                                     lines-tail empty)
- word-wrap                         t
+ 
+ ;;---visual-----------------------------------------------------------------
+ fill-column                                     80
+ visual-fill-column-width                        100
+ word-wrap                                       t
+ highlight-indent-guides-method                  'column
+ tab-width                                       8
+ tooltip-delay                                   1.5
+ 
+ ;;---company----------------------------------------------------------------
+ company-idle-delay                              .5
+ 
+ ;;---helm-------------------------------------------------------------------
+ ;; brew install rg   if you'd like to use rg as my doing
+ helm-ag-base-command                            "rg --no-heading --smart-case"
+ 
+ ;;---shell------------------------------------------------------------------
+ shell-file-name                                 "/bin/zsh"
+ 
+ ;;---parens-----------------------------------------------------------------
+ show-paren-style                                'expression
+ sp-autoinsert-quote-if-followed-by-closing-pair t
+ sp-base-key-bindings                            'paredit
+ sp-show-pair-from-inside                        t
+ 
+ ;;---whitespace-------------------------------------------------------------
+ whitespace-line-column                          80
+ whitespace-style                                '(face spaces tabs newline
+                                                   space-mark tab-mark newline-mark
+                                                   lines-tail empty)
+ 
+ ;;---others-----------------------------------------------------------------
+ use-pyenv                                       t  ;; `t' if you'd like to use pyenv when using pyls
 )
 
 
 (setq-default
  initial-scratch-message     (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
  dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
- initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))
+ initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; may cause error.
 )
 
 
 (defun nasy:config-after ()
-  "Set default after init."
+  "Set configuration need to be set after init."
   (setq-default
    helm-allow-mouse                  t
    helm-follow-mode-persistent       t
@@ -89,10 +109,10 @@
 
 (defun nasy:set-face ()
   "Set custom face."
-  (set-face-attribute 'custom-comment              nil :background "#3d4551" :foreground "#cbe3e7" :slant 'italic)
-  (set-face-attribute 'font-lock-keyword-face      nil :foreground "#aa96da"                       :slant 'italic)
-  (set-face-attribute 'mode-line                   nil :background "#a1de93" :foreground "#2f3e75" :box nil )
-  (set-face-attribute 'mode-line-inactive          nil :background "#333"    :foreground "#96A7A9" :box nil)
+  (set-face-attribute 'custom-comment              nil :background "#3d4551" :foreground "#cbe3e7" :slant   'italic)
+  (set-face-attribute 'font-lock-keyword-face      nil                       :foreground "#aa96da" :slant   'italic)
+  (set-face-attribute 'mode-line                   nil :background "#a1de93" :foreground "#2f3e75" :box     nil)
+  (set-face-attribute 'mode-line-inactive          nil :background "#333"    :foreground "#96A7A9" :box     nil)
   (set-face-attribute 'powerline-active0           nil :background "#ffffc1"                       :inherit 'mode-line )
   (set-face-attribute 'powerline-active1           nil :background "#aa96da" :foreground "#2f3e75" :inherit 'mode-line )
   (set-face-attribute 'powerline-active2           nil :background "#d0efb5" :foreground "black"   :inherit 'mode-line)
@@ -106,11 +126,11 @@
 ;; Key Bindings
 ;;----------------------------------------------------------------------------
 
-(when *is-a-mac*  ;; init.el:16 (defconst *is-a-mac* (eq system-type 'darwin))
-  ;; Cursor Movement
+(when *is-a-mac*
+  ;; cursor Movement
   (global-set-key (kbd "s-<up>")   'beginning-of-buffer)
   (global-set-key (kbd "s-<down>") 'end-of-buffer)
-  ;; Text Operations
+  ;; text Operations
   (global-set-key (kbd "M-¥") (lambda ()
                                 (interactive)
                                 (insert "\\")))

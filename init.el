@@ -633,8 +633,7 @@ This is useful when followed by an immediate kill."
   :straight smartparens
   :hook ((after-init . show-smartparens-global-mode)
          (after-init . smartparens-global-mode))
-  :init (setq sp-autoskip-closing-pair 'always
-              sp-hybrid-kill-entire-symbol nil))
+  :init (setq sp-hybrid-kill-entire-symbol nil))
 
 
 (use-package rainbow-delimiters
