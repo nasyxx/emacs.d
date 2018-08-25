@@ -1469,7 +1469,7 @@ This is helpful for writeroom-mode, in particular."
 
 (use-package lsp-mode
   :demand t
-  :straight t)
+  :straight (lsp-mode :host github :repo "nasyxx/lsp-mode"))
 
 (use-package lsp-imenu
   :demand t
