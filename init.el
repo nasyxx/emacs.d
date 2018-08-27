@@ -574,6 +574,12 @@ Call a second time to restore the original window configuration."
   :straight t)
 
 
+(use-package page-break-lines
+  :straight t
+  :hook ((after-init . global-page-break-lines-mode))
+  :diminish page-break-lines-mode)
+
+
 ;; isearch
 ;;----------------------------------------------------------------------------
 
@@ -1606,19 +1612,57 @@ This is helpful for writeroom-mode, in particular."
 
 (use-package haskell-mode
   :straight t
-  :hook ((haskell-mode . haskell-auto-insert-module-template)
-         (haskell-mode . haskell-collapse-mode))
-  :bind (("C-x a a" . align))
+  :preface
+  (define-minor-mode stack-exec-path-mode
+    "If this is a stack project, set `exec-path' to the path \"stack exec\" would use."
+    nil
+    :lighter ""
+    :global nil
+    (if stack-exec-path-mode
+        (when (and (executable-find "stack")
+                   (locate-dominating-file default-directory "stack.yaml"))
+          (setq-local
+           exec-path
+           (seq-uniq
+            (append (list (concat (string-trim-right (shell-command-to-string "stack path --local-install-root")) "/bin"))
+                    (parse-colon-path
+                     (replace-regexp-in-string "[\r\n]+\\'" ""
+                                               (shell-command-to-string "stack path --bin-path"))))
+            'string-equal)))
+      (kill-local-variable 'exec-path)))
+
+  (defvar lsp-haskell--config-options (make-hash-table))
+
+  (defun lsp-haskell--set-configuration ()
+    (lsp--set-configuration `(:languageServerHaskell ,lsp-haskell--config-options)))
+
+  (defun lsp-haskell-set-config (name option)
+    "Set a config option in the haskell lsp server."
+    (puthash name option lsp-haskell--config-options))
+
+  ;; The default settings here, if you want to change any about it, just do it.
+  ;; (lsp-haskell-set-config "maxNumberOfProblems" 100)
+  ;; (lsp-haskell-set-config "hlintOn" t)
+
+  :hook ((haskell-mode . subword-mode)
+         (haskell-mode . haskell-auto-insert-module-template)
+         (haskell-mode . haskell-collapse-mode)
+         (haskell-mode . stack-exec-path-mode)
+         (lsp-after-initialize . lsp-haskell--set-configuration))
+  :bind (("C-x a a" . align)
+         :map haskell-mode-map
+         ("C-c h" . hoogle)
+         ("C-o"   . open-line))
   :init (use-package lsp-haskell
           :straight t
-          :hook ((haskell-mode . lsp-haskell-enable)))
+          :hook ((haskell-mode . lsp-haskell-enable))
+          :config (setq tab-width 4))
 
-  (setq haskell-mode-stylish-haskell-path "stylish-haskell"
+  (setq haskell-mode-stylish-haskell-path            "stylish-haskell"
         haskell-process-suggest-haskell-docs-imports t
-        haskell-process-suggest-hayoo-imports t
-        haskell-process-suggest-hoogle-imports t
-        haskell-process-suggest-remove-import-lines t
-        haskell-stylish-on-save t
+        haskell-process-suggest-hayoo-imports        t
+        haskell-process-suggest-hoogle-imports       t
+        haskell-process-suggest-remove-import-lines  t
         haskell-tags-on-save t)
 
   (add-to-list 'align-rules-list
@@ -1636,7 +1680,20 @@ This is helpful for writeroom-mode, in particular."
   (add-to-list 'align-rules-list
                '(haskell-left-arrows
                  (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
-                 (modes quote (haskell-mode literate-haskell-mode)))))
+                 (modes quote (haskell-mode literate-haskell-mode))))
+
+  :config
+  (push 'haskell-mode page-break-lines-modes))
+
+
+(use-package intero
+  ;; :disabled t  ;; I'm not sure if it is a good idea to use intero with lsp-mode, but I like it.
+  :straight t
+  :after haskell-mode
+  :hook (haskell-mode . (lambda () (intero-global-mode 1)))
+  :config (define-key intero-mode-map (kbd "M-?") nil))
+
+
 
 
 ;; lisp
