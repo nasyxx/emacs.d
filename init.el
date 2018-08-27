@@ -2159,8 +2159,8 @@ typical word processor."
   :straight t)
 
 (use-package toc-org
-  :straight t
-  :hook ((org-mode . org-toc-enable)))
+  :defer t
+  :straight t)
 
 
 ;; Themes and modeline
