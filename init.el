@@ -936,8 +936,62 @@ This is helpful for writeroom-mode, in particular."
   :hook ((after-init . (lambda () (company-flx-mode +1)))))
 
 
-;; version control
+;; version control (I gave up SVN)
 ;;----------------------------------------------------------------------------
+
+
+(use-package git-blamed
+  :straight t)
+
+
+(use-package gitignore-mode
+  :straight t)
+
+
+(use-package gitconfig-mode
+  :straight t)
+
+
+(use-package git-timemachine
+  :defer t
+  :straight t)
+
+
+(use-package magit-todos
+  :defer t
+  :straight t)
+
+
+(use-package magit
+  :defer t
+  :after magit-todos
+  :straight t
+  :hook ((magit-popup-mode-hook . no-trailing-whitespace))
+  :init (setq-default magit-diff-refine-hunk t)
+  :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
+         ("C-c g"      . magit-status)  ;; quickly open magit on any one of your projects.  -- purcell
+         ("C-x M-g"    . magit-dispatch-popup)
+         :map magit-status-mode-map
+         ("C-M-<up>"   . magit-section-up)
+         :map vc-prefix-map
+         ("f"          . vc-git-grep))
+  :config (magit-todos-mode)
+  (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+
+
+(use-package git-commit
+  :defer t
+  :straight t
+  :hook ((git-commit-mode . goto-address-mode)))
+
+
+(use-package git-messenger
+  :defer t
+  :straight t
+  :init (setq git-messenger:show-detail t)
+  :bind (:map vc-prefix-map
+         ("p" . git-messenger:popup-message)))
+
 
 (use-package git-gutter
   :straight t
