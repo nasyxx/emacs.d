@@ -45,12 +45,12 @@
  ;; calendar-latitude  24.8801
  ;; calendar-longitude 102.8329
  ;; user-mail-address ""
- 
+
  ;;---cursor-----------------------------------------------------------------
  blink-cursor-interval                           .6
  blink-matching-paren                            t
  ;; cursor-type 'bar
- 
+
  ;;---visual-----------------------------------------------------------------
  fill-column                                     80
  visual-fill-column-width                        100
@@ -58,32 +58,32 @@
  highlight-indent-guides-method                  'column
  tab-width                                       8
  tooltip-delay                                   1.5
- 
+
  ;;---company----------------------------------------------------------------
  company-idle-delay                              .5
- 
+
  ;;---helm-------------------------------------------------------------------
  ;; brew install rg   if you'd like to use rg as my doing
  helm-ag-base-command                            "rg --no-heading --smart-case"
- 
+
  ;;---shell------------------------------------------------------------------
  shell-file-name                                 "/bin/zsh"
 
  ;;---language---------------------------------------------------------------
  haskell-stylish-on-save                         nil
- 
+
  ;;---parens-----------------------------------------------------------------
  show-paren-style                                'expression
  sp-autoinsert-quote-if-followed-by-closing-pair t
  sp-base-key-bindings                            'paredit
  sp-show-pair-from-inside                        t
- 
+
  ;;---whitespace-------------------------------------------------------------
  whitespace-line-column                          80
  whitespace-style                                '(face spaces tabs newline
                                                    space-mark tab-mark newline-mark
                                                    lines-tail empty)
- 
+
  ;;---others-----------------------------------------------------------------
  use-pyenv                                       t  ;; `t' if you'd like to use pyenv when using pyls
 )
@@ -92,7 +92,8 @@
 (setq-default
  initial-scratch-message     (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
  dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
- ;; initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; may cause error.
+ ;; initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; It will cause error if you start emacs from Command line with file name
+                                                                          ;; https://github.com/rakanalh/emacs-dashboard/issues/69
 )
 
 

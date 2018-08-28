@@ -1,6 +1,6 @@
 #+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
 #+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
-#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
+#+OPTIONS: email:nil f:t inline:t num:nil p:nil pri:nil prop:nil stat:t tags:t
 #+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
 #+TITLE: README
 #+DATE: <2018-08-20 Mon>
@@ -11,27 +11,42 @@
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 26.1 (Org mode N/A)
 
-* Emacs Configuration
-
-My personal emacs configuration for macOS.
-
-[[./screenshot.png]]
+* Table of Contents                                                             :TOC:
+- [[#emacs-configuration][Emacs Configuration]]
+- [[#custom-configuration][Custom Configuration]]
+    - [[#add-custom-configuration][Add Custom Configuration]]
+    - [[#dashboard][dashboard]]
+- [[#notice][*NOTICE:*]]
 
 * Custom Configuration
 
-To add your own customization, use ~M-x customize~ etc. and/or create a file ~~/.emacs.d/config/user-config.el~ which looks like this:
+** Add Custom Configuration
+
+To add your own customization, use ~M-x customize~ etc. and/or create a file
+~config/user-config.el~ which looks like this:
 
 #+BEGIN_SRC elisp
-(setq-default 
+(setq-default
  calendar-latitude  24.8801
  calendar-longitude 102.8329
- user-mail-address  "nasyxx+emacs@gmail.com")
+ user-mail-address  "nasyxx+emacs@gmail.com"
+ initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))
 
 (provide 'user-config)
 #+END_SRC
 
-*NOTICE:*
+** dashboard
+
+If you want start with [[https://github.com/rakanalh/emacs-dashboard][dashboard]], you need to set
+
+~(setq initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))~
+
+in your ~config/user-config.el~.
+
+*This will cause errors when start emacs from command line with a file name*.  The
+issue [[https://github.com/rakanalh/emacs-dashboard/issues/69][here]].  Hope some one fix it.
+
+* *NOTICE:*
 
 - Functions added to ~nasy:config-before-hook~ will run before load ~custom.el~.
 - Functions added to ~nasy:config-after-hook~ will run after init.
-
