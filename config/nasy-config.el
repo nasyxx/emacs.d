@@ -84,6 +84,11 @@
                                                    space-mark tab-mark newline-mark
                                                    lines-tail empty)
 
+ ;;---straight---------------------------------------------------------------
+ ;; The original one is `(find-at-startup find-when-checking) which is so slow.
+ ;; straight-check-for-modifications                '(find-at-startup find-when-checking)
+ straight-check-for-modifications                '(check-on-save find-when-checking)
+
  ;;---others-----------------------------------------------------------------
  use-pyenv                                       t  ;; `t' if you'd like to use pyenv when using pyls
 )

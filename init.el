@@ -25,11 +25,13 @@
 ;; For straight
 ;;----------------------------------------------------------------------------
 
-(setq straight-recipes-gnu-elpa-use-mirror t)
+(setq straight-recipes-gnu-elpa-use-mirror t
+      straight-repository-branch           "develop")
 
+(defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (Bootstrap-version 4))
+      (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
@@ -958,13 +960,11 @@ This is helpful for writeroom-mode, in particular."
 
 
 (use-package magit-todos
-  :defer t
   :straight t)
 
 
 (use-package magit
   :defer t
-  :after magit-todos
   :straight t
   :hook ((magit-popup-mode-hook . no-trailing-whitespace))
   :init (setq-default magit-diff-refine-hunk t)
@@ -975,7 +975,8 @@ This is helpful for writeroom-mode, in particular."
          ("C-M-<up>"   . magit-section-up)
          :map vc-prefix-map
          ("f"          . vc-git-grep))
-  :config (magit-todos-mode)
+  :config (with-eval-after-load 'magit-todos
+            (magit-todos-mode))
   (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
 
