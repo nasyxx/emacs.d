@@ -1176,8 +1176,9 @@ This is helpful for writeroom-mode, in particular."
 
 (use-package helm-ls-git
   :straight t
-  :bind (("C-<f6>"  . helm-ls-git-ls)
-         ("C-x C-d" . helm-browse-project)))
+  :bind (("C-<f6>"   . helm-ls-git-ls)
+         ("C-x C-g"  . helm-ls-git-ls)
+         ("C-x C-d"  . helm-browse-project)))
 
 ;; Treemacs
 ;;----------------------------------------------------------------------------
