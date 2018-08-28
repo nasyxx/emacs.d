@@ -3,6 +3,7 @@ all:
 .PHONY: all
 
 clean: clean-cache clean-history clean-jar clean-python
+	rm -rf straight/repoes/straight.el
 	@echo "Cleaning done!"
 .PHONY: clean
 
@@ -10,6 +11,7 @@ clean: clean-cache clean-history clean-jar clean-python
 clean-cache:
 	rm -rf straight/build-cache.el
 	rm -rf .smex-items
+	rm -rf auto-save-list
 .PHONY: clean-cache
 
 
