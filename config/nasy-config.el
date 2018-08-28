@@ -92,7 +92,7 @@
 (setq-default
  initial-scratch-message     (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
  dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
- initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; may cause error.
+ ;; initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; may cause error.
 )
 
 
