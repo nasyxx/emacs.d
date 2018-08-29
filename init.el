@@ -1702,6 +1702,7 @@ This is helpful for writeroom-mode, in particular."
     (puthash name option lsp-haskell--config-options))
 
   ;; The default settings here, if you want to change any about it, just do it.
+  ;; For example:
   ;; (lsp-haskell-set-config "maxNumberOfProblems" 100)
   ;; (lsp-haskell-set-config "hlintOn" t)
 
@@ -1709,6 +1710,7 @@ This is helpful for writeroom-mode, in particular."
          (haskell-mode . haskell-auto-insert-module-template)
          (haskell-mode . haskell-collapse-mode)
          (haskell-mode . stack-exec-path-mode)
+         (haskell-mode . (lambda () (setq-local tab-width 4)))
          (lsp-after-initialize . lsp-haskell--set-configuration))
   :bind (("C-x a a" . align)
          :map haskell-mode-map
@@ -1716,15 +1718,15 @@ This is helpful for writeroom-mode, in particular."
          ("C-o"   . open-line))
   :init (use-package lsp-haskell
           :straight t
-          :hook ((haskell-mode . lsp-haskell-enable))
-          :config (setq tab-width 4))
+          :hook ((haskell-mode   . lsp-haskell-enable)
+                 (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))))
 
   (setq haskell-mode-stylish-haskell-path            "stylish-haskell"
         haskell-process-suggest-haskell-docs-imports t
         haskell-process-suggest-hayoo-imports        t
         haskell-process-suggest-hoogle-imports       t
         haskell-process-suggest-remove-import-lines  t
-        haskell-tags-on-save t)
+        haskell-tags-on-save                         t)
 
   (add-to-list 'align-rules-list
              '(haskell-types
