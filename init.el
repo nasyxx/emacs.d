@@ -246,7 +246,7 @@
 
   (defun shell-command-to-string (command)
     (let ((call-process-args
-           (imalison:get-call-process-args-from-shell-command command)))
+           (get-call-process-args-from-shell-command command)))
       (if call-process-args
           (apply 'call-process-to-string call-process-args)
         (shell-command-to-string command))))
@@ -260,8 +260,9 @@
   (advice-add 'shell-command-to-string :before-until 'try-call-process)
 
   (defun call-with-quick-shell-command (fn &rest args)
-    (noflet ((shell-command-to-string (&rest args)
-                                      (or (apply 'try-call-process args) (apply this-fn args))))
+    (noflet ((shell-command-to-string
+              (&rest args)
+              (or (apply 'try-call-process args) (apply this-fn args))))
             (apply fn args)))
 
   (advice-add 'projectile-find-file :around 'call-with-quick-shell-command)
@@ -563,9 +564,8 @@ Call a second time to restore the original window configuration."
 
 
 (use-package which-key
-  :defer t
   :straight t
-  :config ((after-init . (lambda () (which-key-mode +1)))))
+  :config ((after-init . which-key-mode)))
 
 
 (use-package dash
@@ -755,7 +755,6 @@ This is useful when followed by an immediate kill."
 ;;----------------------------------------------------------------------------
 
 (use-package whitespace
-  :defer t
   :preface
   (defun no-trailing-whitespace ()
     "Turn off display of trailing whitespace in this buffer."
@@ -776,7 +775,6 @@ This is useful when followed by an immediate kill."
 
 
 (use-package whitespace-cleanup-mode
-  :defer t
   :straight t
   :hook ((after-init . global-whitespace-cleanup-mode))
   :diminish (whitespace-cleanup-mode)
@@ -1596,6 +1594,14 @@ This is helpful for writeroom-mode, in particular."
   :hook (((c-mode c++-mode) . lsp-cquery-enable)))
 
 
+;; html
+
+(use-package lsp-html
+  :when (executable-find "html-languageserver")
+  :straight t
+  :hook ((html-mode . lsp-html-enable)))
+
+
 ;; python
 
 (use-package python
@@ -1705,10 +1711,11 @@ This is helpful for writeroom-mode, in particular."
   ;; For example:
   ;; (lsp-haskell-set-config "maxNumberOfProblems" 100)
   ;; (lsp-haskell-set-config "hlintOn" t)
-
+  
   :hook ((haskell-mode . subword-mode)
          (haskell-mode . haskell-auto-insert-module-template)
          (haskell-mode . haskell-collapse-mode)
+         (haskell-mode . haskell-indentation-mode)
          (haskell-mode . stack-exec-path-mode)
          (haskell-mode . (lambda () (setq-local tab-width 4)))
          (lsp-after-initialize . lsp-haskell--set-configuration))
@@ -1722,6 +1729,7 @@ This is helpful for writeroom-mode, in particular."
                  (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))))
 
   (setq haskell-mode-stylish-haskell-path            "stylish-haskell"
+        haskell-indentation-layout-offset            4
         haskell-process-suggest-haskell-docs-imports t
         haskell-process-suggest-hayoo-imports        t
         haskell-process-suggest-hoogle-imports       t
@@ -1746,7 +1754,25 @@ This is helpful for writeroom-mode, in particular."
                  (modes quote (haskell-mode literate-haskell-mode))))
 
   :config
-  (push 'haskell-mode page-break-lines-modes))
+  (push 'haskell-mode page-break-lines-modes)
+  (defun haskell-mode-generate-tags (&optional and-then-find-this-tag)
+    "Generate tags using Hasktags.  This is synchronous function.
+
+If optional AND-THEN-FIND-THIS-TAG argument is present it is used
+with function `xref-find-definitions' after new table was
+generated."
+    (interactive)
+    (let* ((dir (haskell-cabal--find-tags-dir))
+           (command (haskell-cabal--compose-hasktags-command dir)))
+      (if (not command)
+          (error "Unable to compose hasktags command")
+        ;; I disabled the noisy shell command output.
+        ;; The original is (shell-command command)
+        (call-process-shell-command command nil "*Shell Command Output*" t)
+        (haskell-mode-message-line "Tags generated.")
+        (when and-then-find-this-tag
+          (let ((tags-file-name dir))
+            (xref-find-definitions and-then-find-this-tag)))))))
 
 
 (use-package intero
