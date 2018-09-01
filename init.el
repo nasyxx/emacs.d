@@ -565,7 +565,7 @@ Call a second time to restore the original window configuration."
 
 (use-package which-key
   :straight t
-  :config ((after-init . which-key-mode)))
+  :hook ((after-init . which-key-mode)))
 
 
 (use-package dash
