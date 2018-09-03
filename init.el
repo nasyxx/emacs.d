@@ -755,12 +755,14 @@ This is useful when followed by an immediate kill."
 ;;----------------------------------------------------------------------------
 
 (use-package whitespace
+  :defer t
   :preface
   (defun no-trailing-whitespace ()
     "Turn off display of trailing whitespace in this buffer."
     (setq show-trailing-whitespace nil))
   :init
-  (setq-default show-trailing-whitespace t)
+  (setq-default show-trailing-whitespace t
+                whitespace-style         '(face tabs empty trailing lines-tail))
 
   ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
   (dolist (hook '(special-mode-hook
@@ -771,11 +773,13 @@ This is useful when followed by an immediate kill."
                   compilation-mode-hook
                   twittering-mode-hook
                   minibuffer-setup-hook))
-    (add-hook hook #'no-trailing-whitespace)))
+    (add-hook hook #'no-trailing-whitespace))
+  :diminish whitespace-mode)
 
 
 (use-package whitespace-cleanup-mode
   :straight t
+  :init (setq whitespace-cleanup-mode-only-if-initially-clean nil)
   :hook ((after-init . global-whitespace-cleanup-mode))
   :diminish (whitespace-cleanup-mode)
   :bind (("<remap> <just-one-space>" . cycle-spacing)))
@@ -1711,7 +1715,7 @@ This is helpful for writeroom-mode, in particular."
   ;; For example:
   ;; (lsp-haskell-set-config "maxNumberOfProblems" 100)
   ;; (lsp-haskell-set-config "hlintOn" t)
-  
+
   :hook ((haskell-mode . subword-mode)
          (haskell-mode . haskell-auto-insert-module-template)
          (haskell-mode . haskell-collapse-mode)
