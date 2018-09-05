@@ -43,7 +43,7 @@ If you want to start with [[https://github.com/rakanalh/emacs-dashboard][dashboa
 
 in your ~config/user-config.el~.
 
-* Launching emacs from command line with a file name causes errors*.  Please refer to the
+*Launching emacs from command line with a file name causes errors*.  Please refer to the
 issue [[https://github.com/rakanalh/emacs-dashboard/issues/69][here]].  Hope someone could fix it.
 
 * *NOTICE:*
