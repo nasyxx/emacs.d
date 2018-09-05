@@ -37,16 +37,16 @@ To add your own customization, use ~M-x customize~ etc. and/or create a file
 
 ** dashboard
 
-If you want start with [[https://github.com/rakanalh/emacs-dashboard][dashboard]], you need to set
+If you want to start with [[https://github.com/rakanalh/emacs-dashboard][dashboard]], you need to set
 
 ~(setq initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))~
 
 in your ~config/user-config.el~.
 
-*This will cause errors when start emacs from command line with a file name*.  The
-issue [[https://github.com/rakanalh/emacs-dashboard/issues/69][here]].  Hope some one fix it.
+* Launching emacs from command line with a file name causes errors*.  Please refer to the
+issue [[https://github.com/rakanalh/emacs-dashboard/issues/69][here]].  Hope someone could fix it.
 
 * *NOTICE:*
 
-- Functions added to ~nasy:config-before-hook~ will run before load ~custom.el~.
-- Functions added to ~nasy:config-after-hook~ will run after init.
+- Functions added to ~nasy:config-before-hook~ will be run before loading ~custom.el~.
+- Functions added to ~nasy:config-after-hook~ will be run after init.
