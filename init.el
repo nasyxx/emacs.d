@@ -1532,7 +1532,12 @@ This is helpful for writeroom-mode, in particular."
 ;;----------------------------------------------------------------------------
 
 (use-package toml-mode
-   :straight t)
+  :straight t)
+
+
+(use-package yaml-mode
+  :straight t)
+
 
 ;; lsp-mode
 
