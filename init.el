@@ -1619,14 +1619,47 @@ This is helpful for writeroom-mode, in particular."
                            (if use-pyenv
                                '("pyenv" "exec" "pyls")
                              '("pyls")))
-  :hook ((python-mode . lsp-python-enable)
-         (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil
-                                    lsp-ui-sideline-enable nil)))
-         (python-mode . (lambda () (nasy:local-push-company-backend 'company-lsp)))
-         (python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
-                                                                      company-gtags
-                                                                      company-etags
-                                                                      company-keywords)))))
+
+  (defvar lsp-python--config-options (make-hash-table))
+
+  (defun lsp-python--set-configuration ()
+    (lsp--set-configuration `(:pyls ,lsp-python--config-options)))
+
+  (defun lsp-python-set-config (name option)
+    "Set a config option in the haskell lsp server."
+    (puthash name option lsp-python--config-options))
+
+  ;; A list here https://github.com/palantir/python-language-server/blob/develop/vscode-client/package.json#L23-L230
+  ;; I prefer pydocstyle and black, so disabled yapf, though, pydocstyle still cannot be abled.
+  ;; pip install black pyls-black -U
+  ;; The default line-length is 88 when using black, you can add a file named "pyproject.yaml" that contains
+  ;; [tool.black]
+  ;; line-length = 79
+  (lsp-python-set-config "configurationSources"          '("pycodestyle" "pyflakes" "pydocstyle"))
+  (lsp-python-set-config "plugins.pydocstyle.enabled"    t)
+  (lsp-python-set-config "plugins.pydocstyle.convention" "pep257")
+  (lsp-python-set-config "plugins.yapf.enabled"          nil)
+
+  ;; TODO: Need improve.
+  (defun setq-after ()
+    "setq after python mode."
+    (when (projectile-file-exists-p "mypy.ini")
+      (setq flycheck-python-mypy-ini "mypy.ini"
+            flycheck-mypy.ini        "mypy.ini"))
+
+    (when (projectile-file-exists-p "pylintrc")
+      (setq flycheck-pylintrc "pylintrc")))
+
+  :hook ((python-mode          . lsp-python-enable)
+         (lsp-after-initialize . lsp-python--set-configuration)
+         (python-mode          . (lambda () (setq lsp-ui-flycheck-enable nil  ;; I prefer to use prospector
+                                             lsp-ui-sideline-enable nil)))
+         (python-mode          . setq-after)
+         (python-mode          . (lambda () (nasy:local-push-company-backend 'company-lsp)))
+         (python-mode          . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
+                                                                          company-gtags
+                                                                          company-etags
+                                                                          company-keywords)))))
   :init (setq-default python-indent-offset 4
                       indent-tabs-mode nil
                       python-indent-guess-indent-offset nil
@@ -1636,40 +1669,18 @@ This is helpful for writeroom-mode, in particular."
                       py-ipython-command-args "-i --simple-prompt --classic"
                       py-python-command "python3"
                       flycheck-python-pycompile-executable "python3"
+                      flycheck-python-pylint-executable "python3"
+                      ;; flycheck-pylintrc "~/.config/pylintrc"
+                      ;; flycheck-python-mypy-ini "~/.config/mypy/mypy.ini"
+                      ;; flycheck-mypy.ini        "~/.config/mypy/mypy.ini"
                       python-mode-modeline-display "Python"
                       python-skeleton-autoinsert t))
 
 
-;; (use-package anaconda-mode
-;;   :straight t
-;;   :hook ((python-mode . anaconda-mode)
-;;          (python-mode . anaconda-eldoc-mode)))
-
-;; (use-package company-anaconda
-;;   :straight t
-;;   :hook ((python-mode . (lambda () (nasy:local-push-company-backend 'company-anaconda)))
-;;          (python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
-;;                                                                  company-gtags
-;;                                                                  company-etags
-;;                                                                  company-keywords))))))
-
-;; (use-package elpy
-;;   :demand t
-;;   :after python
-;;   :straight t
-;;   :init (elpy-enable)
-;;   (setq elpy-rpc-backend "jedi"
-;;         elpy-rpc-python-command "python3")
-;;   :hook ((python-mode . elpy-mode)
-;;          (elpy-mode . (lambda () (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))))))
-
-;; disable due to lsp-mode
-;; (use-package flycheck-pyflakes
-;;   :after flycheck
-;;   :straight t)
-
-
+;; Now you can use it in lsp
+;; NOTICE you have to config black though pyproject.toml.
 (use-package blacken
+  :when use-blacken
   :straight t
   :hook ((python-mode . blacken-mode)))
 
@@ -1677,6 +1688,16 @@ This is helpful for writeroom-mode, in particular."
 (use-package py-isort
   :straight t
   :hook (before-save . py-isort-before-save))
+
+
+(use-package flycheck-prospector
+  :straight (flycheck-prospector :host github :repo "nasyxx/flycheck-prospector")  ;; I have added a config file path to it.
+  :init (setq flycheck-prospector-profile-path "~/.config/prospector/prospector.yaml")
+  :hook ((flycheck-mode . flycheck-prospector-setup))
+  :config
+  (add-to-list 'flycheck-disabled-checkers 'python-flake8)
+  (add-to-list 'flycheck-disabled-checkers 'python-pylint))
+
 
 
 ;; haskell

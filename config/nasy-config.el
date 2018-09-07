@@ -71,6 +71,7 @@
 
  ;;---language---------------------------------------------------------------
  haskell-stylish-on-save                         nil
+ blacken-line-length                             80
 
  ;;---parens-----------------------------------------------------------------
  show-paren-style                                'expression
@@ -91,6 +92,7 @@
 
  ;;---others-----------------------------------------------------------------
  use-pyenv                                       t  ;; `t' if you'd like to use pyenv when using pyls
+ use-blacken                                     nil  ;; `t' if you'd like to use black when using pyls
 )
 
 
