@@ -582,6 +582,13 @@ Call a second time to restore the original window configuration."
   :diminish page-break-lines-mode)
 
 
+;; Emacs to carbon.now.sh integration
+;; https://github.com/veelenga/carbon-now-sh.el
+;; (carbon-now-sh)
+
+(use-package carbon-now-sh
+  :straight t)
+
 ;; isearch
 ;;----------------------------------------------------------------------------
 
