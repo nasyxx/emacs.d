@@ -72,6 +72,8 @@
  ;;---language---------------------------------------------------------------
  haskell-stylish-on-save                         nil
  blacken-line-length                             80
+ *clangd*                                        (or (executable-find "clangd")  ;; usually
+                                                     (executable-find "/usr/local/opt/llvm/bin/clangd"))  ;; macOS
 
  ;;---parens-----------------------------------------------------------------
  show-paren-style                                'expression

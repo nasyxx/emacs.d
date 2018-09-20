@@ -1594,11 +1594,13 @@ This is helpful for writeroom-mode, in particular."
   :disabled t
   :straight t)
 
-;; C/C++/OBJC
+;; C/C++/OBJ-C
 
 (use-package lsp-clangd
+  :when *clangd*
   :straight t
-  :hook (((c-mode c++-mode objc-mode) . lsp-clangd-c-enable)))
+  :hook (((c-mode c++-mode objc-mode) . lsp-clangd-c-enable))
+  :init (setq-default lsp-clang-executable *clangd*))
 
 
 (use-package cquery
