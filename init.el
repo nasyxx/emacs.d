@@ -1546,6 +1546,14 @@ This is helpful for writeroom-mode, in particular."
   :straight t)
 
 
+(use-package elvish-mode
+  :straight t)
+
+
+(use-package ob-elvish
+  :straight t)
+
+
 ;; lsp-mode
 
 (use-package lsp-mode
@@ -2171,20 +2179,21 @@ generated."
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
-   `((R . t)
-     (ditaa . t)
-     (dot . t)
+   `((ditaa      . t)
+     (dot        . t)
+     (elvish     . t)
      (emacs-lisp . t)
-     (gnuplot . t)
-     (haskell . nil)
-     (latex . t)
-     (ledger . t)
-     (ocaml . nil)
-     (octave . t)
-     (plantuml . t)
-     (python . t)
-     (ruby . t)
-     (screen . nil)
+     (gnuplot    . t)
+     (haskell    . nil)
+     (latex      . t)
+     (ledger     . t)
+     (ocaml      . nil)
+     (octave     . t)
+     (plantuml   . t)
+     (python     . t)
+     (R          . t)
+     (ruby       . t)
+     (screen     . nil)
      (,(if (locate-library "ob-sh") 'sh 'shell) . t)
      (sql . nil)
      (sqlite . t)))
