@@ -74,6 +74,7 @@
  blacken-line-length                             80
  *clangd*                                        (or (executable-find "clangd")  ;; usually
                                                      (executable-find "/usr/local/opt/llvm/bin/clangd"))  ;; macOS
+ *nix*                                           (executable-find "nix")
 
  ;;---parens-----------------------------------------------------------------
  show-paren-style                                'expression

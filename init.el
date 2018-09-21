@@ -1554,6 +1554,22 @@ This is helpful for writeroom-mode, in particular."
   :straight t)
 
 
+;; nix
+
+(when *nix*
+
+  (use-package nix-mode
+    :straight t
+    :hook ((after-init . global-nix-prettify-mode)))
+
+  (use-package nix-buffer
+    :straight t)
+
+  (use-package nix-sandbox
+    :straight t)
+  )
+
+
 ;; lsp-mode
 
 (use-package lsp-mode
