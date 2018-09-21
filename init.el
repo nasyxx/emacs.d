@@ -1554,6 +1554,12 @@ This is helpful for writeroom-mode, in particular."
   :straight t)
 
 
+(use-package fish-mode
+  :straight t)
+
+(use-package fish-completion
+  :straight t)
+
 ;; nix
 
 (when *nix*
