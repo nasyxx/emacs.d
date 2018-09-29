@@ -1627,7 +1627,7 @@ This is helpful for writeroom-mode, in particular."
 ;; C/C++/OBJ-C
 
 (use-package lsp-clangd
-  :when *clangd*
+  :disabled (not *clangd*)
   :straight t
   :hook (((c-mode c++-mode objc-mode) . lsp-clangd-c-enable))
   :init (setq-default lsp-clang-executable *clangd*))
@@ -1645,7 +1645,7 @@ This is helpful for writeroom-mode, in particular."
 ;; html
 
 (use-package lsp-html
-  :when (executable-find "html-languageserver")
+  :disabled (not (executable-find "html-languageserver"))
   :straight t
   :hook ((html-mode . lsp-html-enable)))
 
@@ -1794,7 +1794,8 @@ This is helpful for writeroom-mode, in particular."
          ("C-o"   . open-line))
   :init (use-package lsp-haskell
           :straight t
-          :hook ((haskell-mode   . lsp-haskell-enable)))
+          :hook ((haskell-mode   . lsp-haskell-enable)
+                 (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))))
 
   (setq haskell-mode-stylish-haskell-path            "stylish-haskell"
         haskell-indentation-layout-offset            4
