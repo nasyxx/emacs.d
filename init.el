@@ -1794,8 +1794,7 @@ This is helpful for writeroom-mode, in particular."
          ("C-o"   . open-line))
   :init (use-package lsp-haskell
           :straight t
-          :hook ((haskell-mode   . lsp-haskell-enable)
-                 (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))))
+          :hook ((haskell-mode   . lsp-haskell-enable)))
 
   (setq haskell-mode-stylish-haskell-path            "stylish-haskell"
         haskell-indentation-layout-offset            4
@@ -1897,7 +1896,20 @@ generated."
 (use-package org
   :straight org-plus-contrib
   :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)))
+         ("C-c a" . org-agenda))
+  :config
+  ;; Borrowed from spacemacs chinese layer.
+  (defadvice org-html-paragraph (before org-html-paragraph-advice
+                                        (paragraph contents info) activate)
+    "Join consecutive Chinese lines into a single long line without
+unwanted space when exporting org-mode to html."
+    (let* ((origin-contents (ad-get-arg 1))
+           (fix-regexp "[[:multibyte:]]")
+           (fixed-contents
+            (replace-regexp-in-string
+             (concat
+              "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
+      (ad-set-arg 1 fixed-contents))))
 
 
 (use-package org-cliplink
