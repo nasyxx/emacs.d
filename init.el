@@ -51,6 +51,8 @@
             (lambda ()
               (setq gc-cons-threshold normal-gc-cons-threshold))))
 
+(add-hook 'focus-out-hook #'garbage-collect)
+
 ;; For use-package
 ;;----------------------------------------------------------------------------
 
@@ -2130,7 +2132,22 @@ unwanted space when exporting org-mode to html."
    org-fast-tag-selection-single-key 'expert
    org-hide-emphasis-markers t
    org-hide-leading-stars nil
-   org-html-with-latex (quote mathjax)
+   org-html-checkbox-type   'html
+   org-html-doctype         "html5"
+   org-html-html5-fancy     t
+   org-html-klipsify-src    t
+   org-html-mathjax-options '((path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML")
+                              (scale "100")
+                              (align "center")
+                              (font "Neo-Euler")
+                              (linebreaks "false")
+                              (autonumber "AMS")
+                              (indent "0em")
+                              (multlinewidth "85%")
+                              (tagindent ".8em")
+                              (tagside "right"))
+   org-html-use-infojs      t
+   org-html-with-latex      (quote mathjax)
    org-html-validation-link nil
    org-indent-mode-turns-on-hiding-stars nil
    org-support-shift-select t
