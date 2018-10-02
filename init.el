@@ -2146,7 +2146,6 @@ unwanted space when exporting org-mode to html."
                               (multlinewidth "85%")
                               (tagindent ".8em")
                               (tagside "right"))
-   org-html-use-infojs      t
    org-html-with-latex      (quote mathjax)
    org-html-validation-link nil
    org-indent-mode-turns-on-hiding-stars nil
