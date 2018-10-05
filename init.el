@@ -725,6 +725,13 @@ This is useful when followed by an immediate kill."
   :bind (("<remap> <execute-extended-command>" . smex)))
 
 
+;; beginend
+;;----------------------------------------------------------------------------
+
+(use-package beginend
+  :straight t
+  :hook ((after-init . beginend-global-mode)))
+
 ;; subword
 ;;----------------------------------------------------------------------------
 
