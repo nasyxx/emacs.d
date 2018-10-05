@@ -1068,7 +1068,8 @@ This is helpful for writeroom-mode, in particular."
 
 (use-package htmlize
   :defer t
-  :straight t)
+  :straight t
+  :init (setq htmlize-pre-style t))
 
 
 ;; projectile
@@ -2130,15 +2131,21 @@ unwanted space when exporting org-mode to html."
   :init
   (setq
    org-archive-mark-done nil
-   org-archive-location "%s_archive::* Archive"
+   org-archive-location  "%s_archive::* Archive"
    org-archive-mark-done nil
+
    org-catch-invisible-edits 'show
+
    org-edit-timestamp-down-means-later t
-   org-export-coding-system 'utf-8
+
+   org-export-coding-system                      'utf-8
    org-export-kill-product-buffer-when-displayed t
+
    org-fast-tag-selection-single-key 'expert
+
    org-hide-emphasis-markers t
-   org-hide-leading-stars nil
+   org-hide-leading-stars    nil
+
    org-html-checkbox-type   'html
    org-html-doctype         "html5"
    org-html-html5-fancy     t
@@ -2153,22 +2160,12 @@ unwanted space when exporting org-mode to html."
                               (multlinewidth "85%")
                               (tagindent ".8em")
                               (tagside "right"))
-   org-html-with-latex      (quote mathjax)
+   org-html-with-latex      'mathjax
    org-html-validation-link nil
+
    org-indent-mode-turns-on-hiding-stars nil
-   org-support-shift-select t
-   org-refile-use-cache nil
-   org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))
-   org-refile-use-outline-path t
-   org-outline-path-complete-in-steps nil
-   org-refile-allow-creating-parent-nodes 'confirm
-   ;; to-do settings
-   org-todo-keywords (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
-                             (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
-                             (sequence "WAITING(w@/!)" "DELEGATED(e!)" "HOLD(h)" "|" "CANCELLED(c@/!)")))
-   org-todo-repeat-to-state "NEXT"
-   org-todo-keyword-faces (quote (("NEXT" :inherit warning)
-                                  ("PROJECT" :inherit font-lock-string-face)))
+
+   org-pretty-entities t
 
    ;; org latex
    org-latex-compiler "lualatex"
@@ -2225,14 +2222,36 @@ unwanted space when exporting org-mode to html."
     ("lualatex -shell-escape -interaction nonstopmode %f"
      "lualatex -shell-escape -interaction nonstopmode %f"))
    org-latex-tables-booktabs t
+
    org-level-color-stars-only nil
    org-list-indent-offset 2
    org-log-done t
-   org-refile-use-outline-path t
-   org-startup-indented t
-   org-startup-folded (quote content)
+
+   org-outline-path-complete-in-steps nil
+
+   org-refile-allow-creating-parent-nodes 'confirm
+   org-refile-targets                     '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))
+   org-refile-use-cache                   nil
+   org-refile-use-outline-path            t
+
+   org-startup-indented  t
+   org-startup-folded    'content
    org-startup-truncated nil
-   org-tags-column 80)
+
+   org-support-shift-select t
+
+   org-tags-column 80
+
+   ;; to-do settings
+   org-todo-keywords        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
+                                    (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
+                                    (sequence "WAITING(w@/!)" "DELEGATED(e!)" "HOLD(h)" "|" "CANCELLED(c@/!)")))
+   org-todo-repeat-to-state "NEXT"
+   org-todo-keyword-faces   (quote (("NEXT" :inherit warning)
+                                    ("PROJECT" :inherit font-lock-string-face)))
+
+   org-use-sub-superscripts '{})
+
   :hook ((org-mode-hook . auto-fill-mode))
   :config
   (org-babel-do-load-languages
