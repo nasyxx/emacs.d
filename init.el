@@ -1777,19 +1777,6 @@ This is helpful for writeroom-mode, in particular."
             'string-equal)))
       (kill-local-variable 'exec-path)))
 
-  (defvar lsp-haskell--config-options (make-hash-table))
-
-  (defun lsp-haskell--set-configuration ()
-    (lsp--set-configuration `(:languageServerHaskell ,lsp-haskell--config-options)))
-
-  (defun lsp-haskell-set-config (name option)
-    "Set a config option in the haskell lsp server."
-    (puthash name option lsp-haskell--config-options))
-
-  ;; The default settings here, if you want to change any about it, just do it.
-  ;; For example:
-  ;; (lsp-haskell-set-config "maxNumberOfProblems" 100)
-  ;; (lsp-haskell-set-config "hlintOn" t)
 
   :hook ((haskell-mode . subword-mode)
          (haskell-mode . haskell-auto-insert-module-template)
@@ -1805,7 +1792,14 @@ This is helpful for writeroom-mode, in particular."
   :init (use-package lsp-haskell
           :straight t
           :hook ((haskell-mode   . lsp-haskell-enable)
-                 (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))))
+                 (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
+          :conifg
+          ;; You can set the lsp-haskell settings here
+          ;; (lsp-haskell-set-hlint-on)                    ;; default on
+          ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
+          ;; (lsp-haskell-set-liquid-on)                   ;; default off
+          ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
+          )
 
   (setq haskell-mode-stylish-haskell-path            "stylish-haskell"
         haskell-indentation-layout-offset            4
