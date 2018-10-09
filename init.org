@@ -1,0 +1,43 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
+#+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
+#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
+#+OPTIONS: tasks:t tex:t timestamp:t title:t toc:nil todo:t |:t
+#+TITLE: Emacs Configuration
+#+DATE: <2018-10-09 Tue>
+#+AUTHOR: Nasy
+#+EMAIL: nasyxx@gmail.com
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+
+* A Straightforward Emacs Configuration
+
+An Emacs Configuration Bundle.
+
+* Table of Contents                                                             :TOC:
+
+* *NOTICE*
+
++ Almost all in one file.
++ Use straight.el to manage packages.
++ For GUI.
++ Now only tested with GNU Emacs 27.0.50 in macOS 10.14.
+
+* Dependencies
+
++ Emacs
++ git
++ ...
+
+* Installation
+
+To install, clone this repo to @@html:<span>@@ ~/.emacs.d @@html:</span>@@:
+
+#+BEGIN_SRC shell
+  git clone https://github.com/nasyxx/emacs.d.git ~/.emacs.d
+#+END_SRC
+
+Upon the first time staring up emacs, other third-party packages will be
+automatically clone to the @@html:<span>@@ straight @@html:</span>@@ folder and
+installed.  If you encounter any errors at that stage, try restarting Emacs, and
+maybe running ~make clean-all~ before doing so.
