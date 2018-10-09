@@ -92,11 +92,6 @@
       (load-file buffer-file-name)))
   (message "Evaluating %s... done." (buffer-name)))
 
-(unwind-protect
-    (let ((straight-treat-as-init t))
-      "load your init-file here")
-  (straight-finalize-transaction))
-
 ;; Expand load-path
 ;;----------------------------------------------------------------------------
 
@@ -1590,7 +1585,8 @@ This is helpful for writeroom-mode, in particular."
 
 (use-package lsp-mode
   :demand t
-  :straight (lsp-mode :host github :repo "nasyxx/lsp-mode"))
+  :straight (lsp-mode :host github :repo "emacs-lsp/lsp-mode"
+                      :fork (:host github :repo "nasyxx/lsp-mode")))
 
 (use-package lsp-imenu
   :demand t
@@ -1745,7 +1741,8 @@ This is helpful for writeroom-mode, in particular."
 
 
 (use-package flycheck-prospector
-  :straight (flycheck-prospector :host github :repo "nasyxx/flycheck-prospector")  ;; I have added a config file path to it.
+  :straight (flycheck-prospector :host github :repo "chocoelho/flycheck-prospector"
+                                 :fork (:host github :repo "nasyxx/flycheck-prospector"))  ;; I have added a config file path to it.
   :init (setq flycheck-prospector-profile-path "~/.config/prospector/prospector.yaml")
   :hook ((flycheck-mode . flycheck-prospector-setup))
   :config
