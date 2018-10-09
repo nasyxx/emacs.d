@@ -1680,7 +1680,7 @@ This is helpful for writeroom-mode, in particular."
     (lsp--set-configuration `(:pyls ,lsp-python--config-options)))
 
   (defun lsp-python-set-config (name option)
-    "Set a config option in the haskell lsp server."
+    "Set a config option in the python lsp server."
     (puthash name option lsp-python--config-options))
 
   ;; A list here https://github.com/palantir/python-language-server/blob/develop/vscode-client/package.json#L23-L230
