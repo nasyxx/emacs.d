@@ -2,7 +2,7 @@ all:
 	@echo "Do nothing."
 .PHONY: all
 
-clean: clean-cache clean-history clean-jar clean-python
+clean: clean-cache clean-history clean-python
 	rm -rf straight/repoes/straight.el
 	@echo "Cleaning done!"
 .PHONY: clean
@@ -39,7 +39,7 @@ clean-build: clean-cache
 .PHONY: clean-build
 
 
-clean-all: clean
+clean-all: clean clean-jar
 	rm -rf straight
 .PHONY: clean-all
 
