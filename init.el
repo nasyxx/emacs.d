@@ -579,6 +579,10 @@ Call a second time to restore the original window configuration."
   :diminish page-break-lines-mode)
 
 
+(use-package hl-line
+  :hook ((after-init . global-hl-line-mode)))
+
+
 ;; Emacs to carbon.now.sh integration
 ;; https://github.com/veelenga/carbon-now-sh.el
 ;; (carbon-now-sh)
@@ -2137,22 +2141,23 @@ unwanted space when exporting org-mode to html."
    org-hide-emphasis-markers t
    org-hide-leading-stars    nil
 
-   org-html-checkbox-type   'html
-   org-html-doctype         "html5"
-   org-html-html5-fancy     t
-   org-html-klipsify-src    t
-   org-html-mathjax-options '((path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML")
-                              (scale "100")
-                              (align "center")
-                              (font "Neo-Euler")
-                              (linebreaks "false")
-                              (autonumber "AMS")
-                              (indent "0em")
-                              (multlinewidth "85%")
-                              (tagindent ".8em")
-                              (tagside "right"))
-   org-html-with-latex      'mathjax
-   org-html-validation-link nil
+   org-html-checkbox-type       'html
+   org-html-doctype             "html5"
+   org-html-html5-fancy         t
+   org-html-htmlize-output-type 'css
+   org-html-klipsify-src        t
+   org-html-mathjax-options     '((path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML")
+                                  (scale "100")
+                                  (align "center")
+                                  (font "Neo-Euler")
+                                  (linebreaks "false")
+                                  (autonumber "AMS")
+                                  (indent "0em")
+                                  (multlinewidth "85%")
+                                  (tagindent ".8em")
+                                  (tagside "right"))
+   org-html-with-latex          'mathjax
+   org-html-validation-link     nil
 
    org-indent-mode-turns-on-hiding-stars nil
 
