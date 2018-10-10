@@ -1790,7 +1790,7 @@ This is helpful for writeroom-mode, in particular."
           :straight t
           :hook ((haskell-mode   . lsp-haskell-enable)
                  (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
-          :conifg
+          :config
           ;; You can set the lsp-haskell settings here
           ;; (lsp-haskell-set-hlint-on)                    ;; default on
           ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100

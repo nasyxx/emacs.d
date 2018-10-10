@@ -42,3 +42,7 @@ clean-build: clean-cache
 clean-all: clean
 	rm -rf straight
 .PHONY: clean-all
+
+update: clean clean-build
+	git pull
+.PHONY: update
