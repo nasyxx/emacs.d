@@ -1589,8 +1589,10 @@ This is helpful for writeroom-mode, in particular."
 
 (use-package lsp-mode
   :demand t
-  :straight (lsp-mode :host github :repo "emacs-lsp/lsp-mode"
-                      :fork (:host github :repo "nasyxx/lsp-mode")))
+  ;; :straight (lsp-mode :type git :host github :repo "emacs-lsp/lsp-mode"
+  ;;                     :fork (:host github :repo "nasyxx/lsp-mode"))
+  :straight (lsp-mode :type git :host github :repo "nasyxx/lsp-mode")
+  )
 
 (use-package lsp-imenu
   :demand t
@@ -1745,8 +1747,9 @@ This is helpful for writeroom-mode, in particular."
 
 
 (use-package flycheck-prospector
-  :straight (flycheck-prospector :host github :repo "chocoelho/flycheck-prospector"
-                                 :fork (:host github :repo "nasyxx/flycheck-prospector"))  ;; I have added a config file path to it.
+  ;; :straight (flycheck-prospector :type git :host github :repo "chocoelho/flycheck-prospector"
+  ;;                                :fork (:host github :repo "nasyxx/flycheck-prospector"))  ;; I have added a config file path to it.
+  :straight (flycheck-prospector :type git :host github :repo "nasyxx/flycheck-prospector")
   :init (setq flycheck-prospector-profile-path "~/.config/prospector/prospector.yaml")
   :hook ((flycheck-mode . flycheck-prospector-setup))
   :config
