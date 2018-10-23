@@ -166,22 +166,23 @@
 (use-package compile
   :demand t
   :preface
-  (defvar last-compilation-buffer nil
+  (defvar nasy:last-compilation-buffer nil
     "The last buffer in which compilation took place.")
 
-  (defadvice compilation-start (after save-compilation-buffer activate)
+  (defun nasy:save-compilation-buffer (&rest _)
     "Save the compilation buffer to find it later."
-    (setq last-compilation-buffer next-error-last-buffer))
+    (setq nasy:last-compilation-buffer next-error-last-buffer))
+  (advice-add 'compilation-start :after 'nasy:save-compilation-buffer)
 
-  (defadvice recompile (around find-prev-compilation (&optional edit-command) activate)
+  (defun nasy:find-prev-compilation (orig &rest args)
     "Find the previous compilation buffer, if present, and recompile there."
     (if (and (null edit-command)
              (not (derived-mode-p 'compilation-mode))
-             last-compilation-buffer
-             (buffer-live-p (get-buffer last-compilation-buffer)))
-        (with-current-buffer last-compilation-buffer
-          ad-do-it)
-      ad-do-it))
+             nasy:last-compilation-buffer
+             (buffer-live-p (get-buffer nasy:last-compilation-buffer)))
+        (with-current-buffer nasy:last-compilation-buffer
+          (apply orig args))
+      (apply orig args)))
   :bind (([f6] . recompile))
   :hook ((compilation-finish-functions . alert-after-compilation-finish)))
 
@@ -211,14 +212,12 @@
   :straight t)
 
 
-(defadvice shell-command-on-region
-    (after shell-command-in-view-mode
-           (start end command &optional output-buffer replace &rest other-args)
-           activate)
+(defun nasy:shell-command-in-view-mode (start end command &optional output-buffer replace &rest other-args)
   "Put \"*Shell Command Output*\" buffers into view-mode."
   (unless (or output-buffer replace)
     (with-current-buffer "*Shell Command Output*"
       (view-mode 1))))
+(advice-add 'shell-command-on-region :after 'nasy:shell-command-in-view-mode)
 
 
 (use-package exec-path-from-shell
@@ -433,30 +432,30 @@ Call a second time to restore the original window configuration."
 ;;----------------------------------------------------------------------------
 ;; desktop save
 
-(setq desktop-path (list user-emacs-directory)
+(setq desktop-path              (list user-emacs-directory)
       desktop-auto-save-timeout 600)
 (desktop-save-mode 1)
 
 
-(defadvice desktop-read (around time-restore activate)
-    (let ((start-time (current-time)))
-      (prog1
-          ad-do-it
-        (message "Desktop restored in %.2fms"
-                 (benchmark-init/time-subtract-millis (current-time)
-                                                 start-time)))))
-
-
-(defadvice desktop-create-buffer (around time-create activate)
-  (let ((start-time (current-time))
-        (filename (ad-get-arg 1)))
+(defun nasy:desktop-time-restore (orig &rest args)
+  (let ((start-time (current-time)))
     (prog1
-        ad-do-it
-      (message "Desktop: %.2fms to restore %s"
+        (apply orig args)
+      (message "Desktop restored in %.2fms"
                (benchmark-init/time-subtract-millis (current-time)
+                                               start-time)))))
+(advice-add 'desktop-read :around 'nasy:desktop-time-restore)
+
+(defun nasy:desktop-time-buffer-create (orig ver filename &rest args)
+  (let ((start-time (current-time)))
+    (prog1
+        (apply orig ver filename args)
+      (message "Desktop: %.2fms to restore %s"
+               (nasy:time-subtract-millis (current-time)
                                                start-time)
                (when filename
                  (abbreviate-file-name filename))))))
+(advice-add 'desktop-create-buffer :around 'nasy:desktop-time-buffer-create)
 
 
 (setq-default history-length 1000)
@@ -1904,18 +1903,29 @@ generated."
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda))
   :config
-  ;; Borrowed from spacemacs chinese layer.
-  (defadvice org-html-paragraph (before org-html-paragraph-advice
-                                        (paragraph contents info) activate)
+  ;; The original from spacemacs chinese layer shows as follow.
+  ;;   (defadvice org-html-paragraph (before org-html-paragraph-advice
+  ;;                                         (paragraph contents info) activate)
+  ;;     "Join consecutive Chinese lines into a single long line without
+  ;; unwanted space when exporting org-mode to html."
+  ;;     (let* ((origin-contents (ad-get-arg 1))
+  ;;            (fix-regexp "[[:multibyte:]]")
+  ;;            (fixed-contents
+  ;;             (replace-regexp-in-string
+  ;;              (concat
+  ;;               "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
+  ;;       (ad-set-arg 1 fixed-contents)))
+
+  (defun nasy:org-html-paragraph-advice (orig paragraph contents &rest args)
     "Join consecutive Chinese lines into a single long line without
 unwanted space when exporting org-mode to html."
-    (let* ((origin-contents (ad-get-arg 1))
-           (fix-regexp "[[:multibyte:]]")
+    (let* ((fix-regexp "[[:multibyte:]]")
            (fixed-contents
             (replace-regexp-in-string
              (concat
-              "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
-      (ad-set-arg 1 fixed-contents))))
+              "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents)))
+      (apply orig paragraph fixed-contents args)))
+  (advice-add #'org-html-paragraph :around #'nasy:org-html-paragraph-advice))
 
 
 (use-package org-cliplink
@@ -2097,9 +2107,7 @@ unwanted space when exporting org-mode to html."
 
 (use-package org
   :preface
-  (defadvice org-refile (after save-all-after-refile activate)
-    "Save all org buffers after each refile operation."
-    (org-save-all-org-buffers))
+  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
 
   ;; Exclude DONE state tasks from refile targets
   (defun verify-refile-target ()
