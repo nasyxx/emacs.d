@@ -1083,8 +1083,8 @@ This is helpful for writeroom-mode, in particular."
 	 )
   :bind-keymap ("C-c C-p" . projectile-command-map)
   :hook ((after-init . projectile-global-mode))
-  :init (setq projectile-require-project-root nil)
-  :config (setq projectile-project-root-files-top-down-recurring
+  :config (setq projectile-require-project-root nil
+                projectile-project-root-files-top-down-recurring
                 (append '("compile_commands.json"
                           ".cquery")
                         projectile-project-root-files-top-down-recurring)))
@@ -1670,11 +1670,8 @@ This is helpful for writeroom-mode, in particular."
   :interpreter (("python" . python-mode)
                 ("python3" . python-mode))
   :preface
-  (lsp-define-stdio-client lsp-python "python3"
-                           #'projectile-project-root
-                           (if use-pyenv
-                               '("pyenv" "exec" "pyls")
-                             '("pyls")))
+  (use-package lsp-python
+    :straight t)
 
   (defvar lsp-python--config-options (make-hash-table))
 
@@ -1787,16 +1784,16 @@ This is helpful for writeroom-mode, in particular."
          (haskell-mode . haskell-collapse-mode)
          (haskell-mode . haskell-indentation-mode)
          (haskell-mode . stack-exec-path-mode)
-         (haskell-mode . (lambda () (setq-local tab-width 4)))
-         (lsp-after-initialize . lsp-haskell--set-configuration))
+         (haskell-mode . (lambda () (setq-local tab-width 4))))
   :bind (("C-x a a" . align)
          :map haskell-mode-map
          ("C-c h" . hoogle)
          ("C-o"   . open-line))
   :init (use-package lsp-haskell
           :straight t
-          :hook ((haskell-mode   . lsp-haskell-enable)
-                 (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
+          :hook ((haskell-mode         . lsp-haskell-enable)
+                 (lsp-after-open       . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+                 (lsp-after-initialize . lsp-haskell--set-configuration))
           :config
           ;; You can set the lsp-haskell settings here
           ;; (lsp-haskell-set-hlint-on)                    ;; default on
