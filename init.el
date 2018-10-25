@@ -451,7 +451,7 @@ Call a second time to restore the original window configuration."
     (prog1
         (apply orig ver filename args)
       (message "Desktop: %.2fms to restore %s"
-               (nasy:time-subtract-millis (current-time)
+               (benchmark-init/time-subtract-millis (current-time)
                                                start-time)
                (when filename
                  (abbreviate-file-name filename))))))
