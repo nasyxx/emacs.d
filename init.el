@@ -1588,10 +1588,7 @@ This is helpful for writeroom-mode, in particular."
 
 (use-package lsp-mode
   :demand t
-  ;; :straight (lsp-mode :type git :host github :repo "emacs-lsp/lsp-mode"
-  ;;                     :fork (:host github :repo "nasyxx/lsp-mode"))
-  :straight (lsp-mode :type git :host github :repo "nasyxx/lsp-mode")
-  )
+  :straight t)
 
 (use-package lsp-imenu
   :demand t
