@@ -1861,12 +1861,17 @@ generated."
     :straight t
     :hook ((rust-mode . (lambda () (setq-local tab-width 4))))))
 
-(when (and *rls* *rust*)
+(when *rls*
   (use-package lsp-rust
     :straight t
     :hook ((rust-mode . lsp-rust-enable)
            (rust-mode . (lambda () (add-to-list 'flycheck-disabled-checkers 'rust-cargo))))))
 
+(use-package cargo
+  :after rust-mode
+  :straight t
+  :hook ((toml-mode . cargo-minor-mode)
+         (rust-mode . cargo-minor-mode)))
 
 ;; lisp
 
