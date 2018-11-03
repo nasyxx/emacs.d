@@ -1634,11 +1634,11 @@ This is helpful for writeroom-mode, in particular."
 
 ;; C/C++/OBJ-C
 
-(use-package lsp-clangd
-  :disabled (not *clangd*)
-  :straight t
-  :hook (((c-mode c++-mode objc-mode) . lsp-clangd-c-enable))
-  :init (setq-default lsp-clang-executable *clangd*))
+(when *clangd*
+  (use-package lsp-clangd
+    :straight t
+    :hook (((c-mode c++-mode objc-mode) . lsp-clangd-c-enable))
+    :init (setq-default lsp-clang-executable *clangd*)))
 
 
 (use-package cquery
@@ -1729,7 +1729,7 @@ This is helpful for writeroom-mode, in particular."
 ;; Now you can use it in lsp
 ;; NOTICE you have to config black though pyproject.toml.
 (use-package blacken
-  :when use-blacken
+  :if use-blacken
   :straight t
   :hook ((python-mode . blacken-mode)))
 
@@ -1845,14 +1845,27 @@ generated."
             (xref-find-definitions and-then-find-this-tag)))))))
 
 
-(use-package intero
-  ;; :disabled t  ;; I'm not sure if it is a good idea to use intero with lsp-mode, but I like it.
-  :straight t
-  :after haskell-mode
-  :hook (haskell-mode . (lambda () (intero-global-mode 1)))
-  :config (define-key intero-mode-map (kbd "M-?") nil))
+(when *intero*
+  (use-package intero
+    :straight t
+    :after haskell-mode
+    :hook (haskell-mode . (lambda () (intero-global-mode 1)))
+    :config (define-key intero-mode-map (kbd "M-?") nil)))
 
 
+;; rust
+
+(when *rust*
+  (use-package rust-mode
+    :defer t
+    :straight t
+    :hook ((rust-mode . (lambda () (setq-local tab-width 4))))))
+
+(when (and *rls* *rust*)
+  (use-package lsp-rust
+    :straight t
+    :hook ((rust-mode . lsp-rust-enable)
+           (rust-mode . (lambda () (add-to-list 'flycheck-disabled-checkers 'rust-cargo))))))
 
 
 ;; lisp

@@ -71,10 +71,17 @@
 
  ;;---language---------------------------------------------------------------
  haskell-stylish-on-save                         nil
+ *intero*                                        t
  blacken-line-length                             80
  *clangd*                                        (or (executable-find "clangd")  ;; usually
                                                      (executable-find "/usr/local/opt/llvm/bin/clangd"))  ;; macOS
  *nix*                                           (executable-find "nix")
+ *rust*                                          (or (executable-find "rustc")
+                                                     (executable-find "cargo")
+                                                     (executable-find "rustup"))
+ *rls*                                           (or (executable-find "rls")
+                                                     (executable-find "~/.cargo/bin/rls"))
+ lsp-rust-rls-command                            '("rls")
 
  ;;---parens-----------------------------------------------------------------
  show-paren-style                                'expression
