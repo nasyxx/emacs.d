@@ -17,3 +17,4 @@ custom.el
 user-config.el
 nix-buffer
 .mc-lists.el
+url/
