@@ -1785,19 +1785,7 @@ This is helpful for writeroom-mode, in particular."
          :map haskell-mode-map
          ("C-c h" . hoogle)
          ("C-o"   . open-line))
-  :init (use-package lsp-haskell
-          :straight t
-          :hook ((haskell-mode         . lsp-haskell-enable)
-                 (lsp-after-open       . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
-                 (lsp-after-initialize . lsp-haskell--set-configuration))
-          :config
-          ;; You can set the lsp-haskell settings here
-          ;; (lsp-haskell-set-hlint-on)                    ;; default on
-          ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
-          ;; (lsp-haskell-set-liquid-on)                   ;; default off
-          ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
-          )
-
+  :init
   (setq haskell-mode-stylish-haskell-path            "stylish-haskell"
         haskell-indentation-layout-offset            4
         haskell-process-suggest-haskell-docs-imports t
@@ -1843,6 +1831,20 @@ generated."
         (when and-then-find-this-tag
           (let ((tags-file-name dir))
             (xref-find-definitions and-then-find-this-tag)))))))
+
+
+(use-package lsp-haskell
+  :straight t
+  :hook ((haskell-mode         . lsp-haskell-enable)
+         (lsp-after-open       . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+         (lsp-after-initialize . lsp-haskell--set-configuration))
+  ;; :config
+  ;; You can set the lsp-haskell settings here
+  ;; (lsp-haskell-set-hlint-on)                    ;; default on
+  ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
+  ;; (lsp-haskell-set-liquid-on)                   ;; default off
+  ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
+  )
 
 
 (when *intero*
