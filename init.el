@@ -1638,7 +1638,7 @@ This is helpful for writeroom-mode, in particular."
   (use-package lsp-clangd
     :straight t
     :hook (((c-mode c++-mode objc-mode) . lsp-clangd-c-enable))
-    :init (setq-default lsp-clang-executable *clangd*)))
+    :init (setq-default lsp-clangd-executable *clangd*)))
 
 
 (use-package cquery
