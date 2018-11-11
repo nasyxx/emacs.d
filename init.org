@@ -102,6 +102,13 @@ This includes some necessary headers.
   ;;; Code:
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Bootstrap
+  ;; In this section, the configuration needs to occur early in emacs startup.
+  ;;----------------------------------------------------------------------------
+#+END_SRC
+
 *** Lexical Binding
 
 This makes it so that the file that is produced from tangling this file uses
@@ -165,6 +172,8 @@ At the same time, I use [[https://github.com/jwiegley/use-package][use-package]]
 Adjust garbage collection thresholds during startup, and thereafter
 
 #+BEGIN_SRC emacs-lisp
+  ;;----------------------------------------------------------------------------
+  ;; Garbage Collection
   (let ((normal-gc-cons-threshold (* 256 1024 1024))
         (init-gc-cons-threshold (* 512 1024 1024)))
     (setq gc-cons-threshold init-gc-cons-threshold)
@@ -178,8 +187,158 @@ Adjust garbage collection thresholds during startup, and thereafter
 *** Benchmark
 
 #+BEGIN_SRC emacs-lisp
+  ;;----------------------------------------------------------------------------
   (use-package benchmark-init
     :demand t
     :straight t
     :hook ((after-init . benchmark-init/deactivate)))
+#+END_SRC
+
+*** Expand load-path
+
+#+BEGIN_SRC emacs-lisp
+  ;;----------------------------------------------------------------------------
+  ;; load-path
+  (add-to-list 'load-path (expand-file-name "lisp"   user-emacs-directory))
+  (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
+#+END_SRC
+
+** Basic Configs
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Configs
+  ;; Some basic configurations.
+  ;;----------------------------------------------------------------------------
+#+END_SRC
+
+*** Custom configs
+
+First, define hooks.
+
+#+BEGIN_SRC emacs-lisp
+  ;;----------------------------------------------------------------------------
+  ;; Custom configs
+  (defvar nasy:config-before-hook nil
+    "Hooks to run config functions before load custom.el.")
+
+  (defvar nasy:config-after-hook nil
+    "Hooks to run config functions after." )
+
+  (add-hook 'nasy:config-after-hook
+            #'(lambda () (message "Hi~ Hoop you have fun with this config.")))
+  (add-hook 'after-init-hook
+            #'(lambda () (run-hooks 'nasy:config-after-hook)))
+#+END_SRC
+
+And then, load them.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'nasy-config nil t)
+  (require 'user-config nil t)
+#+END_SRC
+
+*** Theme
+
+I use doom-themes.
+
+#+BEGIN_SRC emacs-lisp
+  ;;----------------------------------------------------------------------------
+  ;; Themes
+  (use-package doom-themes
+    :demand t
+    :straight t
+    :config
+    (load-theme nasy:theme t)
+    ;; (doom-themes-treemacs-config)  ;; The doom themes havn't finished it yet.
+    (doom-themes-visual-bell-config)
+    (doom-themes-org-config))
+#+END_SRC
+
+** Custom Functions
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Custom Functions
+  ;;----------------------------------------------------------------------------
+#+END_SRC
+
+*** Reload the init-file
+
+#+BEGIN_SRC emacs-lisp
+  (defun radian-reload-init ()
+    "Reload init.el."
+    (interactive)
+    (straight-transaction
+      (straight-mark-transaction-as-init)
+      (message "Reloading init.el...")
+      (load user-init-file nil 'nomessage)
+      (message "Reloading init.el... done.")))
+
+  (defun radian-eval-buffer ()
+    "Evaluate the current buffer as Elisp code."
+    (interactive)
+    (message "Evaluating %s..." (buffer-name))
+    (straight-transaction
+      (if (null buffer-file-name)
+          (eval-buffer)
+        (when (string= buffer-file-name user-init-file)
+          (straight-mark-transaction-as-init))
+        (load-file buffer-file-name)))
+    (message "Evaluating %s... done." (buffer-name)))
+#+END_SRC
+
+*** Insert Date
+
+#+BEGIN_SRC emacs-lisp
+  (defun nasy:insert-current-date ()
+    "Insert current date."
+    (interactive)
+    (insert (shell-command-to-string "echo -n $(date +'%b %d, %Y')")))
+
+  (defun nasy:insert-current-filename ()
+    "Insert current buffer filename."
+    (interactive)
+    (insert (file-relative-name buffer-file-name)))
+#+END_SRC
+
+*** Rearrange split windows
+
+#+BEGIN_SRC emacs-lisp
+  (defun split-window-horizontally-instead ()
+    "Kill any other windows and re-split such that the current window is on the
+  top half of the frame."
+    (interactive)
+    (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+      (delete-other-windows)
+      (split-window-horizontally)
+      (when other-buffer
+        (set-window-buffer (next-window) other-buffer))))
+
+  (defun split-window-vertically-instead ()
+    "Kill any other windows and re-split such that the current window is on the
+  left half of the frame."
+    (interactive)
+    (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+      (delete-other-windows)
+      (split-window-vertically)
+      (when other-buffer
+        (set-window-buffer (next-window) other-buffer))))
+
+  (global-set-key (kbd "C-x |") 'split-window-horizontally-instead)
+  (global-set-key (kbd "C-x _") 'split-window-vertically-instead)
+
+  ;; Borrowed from http://postmomentum.ch/blog/201304/blog-on-emacs
+  (defun nasy:split-window()
+    "Split the window to see the most recent buffer in the other window.
+  Call a second time to restore the original window configuration."
+    (interactive)
+    (if (eq last-command 'nasy:split-window)
+        (progn
+          (jump-to-register :nasy:split-window)
+          (setq this-command 'nasy:unsplit-window))
+      (window-configuration-to-register :nasy:split-window)
+      (switch-to-buffer-other-window nil)))
+
+  (global-set-key (kbd "<f7>") 'nasy:split-window)
 #+END_SRC
