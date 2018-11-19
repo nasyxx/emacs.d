@@ -589,6 +589,17 @@ Call a second time to restore the original window configuration."
 (use-package carbon-now-sh
   :straight t)
 
+;; awesome-tab
+;;----------------------------------------------------------------------------
+
+(use-package awesome-tab
+  :disabled t  ;; now disable it.
+  :straight (awesome-tab :type git :host github :repo "manateelazycat/awesome-tab")
+  :init (setq awesome-tab-background-color "#272A36"
+              tabbar-background-color      "#272A36")
+  :config
+  (awesome-tab-mode))
+
 ;; isearch
 ;;----------------------------------------------------------------------------
 
@@ -1104,7 +1115,7 @@ This is helpful for writeroom-mode, in particular."
 	  ("C-x c g"   . helm-google-suggest)
 	  ("C-x c M-:" . helm-eval-expression-with-eldoc)
 	  ("C-x C-f"   . helm-find-files)
-	  ("C-x b"     . helm-mini)      ; *<major-mode> or /<dir> or !/<dir-not-desired> or @<regexp>
+	  ("C-x b"     . nasy:helm)      ; *<major-mode> or /<dir> or !/<dir-not-desired> or @<regexp>
 	  :map helm-map
 	  ("<tab>" . helm-execute-persistent-action) ; rebind tab to run persistent action
 	  ("C-i"   . helm-execute-persistent-action) ; make TAB works in terminal
@@ -1137,7 +1148,38 @@ This is helpful for writeroom-mode, in particular."
 	 helm-echo-input-in-header-line        t)
 
    :config
-   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages))
+   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+
+   (require 'helm-buffers)
+   (require 'helm-for-files)
+
+   (defun nasy:helm ()
+     (interactive)
+     (let ((helm-ff-transformer-show-only-basename nil)
+           helm-source-list)
+       (unless helm-source-buffers-list
+         (setq helm-source-buffers-list
+               (helm-make-source "Buffers" 'helm-source-buffers)))
+       (cond (
+              ;; Just add helm-source-projectile-* in list when current place in project.
+              (projectile-project-p)
+              (setq helm-source-list
+                    '(
+                      ;; helm-source-awesome-tab-group
+                      helm-source-projectile-buffers-list
+                      helm-source-projectile-files-list
+                      helm-source-buffers-list
+                      helm-source-recentf
+                      )))
+             (t
+              (setq helm-source-list
+                    '(
+                      ;; helm-source-awesome-tab-group
+                      helm-source-buffers-list
+                      helm-source-recentf
+                      ))
+              ))
+       (helm-other-buffer helm-source-list "*helm search*"))))
 
 
 (use-package helm-org
