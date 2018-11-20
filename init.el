@@ -1958,10 +1958,33 @@ generated."
 
 
 (use-package org
-  :straight org-plus-contrib
-  :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda))
-  :config
+  :demand t
+  :straight org-plus-contrib)
+
+
+(use-package org
+  :demand t
+  :preface
+  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+
+  ;; Exclude DONE state tasks from refile targets
+  (defun verify-refile-target ()
+    "Exclude todo keywords with a done state from refile targets."
+    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+  (setq org-refile-target-verify-function 'verify-refile-target)
+
+  (defun org-refile-anywhere (&optional goto default-buffer rfloc msg)
+    "A version of `org-refile' which allows refiling to any subtree."
+    (interactive "P")
+    (let ((org-refile-target-verify-function))
+      (org-refile goto default-buffer rfloc msg)))
+
+  (defun org-agenda-refile-anywhere (&optional goto rfloc no-update)
+    "A version of `org-agenda-refile' which allows refiling to any subtree."
+    (interactive "P")
+    (let ((org-refile-target-verify-function))
+      (org-agenda-refile goto rfloc no-update)))
+
   ;; The original from spacemacs chinese layer shows as follow.
   ;;   (defadvice org-html-paragraph (before org-html-paragraph-advice
   ;;                                         (paragraph contents info) activate)
@@ -1984,212 +2007,15 @@ unwanted space when exporting org-mode to html."
              (concat
               "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents)))
       (apply orig paragraph fixed-contents args)))
-  (advice-add #'org-html-paragraph :around #'nasy:org-html-paragraph-advice))
+  (advice-add #'org-html-paragraph :around #'nasy:org-html-paragraph-advice)
 
-
-(use-package org-cliplink
-  :defer t
-  :straight t)
-
-
-(use-package org-clock
-  :after org
-  :preface
-  (defun show-org-clock-in-header-line ()
-    "Show the clocked-in task in header line"
-    (setq-default header-line-format '((" " org-mode-line-string ""))))
-
-  (defun hide-org-clock-from-header-line ()
-    "Hide the clocked-in task from header line"
-    (setq-default header-line-format nil))
-  :init
-  (setq org-clock-persist t)
-  (setq org-clock-in-resume t)
-  ;; Save clock data and notes in the LOGBOOK drawer
-  (setq org-clock-into-drawer t)
-  ;; Save state changes in the LOGBOOK drawer
-  (setq org-log-into-drawer t)
-  ;; Removes clocked tasks with 0:00 duration
-  (setq org-clock-out-remove-zero-time-clocks t)
-  ;; Show clock sums as hours and minutes, not "n days" etc.
-  (setq org-time-clocksum-format
-        '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
-  :hook ((org-clock-in . show-org-clock-in-header-line)
-         ((org-clock-out . org-clock-cancel) . hide-org-clock-from-header))
-  :bind (:map org-clock-mode-line-map
-             ([header-line mouse-2] . org-clock-goto)
-             ([header-line mouse-1] . org-clock-menu))
-  :config
-  (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
-    (add-hook 'org-clock-in-hook
-              (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
-                                  (concat "tell application \"org-clock-statusbar\" to clock in \""
-                                          org-clock-current-task "\""))))
-    (add-hook 'org-clock-out-hook
-              (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
-                                  "tell application \"org-clock-statusbar\" to clock out")))))
-
-(use-package org-pomodoro
-  :after org-agenda
-  :init (setq org-pomodoro-keep-killed-pomodoro-time t)
-  :bind (:map org-agenda-mode-map
-              ("P" . org-pomodoro)))
-
-
-(use-package org-wc
-  :straight t)
-
-
-(use-package ob-ditaa
-  :after org
-  :preface
-  (defun grab-ditaa (url jar-name)
-    "Download URL and extract JAR-NAME as `org-ditaa-jar-path'."
-    (message "Grabbing " jar-name " for org.")
-    (let ((zip-temp (make-temp-name "emacs-ditaa")))
-      (unwind-protect
-          (progn
-            (when (executable-find "unzip")
-              (url-copy-file url zip-temp)
-              (shell-command (concat "unzip -p " (shell-quote-argument zip-temp)
-                                     " " (shell-quote-argument jar-name) " > "
-                                     (shell-quote-argument org-ditaa-jar-path)))))
-        (when (file-exists-p zip-temp)
-          (delete-file zip-temp)))))
-  :config (unless (and (boundp 'org-ditaa-jar-path)
-                       (file-exists-p org-ditaa-jar-path))
-            (let ((jar-name "ditaa0_9.jar")
-                  (url "http://jaist.dl.sourceforge.net/project/ditaa/ditaa/0.9/ditaa0_9.zip"))
-              (setq org-ditaa-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
-              (unless (file-exists-p org-ditaa-jar-path)
-                (grab-ditaa url jar-name)))))
-
-
-(use-package ob-plantuml
-  :after org
-  :config (let ((jar-name "plantuml.jar")
-                (url "http://jaist.dl.sourceforge.net/project/plantuml/plantuml.jar"))
-            (setq org-plantuml-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
-            (unless (file-exists-p org-plantuml-jar-path)
-              (url-copy-file url org-plantuml-jar-path))))
-
-
-(use-package org-agenda
-  :after org
-  :init (setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
-  :hook ((org-agenda-mode . (lambda () (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t)))
-         (org-agenda-mode . hl-line-mode))
-  :config (add-to-list 'org-agenda-after-show-hook 'org-show-entry)
-  (let ((active-project-match "-INBOX/PROJECT"))
-
-    (setq org-stuck-projects
-          `(,active-project-match ("NEXT")))
-
-    (setq org-agenda-compact-blocks t
-          org-agenda-sticky t
-          org-agenda-start-on-weekday nil
-          org-agenda-span 'day
-          org-agenda-include-diary nil
-          org-agenda-sorting-strategy
-          '((agenda habit-down time-up user-defined-up effort-up category-keep)
-            (todo category-up effort-up)
-            (tags category-up effort-up)
-            (search category-up))
-          org-agenda-window-setup 'current-window
-          org-agenda-custom-commands
-          `(("N" "Notes" tags "NOTE"
-             ((org-agenda-overriding-header "Notes")
-              (org-tags-match-list-sublevels t)))
-            ("g" "GTD"
-             ((agenda "" nil)
-              (tags "INBOX"
-                    ((org-agenda-overriding-header "Inbox")
-                     (org-tags-match-list-sublevels nil)))
-              (stuck ""
-                     ((org-agenda-overriding-header "Stuck Projects")
-                      (org-agenda-tags-todo-honor-ignore-options t)
-                      (org-tags-match-list-sublevels t)
-                      (org-agenda-todo-ignore-scheduled 'future)))
-              (tags-todo "-INBOX"
-                         ((org-agenda-overriding-header "Next Actions")
-                          (org-agenda-tags-todo-honor-ignore-options t)
-                          (org-agenda-todo-ignore-scheduled 'future)
-                          (org-agenda-skip-function
-                           '(lambda ()
-                              (or (org-agenda-skip-subtree-if 'todo '("HOLD" "WAITING"))
-                                  (org-agenda-skip-entry-if 'nottodo '("NEXT")))))
-                          (org-tags-match-list-sublevels t)
-                          (org-agenda-sorting-strategy
-                           '(todo-state-down effort-up category-keep))))
-              (tags-todo ,active-project-match
-                         ((org-agenda-overriding-header "Projects")
-                          (org-tags-match-list-sublevels t)
-                          (org-agenda-sorting-strategy
-                           '(category-keep))))
-              (tags-todo "-INBOX/-NEXT"
-                         ((org-agenda-overriding-header "Orphaned Tasks")
-                          (org-agenda-tags-todo-honor-ignore-options t)
-                          (org-agenda-todo-ignore-scheduled 'future)
-                          (org-agenda-skip-function
-                           '(lambda ()
-                              (or (org-agenda-skip-subtree-if 'todo '("PROJECT" "HOLD" "WAITING" "DELEGATED"))
-                                  (org-agenda-skip-subtree-if 'nottododo '("TODO")))))
-                          (org-tags-match-list-sublevels t)
-                          (org-agenda-sorting-strategy
-                           '(category-keep))))
-              (tags-todo "/WAITING"
-                         ((org-agenda-overriding-header "Waiting")
-                          (org-agenda-tags-todo-honor-ignore-options t)
-                          (org-agenda-todo-ignore-scheduled 'future)
-                          (org-agenda-sorting-strategy
-                           '(category-keep))))
-              (tags-todo "/DELEGATED"
-                         ((org-agenda-overriding-header "Delegated")
-                          (org-agenda-tags-todo-honor-ignore-options t)
-                          (org-agenda-todo-ignore-scheduled 'future)
-                          (org-agenda-sorting-strategy
-                           '(category-keep))))
-              (tags-todo "-INBOX"
-                         ((org-agenda-overriding-header "On Hold")
-                          (org-agenda-skip-function
-                           '(lambda ()
-                              (or (org-agenda-skip-subtree-if 'todo '("WAITING"))
-                                  (org-agenda-skip-entry-if 'nottodo '("HOLD")))))
-                          (org-tags-match-list-sublevels nil)
-                          (org-agenda-sorting-strategy
-                           '(category-keep))))))))))
-
-(use-package org-bullets
-  :after org
-  :straight t
-  :hook ((org-mode . (lambda () (org-bullets-mode 1)))))
-
-(use-package org
-  :preface
-  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
-
-  ;; Exclude DONE state tasks from refile targets
-  (defun verify-refile-target ()
-    "Exclude todo keywords with a done state from refile targets."
-    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
-  (setq org-refile-target-verify-function 'verify-refile-target)
-
-  (defun org-refile-anywhere (&optional goto default-buffer rfloc msg)
-    "A version of `org-refile' which allows refiling to any subtree."
-    (interactive "P")
-    (let ((org-refile-target-verify-function))
-      (org-refile goto default-buffer rfloc msg)))
-
-  (defun org-agenda-refile-anywhere (&optional goto rfloc no-update)
-    "A version of `org-agenda-refile' which allows refiling to any subtree."
-    (interactive "P")
-    (let ((org-refile-target-verify-function))
-      (org-agenda-refile goto rfloc no-update)))
-
-  :bind (:map org-mode-map
-              ("C-M-<up>" . org-up-element)
-              ("M-h" . nil)
-              ("C-c g" . org-mac-grab-link))
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+	 ("C-c c" . org-capture)
+         :map org-mode-map
+         ("C-M-<up>" . org-up-element)
+         ("M-h"      . nil)
+         ("C-c g"    . org-mac-grab-link))
   :init
   (setq
    org-archive-mark-done nil
@@ -2197,6 +2023,8 @@ unwanted space when exporting org-mode to html."
    org-archive-mark-done nil
 
    org-catch-invisible-edits 'show
+
+   org-default-notes-file "~/notes/default.org"
 
    org-edit-timestamp-down-means-later t
 
@@ -2317,6 +2145,7 @@ unwanted space when exporting org-mode to html."
 
   :hook ((org-mode-hook . auto-fill-mode))
   :config
+  ;; --------
   (org-babel-do-load-languages
    'org-babel-load-languages
    `((ditaa      . t)
@@ -2337,6 +2166,8 @@ unwanted space when exporting org-mode to html."
      (,(if (locate-library "ob-sh") 'sh 'shell) . t)
      (sql . nil)
      (sqlite . t)))
+
+  ;; --------
   (setq luamagick
       '(luamagick
         :programs ("lualatex" "convert")
@@ -2349,6 +2180,7 @@ unwanted space when exporting org-mode to html."
         :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
         :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
   (add-to-list 'org-preview-latex-process-alist luamagick)
+
   (setq luasvg
       '(luasvg
         :programs ("lualatex" "dvisvgm")
@@ -2362,6 +2194,220 @@ unwanted space when exporting org-mode to html."
         :image-converter ("dvisvgm %f -n -b min -c %S -o %O")))
   (add-to-list 'org-preview-latex-process-alist luasvg)
   (setq org-preview-latex-default-process 'luasvg))
+
+
+(use-package org-agenda
+  :after org
+  :init (setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
+  :hook ((org-agenda-mode . (lambda () (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t)))
+         (org-agenda-mode . hl-line-mode))
+  :config (add-to-list 'org-agenda-after-show-hook 'org-show-entry)
+  (let ((active-project-match "-INBOX/PROJECT"))
+
+    (setq org-stuck-projects
+          `(,active-project-match ("NEXT")))
+
+    (setq org-agenda-compact-blocks t
+          org-agenda-sticky t
+          org-agenda-start-on-weekday nil
+          org-agenda-span 'day
+          org-agenda-include-diary nil
+          org-agenda-sorting-strategy
+          '((agenda habit-down time-up user-defined-up effort-up category-keep)
+            (todo category-up effort-up)
+            (tags category-up effort-up)
+            (search category-up))
+          org-agenda-window-setup 'current-window
+          org-agenda-custom-commands
+          `(("N" "Notes" tags "NOTE"
+             ((org-agenda-overriding-header "Notes")
+              (org-tags-match-list-sublevels t)))
+            ("g" "GTD"
+             ((agenda "" nil)
+              (tags "INBOX"
+                    ((org-agenda-overriding-header "Inbox")
+                     (org-tags-match-list-sublevels nil)))
+              (stuck ""
+                     ((org-agenda-overriding-header "Stuck Projects")
+                      (org-agenda-tags-todo-honor-ignore-options t)
+                      (org-tags-match-list-sublevels t)
+                      (org-agenda-todo-ignore-scheduled 'future)))
+              (tags-todo "-INBOX"
+                         ((org-agenda-overriding-header "Next Actions")
+                          (org-agenda-tags-todo-honor-ignore-options t)
+                          (org-agenda-todo-ignore-scheduled 'future)
+                          (org-agenda-skip-function
+                           '(lambda ()
+                              (or (org-agenda-skip-subtree-if 'todo '("HOLD" "WAITING"))
+                                  (org-agenda-skip-entry-if 'nottodo '("NEXT")))))
+                          (org-tags-match-list-sublevels t)
+                          (org-agenda-sorting-strategy
+                           '(todo-state-down effort-up category-keep))))
+              (tags-todo ,active-project-match
+                         ((org-agenda-overriding-header "Projects")
+                          (org-tags-match-list-sublevels t)
+                          (org-agenda-sorting-strategy
+                           '(category-keep))))
+              (tags-todo "-INBOX/-NEXT"
+                         ((org-agenda-overriding-header "Orphaned Tasks")
+                          (org-agenda-tags-todo-honor-ignore-options t)
+                          (org-agenda-todo-ignore-scheduled 'future)
+                          (org-agenda-skip-function
+                           '(lambda ()
+                              (or (org-agenda-skip-subtree-if 'todo '("PROJECT" "HOLD" "WAITING" "DELEGATED"))
+                                  (org-agenda-skip-subtree-if 'nottododo '("TODO")))))
+                          (org-tags-match-list-sublevels t)
+                          (org-agenda-sorting-strategy
+                           '(category-keep))))
+              (tags-todo "/WAITING"
+                         ((org-agenda-overriding-header "Waiting")
+                          (org-agenda-tags-todo-honor-ignore-options t)
+                          (org-agenda-todo-ignore-scheduled 'future)
+                          (org-agenda-sorting-strategy
+                           '(category-keep))))
+              (tags-todo "/DELEGATED"
+                         ((org-agenda-overriding-header "Delegated")
+                          (org-agenda-tags-todo-honor-ignore-options t)
+                          (org-agenda-todo-ignore-scheduled 'future)
+                          (org-agenda-sorting-strategy
+                           '(category-keep))))
+              (tags-todo "-INBOX"
+                         ((org-agenda-overriding-header "On Hold")
+                          (org-agenda-skip-function
+                           '(lambda ()
+                              (or (org-agenda-skip-subtree-if 'todo '("WAITING"))
+                                  (org-agenda-skip-entry-if 'nottodo '("HOLD")))))
+                          (org-tags-match-list-sublevels nil)
+                          (org-agenda-sorting-strategy
+                           '(category-keep))))))))))
+
+
+(use-package org-capture
+  :after org
+  :demand t
+  :init
+  (unless (boundp 'org-capture-templates)
+    (defvar org-capture-templates nil))
+
+  (add-to-list 'org-capture-templates '("t" "Tasks"))
+  (add-to-list 'org-capture-templates
+               '("tr" "Book Reading Task" entry
+                 (file+olp "~/notes/task.org" "Reading" "Book")
+                 "* TODO %^{book name}\n%u\n%a\n" :clock-in t :clock-resume t))
+  (add-to-list 'org-capture-templates
+               '("tw" "Work Task" entry
+                 (file+headline "~/notes/task.org" "Work")
+                 "* TODO %^{task name}\n%u\n%a\n" :clock-in t :clock-resume t))
+
+  (add-to-list 'org-capture-templates
+               '("j" "Journal" entry
+                 (file "~/notes/journal.org")
+                 "* %U - %^{heading}\n  %?"))
+
+  (add-to-list 'org-capture-templates
+               '("i" "Inbox" entry
+                 (file "~/notes/inbox.org")
+                 "* %U - %^{heading} %^g\n %?\n"))
+
+  (add-to-list 'org-capture-templates
+               '("n" "Notes" entry
+                 (file "~/notes/notes.org")
+                 "* %^{heading} %t %^g\n  %?\n"))
+
+  )
+
+
+(use-package org-clock
+  :after org
+  :preface
+  (defun show-org-clock-in-header-line ()
+    "Show the clocked-in task in header line"
+    (setq-default header-line-format '((" " org-mode-line-string ""))))
+
+  (defun hide-org-clock-from-header-line ()
+    "Hide the clocked-in task from header line"
+    (setq-default header-line-format nil))
+  :init
+  (setq org-clock-persist t)
+  (setq org-clock-in-resume t)
+  ;; Save clock data and notes in the LOGBOOK drawer
+  (setq org-clock-into-drawer t)
+  ;; Save state changes in the LOGBOOK drawer
+  (setq org-log-into-drawer t)
+  ;; Removes clocked tasks with 0:00 duration
+  (setq org-clock-out-remove-zero-time-clocks t)
+  ;; Show clock sums as hours and minutes, not "n days" etc.
+  (setq org-time-clocksum-format
+        '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+  :hook ((org-clock-in . show-org-clock-in-header-line)
+         ((org-clock-out . org-clock-cancel) . hide-org-clock-from-header))
+  :bind (:map org-clock-mode-line-map
+             ([header-line mouse-2] . org-clock-goto)
+             ([header-line mouse-1] . org-clock-menu))
+  :config
+  (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
+    (add-hook 'org-clock-in-hook
+              (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                                  (concat "tell application \"org-clock-statusbar\" to clock in \""
+                                          org-clock-current-task "\""))))
+    (add-hook 'org-clock-out-hook
+              (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                                  "tell application \"org-clock-statusbar\" to clock out")))))
+
+(use-package ob-ditaa
+  :after org
+  :preface
+  (defun grab-ditaa (url jar-name)
+    "Download URL and extract JAR-NAME as `org-ditaa-jar-path'."
+    (message "Grabbing " jar-name " for org.")
+    (let ((zip-temp (make-temp-name "emacs-ditaa")))
+      (unwind-protect
+          (progn
+            (when (executable-find "unzip")
+              (url-copy-file url zip-temp)
+              (shell-command (concat "unzip -p " (shell-quote-argument zip-temp)
+                                     " " (shell-quote-argument jar-name) " > "
+                                     (shell-quote-argument org-ditaa-jar-path)))))
+        (when (file-exists-p zip-temp)
+          (delete-file zip-temp)))))
+  :config (unless (and (boundp 'org-ditaa-jar-path)
+                       (file-exists-p org-ditaa-jar-path))
+            (let ((jar-name "ditaa0_9.jar")
+                  (url "http://jaist.dl.sourceforge.net/project/ditaa/ditaa/0.9/ditaa0_9.zip"))
+              (setq org-ditaa-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
+              (unless (file-exists-p org-ditaa-jar-path)
+                (grab-ditaa url jar-name)))))
+
+
+(use-package ob-plantuml
+  :after org
+  :config (let ((jar-name "plantuml.jar")
+                (url "http://jaist.dl.sourceforge.net/project/plantuml/plantuml.jar"))
+            (setq org-plantuml-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
+            (unless (file-exists-p org-plantuml-jar-path)
+              (url-copy-file url org-plantuml-jar-path))))
+
+
+(use-package org-pomodoro
+  :after org-agenda
+  :init (setq org-pomodoro-keep-killed-pomodoro-time t)
+  :bind (:map org-agenda-mode-map
+              ("P" . org-pomodoro)))
+
+
+(use-package org-cliplink
+  :defer t
+  :straight t)
+
+
+(use-package org-bullets
+  :after org
+  :straight t
+  :hook ((org-mode . (lambda () (org-bullets-mode 1)))))
+
+
+(use-package org-wc
+  :straight t)
 
 
 (use-package writeroom-mode

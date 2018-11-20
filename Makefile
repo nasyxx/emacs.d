@@ -12,6 +12,7 @@ clean-cache:
 	rm -rf straight/build-cache.el
 	rm -rf .smex-items
 	rm -rf auto-save-list
+	rm -rf .cache
 .PHONY: clean-cache
 
 
@@ -21,6 +22,7 @@ clean-history:
 	rm -rf recentf
 	rm -rf .session
 	rm -rf .emacs.desktop
+	rm -rf .bookmarks.el
 .PHONY: clean-history
 
 
