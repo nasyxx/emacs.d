@@ -171,9 +171,12 @@ At the same time, I use [[https://github.com/jwiegley/use-package][use-package]]
 
 Adjust garbage collection thresholds during startup, and thereafter
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Garbage Collection
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (let ((normal-gc-cons-threshold (* 256 1024 1024))
         (init-gc-cons-threshold (* 512 1024 1024)))
     (setq gc-cons-threshold init-gc-cons-threshold)
@@ -186,19 +189,26 @@ Adjust garbage collection thresholds during startup, and thereafter
 
 *** Benchmark
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :exports none
   ;;----------------------------------------------------------------------------
+  ;; Benchmark
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (use-package benchmark-init
-    :demand t
+    :demand   t
     :straight t
     :hook ((after-init . benchmark-init/deactivate)))
 #+END_SRC
 
 *** Expand load-path
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :exports none
   ;;----------------------------------------------------------------------------
   ;; load-path
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path (expand-file-name "lisp"   user-emacs-directory))
   (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
 #+END_SRC
@@ -212,13 +222,175 @@ Adjust garbage collection thresholds during startup, and thereafter
   ;;----------------------------------------------------------------------------
 #+END_SRC
 
+*** Compile
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Compile
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package async
+    :straight t
+    :config
+    (dired-async-mode            1)
+    (async-bytecomp-package-mode 1))
+
+  (use-package auto-compile
+    :demand   t
+    :straight t
+    :config
+    (auto-compile-on-load-mode)
+    (auto-compile-on-save-mode))
+
+  (setq-default compilation-scroll-output t)
+
+  (use-package alert
+    :demand   t
+    :straight t
+    :preface
+    (defun alert-after-compilation-finish (buf result)
+      "Use `alert' to report compilation RESULT if BUF is hidden."
+      (when (buffer-live-p buf)
+        (unless (catch 'is-visible
+                  (walk-windows (lambda (w)
+                                  (when (eq (window-buffer w) buf)
+                                    (throw 'is-visible t))))
+                  nil)
+          (alert (concat "Compilation " result)
+                 :buffer buf
+                 :category 'compilation)))))
+
+
+  (use-package compile
+    :demand t
+    :preface
+    (defvar nasy:last-compilation-buffer nil
+      "The last buffer in which compilation took place.")
+
+    (defun nasy:save-compilation-buffer (&rest _)
+      "Save the compilation buffer to find it later."
+      (setq nasy:last-compilation-buffer next-error-last-buffer))
+    (advice-add 'compilation-start :after 'nasy:save-compilation-buffer)
+
+    (defun nasy:find-prev-compilation (orig &rest args)
+      "Find the previous compilation buffer, if present, and recompile there."
+      (if (and (null edit-command)
+               (not (derived-mode-p 'compilation-mode))
+               nasy:last-compilation-buffer
+               (buffer-live-p (get-buffer nasy:last-compilation-buffer)))
+          (with-current-buffer nasy:last-compilation-buffer
+            (apply orig args))
+        (apply orig args)))
+    :bind (([f6] . recompile))
+    :hook ((compilation-finish-functions . alert-after-compilation-finish)))
+
+
+  (use-package ansi-color
+    :demand   t
+    :after    compile
+    :straight t
+    :hook ((compilation-filter . colourise-compilation-buffer))
+    :config
+    (defun colourise-compilation-buffer ()
+      (when (eq major-mode 'compilation-mode)
+        (ansi-color-apply-on-region compilation-filter-start (point-max)))))
+#+END_SRC
+
+*** Shell
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Shell
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (require 'shell)
+
+  (use-package cmd-to-echo
+    :defer    t
+    :straight t)
+
+
+  (use-package command-log-mode
+    :demand   t
+    :straight t)
+
+
+  (defun nasy:shell-command-in-view-mode (start end command &optional output-buffer replace &rest other-args)
+    "Put \"*Shell Command Output*\" buffers into view-mode."
+    (unless (or output-buffer replace)
+      (with-current-buffer "*Shell Command Output*"
+        (view-mode 1))))
+  (advice-add 'shell-command-on-region :after 'nasy:shell-command-in-view-mode)
+
+
+  (use-package exec-path-from-shell
+    :demand   *is-a-mac*
+    :straight t
+    :preface
+    ;; Non-Forking Shell Command To String
+    ;; https://github.com/bbatsov/projectile/issues/1044
+    ;;--------------------------------------------------------------------------
+
+    (defun call-process-to-string (program &rest args)
+      (with-temp-buffer
+        (apply 'call-process program nil (current-buffer) nil args)
+        (buffer-string)))
+
+    (defun get-call-process-args-from-shell-command (command)
+      (cl-destructuring-bind
+          (the-command . args) (split-string command " ")
+        (let ((binary-path (executable-find the-command)))
+          (when binary-path
+            (cons binary-path args)))))
+
+    (defun shell-command-to-string (command)
+      (let ((call-process-args
+             (get-call-process-args-from-shell-command command)))
+        (if call-process-args
+            (apply 'call-process-to-string call-process-args)
+          (shell-command-to-string command))))
+
+    (defun try-call-process (command)
+      (let ((call-process-args
+             (get-call-process-args-from-shell-command command)))
+        (if call-process-args
+            (apply 'call-process-to-string call-process-args))))
+
+    (advice-add 'shell-command-to-string :before-until 'try-call-process)
+
+    (defun call-with-quick-shell-command (fn &rest args)
+      (noflet ((shell-command-to-string
+                (&rest args)
+                (or (apply 'try-call-process args) (apply this-fn args))))
+              (apply fn args)))
+
+    (advice-add 'projectile-find-file :around 'call-with-quick-shell-command)
+    :init (setq shell-command-switch "-ic")
+    :config
+    (when nil (message "PATH: %s, INFO: %s" (getenv "PATH")
+                     (getenv "ENVIRONMENT_SETUP_DONE"))
+          (setq exec-path-from-shell-debug t))
+    (setq exec-path-from-shell-arguments (list "-l"))
+    (setq exec-path-from-shell-check-startup-files nil)
+    (add-to-list 'exec-path-from-shell-variables "SHELL")
+    (add-to-list 'exec-path-from-shell-variables "GOPATH")
+    (add-to-list 'exec-path-from-shell-variables "ENVIRONMENT_SETUP_DONE")
+    (add-to-list 'exec-path-from-shell-variables "PYTHONPATH")
+    (exec-path-from-shell-initialize))
+#+END_SRC
+
 *** Custom configs
 
 First, define hooks.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Custom configs
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (defvar nasy:config-before-hook nil
     "Hooks to run config functions before load custom.el.")
 
@@ -238,21 +410,219 @@ And then, load them.
   (require 'user-config nil t)
 #+END_SRC
 
+Disable some features.
+
+#+BEGIN_SRC emacs-lisp
+  (setq use-file-dialog        nil
+        use-dialog-box         nil
+        inhibit-startup-screen t)
+
+  (when (fboundp 'tool-bar-mode)
+    (tool-bar-mode -1))
+
+  (when (fboundp 'set-scroll-bar-mode)
+    (set-scroll-bar-mode nil))
+#+END_SRC
+
+Nice scrolling.
+
+#+BEGIN_SRC emacs-lisp
+  (setq scroll-margin                   0
+        scroll-conservatively           100000
+        scroll-preserve-screen-position 'always)
+#+END_SRC
+
 *** Theme
 
 I use doom-themes.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Themes
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (use-package doom-themes
-    :demand t
+    :demand   t
     :straight t
     :config
     (load-theme nasy:theme t)
     ;; (doom-themes-treemacs-config)  ;; The doom themes havn't finished it yet.
     (doom-themes-visual-bell-config)
     (doom-themes-org-config))
+#+END_SRC
+
+*** Scratch Message
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Scratch Message
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package scratch
+    :demand   t
+    :straight t)
+#+END_SRC
+
+*** Dashboard
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Dashboard
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dashboard
+    :after    org  ;; Well, if not, it will load the old one org.
+    :demand   t
+    :straight t
+    :init (setq dashboard-startup-banner 'official
+                dashboard-items '((recents   . 10)
+                                  (bookmarks . 3 )
+                                  (projects  . 2 )
+                                  (agenda    . 5 )
+                                  (registers . 5 )))
+    :config (dashboard-setup-startup-hook))
+#+END_SRC
+
+*** Window
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Window
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook 'winner-mode)
+
+  (use-package switch-window
+    :straight t
+    :init (setq-default switch-window-shortcut-style 'alphabet
+                        switch-window-timeout nil)
+    :bind (("C-x o" . switch-window)))
+
+  ;; When splitting window, show (other-buffer) in the new window
+  (defun split-window-func-with-other-buffer (split-function)
+    (lambda (&optional arg)
+      "Split this window and switch to the new window unless ARG is provided."
+      (interactive "P")
+      (funcall split-function)
+      (let ((target-window (next-window)))
+        (set-window-buffer target-window (other-buffer))
+        (unless arg
+          (select-window target-window)))))
+
+  (global-set-key (kbd "C-x 2")
+                  (split-window-func-with-other-buffer 'split-window-vertically))
+  (global-set-key (kbd "C-x 3")
+                  (split-window-func-with-other-buffer 'split-window-horizontally))
+
+
+  (defun toggle-delete-other-windows ()
+    "Delete other windows in frame if any, or restore previous window config."
+    (interactive)
+    (if (and winner-mode
+             (equal (selected-window) (next-window)))
+        (winner-undo)
+      (delete-other-windows)))
+
+  (global-set-key (kbd "C-x 1") 'toggle-delete-other-windows)
+#+END_SRC
+
+*** Session
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Session
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq desktop-path              (list user-emacs-directory)
+        desktop-auto-save-timeout 600)
+  (desktop-save-mode 1)
+
+
+  (defun nasy:desktop-time-restore (orig &rest args)
+    (let ((start-time (current-time)))
+      (prog1
+          (apply orig args)
+        (message "Desktop restored in %.2fms"
+                 (benchmark-init/time-subtract-millis (current-time)
+                                                 start-time)))))
+  (advice-add 'desktop-read :around 'nasy:desktop-time-restore)
+
+  (defun nasy:desktop-time-buffer-create (orig ver filename &rest args)
+    (let ((start-time (current-time)))
+      (prog1
+          (apply orig ver filename args)
+        (message "Desktop: %.2fms to restore %s"
+                 (benchmark-init/time-subtract-millis (current-time)
+                                                 start-time)
+                 (when filename
+                   (abbreviate-file-name filename))))))
+  (advice-add 'desktop-create-buffer :around 'nasy:desktop-time-buffer-create)
+
+
+  (setq-default history-length 1000)
+  (add-hook 'after-init-hook 'savehist-mode)
+
+
+  (use-package session
+    :defer    t
+    :straight t
+    :hook ((after-init . session-initialize))
+    :init
+    (setq session-save-file (expand-file-name ".session" user-emacs-directory)
+          session-name-disable-regexp "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)"
+          session-save-file-coding-system 'utf-8
+          desktop-globals-to-save
+          (append '((comint-input-ring        . 50)
+                    (compile-history          . 30)
+                    desktop-missing-file-warning
+                    (dired-regexp-history     . 20)
+                    (extended-command-history . 30)
+                    (face-name-history        . 20)
+                    (file-name-history        . 100)
+                    (grep-find-history        . 30)
+                    (grep-history             . 30)
+                    (ido-buffer-history       . 100)
+                    (ido-last-directory-list  . 100)
+                    (ido-work-directory-list  . 100)
+                    (ido-work-file-list       . 100)
+                    (ivy-history              . 100)
+                    (magit-read-rev-history   . 50)
+                    (minibuffer-history       . 50)
+                    (org-clock-history        . 50)
+                    (org-refile-history       . 50)
+                    (org-tags-history         . 50)
+                    (query-replace-history    . 60)
+                    (read-expression-history  . 60)
+                    (regexp-history           . 60)
+                    (regexp-search-ring       . 20)
+                    register-alist
+                    (search-ring              . 20)
+                    (shell-command-history    . 50)
+                    tags-file-name
+                    tags-table-list))))
+#+END_SRC
+
+*** Disable Mouse
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Disable Mouse
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package disable-mouse
+    :straight t
+    :bind (([mouse-4] . (lambda ()
+                          (interactive)
+                          (scroll-down 1)))
+           ([mouse-5] . (lambda ()
+                          (interactive)
+                          (scroll-up 1)))))
 #+END_SRC
 
 ** Custom Functions
@@ -341,4 +711,827 @@ I use doom-themes.
       (switch-to-buffer-other-window nil)))
 
   (global-set-key (kbd "<f7>") 'nasy:split-window)
+#+END_SRC
+
+** Editor
+
+Here is the editor config, including some features and functions.
+
+#+BEGIN_SRC emacs-lisp
+  ;;----------------------------------------------------------------------------
+  ;; Editor
+  ;;----------------------------------------------------------------------------
+#+END_SRC
+
+*** Default Settings
+
+Default settings for editor.
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Default Settings
+  (setq-default
+   bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory)
+   buffers-menu-max-size 30
+   case-fold-search      t
+   column-number-mode    t
+   cursor-in-non-selected-windows t
+   dired-dwim-target     t
+   ediff-split-window-function 'split-window-horizontally
+   ediff-window-setup-function 'ediff-setup-windows-plain
+   indent-tabs-mode      nil
+   line-move-visual      t
+   make-backup-files     nil
+   mouse-yank-at-point   t
+   require-final-newline t
+   save-interprogram-paste-before-kill t
+   set-mark-command-repeat-pop    t
+   tab-always-indent              'complete
+   truncate-lines                 nil
+   truncate-partial-width-windows nil)
+
+  (delete-selection-mode t)
+
+  (fset 'yes-or-no-p 'y-or-n-p)
+
+  (global-auto-revert-mode t)
+
+  (blink-cursor-mode t)
+#+END_SRC
+
+*** Diminish
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Diminish
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish
+    :demand   t
+    :straight t)
+#+END_SRC
+
+*** Cheat Sh
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Cheat-Sh
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'cheat-sh)
+#+END_SRC
+
+*** Dash
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Dash
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'dash)
+#+END_SRC
+
+*** List Unicode Display
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; List Unicode Display
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'list-unicode-display)
+#+END_SRC
+
+*** Paper Break Lines
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Page Break Lines
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package page-break-lines
+    :straight t
+    :hook ((after-init . global-page-break-lines-mode))
+    :diminish page-break-lines-mode)
+#+END_SRC
+
+*** PDF Tools
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; PDF Tools
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package pdf-tools
+    :straight t
+    :config
+    (setq-default pdf-view-display-size 'fit-width)
+    (bind-keys :map pdf-view-mode-map
+               ("\\" . hydra-pdftools/body)
+               ("<s-spc>" .  pdf-view-scroll-down-or-next-page)
+               ("g"  . pdf-view-first-page)
+               ("G"  . pdf-view-last-page)
+               ("l"  . image-forward-hscroll)
+               ("h"  . image-backward-hscroll)
+               ("j"  . pdf-view-next-page)
+               ("k"  . pdf-view-previous-page)
+               ("e"  . pdf-view-goto-page)
+               ("u"  . pdf-view-revert-buffer)
+               ("al" . pdf-annot-list-annotations)
+               ("ad" . pdf-annot-delete)
+               ("aa" . pdf-annot-attachment-dired)
+               ("am" . pdf-annot-add-markup-annotation)
+               ("at" . pdf-annot-add-text-annotation)
+               ("y"  . pdf-view-kill-ring-save)
+               ("i"  . pdf-misc-display-metadata)
+               ("s"  . pdf-occur)
+               ("b"  . pdf-view-set-slice-from-bounding-box)
+               ("r"  . pdf-view-reset-slice)))
+#+END_SRC
+
+*** Projectil
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Projectil
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :defer    t
+    :straight t
+    :diminish
+    :bind (("C-c TAB" . projectile-find-other-file))
+    :bind-keymap ("C-c C-p" . projectile-command-map)
+    :hook ((after-init . projectile-global-mode))
+    :config (setq projectile-require-project-root nil
+                  projectile-project-root-files-top-down-recurring
+                  (append '("compile_commands.json"
+                            ".cquery")
+                          projectile-project-root-files-top-down-recurring)))
+#+END_SRC
+
+*** Which Function
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Which Function
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-func
+    :demand t
+    :hook ((after-init . which-function-mode)))
+#+END_SRC
+
+*** Which Key
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Which Key
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :straight t
+    :hook ((after-init . which-key-mode)))
+#+END_SRC
+
+*** Writeroom Mode
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Writeroom Mode
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package writeroom-mode
+    :defer t
+    :straight t
+    :preface
+    (define-minor-mode prose-mode
+      "Set up a buffer for prose editing.
+  This enables or modifies a number of settings so that the
+  experience of editing prose is a little more like that of a
+  typical word processor."
+      nil " Prose" nil
+      (if prose-mode
+          (progn
+            (when (fboundp 'writeroom-mode)
+              (writeroom-mode 1))
+            (setq truncate-lines nil)
+            (setq word-wrap t)
+            (setq cursor-type 'bar)
+            (when (eq major-mode 'org)
+              (kill-local-variable 'buffer-face-mode-face))
+            (buffer-face-mode 1)
+            ;;(delete-selection-mode 1)
+            (set (make-local-variable 'blink-cursor-interval) 0.6)
+            (set (make-local-variable 'show-trailing-whitespace) nil)
+            (set (make-local-variable 'line-spacing) 0.2)
+            (set (make-local-variable 'electric-pair-mode) nil)
+            (ignore-errors (flyspell-mode 1))
+            (visual-line-mode 1))
+        (kill-local-variable 'truncate-lines)
+        (kill-local-variable 'word-wrap)
+        (kill-local-variable 'cursor-type)
+        (kill-local-variable 'show-trailing-whitespace)
+        (kill-local-variable 'line-spacing)
+        (kill-local-variable 'electric-pair-mode)
+        (buffer-face-mode -1)
+        ;; (delete-selection-mode -1)
+        (flyspell-mode -1)
+        (visual-line-mode -1)
+        (when (fboundp 'writeroom-mode)
+          (writeroom-mode 0)))))
+#+END_SRC
+
+** Languages
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Languages
+  ;;----------------------------------------------------------------------------
+#+END_SRC
+
+*** Simple Supported Languages
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Simple Supported Languages
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (let ((languages '(elvish-mode
+                     fish-mode
+                     toml-mode
+                     yaml-mode))
+        (extras    '(fish-completion
+                     ob-elvish)))
+    (dolist (language languages)
+      (straight-use-package language))
+    (dolist (extra extras)
+      (straight-use-package extra)))
+#+END_SRC
+
+** Org Mode
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Mode
+  ;;----------------------------------------------------------------------------
+#+END_SRC
+
+*** Load
+
+I use ~org~ with ~org-plus-contrib~
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Load
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :straight org-plus-contrib)
+#+END_SRC
+
+*** Basic Configs
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Basic Configs
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :preface
+    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+
+    ;; Exclude DONE state tasks from refile targets
+    (defun verify-refile-target ()
+      "Exclude todo keywords with a done state from refile targets."
+      (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+    (setq org-refile-target-verify-function 'verify-refile-target)
+
+    (defun org-refile-anywhere (&optional goto default-buffer rfloc msg)
+      "A version of `org-refile' which allows refiling to any subtree."
+      (interactive "P")
+      (let ((org-refile-target-verify-function))
+        (org-refile goto default-buffer rfloc msg)))
+
+    (defun org-agenda-refile-anywhere (&optional goto rfloc no-update)
+      "A version of `org-agenda-refile' which allows refiling to any subtree."
+      (interactive "P")
+      (let ((org-refile-target-verify-function))
+        (org-agenda-refile goto rfloc no-update)))
+
+    ;; The original from spacemacs chinese layer shows as follow.
+    ;;   (defadvice org-html-paragraph (before org-html-paragraph-advice
+    ;;                                         (paragraph contents info) activate)
+    ;;     "Join consecutive Chinese lines into a single long line without
+    ;; unwanted space when exporting org-mode to html."
+    ;;     (let* ((origin-contents (ad-get-arg 1))
+    ;;            (fix-regexp "[[:multibyte:]]")
+    ;;            (fixed-contents
+    ;;             (replace-regexp-in-string
+    ;;              (concat
+    ;;               "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
+    ;;       (ad-set-arg 1 fixed-contents)))
+
+    (defun nasy:org-html-paragraph-advice (orig paragraph contents &rest args)
+      "Join consecutive Chinese lines into a single long line without
+  unwanted space when exporting org-mode to html."
+      (let* ((fix-regexp "[[:multibyte:]]")
+             (fixed-contents
+              (replace-regexp-in-string
+               (concat
+                "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents)))
+        (apply orig paragraph fixed-contents args)))
+    (advice-add #'org-html-paragraph :around #'nasy:org-html-paragraph-advice)
+
+    :bind (("C-c l" . org-store-link)
+           ("C-c a" . org-agenda)
+           ("C-c c" . org-capture)
+           :map org-mode-map
+           ("C-M-<up>" . org-up-element)
+           ("M-h"      . nil)
+           ("C-c g"    . org-mac-grab-link))
+    :hook ((org-mode-hook . auto-fill-mode))
+    :init
+    (setq
+     org-archive-mark-done nil
+     org-archive-location  "%s_archive::* Archive"
+     org-archive-mark-done nil
+
+     org-catch-invisible-edits 'show
+
+     org-default-notes-file "~/notes/default.org"
+
+     org-edit-timestamp-down-means-later t
+
+     org-export-coding-system                      'utf-8
+     org-export-kill-product-buffer-when-displayed t
+
+     org-fast-tag-selection-single-key 'expert
+
+     org-hide-emphasis-markers t
+     org-hide-leading-stars    nil
+
+     org-html-checkbox-type       'html
+     org-html-doctype             "html5"
+     org-html-html5-fancy         t
+     org-html-htmlize-output-type 'css
+     org-html-klipsify-src        t
+     org-html-mathjax-options     '((path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML")
+                                    (scale "100")
+                                    (align "center")
+                                    (font "Neo-Euler")
+                                    (linebreaks "false")
+                                    (autonumber "AMS")
+                                    (indent "0em")
+                                    (multlinewidth "85%")
+                                    (tagindent ".8em")
+                                    (tagside "right"))
+     org-html-with-latex          'mathjax
+     org-html-validation-link     nil
+
+     org-indent-mode-turns-on-hiding-stars nil
+
+     org-pretty-entities t
+
+     ;; org latex
+     org-latex-compiler "lualatex"
+     org-latex-default-packages-alist
+     (quote
+      (("AUTO" "inputenc" t
+        ("pdflatex"))
+       ("T1" "fontenc" t
+        ("pdflatex"))
+       ("" "graphicx" t nil)
+       ("" "grffile" t nil)
+       ("" "longtable" t nil)
+       ("" "wrapfig" nil nil)
+       ("" "rotating" nil nil)
+       ("normalem" "ulem" t nil)
+       ("" "amsmath" t nil)
+       ("" "textcomp" t nil)
+       ("" "amssymb" t nil)
+       ("" "capt-of" nil nil)
+       ("colorlinks,linkcolor=blue,anchorcolor=blue,citecolor=green,filecolor=black,urlcolor=blue"
+        "hyperref" t nil)
+       ("" "luatexja-fontspec" t nil)
+       ("" "listings" t nil)))
+     org-latex-default-table-environment "longtable"
+     org-latex-listings t
+     org-latex-listings-langs
+     (quote
+      ((emacs-lisp "Lisp")
+       (lisp "Lisp")
+       (clojure "Lisp")
+       (c "C")
+       (cc "C++")
+       (fortran "fortran")
+       (perl "Perl")
+       (cperl "Perl")
+       (Python "python")
+       (python "Python")
+       (ruby "Ruby")
+       (html "HTML")
+       (xml "XML")
+       (tex "TeX")
+       (latex "[LaTeX]TeX")
+       (sh "bash")
+       (shell-script "bash")
+       (gnuplot "Gnuplot")
+       (ocaml "Caml")
+       (caml "Caml")
+       (sql "SQL")
+       (sqlite "sql")
+       (makefile "make")
+       (R "r")))
+     org-latex-pdf-process
+     (quote
+      ("lualatex -shell-escape -interaction nonstopmode %f"
+       "lualatex -shell-escape -interaction nonstopmode %f"))
+     org-latex-tables-booktabs t
+
+     org-level-color-stars-only nil
+     org-list-indent-offset 2
+     org-log-done t
+
+     org-outline-path-complete-in-steps nil
+
+     org-refile-allow-creating-parent-nodes 'confirm
+     org-refile-targets                     '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))
+     org-refile-use-cache                   nil
+     org-refile-use-outline-path            t
+
+     org-startup-indented  t
+     org-startup-folded    'content
+     org-startup-truncated nil
+
+     org-support-shift-select t
+
+     org-tags-column 80
+
+     ;; to-do settings
+     org-todo-keywords        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
+                                      (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
+                                      (sequence "WAITING(w@/!)" "DELEGATED(e!)" "HOLD(h)" "|" "CANCELLED(c@/!)")))
+     org-todo-repeat-to-state "NEXT"
+     org-todo-keyword-faces   (quote (("NEXT" :inherit warning)
+                                      ("PROJECT" :inherit font-lock-string-face)))
+
+     org-use-sub-superscripts '{})
+    :config
+    ;; --------
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     `((ditaa      . t)
+       (dot        . t)
+       (elvish     . t)
+       (emacs-lisp . t)
+       (gnuplot    . t)
+       (haskell    . nil)
+       (latex      . t)
+       (ledger     . t)
+       (ocaml      . nil)
+       (octave     . t)
+       (plantuml   . t)
+       (python     . t)
+       (R          . t)
+       (ruby       . t)
+       (screen     . nil)
+       (,(if (locate-library "ob-sh") 'sh 'shell) . t)
+       (sql . nil)
+       (sqlite . t)))
+
+    ;; --------
+    (setq luamagick
+        '(luamagick
+          :programs ("lualatex" "convert")
+          :description "pdf > png"
+          :message "you need to install lualatex and imagemagick."
+          :use-xcolor t
+          :image-input-type "pdf"
+          :image-output-type "png"
+          :image-size-adjust (1.0 . 1.0)
+          :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+          :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+    (add-to-list 'org-preview-latex-process-alist luamagick)
+
+    (setq luasvg
+        '(luasvg
+          :programs ("lualatex" "dvisvgm")
+          :description "dvi > svg"
+          :message "you need to install lualatex and dvisvgm."
+          :use-xcolor t
+          :image-input-type "dvi"
+          :image-output-type "svg"
+          :image-size-adjust (1.7 . 1.5)
+          :latex-compiler ("lualatex -interaction nonstopmode -output-format dvi -output-directory %o %f")
+          :image-converter ("dvisvgm %f -n -b min -c %S -o %O")))
+    (add-to-list 'org-preview-latex-process-alist luasvg)
+    (setq org-preview-latex-default-process 'luasvg))
+#+END_SRC
+
+*** Org-Agenda
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Agenda
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-agenda
+    :after org
+    :init (setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
+    :hook ((org-agenda-mode . (lambda () (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t)))
+           (org-agenda-mode . hl-line-mode))
+    :config (add-to-list 'org-agenda-after-show-hook 'org-show-entry)
+    (let ((active-project-match "-INBOX/PROJECT"))
+
+      (setq org-stuck-projects
+            `(,active-project-match ("NEXT")))
+
+      (setq org-agenda-compact-blocks t
+            org-agenda-sticky t
+            org-agenda-start-on-weekday nil
+            org-agenda-span 'day
+            org-agenda-include-diary nil
+            org-agenda-sorting-strategy
+            '((agenda habit-down time-up user-defined-up effort-up category-keep)
+              (todo category-up effort-up)
+              (tags category-up effort-up)
+              (search category-up))
+            org-agenda-window-setup 'current-window
+            org-agenda-custom-commands
+            `(("N" "Notes" tags "NOTE"
+               ((org-agenda-overriding-header "Notes")
+                (org-tags-match-list-sublevels t)))
+              ("g" "GTD"
+               ((agenda "" nil)
+                (tags "INBOX"
+                      ((org-agenda-overriding-header "Inbox")
+                       (org-tags-match-list-sublevels nil)))
+                (stuck ""
+                       ((org-agenda-overriding-header "Stuck Projects")
+                        (org-agenda-tags-todo-honor-ignore-options t)
+                        (org-tags-match-list-sublevels t)
+                        (org-agenda-todo-ignore-scheduled 'future)))
+                (tags-todo "-INBOX"
+                           ((org-agenda-overriding-header "Next Actions")
+                            (org-agenda-tags-todo-honor-ignore-options t)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-skip-function
+                             '(lambda ()
+                                (or (org-agenda-skip-subtree-if 'todo '("HOLD" "WAITING"))
+                                    (org-agenda-skip-entry-if 'nottodo '("NEXT")))))
+                            (org-tags-match-list-sublevels t)
+                            (org-agenda-sorting-strategy
+                             '(todo-state-down effort-up category-keep))))
+                (tags-todo ,active-project-match
+                           ((org-agenda-overriding-header "Projects")
+                            (org-tags-match-list-sublevels t)
+                            (org-agenda-sorting-strategy
+                             '(category-keep))))
+                (tags-todo "-INBOX/-NEXT"
+                           ((org-agenda-overriding-header "Orphaned Tasks")
+                            (org-agenda-tags-todo-honor-ignore-options t)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-skip-function
+                             '(lambda ()
+                                (or (org-agenda-skip-subtree-if 'todo '("PROJECT" "HOLD" "WAITING" "DELEGATED"))
+                                    (org-agenda-skip-subtree-if 'nottododo '("TODO")))))
+                            (org-tags-match-list-sublevels t)
+                            (org-agenda-sorting-strategy
+                             '(category-keep))))
+                (tags-todo "/WAITING"
+                           ((org-agenda-overriding-header "Waiting")
+                            (org-agenda-tags-todo-honor-ignore-options t)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-sorting-strategy
+                             '(category-keep))))
+                (tags-todo "/DELEGATED"
+                           ((org-agenda-overriding-header "Delegated")
+                            (org-agenda-tags-todo-honor-ignore-options t)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-sorting-strategy
+                             '(category-keep))))
+                (tags-todo "-INBOX"
+                           ((org-agenda-overriding-header "On Hold")
+                            (org-agenda-skip-function
+                             '(lambda ()
+                                (or (org-agenda-skip-subtree-if 'todo '("WAITING"))
+                                    (org-agenda-skip-entry-if 'nottodo '("HOLD")))))
+                            (org-tags-match-list-sublevels nil)
+                            (org-agenda-sorting-strategy
+                             '(category-keep))))))))))
+#+END_SRC
+
+*** Org Bullets
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Bullets
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :after org
+    :straight t
+    :hook ((org-mode . (lambda () (org-bullets-mode 1)))))
+#+END_SRC
+
+*** Org Capture
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Capture
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-capture
+    :after org
+    :demand t
+    :init
+    (unless (boundp 'org-capture-templates)
+      (defvar org-capture-templates nil))
+
+    (add-to-list 'org-capture-templates '("t" "Tasks"))
+    (add-to-list 'org-capture-templates
+                 '("tr" "Book Reading Task" entry
+                   (file+olp "~/notes/task.org" "Reading" "Book")
+                   "* TODO %^{book name}\n%u\n%a\n" :clock-in t :clock-resume t))
+    (add-to-list 'org-capture-templates
+                 '("tw" "Work Task" entry
+                   (file+headline "~/notes/task.org" "Work")
+                   "* TODO %^{task name}\n%u\n%a\n" :clock-in t :clock-resume t))
+
+    (add-to-list 'org-capture-templates
+                 '("j" "Journal" entry
+                   (file "~/notes/journal.org")
+                   "* %U - %^{heading}\n  %?"))
+
+    (add-to-list 'org-capture-templates
+                 '("i" "Inbox" entry
+                   (file "~/notes/inbox.org")
+                   "* %U - %^{heading} %^g\n %?\n"))
+
+    (add-to-list 'org-capture-templates
+                 '("n" "Notes" entry
+                   (file "~/notes/notes.org")
+                   "* %^{heading} %t %^g\n  %?\n")))
+#+END_SRC
+
+*** Org Cliplink
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Cliplink
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'org-cliplink)
+#+END_SRC
+
+*** Org Clock
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Clock
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-clock
+    :after org
+    :preface
+    (defun show-org-clock-in-header-line ()
+      "Show the clocked-in task in header line"
+      (setq-default header-line-format '((" " org-mode-line-string ""))))
+
+    (defun hide-org-clock-from-header-line ()
+      "Hide the clocked-in task from header line"
+      (setq-default header-line-format nil))
+    :init
+    (setq org-clock-persist t)
+    (setq org-clock-in-resume t)
+    ;; Save clock data and notes in the LOGBOOK drawer
+    (setq org-clock-into-drawer t)
+    ;; Save state changes in the LOGBOOK drawer
+    (setq org-log-into-drawer t)
+    ;; Removes clocked tasks with 0:00 duration
+    (setq org-clock-out-remove-zero-time-clocks t)
+    ;; Show clock sums as hours and minutes, not "n days" etc.
+    (setq org-time-clocksum-format
+          '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+    :hook ((org-clock-in . show-org-clock-in-header-line)
+           ((org-clock-out . org-clock-cancel) . hide-org-clock-from-header))
+    :bind (:map org-clock-mode-line-map
+               ([header-line mouse-2] . org-clock-goto)
+               ([header-line mouse-1] . org-clock-menu))
+    :config
+    (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
+      (add-hook 'org-clock-in-hook
+                (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                                    (concat "tell application \"org-clock-statusbar\" to clock in \""
+                                            org-clock-current-task "\""))))
+      (add-hook 'org-clock-out-hook
+                (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                                    "tell application \"org-clock-statusbar\" to clock out")))))
+#+END_SRC
+
+*** Org Extra Jar -- ob-ditaa & ob-plantuml
+
+Include ob-ditaa and ob-plantuml
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Extra Jar
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :preface
+    (defun grab-ditaa (url jar-name)
+      "Download URL and extract JAR-NAME as `org-ditaa-jar-path'."
+      (message "Grabbing " jar-name " for org.")
+      (let ((zip-temp (make-temp-name "emacs-ditaa")))
+        (unwind-protect
+            (progn
+              (when (executable-find "unzip")
+                (url-copy-file url zip-temp)
+                (shell-command (concat "unzip -p " (shell-quote-argument zip-temp)
+                                       " " (shell-quote-argument jar-name) " > "
+                                       (shell-quote-argument org-ditaa-jar-path)))))
+          (when (file-exists-p zip-temp)
+            (delete-file zip-temp)))))
+    :config
+    (unless (and (boundp 'org-ditaa-jar-path)
+                 (file-exists-p org-ditaa-jar-path))
+      (let ((jar-name "ditaa0_9.jar")
+            (url "http://jaist.dl.sourceforge.net/project/ditaa/ditaa/0.9/ditaa0_9.zip"))
+        (setq org-ditaa-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
+        (unless (file-exists-p org-ditaa-jar-path)
+          (grab-ditaa url jar-name))))
+
+    (let ((jar-name "plantuml.jar")
+          (url "http://jaist.dl.sourceforge.net/project/plantuml/plantuml.jar"))
+      (setq org-plantuml-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
+      (unless (file-exists-p org-plantuml-jar-path)
+        (url-copy-file url org-plantuml-jar-path))))
+#+END_SRC
+
+*** Org Pdfview
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Pdfview
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'org-pdfview)
+#+END_SRC
+
+*** Org Pomodoro
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Pomodoro
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-pomodoro
+    :after org-agenda
+    :init (setq org-pomodoro-keep-killed-pomodoro-time t)
+    :bind (:map org-agenda-mode-map
+                ("P" . org-pomodoro)))
+#+END_SRC
+
+*** Org Toc
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Toc
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'toc-org)
+#+END_SRC
+
+*** Org Wc
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Wc
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'org-wc)
 #+END_SRC
