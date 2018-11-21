@@ -22,7 +22,6 @@ clean-history:
 	rm -rf recentf
 	rm -rf .session
 	rm -rf .emacs.desktop
-	rm -rf .bookmarks.el
 .PHONY: clean-history
 
 
