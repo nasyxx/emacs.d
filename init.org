@@ -658,6 +658,12 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
         scroll-preserve-screen-position 'always)
 #+END_SRC
 
+**** Text Scale
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'default-text-scale)
+#+END_SRC
+
 *** Theme
 
 I use doom-themes.
@@ -1102,6 +1108,35 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :hook ((dired-mode . diff-hl-dired-mode)))
 #+END_SRC
 
+*** Fill Column
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Fill Column
+#+END_SRC
+
+**** Unfill
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'unfill)
+#+END_SRC
+
+**** Visual-fill-column
+
+#+BEGIN_SRC emacs-lisp
+  (use-package visual-fill-column
+    :straight t
+    :preface
+    (defun maybe-adjust-visual-fill-column ()
+      "Readjust visual fill column when the global font size is modified.
+  This is helpful for writeroom-mode, in particular."
+      (if visual-fill-column-mode
+          (add-hook 'after-setting-font-hook 'visual-fill-column--adjust-window nil t)
+        (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t)))
+    :hook ((visual-line-mode        . visual-fill-column-mode        )
+           (visual-fill-column-mode . maybe-adjust-visual-fill-column)))
+#+END_SRC
+
 *** Grep
 
 #+BEGIN_SRC emacs-lisp :exports none
@@ -1182,6 +1217,26 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     (when (fboundp 'isearch-occur)
       ;; to match ivy conventions
       (define-key isearch-mode-map (kbd "C-c C-o") 'isearch-occur)))
+#+END_SRC
+
+*** Large File
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Large File
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package vlf
+    :straight t
+    :init
+    (defun ffap-vlf ()
+      "Find file at point with VLF."
+      (interactive)
+      (let ((file (ffap-file-at-point)))
+        (unless (file-exists-p file)
+          (error "File does not exist: %s" file))
+        (vlf file))))
 #+END_SRC
 
 *** List Unicode Display
@@ -1401,6 +1456,44 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package which-key
     :straight t
     :hook ((after-init . which-key-mode)))
+#+END_SRC
+
+*** Whitespace
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Whitespace
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package whitespace
+    :preface
+    (defun no-trailing-whitespace ()
+      "Turn off display of trailing whitespace in this buffer."
+      (setq show-trailing-whitespace nil))
+    :init
+    (setq-default show-trailing-whitespace t
+                  whitespace-style         '(face tabs empty trailing lines-tail))
+
+    ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
+    (dolist (hook '(special-mode-hook
+                    Info-mode-hook
+                    eww-mode-hook
+                    term-mode-hook
+                    comint-mode-hook
+                    compilation-mode-hook
+                    twittering-mode-hook
+                    minibuffer-setup-hook))
+      (add-hook hook #'no-trailing-whitespace))
+    :diminish whitespace-mode)
+
+
+  (use-package whitespace-cleanup-mode
+    :straight t
+    :init (setq whitespace-cleanup-mode-only-if-initially-clean nil)
+    :hook ((after-init . global-whitespace-cleanup-mode))
+    :diminish (whitespace-cleanup-mode)
+    :bind (("<remap> <just-one-space>" . cycle-spacing)))
 #+END_SRC
 
 *** Writeroom Mode
