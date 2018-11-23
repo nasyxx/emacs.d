@@ -1,6 +1,6 @@
-#+PROPERTY: header-args:emacs-lisp :tangle (concat (file-name-sans-extension (buffer-file-name)) ".new.el")
+#+PROPERTY: header-args:emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "init.new.el")
 
-#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
+#+OPTIONS: ':nil *:t -:t ::t <:t H:5 \n:nil ^:t arch:headline author:t
 #+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
 #+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
 #+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
@@ -11,6 +11,17 @@
 #+LANGUAGE: en
 #+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
+
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://www.pirilampo.org/styles/readtheorg/css/readtheorg.css"/>
+
+#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://www.pirilampo.org/styles/readtheorg/js/readtheorg.js"></script>
+
+#+HTML_HEAD: <style>kbd {border-style: outset;} pre.src:before {top: -4px; box-shadow: 3px 3px 3px #eee; border-color: #ccc; padding: 0;}</style>
+#+HTML_HEAD: <style>#content {background-color: #fff0f8;} body,pre.src {background-color: #f7f4e3;}</style>
 
 * About
 
@@ -37,16 +48,16 @@ not sure if it would work well well in Linux or Windows.
 
 * Installation
 
-To install, clone this repo to @@html:<span>@@ ~/.emacs.d @@html:</span>@@:
+To install, clone this repo to @@html: <span> @@ ~~/.emacs.d~ @@html: </span> @@:
 
 #+BEGIN_SRC shell
   git clone https://github.com/nasyxx/emacs.d.git ~/.emacs.d
 #+END_SRC
 
 Upon the first time staring up emacs, other third-party packages will be
-automatically clone to the @@html:<span>@@ ~straight~: @@html</span>@@ folder and
-installed.  If you encounter any errors at that stage, try restarting Emacs, and
-maybe running ~make clean-all~ before doing so.
+automatically clone to the @@html: <span> @@ ~straight~: @@html: </span> @@ folder
+and installed.  If you encounter any errors at that stage, try restarting Emacs,
+and maybe running ~make clean-all~ before doing so.
 
 * Updates
 
@@ -54,13 +65,12 @@ Update this config with running ~make update~ or ~git pull~ after a ~make
 clean-build~ and restart Emacs.
 
 And I guess you'll need to update third-party packages regularly too if you
-have not modificated the ~straight-check-for-modifications~ in @@html:<span>@@
-~config/nasy-config.el~: @@html:</span>@@
+have not modificated the ~straight-check-for-modifications~ in @@html: <span> @@
+~config/nasy-config.el~: @@html: </span> @@
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  M-x straight-pull-all
-  M-x straight-rebuild-all
-#+END_SRC
+
++ @@html: <kbd>M-x</kbd> <kbd>straight-pull-all</kbd> <kbd>RET</kbd> @@
++ @@html: <kbd>M-x</kbd> <kbd>straight-rebuild-all</kbd> <kbd>RET</kbd> @@
 
 If you encounter any errors while updating, you may need to kill Emacs and run
 ~make clean~. If you still meet errors after doing that, you probably need to run
@@ -69,8 +79,9 @@ If you encounter any errors while updating, you may need to kill Emacs and run
 * The Configuration
 
 One thing to note is that this file generates a file named @@html: <span> @@
-~init.el~. @@html: </span> @@ *You should not edit that file directly and make any
-changes here and regenerate it from Emacs org-mode using ~C-c C-v t~.
+~init.el~. @@html: </span> @@ You *should not* edit that file directly and make any
+changes here and regenerate it from Emacs org-mode using @@html: <kbd>C-c</kbd>
+<kbd>C-v</kbd> <kbd>t</kbd> @@.
 
 ** Bootstrap
 
@@ -383,13 +394,230 @@ Adjust garbage collection thresholds during startup, and thereafter
 
 *** Custom configs
 
-First, define hooks.
-
 #+BEGIN_SRC emacs-lisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Custom configs
 #+END_SRC
 
+**** nasy-config.el
+
+This file includes all of the customizable variables of my configuration.
+
+You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
+
+***** Header
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  ;;; config.el --- User config file.                    -*- lexical-binding: t; -*-
+
+  ;; Author: Nasy <nasyxx+emacs@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Custom Config file.
+
+  ;;; Code:
+#+END_SRC
+
+***** Constants
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (defconst *is-a-mac* (eq system-type 'darwin))
+#+END_SRC
+
+***** UI Settings
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  ;; Theme
+  (setq-default nasy:theme 'doom-dracula)
+
+  (when *is-a-mac*
+    (add-to-list 'default-frame-alist
+                 '(ns-transparent-titlebar . t))
+
+    (add-to-list 'default-frame-alist
+                 '(ns-appearance . dark))
+
+    (add-to-list 'default-frame-alist
+                 '(alpha . (80 . 75)))
+
+    (add-to-list 'default-frame-alist
+                 '(font . "OperatorMonoLig Nerd Font-14"))
+
+    (defun stop-minimizing-window ()
+    "Stop minimizing window under macOS."
+    (interactive)
+    (unless (and *is-a-mac*
+                 window-system)
+      (suspend-frame)))
+
+    (global-set-key (kbd "C-z") 'stop-minimizing-window))
+#+END_SRC
+
+***** Default Settings
+
++ Cursor
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (setq-default
+    blink-cursor-interval .6
+    blink-matching-paren  t)
+#+END_SRC
+
++ Visual
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (setq-default
+   fill-column                    80
+   visual-fill-column-width       100
+   word-wrap                      t
+   highlight-indent-guides-method 'column
+   tab-width                      8
+   tooltip-delay                  1.5)
+#+END_SRC
+
++ Company
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (setq-default
+   company-idle-delay .5)
+#+END_SRC
+
++ Helm
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (setq-default
+   ;; brew install rg   if you'd like to use rg as my doing
+   helm-ag-base-command "rg --no-heading --smart-case")
+#+END_SRC
+
++ Shell
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (setq-default
+   shell-file-name "/bin/zsh")
+#+END_SRC
+
++ Languages
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (setq-default
+   haskell-stylish-on-save nil
+   ,*intero*                t
+   ,*blacken*               t
+   blacken-line-length     80
+   ,*clangd*                (or (executable-find "clangd")  ;; usually
+                               (executable-find "/usr/local/opt/llvm/bin/clangd"))  ;; macOS
+   ,*nix*                   (executable-find "nix")
+   ,*rust*                  (or (executable-find "rustc")
+                               (executable-find "cargo")
+                               (executable-find "rustup"))
+   ,*rls*                   (or (executable-find "rls")
+                               (executable-find "~/.cargo/bin/rls"))
+   lsp-rust-rls-command    '("rls"))
+#+END_SRC
+
++ Parens
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (setq-default
+   show-paren-style                                'expression
+   sp-autoinsert-quote-if-followed-by-closing-pair t
+   sp-base-key-bindings                            'paredit
+   sp-show-pair-from-inside                        t)
+#+END_SRC
+
++ Whitespace
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (setq-default
+   whitespace-line-column 80
+   whitespace-style       '(face spaces tabs newline
+                            space-mark tab-mark newline-mark
+                            lines-tail empty))
+#+END_SRC
+
++ Straight.el
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  ;; The original one is `(find-at-startup find-when-checking) which is so slow.
+  ;; straight-check-for-modifications '(find-at-startup find-when-checking)
+  (setq-default
+   straight-check-for-modifications '(check-on-save find-when-checking))
+#+END_SRC
+
++ Start
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (setq-default
+   initial-scratch-message     (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+   dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+   ;; initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; It will cause error if you start emacs from Command line with file name
+                                                                            ;; https://github.com/rakanalh/emacs-dashboard/issues/69
+  )
+#+END_SRC
+
++ Config After initialization
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (defun nasy:config-after ()
+    "Set configuration need to be set after init."
+    (setq-default
+     helm-allow-mouse                  t
+     helm-follow-mode-persistent       t
+     helm-move-to-line-cycle-in-source nil
+     helm-source-names-using-follow    '("Buffers" "kill-buffer" "Occur")))
+
+
+  (add-hook 'nasy:config-after-hook  #'nasy:config-after)
+#+END_SRC
+
+***** Custom Faces
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (defun nasy:set-face ()
+    "Set custom face."
+    (set-face-attribute 'custom-comment              nil                                             :slant   'italic)
+    (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
+    (set-face-attribute 'mode-line                   nil :background "#a1de93" :foreground "#2f3e75" :box     nil)
+    (set-face-attribute 'mode-line-inactive          nil :background "#333"    :foreground "#96A7A9" :box     nil)
+    (set-face-attribute 'powerline-active0           nil :background "#ffffc1"                       :inherit 'mode-line )
+    (set-face-attribute 'powerline-active1           nil :background "#aa96da" :foreground "#2f3e75" :inherit 'mode-line )
+    (set-face-attribute 'powerline-active2           nil :background "#d0efb5" :foreground "black"   :inherit 'mode-line)
+    (set-face-attribute 'show-paren-match            nil :background "#bfcfff" :foreground "#dc322f" :weight  'ultra-bold)
+    (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified)
+    (set-face-attribute 'which-func                  nil                       :foreground "#333"))
+
+  (add-hook 'nasy:config-before-hook #'nasy:set-face)
+#+END_SRC
+
+***** Key Bindings
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (when *is-a-mac*
+    ;; cursor Movement
+    (global-set-key (kbd "s-<up>")   'beginning-of-buffer)
+    (global-set-key (kbd "s-<down>") 'end-of-buffer)
+    ;; text Operations
+    (global-set-key (kbd "M-¥")
+                    (lambda ()
+                      (interactive)
+                      (insert "\\")))
+    (global-set-key (kbd "s-<backspace>")
+                    (lambda ()
+                      (interactive)
+                      (kill-line 0)))
+  )
+#+END_SRC
+
+***** Footer
+
+#+BEGIN_SRC emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.new.el")
+  (provide 'nasy-config)
+  ;;; nasy-config.el ends here
+#+END_SRC
+
+**** Hooks & Require
 #+BEGIN_SRC emacs-lisp
   (defvar nasy:config-before-hook nil
     "Hooks to run config functions before load custom.el.")
@@ -403,14 +631,12 @@ First, define hooks.
             #'(lambda () (run-hooks 'nasy:config-after-hook)))
 #+END_SRC
 
-And then, load them.
-
 #+BEGIN_SRC emacs-lisp
   (require 'nasy-config nil t)
   (require 'user-config nil t)
 #+END_SRC
 
-Disable some features.
+**** Disable Some Features
 
 #+BEGIN_SRC emacs-lisp
   (setq use-file-dialog        nil
@@ -424,7 +650,7 @@ Disable some features.
     (set-scroll-bar-mode nil))
 #+END_SRC
 
-Nice scrolling.
+**** Nice Scrolling
 
 #+BEGIN_SRC emacs-lisp
   (setq scroll-margin                   0
@@ -772,6 +998,39 @@ Default settings for editor.
     :straight t)
 #+END_SRC
 
+*** Beginend
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Beginend
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package beginend
+    :straight t
+    :hook ((after-init . beginend-global-mode)))
+#+END_SRC
+
+*** Carbon Now sh
+
+Emacs to carbon.now.sh integration.
+
+https://github.com/veelenga/carbon-now-sh.el
+
+Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Carbon Now sh
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  ;; Emacs to carbon.now.sh integration
+  ;; https://github.com/veelenga/carbon-now-sh.el
+  ;; (carbon-now-sh)
+  (straight-use-package 'carbon-now-sh)
+#+END_SRC
+
 *** Cheat Sh
 
 #+BEGIN_SRC emacs-lisp :exports none
@@ -794,6 +1053,137 @@ Default settings for editor.
   (straight-use-package 'dash)
 #+END_SRC
 
+*** Dired
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Dired
+#+END_SRC
+
+**** Dired
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dired
+    :init
+    (let ((gls (executable-find "gls")))
+      (when gls (setq insert-directory-program gls)))
+    (setq dired-recursive-deletes 'top)
+    :bind (:map dired-mode-map
+                ([mouse-2] . dired-find-file             )
+                ("C-c C-p" . wdired-change-to-wdired-mode)))
+#+END_SRC
+
+**** Diredfl
+
+#+BEGIN_SRC emacs-lisp
+  (use-package diredfl
+    :after dired
+    :straight t
+    :hook ((after-init . diredfl-global-mode)))
+#+END_SRC
+
+**** Uniquify
+
+#+BEGIN_SRC emacs-lisp
+  (use-package uniquify
+    :init  ;; nicer naming of buffers for files with identical names
+    (setq uniquify-buffer-name-style   'reverse
+          uniquify-separator           " • "
+          uniquify-after-kill-buffer-p t
+          uniquify-ignore-buffers-re   "^\\*"))
+#+END_SRC
+
+**** Diff-hl
+
+#+BEGIN_SRC emacs-lisp
+  (use-package diff-hl
+    :after dired
+    :straight t
+    :hook ((dired-mode . diff-hl-dired-mode)))
+#+END_SRC
+
+*** Grep
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Grep
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default grep-highlight-matches t
+                grep-scroll-output t)
+
+  (when *is-a-mac*
+    (setq-default locate-command "mdfind"))
+#+END_SRC
+
+*** Highlight
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Highlight
+#+END_SRC
+
+**** hl-line
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-line
+    :hook ((after-init . global-hl-line-mode)))
+#+END_SRC
+
+**** Highlight Indent Guides
+
+#+BEGIN_SRC emacs-lisp
+  (use-package highlight-indent-guides
+    :straight t
+    :hook (((prog-mode text-mode) . highlight-indent-guides-mode)))
+#+END_SRC
+
+*** iSearch
+
+I only use ~rg~ to search, so I disabled the key-map of isearch.
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; isearch
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package isearch
+    :preface
+    ;; Search back/forth for the symbol at point
+    ;; See http://www.emacswiki.org/emacs/SearchAtPoint
+    (defun isearch-yank-symbol ()
+      "*Put symbol at current point into search string."
+      (interactive)
+      (let ((sym (thing-at-point 'symbol)))
+        (if sym
+            (progn
+              (setq isearch-regexp t
+                    isearch-string (concat "\\_<" (regexp-quote sym) "\\_>")
+                    isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
+                    isearch-yank-flag t))
+          (ding)))
+      (isearch-search-and-update))
+
+    ;; http://www.emacswiki.org/emacs/ZapToISearch
+    (defun isearch-exit-other-end (rbeg rend)
+      "Exit isearch, but at the other end of the search string.
+  This is useful when followed by an immediate kill."
+      (interactive "r")
+      (isearch-exit)
+      (goto-char isearch-other-end))
+
+    :bind (:map isearch-mode-map
+                ([remap isearch-delete-char] . isearch-del-char)
+                ("C-M-w" . isearch-yank-symbol)
+                ([(control return)] . isearch-exit-other-end))
+    :config
+    (when (fboundp 'isearch-occur)
+      ;; to match ivy conventions
+      (define-key isearch-mode-map (kbd "C-c C-o") 'isearch-occur)))
+#+END_SRC
+
 *** List Unicode Display
 
 #+BEGIN_SRC emacs-lisp :exports none
@@ -803,6 +1193,43 @@ Default settings for editor.
 
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'list-unicode-display)
+#+END_SRC
+
+*** mmm-mode
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; mmm-mode
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package mmm-auto
+    :demand t
+    :straight mmm-mode
+    :init (setq
+           mmm-global-mode              'buffers-with-submode-classes
+           mmm-submode-decoration-level 2))
+#+END_SRC
+
+*** Multiple Cursors
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Multiple Cursors
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package multiple-cursors
+    :straight t
+    :bind (("C-<"     . mc/mark-previous-like-this)
+           ("C->"     . mc/mark-next-like-this)
+           ("C-+"     . mc/mark-next-like-this)
+           ("C-c C-<" . mc/mark-all-like-this)
+           ;; From active region to multiple cursors:
+           ("C-c m r" . set-rectangular-region-anchor)
+           ("C-c m c" . mc/edit-lines)
+           ("C-c m e" . mc/edit-ends-of-lines)
+           ("C-c m a" . mc/edit-beginnings-of-lines)))
 #+END_SRC
 
 *** Paper Break Lines
@@ -817,6 +1244,37 @@ Default settings for editor.
     :straight t
     :hook ((after-init . global-page-break-lines-mode))
     :diminish page-break-lines-mode)
+#+END_SRC
+
+*** Parens
+
+I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Parens
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook 'show-paren-mode)
+#+END_SRC
+
+**** Smartparens
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens-config
+    :straight smartparens
+    :hook ((after-init . show-smartparens-global-mode)
+           (after-init . smartparens-global-mode))
+    :init (setq sp-hybrid-kill-entire-symbol nil))
+#+END_SRC
+
+**** Rainbow Delimiters
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :straight t
+    :hook (((prog-mode text-mode) . rainbow-delimiters-mode)))
 #+END_SRC
 
 *** PDF Tools
@@ -874,6 +1332,49 @@ Default settings for editor.
                   (append '("compile_commands.json"
                             ".cquery")
                           projectile-project-root-files-top-down-recurring)))
+#+END_SRC
+
+*** Recentf
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Recentf
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package recentf
+    :hook ((after-init . recentf-mode))
+    :init (setq-default
+           recentf-save-file       "~/.emacs.d/recentf"
+           recentf-max-saved-items 100
+           recentf-exclude         '("/tmp/" "/ssh:")))
+#+END_SRC
+
+*** Smex
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Smex
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smex
+    :straight t
+    :init (setq-default smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+    :bind (("<remap> <execute-extended-command>" . smex)))
+#+END_SRC
+
+*** Subword
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Subword
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package subword
+    :defer t
+    :diminish (subword-mode))
 #+END_SRC
 
 *** Which Function
