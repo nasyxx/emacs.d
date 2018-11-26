@@ -25,10 +25,10 @@
 
 * About
 
-An Straightforward Emacs Configuration Bundle.
+A Straightforward Emacs Configuration Bundle.
 
 This is my Emacs configuration in literate form, and it is towards macOS.  I am
-not sure if it would work well well in Linux or Windows.
+not sure if it would work well well on Linux or Windows.
 
 ** *NOTICE*
 
@@ -1048,6 +1048,98 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
   (straight-use-package 'cheat-sh)
 #+END_SRC
 
+*** Company
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Company
+#+END_SRC
+
+**** Company
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :straight t
+    :init
+    (setq-default company-minimum-prefix-length .2
+                  company-transformers '(company-sort-by-backend-importance)
+                  company-require-match nil
+                  company-tooltip-align-annotations t
+                  company-dabbrev-other-buffers 'all
+                  company-dabbrev-downcase nil
+                  company-dabbrev-ignore-case t
+                  company-gtags-executable "gtags")
+    :hook ((after-init . global-company-mode))
+    :bind (("M-C-/" . company-complete)
+           :map company-mode-map
+           ("M-/"   . company-complete)
+           :map company-active-map
+           ("M-/"   . company-complete)
+           ("<tab>" . company-other-backend)
+           ("C-n"   . company-select-next)
+           ("C-p"   . company-select-previous))
+    :config
+    (defvar my-prev-whitespace-mode nil)
+    (make-variable-buffer-local 'my-prev-whitespace-mode)
+    (defun pre-popup-draw ()
+      "Turn off whitespace mode before showing company complete tooltip"
+      (if whitespace-mode
+          (progn
+            (setq my-prev-whitespace-mode t)
+            (whitespace-mode -1)
+            (setq my-prev-whitespace-mode t))))
+    (defun post-popup-draw ()
+      "Restore previous whitespace mode after showing company tooltip"
+      (if my-prev-whitespace-mode
+          (progn
+            (whitespace-mode 1)
+            (setq my-prev-whitespace-mode nil))))
+    (advice-add 'company-pseudo-tooltip-unhide :before #'pre-popup-draw)
+    (advice-add 'company-pseudo-tooltip-hide :after #'post-popup-draw)
+
+    (defun nasy:local-push-company-backend (backend)
+      "Add BACKEND to a buffer-local version of `company-backends'."
+      (make-local-variable 'company-backends)
+      (push backend company-backends))
+
+    (diminish 'company-mode "CMP"))
+#+END_SRC
+
+**** Company Try Hard
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-try-hard
+    :straight t
+    :bind (:map company-active-map
+           ("C-z" . company-try-hard)))
+#+END_SRC
+
+**** Company Quickhelp
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-quickhelp
+    :after company
+    :straight t
+    :bind (:map company-active-map
+                ("C-c h" . company-quickhelp-manual-begin))
+    :hook ((after-init . company-quickhelp-mode)))
+#+END_SRC
+
+**** Company Math
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'company-math)
+#+END_SRC
+
+**** Company Flx
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-flx
+    :straight t
+    :after company
+    :hook ((after-init . (lambda () (company-flx-mode +1)))))
+#+END_SRC
+
 *** Dash
 
 #+BEGIN_SRC emacs-lisp :exports none
@@ -1135,6 +1227,40 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
         (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t)))
     :hook ((visual-line-mode        . visual-fill-column-mode        )
            (visual-fill-column-mode . maybe-adjust-visual-fill-column)))
+#+END_SRC
+
+*** Flycheck
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Flycheck
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :straight t
+    :preface
+    (defun save-buffer-maybe-show-errors ()
+      "Save buffer and show errors if any."
+      (interactive)
+      (save-buffer)
+      (when (not flycheck-current-errors)
+        (flycheck-list-errors)))
+    :commands (flycheck-mode
+               flycheck-next-error
+               flycheck-previous-error)
+    ;; :bind (("C-x C-s" . save-buffer-maybe-show-errors))
+    :hook ((after-init . global-flycheck-mode))
+    :init (setq flycheck-display-errors-function
+                #'flycheck-display-error-messages-unless-error-list)
+    :config (defalias 'show-error-at-point-soon
+              'flycheck-show-error-at-point)
+    (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space))
+
+
+  (use-package flycheck-package
+    :after flycheck
+    :straight t)
 #+END_SRC
 
 *** Grep
@@ -1430,6 +1556,80 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package subword
     :defer t
     :diminish (subword-mode))
+#+END_SRC
+
+*** Version Control
+
+#+BEGIN_SRC emacs-lisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Version Control
+#+END_SRC
+
+**** Useful Simple Packages
+
+#+BEGIN_SRC emacs-lisp
+  (dolist (package '(git-blamed
+                     gitignore-mode
+                     gitconfig-mode
+                     git-timemachine))
+    (straight-use-package package))
+#+END_SRC
+
+**** Magit
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :straight t
+    :hook ((magit-popup-mode-hook . no-trailing-whitespace))
+    :init (setq-default magit-diff-refine-hunk t)
+    :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
+           ("C-c g"      . magit-status)  ;; quickly open magit on any one of your projects.  -- purcell
+           ("C-x M-g"    . magit-dispatch-popup)
+           :map magit-status-mode-map
+           ("C-M-<up>"   . magit-section-up)
+           :map vc-prefix-map
+           ("f"          . vc-git-grep))
+    :config (with-eval-after-load 'magit-todos
+              (magit-todos-mode))
+    (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+
+  (straight-use-package 'magit-todos)
+#+END_SRC
+
+**** Git Commit
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-commit
+    :straight t
+    :hook ((git-commit-mode . goto-address-mode)))
+#+END_SRC
+
+**** Git Messenger
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-messenger
+    :straight t
+    :init (setq git-messenger:show-detail t)
+    :bind (:map vc-prefix-map
+           ("p" . git-messenger:popup-message)))
+#+END_SRC
+
+**** Git Gutter
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter
+    :straight t
+    :diminish
+    :hook (after-init . global-git-gutter-mode)
+    :bind (("C-x C-g" . git-gutter)
+           ("C-x v =" . git-gutter:popup-hunk)
+           ("C-x p"   . git-gutter:previous-hunk)
+           ("C-x n"   . git-gutter:next-hunk))
+    :init (setq git-gutter:visual-line t
+                git-gutter:disabled-modes '(asm-mode image-mode)
+                git-gutter:modified-sign "■"
+                git-gutter:added-sign "●"
+                git-gutter:deleted-sign "✘"))
 #+END_SRC
 
 *** Which Function
