@@ -108,7 +108,7 @@
 (defvar nasy:config-after-hook nil
   "Hooks to run config functions after." )
 
-(add-hook 'nasy:config-after-hook #'(lambda () (message "Hi~ Hoop you have fun with this config.")))
+(add-hook 'nasy:config-after-hook #'(lambda () (message "Hi~ Hope you have fun with this config.")))
 (add-hook 'after-init-hook #'(lambda () (run-hooks 'nasy:config-after-hook)))
 
 (require 'nasy-config nil t)
@@ -310,6 +310,7 @@
 ;;----------------------------------------------------------------------------
 
 (use-package dashboard
+  :after org
   :demand t
   :straight t
   :init (setq dashboard-startup-banner 'official
@@ -1628,19 +1629,23 @@ This is helpful for writeroom-mode, in particular."
 
 ;; lsp-mode
 
-(use-package lsp-mode
-  :demand t
-  :straight t)
-
-(use-package lsp-imenu
-  :demand t
-  :after lsp-mode
-  :hook ((lsp-after-open . lsp-enable-imenu)))
+(use-package lsp
+  :straight lsp-mode
+  :hook (((haskell-mode
+           html-mode
+           python-mode
+           rust-mode)    . lsp)
+         (lsp-after-open . lsp-enable-imenu))
+  :config (require 'lsp-clients))
 
 (use-package lsp-ui
   :demand t
   :after lsp-mode
   :straight t
+  :bind (:map lsp-ui-mode-map
+              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+              ([remap xref-find-references] . lsp-ui-peek-find-references)
+              ("C-c u" . lsp-ui-imenu))
   :hook ((lsp-mode . lsp-ui-mode))
   :init
   (setq-default lsp-ui-doc-position 'at-point
@@ -1651,12 +1656,7 @@ This is helpful for writeroom-mode, in particular."
 		lsp-ui-sideline-update-mode 'point
 		lsp-ui-sideline-delay 1
 		lsp-ui-sideline-ignore-duplicate t
-		lsp-ui-peek-always-show t)
-  :config
-  (define-key lsp-ui-mode-map [remap xref-find-definitions]
-    #'lsp-ui-peek-find-definitions)
-  (define-key lsp-ui-mode-map [remap xref-find-references]
-    #'lsp-ui-peek-find-references))
+		lsp-ui-peek-always-show t))
 
 (use-package company-lsp
   :defer t
@@ -1694,10 +1694,10 @@ This is helpful for writeroom-mode, in particular."
 
 ;; html
 
-(use-package lsp-html
-  :disabled (not (executable-find "html-languageserver"))
-  :straight t
-  :hook ((html-mode . lsp-html-enable)))
+;; (use-package lsp-html
+;;   :disabled (not (executable-find "html-languageserver"))
+;;   :straight t
+;;   :hook ((html-mode . lsp-html-enable)))
 
 
 ;; python
@@ -1708,29 +1708,6 @@ This is helpful for writeroom-mode, in particular."
   :interpreter (("python" . python-mode)
                 ("python3" . python-mode))
   :preface
-  (use-package lsp-python
-    :straight t)
-
-  (defvar lsp-python--config-options (make-hash-table))
-
-  (defun lsp-python--set-configuration ()
-    (lsp--set-configuration `(:pyls ,lsp-python--config-options)))
-
-  (defun lsp-python-set-config (name option)
-    "Set a config option in the python lsp server."
-    (puthash name option lsp-python--config-options))
-
-  ;; A list here https://github.com/palantir/python-language-server/blob/develop/vscode-client/package.json#L23-L230
-  ;; I prefer pydocstyle and black, so disabled yapf, though, pydocstyle still cannot be abled.
-  ;; pip install black pyls-black -U
-  ;; The default line-length is 88 when using black, you can add a file named "pyproject.yaml" that contains
-  ;; [tool.black]
-  ;; line-length = 79
-  (lsp-python-set-config "configurationSources"          '("pycodestyle" "pyflakes" "pydocstyle"))
-  (lsp-python-set-config "plugins.pydocstyle.enabled"    t)
-  (lsp-python-set-config "plugins.pydocstyle.convention" "pep257")
-  (lsp-python-set-config "plugins.yapf.enabled"          nil)
-
   ;; TODO: Need improve.
   (defun setq-after ()
     "setq after python mode."
@@ -1741,16 +1718,10 @@ This is helpful for writeroom-mode, in particular."
     (when (projectile-file-exists-p "pylintrc")
       (setq flycheck-pylintrc "pylintrc")))
 
-  :hook ((python-mode          . lsp-python-enable)
-         (lsp-after-initialize . lsp-python--set-configuration)
-         (python-mode          . (lambda () (setq lsp-ui-flycheck-enable nil  ;; I prefer to use prospector
-                                             lsp-ui-sideline-enable nil)))
-         (python-mode          . setq-after)
-         (python-mode          . (lambda () (nasy:local-push-company-backend 'company-lsp)))
-         (python-mode          . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
-                                                                          company-gtags
-                                                                          company-etags
-                                                                          company-keywords)))))
+  :hook ((python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
+                                                                 company-gtags
+                                                                 company-etags
+                                                                 company-keywords)))))
   :init (setq-default python-indent-offset 4
                       indent-tabs-mode nil
                       python-indent-guess-indent-offset nil
@@ -1767,6 +1738,34 @@ This is helpful for writeroom-mode, in particular."
                       python-mode-modeline-display "Python"
                       python-skeleton-autoinsert t))
 
+;; (use-package lsp-python
+;;   :straight t
+;;   :preface
+;;   (defvar lsp-python--config-options (make-hash-table))
+
+;;   (defun lsp-python--set-configuration ()
+;;     (lsp--set-configuration `(:pyls ,lsp-python--config-options)))
+
+;;   (defun lsp-python-set-config (name option)
+;;     "Set a config option in the python lsp server."
+;;     (puthash name option lsp-python--config-options))
+
+;;   ;; A list here https://github.com/palantir/python-language-server/blob/develop/vscode-client/package.json#L23-L230
+;;   ;; I prefer pydocstyle and black, so disabled yapf, though, pydocstyle still cannot be abled.
+;;   ;; pip install black pyls-black -U
+;;   ;; The default line-length is 88 when using black, you can add a file named "pyproject.yaml" that contains
+;;   ;; [tool.black]
+;;   ;; line-length = 79
+;;   (lsp-python-set-config "configurationSources"          '("pycodestyle" "pyflakes" "pydocstyle"))
+;;   (lsp-python-set-config "plugins.pydocstyle.enabled"    t)
+;;   (lsp-python-set-config "plugins.pydocstyle.convention" "pep257")
+;;   (lsp-python-set-config "plugins.yapf.enabled"          nil)
+;;   :hook ((python-mode          . lsp-python-enable)
+;;          (lsp-after-initialize . lsp-python--set-configuration)
+;;          (python-mode          . (lambda () (setq lsp-ui-flycheck-enable nil  ;; I prefer to use prospector
+;;                                              lsp-ui-sideline-enable nil)))
+;;          (python-mode          . setq-after)
+;;          (python-mode          . (lambda () (nasy:local-push-company-backend 'company-lsp)))))
 
 ;; Now you can use it in lsp
 ;; NOTICE you have to config black though pyproject.toml.
@@ -1875,18 +1874,18 @@ generated."
             (xref-find-definitions and-then-find-this-tag)))))))
 
 
-(use-package lsp-haskell
-  :straight t
-  :hook ((haskell-mode         . lsp-haskell-enable)
-         (lsp-after-open       . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
-         (lsp-after-initialize . lsp-haskell--set-configuration))
-  ;; :config
-  ;; You can set the lsp-haskell settings here
-  ;; (lsp-haskell-set-hlint-on)                    ;; default on
-  ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
-  ;; (lsp-haskell-set-liquid-on)                   ;; default off
-  ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
-  )
+;; (use-package lsp-haskell
+;;   :straight t
+;;   :hook ((haskell-mode         . lsp-haskell-enable)
+;;          (lsp-after-open       . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+;;          (lsp-after-initialize . lsp-haskell--set-configuration))
+;;   ;; :config
+;;   ;; You can set the lsp-haskell settings here
+;;   ;; (lsp-haskell-set-hlint-on)                    ;; default on
+;;   ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
+;;   ;; (lsp-haskell-set-liquid-on)                   ;; default off
+;;   ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
+;;   )
 
 
 (when *intero*
@@ -1905,11 +1904,11 @@ generated."
     :straight t
     :hook ((rust-mode . (lambda () (setq-local tab-width 4))))))
 
-(when *rls*
-  (use-package lsp-rust
-    :straight t
-    :hook ((rust-mode . lsp-rust-enable)
-           (rust-mode . (lambda () (add-to-list 'flycheck-disabled-checkers 'rust-cargo))))))
+;; (when *rls*
+;;   (use-package lsp-rust
+;;     :straight t
+;;     :hook ((rust-mode . lsp-rust-enable)
+;;            (rust-mode . (lambda () (add-to-list 'flycheck-disabled-checkers 'rust-cargo))))))
 
 (use-package cargo
   :after rust-mode
