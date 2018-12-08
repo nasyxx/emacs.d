@@ -966,6 +966,10 @@ This is helpful for writeroom-mode, in particular."
   :hook ((after-init . (lambda () (company-flx-mode +1)))))
 
 
+(use-package company-english-helper
+  ;; toggle-company-english-helper
+  :straight (company-english-helper :type git :host github :repo "manateelazycat/company-english-helper"))
+
 ;; version control (I gave up SVN)
 ;;----------------------------------------------------------------------------
 
@@ -1168,9 +1172,9 @@ This is helpful for writeroom-mode, in particular."
                     '(
                       ;; helm-source-awesome-tab-group
                       helm-source-projectile-buffers-list
-                      helm-source-projectile-files-list
                       helm-source-buffers-list
                       helm-source-recentf
+                      helm-source-projectile-files-list
                       )))
              (t
               (setq helm-source-list
@@ -1721,7 +1725,11 @@ This is helpful for writeroom-mode, in particular."
   :hook ((python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
                                                                  company-gtags
                                                                  company-etags
-                                                                 company-keywords)))))
+                                                                 company-keywords))))
+         (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil  ;; I prefer to use prospector
+                                    lsp-ui-sideline-enable nil)))
+         (python-mode . setq-after)
+         (python-mode . (lambda () (nasy:local-push-company-backend 'company-lsp))))
   :init (setq-default python-indent-offset 4
                       indent-tabs-mode nil
                       python-indent-guess-indent-offset nil
@@ -2515,6 +2523,19 @@ typical word processor."
   :straight t)
 
 
+(use-package doom-modeline
+  :disabled t
+  :straight t
+  :hook ((after-init . doom-modeline-init))
+  :init (setq doom-modeline-buffer-file-name-style 'relative-from-project
+              doom-modeline-python-executable      "python3"
+              doom-modeline-icon                   t
+              doom-modeline-major-mode-icon        t
+              doom-modeline-minor-modes            nil
+              doom-modeline-persp-name             t
+              doom-modeline-lsp                    t))
+
+
 (use-package nyan-mode
   :demand t
   :straight t
@@ -2525,7 +2546,6 @@ typical word processor."
 
 
 (use-package spaceline-config
-  :demand t
   :init
   (setq-default
    mode-line-format '("%e" (:eval (spaceline-ml-main)))
@@ -2577,21 +2597,22 @@ typical word processor."
                            "✔ No Issues"))
               (`running     "⟲ Running")
               (`no-checker  "⚠ No Checker")
-              (`not-checked "✖ Disabled")
+              (`not-checked "✣ Disabled")
               (`errored     "⚠ Error")
               (`interrupted "⛔ Interrupted")
               (`suspicious  "")))
            (f (cond
                ((string-match "⚠" text) `(:height 0.9 :background ,(face-attribute 'spaceline-flycheck-warning :foreground)))
                ((string-match "✖ [0-9]" text) `(:height 0.9 :background ,(face-attribute 'spaceline-flycheck-error :foreground)))
-               ((string-match "✖ Disabled" text) `(:height 0.9 :background ,(face-attribute 'font-lock-comment-face :foreground)))
+               ((string-match "✣ Disabled" text) `(:height 0.9))
                (t '(:height 0.9 :inherit)))))
       (propertize (format " %s " text)
                   'face f
                   'help-echo "Show Flycheck Errors"
                   'mouse-face '(:box 1)
                   'local-map (make-mode-line-mouse-map 'mouse-1 (lambda () (interactive) (flycheck-list-errors)))))
-    :when active)
+    :when active
+    :tight-right t)
 
   (add-hook
    'after-init-hook
@@ -2600,17 +2621,16 @@ typical word processor."
              (anzu)
              ((nasy:version-control projectile-root) :separator " in ")
              (buffer-id)
-             ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :face powerline-active0 :when active)
-             ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :face mode-line-inactive :when (not active))
-             (selection-info :face powerline-active0 :when active)
-             (nyan-cat :tight t :face mode-line-inactive))
-           `((line-column :face powerline-active0 :when active)
+             (selection-info :when active)
+             (nyan-cat :tight t))
+           `((line-column :when active)
              (line-column :when (not active))
-             (which-function)
-             (global :when active)
+             ;; (which-function)
+             ;; (global :when active)
              ;; (minor-modes)
              (buffer-position
               hud)
+             (((flycheck-error flycheck-warning flycheck-info) flycheck-status) :when active)
              (nasy-time :face spaceline-modified :when active)
              (nasy-time :when (not active)))))))
 

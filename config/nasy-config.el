@@ -132,14 +132,8 @@
   "Set custom face."
   (set-face-attribute 'custom-comment              nil                                             :slant   'italic)
   (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
-  (set-face-attribute 'mode-line                   nil :background "#a1de93" :foreground "#2f3e75" :box     nil)
-  (set-face-attribute 'mode-line-inactive          nil :background "#333"    :foreground "#96A7A9" :box     nil)
-  (set-face-attribute 'powerline-active0           nil :background "#ffffc1"                       :inherit 'mode-line )
-  (set-face-attribute 'powerline-active1           nil :background "#aa96da" :foreground "#2f3e75" :inherit 'mode-line )
-  (set-face-attribute 'powerline-active2           nil :background "#d0efb5" :foreground "black"   :inherit 'mode-line)
   (set-face-attribute 'show-paren-match            nil :background "#bfcfff" :foreground "#dc322f" :weight  'ultra-bold)
-  (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified)
-  (set-face-attribute 'which-func                  nil                       :foreground "#333"))
+  (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified))
 
 (add-hook 'nasy:config-before-hook #'nasy:set-face)
 
