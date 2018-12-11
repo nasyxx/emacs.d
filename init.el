@@ -127,7 +127,6 @@
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 
-
 ;; Compile
 ;;----------------------------------------------------------------------------
 
@@ -288,6 +287,13 @@
 
 (when (fboundp 'set-scroll-bar-mode)
   (set-scroll-bar-mode nil))
+
+
+;; Load org-mode before
+;;----------------------------------------------------------------------------
+
+(use-package org
+  :straight org-plus-contrib)
 
 
 ;; scratch message
@@ -1283,7 +1289,7 @@ This is helpful for writeroom-mode, in particular."
 
     ;; The default width and height of the icons is 22 pixels. If you are
     ;; using a Hi-DPI display, uncomment this to double the icon size.
-    (treemacs-resize-icons 44)
+    ;; (treemacs-resize-icons 44)
 
     (treemacs-follow-mode t)
     (treemacs-filewatch-mode t)
@@ -1635,11 +1641,9 @@ This is helpful for writeroom-mode, in particular."
 
 (use-package lsp
   :straight lsp-mode
-  :hook (((haskell-mode
-           html-mode
-           python-mode
-           rust-mode)    . lsp)
-         (lsp-after-open . lsp-enable-imenu))
+  :hook ((lsp-after-open . lsp-enable-imenu))
+  :init (setq lsp-auto-guess-root t
+              lsp-prefer-flymake  nil)
   :config (require 'lsp-clients))
 
 (use-package lsp-ui
@@ -1648,15 +1652,13 @@ This is helpful for writeroom-mode, in particular."
   :straight t
   :bind (:map lsp-ui-mode-map
               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-              ([remap xref-find-references] . lsp-ui-peek-find-references)
+              ([remap xref-find-references]  . lsp-ui-peek-find-references)
               ("C-c u" . lsp-ui-imenu))
   :hook ((lsp-mode . lsp-ui-mode))
   :init
   (setq-default lsp-ui-doc-position 'at-point
 		lsp-ui-doc-header nil
-		lsp-ui-doc-include-signature nil
-		lsp-ui-flycheck-enable nil
-		lsp-ui-sideline-enable nil  ;; not really good at all.
+		;; lsp-ui-doc-include-signature nil
 		lsp-ui-sideline-update-mode 'point
 		lsp-ui-sideline-delay 1
 		lsp-ui-sideline-ignore-duplicate t
@@ -1683,17 +1685,10 @@ This is helpful for writeroom-mode, in particular."
 (when *clangd*
   (use-package lsp-clangd
     :straight t
-    :hook (((c-mode c++-mode objc-mode) . lsp-clangd-c-enable))
-    :init (setq-default lsp-clangd-executable *clangd*)))
-
-
-(use-package cquery
-  :disabled t
-  :commands lsp-cquery-enable
-  :straight t
-  :init (setq cquery-executable        "/usr/local/bin/cquery"
-              cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t)))
-  :hook (((c-mode c++-mode) . lsp-cquery-enable)))
+    :after lsp
+    :hook (((c-mode c++-mode objc-mode) . lsp))
+    :init (setq-default lsp-clients-clangd-executable *clangd*)
+    :config (lsp-clients-register-clangd)))
 
 
 ;; html
@@ -1709,7 +1704,7 @@ This is helpful for writeroom-mode, in particular."
 (use-package python
   :commands python-mode
   :mode ("\\.py\\'" . python-mode)
-  :interpreter (("python" . python-mode)
+  :interpreter (("python"  . python-mode)
                 ("python3" . python-mode))
   :preface
   ;; TODO: Need improve.
@@ -1722,12 +1717,40 @@ This is helpful for writeroom-mode, in particular."
     (when (projectile-file-exists-p "pylintrc")
       (setq flycheck-pylintrc "pylintrc")))
 
-  :hook ((python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
+  (defvar lsp-python--config-options (make-hash-table))
+
+  (defun lsp-python--set-configuration ()
+    (lsp--set-configuration `(:pyls ,lsp-python--config-options)))
+
+  (defun lsp-python-set-config (name option)
+    "Set a config option in the python lsp server."
+    (puthash name option lsp-python--config-options))
+
+  ;; A list here https://github.com/palantir/python-language-server/blob/develop/vscode-client/package.json#L23-L230
+  ;; I prefer pydocstyle and black, so disabled yapf, though, pydocstyle still cannot be abled.
+  ;; pip install black pyls-black -U
+  ;; The default line-length is 88 when using black, you can add a file named "pyproject.yaml" that contains
+  ;; [tool.black]
+  ;; line-length = 79
+
+  (defun lsp-python-config-set ()
+    "Set python lsp config."
+    (lsp-python-set-config "configurationSources"          '("pycodestyle" "pyflakes" "pydocstyle"))
+    (lsp-python-set-config "plugins.pydocstyle.enabled"    t)
+    (lsp-python-set-config "plugins.pydocstyle.convention" "pep257")
+    (lsp-python-set-config "plugins.yapf.enabled"          nil)
+
+    (lsp-python-set-config "plugins.jedi_definition.follow_imports"         t)
+    (lsp-python-set-config "plugins.jedi_definition.follow_builtin_imports" t))
+
+  :hook ((python-mode . lsp)
+         (python-mode . lsp-python-config-set)
+         (python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
                                                                  company-gtags
                                                                  company-etags
                                                                  company-keywords))))
-         (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil  ;; I prefer to use prospector
-                                    lsp-ui-sideline-enable nil)))
+         ;; (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil  ;; I prefer to use prospector
+         ;;                            lsp-ui-sideline-enable nil)))
          (python-mode . setq-after)
          (python-mode . (lambda () (nasy:local-push-company-backend 'company-lsp))))
   :init (setq-default python-indent-offset 4
@@ -1789,8 +1812,7 @@ This is helpful for writeroom-mode, in particular."
 
 
 (use-package flycheck-prospector
-  ;; :straight (flycheck-prospector :type git :host github :repo "chocoelho/flycheck-prospector"
-  ;;                                :fork (:host github :repo "nasyxx/flycheck-prospector"))  ;; I have added a config file path to it.
+  :disabled t
   :straight (flycheck-prospector :type git :host github :repo "nasyxx/flycheck-prospector")
   :init (setq flycheck-prospector-profile-path "~/.config/prospector/prospector.yaml")
   :hook ((flycheck-mode . flycheck-prospector-setup))
@@ -1882,18 +1904,17 @@ generated."
             (xref-find-definitions and-then-find-this-tag)))))))
 
 
-;; (use-package lsp-haskell
-;;   :straight t
-;;   :hook ((haskell-mode         . lsp-haskell-enable)
-;;          (lsp-after-open       . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
-;;          (lsp-after-initialize . lsp-haskell--set-configuration))
-;;   ;; :config
-;;   ;; You can set the lsp-haskell settings here
-;;   ;; (lsp-haskell-set-hlint-on)                    ;; default on
-;;   ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
-;;   ;; (lsp-haskell-set-liquid-on)                   ;; default off
-;;   ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
-;;   )
+(use-package lsp-haskell
+  :straight t
+  :hook ((haskell-mode   . lsp)
+         (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
+  ;; :config
+  ;; You can set the lsp-haskell settings here
+  ;; (lsp-haskell-set-hlint-on)                    ;; default on
+  ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
+  ;; (lsp-haskell-set-liquid-on)                   ;; default off
+  ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
+  )
 
 
 (when *intero*
@@ -1910,7 +1931,8 @@ generated."
   (use-package rust-mode
     :defer t
     :straight t
-    :hook ((rust-mode . (lambda () (setq-local tab-width 4))))))
+    :hook ((rust-mode . (lambda () (setq-local tab-width 4)))
+           (rust-mode . lsp))))
 
 ;; (when *rls*
 ;;   (use-package lsp-rust
@@ -1964,9 +1986,13 @@ generated."
   :straight t)
 
 
-(use-package org
-  :demand t
-  :straight org-plus-contrib)
+(use-package ox-rst
+  :after org
+  :straight t)
+
+
+(use-package ox-md
+  :after org)
 
 
 (use-package org
@@ -2035,6 +2061,7 @@ unwanted space when exporting org-mode to html."
 
    org-edit-timestamp-down-means-later t
 
+   org-export-backends                           '(ascii html latex md)
    org-export-coding-system                      'utf-8
    org-export-kill-product-buffer-when-displayed t
 
@@ -2596,14 +2623,16 @@ typical word processor."
                                (format "✖ %s Issue%s" count (if (eq 1 count) "" "s")))
                            "✔ No Issues"))
               (`running     "⟲ Running")
-              (`no-checker  "⚠ No Checker")
+              (`no-checker  "⚠")
               (`not-checked "✣ Disabled")
               (`errored     "⚠ Error")
               (`interrupted "⛔ Interrupted")
               (`suspicious  "")))
            (f (cond
-               ((string-match "⚠" text) `(:height 0.9 :background ,(face-attribute 'spaceline-flycheck-warning :foreground)))
-               ((string-match "✖ [0-9]" text) `(:height 0.9 :background ,(face-attribute 'spaceline-flycheck-error :foreground)))
+               ((string-match "⚠" text) `(:height 0.9 :foreground ,(face-attribute 'spaceline-flycheck-warning :foreground)
+                                                      :background "#1d5464"))
+               ((string-match "✖ [0-9]" text) `(:height 0.9 :background ,(face-attribute 'spaceline-flycheck-error :foreground)
+                                                            :foreground "#333333"))
                ((string-match "✣ Disabled" text) `(:height 0.9))
                (t '(:height 0.9 :inherit)))))
       (propertize (format " %s " text)

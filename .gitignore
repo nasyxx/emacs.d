@@ -19,4 +19,4 @@ nix-buffer
 .mc-lists.el
 url/
 .bookmarks.el
-.lsp-session
+.lsp-session*
