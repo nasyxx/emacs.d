@@ -52,7 +52,7 @@ To install, clone this repo to @@html: <span> @@ ~~/.emacs.d~ @@html: </span> @@
 
 #+begin_src shell
   git clone https://github.com/nasyxx/emacs.d.git ~/.emacs.d
-#+END_SRC
+#+end_src
 
 Upon the first time staring up emacs, other third-party packages will be
 automatically clone to the @@html: <span> @@ ~straight~: @@html: </span> @@ folder
@@ -100,7 +100,7 @@ This includes some necessary headers.
   ;;; Commentary:
 
   ;; Nasy's emacs.d init file.  For macOS and Emacs 26, Emacs 27.
-#+END_SRC
+#+end_src
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
@@ -111,14 +111,14 @@ This includes some necessary headers.
   ;;----------------------------------------------------------------------------
 
   ;;; Code:
-#+END_SRC
+#+end_src
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Bootstrap
   ;; In this section, the configuration needs to occur early in emacs startup.
   ;;----------------------------------------------------------------------------
-#+END_SRC
+#+end_src
 
 *** Lexical Binding
 
@@ -127,7 +127,7 @@ lexical scoping.
 
 #+begin_src elisp
   (setq-default lexical-binding t)
-#+END_SRC
+#+end_src
 
 *** Some Default Settings
 
@@ -139,7 +139,7 @@ Some default settings are here, including ~debug-on-error~, ~message-log-max~,
                 message-log-max        t
                 load-prefer-newer      t
                 ad-redefinition-action 'accept)
-#+END_SRC
+#+end_src
 
 *** Is A Mac?
 
@@ -147,7 +147,7 @@ If this os is macOS?
 
 #+begin_src elisp
   (defconst *is-a-mac* (eq system-type 'darwin))
-#+END_SRC
+#+end_src
 
 *** Packages Manager
 
@@ -170,13 +170,13 @@ I use [[https://github.com/raxod502/straight.el][straight.el]] as my packages ma
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
-#+END_SRC
+#+end_src
 
 At the same time, I use [[https://github.com/jwiegley/use-package][use-package]] to manage packages in one file.
 
 #+begin_src elisp
   (straight-use-package 'use-package)
-#+END_SRC
+#+end_src
 
 *** Garbage Collection
 
@@ -185,7 +185,7 @@ Adjust garbage collection thresholds during startup, and thereafter
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Garbage Collection
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (let ((normal-gc-cons-threshold (* 256 1024 1024))
@@ -196,33 +196,33 @@ Adjust garbage collection thresholds during startup, and thereafter
                 (setq gc-cons-threshold normal-gc-cons-threshold))))
 
   (add-hook 'focus-out-hook #'garbage-collect)
-#+END_SRC
+#+end_src
 
 *** Benchmark
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Benchmark
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package benchmark-init
     :demand   t
     :straight t
     :hook ((after-init . benchmark-init/deactivate)))
-#+END_SRC
+#+end_src
 
 *** Expand load-path
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; load-path
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (add-to-list 'load-path (expand-file-name "lisp"   user-emacs-directory))
   (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
-#+END_SRC
+#+end_src
 
 ** Basic Configs
 
@@ -231,14 +231,14 @@ Adjust garbage collection thresholds during startup, and thereafter
   ;; Configs
   ;; Some basic configurations.
   ;;----------------------------------------------------------------------------
-#+END_SRC
+#+end_src
 
 *** Compile
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Compile
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package async
@@ -306,14 +306,14 @@ Adjust garbage collection thresholds during startup, and thereafter
     (defun colourise-compilation-buffer ()
       (when (eq major-mode 'compilation-mode)
         (ansi-color-apply-on-region compilation-filter-start (point-max)))))
-#+END_SRC
+#+end_src
 
 *** Shell
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Shell
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (require 'shell)
@@ -390,14 +390,14 @@ Adjust garbage collection thresholds during startup, and thereafter
     (add-to-list 'exec-path-from-shell-variables "ENVIRONMENT_SETUP_DONE")
     (add-to-list 'exec-path-from-shell-variables "PYTHONPATH")
     (exec-path-from-shell-initialize))
-#+END_SRC
+#+end_src
 
 *** Custom configs
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Custom configs
-#+END_SRC
+#+end_src
 
 **** nasy-config.el
 
@@ -417,13 +417,13 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   ;; Nasy's Custom Config file.
 
   ;;; Code:
-#+END_SRC
+#+end_src
 
 ***** Constants
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (defconst *is-a-mac* (eq system-type 'darwin))
-#+END_SRC
+#+end_src
 
 ***** UI Settings
 
@@ -452,7 +452,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
       (suspend-frame)))
 
     (global-set-key (kbd "C-z") 'stop-minimizing-window))
-#+END_SRC
+#+end_src
 
 ***** Default Settings
 
@@ -462,7 +462,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   (setq-default
     blink-cursor-interval .6
     blink-matching-paren  t)
-#+END_SRC
+#+end_src
 
 + Visual
 
@@ -474,14 +474,14 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    highlight-indent-guides-method 'column
    tab-width                      8
    tooltip-delay                  1.5)
-#+END_SRC
+#+end_src
 
 + Company
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
    company-idle-delay .5)
-#+END_SRC
+#+end_src
 
 + Helm
 
@@ -489,14 +489,14 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   (setq-default
    ;; brew install rg   if you'd like to use rg as my doing
    helm-ag-base-command "rg --no-heading --smart-case")
-#+END_SRC
+#+end_src
 
 + Shell
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
    shell-file-name "/bin/zsh")
-#+END_SRC
+#+end_src
 
 + Languages
 
@@ -515,7 +515,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    ,*rls*                   (or (executable-find "rls")
                                (executable-find "~/.cargo/bin/rls"))
    lsp-rust-rls-command    '("rls"))
-#+END_SRC
+#+end_src
 
 + Parens
 
@@ -525,7 +525,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    sp-autoinsert-quote-if-followed-by-closing-pair t
    sp-base-key-bindings                            'paredit
    sp-show-pair-from-inside                        t)
-#+END_SRC
+#+end_src
 
 + Whitespace
 
@@ -535,7 +535,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    whitespace-style       '(face spaces tabs newline
                             space-mark tab-mark newline-mark
                             lines-tail empty))
-#+END_SRC
+#+end_src
 
 + Straight.el
 
@@ -544,7 +544,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   ;; straight-check-for-modifications '(find-at-startup find-when-checking)
   (setq-default
    straight-check-for-modifications '(check-on-save find-when-checking))
-#+END_SRC
+#+end_src
 
 + Start
 
@@ -555,7 +555,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    ;; initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; It will cause error if you start emacs from Command line with file name
                                                                             ;; https://github.com/rakanalh/emacs-dashboard/issues/69
   )
-#+END_SRC
+#+end_src
 
 + Config After initialization
 
@@ -570,7 +570,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 
 
   (add-hook 'nasy:config-after-hook  #'nasy:config-after)
-#+END_SRC
+#+end_src
 
 ***** Custom Faces
 
@@ -584,7 +584,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
     (set-face-attribute 'which-func                  nil                       :foreground "#333"))
 
   (add-hook 'nasy:config-before-hook #'nasy:set-face)
-#+END_SRC
+#+end_src
 
 ***** Key Bindings
 
@@ -603,14 +603,14 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
                       (interactive)
                       (kill-line 0)))
   )
-#+END_SRC
+#+end_src
 
 ***** Epoligue
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (provide 'nasy-config)
   ;;; nasy-config.el ends here
-#+END_SRC
+#+end_src
 
 **** Hooks & Require
 #+begin_src elisp
@@ -624,12 +624,12 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
             #'(lambda () (message "Hi~ Hope you have fun with this config.")))
   (add-hook 'after-init-hook
             #'(lambda () (run-hooks 'nasy:config-after-hook)))
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (require 'nasy-config nil t)
   (require 'user-config nil t)
-#+END_SRC
+#+end_src
 
 **** Disable Some Features
 
@@ -643,7 +643,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 
   (when (fboundp 'set-scroll-bar-mode)
     (set-scroll-bar-mode nil))
-#+END_SRC
+#+end_src
 
 **** Nice Scrolling
 
@@ -651,33 +651,33 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   (setq scroll-margin                   0
         scroll-conservatively           100000
         scroll-preserve-screen-position 'always)
-#+END_SRC
+#+end_src
 
 **** Text Scale
 
 #+begin_src elisp
   (straight-use-package 'default-text-scale)
-#+END_SRC
+#+end_src
 
 *** Scratch Message
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Scratch Message
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package scratch
     :demand   t
     :straight t)
-#+END_SRC
+#+end_src
 
 *** Dashboard
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Dashboard
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package dashboard
@@ -691,14 +691,14 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
                                   (agenda    . 5 )
                                   (registers . 5 )))
     :config (dashboard-setup-startup-hook))
-#+END_SRC
+#+end_src
 
 *** Window
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Window
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (add-hook 'after-init-hook 'winner-mode)
@@ -735,14 +735,14 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
       (delete-other-windows)))
 
   (global-set-key (kbd "C-x 1") 'toggle-delete-other-windows)
-#+END_SRC
+#+end_src
 
 *** Session
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Session
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (setq desktop-path              (list user-emacs-directory)
@@ -812,14 +812,14 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
                     (shell-command-history    . 50)
                     tags-file-name
                     tags-table-list))))
-#+END_SRC
+#+end_src
 
 *** Disable Mouse
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Disable Mouse
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package disable-mouse
@@ -830,7 +830,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
            ([mouse-5] . (lambda ()
                           (interactive)
                           (scroll-up 1)))))
-#+END_SRC
+#+end_src
 
 ** Custom Functions
 
@@ -838,7 +838,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   ;;----------------------------------------------------------------------------
   ;; Custom Functions
   ;;----------------------------------------------------------------------------
-#+END_SRC
+#+end_src
 
 *** Reload the init-file
 
@@ -863,7 +863,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
           (straight-mark-transaction-as-init))
         (load-file buffer-file-name)))
     (message "Evaluating %s... done." (buffer-name)))
-#+END_SRC
+#+end_src
 
 *** Insert Date
 
@@ -877,7 +877,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
     "Insert current buffer filename."
     (interactive)
     (insert (file-relative-name buffer-file-name)))
-#+END_SRC
+#+end_src
 
 *** Rearrange split windows
 
@@ -918,7 +918,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
       (switch-to-buffer-other-window nil)))
 
   (global-set-key (kbd "<f7>") 'nasy:split-window)
-#+END_SRC
+#+end_src
 
 ** Editor
 
@@ -928,7 +928,7 @@ Here is the editor config, including some features and functions.
   ;;----------------------------------------------------------------------------
   ;; Editor
   ;;----------------------------------------------------------------------------
-#+END_SRC
+#+end_src
 
 *** Default Settings
 
@@ -964,33 +964,136 @@ Default settings for editor.
   (global-auto-revert-mode t)
 
   (blink-cursor-mode t)
-#+END_SRC
+#+end_src
 
 *** Diminish
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Diminish
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package diminish
     :demand   t
     :straight t)
-#+END_SRC
+#+end_src
+
+*** Anzu
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Anzu
+#+end_src
+
+#+begin_src elisp
+  (use-package anzu
+    :defer t
+    :straight t
+    :hook ((after-init . global-anzu-mode))
+    :bind ([remap query-replace] . anzu-query-replace-regexp))
+#+end_src
+
+*** Auto Insert
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Auto insert
+#+end_src
+
+#+begin_src elisp
+  (use-package autoinsert
+    :init
+    (define-auto-insert
+      '("\\.py" . "Python Language")
+      '("Python Language"
+        "#!/usr/bin/env python3\n"
+        "# -*- coding: utf-8 -*-\n"
+        "\"\"\"\n"
+        "Life's pathetic, have fun (\"▔□▔)/hi~♡ Nasy.\n\n"
+        "Excited without bugs::\n\n"
+        "    |             *         *\n"
+        "    |                  .                .\n"
+        "    |           .\n"
+        "    |     *                      ,\n"
+        "    |                   .\n"
+        "    |\n"
+        "    |                               *\n"
+        "    |          |\\___/|\n"
+        "    |          )    -(             .              ·\n"
+        "    |         =\\ -   /=\n"
+        "    |           )===(       *\n"
+        "    |          /   - \\\n"
+        "    |          |-    |\n"
+        "    |         /   -   \\     0.|.0\n"
+        "    |  NASY___\\__( (__/_____(\\=/)__+1s____________\n"
+        "    |  ______|____) )______|______|______|______|_\n"
+        "    |  ___|______( (____|______|______|______|____\n"
+        "    |  ______|____\\_|______|______|______|______|_\n"
+        "    |  ___|______|______|______|______|______|____\n"
+        "    |  ______|______|______|______|______|______|_\n"
+        "    |  ___|______|______|______|______|______|____\n\n"
+        "author   : Nasy https://nasy.moe\n"
+        "date     : " (format-time-string "%b %e, %Y") \n
+        "email    : Nasy <nasyxx+python@gmail.com>" \n
+        "filename : " (file-name-nondirectory (buffer-file-name)) \n
+        "project  : " (file-name-nondirectory (directory-file-name (projectile-project-root))) \n
+        "license  : GPL-3.0+\n\n"
+        "There are more things in heaven and earth, Horatio, than are dreamt.\n"
+        " --  From \"Hamlet\"\n"
+        "\"\"\"\n"))
+
+    (define-auto-insert
+      '("\\.hs" . "Haskell Language")
+      '("Haskell Language"
+        "{-\n"
+        " Excited without bugs, have fun (\"▔□▔)/hi~♡ Nasy.\n"
+        " ------------------------------------------------\n"
+        " |             *         *\n"
+        " |                  .                .\n"
+        " |           .\n"
+        " |     *                      ,\n"
+        " |                   .\n"
+        " |\n"
+        " |                               *\n"
+        " |          |\\___/|\n"
+        " |          )    -(             .              ·\n"
+        " |         =\\ -   /=\n"
+        " |           )===(       *\n"
+        " |          /   - \\\n"
+        " |          |-    |\n"
+        " |         /   -   \\     0.|.0\n"
+        " |  NASY___\\__( (__/_____(\\=/)__+1s____________\n"
+        " |  ______|____) )______|______|______|______|_\n"
+        " |  ___|______( (____|______|______|______|____\n"
+        " |  ______|____\\_|______|______|______|______|_\n"
+        " |  ___|______|______|______|______|______|____\n"
+        " |  ______|______|______|______|______|______|_\n"
+        " |  ___|______|______|______|______|______|____\n\n"
+        "There are more things in heaven and earth, Horatio, than are dreamt.\n"
+        "   -- From \"Hamlet\"\n"
+        "--------------------------------------------------------------------------------\n\n-}\n\n"
+        "--------------------------------------------------------------------------------\n-- |\n"
+        "-- Filename   : " (file-name-nondirectory (buffer-file-name)) \n
+        "-- Project    : " (file-name-nondirectory (directory-file-name (projectile-project-root))) \n
+        "-- Author     : Nasy\n"
+        "-- License    : GPL-3.0+\n--\n"
+        "-- Maintainer : Nasy <nasyxx+haskell@gmail.com>\n"
+        "--\n--\n--\n--------------------------------------------------------------------------------\n")))
+#+end_src
 
 *** Beginend
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Beginend
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package beginend
     :straight t
     :hook ((after-init . beginend-global-mode)))
-#+END_SRC
+#+end_src
 
 *** Carbon Now sh
 
@@ -1003,32 +1106,32 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Carbon Now sh
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   ;; Emacs to carbon.now.sh integration
   ;; https://github.com/veelenga/carbon-now-sh.el
   ;; (carbon-now-sh)
   (straight-use-package 'carbon-now-sh)
-#+END_SRC
+#+end_src
 
 *** Cheat Sh
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Cheat-Sh
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (straight-use-package 'cheat-sh)
-#+END_SRC
+#+end_src
 
 *** Company
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Company
-#+END_SRC
+#+end_src
 
 **** Company
 
@@ -1078,7 +1181,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
       (push backend company-backends))
 
     (diminish 'company-mode "CMP"))
-#+END_SRC
+#+end_src
 
 **** Company Try Hard
 
@@ -1087,7 +1190,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :straight t
     :bind (:map company-active-map
            ("C-z" . company-try-hard)))
-#+END_SRC
+#+end_src
 
 **** Company Quickhelp
 
@@ -1098,13 +1201,13 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :bind (:map company-active-map
                 ("C-c h" . company-quickhelp-manual-begin))
     :hook ((after-init . company-quickhelp-mode)))
-#+END_SRC
+#+end_src
 
 **** Company Math
 
 #+begin_src elisp
   (straight-use-package 'company-math)
-#+END_SRC
+#+end_src
 
 **** Company Flx
 
@@ -1113,25 +1216,36 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :straight t
     :after company
     :hook ((after-init . (lambda () (company-flx-mode +1)))))
-#+END_SRC
+#+end_src
 
 *** Dash
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Dash
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (straight-use-package 'dash)
-#+END_SRC
+#+end_src
+
+*** Dash Functional
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Dash Functional
+#+end_src
+
+#+begin_src elisp
+  (straight-use-package 'dash-functional)
+#+end_src
 
 *** Dired
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Dired
-#+END_SRC
+#+end_src
 
 **** Dired
 
@@ -1144,7 +1258,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :bind (:map dired-mode-map
                 ([mouse-2] . dired-find-file             )
                 ("C-c C-p" . wdired-change-to-wdired-mode)))
-#+END_SRC
+#+end_src
 
 **** Diredfl
 
@@ -1153,7 +1267,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :after dired
     :straight t
     :hook ((after-init . diredfl-global-mode)))
-#+END_SRC
+#+end_src
 
 **** Uniquify
 
@@ -1164,7 +1278,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
           uniquify-separator           " • "
           uniquify-after-kill-buffer-p t
           uniquify-ignore-buffers-re   "^\\*"))
-#+END_SRC
+#+end_src
 
 **** Diff-hl
 
@@ -1173,20 +1287,20 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :after dired
     :straight t
     :hook ((dired-mode . diff-hl-dired-mode)))
-#+END_SRC
+#+end_src
 
 *** Fill Column
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Fill Column
-#+END_SRC
+#+end_src
 
 **** Unfill
 
 #+begin_src elisp
   (straight-use-package 'unfill)
-#+END_SRC
+#+end_src
 
 **** Visual-fill-column
 
@@ -1202,14 +1316,14 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
         (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t)))
     :hook ((visual-line-mode        . visual-fill-column-mode        )
            (visual-fill-column-mode . maybe-adjust-visual-fill-column)))
-#+END_SRC
+#+end_src
 
 *** Flycheck
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Flycheck
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package flycheck
@@ -1235,15 +1349,31 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 
   (use-package flycheck-package
     :after flycheck
-    :straight t)
+    :straight t
+    :config
+    (after-load 'elisp-mode
+                (flycheck-package-setup)))
+#+end_src
+
+*** Grab Mac Link
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Grab Mac Link
 #+END_SRC
+
+#+begin_src elisp
+  (use-package grab-mac-link
+    :defer    t
+    :straight t)
+#+end_src
 
 *** Grep
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Grep
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (setq-default grep-highlight-matches t
@@ -1251,14 +1381,14 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 
   (when *is-a-mac*
     (setq-default locate-command "mdfind"))
-#+END_SRC
+#+end_src
 
 *** Helm
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Grep
-#+END_SRC
+#+end_src
 
 **** Helm
 
@@ -1340,7 +1470,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
                         ))
                 ))
          (helm-other-buffer helm-source-list "*helm search*"))))
-#+END_SRC
+#+end_src
 
 **** Helm Org
 
@@ -1356,7 +1486,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
                              (projectile-all-project-files))))
             :candidate-number-limit 99999
             :buffer "*helm org inbuffer*")))
-#+END_SRC
+#+end_src
 
 **** Helm Shell
 
@@ -1365,7 +1495,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :after helm
     :bind (:map eshell-mode-map
                 ("C-c C-l" . helm-eshell-history)))
-#+END_SRC
+#+end_src
 
 **** Helm Descbings
 
@@ -1374,7 +1504,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :straight t
     :after helm
     :hook ((after-init . helm-descbinds-mode)))
-#+END_SRC
+#+end_src
 
 **** Helm Projectile
 
@@ -1384,7 +1514,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :hook ((after-init . helm-projectile-on))
     :init
     (setq projectile-completion-system 'helm))
-#+END_SRC
+#+end_src
 
 **** Helm Ag
 
@@ -1394,7 +1524,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :init (setq helm-ag-fuzzy-match t
                 helm-ag-use-grep-ignore-list t
                 helm-ag-use-agignore t))
-#+END_SRC
+#+end_src
 
 **** Helm Dash
 
@@ -1402,7 +1532,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
   (use-package helm-dash
     :straight t
     :init (setq helm-dash-docsets-path "~/.docsets"))
-#+END_SRC
+#+end_src
 
 **** Helm Swoop
 
@@ -1413,7 +1543,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :init (setq helm-swoop-move-to-line-cycle   t
                 helm-swoop-use-line-number-face t
                 helm-swoop-use-fuzzy-match      t))
-#+END_SRC
+#+end_src
 
 **** Helm Ls Git
 
@@ -1423,21 +1553,31 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :bind (("C-<f6>"   . helm-ls-git-ls)
            ("C-x C-g"  . helm-ls-git-ls)
            ("C-x C-d"  . helm-browse-project)))
-#+END_SRC
+#+end_src
 
 *** Highlight
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Highlight
-#+END_SRC
+#+end_src
+
+**** cl-lib-highlight
+
+#+begin_src elisp
+  (use-package cl-lib-highlight
+    :after lisp-mode
+    :straight t
+    :config
+    (cl-lib-highlight-initialize))
+#+end_src
 
 **** hl-line
 
 #+begin_src elisp
   (use-package hl-line
     :hook ((after-init . global-hl-line-mode)))
-#+END_SRC
+#+end_src
 
 **** Highlight Indent Guides
 
@@ -1445,7 +1585,38 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
   (use-package highlight-indent-guides
     :straight t
     :hook (((prog-mode text-mode) . highlight-indent-guides-mode)))
+#+end_src
+
+*** Htmlize
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Htmlize
+#+end_src
+
+#+begin_src elisp
+  (use-package htmlize
+    :defer t
+    :straight t
+    :init (setq htmlize-pre-style t))
+#+end_src
+
+*** Indent
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Indent
 #+END_SRC
+
+**** aggressive indent
+
+#+begin_src elisp
+    (use-package aggressive-indent
+      :straight t
+      :hook (((emacs-lisp-mode
+               lisp-mode
+               css-mode) . aggressive-indent-mode)))
+#+end_src
 
 *** iSearch
 
@@ -1454,7 +1625,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; isearch
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package isearch
@@ -1490,14 +1661,14 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     (when (fboundp 'isearch-occur)
       ;; to match ivy conventions
       (define-key isearch-mode-map (kbd "C-c C-o") 'isearch-occur)))
-#+END_SRC
+#+end_src
 
 *** Large File
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Large File
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package vlf
@@ -1510,25 +1681,25 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
         (unless (file-exists-p file)
           (error "File does not exist: %s" file))
         (vlf file))))
-#+END_SRC
+#+end_src
 
 *** List Unicode Display
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; List Unicode Display
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (straight-use-package 'list-unicode-display)
-#+END_SRC
+#+end_src
 
 *** mmm-mode
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; mmm-mode
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package mmm-auto
@@ -1537,14 +1708,14 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     :init (setq
            mmm-global-mode              'buffers-with-submode-classes
            mmm-submode-decoration-level 2))
-#+END_SRC
+#+end_src
 
 *** Multiple Cursors
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Multiple Cursors
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package multiple-cursors
@@ -1558,21 +1729,21 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
            ("C-c m c" . mc/edit-lines)
            ("C-c m e" . mc/edit-ends-of-lines)
            ("C-c m a" . mc/edit-beginnings-of-lines)))
-#+END_SRC
+#+end_src
 
 *** Paper Break Lines
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Page Break Lines
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package page-break-lines
     :straight t
     :hook ((after-init . global-page-break-lines-mode))
     :diminish page-break-lines-mode)
-#+END_SRC
+#+end_src
 
 *** Parens
 
@@ -1581,11 +1752,11 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Parens
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (add-hook 'after-init-hook 'show-paren-mode)
-#+END_SRC
+#+end_src
 
 **** Smartparens
 
@@ -1595,7 +1766,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :hook ((after-init . show-smartparens-global-mode)
            (after-init . smartparens-global-mode))
     :init (setq sp-hybrid-kill-entire-symbol nil))
-#+END_SRC
+#+end_src
 
 **** Rainbow Delimiters
 
@@ -1603,14 +1774,14 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package rainbow-delimiters
     :straight t
     :hook (((prog-mode text-mode) . rainbow-delimiters-mode)))
-#+END_SRC
+#+end_src
 
 *** PDF Tools
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; PDF Tools
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package pdf-tools
@@ -1638,14 +1809,227 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
                ("s"  . pdf-occur)
                ("b"  . pdf-view-set-slice-from-bounding-box)
                ("r"  . pdf-view-reset-slice)))
-#+END_SRC
+#+end_src
 
-*** Projectil
+*** Pretty
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
-  ;; Projectil
-#+END_SRC
+  ;; Pretty
+#+end_src
+
+**** Pretty Mode
+
+#+begin_src elisp
+  (use-package pretty-mode
+    :demand t
+    :straight t
+    :hook (((prog-mode text-mode) . turn-on-pretty-mode)
+           (after-init . global-prettify-symbols-mode)
+           (python-mode . (lambda ()
+                            (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                                  '(;; Syntax
+                                    ("def" .      #x2131)
+                                    ;; ("not" .      #x2757)
+                                    ("not" .      #xac)
+                                    ("in" .       #x2208)
+                                    ("not in" .   #x2209)
+                                    ("return" .   #x27fc)
+                                    ("yield" .    #x27fb)
+                                    ("for" .      #x2200)
+                                    ;; Extend Functions
+                                    ("any" .      #x2754)
+                                    ("all" .      #x2201)
+                                    ("dict" .     #x1d507)
+                                    ("list" .     #x2112)
+                                    ("tuple" .    #x2a02)
+                                    ("set" .      #x2126)
+                                    ;; Base Types
+                                    ("int" .      #x2124)
+                                    ("float" .    #x211d)
+                                    ("str" .      #x1d54a)
+                                    ("True" .     #x1d54b)
+                                    ("False" .    #x1d53d)
+                                    ;; Extend Types
+                                    ("Int" .      #x2124)
+                                    ("Float" .    #x211d)
+                                    ("String" .   #x1d54a)
+                                    ;; Mypy
+                                    ("Dict" .     #x1d507)
+                                    ("List" .     #x2112)
+                                    ("Tuple" .    #x2a02)
+                                    ("Set" .      #x2126)
+                                    ("Iterable" . #x1d50a)
+                                    ("Any" .      #x2754)
+                                    ("Union" .    #x22c3)))))
+           (haskell-mode . (lambda ()
+                            (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                                  '(;; Syntax
+                                    ("not" .      #x2757)
+                                    ("in" .       #x2208)
+                                    ("elem" .     #x2208)
+                                    ("not in" .   #x2209)
+                                    ("notElem" .  #x2209)
+                                    ;; Types
+                                    ("String" .   #x1d54a)
+                                    ("Int" .      #x2124)
+                                    ("Float" .    #x211d)
+                                    ("True" .     #x1d54b)
+                                    ("False" .    #x1d53d))))))
+    :config
+    (pretty-activate-groups
+     '(:sub-and-superscripts :greek :arithmetic))
+
+    (pretty-deactivate-groups
+     '(:equality :ordering :ordering-double :ordering-triple
+                 :arrows :arrows-twoheaded :punctuation
+                 :logic :sets :arithmetic-double :arithmetic-triple)))
+#+end_src
+
+**** ipretty
+
+#+begin_src elisp
+  (use-package ipretty
+    :defer t
+    :straight t
+    :hook ((after-init . ipretty-mode)))
+#+end_src
+
+**** Pretty Font
+
+#+begin_src elisp
+  ;; https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
+  ;; This works when using emacs --daemon + emacsclient
+  (add-hook 'after-make-frame-functions (lambda (frame) (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
+  ;; This works when using emacs without server/client
+  (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
+  ;; I haven't found one statement that makes both of the above situations work, so I use both for now
+
+  (defun pretty-fonts-set-fontsets (CODE-FONT-ALIST)
+    "Utility to associate many unicode points with specified `CODE-FONT-ALIST'."
+    (--each CODE-FONT-ALIST
+      (-let (((font . codes) it))
+        (--each codes
+          (set-fontset-font nil `(,it . ,it) font)
+          (set-fontset-font t `(,it . ,it) font)))))
+
+  (defun pretty-fonts--add-kwds (FONT-LOCK-ALIST)
+    "Exploits `font-lock-add-keywords'(`FONT-LOCK-ALIST') to apply regex-unicode replacements."
+    (font-lock-add-keywords
+     nil (--map (-let (((rgx uni-point) it))
+                 `(,rgx (0 (progn
+                             (compose-region
+                              (match-beginning 1) (match-end 1)
+                              ,(concat "\t" (list uni-point)))
+                             nil))))
+               FONT-LOCK-ALIST)))
+
+  (defmacro pretty-fonts-set-kwds (FONT-LOCK-HOOKS-ALIST)
+    "Set regex-unicode replacements to many modes(`FONT-LOCK-HOOKS-ALIST')."
+    `(--each ,FONT-LOCK-HOOKS-ALIST
+       (-let (((font-locks . mode-hooks) it))
+         (--each mode-hooks
+           (add-hook it (-partial 'pretty-fonts--add-kwds
+                                  (symbol-value font-locks)))))))
+
+  (defconst pretty-fonts-fira-font
+    '(;; OPERATORS
+      ;; Pipes
+      ("\\(<|\\)" #Xe14d) ("\\(<>\\)" #Xe15b) ("\\(<|>\\)" #Xe14e) ("\\(|>\\)" #Xe135)
+
+      ;; Brackets
+      ("\\(<\\*\\)" #Xe14b) ("\\(<\\*>\\)" #Xe14c) ("\\(\\*>\\)" #Xe104)
+      ("\\(<\\$\\)" #Xe14f) ("\\(<\\$>\\)" #Xe150) ("\\(\\$>\\)" #Xe137)
+      ("\\(<\\+\\)" #Xe155) ("\\(<\\+>\\)" #Xe156) ("\\(\\+>\\)" #Xe13a)
+
+      ;; Equality
+      ("\\(!=\\)" #Xe10e) ("\\(!==\\)"         #Xe10f) ("\\(=/=\\)" #Xe143)
+      ("\\(/=\\)" #Xe12c) ("\\(/==\\)"         #Xe12d)
+      ("\\(===\\)"#Xe13d) ("[^!/]\\(==\\)[^>]" #Xe13c)
+
+      ;; Equality Special
+      ("\\(||=\\)"  #Xe133) ("[^|]\\(|=\\)" #Xe134)
+      ("\\(~=\\)"   #Xe166)
+      ("\\(\\^=\\)" #Xe136)
+      ("\\(=:=\\)"  #Xe13b)
+
+      ;; Comparisons
+      ("\\(<=\\)" #Xe141) ("\\(>=\\)" #Xe145)
+      ("\\(</\\)" #Xe162) ("\\(</>\\)" #Xe163)
+
+      ;; Shifts
+      ("[^-=]\\(>>\\)" #Xe147) ("\\(>>>\\)" #Xe14a)
+      ("[^-=]\\(<<\\)" #Xe15c) ("\\(<<<\\)" #Xe15f)
+
+      ;; Dots
+      ("\\(\\.-\\)"    #Xe122) ("\\(\\.=\\)" #Xe123)
+      ("\\(\\.\\.<\\)" #Xe125)
+
+      ;; Hashes
+      ("\\(#{\\)"  #Xe119) ("\\(#(\\)"   #Xe11e) ("\\(#_\\)"   #Xe120)
+      ("\\(#_(\\)" #Xe121) ("\\(#\\?\\)" #Xe11f) ("\\(#\\[\\)" #Xe11a)
+
+      ;; REPEATED CHARACTERS
+      ;; 2-Repeats
+      ("\\(||\\)" #Xe132)
+      ("\\(!!\\)" #Xe10d)
+      ("\\(%%\\)" #Xe16a)
+      ("\\(&&\\)" #Xe131)
+
+      ;; 2+3-Repeats
+      ("\\(##\\)"       #Xe11b) ("\\(###\\)"          #Xe11c) ("\\(####\\)" #Xe11d)
+      ("\\(--\\)"       #Xe111) ("\\(---\\)"          #Xe112)
+      ("\\({-\\)"       #Xe108) ("\\(-}\\)"           #Xe110)
+      ("\\(\\\\\\\\\\)" #Xe106) ("\\(\\\\\\\\\\\\\\)" #Xe107)
+      ("\\(\\.\\.\\)"   #Xe124) ("\\(\\.\\.\\.\\)"    #Xe126)
+      ("\\(\\+\\+\\)"   #Xe138) ("\\(\\+\\+\\+\\)"    #Xe139)
+      ("\\(//\\)"       #Xe12f) ("\\(///\\)"          #Xe130)
+      ("\\(::\\)"       #Xe10a) ("\\(:::\\)"          #Xe10b)
+
+      ;; ARROWS
+      ;; Direct
+      ("[^-]\\(->\\)" #Xe114) ("[^=]\\(=>\\)" #Xe13f)
+      ("\\(<-\\)"     #Xe152)
+      ("\\(-->\\)"    #Xe113) ("\\(->>\\)"    #Xe115)
+      ("\\(==>\\)"    #Xe13e) ("\\(=>>\\)"    #Xe140)
+      ("\\(<--\\)"    #Xe153) ("\\(<<-\\)"    #Xe15d)
+      ("\\(<==\\)"    #Xe158) ("\\(<<=\\)"    #Xe15e)
+      ("\\(<->\\)"    #Xe154) ("\\(<=>\\)"    #Xe159)
+
+      ;; Branches
+      ("\\(-<\\)"  #Xe116) ("\\(-<<\\)" #Xe117)
+      ("\\(>-\\)"  #Xe144) ("\\(>>-\\)" #Xe148)
+      ("\\(=<<\\)" #Xe142) ("\\(>>=\\)" #Xe149)
+      ("\\(>=>\\)" #Xe146) ("\\(<=<\\)" #Xe15a)
+
+      ;; Squiggly
+      ("\\(<~\\)" #Xe160) ("\\(<~~\\)" #Xe161)
+      ("\\(~>\\)" #Xe167) ("\\(~~>\\)" #Xe169)
+      ("\\(-~\\)" #Xe118) ("\\(~-\\)"  #Xe165)
+
+      ;; MISC
+      ("\\(www\\)"                   #Xe100)
+      ("\\(<!--\\)"                  #Xe151)
+      ("\\(~@\\)"                    #Xe164)
+      ("[^<]\\(~~\\)"                #Xe168)
+      ("\\(\\?=\\)"                  #Xe127)
+      ("[^=]\\(:=\\)"                #Xe10c)
+      ("\\(/>\\)"                    #Xe12e)
+      ("[^\\+<>]\\(\\+\\)[^\\+<>]"   #Xe16d)
+      ("[^:=]\\(:\\)[^:=]"           #Xe16c)
+      ("\\(<=\\)"                    #Xe157))
+    "Fira font ligatures and their regexes.")
+
+  (pretty-fonts-set-kwds
+   '((pretty-fonts-fira-font prog-mode-hook org-mode-hook)))
+#+end_src
+
+*** Projectile
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Projectile
+#+end_src
 
 #+begin_src elisp
   (use-package projectile
@@ -1660,14 +2044,14 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
                   (append '("compile_commands.json"
                             ".cquery")
                           projectile-project-root-files-top-down-recurring)))
-#+END_SRC
+#+end_src
 
 *** Recentf
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Recentf
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package recentf
@@ -1676,41 +2060,41 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
            recentf-save-file       "~/.emacs.d/recentf"
            recentf-max-saved-items 100
            recentf-exclude         '("/tmp/" "/ssh:")))
-#+END_SRC
+#+end_src
 
 *** Smex
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Smex
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package smex
     :straight t
     :init (setq-default smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
     :bind (("<remap> <execute-extended-command>" . smex)))
-#+END_SRC
+#+end_src
 
 *** Subword
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Subword
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package subword
     :defer t
     :diminish (subword-mode))
-#+END_SRC
+#+end_src
 
 *** Treemacs
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Treemacs
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package treemacs
@@ -1772,14 +2156,14 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package treemacs-projectile
     :after treemacs projectile
     :straight t)
-#+END_SRC
+#+end_src
 
 *** Version Control
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Version Control
-#+END_SRC
+#+end_src
 
 **** Useful Simple Packages
 
@@ -1789,7 +2173,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
                      gitconfig-mode
                      git-timemachine))
     (straight-use-package package))
-#+END_SRC
+#+end_src
 
 **** Magit
 
@@ -1811,7 +2195,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
   (straight-use-package 'magit-todos)
-#+END_SRC
+#+end_src
 
 **** Git Commit
 
@@ -1819,7 +2203,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package git-commit
     :straight t
     :hook ((git-commit-mode . goto-address-mode)))
-#+END_SRC
+#+end_src
 
 **** Git Messenger
 
@@ -1829,7 +2213,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :init (setq git-messenger:show-detail t)
     :bind (:map vc-prefix-map
            ("p" . git-messenger:popup-message)))
-#+END_SRC
+#+end_src
 
 **** Git Gutter
 
@@ -1846,40 +2230,40 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
                 git-gutter:modified-sign "■"
                 git-gutter:added-sign "●"
                 git-gutter:deleted-sign "✘"))
-#+END_SRC
+#+end_src
 
 *** Which Function
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Which Function
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package which-func
     :demand t
     :hook ((after-init . which-function-mode)))
-#+END_SRC
+#+end_src
 
 *** Which Key
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Which Key
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package which-key
     :straight t
     :hook ((after-init . which-key-mode)))
-#+END_SRC
+#+end_src
 
 *** Whitespace
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Whitespace
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package whitespace
@@ -1910,14 +2294,14 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :hook ((after-init . global-whitespace-cleanup-mode))
     :diminish (whitespace-cleanup-mode)
     :bind (("<remap> <just-one-space>" . cycle-spacing)))
-#+END_SRC
+#+end_src
 
 *** Writeroom Mode
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Writeroom Mode
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package writeroom-mode
@@ -1959,7 +2343,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
         (visual-line-mode -1)
         (when (fboundp 'writeroom-mode)
           (writeroom-mode 0)))))
-#+END_SRC
+#+end_src
 
 ** Languages
 
@@ -1967,14 +2351,14 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   ;;----------------------------------------------------------------------------
   ;; Languages
   ;;----------------------------------------------------------------------------
-#+END_SRC
+#+end_src
 
 *** Simple Supported Languages
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Simple Supported Languages
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (let ((languages '(elvish-mode
@@ -1987,14 +2371,246 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
       (straight-use-package language))
     (dolist (extra extras)
       (straight-use-package extra)))
+#+end_src
+
+*** Language Server Protocol
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Language Server Protocol
+#+end_src
+
+**** lsp-mode
+
+#+begin_src elisp
+  (use-package lsp
+    :straight lsp-mode
+    :hook ((lsp-after-open . lsp-enable-imenu))
+    :init (setq lsp-auto-guess-root t
+                lsp-prefer-flymake  nil)
+    :config (require 'lsp-clients))
+#+end_src
+
+**** lsp-ui
+
+#+begin_src elisp
+  (use-package lsp-ui
+    :demand t
+    :after lsp-mode
+    :straight t
+    :bind (:map lsp-ui-mode-map
+                ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+                ([remap xref-find-references]  . lsp-ui-peek-find-references)
+                ("C-c u" . lsp-ui-imenu))
+    :hook ((lsp-mode . lsp-ui-mode))
+    :init
+    (setq-default lsp-ui-doc-position 'at-point
+                  lsp-ui-doc-header nil
+                  ;; lsp-ui-doc-include-signature nil
+                  lsp-ui-sideline-update-mode 'point
+                  lsp-ui-sideline-delay 1
+                  lsp-ui-sideline-ignore-duplicate t
+                  lsp-ui-peek-always-show t))
+#+end_src
+
+**** company-lsp
+
+#+begin_src elisp
+  (use-package company-lsp
+    :defer t
+    :after lsp-mode
+    :straight t
+    :init
+    (setq company-lsp-async               t
+          company-lsp-enable-recompletion t
+          company-lsp-enable-snippet      t
+          company-lsp-cache-candidates    nil))
+#+end_src
+
+*** Debug Adapter Protocol
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Debug Adapter Protocol
 #+END_SRC
+
+**** Dap Mode
+
+#+begin_src elisp
+  (use-package dap-mode
+    :straight t
+    :config
+    (require 'dap-python))
+#+end_src
+
+*** C/C++/Object-C (Clangd)
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; C/C++/Object-C
+  ;; I use clangd
+#+end_src
+
+I use clangd
+
+#+begin_src elisp
+  (when *clangd*
+    (use-package lsp-clangd
+      :straight t
+      :after lsp
+      :hook (((c-mode c++-mode objc-mode) . lsp))
+      :init (setq-default lsp-clients-clangd-executable *clangd*)
+      :config (lsp-clients-register-clangd)))
+#+end_src
+
+*** Haskell
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Haskell
+  ;; Include haskell-mode, lsp-haskell and intero
+#+end_src
+
+Include haskell-mode, lsp-haskell and intero.
+
+#+begin_src elisp
+  (use-package haskell-mode
+    :straight t
+    :preface
+    (define-minor-mode stack-exec-path-mode
+      "If this is a stack project, set `exec-path' to the path \"stack exec\" would use."
+      nil
+      :lighter ""
+      :global nil
+      (if stack-exec-path-mode
+          (when (and (executable-find "stack")
+                     (locate-dominating-file default-directory "stack.yaml"))
+            (setq-local
+             exec-path
+             (seq-uniq
+              (append (list (concat (string-trim-right (shell-command-to-string "stack path --local-install-root")) "/bin"))
+                      (parse-colon-path
+                       (replace-regexp-in-string "[\r\n]+\\'" ""
+                                                 (shell-command-to-string "stack path --bin-path"))))
+              'string-equal)))
+        (kill-local-variable 'exec-path)))
+
+    :hook ((haskell-mode . subword-mode)
+           (haskell-mode . haskell-auto-insert-module-template)
+           (haskell-mode . haskell-collapse-mode)
+           (haskell-mode . haskell-indentation-mode)
+           (haskell-mode . stack-exec-path-mode)
+           (haskell-mode . (lambda () (setq-local tab-width 4))))
+    :bind (("C-x a a" . align)
+           :map haskell-mode-map
+           ("C-c h" . hoogle)
+           ("C-o"   . open-line))
+    :init
+    (setq haskell-mode-stylish-haskell-path            "stylish-haskell"
+          haskell-indentation-layout-offset            4
+          haskell-process-suggest-haskell-docs-imports t
+          haskell-process-suggest-hayoo-imports        t
+          haskell-process-suggest-hoogle-imports       t
+          haskell-process-suggest-remove-import-lines  t
+          haskell-tags-on-save                         t)
+
+    (add-to-list 'align-rules-list
+               '(haskell-types
+                 (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
+                 (modes quote (haskell-mode literate-haskell-mode))))
+    (add-to-list 'align-rules-list
+                 '(haskell-assignment
+                   (regexp . "\\(\\s-+\\)=\\s-+")
+                   (modes quote (haskell-mode literate-haskell-mode))))
+    (add-to-list 'align-rules-list
+                 '(haskell-arrows
+                   (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
+                   (modes quote (haskell-mode literate-haskell-mode))))
+    (add-to-list 'align-rules-list
+                 '(haskell-left-arrows
+                   (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
+                   (modes quote (haskell-mode literate-haskell-mode))))
+
+    :config
+    (push 'haskell-mode page-break-lines-modes)
+    (defun haskell-mode-generate-tags (&optional and-then-find-this-tag)
+      "Generate tags using Hasktags.  This is synchronous function.
+
+  If optional AND-THEN-FIND-THIS-TAG argument is present it is used
+  with function `xref-find-definitions' after new table was
+  generated."
+      (interactive)
+      (let* ((dir (haskell-cabal--find-tags-dir))
+             (command (haskell-cabal--compose-hasktags-command dir)))
+        (if (not command)
+            (error "Unable to compose hasktags command")
+          ;; I disabled the noisy shell command output.
+          ;; The original is (shell-command command)
+          (call-process-shell-command command nil "*Shell Command Output*" t)
+          (haskell-mode-message-line "Tags generated.")
+          (when and-then-find-this-tag
+            (let ((tags-file-name dir))
+              (xref-find-definitions and-then-find-this-tag)))))))
+
+  (use-package lsp-haskell
+    :straight t
+    :hook ((haskell-mode   . lsp)
+           (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
+    ;; :config
+    ;; You can set the lsp-haskell settings here
+    ;; (lsp-haskell-set-hlint-on)                    ;; default on
+    ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
+    ;; (lsp-haskell-set-liquid-on)                   ;; default off
+    ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
+    )
+
+  (when *intero*
+    (use-package intero
+      :straight t
+      :after haskell-mode
+      :hook (haskell-mode . (lambda () (intero-global-mode 1)))
+      :config (define-key intero-mode-map (kbd "M-?") nil)))
+#+end_src
+
+*** Lisp
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Lisp
+  ;; Include lisp-mode and highlight-quoted.
+#+end_src
+
+**** lisp-mode
+
+#+begin_src elisp
+  (use-package lisp-mode
+    :preface
+    (defun eval-last-sexp-or-region (prefix)
+      "Eval region from BEG to END if active, otherwise the last sexp."
+      (interactive "P")
+      (if (and (mark) (use-region-p))
+          (eval-region (min (point) (mark)) (max (point) (mark)))
+        (pp-eval-last-sexp prefix)))
+    :bind (("<remap> <eval-expression>" . pp-eval-expression)
+           :map emacs-lisp-mode-map
+           ("C-x C-e" . eval-last-sexp-or-region)))
+#+end_src
+
+**** Highlight-quoted
+
+#+begin_src elisp
+  (use-package highlight-quoted
+    :defer t
+    :straight t
+    :hook ((emacs-lisp-mode . highlight-quoted-mode)))
+#+end_src
 
 *** Markdown
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Markdown
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package markdown-mode
@@ -2006,7 +2622,133 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
            "README\\'"
            "\\.markdown\\'"
            "\\.md\\'"))
-#+END_SRC
+#+end_src
+
+*** Python
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Python
+  ;; Include python-mode, blacken, py-isort and flycheck-prospector
+#+end_src
+
+Include python-mode, blacken, py-isort and flycheck-prospector.
+
+#+begin_src elisp
+  (use-package python
+    :commands python-mode
+    :mode ("\\.py\\'" . python-mode)
+    :interpreter (("python"  . python-mode)
+                  ("python3" . python-mode))
+    :preface
+    ;; TODO: Need improve.
+    (defun setq-after ()
+      "setq after python mode."
+      (when (projectile-file-exists-p "mypy.ini")
+        (setq flycheck-python-mypy-ini "mypy.ini"
+              flycheck-mypy.ini        "mypy.ini"))
+
+      (when (projectile-file-exists-p "pylintrc")
+        (setq flycheck-pylintrc "pylintrc")))
+
+    (defvar lsp-python--config-options (make-hash-table))
+
+    (defun lsp-python--set-configuration ()
+      (lsp--set-configuration `(:pyls ,lsp-python--config-options)))
+
+    (defun lsp-python-set-config (name option)
+      "Set a config option in the python lsp server."
+      (puthash name option lsp-python--config-options))
+
+    ;; A list here https://github.com/palantir/python-language-server/blob/develop/vscode-client/package.json#L23-L230
+    ;; I prefer pydocstyle and black, so disabled yapf, though, pydocstyle still cannot be abled.
+    ;; pip install black pyls-black -U
+    ;; The default line-length is 88 when using black, you can add a file named "pyproject.yaml" that contains
+    ;; [tool.black]
+    ;; line-length = 79
+
+    (defun lsp-python-config-set ()
+      "Set python lsp config."
+      (lsp-python-set-config "configurationSources"          '("pycodestyle" "pyflakes" "pydocstyle"))
+      (lsp-python-set-config "plugins.pydocstyle.enabled"    t)
+      (lsp-python-set-config "plugins.pydocstyle.convention" "pep257")
+      (lsp-python-set-config "plugins.yapf.enabled"          nil)
+
+      (lsp-python-set-config "plugins.jedi_definition.follow_imports"         t)
+      (lsp-python-set-config "plugins.jedi_definition.follow_builtin_imports" t))
+
+    :hook ((python-mode . lsp)
+           (python-mode . lsp-python-config-set)
+           (python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
+                                                                   company-gtags
+                                                                   company-etags
+                                                                   company-keywords))))
+           ;; (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil  ;; I prefer to use prospector
+           ;;                            lsp-ui-sideline-enable nil)))
+           (python-mode . setq-after)
+           (python-mode . (lambda () (nasy:local-push-company-backend 'company-lsp))))
+    :init (setq-default python-indent-offset                  4
+                        indent-tabs-mode                      nil
+                        python-indent-guess-indent-offset     nil
+                        python-shell-completion-native-enable nil
+                        python-shell-interpreter              "ipython3"
+                        python-shell-interpreter-args         "-i --simple-prompt --classic"
+                        py-ipython-command-args               "-i --simple-prompt --classic"
+                        py-python-command                     "python3"
+                        flycheck-python-pycompile-executable "python3"
+                        flycheck-python-pylint-executable    "python3"
+                        python-mode-modeline-display         "Python"
+                        python-skeleton-autoinsert           t))
+
+  ;; Now you can use it in lsp
+  ;; NOTICE you have to config black though pyproject.toml.
+  (when *blacken*
+    (use-package blacken
+      :straight t
+      :hook ((python-mode . blacken-mode))))
+
+  (use-package py-isort
+    :straight t
+    :hook (before-save . py-isort-before-save))
+
+  (use-package flycheck-prospector
+    :disabled t
+    :straight (flycheck-prospector :type git :host github :repo "nasyxx/flycheck-prospector")
+    :init (setq flycheck-prospector-profile-path "~/.config/prospector/prospector.yaml")
+    :hook ((flycheck-mode . flycheck-prospector-setup))
+    :config
+    (add-to-list 'flycheck-disabled-checkers 'python-flake8)
+    (add-to-list 'flycheck-disabled-checkers 'python-pylint))
+#+end_src
+
+*** Rust
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Rust
+  ;; Include rust-mode, rls and Cargo.
+#+end_src
+
+Include rust-mode, rls and Cargo.
+
+#+begin_src elisp
+  (when *rust*
+    (use-package rust-mode
+      :defer t
+      :straight t
+      :hook ((rust-mode . (lambda () (setq-local tab-width 4)))
+             (rust-mode . lsp))
+      :config
+      (when *rls*
+        (add-hook #'rust-mode-hook #'lsp)
+        (add-hook #'rust-mode-hook #'(lambda () (add-to-list 'flycheck-disabled-checkers 'rust-cargo))))))
+
+  (use-package cargo
+    :after rust-mode
+    :straight t
+    :hook ((toml-mode . cargo-minor-mode)
+           (rust-mode . cargo-minor-mode)))
+#+end_src
 
 ** Org Mode
 
@@ -2014,7 +2756,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   ;;----------------------------------------------------------------------------
   ;; Org Mode
   ;;----------------------------------------------------------------------------
-#+END_SRC
+#+end_src
 
 *** Load
 
@@ -2023,12 +2765,12 @@ I use ~org~ with ~org-plus-contrib~
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Load
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package org
     :straight org-plus-contrib)
-#+END_SRC
+#+end_src
 
 *** OX Org
 
@@ -2037,20 +2779,20 @@ Other ~ox-_~ packages.
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; OX Org
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (straight-use-package 'ox-rst)
 
   (require 'ox-md)
-#+END_SRC
+#+end_src
 
 *** Basic Configs
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Basic Configs
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package org
@@ -2300,14 +3042,14 @@ Other ~ox-_~ packages.
             :image-converter ("dvisvgm %f -n -b min -c %S -o %O")))
     (add-to-list 'org-preview-latex-process-alist luasvg)
     (setq org-preview-latex-default-process 'luasvg))
-#+END_SRC
+#+end_src
 
 *** Org-Agenda
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Org Agenda
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package org-agenda
@@ -2393,27 +3135,27 @@ Other ~ox-_~ packages.
                             (org-tags-match-list-sublevels nil)
                             (org-agenda-sorting-strategy
                              '(category-keep))))))))))
-#+END_SRC
+#+end_src
 
 *** Org Bullets
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Org Bullets
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package org-bullets
     :straight t
     :hook ((org-mode . (lambda () (org-bullets-mode 1)))))
-#+END_SRC
+#+end_src
 
 *** Org Capture
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Org Capture
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package org-capture
@@ -2446,25 +3188,25 @@ Other ~ox-_~ packages.
                  '("n" "Notes" entry
                    (file "~/notes/notes.org")
                    "* %^{heading} %t %^g\n  %?\n")))
-#+END_SRC
+#+end_src
 
 *** Org Cliplink
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Org Cliplink
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (straight-use-package 'org-cliplink)
-#+END_SRC
+#+end_src
 
 *** Org Clock
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Org Clock
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package org-clock
@@ -2502,7 +3244,7 @@ Other ~ox-_~ packages.
       (add-hook 'org-clock-out-hook
                 (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
                                     "tell application \"org-clock-statusbar\" to clock out")))))
-#+END_SRC
+#+end_src
 
 *** Org Extra Jar -- ob-ditaa & ob-plantuml
 
@@ -2511,7 +3253,7 @@ Include ob-ditaa and ob-plantuml
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Org Extra Jar
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package org
@@ -2543,25 +3285,25 @@ Include ob-ditaa and ob-plantuml
       (setq org-plantuml-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
       (unless (file-exists-p org-plantuml-jar-path)
         (url-copy-file url org-plantuml-jar-path))))
-#+END_SRC
+#+end_src
 
 *** Org Pdfview
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Org Pdfview
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (straight-use-package 'org-pdfview)
-#+END_SRC
+#+end_src
 
 *** Org Pomodoro
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Org Pomodoro
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package org-pomodoro
@@ -2569,29 +3311,29 @@ Include ob-ditaa and ob-plantuml
     :init (setq org-pomodoro-keep-killed-pomodoro-time t)
     :bind (:map org-agenda-mode-map
                 ("P" . org-pomodoro)))
-#+END_SRC
+#+end_src
 
 *** Org Toc
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Org Toc
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (straight-use-package 'toc-org)
-#+END_SRC
+#+end_src
 
 *** Org Wc
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Org Wc
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (straight-use-package 'org-wc)
-#+END_SRC
+#+end_src
 
 ** Themes
 
@@ -2599,7 +3341,7 @@ Include ob-ditaa and ob-plantuml
   ;;----------------------------------------------------------------------------
   ;; Themes
   ;;----------------------------------------------------------------------------
-#+END_SRC
+#+end_src
 
 *** Main Theme
 
@@ -2608,7 +3350,7 @@ I use doom-themes.
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Main Theme
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package doom-themes
@@ -2619,14 +3361,14 @@ I use doom-themes.
     (doom-themes-treemacs-config)  ;; The doom themes havn't finished it yet.
     (doom-themes-visual-bell-config)
     (doom-themes-org-config))
-#+END_SRC
+#+end_src
 
 *** Font
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Font
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package emojify
@@ -2640,14 +3382,14 @@ I use doom-themes.
     :demand t
     :init (setq inhibit-compacting-font-caches t)
     :straight t)
-#+END_SRC
+#+end_src
 
 *** Mode Line
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Mode Line
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (use-package nyan-mode
@@ -2749,15 +3491,15 @@ I use doom-themes.
                (((flycheck-error flycheck-warning flycheck-info) flycheck-status) :when active)
                (nasy-time :face spaceline-modified :when active)
                (nasy-time :when (not active)))))))
-#+END_SRC
+#+end_src
 
-** Epilogue
+* Epilogue
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Epilogue
   ;;----------------------------------------------------------------------------
-#+END_SRC
+#+end_src
 
 #+begin_src elisp
   (run-hooks 'nasy:config-before-hook)
@@ -2768,4 +3510,4 @@ I use doom-themes.
     (load custom-file))
 
   ;;; init.el ends here
-#+END_SRC
+#+end_src

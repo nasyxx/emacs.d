@@ -517,6 +517,97 @@ Call a second time to restore the original window configuration."
   :straight t)
 
 ;;----------------------------------------------------------------------------
+;; Anzu
+
+(use-package anzu
+  :defer t
+  :straight t
+  :hook ((after-init . global-anzu-mode))
+  :bind ([remap query-replace] . anzu-query-replace-regexp))
+
+;;----------------------------------------------------------------------------
+;; Auto insert
+
+(use-package autoinsert
+  :init
+  (define-auto-insert
+    '("\\.py" . "Python Language")
+    '("Python Language"
+      "#!/usr/bin/env python3\n"
+      "# -*- coding: utf-8 -*-\n"
+      "\"\"\"\n"
+      "Life's pathetic, have fun (\"▔□▔)/hi~♡ Nasy.\n\n"
+      "Excited without bugs::\n\n"
+      "    |             *         *\n"
+      "    |                  .                .\n"
+      "    |           .\n"
+      "    |     *                      ,\n"
+      "    |                   .\n"
+      "    |\n"
+      "    |                               *\n"
+      "    |          |\\___/|\n"
+      "    |          )    -(             .              ·\n"
+      "    |         =\\ -   /=\n"
+      "    |           )===(       *\n"
+      "    |          /   - \\\n"
+      "    |          |-    |\n"
+      "    |         /   -   \\     0.|.0\n"
+      "    |  NASY___\\__( (__/_____(\\=/)__+1s____________\n"
+      "    |  ______|____) )______|______|______|______|_\n"
+      "    |  ___|______( (____|______|______|______|____\n"
+      "    |  ______|____\\_|______|______|______|______|_\n"
+      "    |  ___|______|______|______|______|______|____\n"
+      "    |  ______|______|______|______|______|______|_\n"
+      "    |  ___|______|______|______|______|______|____\n\n"
+      "author   : Nasy https://nasy.moe\n"
+      "date     : " (format-time-string "%b %e, %Y") \n
+      "email    : Nasy <nasyxx+python@gmail.com>" \n
+      "filename : " (file-name-nondirectory (buffer-file-name)) \n
+      "project  : " (file-name-nondirectory (directory-file-name (projectile-project-root))) \n
+      "license  : GPL-3.0+\n\n"
+      "There are more things in heaven and earth, Horatio, than are dreamt.\n"
+      " --  From \"Hamlet\"\n"
+      "\"\"\"\n"))
+
+  (define-auto-insert
+    '("\\.hs" . "Haskell Language")
+    '("Haskell Language"
+      "{-\n"
+      " Excited without bugs, have fun (\"▔□▔)/hi~♡ Nasy.\n"
+      " ------------------------------------------------\n"
+      " |             *         *\n"
+      " |                  .                .\n"
+      " |           .\n"
+      " |     *                      ,\n"
+      " |                   .\n"
+      " |\n"
+      " |                               *\n"
+      " |          |\\___/|\n"
+      " |          )    -(             .              ·\n"
+      " |         =\\ -   /=\n"
+      " |           )===(       *\n"
+      " |          /   - \\\n"
+      " |          |-    |\n"
+      " |         /   -   \\     0.|.0\n"
+      " |  NASY___\\__( (__/_____(\\=/)__+1s____________\n"
+      " |  ______|____) )______|______|______|______|_\n"
+      " |  ___|______( (____|______|______|______|____\n"
+      " |  ______|____\\_|______|______|______|______|_\n"
+      " |  ___|______|______|______|______|______|____\n"
+      " |  ______|______|______|______|______|______|_\n"
+      " |  ___|______|______|______|______|______|____\n\n"
+      "There are more things in heaven and earth, Horatio, than are dreamt.\n"
+      "   -- From \"Hamlet\"\n"
+      "--------------------------------------------------------------------------------\n\n-}\n\n"
+      "--------------------------------------------------------------------------------\n-- |\n"
+      "-- Filename   : " (file-name-nondirectory (buffer-file-name)) \n
+      "-- Project    : " (file-name-nondirectory (directory-file-name (projectile-project-root))) \n
+      "-- Author     : Nasy\n"
+      "-- License    : GPL-3.0+\n--\n"
+      "-- Maintainer : Nasy <nasyxx+haskell@gmail.com>\n"
+      "--\n--\n--\n--------------------------------------------------------------------------------\n")))
+
+;;----------------------------------------------------------------------------
 ;; Beginend
 
 (use-package beginend
@@ -610,6 +701,11 @@ Call a second time to restore the original window configuration."
 (straight-use-package 'dash)
 
 ;;----------------------------------------------------------------------------
+;; Dash Functional
+
+(straight-use-package 'dash-functional)
+
+;;----------------------------------------------------------------------------
 ;; Dired
 
 (use-package dired
@@ -681,6 +777,16 @@ This is helpful for writeroom-mode, in particular."
 
 (use-package flycheck-package
   :after flycheck
+  :straight t
+  :config
+  (after-load 'elisp-mode
+              (flycheck-package-setup)))
+
+;;----------------------------------------------------------------------------
+;; Grab Mac Link
+
+(use-package grab-mac-link
+  :defer    t
   :straight t)
 
 ;;----------------------------------------------------------------------------
@@ -827,12 +933,35 @@ This is helpful for writeroom-mode, in particular."
 ;;----------------------------------------------------------------------------
 ;; Highlight
 
+(use-package cl-lib-highlight
+  :after lisp-mode
+  :straight t
+  :config
+  (cl-lib-highlight-initialize))
+
 (use-package hl-line
   :hook ((after-init . global-hl-line-mode)))
 
 (use-package highlight-indent-guides
   :straight t
   :hook (((prog-mode text-mode) . highlight-indent-guides-mode)))
+
+;;----------------------------------------------------------------------------
+;; Htmlize
+
+(use-package htmlize
+  :defer t
+  :straight t
+  :init (setq htmlize-pre-style t))
+
+;;----------------------------------------------------------------------------
+;; Indent
+
+(use-package aggressive-indent
+  :straight t
+  :hook (((emacs-lisp-mode
+           lisp-mode
+           css-mode) . aggressive-indent-mode)))
 
 ;;----------------------------------------------------------------------------
 ;; isearch
@@ -968,7 +1097,204 @@ This is useful when followed by an immediate kill."
              ("r"  . pdf-view-reset-slice)))
 
 ;;----------------------------------------------------------------------------
-;; Projectil
+;; Pretty
+
+(use-package pretty-mode
+  :demand t
+  :straight t
+  :hook (((prog-mode text-mode) . turn-on-pretty-mode)
+         (after-init . global-prettify-symbols-mode)
+         (python-mode . (lambda ()
+                          (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                                '(;; Syntax
+                                  ("def" .      #x2131)
+                                  ;; ("not" .      #x2757)
+                                  ("not" .      #xac)
+                                  ("in" .       #x2208)
+                                  ("not in" .   #x2209)
+                                  ("return" .   #x27fc)
+                                  ("yield" .    #x27fb)
+                                  ("for" .      #x2200)
+                                  ;; Extend Functions
+                                  ("any" .      #x2754)
+                                  ("all" .      #x2201)
+                                  ("dict" .     #x1d507)
+                                  ("list" .     #x2112)
+                                  ("tuple" .    #x2a02)
+                                  ("set" .      #x2126)
+                                  ;; Base Types
+                                  ("int" .      #x2124)
+                                  ("float" .    #x211d)
+                                  ("str" .      #x1d54a)
+                                  ("True" .     #x1d54b)
+                                  ("False" .    #x1d53d)
+                                  ;; Extend Types
+                                  ("Int" .      #x2124)
+                                  ("Float" .    #x211d)
+                                  ("String" .   #x1d54a)
+                                  ;; Mypy
+                                  ("Dict" .     #x1d507)
+                                  ("List" .     #x2112)
+                                  ("Tuple" .    #x2a02)
+                                  ("Set" .      #x2126)
+                                  ("Iterable" . #x1d50a)
+                                  ("Any" .      #x2754)
+                                  ("Union" .    #x22c3)))))
+         (haskell-mode . (lambda ()
+                          (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                                '(;; Syntax
+                                  ("not" .      #x2757)
+                                  ("in" .       #x2208)
+                                  ("elem" .     #x2208)
+                                  ("not in" .   #x2209)
+                                  ("notElem" .  #x2209)
+                                  ;; Types
+                                  ("String" .   #x1d54a)
+                                  ("Int" .      #x2124)
+                                  ("Float" .    #x211d)
+                                  ("True" .     #x1d54b)
+                                  ("False" .    #x1d53d))))))
+  :config
+  (pretty-activate-groups
+   '(:sub-and-superscripts :greek :arithmetic))
+
+  (pretty-deactivate-groups
+   '(:equality :ordering :ordering-double :ordering-triple
+               :arrows :arrows-twoheaded :punctuation
+               :logic :sets :arithmetic-double :arithmetic-triple)))
+
+(use-package ipretty
+  :defer t
+  :straight t
+  :hook ((after-init . ipretty-mode)))
+
+;; https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
+;; This works when using emacs --daemon + emacsclient
+(add-hook 'after-make-frame-functions (lambda (frame) (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
+;; This works when using emacs without server/client
+(set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
+;; I haven't found one statement that makes both of the above situations work, so I use both for now
+
+(defun pretty-fonts-set-fontsets (CODE-FONT-ALIST)
+  "Utility to associate many unicode points with specified `CODE-FONT-ALIST'."
+  (--each CODE-FONT-ALIST
+    (-let (((font . codes) it))
+      (--each codes
+        (set-fontset-font nil `(,it . ,it) font)
+        (set-fontset-font t `(,it . ,it) font)))))
+
+(defun pretty-fonts--add-kwds (FONT-LOCK-ALIST)
+  "Exploits `font-lock-add-keywords'(`FONT-LOCK-ALIST') to apply regex-unicode replacements."
+  (font-lock-add-keywords
+   nil (--map (-let (((rgx uni-point) it))
+               `(,rgx (0 (progn
+                           (compose-region
+                            (match-beginning 1) (match-end 1)
+                            ,(concat "\t" (list uni-point)))
+                           nil))))
+             FONT-LOCK-ALIST)))
+
+(defmacro pretty-fonts-set-kwds (FONT-LOCK-HOOKS-ALIST)
+  "Set regex-unicode replacements to many modes(`FONT-LOCK-HOOKS-ALIST')."
+  `(--each ,FONT-LOCK-HOOKS-ALIST
+     (-let (((font-locks . mode-hooks) it))
+       (--each mode-hooks
+         (add-hook it (-partial 'pretty-fonts--add-kwds
+                                (symbol-value font-locks)))))))
+
+(defconst pretty-fonts-fira-font
+  '(;; OPERATORS
+    ;; Pipes
+    ("\\(<|\\)" #Xe14d) ("\\(<>\\)" #Xe15b) ("\\(<|>\\)" #Xe14e) ("\\(|>\\)" #Xe135)
+
+    ;; Brackets
+    ("\\(<\\*\\)" #Xe14b) ("\\(<\\*>\\)" #Xe14c) ("\\(\\*>\\)" #Xe104)
+    ("\\(<\\$\\)" #Xe14f) ("\\(<\\$>\\)" #Xe150) ("\\(\\$>\\)" #Xe137)
+    ("\\(<\\+\\)" #Xe155) ("\\(<\\+>\\)" #Xe156) ("\\(\\+>\\)" #Xe13a)
+
+    ;; Equality
+    ("\\(!=\\)" #Xe10e) ("\\(!==\\)"         #Xe10f) ("\\(=/=\\)" #Xe143)
+    ("\\(/=\\)" #Xe12c) ("\\(/==\\)"         #Xe12d)
+    ("\\(===\\)"#Xe13d) ("[^!/]\\(==\\)[^>]" #Xe13c)
+
+    ;; Equality Special
+    ("\\(||=\\)"  #Xe133) ("[^|]\\(|=\\)" #Xe134)
+    ("\\(~=\\)"   #Xe166)
+    ("\\(\\^=\\)" #Xe136)
+    ("\\(=:=\\)"  #Xe13b)
+
+    ;; Comparisons
+    ("\\(<=\\)" #Xe141) ("\\(>=\\)" #Xe145)
+    ("\\(</\\)" #Xe162) ("\\(</>\\)" #Xe163)
+
+    ;; Shifts
+    ("[^-=]\\(>>\\)" #Xe147) ("\\(>>>\\)" #Xe14a)
+    ("[^-=]\\(<<\\)" #Xe15c) ("\\(<<<\\)" #Xe15f)
+
+    ;; Dots
+    ("\\(\\.-\\)"    #Xe122) ("\\(\\.=\\)" #Xe123)
+    ("\\(\\.\\.<\\)" #Xe125)
+
+    ;; Hashes
+    ("\\(#{\\)"  #Xe119) ("\\(#(\\)"   #Xe11e) ("\\(#_\\)"   #Xe120)
+    ("\\(#_(\\)" #Xe121) ("\\(#\\?\\)" #Xe11f) ("\\(#\\[\\)" #Xe11a)
+
+    ;; REPEATED CHARACTERS
+    ;; 2-Repeats
+    ("\\(||\\)" #Xe132)
+    ("\\(!!\\)" #Xe10d)
+    ("\\(%%\\)" #Xe16a)
+    ("\\(&&\\)" #Xe131)
+
+    ;; 2+3-Repeats
+    ("\\(##\\)"       #Xe11b) ("\\(###\\)"          #Xe11c) ("\\(####\\)" #Xe11d)
+    ("\\(--\\)"       #Xe111) ("\\(---\\)"          #Xe112)
+    ("\\({-\\)"       #Xe108) ("\\(-}\\)"           #Xe110)
+    ("\\(\\\\\\\\\\)" #Xe106) ("\\(\\\\\\\\\\\\\\)" #Xe107)
+    ("\\(\\.\\.\\)"   #Xe124) ("\\(\\.\\.\\.\\)"    #Xe126)
+    ("\\(\\+\\+\\)"   #Xe138) ("\\(\\+\\+\\+\\)"    #Xe139)
+    ("\\(//\\)"       #Xe12f) ("\\(///\\)"          #Xe130)
+    ("\\(::\\)"       #Xe10a) ("\\(:::\\)"          #Xe10b)
+
+    ;; ARROWS
+    ;; Direct
+    ("[^-]\\(->\\)" #Xe114) ("[^=]\\(=>\\)" #Xe13f)
+    ("\\(<-\\)"     #Xe152)
+    ("\\(-->\\)"    #Xe113) ("\\(->>\\)"    #Xe115)
+    ("\\(==>\\)"    #Xe13e) ("\\(=>>\\)"    #Xe140)
+    ("\\(<--\\)"    #Xe153) ("\\(<<-\\)"    #Xe15d)
+    ("\\(<==\\)"    #Xe158) ("\\(<<=\\)"    #Xe15e)
+    ("\\(<->\\)"    #Xe154) ("\\(<=>\\)"    #Xe159)
+
+    ;; Branches
+    ("\\(-<\\)"  #Xe116) ("\\(-<<\\)" #Xe117)
+    ("\\(>-\\)"  #Xe144) ("\\(>>-\\)" #Xe148)
+    ("\\(=<<\\)" #Xe142) ("\\(>>=\\)" #Xe149)
+    ("\\(>=>\\)" #Xe146) ("\\(<=<\\)" #Xe15a)
+
+    ;; Squiggly
+    ("\\(<~\\)" #Xe160) ("\\(<~~\\)" #Xe161)
+    ("\\(~>\\)" #Xe167) ("\\(~~>\\)" #Xe169)
+    ("\\(-~\\)" #Xe118) ("\\(~-\\)"  #Xe165)
+
+    ;; MISC
+    ("\\(www\\)"                   #Xe100)
+    ("\\(<!--\\)"                  #Xe151)
+    ("\\(~@\\)"                    #Xe164)
+    ("[^<]\\(~~\\)"                #Xe168)
+    ("\\(\\?=\\)"                  #Xe127)
+    ("[^=]\\(:=\\)"                #Xe10c)
+    ("\\(/>\\)"                    #Xe12e)
+    ("[^\\+<>]\\(\\+\\)[^\\+<>]"   #Xe16d)
+    ("[^:=]\\(:\\)[^:=]"           #Xe16c)
+    ("\\(<=\\)"                    #Xe157))
+  "Fira font ligatures and their regexes.")
+
+(pretty-fonts-set-kwds
+ '((pretty-fonts-fira-font prog-mode-hook org-mode-hook)))
+
+;;----------------------------------------------------------------------------
+;; Projectile
 
 (use-package projectile
   :defer    t
@@ -1229,6 +1555,186 @@ typical word processor."
     (straight-use-package extra)))
 
 ;;----------------------------------------------------------------------------
+;; Language Server Protocol
+
+(use-package lsp
+  :straight lsp-mode
+  :hook ((lsp-after-open . lsp-enable-imenu))
+  :init (setq lsp-auto-guess-root t
+              lsp-prefer-flymake  nil)
+  :config (require 'lsp-clients))
+
+(use-package lsp-ui
+  :demand t
+  :after lsp-mode
+  :straight t
+  :bind (:map lsp-ui-mode-map
+              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+              ([remap xref-find-references]  . lsp-ui-peek-find-references)
+              ("C-c u" . lsp-ui-imenu))
+  :hook ((lsp-mode . lsp-ui-mode))
+  :init
+  (setq-default lsp-ui-doc-position 'at-point
+                lsp-ui-doc-header nil
+                ;; lsp-ui-doc-include-signature nil
+                lsp-ui-sideline-update-mode 'point
+                lsp-ui-sideline-delay 1
+                lsp-ui-sideline-ignore-duplicate t
+                lsp-ui-peek-always-show t))
+
+(use-package company-lsp
+  :defer t
+  :after lsp-mode
+  :straight t
+  :init
+  (setq company-lsp-async               t
+        company-lsp-enable-recompletion t
+        company-lsp-enable-snippet      t
+        company-lsp-cache-candidates    nil))
+
+;;----------------------------------------------------------------------------
+;; Debug Adapter Protocol
+
+(use-package dap-mode
+  :straight t
+  :config
+  (require 'dap-python))
+
+;;----------------------------------------------------------------------------
+;; C/C++/Object-C
+;; I use clangd
+
+(when *clangd*
+  (use-package lsp-clangd
+    :straight t
+    :after lsp
+    :hook (((c-mode c++-mode objc-mode) . lsp))
+    :init (setq-default lsp-clients-clangd-executable *clangd*)
+    :config (lsp-clients-register-clangd)))
+
+;;----------------------------------------------------------------------------
+;; Haskell
+;; Include haskell-mode, lsp-haskell and intero
+
+(use-package haskell-mode
+  :straight t
+  :preface
+  (define-minor-mode stack-exec-path-mode
+    "If this is a stack project, set `exec-path' to the path \"stack exec\" would use."
+    nil
+    :lighter ""
+    :global nil
+    (if stack-exec-path-mode
+        (when (and (executable-find "stack")
+                   (locate-dominating-file default-directory "stack.yaml"))
+          (setq-local
+           exec-path
+           (seq-uniq
+            (append (list (concat (string-trim-right (shell-command-to-string "stack path --local-install-root")) "/bin"))
+                    (parse-colon-path
+                     (replace-regexp-in-string "[\r\n]+\\'" ""
+                                               (shell-command-to-string "stack path --bin-path"))))
+            'string-equal)))
+      (kill-local-variable 'exec-path)))
+
+  :hook ((haskell-mode . subword-mode)
+         (haskell-mode . haskell-auto-insert-module-template)
+         (haskell-mode . haskell-collapse-mode)
+         (haskell-mode . haskell-indentation-mode)
+         (haskell-mode . stack-exec-path-mode)
+         (haskell-mode . (lambda () (setq-local tab-width 4))))
+  :bind (("C-x a a" . align)
+         :map haskell-mode-map
+         ("C-c h" . hoogle)
+         ("C-o"   . open-line))
+  :init
+  (setq haskell-mode-stylish-haskell-path            "stylish-haskell"
+        haskell-indentation-layout-offset            4
+        haskell-process-suggest-haskell-docs-imports t
+        haskell-process-suggest-hayoo-imports        t
+        haskell-process-suggest-hoogle-imports       t
+        haskell-process-suggest-remove-import-lines  t
+        haskell-tags-on-save                         t)
+
+  (add-to-list 'align-rules-list
+             '(haskell-types
+               (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
+               (modes quote (haskell-mode literate-haskell-mode))))
+  (add-to-list 'align-rules-list
+               '(haskell-assignment
+                 (regexp . "\\(\\s-+\\)=\\s-+")
+                 (modes quote (haskell-mode literate-haskell-mode))))
+  (add-to-list 'align-rules-list
+               '(haskell-arrows
+                 (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
+                 (modes quote (haskell-mode literate-haskell-mode))))
+  (add-to-list 'align-rules-list
+               '(haskell-left-arrows
+                 (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
+                 (modes quote (haskell-mode literate-haskell-mode))))
+
+  :config
+  (push 'haskell-mode page-break-lines-modes)
+  (defun haskell-mode-generate-tags (&optional and-then-find-this-tag)
+    "Generate tags using Hasktags.  This is synchronous function.
+
+If optional AND-THEN-FIND-THIS-TAG argument is present it is used
+with function `xref-find-definitions' after new table was
+generated."
+    (interactive)
+    (let* ((dir (haskell-cabal--find-tags-dir))
+           (command (haskell-cabal--compose-hasktags-command dir)))
+      (if (not command)
+          (error "Unable to compose hasktags command")
+        ;; I disabled the noisy shell command output.
+        ;; The original is (shell-command command)
+        (call-process-shell-command command nil "*Shell Command Output*" t)
+        (haskell-mode-message-line "Tags generated.")
+        (when and-then-find-this-tag
+          (let ((tags-file-name dir))
+            (xref-find-definitions and-then-find-this-tag)))))))
+
+(use-package lsp-haskell
+  :straight t
+  :hook ((haskell-mode   . lsp)
+         (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
+  ;; :config
+  ;; You can set the lsp-haskell settings here
+  ;; (lsp-haskell-set-hlint-on)                    ;; default on
+  ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
+  ;; (lsp-haskell-set-liquid-on)                   ;; default off
+  ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
+  )
+
+(when *intero*
+  (use-package intero
+    :straight t
+    :after haskell-mode
+    :hook (haskell-mode . (lambda () (intero-global-mode 1)))
+    :config (define-key intero-mode-map (kbd "M-?") nil)))
+
+;;----------------------------------------------------------------------------
+;; Lisp
+;; Include lisp-mode and highlight-quoted.
+
+(use-package lisp-mode
+  :preface
+  (defun eval-last-sexp-or-region (prefix)
+    "Eval region from BEG to END if active, otherwise the last sexp."
+    (interactive "P")
+    (if (and (mark) (use-region-p))
+        (eval-region (min (point) (mark)) (max (point) (mark)))
+      (pp-eval-last-sexp prefix)))
+  :bind (("<remap> <eval-expression>" . pp-eval-expression)
+         :map emacs-lisp-mode-map
+         ("C-x C-e" . eval-last-sexp-or-region)))
+
+(use-package highlight-quoted
+  :defer t
+  :straight t
+  :hook ((emacs-lisp-mode . highlight-quoted-mode)))
+
+;;----------------------------------------------------------------------------
 ;; Markdown
 
 (use-package markdown-mode
@@ -1240,6 +1746,116 @@ typical word processor."
          "README\\'"
          "\\.markdown\\'"
          "\\.md\\'"))
+
+;;----------------------------------------------------------------------------
+;; Python
+;; Include python-mode, blacken, py-isort and flycheck-prospector
+
+(use-package python
+  :commands python-mode
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter (("python"  . python-mode)
+                ("python3" . python-mode))
+  :preface
+  ;; TODO: Need improve.
+  (defun setq-after ()
+    "setq after python mode."
+    (when (projectile-file-exists-p "mypy.ini")
+      (setq flycheck-python-mypy-ini "mypy.ini"
+            flycheck-mypy.ini        "mypy.ini"))
+
+    (when (projectile-file-exists-p "pylintrc")
+      (setq flycheck-pylintrc "pylintrc")))
+
+  (defvar lsp-python--config-options (make-hash-table))
+
+  (defun lsp-python--set-configuration ()
+    (lsp--set-configuration `(:pyls ,lsp-python--config-options)))
+
+  (defun lsp-python-set-config (name option)
+    "Set a config option in the python lsp server."
+    (puthash name option lsp-python--config-options))
+
+  ;; A list here https://github.com/palantir/python-language-server/blob/develop/vscode-client/package.json#L23-L230
+  ;; I prefer pydocstyle and black, so disabled yapf, though, pydocstyle still cannot be abled.
+  ;; pip install black pyls-black -U
+  ;; The default line-length is 88 when using black, you can add a file named "pyproject.yaml" that contains
+  ;; [tool.black]
+  ;; line-length = 79
+
+  (defun lsp-python-config-set ()
+    "Set python lsp config."
+    (lsp-python-set-config "configurationSources"          '("pycodestyle" "pyflakes" "pydocstyle"))
+    (lsp-python-set-config "plugins.pydocstyle.enabled"    t)
+    (lsp-python-set-config "plugins.pydocstyle.convention" "pep257")
+    (lsp-python-set-config "plugins.yapf.enabled"          nil)
+
+    (lsp-python-set-config "plugins.jedi_definition.follow_imports"         t)
+    (lsp-python-set-config "plugins.jedi_definition.follow_builtin_imports" t))
+
+  :hook ((python-mode . lsp)
+         (python-mode . lsp-python-config-set)
+         (python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
+                                                                 company-gtags
+                                                                 company-etags
+                                                                 company-keywords))))
+         ;; (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil  ;; I prefer to use prospector
+         ;;                            lsp-ui-sideline-enable nil)))
+         (python-mode . setq-after)
+         (python-mode . (lambda () (nasy:local-push-company-backend 'company-lsp))))
+  :init (setq-default python-indent-offset                  4
+                      indent-tabs-mode                      nil
+                      python-indent-guess-indent-offset     nil
+                      python-shell-completion-native-enable nil
+                      python-shell-interpreter              "ipython3"
+                      python-shell-interpreter-args         "-i --simple-prompt --classic"
+                      py-ipython-command-args               "-i --simple-prompt --classic"
+                      py-python-command                     "python3"
+                      flycheck-python-pycompile-executable "python3"
+                      flycheck-python-pylint-executable    "python3"
+                      python-mode-modeline-display         "Python"
+                      python-skeleton-autoinsert           t))
+
+;; Now you can use it in lsp
+;; NOTICE you have to config black though pyproject.toml.
+(when *blacken*
+  (use-package blacken
+    :straight t
+    :hook ((python-mode . blacken-mode))))
+
+(use-package py-isort
+  :straight t
+  :hook (before-save . py-isort-before-save))
+
+(use-package flycheck-prospector
+  :disabled t
+  :straight (flycheck-prospector :type git :host github :repo "nasyxx/flycheck-prospector")
+  :init (setq flycheck-prospector-profile-path "~/.config/prospector/prospector.yaml")
+  :hook ((flycheck-mode . flycheck-prospector-setup))
+  :config
+  (add-to-list 'flycheck-disabled-checkers 'python-flake8)
+  (add-to-list 'flycheck-disabled-checkers 'python-pylint))
+
+;;----------------------------------------------------------------------------
+;; Rust
+;; Include rust-mode, rls and Cargo.
+
+(when *rust*
+  (use-package rust-mode
+    :defer t
+    :straight t
+    :hook ((rust-mode . (lambda () (setq-local tab-width 4)))
+           (rust-mode . lsp))
+    :config
+    (when *rls*
+      (add-hook #'rust-mode-hook #'lsp)
+      (add-hook #'rust-mode-hook #'(lambda () (add-to-list 'flycheck-disabled-checkers 'rust-cargo))))))
+
+(use-package cargo
+  :after rust-mode
+  :straight t
+  :hook ((toml-mode . cargo-minor-mode)
+         (rust-mode . cargo-minor-mode)))
 
 ;;----------------------------------------------------------------------------
 ;; Org Mode
