@@ -563,7 +563,7 @@ Call a second time to restore the original window configuration."
       "date     : " (format-time-string "%b %e, %Y") \n
       "email    : Nasy <nasyxx+python@gmail.com>" \n
       "filename : " (file-name-nondirectory (buffer-file-name)) \n
-      "project  : " (file-name-nondirectory (directory-file-name (projectile-project-root))) \n
+      "project  : " (file-name-nondirectory (directory-file-name (or projectile-project-root default-directory))) \n
       "license  : GPL-3.0+\n\n"
       "There are more things in heaven and earth, Horatio, than are dreamt.\n"
       " --  From \"Hamlet\"\n"
@@ -601,7 +601,7 @@ Call a second time to restore the original window configuration."
       "--------------------------------------------------------------------------------\n\n-}\n\n"
       "--------------------------------------------------------------------------------\n-- |\n"
       "-- Filename   : " (file-name-nondirectory (buffer-file-name)) \n
-      "-- Project    : " (file-name-nondirectory (directory-file-name (projectile-project-root))) \n
+      "-- Project    : " (file-name-nondirectory (directory-file-name (or projectile-project-root default-directory))) \n
       "-- Author     : Nasy\n"
       "-- License    : GPL-3.0+\n--\n"
       "-- Maintainer : Nasy <nasyxx+haskell@gmail.com>\n"
@@ -1305,7 +1305,8 @@ This is useful when followed by an immediate kill."
   :bind (("C-c TAB" . projectile-find-other-file))
   :bind-keymap ("C-c C-p" . projectile-command-map)
   :hook ((after-init . projectile-global-mode))
-  :config (setq projectile-require-project-root nil
+  :config (setq projectile-indexing-method      'hybrid
+                projectile-require-project-root 'prompt
                 projectile-project-root-files-top-down-recurring
                 (append '("compile_commands.json"
                           ".cquery")
@@ -2443,6 +2444,12 @@ unwanted space when exporting org-mode to html."
     (format-time-string "%b %d, %Y - %H:%M ")
     :tight-right t)
 
+  (spaceline-define-segment nasy:project-name
+    "Project Name"
+    (cond
+     ((projectile-project-p) (projectile-project-name))
+     (t                    (file-name-nondirectory (directory-file-name default-directory)))))
+
   (spaceline-define-segment flycheck-status
     "An `all-the-icons' representaiton of `flycheck-status'"
     (let* ((text
@@ -2460,9 +2467,9 @@ unwanted space when exporting org-mode to html."
               (`suspicious  "")))
            (f (cond
                ((string-match "⚠" text) `(:height 0.9 :foreground ,(face-attribute 'spaceline-flycheck-warning :foreground)
-                                                      :background "#1d5464"))
+                                                  :background "#1d5464"))
                ((string-match "✖ [0-9]" text) `(:height 0.9 :background ,(face-attribute 'spaceline-flycheck-error :foreground)
-                                                            :foreground "#333333"))
+                                                        :foreground "#333333"))
                ((string-match "✣ Disabled" text) `(:height 0.9))
                (t '(:height 0.9 :inherit)))))
       (propertize (format " %s " text)
@@ -2478,19 +2485,20 @@ unwanted space when exporting org-mode to html."
    (lambda () (spaceline-compile
            `(((buffer-modified major-mode buffer-size) :face highlight-face)
              (anzu)
-             ((nasy:version-control projectile-root) :separator " in ")
+             (auto-compile)
+             ((nasy:version-control nasy:project-name) :separator " in ")
              (buffer-id)
-             (selection-info :when active)
+             (selection-info)
              (nyan-cat :tight t))
            `((line-column :when active)
              (line-column :when (not active))
-             ;; (which-function)
-             ;; (global :when active)
+             (global :when active)
              ;; (minor-modes)
              (buffer-position
               hud)
              (((flycheck-error flycheck-warning flycheck-info) flycheck-status) :when active)
-             (nasy-time :face spaceline-modified :when active)
+             (which-function :face spaceline-evil-insert)
+             (nasy-time :face spaceline-evil-replace :when active)
              (nasy-time :when (not active)))))))
 
 ;;----------------------------------------------------------------------------
