@@ -1,17 +1,17 @@
 ;;; config.el --- User config file.                    -*- lexical-binding: t; -*-
 
-;; Author: Nasy <nasyxx@gmail.com>
+;; Author: Nasy <nasyxx+emacs@gmail.com>
 
 ;;; Commentary:
 
-;; User config file.
+;; Nasy's Custom Config file.
 
 ;;; Code:
 
 (defconst *is-a-mac* (eq system-type 'darwin))
 
-;; Ui settings
-;;----------------------------------------------------------------------------
+;; Theme
+(setq-default nasy:theme 'doom-dracula)
 
 (when *is-a-mac*
   (add-to-list 'default-frame-alist
@@ -35,76 +35,59 @@
 
   (global-set-key (kbd "C-z") 'stop-minimizing-window))
 
-(setq-default nasy:theme 'doom-dracula)
-
-
-;; Some default settings
-;;----------------------------------------------------------------------------
+(setq-default
+  blink-cursor-interval .6
+  blink-matching-paren  t)
 
 (setq-default
- ;; calendar-latitude  24.8801
- ;; calendar-longitude 102.8329
- ;; user-mail-address ""
+ fill-column                    80
+ visual-fill-column-width       100
+ word-wrap                      t
+ highlight-indent-guides-method 'column
+ tab-width                      8
+ tooltip-delay                  1.5)
 
- ;;---cursor-----------------------------------------------------------------
- blink-cursor-interval                           .6
- blink-matching-paren                            t
- ;; cursor-type 'bar
+(setq-default
+ company-idle-delay .5)
 
- ;;---visual-----------------------------------------------------------------
- fill-column                                     80
- visual-fill-column-width                        100
- word-wrap                                       t
- highlight-indent-guides-method                  'column
- tab-width                                       8
- tooltip-delay                                   1.5
-
- ;;---company----------------------------------------------------------------
- company-idle-delay                              .5
-
- ;;---helm-------------------------------------------------------------------
+(setq-default
  ;; brew install rg   if you'd like to use rg as my doing
- helm-ag-base-command                            "rg --no-heading --smart-case"
+ helm-ag-base-command "rg --no-heading --smart-case")
 
- ;;---shell------------------------------------------------------------------
- shell-file-name                                 "/bin/zsh"
+(setq-default
+ shell-file-name "/bin/zsh")
 
- ;;---language---------------------------------------------------------------
- haskell-stylish-on-save                         nil
- *intero*                                        t
- blacken-line-length                             80
- *clangd*                                        (or (executable-find "clangd")  ;; usually
-                                                     (executable-find "/usr/local/opt/llvm/bin/clangd"))  ;; macOS
- *nix*                                           (executable-find "nix")
- *rust*                                          (or (executable-find "rustc")
-                                                     (executable-find "cargo")
-                                                     (executable-find "rustup"))
- *rls*                                           (or (executable-find "rls")
-                                                     (executable-find "~/.cargo/bin/rls"))
- lsp-rust-rls-command                            '("rls")
+(setq-default
+ haskell-stylish-on-save nil
+ *intero*                t
+ *blacken*               t
+ blacken-line-length     80
+ *clangd*                (or (executable-find "clangd")  ;; usually
+                             (executable-find "/usr/local/opt/llvm/bin/clangd"))  ;; macOS
+ *nix*                   (executable-find "nix")
+ *rust*                  (or (executable-find "rustc")
+                             (executable-find "cargo")
+                             (executable-find "rustup"))
+ *rls*                   (or (executable-find "rls")
+                             (executable-find "~/.cargo/bin/rls"))
+ lsp-rust-rls-command    '("rls"))
 
- ;;---parens-----------------------------------------------------------------
+(setq-default
  show-paren-style                                'expression
  sp-autoinsert-quote-if-followed-by-closing-pair t
  sp-base-key-bindings                            'paredit
- sp-show-pair-from-inside                        t
+ sp-show-pair-from-inside                        t)
 
- ;;---whitespace-------------------------------------------------------------
- whitespace-line-column                          80
- whitespace-style                                '(face spaces tabs newline
-                                                   space-mark tab-mark newline-mark
-                                                   lines-tail empty)
+(setq-default
+ whitespace-line-column 80
+ whitespace-style       '(face spaces tabs newline
+                          space-mark tab-mark newline-mark
+                          lines-tail empty))
 
- ;;---straight---------------------------------------------------------------
- ;; The original one is `(find-at-startup find-when-checking) which is so slow.
- ;; straight-check-for-modifications                '(find-at-startup find-when-checking)
- straight-check-for-modifications                '(check-on-save find-when-checking)
-
- ;;---others-----------------------------------------------------------------
- use-pyenv                                       t  ;; `t' if you'd like to use pyenv when using pyls
- use-blacken                                     nil  ;; `t' if you'd like to use black when using pyls
-)
-
+;; The original one is `(find-at-startup find-when-checking) which is so slow.
+;; straight-check-for-modifications '(find-at-startup find-when-checking)
+(setq-default
+ straight-check-for-modifications '(check-on-save find-when-checking))
 
 (setq-default
  initial-scratch-message     (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
@@ -112,7 +95,6 @@
  ;; initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; It will cause error if you start emacs from Command line with file name
                                                                           ;; https://github.com/rakanalh/emacs-dashboard/issues/69
 )
-
 
 (defun nasy:config-after ()
   "Set configuration need to be set after init."
@@ -125,21 +107,15 @@
 
 (add-hook 'nasy:config-after-hook  #'nasy:config-after)
 
-;; Custom face
-;;----------------------------------------------------------------------------
-
 (defun nasy:set-face ()
   "Set custom face."
   (set-face-attribute 'custom-comment              nil                                             :slant   'italic)
   (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
   (set-face-attribute 'show-paren-match            nil :background "#bfcfff" :foreground "#dc322f" :weight  'ultra-bold)
-  (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified))
+  (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified)
+  (set-face-attribute 'which-func                  nil                       :foreground "#333"))
 
 (add-hook 'nasy:config-before-hook #'nasy:set-face)
-
-
-;; Key Bindings
-;;----------------------------------------------------------------------------
 
 (when *is-a-mac*
   ;; cursor Movement
