@@ -703,7 +703,9 @@ Call a second time to restore the original window configuration."
 ;;----------------------------------------------------------------------------
 ;; Dash Functional
 
-(straight-use-package 'dash-functional)
+(use-package dash-functional
+  :demand   t
+  :straight t)
 
 ;;----------------------------------------------------------------------------
 ;; Dired
@@ -779,8 +781,8 @@ This is helpful for writeroom-mode, in particular."
   :after flycheck
   :straight t
   :config
-  (after-load 'elisp-mode
-              (flycheck-package-setup)))
+  (with-eval-after-load 'elisp-mode
+    (flycheck-package-setup)))
 
 ;;----------------------------------------------------------------------------
 ;; Grab Mac Link
@@ -1656,10 +1658,13 @@ typical word processor."
         haskell-process-suggest-remove-import-lines  t
         haskell-tags-on-save                         t)
 
+  (unless (fboundp 'align-rules-list)
+    (defvar align-rules-list nil))
+
   (add-to-list 'align-rules-list
-             '(haskell-types
-               (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
-               (modes quote (haskell-mode literate-haskell-mode))))
+               '(haskell-types
+                 (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
+                 (modes quote (haskell-mode literate-haskell-mode))))
   (add-to-list 'align-rules-list
                '(haskell-assignment
                  (regexp . "\\(\\s-+\\)=\\s-+")
@@ -1678,9 +1683,9 @@ typical word processor."
   (defun haskell-mode-generate-tags (&optional and-then-find-this-tag)
     "Generate tags using Hasktags.  This is synchronous function.
 
-If optional AND-THEN-FIND-THIS-TAG argument is present it is used
-with function `xref-find-definitions' after new table was
-generated."
+  If optional AND-THEN-FIND-THIS-TAG argument is present it is used
+  with function `xref-find-definitions' after new table was
+  generated."
     (interactive)
     (let* ((dir (haskell-cabal--find-tags-dir))
            (command (haskell-cabal--compose-hasktags-command dir)))
