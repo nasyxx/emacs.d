@@ -2486,7 +2486,7 @@ unwanted space when exporting org-mode to html."
            `(((buffer-modified major-mode buffer-size) :face highlight-face)
              (anzu)
              (auto-compile)
-             ((nasy:version-control nasy:project-name) :separator " in ")
+             ((nasy:version-control nasy:project-name) :separator " in " :face spaceline-flycheck-warning)
              (buffer-id)
              (selection-info)
              (nyan-cat :tight t))
