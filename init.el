@@ -2448,7 +2448,7 @@ unwanted space when exporting org-mode to html."
     "Project Name"
     (cond
      ((projectile-project-p) (projectile-project-name))
-     (t                    (file-name-nondirectory (directory-file-name default-directory)))))
+     (t                      (file-name-nondirectory (directory-file-name default-directory)))))
 
   (spaceline-define-segment flycheck-status
     "An `all-the-icons' representaiton of `flycheck-status'"
