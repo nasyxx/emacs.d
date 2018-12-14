@@ -741,6 +741,7 @@ Call a second time to restore the original window configuration."
 
 (use-package eldoc-box
   :straight (eldoc-box :type git :host github :repo "casouri/eldoc-box")
+  :init (setq eldoc-box-only-multi-line t)
   :hook ((eldoc-mode . eldoc-box-hover-mode)))
 
 ;;----------------------------------------------------------------------------
