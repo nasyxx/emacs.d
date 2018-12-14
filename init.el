@@ -737,6 +737,13 @@ Call a second time to restore the original window configuration."
   :hook ((dired-mode . diff-hl-dired-mode)))
 
 ;;----------------------------------------------------------------------------
+;; Eldoc Box
+
+(use-package eldoc-box
+  :straight (eldoc-box :type git :host github :repo "casouri/eldoc-box")
+  :hook ((eldoc-mode . eldoc-box-hover-mode)))
+
+;;----------------------------------------------------------------------------
 ;; Fill Column
 
 (straight-use-package 'unfill)
@@ -1778,6 +1785,8 @@ typical word processor."
   (defun lsp-python--set-configuration ()
     (lsp--set-configuration `(:pyls ,lsp-python--config-options)))
 
+  (add-hook 'lsp-after-initialize-hook 'lsp-python--set-configuration)
+
   (defun lsp-python-set-config (name option)
     "Set a config option in the python lsp server."
     (puthash name option lsp-python--config-options))
@@ -1797,7 +1806,10 @@ typical word processor."
     (lsp-python-set-config "plugins.yapf.enabled"          nil)
 
     (lsp-python-set-config "plugins.jedi_definition.follow_imports"         t)
-    (lsp-python-set-config "plugins.jedi_definition.follow_builtin_imports" t))
+    (lsp-python-set-config "plugins.jedi_definition.follow_builtin_imports" t)
+
+    (lsp-python-set-config "plugins.pyls_mypy.live_mode" nil)  ;; nothing happened. So I use a fork that disable it default.
+    (lsp-python--set-configuration))
 
   :hook ((python-mode . lsp)
          (python-mode . lsp-python-config-set)

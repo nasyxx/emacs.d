@@ -1291,6 +1291,19 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :hook ((dired-mode . diff-hl-dired-mode)))
 #+end_src
 
+*** Eldoc Box
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Eldoc Box
+#+end_src
+
+#+begin_src elisp
+  (use-package eldoc-box
+    :straight (eldoc-box :type git :host github :repo "casouri/eldoc-box")
+    :hook ((eldoc-mode . eldoc-box-hover-mode)))
+#+end_src
+
 *** Fill Column
 
 #+begin_src elisp :exports none
@@ -2662,6 +2675,8 @@ Include python-mode, blacken, py-isort and flycheck-prospector.
     (defun lsp-python--set-configuration ()
       (lsp--set-configuration `(:pyls ,lsp-python--config-options)))
 
+    (add-hook 'lsp-after-initialize-hook 'lsp-python--set-configuration)
+
     (defun lsp-python-set-config (name option)
       "Set a config option in the python lsp server."
       (puthash name option lsp-python--config-options))
@@ -2681,7 +2696,10 @@ Include python-mode, blacken, py-isort and flycheck-prospector.
       (lsp-python-set-config "plugins.yapf.enabled"          nil)
 
       (lsp-python-set-config "plugins.jedi_definition.follow_imports"         t)
-      (lsp-python-set-config "plugins.jedi_definition.follow_builtin_imports" t))
+      (lsp-python-set-config "plugins.jedi_definition.follow_builtin_imports" t)
+
+      (lsp-python-set-config "plugins.pyls_mypy.live_mode" nil)  ;; nothing happened. So I use a fork that disable it default.
+      (lsp-python--set-configuration))
 
     :hook ((python-mode . lsp)
            (python-mode . lsp-python-config-set)
