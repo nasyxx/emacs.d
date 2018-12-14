@@ -1415,7 +1415,7 @@ This is useful when followed by an immediate kill."
   :init (setq-default magit-diff-refine-hunk t)
   :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
          ("C-c g"      . magit-status)  ;; quickly open magit on any one of your projects.  -- purcell
-         ("C-x C-g"    . magit-status)
+         ("C-x g"      . magit-status)
          ("C-x M-g"    . magit-dispatch-popup)
          :map magit-status-mode-map
          ("C-M-<up>"   . magit-section-up)
