@@ -20,3 +20,6 @@ nix-buffer
 url/
 .bookmarks.el
 .lsp-session*
+config/user-config-example.el
+init.html
+README.html
