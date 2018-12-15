@@ -29,7 +29,7 @@
 (defvar   *blacken*   t)
 
 ;; Theme
-(setq-default nasy:theme 'doom-dracula)
+(defvar nasy:theme 'doom-dracula)
 
 (when *is-a-mac*
   (add-to-list 'default-frame-alist
