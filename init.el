@@ -1570,6 +1570,15 @@ typical word processor."
         (writeroom-mode 0)))))
 
 ;;----------------------------------------------------------------------------
+;; Yasnippet
+
+(use-package yasnippet
+  :straight t
+  :hook (after-init . yas-global-mode))
+
+(use-package yasnippet-snippets :straight t)
+
+;;----------------------------------------------------------------------------
 ;; Languages
 ;;----------------------------------------------------------------------------
 

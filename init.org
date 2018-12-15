@@ -2400,6 +2400,21 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
           (writeroom-mode 0)))))
 #+end_src
 
+*** Yasnippet
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Yasnippet
+#+end_src
+
+#+begin_src elisp
+  (use-package yasnippet
+    :straight t
+    :hook (after-init . yas-global-mode))
+
+  (use-package yasnippet-snippets :straight t)
+#+end_src
+
 ** Languages
 
 #+begin_src elisp :exports none
