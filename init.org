@@ -419,10 +419,28 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   ;;; Code:
 #+end_src
 
-***** Constants
+***** Constants And Variables
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (defconst *is-a-mac* (eq system-type 'darwin))
+  (defconst *is-a-mac*  (eq system-type 'darwin))
+
+  (defconst *clangd*    (or (executable-find "clangd")  ;; usually
+                            (executable-find "/usr/local/opt/llvm/bin/clangd")))  ;; macOS
+
+  (defconst *nix*       (executable-find "nix"))
+
+  (defconst *rust*      (or (executable-find "rustc")
+                            (executable-find "cargo")
+                            (executable-find "rustup")))
+  (defconst *rls*       (or (executable-find "rls")
+                            (executable-find "~/.cargo/bin/rls")))
+
+  (defvar   *intero*    t)
+
+  (defconst *struct-hs* (executable-find "structured-haskell-mode"))
+  (defvar   *struct-hs-path* nil)
+
+  (defvar   *blacken*   t)
 #+end_src
 
 ***** UI Settings
@@ -503,17 +521,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
    haskell-stylish-on-save nil
-   ,*intero*                t
-   ,*blacken*               t
    blacken-line-length     80
-   ,*clangd*                (or (executable-find "clangd")  ;; usually
-                               (executable-find "/usr/local/opt/llvm/bin/clangd"))  ;; macOS
-   ,*nix*                   (executable-find "nix")
-   ,*rust*                  (or (executable-find "rustc")
-                               (executable-find "cargo")
-                               (executable-find "rustup"))
-   ,*rls*                   (or (executable-find "rls")
-                               (executable-find "~/.cargo/bin/rls"))
    lsp-rust-rls-command    '("rls"))
 #+end_src
 
@@ -2568,7 +2576,6 @@ Include haskell-mode, lsp-haskell and intero.
     :hook ((haskell-mode . subword-mode)
            (haskell-mode . haskell-auto-insert-module-template)
            (haskell-mode . haskell-collapse-mode)
-           (haskell-mode . haskell-indentation-mode)
            (haskell-mode . stack-exec-path-mode)
            (haskell-mode . (lambda () (setq-local tab-width 4))))
     :bind (("C-x a a" . align)
@@ -2583,6 +2590,9 @@ Include haskell-mode, lsp-haskell and intero.
           haskell-process-suggest-hoogle-imports       t
           haskell-process-suggest-remove-import-lines  t
           haskell-tags-on-save                         t)
+
+    (when (not (and *struct-hs* *struct-hs-path*))
+      (add-hook #'haskell-mode-hook #'turn-on-haskell-indent))
 
     (unless (fboundp 'align-rules-list)
       (defvar align-rules-list nil))
@@ -2643,6 +2653,14 @@ Include haskell-mode, lsp-haskell and intero.
       :after haskell-mode
       :hook (haskell-mode . (lambda () (intero-global-mode 1)))
       :config (define-key intero-mode-map (kbd "M-?") nil)))
+
+  (if (and *struct-hs* *struct-hs-path*)
+      (progn
+        (add-to-list 'load-path *struct-hs-path*)
+        (use-package shm :hook ((haskell-mode . structured-haskell-mode))))
+    (message (concat "*NOTE*:\n"
+                     "No structure haskell mode (https://github.com/projectional-haskell/structured-haskell-mode) find.\n"
+                     "Install it and config its variables *struct-hs-path* in user-config.el")))
 #+end_src
 
 *** Lisp

@@ -8,7 +8,25 @@
 
 ;;; Code:
 
-(defconst *is-a-mac* (eq system-type 'darwin))
+(defconst *is-a-mac*  (eq system-type 'darwin))
+
+(defconst *clangd*    (or (executable-find "clangd")  ;; usually
+                          (executable-find "/usr/local/opt/llvm/bin/clangd")))  ;; macOS
+
+(defconst *nix*       (executable-find "nix"))
+
+(defconst *rust*      (or (executable-find "rustc")
+                          (executable-find "cargo")
+                          (executable-find "rustup")))
+(defconst *rls*       (or (executable-find "rls")
+                          (executable-find "~/.cargo/bin/rls")))
+
+(defvar   *intero*    t)
+
+(defconst *struct-hs* (executable-find "structured-haskell-mode"))
+(defvar   *struct-hs-path* nil)
+
+(defvar   *blacken*   t)
 
 ;; Theme
 (setq-default nasy:theme 'doom-dracula)
@@ -59,17 +77,7 @@
 
 (setq-default
  haskell-stylish-on-save nil
- *intero*                t
- *blacken*               t
  blacken-line-length     80
- *clangd*                (or (executable-find "clangd")  ;; usually
-                             (executable-find "/usr/local/opt/llvm/bin/clangd"))  ;; macOS
- *nix*                   (executable-find "nix")
- *rust*                  (or (executable-find "rustc")
-                             (executable-find "cargo")
-                             (executable-find "rustup"))
- *rls*                   (or (executable-find "rls")
-                             (executable-find "~/.cargo/bin/rls"))
  lsp-rust-rls-command    '("rls"))
 
 (setq-default

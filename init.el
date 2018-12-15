@@ -1682,7 +1682,6 @@ typical word processor."
   :hook ((haskell-mode . subword-mode)
          (haskell-mode . haskell-auto-insert-module-template)
          (haskell-mode . haskell-collapse-mode)
-         (haskell-mode . haskell-indentation-mode)
          (haskell-mode . stack-exec-path-mode)
          (haskell-mode . (lambda () (setq-local tab-width 4))))
   :bind (("C-x a a" . align)
@@ -1697,6 +1696,9 @@ typical word processor."
         haskell-process-suggest-hoogle-imports       t
         haskell-process-suggest-remove-import-lines  t
         haskell-tags-on-save                         t)
+
+  (when (not (and *struct-hs* *struct-hs-path*))
+    (add-hook #'haskell-mode-hook #'turn-on-haskell-indent))
 
   (unless (fboundp 'align-rules-list)
     (defvar align-rules-list nil))
@@ -1757,6 +1759,14 @@ typical word processor."
     :after haskell-mode
     :hook (haskell-mode . (lambda () (intero-global-mode 1)))
     :config (define-key intero-mode-map (kbd "M-?") nil)))
+
+(if (and *struct-hs* *struct-hs-path*)
+    (progn
+      (add-to-list 'load-path *struct-hs-path*)
+      (use-package shm :hook ((haskell-mode . structured-haskell-mode))))
+  (message (concat "*NOTE*:\n"
+                   "No structure haskell mode (https://github.com/projectional-haskell/structured-haskell-mode) find.\n"
+                   "Install it and config its variables *struct-hs-path* in user-config.el")))
 
 ;;----------------------------------------------------------------------------
 ;; Lisp
