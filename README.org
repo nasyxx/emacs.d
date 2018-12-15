@@ -34,6 +34,14 @@ not sure if it would work well well on Linux or Windows.
 + Font
     - Fira Code Symbol
 
+** Screenshots
+
+[[./screenshot1.png]]
+
+[[./screenshot2.png]]
+
+[[./screenshot3.png]]
+
 * Dependencies
 
 + Emacs
