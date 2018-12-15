@@ -2995,6 +2995,8 @@ Other ~ox-_~ packages.
      org-export-backends                           '(ascii html latex md)
      org-export-coding-system                      'utf-8
      org-export-kill-product-buffer-when-displayed t
+     org-use-sub-superscripts                      '{}
+     org-export-with-sub-superscripts              '{}
 
      org-fast-tag-selection-single-key 'expert
 
