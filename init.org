@@ -2,7 +2,7 @@
 
 #+OPTIONS: ':nil *:t -:t ::t <:t H:5 \n:nil ^:t arch:headline author:t
 #+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
-#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
+#+OPTIONS: email:nil f:t inline:t num:nil p:nil pri:nil prop:nil stat:t tags:t
 #+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
 #+TITLE: Emacs Configuration
 #+DATE: <2018-10-09 Tue>
@@ -12,16 +12,10 @@
 #+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
 
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://www.pirilampo.org/styles/readtheorg/css/readtheorg.css"/>
-
-#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-#+HTML_HEAD: <script type="text/javascript" src="https://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.min.js"></script>
-#+HTML_HEAD: <script type="text/javascript" src="https://www.pirilampo.org/styles/readtheorg/js/readtheorg.js"></script>
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 
 #+HTML_HEAD: <style>kbd {border-style: outset;} pre.src:before {top: -4px; box-shadow: 3px 3px 3px #eee; border-color: #ccc; padding: 0;}</style>
-#+HTML_HEAD: <style>#content {background-color: #fff0f8;} body,pre.src {background-color: #f7f4e3;}</style>
+#+HTML_HEAD: <style>#content {background-color: #fff0f8;} body,pre.src {background-color: #f7f4e3; box-shadow: 1px 1px 10px #7a378b;}</style>
 
 * Prologue
 
@@ -75,6 +69,43 @@ have not modificated the ~straight-check-for-modifications~ in @@html: <span> @@
 If you encounter any errors while updating, you may need to kill Emacs and run
 ~make clean~. If you still meet errors after doing that, you probably need to run
 ~make clean-all~ and restart Emacs.
+
+* Custom Configuration
+
+** Add Custom Configuration
+
+To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @@
+ etc. and/or create a file @@html: <span> @@ ~config/user-config.el~ @@html:
+ </span> @@ which looks like this (when you ~make~ or ~make generate~, below will
+ generate to @@html: <span> @@ ~config/user-config.el~ @@html: </span> @@):
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config-example.el")
+(setq-default
+ calendar-latitude           24.8801
+ calendar-longitude          102.8329
+ user-mail-address           "nasyxx@gmail.com"
+ initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))
+ *blacken*                   t
+ nasy:theme                  'doom-Iosvkem
+ *struct-hs-path*            "/Users/Nasy/src/structured-haskell-mode/elisp")
+(provide 'user-config)
+#+end_src
+
+** dashboard
+
+If you want to start with [[https://github.com/rakanalh/emacs-dashboard][dashboard]], you need to set
+
+~(setq initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))~
+
+in your ~config/user-config.el~.
+
+*Launching emacs from command line with a file name causes errors*.  Please refer
+to the issue [[https://github.com/rakanalh/emacs-dashboard/issues/69][here]].  Hope someone could fix it.
+
+* *NOTICE:*
+
+- Functions added to ~nasy:config-before-hook~ will be run before loading ~custom.el~.
+- Functions added to ~nasy:config-after-hook~ will be run after init.
 
 * The Configuration
 
@@ -447,7 +478,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   ;; Theme
-  (setq-default nasy:theme 'doom-dracula)
+  (defvar nasy:theme 'doom-dracula)
 
   (when *is-a-mac*
     (add-to-list 'default-frame-alist
