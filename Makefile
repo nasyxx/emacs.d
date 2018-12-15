@@ -1,6 +1,10 @@
-all:
-	@echo "Do nothing."
+all: generate
 .PHONY: all
+
+generate:
+	@echo "Generate init.el from README.org."
+	emacs -Q --batch --find-file "README.org" -f "org-babel-tangle"
+.PHONY: generate
 
 clean: clean-cache clean-history clean-python
 	rm -rf straight/repoes/straight.el
