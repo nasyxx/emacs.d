@@ -949,6 +949,10 @@ This is helpful for writeroom-mode, in particular."
   :config
   (cl-lib-highlight-initialize))
 
+(use-package color-identifiers-mode
+  :straight t
+  :hook ((after-init . global-color-identifiers-mode)))
+
 (use-package hl-line
   :hook ((after-init . global-hl-line-mode)))
 

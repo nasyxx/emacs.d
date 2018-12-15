@@ -1588,6 +1588,14 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     (cl-lib-highlight-initialize))
 #+end_src
 
+**** Color Identifiers Mode
+
+#+begin_src elisp
+  (use-package color-identifiers-mode
+    :straight t
+    :hook ((after-init . global-color-identifiers-mode)))
+#+end_src
+
 **** hl-line
 
 #+begin_src elisp
