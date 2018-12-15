@@ -1770,6 +1770,20 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
            ("C-c m a" . mc/edit-beginnings-of-lines)))
 #+end_src
 
+*** Pangu Spacing
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Pangu Spacing
+#+end_src
+
+#+begin_src elisp
+  (use-package pangu-spacing
+    :straight t
+    :init (setq pangu-spacing-real-insert-separtor t)
+    :hook ((after-init . global-pangu-spacing-mode)))
+#+end_src
+
 *** Paper Break Lines
 
 #+begin_src elisp :exports none

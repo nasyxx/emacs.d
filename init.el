@@ -1068,6 +1068,14 @@ This is useful when followed by an immediate kill."
          ("C-c m a" . mc/edit-beginnings-of-lines)))
 
 ;;----------------------------------------------------------------------------
+;; Pangu Spacing
+
+(use-package pangu-spacing
+  :straight t
+  :init (setq pangu-spacing-real-insert-separtor t)
+  :hook ((after-init . global-pangu-spacing-mode)))
+
+;;----------------------------------------------------------------------------
 ;; Page Break Lines
 
 (use-package page-break-lines
