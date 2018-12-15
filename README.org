@@ -2498,8 +2498,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package lsp
     :straight lsp-mode
     :hook ((lsp-after-open . lsp-enable-imenu))
-    :init (setq lsp-auto-guess-root t
-                lsp-prefer-flymake  nil)
+    :init (setq lsp-prefer-flymake  nil)
     :config (require 'lsp-clients))
 #+end_src
 
