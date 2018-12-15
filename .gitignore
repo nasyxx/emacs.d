@@ -22,4 +22,5 @@ url/
 .lsp-session*
 config/user-config-example.el
 init.html
+init.el
 README.html
