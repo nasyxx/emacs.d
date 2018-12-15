@@ -1082,6 +1082,21 @@ Default settings for editor.
         "--\n--\n--\n--------------------------------------------------------------------------------\n")))
 #+end_src
 
+*** Beacon
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Beacon
+#+end_src
+
+#+begin_src elisp
+  (use-package beacon
+    :straight t
+    :init (setq beacon-size  7
+                beacon-color "#dfbaf7")
+    :hook ((after-init . beacon-mode)))
+#+end_src
+
 *** Beginend
 
 #+begin_src elisp :exports none
@@ -1567,7 +1582,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
   (use-package helm-ls-git
     :straight t
     :bind (("C-<f6>"   . helm-ls-git-ls)
-           ("C-x C-g"  . helm-ls-git-ls)
+           ("C-x g"    . helm-ls-git-ls)
            ("C-x C-d"  . helm-browse-project)))
 #+end_src
 
@@ -2209,7 +2224,8 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :init (setq-default magit-diff-refine-hunk t)
     :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
            ("C-c g"      . magit-status)  ;; quickly open magit on any one of your projects.  -- purcell
-           ("C-x g"      . magit-status)
+           ("C-c C-g"    . magit-status)
+           ("C-x C-g"    . magit-status)
            ("C-x M-g"    . magit-dispatch-popup)
            :map magit-status-mode-map
            ("C-M-<up>"   . magit-section-up)
