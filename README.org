@@ -797,7 +797,8 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 #+begin_src elisp
   (setq desktop-path              (list user-emacs-directory)
         desktop-auto-save-timeout 600)
-  (desktop-save-mode 1)
+  (desktop-save-mode t)
+  (setq desktop-save 'if-exists)
 
 
   (defun nasy:desktop-time-restore (orig &rest args)
