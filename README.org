@@ -1,5 +1,5 @@
 #+PROPERTY: header-args:elisp :tangle (concat (file-name-directory (buffer-file-name)) "init.el")
-
+#+STARTUP: fold
 #+OPTIONS: ':nil *:t -:t ::t <:t H:5 \n:nil ^:t arch:headline author:t
 #+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
 #+OPTIONS: email:nil f:t inline:t num:nil p:nil pri:nil prop:nil stat:t tags:t
@@ -2575,9 +2575,8 @@ I use clangd
 
 #+begin_src elisp
   (when *clangd*
-    (use-package lsp-clangd
-      :straight t
-      :after lsp
+    (use-package lsp
+      :straight lsp-mode
       :hook (((c-mode c++-mode objc-mode) . lsp))
       :init (setq-default lsp-clients-clangd-executable *clangd*)
       :config (lsp-clients-register-clangd)))
