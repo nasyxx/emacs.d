@@ -1144,7 +1144,7 @@ Default settings for editor.
   (use-package beacon
     :straight t
     :init (setq beacon-size  7
-                beacon-color "#dfbaf7")
+                beacon-color "#f85e9f")
     :hook ((after-init . beacon-mode)))
 #+end_src
 
@@ -2288,9 +2288,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :hook ((magit-popup-mode-hook . no-trailing-whitespace))
     :init (setq-default magit-diff-refine-hunk t)
     :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
-           ("C-c g"      . magit-status)  ;; quickly open magit on any one of your projects.  -- purcell
-           ("C-c C-g"    . magit-status)
-           ("C-x C-g"    . magit-status)
+           ("C-x g"      . magit-status)
            ("C-x M-g"    . magit-dispatch-popup)
            :map magit-status-mode-map
            ("C-M-<up>"   . magit-section-up)
@@ -3016,8 +3014,8 @@ Other ~ox-_~ packages.
      org-export-backends                           '(ascii html latex md)
      org-export-coding-system                      'utf-8
      org-export-kill-product-buffer-when-displayed t
-     org-use-sub-superscripts                      '{}
      org-export-with-sub-superscripts              '{}
+     org-use-sub-superscripts                      '{}
 
      org-fast-tag-selection-single-key 'expert
 
@@ -3142,9 +3140,7 @@ Other ~ox-_~ packages.
                                       (sequence "WAITING(w@/!)" "DELEGATED(e!)" "HOLD(h)" "|" "CANCELLED(c@/!)")))
      org-todo-repeat-to-state "NEXT"
      org-todo-keyword-faces   (quote (("NEXT" :inherit warning)
-                                      ("PROJECT" :inherit font-lock-string-face)))
-
-     org-use-sub-superscripts '{})
+                                      ("PROJECT" :inherit font-lock-string-face))))
     :config
     ;; --------
     (org-babel-do-load-languages
