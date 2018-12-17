@@ -2588,10 +2588,12 @@ I use clangd
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
   ;; Haskell
-  ;; Include haskell-mode, lsp-haskell and intero
+  ;; Include haskell-mode, lsp-haskell, intero and structured haskell mode
 #+end_src
 
 Include haskell-mode, lsp-haskell and intero.
+
+**** Haskell-Mode
 
 #+begin_src elisp
   (use-package haskell-mode
@@ -2633,7 +2635,7 @@ Include haskell-mode, lsp-haskell and intero.
           haskell-process-suggest-remove-import-lines  t
           haskell-tags-on-save                         t)
 
-    (when (not (and *struct-hs* *struct-hs-path*))
+    (unless (and *struct-hs* *struct-hs-path*)
       (add-hook #'haskell-mode-hook #'turn-on-haskell-indent))
 
     (unless (fboundp 'align-rules-list)
@@ -2676,30 +2678,44 @@ Include haskell-mode, lsp-haskell and intero.
           (when and-then-find-this-tag
             (let ((tags-file-name dir))
               (xref-find-definitions and-then-find-this-tag)))))))
+#+end_src
 
+**** LSP Haskell
+
+#+begin_src elisp
   (use-package lsp-haskell
+    :demand   t
     :straight t
     :hook ((haskell-mode   . lsp)
            (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
-    ;; :config
     ;; You can set the lsp-haskell settings here
     ;; (lsp-haskell-set-hlint-on)                    ;; default on
     ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
     ;; (lsp-haskell-set-liquid-on)                   ;; default off
     ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
     )
+#+end_src
 
+**** intero
+
+#+begin_src elisp
   (when *intero*
     (use-package intero
       :straight t
       :after haskell-mode
       :hook (haskell-mode . (lambda () (intero-global-mode 1)))
       :config (define-key intero-mode-map (kbd "M-?") nil)))
+#+end_src
 
+**** Structured Haskell Mode
+
+#+begin_src elisp
   (if (and *struct-hs* *struct-hs-path*)
       (progn
         (add-to-list 'load-path *struct-hs-path*)
-        (use-package shm :hook ((haskell-mode . structured-haskell-mode))))
+        (require 'shm)
+        (setq shm-program-name *struct-hs*)
+        (add-hook #'haskell-mode-hook #'structured-haskell-mode))
     (message (concat "*NOTE*:\n"
                      "No structure haskell mode (https://github.com/projectional-haskell/structured-haskell-mode) find.\n"
                      "Install it and config its variables *struct-hs-path* in user-config.el")))
