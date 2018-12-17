@@ -2837,8 +2837,6 @@ Include python-mode, blacken, py-isort and flycheck-prospector.
                                                                    company-gtags
                                                                    company-etags
                                                                    company-keywords))))
-           ;; (python-mode . (lambda () (setq lsp-ui-flycheck-enable nil  ;; I prefer to use prospector
-           ;;                            lsp-ui-sideline-enable nil)))
            (python-mode . setq-after)
            (python-mode . (lambda () (nasy:local-push-company-backend 'company-lsp))))
     :init (setq-default python-indent-offset                  4
