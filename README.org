@@ -96,7 +96,7 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
  initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))
  *blacken*                   t
  nasy:theme                  'doom-Iosvkem
- *struct-hs-path*            "/Users/Nasy/src/structured-haskell-mode/elisp")
+ *struct-hs-path*            nil)
 (provide 'user-config)
 #+end_src
 
@@ -2633,7 +2633,7 @@ Include haskell-mode, lsp-haskell and intero.
           haskell-tags-on-save                         t)
 
     (unless (and *struct-hs* *struct-hs-path*)
-      (add-hook #'haskell-mode-hook #'turn-on-haskell-indent))
+      (add-hook #'haskell-mode-hook #'haskell-indentation-mode))
 
     (unless (fboundp 'align-rules-list)
       (defvar align-rules-list nil))
@@ -2713,9 +2713,13 @@ Include haskell-mode, lsp-haskell and intero.
         (require 'shm)
         (setq shm-program-name *struct-hs*)
         (add-hook #'haskell-mode-hook #'structured-haskell-mode))
-    (message (concat "*NOTE*:\n"
-                     "No structure haskell mode (https://github.com/projectional-haskell/structured-haskell-mode) find.\n"
-                     "Install it and config its variables *struct-hs-path* in user-config.el")))
+    (progn
+      (when *struct-hs*
+        (message (concat "*NOTE* about structured-haskell-mode:\n"
+                         "https://github.com/projectional-haskell/structured-haskell-mode\n"
+                         "No structured-haskell-mode elisp find.\n"
+                         "If you want to use it, \n"
+                         "please install it and config its variables *struct-hs-path* in user-config.el\n")))))
 #+end_src
 
 *** Lisp
