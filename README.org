@@ -1357,6 +1357,25 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :hook ((dired-mode . diff-hl-dired-mode)))
 #+end_src
 
+*** Easy Kill
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Easy Kill
+#+end_src
+
+#+begin_src elisp
+  (use-package easy-kill
+    :straight t
+    :bind (([remap kill-ring-save] . easy-kill)
+           ([remap mark-sexp]      . easy-mark)))
+#+end_src
+
+#+begin_src elisp
+  (use-package thingopt
+    :straight t)
+#+end_src
+
 *** Eldoc Box
 
 #+begin_src elisp :exports none
@@ -2299,6 +2318,13 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
   (straight-use-package 'magit-todos)
+#+end_src
+
+**** Forge
+
+#+begin_src elisp
+  (use-package forge
+    :straight (forge :type git :host github :repo "magit/forge"))
 #+end_src
 
 **** Git Commit
