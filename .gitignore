@@ -1,26 +1,84 @@
-emojis
-straight
-var
+# Created by https://www.gitignore.io/api/emacs
+# Edit at https://www.gitignore.io/?templates=emacs
+
+### Emacs ###
+# -*- mode: gitignore; -*-
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+# network security
+/network-security.data
+
+
+# End of https://www.gitignore.io/api/emacs
+
 .emacs.desktop*
 .historian
 .session
 .smex-items
 .zsh_history
-ditaa0_9.jar
-history
-plantuml.jar
-projectile-bookmarks.eld
-recentf
-.cache
-anaconda-mode
-custom.el
-user-config.el
-nix-buffer
 .mc-lists.el
-url/
 .bookmarks.el
 .lsp-session*
+
+.cache
+anaconda-mode
 config/user-config-example.el
+config/user-config.el
+emojis
+straight
+url/
+
+custom.el
+ditaa0_9.jar
+forge-database.sqlite
+history
 init.html
 init.el
+plantuml.jar
+projectile-bookmarks.eld
+nix-buffer
 README.html
+recentf
