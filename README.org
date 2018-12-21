@@ -2358,6 +2358,13 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
                 git-gutter:deleted-sign "✘"))
 #+end_src
 
+**** Github Gist
+
+#+begin_src elisp
+  (use-package gist
+    :straight t)
+#+end_src
+
 *** Which Function
 
 #+begin_src elisp :exports none
