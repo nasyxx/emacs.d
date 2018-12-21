@@ -1692,6 +1692,14 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :hook (((prog-mode text-mode) . highlight-indent-guides-mode)))
 #+end_src
 
+**** Highlight Number
+
+#+begin_src elisp
+  (use-package highlight-numbers
+    :straight t
+    :hook ((after-init . highlight-numbers-mode)))
+#+end_src
+
 *** Htmlize
 
 #+begin_src elisp :exports none
