@@ -70,7 +70,8 @@ config/user-config.el
 emojis
 straight
 url/
-var
+var/
+etc/
 
 custom.el
 ditaa0_9.jar

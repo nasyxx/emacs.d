@@ -266,6 +266,18 @@ Adjust garbage collection thresholds during startup, and thereafter
   (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
 #+end_src
 
+*** No Littering
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; load-path
+#+end_src
+
+#+begin_src elisp
+  (use-package no-littering
+    :straight t)
+#+end_src
+
 ** Basic Configs
 
 #+begin_src elisp :exports none
@@ -831,7 +843,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
     :straight t
     :hook ((after-init . session-initialize))
     :init
-    (setq session-save-file (expand-file-name ".session" user-emacs-directory)
+    (setq session-save-file (no-littering-expand-var-file-name ".session")
           session-name-disable-regexp "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)"
           session-save-file-coding-system 'utf-8
           desktop-globals-to-save
@@ -985,7 +997,7 @@ Default settings for editor.
   ;;----------------------------------------------------------------------------
   ;; Default Settings
   (setq-default
-   bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory)
+   bookmark-default-file (no-littering-expand-var-file-name ".bookmarks.el")
    buffers-menu-max-size 30
    case-fold-search      t
    column-number-mode    t
@@ -2185,9 +2197,12 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package recentf
     :hook ((after-init . recentf-mode))
     :init (setq-default
-           recentf-save-file       "~/.emacs.d/recentf"
+           recentf-save-file       "~/.emacs.d/var/recentf"
            recentf-max-saved-items 100
-           recentf-exclude         '("/tmp/" "/ssh:")))
+           recentf-exclude         '("/tmp/" "/ssh:"))
+    :config
+    (add-to-list 'recentf-exclude no-littering-var-directory)
+    (add-to-list 'recentf-exclude no-littering-etc-directory))
 #+end_src
 
 *** Smex
@@ -2200,7 +2215,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 #+begin_src elisp
   (use-package smex
     :straight t
-    :init (setq-default smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+    :init (setq-default smex-save-file (no-littering-expand-var-file-name ".smex-items"))
     :bind (("<remap> <execute-extended-command>" . smex)))
 #+end_src
 
@@ -2246,7 +2261,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
             treemacs-is-never-other-window      nil
             treemacs-no-png-images              nil
             treemacs-project-follow-cleanup     nil
-            treemacs-persist-file               (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+            treemacs-persist-file               (no-littering-expand-var-file-name "treemacs-persist")
             treemacs-recenter-after-file-follow nil
             treemacs-recenter-after-tag-follow  nil
             treemacs-show-hidden-files          t
@@ -3451,7 +3466,7 @@ Include ob-ditaa and ob-plantuml
     (defun grab-ditaa (url jar-name)
       "Download URL and extract JAR-NAME as `org-ditaa-jar-path'."
       (message "Grabbing " jar-name " for org.")
-      (let ((zip-temp (make-temp-name "emacs-ditaa")))
+      (let ((zip-temp (make-temp-name "var/emacs-ditaa")))
         (unwind-protect
             (progn
               (when (executable-find "unzip")
@@ -3466,13 +3481,13 @@ Include ob-ditaa and ob-plantuml
                  (file-exists-p org-ditaa-jar-path))
       (let ((jar-name "ditaa0_9.jar")
             (url "http://jaist.dl.sourceforge.net/project/ditaa/ditaa/0.9/ditaa0_9.zip"))
-        (setq org-ditaa-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
+        (setq org-ditaa-jar-path (no-littering-expand-var-file-name jar-name))
         (unless (file-exists-p org-ditaa-jar-path)
           (grab-ditaa url jar-name))))
 
     (let ((jar-name "plantuml.jar")
           (url "http://jaist.dl.sourceforge.net/project/plantuml/plantuml.jar"))
-      (setq org-plantuml-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
+      (setq org-plantuml-jar-path (no-littering-expand-var-file-name jar-name))
       (unless (file-exists-p org-plantuml-jar-path)
         (url-copy-file url org-plantuml-jar-path))))
 #+end_src
@@ -3702,7 +3717,7 @@ I use doom-themes.
 #+begin_src elisp
   (run-hooks 'nasy:config-before-hook)
 
-  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
 
   (when (file-exists-p custom-file)
     (load custom-file))
