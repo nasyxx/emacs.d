@@ -1855,6 +1855,19 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
       (define-key isearch-mode-map (kbd "C-c C-o") 'isearch-occur)))
 #+end_src
 
+*** Keycast
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Keycast
+#+end_src
+
+#+begin_src elisp
+  (use-package keycast
+    :straight t
+    :init (setq keycast-remove-tail-elements nil))
+#+end_src
+
 *** Large File
 
 #+begin_src elisp :exports none
@@ -2406,6 +2419,14 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (straight-use-package 'magit-todos)
 #+end_src
 
+**** Magit Org Todos
+
+#+begin_src elisp
+  (use-package magit-org-todos
+    :straight t
+    :config (magit-org-todos-autoinsert))
+#+end_src
+
 **** Forge
 
 #+begin_src elisp
@@ -2871,6 +2892,14 @@ Include haskell-mode, lsp-haskell and intero.
     :defer t
     :straight t
     :hook ((emacs-lisp-mode . highlight-quoted-mode)))
+#+end_src
+
+**** elisp-def
+
+#+begin_src elisp
+  (use-package elisp-def
+    :straight t
+    :hook (((emacs-lisp-mode ielm-mode) . elisp-def-mode)))
 #+end_src
 
 *** Markdown
@@ -3740,8 +3769,31 @@ I use doom-themes.
                     'help-echo "Show Flycheck Errors"
                     'mouse-face '(:box 1)
                     'local-map (make-mode-line-mouse-map 'mouse-1 (lambda () (interactive) (flycheck-list-errors)))))
-      :when active
-      :tight-right t)
+      :when active)
+
+    (set-face-attribute 'keycast-key t :weight 'bold :height 1.2 :background "#90007f" :foreground "#ffedc6" :box nil)
+
+    (spaceline-define-segment nasy:keycast-keys
+      "Keycast modeline segment."
+      (and (funcall keycast-window-predicate)
+           (let* ((key (ignore-errors
+                         (key-description keycast--this-command-keys)))
+                  (cmd keycast--this-command)
+                  (elt (or (assoc cmd keycast-substitute-alist)
+                           (assoc key keycast-substitute-alist))))
+             (when elt
+               (pcase-let ((`(,_ ,k ,c) elt))
+                 (unless (eq k t) (setq key k))
+                 (unless (eq c t) (setq cmd c))))
+             (and key cmd
+                  (concat
+                   (propertize (let ((pad (max 2 (- 5 (length key)))))
+                                 (concat (make-string (ceiling pad 2) ?\s) key
+                                         (make-string (floor   pad 2) ?\s)))
+                               'face 'keycast-key)
+                   ;; (format " %s" (propertize (symbol-name cmd)
+                   ;;                           'face 'keycast-command))
+                   )))))
 
     (add-hook
      'after-init-hook
@@ -3757,9 +3809,11 @@ I use doom-themes.
              `((line-column :when active)
                (line-column :when (not active))
                (global :when active)
+               (process)
                ;; (minor-modes)
                (buffer-position
                 hud)
+               nasy:keycast-keys
                (((flycheck-error flycheck-warning flycheck-info) flycheck-status) :when active)
                (which-function :face 'spaceline-evil-insert)
                (nasy-time :face 'spaceline-evil-replace :when active)
