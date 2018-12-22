@@ -2628,8 +2628,7 @@ I use clangd
     (use-package lsp
       :straight lsp-mode
       :hook (((c-mode c++-mode objc-mode) . lsp))
-      :init (setq-default lsp-clients-clangd-executable *clangd*)
-      :config (lsp-clients-register-clangd)))
+      :init (setq-default lsp-clients-clangd-executable *clangd*)))
 #+end_src
 
 *** Haskell
@@ -2733,7 +2732,6 @@ Include haskell-mode, lsp-haskell and intero.
 
 #+begin_src elisp
   (use-package lsp-haskell
-    :demand   t
     :straight t
     :hook ((haskell-mode   . lsp)
            (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
