@@ -910,6 +910,24 @@ https://github.com/akermu/emacs-libvterm
                     tags-table-list))))
 #+end_src
 
+*** Auto Save (Super Save)
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Auto Save
+  ;; I use super save to auto save files.
+#+end_src
+
+I use super save to auto save files.
+
+#+begin_src elisp
+  (use-package super-save
+    :straight t
+    :hook ((after-init . (lambda () (super-save-mode +1))))
+    :init (setq super-save-auto-save-when-idle t
+                super-save-remote-files        nil))
+#+end_src
+
 *** Disable Mouse
 
 #+begin_src elisp :exports none
