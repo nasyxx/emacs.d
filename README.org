@@ -786,7 +786,7 @@ https://github.com/akermu/emacs-libvterm
     :init (setq dashboard-startup-banner 'official
                 dashboard-items '((recents   . 10)
                                   (bookmarks . 3 )
-                                  (projects  . 2 )
+                                  (projects  . 5 )
                                   (agenda    . 5 )
                                   (registers . 5 )))
     :config (dashboard-setup-startup-hook))
@@ -3149,7 +3149,10 @@ Other ~ox-_~ packages.
            :map org-mode-map
            ("C-M-<up>" . org-up-element)
            ("M-h"      . nil)
-           ("C-c g"    . org-mac-grab-link))
+           ("C-c g"    . org-mac-grab-link)
+           ("C-c _"    . org-edit-special)
+           :map org-src-mode-map
+           ("C-c _"    . org-edit-src-exit))
     :hook ((org-mode . auto-fill-mode))
     :init
     (setq
@@ -3814,9 +3817,8 @@ I use doom-themes.
                ;; (minor-modes)
                (buffer-position
                 hud)
-               nasy:keycast-keys
-               (((flycheck-error flycheck-warning flycheck-info) flycheck-status) :when active)
-               (which-function :face 'spaceline-evil-insert)
+               (nasy:keycast-keys)
+               ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :when active)
                (nasy-time :face 'spaceline-evil-replace :when active)
                (nasy-time :when (not active)))))))
 #+end_src
