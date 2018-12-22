@@ -81,15 +81,13 @@ If you encounter any errors while updating, you may need to kill Emacs and run
 
 * Custom Configuration
 
-** Custom configs
-
-*** nasy-config.el
+** Default Custom Configuration
 
 This file includes all of the customizable variables of my configuration.
 
 You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 
-**** Header
+*** Header
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   ;;; config.el --- User config file.                    -*- lexical-binding: t; -*-
@@ -103,7 +101,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   ;;; Code:
 #+end_src
 
-**** Constants And Variables
+*** Constants And Variables
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (defconst *is-a-mac*  (eq system-type 'darwin))
@@ -129,7 +127,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   (defvar   *vterm*     nil)
 #+end_src
 
-**** UI Settings
+*** UI Settings
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   ;; Theme
@@ -158,9 +156,9 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
     (global-set-key (kbd "C-z") 'stop-minimizing-window))
 #+end_src
 
-**** Default Settings
+*** Default Settings
 
-***** Cursor
+**** Cursor
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
@@ -168,7 +166,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
     blink-matching-paren  t)
 #+end_src
 
-***** Visual
+**** Visual
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
@@ -180,14 +178,14 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    tooltip-delay                  1.5)
 #+end_src
 
-***** Company
+**** Company
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
    company-idle-delay .5)
 #+end_src
 
-***** Helm
+**** Helm
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
@@ -195,14 +193,14 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    helm-ag-base-command "rg --no-heading --smart-case")
 #+end_src
 
-***** Shell
+**** Shell
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
    shell-file-name "/bin/zsh")
 #+end_src
 
-***** Languages
+**** Languages
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
@@ -211,7 +209,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    lsp-rust-rls-command    '("rls"))
 #+end_src
 
-***** Parens
+**** Parens
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
@@ -221,7 +219,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    sp-show-pair-from-inside                        t)
 #+end_src
 
-***** Whitespace
+**** Whitespace
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
@@ -231,7 +229,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
                             lines-tail empty))
 #+end_src
 
-***** Straight.el
+**** Straight.el
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   ;; The original one is `(find-at-startup find-when-checking) which is so slow.
@@ -240,7 +238,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    straight-check-for-modifications '(check-on-save find-when-checking))
 #+end_src
 
-***** Start
+**** Start
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
@@ -251,7 +249,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   )
 #+end_src
 
-***** Config After initialization
+**** Config After initialization
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (defun nasy:config-after ()
@@ -266,7 +264,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   (add-hook 'nasy:config-after-hook  #'nasy:config-after)
 #+end_src
 
-**** Custom Faces
+*** Custom Faces
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (defun nasy:set-face ()
@@ -280,7 +278,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   (add-hook 'nasy:config-before-hook #'nasy:set-face)
 #+end_src
 
-**** Key Bindings
+*** Key Bindings
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (when *is-a-mac*
@@ -299,14 +297,14 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   )
 #+end_src
 
-**** Epoligue
+*** Epoligue
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (provide 'nasy-config)
   ;;; nasy-config.el ends here
 #+end_src
 
-** Add Custom Configuration
+** Example Custom Configuration
 
 To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @@
  etc. and/or create a file @@html: <span> @@ ~config/user-config.el~ @@html:
