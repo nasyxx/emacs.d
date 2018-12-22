@@ -83,11 +83,6 @@ If you encounter any errors while updating, you may need to kill Emacs and run
 
 ** Custom configs
 
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; Custom configs
-#+end_src
-
 *** nasy-config.el
 
 This file includes all of the customizable variables of my configuration.
@@ -744,6 +739,25 @@ Adjust garbage collection thresholds during startup, and thereafter
     (add-to-list 'exec-path-from-shell-variables "ENVIRONMENT_SETUP_DONE")
     (add-to-list 'exec-path-from-shell-variables "PYTHONPATH")
     (exec-path-from-shell-initialize))
+#+end_src
+
+*** Term
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Term
+#+end_src
+
+Emacs libvterm intergration
+
+https://github.com/akermu/emacs-libvterm
+
+#+begin_src elisp
+  (when *vterm*
+    (progn
+      (add-to-list 'load-path *vterm*)
+      (let (vterm-install)
+        (require 'vterm))))
 #+end_src
 
 *** Scratch Message
