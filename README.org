@@ -3319,6 +3319,8 @@ Other ~ox-_~ packages.
        (sql . nil)
        (sqlite . t)))
 
+    (setq org-babel-python-command "python3")
+
     ;; --------
     (setq luamagick
           '(luamagick
