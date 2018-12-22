@@ -1038,6 +1038,18 @@ Default settings for editor.
     :straight t)
 #+end_src
 
+*** Advance Words Count
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Diminish
+#+end_src
+
+#+begin_src elisp
+  (use-package advance-words-count
+    :straight (advance-words-count :type git :host github :repo "LdBeth/advance-words-count.el"))
+#+end_src
+
 *** Anzu
 
 #+begin_src elisp :exports none
