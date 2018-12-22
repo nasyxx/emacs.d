@@ -81,6 +81,236 @@ If you encounter any errors while updating, you may need to kill Emacs and run
 
 * Custom Configuration
 
+** Custom configs
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Custom configs
+#+end_src
+
+*** nasy-config.el
+
+This file includes all of the customizable variables of my configuration.
+
+You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
+
+**** Header
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  ;;; config.el --- User config file.                    -*- lexical-binding: t; -*-
+
+  ;; Author: Nasy <nasyxx+emacs@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Custom Config file.
+
+  ;;; Code:
+#+end_src
+
+**** Constants And Variables
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (defconst *is-a-mac*  (eq system-type 'darwin))
+
+  (defconst *clangd*    (or (executable-find "clangd")  ;; usually
+                            (executable-find "/usr/local/opt/llvm/bin/clangd")))  ;; macOS
+
+  (defconst *nix*       (executable-find "nix"))
+
+  (defconst *rust*      (or (executable-find "rustc")
+                            (executable-find "cargo")
+                            (executable-find "rustup")))
+  (defconst *rls*       (or (executable-find "rls")
+                            (executable-find "~/.cargo/bin/rls")))
+
+  (defvar   *intero*    t)
+
+  (defconst *struct-hs* (executable-find "structured-haskell-mode"))
+  (defvar   *struct-hs-path* nil)
+
+  (defvar   *blacken*   t)
+
+  (defvar   *vterm*     nil)
+#+end_src
+
+**** UI Settings
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  ;; Theme
+  (defvar nasy:theme 'doom-dracula)
+
+  (when *is-a-mac*
+    (add-to-list 'default-frame-alist
+                 '(ns-transparent-titlebar . t))
+
+    (add-to-list 'default-frame-alist
+                 '(ns-appearance . dark))
+
+    (add-to-list 'default-frame-alist
+                 '(alpha . (80 . 75)))
+
+    (add-to-list 'default-frame-alist
+                 '(font . "OperatorMonoLig Nerd Font-14"))
+
+    (defun stop-minimizing-window ()
+    "Stop minimizing window under macOS."
+    (interactive)
+    (unless (and *is-a-mac*
+                 window-system)
+      (suspend-frame)))
+
+    (global-set-key (kbd "C-z") 'stop-minimizing-window))
+#+end_src
+
+**** Default Settings
+
+***** Cursor
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (setq-default
+    blink-cursor-interval .6
+    blink-matching-paren  t)
+#+end_src
+
+***** Visual
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (setq-default
+   fill-column                    80
+   visual-fill-column-width       100
+   word-wrap                      t
+   highlight-indent-guides-method 'column
+   tab-width                      8
+   tooltip-delay                  1.5)
+#+end_src
+
+***** Company
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (setq-default
+   company-idle-delay .5)
+#+end_src
+
+***** Helm
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (setq-default
+   ;; brew install rg   if you'd like to use rg as my doing
+   helm-ag-base-command "rg --no-heading --smart-case")
+#+end_src
+
+***** Shell
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (setq-default
+   shell-file-name "/bin/zsh")
+#+end_src
+
+***** Languages
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (setq-default
+   haskell-stylish-on-save nil
+   blacken-line-length     80
+   lsp-rust-rls-command    '("rls"))
+#+end_src
+
+***** Parens
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (setq-default
+   show-paren-style                                'expression
+   sp-autoinsert-quote-if-followed-by-closing-pair t
+   sp-base-key-bindings                            'paredit
+   sp-show-pair-from-inside                        t)
+#+end_src
+
+***** Whitespace
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (setq-default
+   whitespace-line-column 80
+   whitespace-style       '(face spaces tabs newline
+                            space-mark tab-mark newline-mark
+                            lines-tail empty))
+#+end_src
+
+***** Straight.el
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  ;; The original one is `(find-at-startup find-when-checking) which is so slow.
+  ;; straight-check-for-modifications '(find-at-startup find-when-checking)
+  (setq-default
+   straight-check-for-modifications '(check-on-save find-when-checking))
+#+end_src
+
+***** Start
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (setq-default
+   initial-scratch-message     (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+   dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+   ;; initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; It will cause error if you start emacs from Command line with file name
+                                                                            ;; https://github.com/rakanalh/emacs-dashboard/issues/69
+  )
+#+end_src
+
+***** Config After initialization
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (defun nasy:config-after ()
+    "Set configuration need to be set after init."
+    (setq-default
+     helm-allow-mouse                  t
+     helm-follow-mode-persistent       t
+     helm-move-to-line-cycle-in-source nil
+     helm-source-names-using-follow    '("Buffers" "kill-buffer" "Occur")))
+
+
+  (add-hook 'nasy:config-after-hook  #'nasy:config-after)
+#+end_src
+
+**** Custom Faces
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (defun nasy:set-face ()
+    "Set custom face."
+    (set-face-attribute 'custom-comment              nil                                             :slant   'italic)
+    (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
+    (set-face-attribute 'show-paren-match            nil :background "#bfcfff" :foreground "#dc322f" :weight  'ultra-bold)
+    (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified)
+    (set-face-attribute 'which-func                  nil                       :foreground "#333"))
+
+  (add-hook 'nasy:config-before-hook #'nasy:set-face)
+#+end_src
+
+**** Key Bindings
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (when *is-a-mac*
+    ;; cursor Movement
+    (global-set-key (kbd "s-<up>")   'beginning-of-buffer)
+    (global-set-key (kbd "s-<down>") 'end-of-buffer)
+    ;; text Operations
+    (global-set-key (kbd "M-¥")
+                    (lambda ()
+                      (interactive)
+                      (insert "\\")))
+    (global-set-key (kbd "s-<backspace>")
+                    (lambda ()
+                      (interactive)
+                      (kill-line 0)))
+  )
+#+end_src
+
+**** Epoligue
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (provide 'nasy-config)
+  ;;; nasy-config.el ends here
+#+end_src
+
 ** Add Custom Configuration
 
 To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @@
@@ -96,7 +326,8 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
  initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))
  *blacken*                   t
  nasy:theme                  'doom-Iosvkem
- *struct-hs-path*            nil)
+ *struct-hs-path*            nil
+ *vterm*                     "/Users/Nasy/src/emacs-libvterm")
 (provide 'user-config)
 #+end_src
 
@@ -362,6 +593,75 @@ Adjust garbage collection thresholds during startup, and thereafter
         (ansi-color-apply-on-region compilation-filter-start (point-max)))))
 #+end_src
 
+*** Hooks & Custom Require
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Hooks & Cutom Require
+#+end_src
+
+#+begin_src elisp
+  (defvar nasy:config-before-hook nil
+    "Hooks to run config functions before load custom.el.")
+
+  (defvar nasy:config-after-hook nil
+    "Hooks to run config functions after." )
+
+  (add-hook 'nasy:config-after-hook
+            #'(lambda () (message "Hi~ Hope you have fun with this config.")))
+  (add-hook 'after-init-hook
+            #'(lambda () (run-hooks 'nasy:config-after-hook)))
+#+end_src
+
+#+begin_src elisp
+  (require 'nasy-config nil t)
+  (require 'user-config nil t)
+#+end_src
+
+*** Disable Some Features
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Disable Some features.
+#+end_src
+
+#+begin_src elisp
+  (setq use-file-dialog        nil
+        use-dialog-box         nil
+        inhibit-startup-screen t)
+
+  (when (fboundp 'tool-bar-mode)
+    (tool-bar-mode -1))
+
+  (when (fboundp 'set-scroll-bar-mode)
+    (set-scroll-bar-mode nil))
+#+end_src
+
+*** Nice Scrolling
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Nice Scrolling
+#+end_src
+
+#+begin_src elisp
+  (setq scroll-margin                   0
+        scroll-conservatively           100000
+        scroll-preserve-screen-position 'always)
+#+end_src
+
+*** Text Scale
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Text Scale
+#+end_src
+
+#+begin_src elisp
+  (straight-use-package 'default-text-scale)
+#+end_src
+
+
 *** Shell
 
 #+begin_src elisp :exports none
@@ -444,281 +744,6 @@ Adjust garbage collection thresholds during startup, and thereafter
     (add-to-list 'exec-path-from-shell-variables "ENVIRONMENT_SETUP_DONE")
     (add-to-list 'exec-path-from-shell-variables "PYTHONPATH")
     (exec-path-from-shell-initialize))
-#+end_src
-
-*** Custom configs
-
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; Custom configs
-#+end_src
-
-**** nasy-config.el
-
-This file includes all of the customizable variables of my configuration.
-
-You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
-
-***** Header
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  ;;; config.el --- User config file.                    -*- lexical-binding: t; -*-
-
-  ;; Author: Nasy <nasyxx+emacs@gmail.com>
-
-  ;;; Commentary:
-
-  ;; Nasy's Custom Config file.
-
-  ;;; Code:
-#+end_src
-
-***** Constants And Variables
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (defconst *is-a-mac*  (eq system-type 'darwin))
-
-  (defconst *clangd*    (or (executable-find "clangd")  ;; usually
-                            (executable-find "/usr/local/opt/llvm/bin/clangd")))  ;; macOS
-
-  (defconst *nix*       (executable-find "nix"))
-
-  (defconst *rust*      (or (executable-find "rustc")
-                            (executable-find "cargo")
-                            (executable-find "rustup")))
-  (defconst *rls*       (or (executable-find "rls")
-                            (executable-find "~/.cargo/bin/rls")))
-
-  (defvar   *intero*    t)
-
-  (defconst *struct-hs* (executable-find "structured-haskell-mode"))
-  (defvar   *struct-hs-path* nil)
-
-  (defvar   *blacken*   t)
-#+end_src
-
-***** UI Settings
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  ;; Theme
-  (defvar nasy:theme 'doom-dracula)
-
-  (when *is-a-mac*
-    (add-to-list 'default-frame-alist
-                 '(ns-transparent-titlebar . t))
-
-    (add-to-list 'default-frame-alist
-                 '(ns-appearance . dark))
-
-    (add-to-list 'default-frame-alist
-                 '(alpha . (80 . 75)))
-
-    (add-to-list 'default-frame-alist
-                 '(font . "OperatorMonoLig Nerd Font-14"))
-
-    (defun stop-minimizing-window ()
-    "Stop minimizing window under macOS."
-    (interactive)
-    (unless (and *is-a-mac*
-                 window-system)
-      (suspend-frame)))
-
-    (global-set-key (kbd "C-z") 'stop-minimizing-window))
-#+end_src
-
-***** Default Settings
-
-+ Cursor
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default
-    blink-cursor-interval .6
-    blink-matching-paren  t)
-#+end_src
-
-+ Visual
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default
-   fill-column                    80
-   visual-fill-column-width       100
-   word-wrap                      t
-   highlight-indent-guides-method 'column
-   tab-width                      8
-   tooltip-delay                  1.5)
-#+end_src
-
-+ Company
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default
-   company-idle-delay .5)
-#+end_src
-
-+ Helm
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default
-   ;; brew install rg   if you'd like to use rg as my doing
-   helm-ag-base-command "rg --no-heading --smart-case")
-#+end_src
-
-+ Shell
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default
-   shell-file-name "/bin/zsh")
-#+end_src
-
-+ Languages
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default
-   haskell-stylish-on-save nil
-   blacken-line-length     80
-   lsp-rust-rls-command    '("rls"))
-#+end_src
-
-+ Parens
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default
-   show-paren-style                                'expression
-   sp-autoinsert-quote-if-followed-by-closing-pair t
-   sp-base-key-bindings                            'paredit
-   sp-show-pair-from-inside                        t)
-#+end_src
-
-+ Whitespace
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default
-   whitespace-line-column 80
-   whitespace-style       '(face spaces tabs newline
-                            space-mark tab-mark newline-mark
-                            lines-tail empty))
-#+end_src
-
-+ Straight.el
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  ;; The original one is `(find-at-startup find-when-checking) which is so slow.
-  ;; straight-check-for-modifications '(find-at-startup find-when-checking)
-  (setq-default
-   straight-check-for-modifications '(check-on-save find-when-checking))
-#+end_src
-
-+ Start
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default
-   initial-scratch-message     (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
-   dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
-   ;; initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; It will cause error if you start emacs from Command line with file name
-                                                                            ;; https://github.com/rakanalh/emacs-dashboard/issues/69
-  )
-#+end_src
-
-+ Config After initialization
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (defun nasy:config-after ()
-    "Set configuration need to be set after init."
-    (setq-default
-     helm-allow-mouse                  t
-     helm-follow-mode-persistent       t
-     helm-move-to-line-cycle-in-source nil
-     helm-source-names-using-follow    '("Buffers" "kill-buffer" "Occur")))
-
-
-  (add-hook 'nasy:config-after-hook  #'nasy:config-after)
-#+end_src
-
-***** Custom Faces
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (defun nasy:set-face ()
-    "Set custom face."
-    (set-face-attribute 'custom-comment              nil                                             :slant   'italic)
-    (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
-    (set-face-attribute 'show-paren-match            nil :background "#bfcfff" :foreground "#dc322f" :weight  'ultra-bold)
-    (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified)
-    (set-face-attribute 'which-func                  nil                       :foreground "#333"))
-
-  (add-hook 'nasy:config-before-hook #'nasy:set-face)
-#+end_src
-
-***** Key Bindings
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (when *is-a-mac*
-    ;; cursor Movement
-    (global-set-key (kbd "s-<up>")   'beginning-of-buffer)
-    (global-set-key (kbd "s-<down>") 'end-of-buffer)
-    ;; text Operations
-    (global-set-key (kbd "M-¥")
-                    (lambda ()
-                      (interactive)
-                      (insert "\\")))
-    (global-set-key (kbd "s-<backspace>")
-                    (lambda ()
-                      (interactive)
-                      (kill-line 0)))
-  )
-#+end_src
-
-***** Epoligue
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (provide 'nasy-config)
-  ;;; nasy-config.el ends here
-#+end_src
-
-**** Hooks & Require
-#+begin_src elisp
-  (defvar nasy:config-before-hook nil
-    "Hooks to run config functions before load custom.el.")
-
-  (defvar nasy:config-after-hook nil
-    "Hooks to run config functions after." )
-
-  (add-hook 'nasy:config-after-hook
-            #'(lambda () (message "Hi~ Hope you have fun with this config.")))
-  (add-hook 'after-init-hook
-            #'(lambda () (run-hooks 'nasy:config-after-hook)))
-#+end_src
-
-#+begin_src elisp
-  (require 'nasy-config nil t)
-  (require 'user-config nil t)
-#+end_src
-
-**** Disable Some Features
-
-#+begin_src elisp
-  (setq use-file-dialog        nil
-        use-dialog-box         nil
-        inhibit-startup-screen t)
-
-  (when (fboundp 'tool-bar-mode)
-    (tool-bar-mode -1))
-
-  (when (fboundp 'set-scroll-bar-mode)
-    (set-scroll-bar-mode nil))
-#+end_src
-
-**** Nice Scrolling
-
-#+begin_src elisp
-  (setq scroll-margin                   0
-        scroll-conservatively           100000
-        scroll-preserve-screen-position 'always)
-#+end_src
-
-**** Text Scale
-
-#+begin_src elisp
-  (straight-use-package 'default-text-scale)
 #+end_src
 
 *** Scratch Message

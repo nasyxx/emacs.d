@@ -28,6 +28,8 @@
 
 (defvar   *blacken*   t)
 
+(defvar   *vterm*     nil)
+
 ;; Theme
 (defvar nasy:theme 'doom-dracula)
 
