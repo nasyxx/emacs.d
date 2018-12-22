@@ -3645,12 +3645,6 @@ I use doom-themes.
       (format-time-string "%b %d, %Y - %H:%M ")
       :tight-right t)
 
-    (spaceline-define-segment nasy:project-name
-      "Project Name"
-      (cond
-       ((projectile-project-p) (projectile-project-name))
-       (t                      (file-name-nondirectory (directory-file-name default-directory)))))
-
     (spaceline-define-segment flycheck-status
       "An `all-the-icons' representaiton of `flycheck-status'"
       (let* ((text
@@ -3687,8 +3681,8 @@ I use doom-themes.
              `(((buffer-modified major-mode buffer-size) :face highlight-face)
                (anzu)
                (auto-compile)
-               ((nasy:version-control nasy:project-name) :separator " in " :face spaceline-flycheck-warning :when active)
-               ((nasy:version-control nasy:project-name) :separator " in " :when (not active))
+               ((nasy:version-control project-name) :separator " in " :face 'spaceline-flycheck-warning :when active)
+               ((nasy:version-control project-name) :separator " in " :when (not active))
                (buffer-id)
                (selection-info)
                (nyan-cat :tight t))
@@ -3699,8 +3693,8 @@ I use doom-themes.
                (buffer-position
                 hud)
                (((flycheck-error flycheck-warning flycheck-info) flycheck-status) :when active)
-               (which-function :face spaceline-evil-insert)
-               (nasy-time :face spaceline-evil-replace :when active)
+               (which-function :face 'spaceline-evil-insert)
+               (nasy-time :face 'spaceline-evil-replace :when active)
                (nasy-time :when (not active)))))))
 #+end_src
 
