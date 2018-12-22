@@ -2423,8 +2423,9 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 
 #+begin_src elisp
   (use-package magit-org-todos
+    :after    org
     :straight t
-    :config (magit-org-todos-autoinsert))
+    :config   (magit-org-todos-autoinsert))
 #+end_src
 
 **** Forge
