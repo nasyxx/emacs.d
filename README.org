@@ -158,12 +158,6 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 
 *** Default Settings
 
-**** Auto Save
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default super-save-idle-duration 20)
-#+end_src
-
 **** Cursor
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
@@ -930,7 +924,7 @@ I use super save to auto save files.
   (use-package super-save
     :straight t
     :hook ((after-init . (lambda () (super-save-mode +1))))
-    :init (setq super-save-auto-save-when-idle t
+    :init (setq super-save-auto-save-when-idle nil
                 super-save-remote-files        nil))
 #+end_src
 

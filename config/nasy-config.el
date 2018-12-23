@@ -55,8 +55,6 @@
 
   (global-set-key (kbd "C-z") 'stop-minimizing-window))
 
-(setq-default super-save-idle-duration 20)
-
 (setq-default
   blink-cursor-interval .6
   blink-matching-paren  t)
