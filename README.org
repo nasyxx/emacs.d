@@ -158,6 +158,12 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 
 *** Default Settings
 
+**** Auto Save
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (setq-default super-save-idle-duration 20)
+#+end_src
+
 **** Cursor
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
