@@ -122,7 +122,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   (defconst *struct-hs* (executable-find "structured-haskell-mode"))
   (defvar   *struct-hs-path* nil)
 
-  (defvar   *blacken*   t)
+  (defvar   *blacken*   nil)
 
   (defvar   *vterm*     nil)
 #+end_src
@@ -317,7 +317,6 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
  calendar-longitude          102.8329
  user-mail-address           "nasyxx@gmail.com"
  initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))
- *blacken*                   t
  nasy:theme                  'doom-Iosvkem
  *struct-hs-path*            nil
  *vterm*                     "/Users/Nasy/src/emacs-libvterm")
@@ -3097,14 +3096,17 @@ Include python-mode, blacken, py-isort and flycheck-prospector.
                         flycheck-python-pycompile-executable "python3"
                         flycheck-python-pylint-executable    "python3"
                         python-mode-modeline-display         "Python"
-                        python-skeleton-autoinsert           t))
+                        python-skeleton-autoinsert           t)
+    :config
+    (unless *blacken*
+      (add-hook #'before-save-hook #'lsp-format-buffer nil t)))
 
   ;; Now you can use it in lsp
   ;; NOTICE you have to config black though pyproject.toml.
   (when *blacken*
     (use-package blacken
       :straight t
-      :hook ((python-mode . blacken-mode))))
+      :hook ((python-mode    . blacken-mode))))
 
   (use-package py-isort
     :straight t

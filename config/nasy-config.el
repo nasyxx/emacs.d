@@ -26,7 +26,7 @@
 (defconst *struct-hs* (executable-find "structured-haskell-mode"))
 (defvar   *struct-hs-path* nil)
 
-(defvar   *blacken*   t)
+(defvar   *blacken*   nil)
 
 (defvar   *vterm*     nil)
 
