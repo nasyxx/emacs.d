@@ -3877,7 +3877,7 @@ I use doom-themes.
                     'local-map (make-mode-line-mouse-map 'mouse-1 (lambda () (interactive) (flycheck-list-errors)))))
       :when active)
 
-    (set-face-attribute 'keycast-key t :weight 'bold :height 1.2 :background "#90007f" :foreground "#ffedc6" :box nil)
+    (set-face-attribute 'keycast-key t :weight 'bold :height 1 :background "#cdeeaa" :foreground "#36622b" :box nil)
 
     (spaceline-define-segment nasy:keycast-keys
       "Keycast modeline segment."
