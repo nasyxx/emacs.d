@@ -123,8 +123,8 @@
   (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
   (set-face-attribute 'show-paren-match            nil :background "#bfcfff" :foreground "#dc322f" :weight  'ultra-bold)
   (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified)
-  (set-face-attribute 'which-func                  nil                       :foreground "#333"))
-
+  (set-face-attribute 'which-func                  nil                       :foreground "#333")
+  (set-face-attribute 'keycast-key                 nil :background 'unspecified :foreground "#f8b195" :weight 'bold :height 'unspecified :box nil))
 (add-hook 'nasy:config-before-hook #'nasy:set-face)
 
 (when *is-a-mac*

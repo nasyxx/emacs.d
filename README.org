@@ -273,8 +273,8 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
     (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
     (set-face-attribute 'show-paren-match            nil :background "#bfcfff" :foreground "#dc322f" :weight  'ultra-bold)
     (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified)
-    (set-face-attribute 'which-func                  nil                       :foreground "#333"))
-
+    (set-face-attribute 'which-func                  nil                       :foreground "#333")
+    (set-face-attribute 'keycast-key                 nil :background 'unspecified :foreground "#f8b195" :weight 'bold :height 'unspecified :box nil))
   (add-hook 'nasy:config-before-hook #'nasy:set-face)
 #+end_src
 
@@ -3866,8 +3866,8 @@ I use doom-themes.
              (f (cond
                  ((string-match "⚠" text) `(:height 0.9 :foreground ,(face-attribute 'spaceline-flycheck-warning :foreground)
                                                     :background "#1d5464"))
-                 ((string-match "✖ [0-9]" text) `(:height 0.9 :background ,(face-attribute 'spaceline-flycheck-error :foreground)
-                                                          :foreground "#333333"))
+                 ((string-match "✖ [0-9]" text) `(:height 0.9 :foreground ,(face-attribute 'spaceline-flycheck-error :foreground)
+                                                          :background "#333333"))
                  ((string-match "✣ Disabled" text) `(:height 0.9))
                  (t '(:height 0.9 :inherit)))))
         (propertize (format " %s " text)
@@ -3876,8 +3876,6 @@ I use doom-themes.
                     'mouse-face '(:box 1)
                     'local-map (make-mode-line-mouse-map 'mouse-1 (lambda () (interactive) (flycheck-list-errors)))))
       :when active)
-
-    (set-face-attribute 'keycast-key nil :weight 'bold :height 'unspecified :background "#cdeeaa" :foreground "#36622b" :box nil)
 
     (spaceline-define-segment nasy:keycast-keys
       "Keycast modeline segment."
@@ -3901,6 +3899,12 @@ I use doom-themes.
                    ;;                           'face 'keycast-command))
                    )))))
 
+    (spaceline-define-segment lsp
+      "The LSP server state."
+      (when (bound-and-true-p lsp-mode)
+        (concat (lsp-mode-line) " "))
+      :when active)
+
     (add-hook
      'after-init-hook
      (lambda () (spaceline-compile
@@ -3910,19 +3914,25 @@ I use doom-themes.
                ((nasy:version-control project-name) :separator " in " :face 'spaceline-flycheck-warning :when active)
                ((nasy:version-control project-name) :separator " in " :when (not active))
                (buffer-id)
-               (selection-info)
+               (lsp)
                (nyan-cat :tight t))
-             `((line-column :when active)
+             `((selection-info)
+               (line-column :when active)
                (line-column :when (not active))
                (global :when active)
                (process)
                ;; (minor-modes)
                (buffer-position
                 hud)
-               (nasy:keycast-keys)
                ((flycheck-status (flycheck-error flycheck-warning flycheck-info)) :when active)
                (nasy-time :face 'spaceline-evil-replace :when active)
                (nasy-time :when (not active)))))))
+#+end_src
+
+#+begin_src elisp
+  (use-package minions
+    :straight t
+    :hook ((after-init . minions-mode)))
 #+end_src
 
 * Epilogue
