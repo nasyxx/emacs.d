@@ -28,7 +28,7 @@ clean-var:
 .PHONY: clean-var
 
 ## clean all build etc python var
-clean-all: clean clean-build clean-etc clean-python clean-var
+clean-all: clean-build clean-etc clean-python clean-var
 .PHONY: clean-all
 
 ## Update config
