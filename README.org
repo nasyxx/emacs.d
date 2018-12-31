@@ -2409,6 +2409,23 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :diminish (subword-mode))
 #+end_src
 
+*** Symbol Overlay
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Subword
+#+end_src
+
+#+begin_src elisp
+  (use-package symbol-overlay
+    :straight t
+    :bind (("M-i"  . symbol-overlay-put)
+           ("M-n"  . symbol-overlay-switch-forward)
+           ("M-p"  . symbol-overlay-switch-backward)
+           ("<f8>" . symbol-overlay-remove-all)
+           ("<f7>" . symbol-overlay-mode)))
+#+end_src
+
 *** Treemacs
 
 #+begin_src elisp :exports none
@@ -2743,6 +2760,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 #+begin_src elisp
   (use-package lsp
     :straight lsp-mode
+    :commands lsp
     :hook ((lsp-after-open . lsp-enable-imenu))
     :init (setq lsp-prefer-flymake  nil)
     :config (require 'lsp-clients))
