@@ -3317,6 +3317,10 @@ Other ~ox-_~ packages.
 
      org-pretty-entities t
 
+     ;; org time
+     org-display-custom-times      t
+     org-time-stamp-custom-formats '("<%a %b %d, %Y>" . "<%a %b %d %H:%M:%S %Y>")
+
      ;; org latex
      org-latex-compiler "lualatex"
      org-latex-default-packages-alist
@@ -3589,14 +3593,21 @@ Other ~ox-_~ packages.
       (defvar org-capture-templates nil))
 
     (add-to-list 'org-capture-templates '("t" "Tasks"))
+
     (add-to-list 'org-capture-templates
                  '("tr" "Book Reading Task" entry
                    (file+olp "~/notes/task.org" "Reading" "Book")
                    "* TODO %^{book name}\n%u\n%a\n" :clock-in t :clock-resume t))
+
     (add-to-list 'org-capture-templates
                  '("tw" "Work Task" entry
                    (file+headline "~/notes/task.org" "Work")
                    "* TODO %^{task name}\n%u\n%a\n" :clock-in t :clock-resume t))
+
+    (add-to-list 'org-capture-templates
+                 '("T" "Thoughts" entry
+                   (file "~/notes/thoughts.org")
+                   "* %t - %^{heading}\n\n%?"))
 
     (add-to-list 'org-capture-templates
                  '("j" "Journal" entry
