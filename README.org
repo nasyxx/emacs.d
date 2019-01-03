@@ -3698,7 +3698,7 @@ Include ob-ditaa and ob-plantuml
     (defun grab-ditaa (url jar-name)
       "Download URL and extract JAR-NAME as `org-ditaa-jar-path'."
       (message "Grabbing " jar-name " for org.")
-      (let ((zip-temp (make-temp-name "var/emacs-ditaa")))
+      (let ((zip-temp (make-temp-name (no-littering-expand-var-file-name "emacs-ditaa"))))
         (unwind-protect
             (progn
               (when (executable-find "unzip")
