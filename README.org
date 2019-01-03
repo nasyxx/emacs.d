@@ -3318,8 +3318,9 @@ Other ~ox-_~ packages.
      org-pretty-entities t
 
      ;; org time
-     org-display-custom-times      t
-     org-time-stamp-custom-formats '("<%a %b %d, %Y>" . "<%a %b %d %H:%M:%S %Y>")
+     ;; org-display-custom-times         t  ;; should setq-default
+     org-time-stamp-custom-formats    '("<%a %b %d, %Y>" . "<%a %b %d %H:%M:%S %Y>")
+     org-export-date-timestamp-format "%b %d, %Y"
 
      ;; org latex
      org-latex-compiler "lualatex"
@@ -3418,6 +3419,7 @@ Other ~ox-_~ packages.
      org-todo-repeat-to-state "NEXT"
      org-todo-keyword-faces   (quote (("NEXT" :inherit warning)
                                       ("PROJECT" :inherit font-lock-string-face))))
+    (setq-default org-display-custom-times t)
     :config
     ;; --------
     (org-babel-do-load-languages
