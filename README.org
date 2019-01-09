@@ -3284,6 +3284,8 @@ Other ~ox-_~ packages.
 
      org-edit-timestamp-down-means-later t
 
+     org-ellipsis " ﹆"
+
      org-export-backends                           '(ascii html latex md)
      org-export-coding-system                      'utf-8
      org-export-kill-product-buffer-when-displayed t
@@ -3291,6 +3293,8 @@ Other ~ox-_~ packages.
      org-use-sub-superscripts                      '{}
 
      org-fast-tag-selection-single-key 'expert
+
+     org-highlight-latex-and-related: '(native latex script entities)
 
      org-hide-emphasis-markers t
      org-hide-leading-stars    nil
