@@ -3284,7 +3284,7 @@ Other ~ox-_~ packages.
 
      org-edit-timestamp-down-means-later t
 
-     org-ellipsis " ﹆"
+     org-ellipsis " ﹅"
 
      org-export-backends                           '(ascii html latex md)
      org-export-coding-system                      'utf-8
