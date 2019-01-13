@@ -1315,11 +1315,6 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     (advice-add 'company-pseudo-tooltip-unhide :before #'pre-popup-draw)
     (advice-add 'company-pseudo-tooltip-hide :after #'post-popup-draw)
 
-    (defun nasy:local-push-company-backend (backend)
-      "Add BACKEND to a buffer-local version of `company-backends'."
-      (make-local-variable 'company-backends)
-      (push backend company-backends))
-
     (diminish 'company-mode "CMP"))
 #+end_src
 
@@ -2758,8 +2753,8 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 **** lsp-mode
 
 #+begin_src elisp
-  (use-package lsp
-    :straight lsp-mode
+  (use-package lsp-mode
+    :straight t
     :commands lsp
     :hook ((lsp-after-open . lsp-enable-imenu))
     :init (setq lsp-prefer-flymake  nil)
@@ -3097,12 +3092,10 @@ Include python-mode, blacken, py-isort and flycheck-prospector.
 
     :hook ((python-mode . lsp)
            (python-mode . lsp-python-config-set)
-           (python-mode . (lambda () (nasy:local-push-company-backend '(company-dabbrev-code
-                                                                   company-gtags
-                                                                   company-etags
-                                                                   company-keywords))))
            (python-mode . setq-after)
-           (python-mode . (lambda () (nasy:local-push-company-backend 'company-lsp))))
+
+           (hack-local-variables . (lambda () (push 'company-files
+                                               company-backends))))
     :init (setq-default python-indent-offset                  4
                         indent-tabs-mode                      nil
                         python-indent-guess-indent-offset     nil
