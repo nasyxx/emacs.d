@@ -109,6 +109,8 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   (defconst *clangd*    (or (executable-find "clangd")  ;; usually
                             (executable-find "/usr/local/opt/llvm/bin/clangd")))  ;; macOS
 
+  (defvar   *eldoc-box* nil)
+
   (defconst *nix*       (executable-find "nix"))
 
   (defconst *rust*      (or (executable-find "rustc")
@@ -1461,10 +1463,14 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 
 **** Eldoc Box
 
+Disabled by default due to it causes lots of cpu.
+
 #+begin_src elisp
-  (use-package eldoc-box
-    :straight (eldoc-box :type git :host github :repo "casouri/eldoc-box")
-    :hook ((eldoc-mode . eldoc-box-hover-mode)))
+  (when *eldoc-box*
+    (use-package eldoc-box
+      :straight (eldoc-box :type git :host github :repo "casouri/eldoc-box")
+      :hook ((eldoc-mode . eldoc-box-hover-mode)
+             (eldoc-mode . eldoc-box-hover-at-point-mode))))
 #+end_src
 
 *** Fill Column
