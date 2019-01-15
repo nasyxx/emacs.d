@@ -55,12 +55,15 @@ To install, clone this repo to @@html: <span> @@ ~~/.emacs.d~ @@html: </span> @@
 
 #+begin_src shell
   git clone https://github.com/nasyxx/emacs.d.git ~/.emacs.d
+  make config
 #+end_src
 
 Upon the first time staring up emacs, other third-party packages will be
 automatically clone to the @@html: <span> @@ ~straight~: @@html: </span> @@ folder
 and installed.  If you encounter any errors at that stage, try restarting Emacs,
 and maybe running ~make clean-all~ before doing so.
+
+You can regenerate @@html: <span> @@ ~init.el~ @@html: </span> @@ by ~make generate~.
 
 * Updates
 

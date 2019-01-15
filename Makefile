@@ -7,6 +7,11 @@ generate:
 	mkdir -p config && emacs -Q --batch --find-file "README.org" -f "org-babel-tangle"
 .PHONY: generate
 
+## Copy example config to user config.
+config: generate
+	@echo "Generate user config from example config."
+	cp config/user-config-example.el user-config.el
+
 ## Clean build (straight/)
 clean-build:
 	rm -rf straight
@@ -33,7 +38,7 @@ clean-all: clean-build clean-etc clean-python clean-var
 
 ## Update config
 update: clean-build
-	git pull
+	git pull && make generate
 .PHONY: update
 
 # COLORS
