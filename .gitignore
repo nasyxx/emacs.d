@@ -1,3 +1,36 @@
+# Custom
+.emacs.desktop*
+.historian
+.session
+.smex-items
+.zsh_history
+.mc-lists.el
+.bookmarks.el
+.lsp-session*
+
+.cache
+anaconda-mode
+config/nasy-config.el
+config/user-config-example.el
+config/user-config.el
+emojis
+straight
+url/
+var/
+etc/
+
+custom.el
+ditaa0_9.jar
+forge-database.sqlite
+history
+init.html
+init.el
+plantuml.jar
+projectile-bookmarks.eld
+nix-buffer
+README.html
+recentf
+
 # Created by https://www.gitignore.io/api/emacs
 # Edit at https://www.gitignore.io/?templates=emacs
 
@@ -53,34 +86,3 @@ flycheck_*.el
 
 
 # End of https://www.gitignore.io/api/emacs
-
-.emacs.desktop*
-.historian
-.session
-.smex-items
-.zsh_history
-.mc-lists.el
-.bookmarks.el
-.lsp-session*
-
-.cache
-anaconda-mode
-config/user-config-example.el
-config/user-config.el
-emojis
-straight
-url/
-var/
-etc/
-
-custom.el
-ditaa0_9.jar
-forge-database.sqlite
-history
-init.html
-init.el
-plantuml.jar
-projectile-bookmarks.eld
-nix-buffer
-README.html
-recentf
