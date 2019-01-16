@@ -2777,6 +2777,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :demand t
     :after lsp-mode
     :straight t
+    :commands lsp-ui-mode
     :bind (:map lsp-ui-mode-map
                 ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
                 ([remap xref-find-references]  . lsp-ui-peek-find-references)
@@ -2799,6 +2800,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :defer t
     :after lsp-mode
     :straight t
+    :commands company-lsp
     :init
     (setq company-lsp-async               t
           company-lsp-enable-recompletion t
@@ -2941,6 +2943,7 @@ Include haskell-mode, lsp-haskell and intero.
 
 #+begin_src elisp
   (use-package lsp-haskell
+    :demand   t
     :straight t
     :hook ((haskell-mode   . lsp)
            (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
