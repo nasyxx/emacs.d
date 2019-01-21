@@ -3355,7 +3355,7 @@ Other ~ox-_~ packages.
        ("" "textcomp" t nil)
        ("" "amssymb" t nil)
        ("" "capt-of" nil nil)
-       ("colorlinks,linkcolor=blue,anchorcolor=blue,citecolor=green,filecolor=black,urlcolor=blue"
+       ("colorlinks,unicode,linkcolor=blue,anchorcolor=blue,citecolor=green,filecolor=black,urlcolor=blue"
         "hyperref" t nil)
        ("" "luatexja-fontspec" t nil)
        ("" "listings" t nil)))
