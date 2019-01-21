@@ -17,6 +17,9 @@
 #+HTML_HEAD: <style>kbd {border-style: outset;} pre.src:before {top: -4px; box-shadow: 3px 3px 3px #eee; border-color: #ccc; padding: 0;}</style>
 #+HTML_HEAD: <style>#content {background-color: #fff0f8;} body,pre.src {background-color: #f7f4e3; box-shadow: 1px 1px 10px #7a378b;}</style>
 
+#+LATEX_HEADER: \setmainjfont[BoldFont=PingFang SC]{FandolSong}
+#+LATEX_HEADER: \setsansfont{PingFang SC}
+
 * Prologue
 
 A Straightforward Emacs Configuration Bundle.
