@@ -2769,7 +2769,8 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :straight t
     :commands lsp
     :hook ((lsp-after-open . lsp-enable-imenu))
-    :init (setq lsp-prefer-flymake  nil)
+    :init (setq lsp-prefer-flymake            nil
+                lsp-enable-on-type-formatting nil)
     :config (require 'lsp-clients))
 #+end_src
 
