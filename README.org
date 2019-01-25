@@ -125,6 +125,8 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   (defconst *rls*       (or (executable-find "rls")
                             (executable-find "~/.cargo/bin/rls")))
 
+  (defvar   *debug*     t)
+
   (defvar   *intero*    t)
 
   (defconst *struct-hs* (executable-find "structured-haskell-mode"))
@@ -320,15 +322,16 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
  generate to @@html: <span> @@ ~config/user-config-example.el~ @@html: </span> @@):
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/user-config-example.el")
-(setq-default
- calendar-latitude           24.8801
- calendar-longitude          102.8329
- user-mail-address           "nasyxx@gmail.com"
- initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))
- nasy:theme                  'doom-Iosvkem
- *struct-hs-path*            nil
- *vterm*                     "/Users/Nasy/src/emacs-libvterm")
-(provide 'user-config)
+  (setq-default
+   calendar-latitude           24.8801
+   calendar-longitude          102.8329
+   user-mail-address           "nasyxx@gmail.com"
+   initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))
+   nasy:theme                  'doom-Iosvkem
+   ,*debug*                     nil
+   ,*struct-hs-path*            nil
+   ,*vterm*                     "/Users/Nasy/src/emacs-libvterm")
+  (provide 'user-config)
 #+end_src
 
 ** dashboard
@@ -630,6 +633,8 @@ Adjust garbage collection thresholds during startup, and thereafter
         use-dialog-box         nil
         inhibit-startup-screen t)
 
+  (setq-default debug-on-error *debug*)
+
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode -1))
 
@@ -660,7 +665,6 @@ Adjust garbage collection thresholds during startup, and thereafter
 #+begin_src elisp
   (straight-use-package 'default-text-scale)
 #+end_src
-
 
 *** Shell
 
