@@ -2347,8 +2347,10 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
       ("\\(<=\\)"                    #Xe157))
     "Fira font ligatures and their regexes.")
 
-  (pretty-fonts-set-kwds
-   '((pretty-fonts-fira-font prog-mode-hook org-mode-hook)))
+  (if (fboundp 'mac-auto-operator-composition-mode)
+      (mac-auto-operator-composition-mode)
+    (pretty-fonts-set-kwds
+     '((pretty-fonts-fira-font prog-mode-hook org-mode-hook))))
 #+end_src
 
 *** Projectile
