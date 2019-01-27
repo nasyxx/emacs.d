@@ -3226,7 +3226,8 @@ I use ~org~ with ~org-plus-contrib~
 
 #+begin_src elisp
   (use-package org
-    :straight org-plus-contrib)
+    :straight org-plus-contrib
+    :config   (require 'org-tempo))
 #+end_src
 
 *** OX Org
