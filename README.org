@@ -126,6 +126,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
                             (executable-find "~/.cargo/bin/rls")))
 
   (defvar   *debug*     t)
+  (defvar   *server*    t)
 
   (defvar   *intero*    t)
 
@@ -4023,5 +4024,7 @@ I use doom-themes.
   (when (file-exists-p custom-file)
     (load custom-file))
 
+  (when *server*
+    (server-start))
   ;;; init.el ends here
 #+end_src
