@@ -284,7 +284,8 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
     (set-face-attribute 'show-paren-match            nil :background "#bfcfff" :foreground "#dc322f" :weight  'ultra-bold)
     (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified)
     (set-face-attribute 'which-func                  nil                       :foreground "#333")
-    (set-face-attribute 'keycast-key                 nil :background 'unspecified :foreground "#f8b195" :weight 'bold :height 'unspecified :box nil))
+    ;; (set-face-attribute 'keycast-key                 nil :background 'unspecified :foreground "#f8b195" :weight 'bold :height 'unspecified :box nil)
+    )
   (add-hook 'nasy:config-before-hook #'nasy:set-face)
 #+end_src
 
@@ -292,19 +293,31 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (when *is-a-mac*
+    (setq mac-option-modifier  'meta)
+    (setq mac-command-modifier 'hyper)
     ;; cursor Movement
-    (global-set-key (kbd "s-<up>")   'beginning-of-buffer)
-    (global-set-key (kbd "s-<down>") 'end-of-buffer)
+    (global-set-key (kbd "H-<up>")   'beginning-of-buffer)
+    (global-set-key (kbd "H-<down>") 'end-of-buffer)
+    (global-set-key (kbd "H-l")      'goto-line)
     ;; text Operations
+    (global-set-key (kbd "H-a") 'mark-whole-buffer)
+    (global-set-key (kbd "H-v") 'yank)
+    (global-set-key (kbd "H-c") 'kill-ring-save)
+    (global-set-key (kbd "H-s") 'save-buffer)
+    (global-set-key (kbd "H-z") 'undo)
+    (global-set-key (kbd "H-w")
+                    (lambda ()
+                      (interactive)
+                      (delete-window)))
     (global-set-key (kbd "M-¥")
                     (lambda ()
                       (interactive)
                       (insert "\\")))
-    (global-set-key (kbd "s-<backspace>")
+    (global-set-key (kbd "H-<backspace>")
                     (lambda ()
                       (interactive)
                       (kill-line 0)))
-  )
+    )
 #+end_src
 
 *** Epoligue
@@ -1228,6 +1241,7 @@ Default settings for editor.
 
 #+begin_src elisp
   (use-package beacon
+    :disabled t
     :straight t
     :init (setq beacon-size  7
                 beacon-color "#f85e9f")
@@ -1493,7 +1507,9 @@ Disabled by default due to it causes lots of cpu.
 **** Unfill
 
 #+begin_src elisp
-  (straight-use-package 'unfill)
+  (use-package unfill
+    :straight t
+    :bind (("M-q" . unfill-toggle)))
 #+end_src
 
 **** Visual-fill-column
@@ -1972,6 +1988,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 #+begin_src elisp
   (use-package keycast
+    :disabled t
     :straight t
     :init (setq keycast-remove-tail-elements nil))
 #+end_src
@@ -2404,6 +2421,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 
 #+begin_src elisp
   (use-package smex
+    :disabled t
     :straight t
     :init (setq-default smex-save-file (no-littering-expand-var-file-name ".smex-items"))
     :bind (("<remap> <execute-extended-command>" . smex)))
@@ -2613,6 +2631,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 
 #+begin_src elisp
   (use-package which-func
+    :disabled t
     :demand t
     :hook ((after-init . which-function-mode)))
 #+end_src
@@ -3930,27 +3949,27 @@ I use doom-themes.
                     'local-map (make-mode-line-mouse-map 'mouse-1 (lambda () (interactive) (flycheck-list-errors)))))
       :when active)
 
-    (spaceline-define-segment nasy:keycast-keys
-      "Keycast modeline segment."
-      (and (funcall keycast-window-predicate)
-           (let* ((key (ignore-errors
-                         (key-description keycast--this-command-keys)))
-                  (cmd keycast--this-command)
-                  (elt (or (assoc cmd keycast-substitute-alist)
-                           (assoc key keycast-substitute-alist))))
-             (when elt
-               (pcase-let ((`(,_ ,k ,c) elt))
-                 (unless (eq k t) (setq key k))
-                 (unless (eq c t) (setq cmd c))))
-             (and key cmd
-                  (concat
-                   (propertize (let ((pad (max 2 (- 5 (length key)))))
-                                 (concat (make-string (ceiling pad 2) ?\s) key
-                                         (make-string (floor   pad 2) ?\s)))
-                               'face 'keycast-key)
-                   ;; (format " %s" (propertize (symbol-name cmd)
-                   ;;                           'face 'keycast-command))
-                   )))))
+    ;; (spaceline-define-segment nasy:keycast-keys
+    ;;   "Keycast modeline segment."
+    ;;   (and (funcall keycast-window-predicate)
+    ;;        (let* ((key (ignore-errors
+    ;;                      (key-description keycast--this-command-keys)))
+    ;;               (cmd keycast--this-command)
+    ;;               (elt (or (assoc cmd keycast-substitute-alist)
+    ;;                        (assoc key keycast-substitute-alist))))
+    ;;          (when elt
+    ;;            (pcase-let ((`(,_ ,k ,c) elt))
+    ;;              (unless (eq k t) (setq key k))
+    ;;              (unless (eq c t) (setq cmd c))))
+    ;;          (and key cmd
+    ;;               (concat
+    ;;                (propertize (let ((pad (max 2 (- 5 (length key)))))
+    ;;                              (concat (make-string (ceiling pad 2) ?\s) key
+    ;;                                      (make-string (floor   pad 2) ?\s)))
+    ;;                            'face 'keycast-key)
+    ;;                ;; (format " %s" (propertize (symbol-name cmd)
+    ;;                ;;                           'face 'keycast-command))
+    ;;                )))))
 
     (spaceline-define-segment lsp
       "The LSP server state."
