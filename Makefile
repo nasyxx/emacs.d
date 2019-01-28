@@ -10,7 +10,7 @@ generate:
 ## Copy example config to user config.
 config: generate
 	@echo "Generate user config from example config."
-	cp config/user-config-example.el user-config.el
+	cp config/user-config-example.el config/user-config.el
 
 ## Clean build (straight/)
 clean-build:
