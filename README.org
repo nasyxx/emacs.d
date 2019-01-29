@@ -2169,9 +2169,11 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package pretty-mode
     :demand t
     :straight t
-    :hook (((prog-mode text-mode org-mode) . turn-on-pretty-mode)
-           (after-init . global-prettify-symbols-mode)
-           (org-mode   . prettify-symbols-mode)
+    :init (setq prettify-symbols-unprettify-at-point 'right-edge)
+    :hook (((prog-mode
+             text-mode
+             org-mode)  . turn-on-pretty-mode)
+           (after-init  . global-prettify-symbols-mode)
            ((prog-mode
              emacs-lisp-mode
              org-mode) . (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
@@ -2288,7 +2290,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
                                        ("?="  . (?\s (Br . Bl) #Xe127))
                                        (":="  . (?\s (Br . Bl) #Xe10c))
                                        ("/>"  . (?\s (Br . Bl) #Xe12e))
-                                       ("+"   . (?\s (Br . Bl) #Xe16d))
+                                       ("+"   . #Xe16d)
                                        ("(:"  . (?\s (Br . Bl) #Xe16c))
                                        ))))
 
