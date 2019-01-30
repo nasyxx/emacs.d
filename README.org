@@ -2937,7 +2937,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
                 ("M-,"  . lsp-ui-peek-find-definitions)
                 ("M-?"  . lsp-ui-peek-find-references)
                 ("C-c u"   . lsp-ui-imenu)
-                ("C-c C-r" . lsp-ui-sideline-apply-code-actions))
+                ("C-c C-a" . lsp-ui-sideline-apply-code-actions))
     :hook ((lsp-mode . lsp-ui-mode))
     :init
     (setq-default lsp-ui-doc-position 'at-point
