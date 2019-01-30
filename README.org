@@ -2942,7 +2942,8 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :init
     (setq-default lsp-ui-doc-position 'at-point
                   lsp-ui-doc-header nil
-                  ;; lsp-ui-doc-include-signature nil
+                  lsp-ui-doc-border "violet"
+                  ;; lsp-ui-doc-include-signature t
                   lsp-ui-sideline-update-mode 'point
                   lsp-ui-sideline-delay 1
                   lsp-ui-sideline-ignore-duplicate t
@@ -3004,9 +3005,11 @@ I use clangd
   ;;----------------------------------------------------------------------------
   ;; Haskell
   ;; Include haskell-mode, lsp-haskell, intero and structured haskell mode
+  ;; Also inlcude haskell-snippets.
 #+end_src
 
-Include haskell-mode, lsp-haskell and intero.
+Include haskell-mode, lsp-haskell, intero and structured haskell mode.  Also
+inlcude haskell-snippets.
 
 **** Haskell-Mode
 
@@ -3036,6 +3039,7 @@ Include haskell-mode, lsp-haskell and intero.
            (haskell-mode . haskell-auto-insert-module-template)
            (haskell-mode . haskell-collapse-mode)
            (haskell-mode . stack-exec-path-mode)
+           (haskell-mode . interactive-haskell-mode)
            (haskell-mode . (lambda () (setq-local tab-width 4))))
     :bind (("C-x a a" . align)
            :map haskell-mode-map
@@ -3045,10 +3049,17 @@ Include haskell-mode, lsp-haskell and intero.
     (setq haskell-mode-stylish-haskell-path            "stylish-haskell"
           haskell-indentation-layout-offset            4
           haskell-process-suggest-haskell-docs-imports t
+          haskell-process-suggest-remove-import-lines  t
+          haskell-process-auto-import-loaded-modules   t
+          haskell-process-log                          t
           haskell-process-suggest-hayoo-imports        t
           haskell-process-suggest-hoogle-imports       t
           haskell-process-suggest-remove-import-lines  t
-          haskell-tags-on-save                         t)
+          haskell-tags-on-save                         t
+          haskell-completing-read-function             'helm--completing-read-default
+          haskell-doc-show-global-types                t
+          haskell-svg-render-images                    t
+          haskell-doc-chop-off-context                 nil)
 
     (unless (and *struct-hs* *struct-hs-path*)
       (add-hook #'haskell-mode-hook #'haskell-indentation-mode))
@@ -3140,6 +3151,13 @@ Include haskell-mode, lsp-haskell and intero.
                          "No structured-haskell-mode elisp find.\n"
                          "If you want to use it, \n"
                          "please install it and config its variables *struct-hs-path* in user-config.el\n")))))
+#+end_src
+
+**** haskell snippets
+
+#+begin_src elisp
+  (use-package haskell-snippets
+    :straight t)
 #+end_src
 
 *** Lisp
