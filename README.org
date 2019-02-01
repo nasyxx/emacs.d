@@ -2169,7 +2169,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package pretty-mode
     :demand t
     :straight t
-    :init (setq prettify-symbols-unprettify-at-point 'right-edge)
+    :init (setq prettify-symbols-unprettify-at-point nil)
     :hook (((prog-mode
              text-mode
              org-mode)  . turn-on-pretty-mode)
@@ -2244,8 +2244,8 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
                                        ("###"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe11c))
                                        ("####" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe11d))
                                        ("---"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe112))
-                                       ("{-"   . (?\s (Br . Bl) ?\s (Br . Bl) #Xe108))
-                                       ("-}"   . (?\s (Br . Bl) ?\s (Br . Bl) #Xe110))
+                                       ("{-"   . (?\s (Br . Bl) #Xe108))
+                                       ("-}"   . (?\s (Br . Bl) #Xe110))
                                        ("\\"   . (?\s (Br . Bl) #Xe106))
                                        ("\\\\" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe107))
                                        (".."   . (?\s (Br . Bl) #Xe124))
@@ -2258,8 +2258,8 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 
                                        ;; Arrows
                                        ;; Direct
-                                       ("->"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe114))
-                                       ("=>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe13f))
+                                       ("->"  . (?\s (Br . Bl) #Xe114))
+                                       ("=>"  . (?\s (Br . Bl) #Xe13f))
                                        ("->>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe115))
                                        ("=>>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe140))
                                        ("<<-" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15d))
@@ -2297,7 +2297,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
            (python-mode . (lambda ()
                             (mapc (lambda (pair) (push pair prettify-symbols-alist))
                                   '(;; Syntax
-                                    ("def"      . #x2131)
+                                    ("def"      . (#x1d507 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
                                     ;; ("not" .      #x2757)
                                     ("not"      . #xac)
                                     ("in"       . #x2208)
