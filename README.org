@@ -135,6 +135,8 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 
   (defvar   *blacken*   nil)
 
+  (defvar   *c-box*     t)
+
   (defvar   *vterm*     nil)
 #+end_src
 
@@ -1362,7 +1364,8 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :straight t
     :bind (:map company-active-map
                 ("C-c h" . company-quickhelp-manual-begin))
-    :hook ((after-init . company-quickhelp-mode)))
+    :hook ((after-init . company-quickhelp-mode))
+    :init (setq pos-tip-use-relative-coordinates t))
 #+end_src
 
 **** Company Math
@@ -1378,6 +1381,59 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :straight t
     :after company
     :hook ((after-init . (lambda () (company-flx-mode +1)))))
+#+end_src
+
+**** Company Box
+
+#+begin_src elisp
+  (when *c-box*
+    (use-package company-box
+      :straight t
+      :demand t
+      :after all-the-icons
+      :config
+      (setq company-box-backends-colors '((company-lsp      . "#e0f9b5")
+                                          (company-elisp    . "#e0f9b5")
+                                          (company-files    . "#ffffc2")
+                                          (company-keywords . "#ffa5a5")
+                                          (company-capf     . "#bfcfff")
+                                          (company-dabbrev  . "#bfcfff")))
+      (setq company-box-icons-unknown (concat (all-the-icons-material "find_in_page") " "))
+      (setq company-box-icons-elisp
+            (list
+             (concat (all-the-icons-faicon "tag") " ")
+             (concat (all-the-icons-faicon "cog") " ")
+             (concat (all-the-icons-faicon "cube") " ")
+             (concat (all-the-icons-material "color_lens") " ")))
+      (setq company-box-icons-yasnippet (concat (all-the-icons-faicon "bookmark") " "))
+      (setq company-box-icons-lsp
+            `((1 .  ,(concat (all-the-icons-faicon   "text-height")    " ")) ;; Text
+              (2 .  ,(concat (all-the-icons-faicon   "tags")           " ")) ;; Method
+              (3 .  ,(concat (all-the-icons-faicon   "tag" )           " ")) ;; Function
+              (4 .  ,(concat (all-the-icons-faicon   "tag" )           " ")) ;; Constructor
+              (5 .  ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Field
+              (6 .  ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Variable
+              (7 .  ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Class
+              (8 .  ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Interface
+              (9 .  ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Module
+              (10 . ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Property
+              (11 . ,(concat (all-the-icons-material "settings_system_daydream") " ")) ;; Unit
+              (12 . ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Value
+              (13 . ,(concat (all-the-icons-material "storage")        " ")) ;; Enum
+              (14 . ,(concat (all-the-icons-material "closed_caption") " ")) ;; Keyword
+              (15 . ,(concat (all-the-icons-material "closed_caption") " ")) ;; Snippet
+              (16 . ,(concat (all-the-icons-material "color_lens")     " ")) ;; Color
+              (17 . ,(concat (all-the-icons-faicon   "file-text-o")    " ")) ;; File
+              (18 . ,(concat (all-the-icons-material "refresh")        " ")) ;; Reference
+              (19 . ,(concat (all-the-icons-faicon   "folder-open")    " ")) ;; Folder
+              (20 . ,(concat (all-the-icons-material "closed_caption") " ")) ;; EnumMember
+              (21 . ,(concat (all-the-icons-faicon   "square")         " ")) ;; Constant
+              (22 . ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Struct
+              (23 . ,(concat (all-the-icons-faicon   "calendar")       " ")) ;; Event
+              (24 . ,(concat (all-the-icons-faicon   "square-o")       " ")) ;; Operator
+              (25 . ,(concat (all-the-icons-faicon   "arrows")         " "))) ;; TypeParameter
+            )
+      :hook ((company-mode . company-box-mode))))
 #+end_src
 
 *** Dash
