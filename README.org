@@ -343,7 +343,7 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
    calendar-longitude          102.8329
    user-mail-address           "nasyxx@gmail.com"
    initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))
-   nasy:theme                  'doom-Iosvkem
+   nasy:theme                  'doom-dracula
    ,*debug*                     nil
    ,*struct-hs-path*            nil
    ,*vterm*                     "/Users/Nasy/src/emacs-libvterm")
@@ -3538,10 +3538,10 @@ Other ~ox-_~ packages.
      org-hide-emphasis-markers t
      org-hide-leading-stars    nil
 
-     org-html-checkbox-type       'html
+     org-html-checkbox-type       'uncode
      org-html-doctype             "html5"
      org-html-html5-fancy         t
-     org-html-htmlize-output-type 'css
+     org-html-htmlize-output-type 'inline-css
      org-html-klipsify-src        t
      org-html-mathjax-options     '((path          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML")
                                     (scale         "100")
