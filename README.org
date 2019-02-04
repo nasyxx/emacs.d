@@ -2225,9 +2225,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package pretty-mode
     :demand t
     :straight t
-    :init (setq prettify-symbols-unprettify-at-point nil)
-    :hook (((prog-mode
-             text-mode
+    :hook (((text-mode
              org-mode)  . turn-on-pretty-mode)
            (after-init  . global-prettify-symbols-mode)
            ((prog-mode
@@ -2250,6 +2248,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
                                        ("<+"  . (?\s (Br . Bl) #Xe155))
                                        ("<+>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe156))
                                        ("+>"  . (?\s (Br . Bl) #Xe13a))
+                                       ("[]"  . #x1d731)
 
                                        ;; Equality
                                        ("=/="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe143))
@@ -2353,19 +2352,23 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
            (python-mode . (lambda ()
                             (mapc (lambda (pair) (push pair prettify-symbols-alist))
                                   '(;; Syntax
-                                    ("def"      . (#x1d507 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
+                                    ("def"      . (#x1d521 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
                                     ;; ("not" .      #x2757)
                                     ("not"      . #xac)
+                                    ("not_"     . #xac)
                                     ("in"       . #x2208)
                                     ("not in"   . #x2209)
                                     ("return"   . #x27fc)
                                     ("yield"    . #x27fb)
                                     ("for"      . #x2200)
+                                    ("None"     . #x1d7c7)
                                     ;; Extend Functions
                                     ("any"      . #x2754)
                                     ("all"      . #x2201)
+                                    ("any_"     . #x2754)
+                                    ("all_"     . #x2201)
                                     ("dict"     . #x1d507)
-                                    ("list"     . #x2112)
+                                    ("list"     . (#x1d4f5 (Br . Bl) #x1d4f2 (Br . Bl) #x1d4fc (Br . Bl) #x1d4fd))
                                     ("tuple"    . #x2a02)
                                     ("set"      . #x2126)
                                     ;; Base Types
@@ -2380,7 +2383,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
                                     ("String"   . #x1d54a)
                                     ;; Mypy
                                     ("Dict"     . #x1d507)
-                                    ("List"     . #x2112)
+                                    ("List"     . (#x1d4db (Br . Bl) #x1d4f2 (Br . Bl) #x1d4fc (Br . Bl) #x1d4fd))
                                     ("Tuple"    . #x2a02)
                                     ("Set"      . #x2126)
                                     ("Iterable" . #x1d50a)
