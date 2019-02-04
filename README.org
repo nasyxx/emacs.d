@@ -810,6 +810,12 @@ https://github.com/akermu/emacs-libvterm
     :demand   t
     :after    org
     :straight t
+    :bind
+    ;; https://github.com/rakanalh/emacs-dashboard/issues/45
+    (:map dashboard-mode-map
+          ("<down-mouse-1>" . nil)
+          ("<mouse-1>"      . widget-button-click)
+          ("<mouse-2>"      . widget-button-click))
     :init (setq dashboard-startup-banner 'official
                 dashboard-items '((recents   . 10)
                                   (bookmarks . 3 )
