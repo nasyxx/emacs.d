@@ -1512,7 +1512,8 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
   (use-package diff-hl
     :after dired
     :straight t
-    :hook ((dired-mode . diff-hl-dired-mode)))
+    :hook ((dired-mode . diff-hl-dired-mode)
+           (magit-post-refresh . diff-hl-magit-post-refresh)))
 #+end_src
 
 *** Easy Kill
