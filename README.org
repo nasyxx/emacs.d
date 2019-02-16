@@ -2787,10 +2787,16 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 
 #+begin_src elisp
   (dolist (package '(git-blamed
-                     gitignore-mode
-                     gitconfig-mode
                      git-timemachine))
-    (straight-use-package package))
+    (straight-use-package package)
+    (require package nil t))
+#+end_src
+
+**** Git Modes
+
+#+begin_src elisp
+  (use-package git-modes
+    :straight t)
 #+end_src
 
 **** Magit
@@ -2827,7 +2833,14 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 
 #+begin_src elisp
   (use-package forge
-    :straight (forge :type git :host github :repo "magit/forge"))
+    :straight t)
+#+end_src
+
+**** Transient
+
+#+begin_src elisp
+  (use-package transient
+    :straight (transient :type git :host github :repo "magit/transient"))
 #+end_src
 
 **** Git Commit
