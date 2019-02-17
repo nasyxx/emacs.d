@@ -19,6 +19,8 @@ url/
 var/
 etc/
 
+patches/
+
 custom.el
 ditaa0_9.jar
 forge-database.sqlite
