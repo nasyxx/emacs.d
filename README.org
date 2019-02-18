@@ -1908,7 +1908,8 @@ Disabled by default due to it causes lots of cpu.
 #+begin_src elisp
   (use-package highlight-indent-guides
     :straight t
-    :hook (((prog-mode text-mode) . highlight-indent-guides-mode)))
+    :init (setq highlight-indent-guides-responsive 'stack)
+    :hook (((prog-mode text-mode org-mode) . highlight-indent-guides-mode)))
 #+end_src
 
 **** Highlight Number
@@ -2840,7 +2841,7 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
 
 #+begin_src elisp
   (use-package transient
-    :straight (transient :type git :host github :repo "magit/transient"))
+    :straight t)
 #+end_src
 
 **** Git Commit
