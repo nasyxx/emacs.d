@@ -2198,7 +2198,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 *** Parens
 
-I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
+I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
@@ -2217,6 +2217,27 @@ I use ~smartparens~ with ~rainbow-delimiters~ instead of ~paredit~.
     :hook ((after-init . show-smartparens-global-mode)
            (after-init . smartparens-global-mode))
     :init (setq sp-hybrid-kill-entire-symbol nil))
+#+end_src
+
+**** Parinfer
+
+#+begin_src elisp
+  (use-package parinfer
+    :straight t
+    :bind (("C-," . parinfer-toggle-mode))
+    :init (setq parinfer-extensions
+                '(defaults       ; should be included.
+                   pretty-parens  ; different paren styles for different modes.
+                   ;; evil           ; If you use Evil.
+                   ;; lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
+                   ;; paredit        ; Introduce some paredit commands.
+                   smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+                   smart-yank))   ; Yank behavior depend on mode.
+    :hook (((clojure-mode
+             emacs-lisp-mode
+             common-lisp-mode
+             scheme-mode
+             lisp-mode) . parinfer-mode)))
 #+end_src
 
 **** Rainbow Delimiters
