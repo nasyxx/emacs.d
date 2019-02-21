@@ -138,6 +138,8 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
   (defvar   *c-box*     t)
 
   (defvar   *vterm*     nil)
+
+  (defvar   *ispell*    (executable-find "aspell"))
 #+end_src
 
 *** UI Settings
@@ -1575,6 +1577,38 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 #+begin_src elisp
   (use-package thingopt
     :straight t)
+#+end_src
+
+*** English
+
+**** Dict
+
+#+begin_src elisp
+  (use-package bing-dict
+    :straight t
+    :bind (("C-c d" . bing-dict-brief))
+    :init (setq bing-dict-show-thesaurus  'both
+                bing-dict-vocabulary-save t
+                bing-dict-cache-auto-save t
+                bing-dict-vocabulary-file
+                (no-littering-expand-var-file-name "bing-dict/vocabulary.org")
+                bing-dict-cache-file
+                (no-littering-expand-var-file-name "bing-dict/bing-dict-save.el")))
+#+end_src
+
+**** Spell
+
+#+begin_src elisp
+  (when *ispell*
+    (use-package ispell
+      :init
+      (setq-default ispell-program-name   *ispell*
+                    ispell-silently-savep t
+                    ispell-dictionary     "english"
+                    ispell-personal-dictionary
+                    (no-littering-expand-var-file-name "ispell/dictionary"))
+      (when (string-suffix-p "aspell" *ispell*)
+        (setq-default ispell-extra-args '("--reverse")))))
 #+end_src
 
 *** Eldoc
