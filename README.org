@@ -1599,16 +1599,17 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 **** Spell
 
 #+begin_src elisp
-  (when *ispell*
-    (use-package ispell
-      :init
-      (setq-default ispell-program-name   *ispell*
-                    ispell-silently-savep t
-                    ispell-dictionary     "english"
-                    ispell-personal-dictionary
-                    (no-littering-expand-var-file-name "ispell/dictionary"))
-      (when (string-suffix-p "aspell" *ispell*)
-        (setq-default ispell-extra-args '("--reverse")))))
+  (if *ispell*
+      (use-package ispell
+        :init
+        (setq-default ispell-program-name   *ispell*
+                      ispell-silently-savep t
+                      ispell-dictionary     "english"
+                      ispell-personal-dictionary
+                      (no-littering-expand-var-file-name "ispell/dictionary"))
+        (when (string-suffix-p "aspell" *ispell*)
+          (setq-default ispell-extra-args '("--reverse"))))
+    (message "if you want to use ispell, try\n brew install aspell\n brew install ispell"))
 #+end_src
 
 *** Eldoc
