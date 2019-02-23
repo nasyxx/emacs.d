@@ -2340,9 +2340,14 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
                                       ("float"  . #x211d )  ;; ℝ
                                       ("Int"    . #x2124 )  ;; ℤ
                                       ("int"    . #x2124 )  ;; 𝕫
-                                      ("String" . #x1d57e)  ;; 𝕊 𝕾
-                                      ("string" . #x1d598)  ;; 𝕤 𝖘
-                                      ("str"    . #x1d598)  ;; 𝕤 𝖘
+                                      ;; ("String" . #x1d57e)  ;; 𝕊 𝕾
+                                      ;; ("string" . #x1d598)  ;; 𝕤 𝖘
+                                      ;; ("str"    . #x1d598)  ;; 𝕤 𝖘
+                                      ("String" . #x1d54a)  ;; 𝕊
+                                      ("string" . #x1d564)  ;; 𝕤
+                                      ("str"    . #x1d564)  ;; 𝕤x
+                                      ("Char"   . #x2102 )  ;; ℂx
+                                      ("char"   . #x1d554)  ;; 𝕔x
 
                                       ("False"  . #x1d53d)  ;; 𝕱 𝔽
                                       ("True"   . #x1d54b)  ;; 𝕿 𝕋
@@ -2508,16 +2513,14 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
                             (mapc (lambda (pair) (push pair prettify-symbols-alist))
                                   '(;; Syntax
                                     ("def"    . (#x1d521 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
-                                    ("List"   . #x1d577)  ;; 𝕃 𝕷
-                                    ("list"   . #x1d591)  ;; 𝕝 𝖑
-                                    ("Char"   . #x1d56e)  ;; 𝕔 𝕮
-                                    ("char"   . #x1d588)  ;; 𝕔 𝕮
-                                    ("Dict"   . #x1d56f)  ;; 𝕯
-                                    ("dict"   . #x1d589)  ;; 𝖉
-                                    ("Set"    . #x1d516)  ;; 𝔖
-                                    ("set"    . #x1d530)  ;; 𝔰
-                                    ("Tuple"  . #x1d57f)  ;; 𝕋 𝕿
-                                    ("tuple"  . #x1d599)  ;; 𝕥 𝖙
+                                    ("List"   . #x1d543)  ;; 𝕃 𝕷
+                                    ("list"   . #x1d55d)  ;; 𝕝 𝖑
+                                    ("Dict"   . #x1d53B)  ;; 𝔻 𝕯
+                                    ("dict"   . #x1d555)  ;; 𝕕 𝖉
+                                    ("Set"    . #x1d61a)  ;; 𝔖 𝘚
+                                    ("set"    . #x1d634)  ;; 𝔰 𝘴
+                                    ("Tuple"  . #x1d61b)  ;; 𝕋 𝕿 𝘛
+                                    ("tuple"  . #x1d635)  ;; 𝕥 𝖙 𝘵
 
                                     ("Union"  . #x22c3 )  ;; ⋃
                                     ("union"  . #x22c3 )  ;; ⋃
@@ -2526,7 +2529,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
                              (mapc (lambda (pair) (push pair prettify-symbols-alist))
                                    '(;; Syntax
                                      ("pure" . (#x21f0 (Br . Bl) #x2006)) ;; ⇰  x
-                                     (" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; ∘
+                                     ;; (" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; ∘
                                      )))))
     :config
     (pretty-activate-groups
