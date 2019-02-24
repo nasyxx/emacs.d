@@ -2280,7 +2280,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 #+begin_src elisp
   (use-package rainbow-delimiters
     :straight t
-    :hook (((prog-mode text-mode) . rainbow-delimiters-mode)))
+    :hook (((after-init prog-mode text-mode org-mode org-src-mode) . rainbow-delimiters-mode)))
 #+end_src
 
 *** PDF Tools
