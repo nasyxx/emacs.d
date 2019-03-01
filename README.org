@@ -1,6 +1,6 @@
 #+PROPERTY: header-args:elisp :tangle (concat (file-name-directory (buffer-file-name)) "init.el")
 #+STARTUP: fold
-#+OPTIONS: ':nil *:t -:t ::t <:t H:5 \n:nil ^:t arch:headline author:t
+#+OPTIONS: ':nil *:t -:t ::t <:t H:5 \n:nil ^:{} arch:headline author:t
 #+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
 #+OPTIONS: email:nil f:t inline:t num:nil p:nil pri:nil prop:nil stat:t tags:t
 #+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
@@ -15,7 +15,9 @@
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 
 #+HTML_HEAD: <style>kbd {border-style: outset;} pre.src:before {top: -4px; box-shadow: 3px 3px 3px #eee; border-color: #ccc; padding: 0;}</style>
-#+HTML_HEAD: <style>#content {background-color: #fff0f8;} body,pre.src {background-color: #f7f4e3; box-shadow: 1px 1px 10px #7a378b;}</style>
+#+HTML_HEAD: <style>#content {background-color: #fff0f8;} body,pre.src {background-color: #282a36; transition: box-shadow 2s}</style>
+#+HTML_HEAD: <style>pre.src {text-shadow: 0 0 10px #000; box-shadow: 1px 1px 5px #7a378b; color: #9e579d;}</style>
+#+HTML_HEAD: <style>pre.src:hover{box-shadow: 1px 1px 10px #7a378b;}</style>
 
 #+LATEX_HEADER: \setmainjfont[BoldFont=PingFang SC]{FandolSong}
 #+LATEX_HEADER: \setsansfont{PingFang SC}
