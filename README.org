@@ -2993,7 +2993,9 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
                   whitespace-style         '(face tabs empty trailing lines-tail))
 
     ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
-    (dolist (hook '(special-mode-hook
+    (dolist (hook '(artist-mode-hook
+                    picture-mode-hook
+                    special-mode-hook
                     Info-mode-hook
                     eww-mode-hook
                     term-mode-hook
