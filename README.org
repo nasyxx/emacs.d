@@ -226,6 +226,14 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
    lsp-rust-rls-command    '("rls"))
 #+end_src
 
+**** Pandoc
+
+#+begin_src elisp
+  (setq-default
+   org-pandoc-options-for-context     '((template . "~/.emacs.d/nasy-context.tex"))  ;; I have no idea why I cannot set it as a variable.
+   org-pandoc-options-for-context-pdf '((template . "~/.emacs.d/nasy-context.tex")))
+#+end_src
+
 **** Parens
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
@@ -3424,6 +3432,18 @@ inlcude haskell-snippets.
            "\\.md\\'"))
 #+end_src
 
+*** Pandoc
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Pandoc
+#+end_src
+
+#+begin_src elisp
+  (use-package pandoc-mode
+    :straight t)
+#+end_src
+
 *** Python
 
 #+begin_src elisp :exports none
@@ -3587,7 +3607,17 @@ Other ~ox-_~ packages.
 #+begin_src elisp
   (straight-use-package 'ox-rst)
 
-  (require 'ox-md)
+
+  (with-eval-after-load 'ox
+    (let ((oxs '(ox-md
+                 ox-rst)))
+      (dolist (language oxs)
+        (require language))))
+
+
+  (use-package ox-pandoc
+    :after    ox
+    :straight t)
 #+end_src
 
 *** Basic Configs
@@ -3673,6 +3703,7 @@ Other ~ox-_~ packages.
      org-export-backends                           '(ascii html latex md)
      org-export-coding-system                      'utf-8
      org-export-kill-product-buffer-when-displayed t
+     org-export-with-broken-links                  'mark
      org-export-with-sub-superscripts              '{}
      org-use-sub-superscripts                      '{}
 
