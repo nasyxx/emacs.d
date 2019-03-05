@@ -228,7 +228,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 
 **** Pandoc
 
-#+begin_src elisp
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (setq-default
    org-pandoc-options-for-context     '((template . "~/.emacs.d/nasy-context.tex"))  ;; I have no idea why I cannot set it as a variable.
    org-pandoc-options-for-context-pdf '((template . "~/.emacs.d/nasy-context.tex")))
