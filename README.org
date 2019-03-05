@@ -871,11 +871,14 @@ https://github.com/akermu/emacs-libvterm
           ("<mouse-1>"      . widget-button-click)
           ("<mouse-2>"      . widget-button-click))
     :init (setq dashboard-startup-banner 'official
+                dashboard-center-content t
+                show-week-agenda-p       t
                 dashboard-items '((recents   . 10)
                                   (bookmarks . 3 )
                                   (projects  . 5 )
                                   (agenda    . 5 )
-                                  (registers . 5 )))
+                                  ;; (registers . 5 )
+                                  ))
     :config (dashboard-setup-startup-hook))
 #+end_src
 
