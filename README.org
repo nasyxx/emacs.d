@@ -3194,6 +3194,13 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
           company-lsp-cache-candidates    nil))
 #+end_src
 
+**** lsp-treemacs
+
+#+begin_src elisp
+  ;; (use-package lsp-treemacs
+  ;;   :straight (lsp-treemacs :type git :host github :repo "emacs-lsp/lsp-treemacs"))
+#+end_src
+
 *** Debug Adapter Protocol
 
 #+begin_src elisp :exports none
