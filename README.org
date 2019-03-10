@@ -259,8 +259,8 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   ;; The original one is `(find-at-startup find-when-checking) which is so slow.
   ;; straight-check-for-modifications '(find-at-startup find-when-checking)
-  (setq-default
-   straight-check-for-modifications '(check-on-save find-when-checking))
+  ;; (setq-default
+  ;;  straight-check-for-modifications '(check-on-save find-when-checking))
 #+end_src
 
 **** Start
@@ -591,6 +591,31 @@ Adjust garbage collection thresholds during startup, and thereafter
   ;;----------------------------------------------------------------------------
 #+end_src
 
+*** Hooks & Custom Require
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Hooks & Cutom Require
+#+end_src
+
+#+begin_src elisp
+  (defvar nasy:config-before-hook nil
+    "Hooks to run config functions before load custom.el.")
+
+  (defvar nasy:config-after-hook nil
+    "Hooks to run config functions after." )
+
+  (add-hook 'nasy:config-after-hook
+            #'(lambda () (message "Hi~ Hope you have fun with this config.")))
+  (add-hook 'after-init-hook
+            #'(lambda () (run-hooks 'nasy:config-after-hook)))
+#+end_src
+
+#+begin_src elisp
+  (require 'nasy-config nil t)
+  (require 'user-config nil t)
+#+end_src
+
 *** Compile
 
 #+begin_src elisp :exports none
@@ -664,31 +689,6 @@ Adjust garbage collection thresholds during startup, and thereafter
     (defun colourise-compilation-buffer ()
       (when (eq major-mode 'compilation-mode)
         (ansi-color-apply-on-region compilation-filter-start (point-max)))))
-#+end_src
-
-*** Hooks & Custom Require
-
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; Hooks & Cutom Require
-#+end_src
-
-#+begin_src elisp
-  (defvar nasy:config-before-hook nil
-    "Hooks to run config functions before load custom.el.")
-
-  (defvar nasy:config-after-hook nil
-    "Hooks to run config functions after." )
-
-  (add-hook 'nasy:config-after-hook
-            #'(lambda () (message "Hi~ Hope you have fun with this config.")))
-  (add-hook 'after-init-hook
-            #'(lambda () (run-hooks 'nasy:config-after-hook)))
-#+end_src
-
-#+begin_src elisp
-  (require 'nasy-config nil t)
-  (require 'user-config nil t)
 #+end_src
 
 *** Disable Some Features
