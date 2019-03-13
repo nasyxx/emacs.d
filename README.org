@@ -1968,6 +1968,27 @@ Disabled by default due to it causes lots of cpu.
     :hook ((after-init . highlight-numbers-mode)))
 #+end_src
 
+*** Helpful
+
+[[https://github.com/Wilfred/helpful]]
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Helpful
+#+end_src
+
+#+begin_src elisp
+  (use-package helpful
+    :straight t
+    :bind (("C-h f" . helpful-callable)
+           ("C-h v" . helpful-variable)
+           ("C-h k" . helpful-key)
+           ;; extra
+           ("C-c C-d" . helpful-at-point)
+           ("C-h F"   . helpful-function)
+           ("C-h C"   . helpful-command)))
+#+end_src
+
 *** Htmlize
 
 #+begin_src elisp :exports none
