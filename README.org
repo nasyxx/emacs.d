@@ -3515,7 +3515,9 @@ inlcude haskell-snippets.
   ;; Include python-mode, blacken, py-isort and flycheck-prospector
 #+end_src
 
-Include python-mode, blacken, py-isort and flycheck-prospector.
+Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flycheck-prospector.
+
+**** Python Mode
 
 #+begin_src elisp
   (use-package python
@@ -3588,17 +3590,46 @@ Include python-mode, blacken, py-isort and flycheck-prospector.
     (unless *blacken*
       (add-hook #'before-save-hook #'lsp-format-buffer nil t)))
 
-  ;; Now you can use it in lsp
+#+end_src
+
+**** black
+
+#+begin_src elisp
+  ;; Now you can use it in lsp.
   ;; NOTICE you have to config black though pyproject.toml.
   (when *blacken*
     (use-package blacken
       :straight t
       :hook ((python-mode    . blacken-mode))))
+#+end_src
 
+**** py-isort
+
+#+begin_src elisp
   (use-package py-isort
     :straight t
     :hook (before-save . py-isort-before-save))
+#+end_src
 
+**** Python Docstring
+
+#+begin_src elisp
+  (use-package python-docstring
+    :straight t
+    :hook ((python-mode . python-docstring-mode)))
+#+end_src
+
+**** Sphinx Doc
+
+#+begin_src elisp
+  (use-package sphinx-doc
+    :straight t
+    :hook ((python-mode . sphinx-doc-mode)))
+#+end_src
+
+**** flycheck-prospector
+
+#+begin_src elisp
   (use-package flycheck-prospector
     :disabled t
     :straight (flycheck-prospector :type git :host github :repo "nasyxx/flycheck-prospector")
