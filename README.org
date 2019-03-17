@@ -3066,7 +3066,8 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
                     comint-mode-hook
                     compilation-mode-hook
                     twittering-mode-hook
-                    minibuffer-setup-hook))
+                    minibuffer-setup-hook
+                    fundamental-mode))
       (add-hook hook #'no-trailing-whitespace))
     :diminish whitespace-mode)
 
@@ -3541,13 +3542,13 @@ Include python-mode, blacken, py-isort and flycheck-prospector.
                   python-indent-guess-indent-offset     nil
                   python-shell-completion-native-enable nil
                   python-shell-interpreter              "ipython3"
-                  python-shell-interpreter-args         "-i --simple-prompt --classic"
-                  py-ipython-command-args               "-i --simple-prompt --classic"
+                  python-shell-interpreter-args         "-i --simple-prompt"
+                  py-ipython-command-args               "-i --simple-prompt"
                   py-python-command                     "python3"
-                  flycheck-python-pycompile-executable "python3"
-                  flycheck-python-pylint-executable    "python3"
-                  python-mode-modeline-display         "Python"
-                  python-skeleton-autoinsert           t)
+                  flycheck-python-pycompile-executable  "python3"
+                  flycheck-python-pylint-executable     "python3"
+                  python-mode-modeline-display          "Python"
+                  python-skeleton-autoinsert            t)
 
     ;; A list here https://github.com/palantir/python-language-server/blob/develop/vscode-client/package.json#L23-L230
     ;; I prefer pydocstyle and black, so disabled yapf, though, pydocstyle still cannot be abled.
