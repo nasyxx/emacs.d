@@ -1526,6 +1526,8 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
       :straight t
       :demand t
       :after all-the-icons
+      :init
+      (setq company-box-icons-alist 'company-box-icons-all-the-icons)
       :config
       (setq company-box-backends-colors '((company-lsp      . "#e0f9b5")
                                           (company-elisp    . "#e0f9b5")
@@ -1556,7 +1558,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
               (12 . ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Value
               (13 . ,(concat (all-the-icons-material "storage")        " ")) ;; Enum
               (14 . ,(concat (all-the-icons-material "closed_caption") " ")) ;; Keyword
-              (15 . ,(concat (all-the-icons-material "closed_caption") " ")) ;; Snippet
+              (15 . ,(concat (all-the-icons-faicon   "bookmark")       " ")) ;; Snippet
               (16 . ,(concat (all-the-icons-material "color_lens")     " ")) ;; Color
               (17 . ,(concat (all-the-icons-faicon   "file-text-o")    " ")) ;; File
               (18 . ,(concat (all-the-icons-material "refresh")        " ")) ;; Reference
