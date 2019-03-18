@@ -1,4 +1,5 @@
 #+PROPERTY: header-args:elisp :tangle (concat (file-name-directory (buffer-file-name)) "init.el")
+#+STARTUP: overview
 #+OPTIONS: ':nil *:t -:t ::t <:t H:5 \n:nil ^:{} arch:headline author:t
 #+OPTIONS: creator:nil d:(not "LOGBOOK") date:t e:t
 #+OPTIONS: email:nil f:t inline:t num:nil p:nil pri:nil prop:nil stat:t tags:t
@@ -3866,6 +3867,13 @@ Other ~ox-_~ packages.
         (apply orig paragraph fixed-contents args)))
     (advice-add #'org-html-paragraph :around #'nasy:org-html-paragraph-advice)
 
+    (defun nasy:org-fix-saveplace ()
+      "Fix a problem with saveplace.el putting you back in a folded position"
+      (when (outline-invisible-p)
+        (save-excursion
+          (outline-previous-visible-heading 1)
+          (org-show-subtree))))
+
     :bind (("C-c l" . org-store-link)
            ("C-c a" . org-agenda)
            ("C-c c" . org-capture)
@@ -3876,7 +3884,8 @@ Other ~ox-_~ packages.
            ("C-c _"    . org-edit-special)
            :map org-src-mode-map
            ("C-c _"    . org-edit-src-exit))
-    :hook ((org-mode . auto-fill-mode))
+    :hook ((org-mode . auto-fill-mode)
+           (org-mode . nasy:org-fix-saveplace))
     :init
     (setq
      org-archive-mark-done nil
