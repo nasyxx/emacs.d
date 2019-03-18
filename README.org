@@ -2215,6 +2215,13 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     :demand   t
     :after    (ivy all-the-icons)
     :straight t
+    :init (setq all-the-icons-ivy-file-commands
+                '(counsel-find-file
+                  counsel-file-jump
+                  counsel-recentf
+                  counsel-projectile
+                  counsel-projectile-find-file
+                  counsel-projectile-find-dir))
     :config (all-the-icons-ivy-setup))
 #+end_src
 
@@ -2224,6 +2231,16 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
   (use-package ivy-yasnippet
     :straight t
     :bind (("C-:" . ivy-yasnippet)))
+#+end_src
+
+**** Counsel Projectile
+
+#+begin_src elisp
+  (use-package counsel-projectile
+    :after    projectile
+    :straight t
+    :bind (:map projectile-command-map ("/" . counsel-projectile-rg))
+    :hook ((after-init . counsel-projectile-mode)))
 #+end_src
 
 *** Keycast
