@@ -2212,6 +2212,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 #+begin_src elisp
   (use-package all-the-icons-ivy
+    :disabled t
     :demand   t
     :after    (ivy all-the-icons)
     :straight t
