@@ -2995,6 +2995,19 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     :straight t)
 #+end_src
 
+*** Undo Tree
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Undo Tree
+#+end_src
+
+#+begin_src elisp
+  (use-package undo-tree
+    :straight t
+    :hook ((after-init . global-undo-tree-mode)))
+#+end_src
+
 *** Version Control
 
 #+begin_src elisp :exports none
