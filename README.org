@@ -825,6 +825,8 @@ I use general.el to set some variables, but key-bindings.
 
     (advice-add 'shell-command-to-string :before-until 'try-call-process)
 
+    (use-package noflet :straight t)
+
     (defun call-with-quick-shell-command (fn &rest args)
       (noflet ((shell-command-to-string
                 (&rest args)
@@ -835,7 +837,7 @@ I use general.el to set some variables, but key-bindings.
     :init (setq shell-command-switch "-ic")
     :config
     (when nil (message "PATH: %s, INFO: %s" (getenv "PATH")
-                     (getenv "ENVIRONMENT_SETUP_DONE"))
+                       (getenv "ENVIRONMENT_SETUP_DONE"))
           (setq exec-path-from-shell-debug t))
     (setq exec-path-from-shell-arguments (list "-l"))
     (setq exec-path-from-shell-check-startup-files nil)
