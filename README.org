@@ -706,6 +706,18 @@ Adjust garbage collection thresholds during startup, and thereafter
     (set-scroll-bar-mode nil))
 #+end_src
 
+*** Auto Compression
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Auto Compression
+#+end_src
+
+#+begin_src elisp
+  (use-package jka-compr
+    :init (auto-compression-mode))
+#+end_src
+
 *** Nice Scrolling
 
 #+begin_src elisp :exports none
@@ -954,8 +966,18 @@ https://github.com/akermu/emacs-libvterm
                    (abbreviate-file-name filename))))))
   (advice-add 'desktop-create-buffer :around 'nasy:desktop-time-buffer-create)
 
+  (setq-default kill-ring-max 300)
 
-  (setq-default history-length 1000)
+  (setq-default history-length 3000
+                history-delete-duplicates t
+                savehist-additional-variables
+                '(mark-ring
+                  global-mark-ring
+                  search-ring
+                  regexp-search-ring
+                  extended-command-history)
+                savehist-autosave-interval 60)
+
   (add-hook 'after-init-hook 'savehist-mode)
 
 
@@ -991,7 +1013,8 @@ https://github.com/akermu/emacs-libvterm
                     (search-ring              . 20)
                     (shell-command-history    . 50)
                     tags-file-name
-                    tags-table-list))))
+                    tags-table-list
+                    kill-ring))))
 #+end_src
 
 *** Auto Save (Super Save)
