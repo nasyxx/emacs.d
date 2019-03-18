@@ -1,5 +1,4 @@
 #+PROPERTY: header-args:elisp :tangle (concat (file-name-directory (buffer-file-name)) "init.el")
-#+STARTUP: fold
 #+OPTIONS: ':nil *:t -:t ::t <:t H:5 \n:nil ^:{} arch:headline author:t
 #+OPTIONS: creator:nil d:(not "LOGBOOK") date:t e:t
 #+OPTIONS: email:nil f:t inline:t num:nil p:nil pri:nil prop:nil stat:t tags:t
@@ -999,8 +998,6 @@ https://github.com/akermu/emacs-libvterm
                 savehist-autosave-interval 60)
 
   (add-hook #'after-init-hook #'savehist-mode)
-
-  (add-hook #'after-init-hook #'save-place-mode)
 
   (use-package session
     :defer    t
