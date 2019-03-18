@@ -2369,6 +2369,33 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
            ("C-c m a" . mc/edit-beginnings-of-lines)))
 #+end_src
 
+*** Outline and Outshine
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Outline and Outshine
+#+end_src
+
+**** Outline
+
+#+begin_src elisp
+  (use-package outline
+    :hook (((prog-mode text-mode) . outline-minor-mode))
+    :bind (:map outline-minor-mode-map
+                ("<tab>" . outline-toggle-children))
+    :diminish outline-minor-mode)
+#+end_src
+
+**** Outshine
+
+#+begin_src elisp
+  (use-package outshine
+    :demand   t
+    :straight t
+    :init (defvar outline-minor-mode-prefix "\M-#")
+    :hook ((outline-minor-mode . outshine-mode)))
+#+end_src
+
 *** Pangu Spacing
 
 #+begin_src elisp :exports none
