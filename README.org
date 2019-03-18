@@ -1908,6 +1908,14 @@ Disabled by default due to it causes lots of cpu.
          (helm-other-buffer helm-source-list "*helm search*"))))
 #+end_src
 
+**** Helm Posframe
+
+#+begin_src elisp
+  (use-package helm-posframe
+    :straight t
+    :config (helm-posframe-enable))
+#+end_src
+
 **** Helm Org
 
 #+begin_src elisp
