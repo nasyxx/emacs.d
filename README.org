@@ -908,18 +908,6 @@ https://github.com/akermu/emacs-libvterm
     :config (dashboard-setup-startup-hook))
 #+end_src
 
-*** Line Number
-
-#+begin_src elisp
-  (gsetq-default display-line-numbers 'visual
-                 display-line-numbers-widen t
-                 ;; default
-                 display-line-numbers-current-absolute t)
-  (custom-set-faces '(line-number-current-line ((t :weight bold
-                                                   :foreground "violet red"
-                                                   :background "violet"))))
-#+end_src
-
 *** Window
 
 #+begin_src elisp :exports none
