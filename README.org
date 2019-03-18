@@ -685,6 +685,26 @@ Adjust garbage collection thresholds during startup, and thereafter
         (ansi-color-apply-on-region compilation-filter-start (point-max)))))
 #+end_src
 
+*** general.el
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Disable Some features.
+#+end_src
+
+I use general.el to set some variables, but key-bindings.
+
+#+begin_src elisp
+  (use-package general
+    :demand   t
+    :straight t)
+
+  (eval-and-compile
+    (defalias 'gsetq #'general-setq)
+    (defalias 'gsetq-local #'general-setq-local)
+    (defalias 'gsetq-default #'general-setq-default))
+#+end_src
+
 *** Disable Some Features
 
 #+begin_src elisp :exports none
