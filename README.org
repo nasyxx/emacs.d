@@ -205,9 +205,9 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 **** Helm
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (setq-default
-   ;; brew install rg   if you'd like to use rg as my doing
-   helm-ag-base-command "rg --no-heading --smart-case")
+  ;; (setq-default
+  ;;  ;; brew install rg   if you'd like to use rg as my doing
+  ;;  helm-ag-base-command "rg --no-heading --smart-case")
 #+end_src
 
 **** Shell
@@ -268,16 +268,16 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 **** Config After initialization
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  (defun nasy:config-after ()
-    "Set configuration need to be set after init."
-    (setq-default
-     helm-allow-mouse                  t
-     helm-follow-mode-persistent       t
-     helm-move-to-line-cycle-in-source nil
-     helm-source-names-using-follow    '("Buffers" "kill-buffer" "Occur")))
+  ;; (defun nasy:config-after ()
+  ;;   "Set configuration need to be set after init."
+  ;;   (setq-default
+  ;;    helm-allow-mouse                  t
+  ;;    helm-follow-mode-persistent       t
+  ;;    helm-move-to-line-cycle-in-source nil
+  ;;    helm-source-names-using-follow    '("Buffers" "kill-buffer" "Occur")))
 
 
-  (add-hook 'nasy:config-after-hook  #'nasy:config-after)
+  ;; (add-hook 'nasy:config-after-hook  #'nasy:config-after)
 #+end_src
 
 *** Custom Faces
@@ -1264,6 +1264,18 @@ Default settings for editor.
     :straight t)
 #+end_src
 
+*** FLX
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Flx
+#+end_src
+
+#+begin_src elisp
+  (use-package flx
+    :straight t)
+#+end_src
+
 *** Advance Words Count
 
 #+begin_src elisp :exports none
@@ -1842,201 +1854,6 @@ Disabled by default due to it causes lots of cpu.
     (setq-default locate-command "mdfind"))
 #+end_src
 
-*** Helm
-
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; Grep
-#+end_src
-
-**** Helm
-
-#+begin_src elisp
-  (use-package helm
-     :defer t
-     :straight t
-     :diminish helm-mode
-     :bind (("M-x"       . helm-M-x)
-            ("C-o"       . helm-occur)
-            ("<f1> SPC"  . helm-all-mark-rings) ; I modified the keybinding
-            ("M-y"       . helm-show-kill-ring)
-            ("C-x c x"   . helm-register)    ; C-x r SPC and C-x r j
-            ("C-x c g"   . helm-google-suggest)
-            ("C-x c M-:" . helm-eval-expression-with-eldoc)
-            ("C-x C-f"   . helm-find-files)
-            ("C-x b"     . nasy:helm)      ; *<major-mode> or /<dir> or !/<dir-not-desired> or @<regexp>
-            :map helm-map
-            ("<tab>" . helm-execute-persistent-action) ; rebind tab to run persistent action
-            ("C-i"   . helm-execute-persistent-action) ; make TAB works in terminal
-            ("C-z"   . helm-select-action) ; list actions using C-z
-            :map shell-mode-map
-            ("C-c C-l" . helm-comint-input-ring) ; in shell mode
-            :map minibuffer-local-map
-            ("C-c C-l" . helm-minibuffer-history))
-     :hook ((after-init . (lambda () (helm-mode 1)))
-            (after-init . (lambda () (helm-autoresize-mode 1))))
-     :init
-     (require 'helm-config)
-
-     (setq helm-M-x-fuzzy-match        t
-           helm-buffers-fuzzy-matching t
-           helm-recentf-fuzzy-match    t
-           helm-imenu-fuzzy-match      t
-           helm-locate-fuzzy-match     t
-           helm-apropos-fuzzy-match    t
-           helm-lisp-fuzzy-completion  t)
-
-     (when (executable-find "curl")
-       (setq helm-google-suggest-use-curl-p t))
-
-     (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
-           helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
-           helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
-           helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
-           helm-ff-file-name-history-use-recentf t
-           helm-echo-input-in-header-line        t)
-
-     :config
-     (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-
-     (require 'helm-buffers)
-     (require 'helm-for-files)
-
-     (defun nasy:helm ()
-       (interactive)
-       (let ((helm-ff-transformer-show-only-basename nil)
-             helm-source-list)
-         (unless helm-source-buffers-list
-           (setq helm-source-buffers-list
-                 (helm-make-source "Buffers" 'helm-source-buffers)))
-         (cond (
-                ;; Just add helm-source-projectile-* in list when current place in project.
-                (projectile-project-p)
-                (setq helm-source-list
-                      '(
-                        ;; helm-source-awesome-tab-group
-                        helm-source-projectile-buffers-list
-                        helm-source-buffers-list
-                        helm-source-recentf
-                        helm-source-projectile-files-list
-                        )))
-               (t
-                (setq helm-source-list
-                      '(
-                        ;; helm-source-awesome-tab-group
-                        helm-source-buffers-list
-                        helm-source-recentf
-                        ))
-                ))
-         (helm-other-buffer helm-source-list "*helm search*"))))
-#+end_src
-
-**** Helm Posframe
-
-#+begin_src elisp
-  (use-package helm-posframe
-    :straight t
-    :config
-    (gsetq helm-posframe-poshandler #'posframe-poshandler-frame-top-center)
-    (helm-posframe-enable))
-#+end_src
-
-**** Helm Org
-
-#+begin_src elisp
-  (use-package helm-org
-    :defer t
-    :config
-    (cl-defun helm-org-headings-in-buffer ()
-      (interactive)
-      (helm :sources (helm-source-org-headings-for-files
-                      (list (projectile-completing-read
-                             "File to look at headings from: "
-                             (projectile-all-project-files))))
-            :candidate-number-limit 99999
-            :buffer "*helm org inbuffer*")))
-#+end_src
-
-**** Helm Company
-
-#+begin_src elisp
-  (use-package helm-company
-    :after    company
-    :demand   t
-    :straight t
-    :bind (:map
-           company-mode-map ("C-:" . helm-company)
-           :map
-           company-active-map ("C-:" . helm-company)))
-#+end_src
-
-**** Helm Shell
-
-#+begin_src elisp
-  (use-package helm-eshell
-    :after helm
-    :bind (:map eshell-mode-map
-                ("C-c C-l" . helm-eshell-history)))
-#+end_src
-
-**** Helm Descbings
-
-#+begin_src elisp
-  (use-package helm-descbinds
-    :straight t
-    :after helm
-    :hook ((after-init . helm-descbinds-mode)))
-#+end_src
-
-**** Helm Projectile
-
-#+begin_src elisp
-  (use-package helm-projectile
-    :straight t
-    :hook ((after-init . helm-projectile-on))
-    :init
-    (setq projectile-completion-system 'helm))
-#+end_src
-
-**** Helm Ag
-
-#+begin_src elisp
-  (use-package helm-ag
-    :straight t
-    :init (setq helm-ag-fuzzy-match t
-                helm-ag-use-grep-ignore-list t
-                helm-ag-use-agignore t))
-#+end_src
-
-**** Helm Dash
-
-#+begin_src elisp
-  (use-package helm-dash
-    :straight t
-    :init (setq helm-dash-docsets-path "~/.docsets"))
-#+end_src
-
-**** Helm Swoop
-
-#+begin_src elisp
-  (use-package helm-swoop
-    :straight t
-    :bind (("C-s" . helm-swoop))
-    :init (setq helm-swoop-move-to-line-cycle   t
-                helm-swoop-use-line-number-face t
-                helm-swoop-use-fuzzy-match      t))
-#+end_src
-
-**** Helm Ls Git
-
-#+begin_src elisp
-  (use-package helm-ls-git
-    :straight t
-    :bind (("C-<f6>"   . helm-ls-git-ls)
-           ("C-x g"    . helm-ls-git-ls)
-           ("C-x C-d"  . helm-browse-project)))
-#+end_src
-
 *** Highlight
 
 #+begin_src elisp :exports none
@@ -2285,6 +2102,117 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     (when (fboundp 'isearch-occur)
       ;; to match ivy conventions
       (define-key isearch-mode-map (kbd "C-c C-o") 'isearch-occur)))
+#+end_src
+
+*** Ivy, Counsel and Swiper
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Ivy, Counsel and Swiper
+#+end_src
+
+**** Ivy
+
+#+begin_src elisp
+  (use-package ivy
+    :straight t
+    :hook ((after-init . ivy-mode))
+    :init (setq-default
+           ivy-wrap                     t
+           ivy-use-virtual-buffers      t
+           ivy-virtual-abbreviate       'fullpath
+           ivy-count-format             ""
+           projectile-completion-system 'ivy
+           ivy-magic-tilde              nil
+           ivy-dynamic-exhibit-delay-ms 150
+           ivy-initial-inputs-alist '((Man-completion-table . "^")
+                                      (woman . "^"))
+           ivy-re-builders-alist    '((t . ivy--regex-fuzzy)))
+    :bind (("C-c C-r" . ivy-resume)
+           :map ivy-minibuffer-map
+           ("RET"   . ivy-alt-done)
+           ("C-j"   . ivy-immediate-done)
+           ("C-RET" . ivy-immediate-done)
+           ("<up>"  . ivy-previous-line-or-history)
+           :map ivy-occur-mode-map
+           ("C-c C-q" . ivy-wgrep-change-to-wgrep-mode))
+    :diminish ivy-mode)
+#+end_src
+
+**** Counsel
+
+#+begin_src elisp
+  (use-package counsel
+    :straight t
+    :hook ((after-init . counsel-mode))
+    :bind (("M-x"   . counsel-M-x)
+           ("C-x :" . counsel-minibuffer-history)
+           ("C-c C-a o" . counsel-outline)
+           ("C-c C-a i" . counsel-imenu)
+           ("C-c C-a p" . counsel-list-processes)
+           ("C-c C-a d" . counsel-dash)
+           ("C-c C-a u" . counsel-unicode-char)
+           :map counsel-find-file-map
+           ("<left>"  . counsel-up-directory)
+           ("<right>" . counsel-down-directory))
+    :init (setq-default counsel-mode-override-describe-bindings t)
+    :config (gsetq counsel-yank-pop-height ivy-height)
+    :diminish counsel-mode)
+#+end_src
+
+**** Swiper
+
+#+begin_src elisp
+  (use-package swiper
+    :straight t
+    :init (defun nasy:swiper-at-point (sym)
+            "Use `swiper' to search for the `sym' at point."
+            (interactive (list (thing-at-point 'symbol)))
+            (swiper sym))
+    :bind (("C-s" . nasy:swiper-at-point)))
+#+end_src
+
+**** Ivy Rich
+
+#+begin_src elisp
+  (use-package ivy-rich
+    :after    counsel
+    :demand   t
+    :straight t
+    :config (ivy-rich-mode))
+#+end_src
+
+**** Ivy Posframe
+
+#+begin_src elisp
+  (use-package ivy-posframe
+    :demand   t
+    :straight t
+    :config
+    (defun ivy-posframe-display-at-frame-top-center (str)
+      (ivy-posframe--display str #'posframe-poshandler-frame-top-center))
+
+    (gsetq ivy-display-function #'ivy-posframe-display-at-frame-top-center)
+
+    (ivy-posframe-enable))
+#+end_src
+
+**** Ivy all-the-icons
+
+#+begin_src elisp
+  (use-package all-the-icons-ivy
+    :demand   t
+    :after    (ivy all-the-icons)
+    :straight t
+    :config (all-the-icons-ivy-setup))
+#+end_src
+
+**** Ivy Yasnippets
+
+#+begin_src elisp
+  (use-package ivy-yasnippet
+    :straight t
+    :bind (("C-:" . ivy-yasnippet)))
 #+end_src
 
 *** Keycast
@@ -2874,6 +2802,30 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
      '((pretty-fonts-fira-font prog-mode-hook org-mode-hook))))
 #+end_src
 
+*** Prescient
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Prescient
+#+end_src
+
+#+begin_src elisp
+  (use-package prescient
+    :straight t
+    :hook ((after-init . prescient-persist-mode)))
+
+
+  (use-package ivy-prescient
+    :straight t
+    :init (setq ivy-prescient-retain-classic-highlighting t)
+    :hook ((after-init . ivy-prescient-mode)))
+
+
+  (use-package company-prescient
+    :straight t
+    :hook ((after-init . company-prescient-mode)))
+#+end_src
+
 *** Projectile
 
 #+begin_src elisp :exports none
@@ -2925,7 +2877,6 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 
 #+begin_src elisp
   (use-package smex
-    :disabled t
     :straight t
     :init (setq-default smex-save-file (no-littering-expand-var-file-name ".smex-items"))
     :bind (("<remap> <execute-extended-command>" . smex)))
@@ -4546,7 +4497,7 @@ I use doom-themes.
      spaceline-separator-dir-left '(left . right)
      spaceline-separator-dir-right '(right . left)
      spaceline-flycheck-bullet "❀ %s")
-    (spaceline-helm-mode 1)
+    ;; (spaceline-helm-mode 1)
     (spaceline-info-mode 1)
     :straight spaceline
     :config
