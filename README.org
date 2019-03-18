@@ -254,15 +254,6 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
                             lines-tail empty))
 #+end_src
 
-**** Straight.el
-
-#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
-  ;; The original one is `(find-at-startup find-when-checking) which is so slow.
-  ;; straight-check-for-modifications '(find-at-startup find-when-checking)
-  ;; (setq-default
-  ;;  straight-check-for-modifications '(check-on-save find-when-checking))
-#+end_src
-
 **** Start
 
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
@@ -459,7 +450,8 @@ I use [[https://github.com/raxod502/straight.el][straight.el]] as my packages ma
 
 #+begin_src elisp
   (setq straight-recipes-gnu-elpa-use-mirror t
-        straight-repository-branch           "develop")
+        straight-repository-branch           "develop"
+        straight-check-for-modifications     'live)
 
   (defvar bootstrap-version)
 
