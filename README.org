@@ -1467,7 +1467,19 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     (advice-add 'company-pseudo-tooltip-unhide :before #'pre-popup-draw)
     (advice-add 'company-pseudo-tooltip-hide :after #'post-popup-draw)
 
-    (diminish 'company-mode "CMP"))
+    (diminish 'company-mode "CMP")
+    (defun company-backend-with-yas (backends)
+      "Add :with company-yasnippet to company BACKENDS.
+    Taken from https://github.com/syl20bnr/spacemacs/pull/179."
+      (if (and (listp backends) (memq 'company-yasnippet backends))
+          backends
+        (append (if (consp backends)
+                    backends
+                  (list backends))
+                '(:with company-yasnippet))))
+    ;; add yasnippet to all backends
+    (gsetq company-backends
+          (mapcar #'company-backend-with-yas company-backends)))
 #+end_src
 
 **** Company Try Hard
