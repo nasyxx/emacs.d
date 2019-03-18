@@ -1182,6 +1182,17 @@ I use super save to auto save files.
   (global-set-key (kbd "<f7>") 'nasy:split-window)
 #+end_src
 
+*** Posframe Helper
+
+#+begin_src elisp
+
+  (defun posframe-poshandler-frame-top-center (info)
+    (cons (/ (- (plist-get info :parent-frame-width)
+                (plist-get info :posframe-width))
+             2)
+          (round (* 0.02 (x-display-pixel-height)))))
+#+end_src
+
 ** Editor
 
 Here is the editor config, including some features and functions.
@@ -1913,7 +1924,9 @@ Disabled by default due to it causes lots of cpu.
 #+begin_src elisp
   (use-package helm-posframe
     :straight t
-    :config (helm-posframe-enable))
+    :config
+    (gsetq helm-posframe-poshandler #'posframe-poshandler-frame-top-center)
+    (helm-posframe-enable))
 #+end_src
 
 **** Helm Org
@@ -3005,7 +3018,10 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 #+begin_src elisp
   (use-package undo-tree
     :straight t
-    :hook ((after-init . global-undo-tree-mode)))
+    :hook ((after-init . global-undo-tree-mode))
+    :init (setq undo-tree-visualizer-diff       t
+                undo-tree-visualizer-timestamps t
+                undo-tree-auto-save-history     t))
 #+end_src
 
 *** Version Control
