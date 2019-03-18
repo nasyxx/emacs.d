@@ -3342,10 +3342,17 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
   (use-package lsp-mode
     :straight t
     :commands lsp
+    :preface
+    (defun delete-company-lsp ()
+      "Delete company-lsp added by lsp-mode from company-backends"
+      (when 'company-backends
+        (setq company-backends (delete 'company-lsp company-backends))))
     :hook ((lsp-after-open . lsp-enable-imenu)
-           (company-mode   . (lambda ()
-                               (setq company-backends
-                                     (delete 'company-lsp company-backends)))))
+           ((lsp-mode
+             lsp-after-open
+             prog-mode
+             company-box-mode
+             company-mode) . delete-company-lsp))
     :init (setq lsp-prefer-flymake            nil
                 lsp-enable-on-type-formatting nil))
 #+end_src
