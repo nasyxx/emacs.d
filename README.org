@@ -3270,11 +3270,9 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     :straight t
     :commands lsp
     :hook ((lsp-after-open . lsp-enable-imenu)
-           (lsp-after-open . (lambda ()
-                               (progn
-                                 (setq company-backends
-                                       (delete 'company-lsp company-backends))
-                                 (print company-backends)))))
+           (company-mode   . (lambda ()
+                               (setq company-backends
+                                     (delete 'company-lsp company-backends)))))
     :init (setq lsp-prefer-flymake            nil
                 lsp-enable-on-type-formatting nil))
 #+end_src
@@ -3314,7 +3312,15 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     :straight t
     :commands company-lsp
     :init
-    (general-pushnew '(company-lsp :with company-yasnippet) company-backends)
+    (general-pushnew
+     '(company-lsp
+       company-files
+       company-dabbrev-code
+       company-gtags
+       company-etags
+       company-keywords
+       :with company-yasnippet)
+     company-backends)
     (setq company-lsp-async               t
           company-lsp-enable-recompletion t
           company-lsp-enable-snippet      t
