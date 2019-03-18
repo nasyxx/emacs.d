@@ -3273,10 +3273,13 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     :straight t
     :commands lsp
     :hook ((lsp-after-open . lsp-enable-imenu)
-           (lsp-after-open . (lambda () (push 'company-files company-backends))))
+           (lsp-after-open . (lambda ()
+                               (progn
+                                 (setq company-backends
+                                       (delete 'company-lsp company-backends))
+                                 (print company-backends)))))
     :init (setq lsp-prefer-flymake            nil
-                lsp-enable-on-type-formatting nil)
-    :config (require 'lsp-clients))
+                lsp-enable-on-type-formatting nil))
 #+end_src
 
 **** lsp-ui
@@ -3310,10 +3313,11 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 #+begin_src elisp
   (use-package company-lsp
     :defer t
-    :after lsp-mode
+    :after (lsp-mode company)
     :straight t
     :commands company-lsp
     :init
+    (general-pushnew '(company-lsp :with company-yasnippet) company-backends)
     (setq company-lsp-async               t
           company-lsp-enable-recompletion t
           company-lsp-enable-snippet      t
@@ -3676,7 +3680,6 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
     :config
     (unless *blacken*
       (add-hook #'before-save-hook #'lsp-format-buffer nil t)))
-
 #+end_src
 
 **** black
