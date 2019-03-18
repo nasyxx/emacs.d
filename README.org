@@ -1924,6 +1924,19 @@ Disabled by default due to it causes lots of cpu.
             :buffer "*helm org inbuffer*")))
 #+end_src
 
+**** Helm Company
+
+#+begin_src elisp
+  (use-package helm-company
+    :after    company
+    :demand   t
+    :straight t
+    :bind (:map
+           company-mode-map ("C-:" . helm-company)
+           :map
+           company-active-map ("C-:" . helm-company)))
+#+end_src
+
 **** Helm Shell
 
 #+begin_src elisp
