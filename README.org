@@ -2145,7 +2145,8 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
            :map counsel-find-file-map
            ("<left>"  . counsel-up-directory)
            ("<right>" . counsel-down-directory))
-    :init (setq-default counsel-mode-override-describe-bindings t)
+    :init (setq-default counsel-mode-override-describe-bindings t
+                        counsel-find-file-at-point t)
     :config (gsetq counsel-yank-pop-height ivy-height)
     :diminish counsel-mode)
 #+end_src
