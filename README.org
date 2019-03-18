@@ -2237,6 +2237,20 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
         (vlf file))))
 #+end_src
 
+*** Link Hint
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Link Hint
+#+end_src
+
+#+begin_src elisp
+  (use-package link-hint
+    :straight t
+    :bind (("C-c l o" . link-hint-open-link)
+           ("C-c l c" . link-hint-copy-link)))
+#+end_src
+
 *** List Unicode Display
 
 #+begin_src elisp :exports none
