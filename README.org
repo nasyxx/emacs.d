@@ -1035,6 +1035,28 @@ I use super save to auto save files.
                 super-save-remote-files        nil))
 #+end_src
 
+*** Minibuffer
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Minibuffer
+#+end_src
+
+#+begin_src elisp
+  (setq enable-recursive-minibuffers t)
+
+  (minibuffer-depth-indicate-mode)
+
+  ;; https://www.reddit.com/r/emacs/comments/4d8gvt/how_do_i_automatically_close_the_minibuffer_after/
+  (defun helper:kill-minibuffer ()
+    "Exit the minibuffer if it is active."
+    (when (and (>= (recursion-depth) 1)
+             (active-minibuffer-window))
+      (abort-recursive-edit)))
+
+  (add-hook #'mouse-leave-buffer-hook #'helper:kill-minibuffer)
+#+end_src
+
 *** Disable Mouse
 
 #+begin_src elisp :exports none
