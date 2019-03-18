@@ -932,11 +932,11 @@ https://github.com/akermu/emacs-libvterm
   (global-set-key (kbd "C-x 1") 'toggle-delete-other-windows)
 #+end_src
 
-*** Session
+*** History, Saving and Session
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
-  ;; Session
+  ;; History, Saving and Session
 #+end_src
 
 #+begin_src elisp
@@ -978,8 +978,9 @@ https://github.com/akermu/emacs-libvterm
                   extended-command-history)
                 savehist-autosave-interval 60)
 
-  (add-hook 'after-init-hook 'savehist-mode)
+  (add-hook #'after-init-hook #'savehist-mode)
 
+  (add-hook #'after-init-hook #'save-place-mode)
 
   (use-package session
     :defer    t
