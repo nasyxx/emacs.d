@@ -323,6 +323,8 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
                     (lambda ()
                       (interactive)
                       (kill-line 0)))
+    (global-unset-key (kbd "<magnify-down>"))
+    (global-unset-key (kbd "<magnify-up>"))
     )
 #+end_src
 
