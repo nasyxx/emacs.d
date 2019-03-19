@@ -1890,7 +1890,10 @@ Disabled by default due to it causes lots of cpu.
 #+begin_src elisp
   (use-package highlight-numbers
     :straight t
-    :hook ((after-init . highlight-numbers-mode)))
+    :hook (((after-init
+             prog-mode
+             text-mode
+             org-mode) . highlight-numbers-mode)))
 #+end_src
 
 *** Helpful
