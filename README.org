@@ -2930,18 +2930,26 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     (add-to-list 'recentf-exclude no-littering-etc-directory))
 #+end_src
 
-*** Smex
+*** Smex/Amx
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
-  ;; Smex
+  ;; Smex/Amx
 #+end_src
+
+Now use amx instead of smex.
 
 #+begin_src elisp
   (use-package smex
+    :disbaled t
     :straight t
     :init (setq-default smex-save-file (no-littering-expand-var-file-name ".smex-items"))
     :bind (("<remap> <execute-extended-command>" . smex)))
+
+  (use-package amx
+    :straight t
+    :init (setq-default amx-save-file (no-littering-expand-var-file-name ".amx-items"))
+    :bind (("<remap> <execute-extended-command>" . amx)))
 #+end_src
 
 *** Subword
