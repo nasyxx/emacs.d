@@ -2941,7 +2941,7 @@ Now use amx instead of smex.
 
 #+begin_src elisp
   (use-package smex
-    :disbaled t
+    :disabled t
     :straight t
     :init (setq-default smex-save-file (no-littering-expand-var-file-name ".smex-items"))
     :bind (("<remap> <execute-extended-command>" . smex)))
