@@ -1699,7 +1699,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 #+begin_src elisp
   (use-package electric-operator
     :straight t
-    :hook ((python-mode c-mode c++-mode haskell-mode)))
+    :hook ((python-mode c-mode c++-mode haskell-mode) . electric-operator-mode))
 #+end_src
 
 *** English
