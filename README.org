@@ -2066,6 +2066,14 @@ Disabled by default due to it causes lots of cpu.
              css-mode) . aggressive-indent-mode)))
 #+end_src
 
+**** indent-tools
+
+#+begin_src elisp
+  (use-package indent-tools
+    :straight t
+    :bind (("C-c TAB" . indent-tools-hydra/body)))
+#+end_src
+
 *** iSearch
 
 I only use ~rg~ to search, so I disabled the key-map of isearch.
@@ -2903,7 +2911,6 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     :defer    t
     :straight t
     :diminish
-    :bind (("C-c TAB" . projectile-find-other-file))
     :bind-keymap ("C-c C-p" . projectile-command-map)
     :hook ((after-init . projectile-global-mode))
     :config (setq projectile-indexing-method      'hybrid
