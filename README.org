@@ -2369,6 +2369,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 #+begin_src elisp
   (use-package outline
+    :disabled t
     :hook (((prog-mode conf-mode bibtex-mode LaTeX-mode) . outline-minor-mode))
     :bind (:map outline-minor-mode-map
                 ("<tab>" . outline-toggle-children))
@@ -2379,6 +2380,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 #+begin_src elisp
   (use-package outshine
+    :disabled t
     :demand   t
     :straight t
     :bind (:map outshine-mode-map
