@@ -3915,6 +3915,15 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
     (add-to-list 'flycheck-disabled-checkers 'python-pylint))
 #+end_src
 
+**** pyimport
+
+#+begin_src elisp
+  (use-package pyimport
+    :straight t
+    :bind (:map python-mode-map
+                ("C-c C-i" . pyimport-insert-missing)))
+#+end_src
+
 *** Rust
 
 #+begin_src elisp :exports none
