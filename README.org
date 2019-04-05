@@ -3777,6 +3777,33 @@ inlcude haskell-snippets.
     :straight t)
 #+end_src
 
+*** HTML
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; HTML
+#+end_src
+
+#+begin_src elisp
+  (use-package lsp-mode
+    :straight t
+    :hook ((html-mode . lsp)))
+#+end_src
+
+*** JavaScript & TypeScript
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; JavaScript & TypeScript
+#+end_src
+
+#+begin_src elisp
+  (use-package lsp-mode
+    :disabled t
+    :straight t
+    :hook ((javascript-mode . lsp)))
+#+end_src
+
 *** Lisp
 
 #+begin_src elisp :exports none
