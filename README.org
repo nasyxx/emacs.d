@@ -161,7 +161,7 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
                  '(alpha . (80 . 75)))
 
     (add-to-list 'default-frame-alist
-                 '(font . "OperatorMonoLig Nerd Font-14"))
+                 '(font . "OperatorMonoSSmLig Nerd Font-13"))
 
     (defun stop-minimizing-window ()
     "Stop minimizing window under macOS."
