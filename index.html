@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-03-26 Tue 10:03 -->
+<!-- 2019-04-05 Fri 15:55 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Emacs Configuration</title>
@@ -256,323 +256,327 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org36fc584">Prologue</a>
+<li><a href="#org03747a6">Prologue</a>
 <ul>
-<li><a href="#org331a641"><b>NOTICE</b></a></li>
-<li><a href="#org5b83279">Screenshots</a></li>
+<li><a href="#orgbe81428"><b>NOTICE</b></a></li>
+<li><a href="#org4d63dda">Screenshots</a></li>
 </ul>
 </li>
-<li><a href="#orgcc0bc64">Dependencies</a></li>
-<li><a href="#orgf8b9011">Installation</a></li>
-<li><a href="#org9d1f691">Updates</a></li>
-<li><a href="#org4caf934">Custom Configuration</a>
+<li><a href="#orgff2e709">Dependencies</a></li>
+<li><a href="#orgcbb2581">Installation</a></li>
+<li><a href="#org1e11229">Updates</a></li>
+<li><a href="#org11731a4">Custom Configuration</a>
 <ul>
-<li><a href="#org545bbed">Default Custom Configuration</a>
+<li><a href="#org61ee64a">Default Custom Configuration</a>
 <ul>
-<li><a href="#org511ca2b">Header</a></li>
-<li><a href="#org7a00aac">Constants And Variables</a></li>
-<li><a href="#orgcfc5881">UI Settings</a></li>
-<li><a href="#org71be5b0">Default Settings</a>
+<li><a href="#orgb275ab6">Header</a></li>
+<li><a href="#org1fba3c1">Constants And Variables</a></li>
+<li><a href="#org7685b00">UI Settings</a></li>
+<li><a href="#org8b8dfd2">Default Settings</a>
 <ul>
-<li><a href="#org9d9561e">Cursor</a></li>
-<li><a href="#org1a95503">Visual</a></li>
-<li><a href="#org1792efa">Company</a></li>
-<li><a href="#org643a455">Helm</a></li>
-<li><a href="#orge337775">Shell</a></li>
-<li><a href="#org934c64c">Languages</a></li>
-<li><a href="#orgfefa113">Pandoc</a></li>
-<li><a href="#orga2348ef">Parens</a></li>
-<li><a href="#orgdf0542e">Whitespace</a></li>
-<li><a href="#org302e13a">Start</a></li>
-<li><a href="#org7f789c5">Config After initialization</a></li>
+<li><a href="#org8cb09e6">Cursor</a></li>
+<li><a href="#orgbedf180">Visual</a></li>
+<li><a href="#orgf39e43b">Company</a></li>
+<li><a href="#orgab62223">Helm</a></li>
+<li><a href="#org51dd270">Shell</a></li>
+<li><a href="#org935423c">Languages</a></li>
+<li><a href="#org391ebc6">Pandoc</a></li>
+<li><a href="#orgd9319b0">Parens</a></li>
+<li><a href="#org20f8332">Whitespace</a></li>
+<li><a href="#org7f561e4">Start</a></li>
+<li><a href="#orgebeb7c0">Config After initialization</a></li>
 </ul>
 </li>
-<li><a href="#org1d04d1d">Custom Faces</a></li>
-<li><a href="#orge3d311c">Key Bindings</a></li>
-<li><a href="#orgd670c65">Epoligue</a></li>
+<li><a href="#orgdcc1355">Custom Faces</a></li>
+<li><a href="#orgde31c8c">Key Bindings</a></li>
+<li><a href="#org3524fec">Epoligue</a></li>
 </ul>
 </li>
-<li><a href="#org4b76ae9">Example Custom Configuration</a></li>
-<li><a href="#org529c623">dashboard</a></li>
-<li><a href="#org51da1bb"><b>NOTICE:</b></a></li>
+<li><a href="#orgb3489a9">Example Custom Configuration</a></li>
+<li><a href="#org14de1bd">dashboard</a></li>
+<li><a href="#org8331c07"><b>NOTICE:</b></a></li>
 </ul>
 </li>
-<li><a href="#orgbe186eb">The Configuration</a>
+<li><a href="#orgc5f9668">The Configuration</a>
 <ul>
-<li><a href="#orgee38a09">Bootstrap</a>
+<li><a href="#orgad82407">Bootstrap</a>
 <ul>
-<li><a href="#org60d597f">File Header</a></li>
-<li><a href="#org67a272a">Lexical Binding</a></li>
-<li><a href="#org5f6e1f3">Some Default Settings</a></li>
-<li><a href="#org773700c">Is A Mac?</a></li>
-<li><a href="#org85fbbf2">Packages Manager</a></li>
-<li><a href="#org9c36d9a">Garbage Collection</a></li>
-<li><a href="#orge9eacf9">Benchmark</a></li>
-<li><a href="#org75b78a6">Expand load-path</a></li>
-<li><a href="#org2e50b51">No Littering</a></li>
-<li><a href="#org615a2de">Early Load Org Mode</a></li>
+<li><a href="#orgf04950b">File Header</a></li>
+<li><a href="#org3837796">Lexical Binding</a></li>
+<li><a href="#org6c62893">Some Default Settings</a></li>
+<li><a href="#orgafa78d9">Is A Mac?</a></li>
+<li><a href="#org73ab907">Packages Manager</a></li>
+<li><a href="#org1fe65e2">Garbage Collection</a></li>
+<li><a href="#orgf0f2e61">Benchmark</a></li>
+<li><a href="#org35b92dc">Expand load-path</a></li>
+<li><a href="#orgdba4892">No Littering</a></li>
+<li><a href="#orgdb3214a">Early Load Org Mode</a></li>
 </ul>
 </li>
-<li><a href="#org130bb54">Basic Configs</a>
+<li><a href="#org4617ca2">Basic Configs</a>
 <ul>
-<li><a href="#org83ec75e">Hooks &amp; Custom Require</a></li>
-<li><a href="#orgcdae79d">Compile</a></li>
-<li><a href="#orgbe7e2f9">general.el</a></li>
-<li><a href="#org6196ea6">Disable Some Features</a></li>
-<li><a href="#org22c8674">Auto Compression</a></li>
-<li><a href="#orgd86f192">Nice Scrolling</a></li>
-<li><a href="#orga3b6403">Text Scale</a></li>
-<li><a href="#org3b689d4">Shell</a></li>
-<li><a href="#org214e6ba">Term</a></li>
-<li><a href="#org4fb1a3f">Scratch Message</a></li>
-<li><a href="#orgc3ad723">Dashboard</a></li>
-<li><a href="#org1350869">Window</a></li>
-<li><a href="#orgd053dd7">History, Saving and Session</a></li>
-<li><a href="#org16e30a2">Auto Save (Super Save)</a></li>
-<li><a href="#org86196e7">Minibuffer</a></li>
-<li><a href="#org0ee8ff7">Disable Mouse</a></li>
+<li><a href="#org6bfbb39">Hooks &amp; Custom Require</a></li>
+<li><a href="#orgeab24a8">Compile</a></li>
+<li><a href="#org8b19479">general.el</a></li>
+<li><a href="#orgfef9848">Disable Some Features</a></li>
+<li><a href="#org323064d">Auto Compression</a></li>
+<li><a href="#orgad558b6">Nice Scrolling</a></li>
+<li><a href="#orgeae25d5">Text Scale</a></li>
+<li><a href="#orgdbe2eab">Shell</a></li>
+<li><a href="#orgf59f0f8">Term</a></li>
+<li><a href="#orga3541a5">Scratch Message</a></li>
+<li><a href="#org46bac30">Dashboard</a></li>
+<li><a href="#org07b779d">Window</a></li>
+<li><a href="#org29ea3b8">History, Saving and Session</a></li>
+<li><a href="#orge3921f3">Auto Save (Super Save)</a></li>
+<li><a href="#org322a418">Minibuffer</a></li>
+<li><a href="#org9a30a3b">Disable Mouse</a></li>
 </ul>
 </li>
-<li><a href="#orgcf8b906">Custom Functions</a>
+<li><a href="#orgafea7bf">Custom Functions</a>
 <ul>
-<li><a href="#org8a4251d">Reload the init-file</a></li>
-<li><a href="#org6a3805f">Insert Date</a></li>
-<li><a href="#org634d825">Rearrange split windows</a></li>
-<li><a href="#org6b8f51b">Posframe Helper</a></li>
+<li><a href="#orgc9b008c">Reload the init-file</a></li>
+<li><a href="#org8be62ca">Insert Date</a></li>
+<li><a href="#orgc2b9ffc">Rearrange split windows</a></li>
+<li><a href="#orgbb78b60">Posframe Helper</a></li>
 </ul>
 </li>
-<li><a href="#orgd0904f4">Editor</a>
+<li><a href="#org2d0c4b3">Editor</a>
 <ul>
-<li><a href="#org05a5c4b">Default Settings</a></li>
-<li><a href="#orgdbde022">Diminish</a></li>
-<li><a href="#orgf997a1d">FLX</a></li>
-<li><a href="#org1948064">Advance Words Count</a></li>
-<li><a href="#org598dd4c">Anzu</a></li>
-<li><a href="#orgce00e5e">Auto Insert</a></li>
-<li><a href="#orgb0a8f5c">Beacon</a></li>
-<li><a href="#org5246aec">Beginend</a></li>
-<li><a href="#orgd5dd494">Carbon Now sh</a></li>
-<li><a href="#org176ba39">Cheat Sh</a></li>
-<li><a href="#orgaea7453">Company</a>
+<li><a href="#org88e0128">Default Settings</a></li>
+<li><a href="#org07d3626">Diminish</a></li>
+<li><a href="#org7b1acd8">FLX</a></li>
+<li><a href="#orgdf0a741">Advance Words Count</a></li>
+<li><a href="#org088d137">Anzu</a></li>
+<li><a href="#org57928cb">Auto Insert</a></li>
+<li><a href="#org00e5a03">Beacon</a></li>
+<li><a href="#orgfbd4c34">Beginend</a></li>
+<li><a href="#orgb128b81">Carbon Now sh</a></li>
+<li><a href="#orgf3e8662">Cheat Sh</a></li>
+<li><a href="#org2c742f5">Company</a>
 <ul>
-<li><a href="#orgf5d2213">Company</a></li>
-<li><a href="#org26a343b">Company Try Hard</a></li>
-<li><a href="#orgafb1137">Company Quickhelp</a></li>
-<li><a href="#org420dc8e">Company Math</a></li>
-<li><a href="#org1b94c1f">Company Flx</a></li>
-<li><a href="#orgb660d57">Company Box</a></li>
+<li><a href="#org8e0b7d3">Company</a></li>
+<li><a href="#orga85b49e">Company Try Hard</a></li>
+<li><a href="#org6fc6252">Company Quickhelp</a></li>
+<li><a href="#org588f2b0">Company Math</a></li>
+<li><a href="#orga6e592f">Company Flx</a></li>
+<li><a href="#orgafa3661">Company Box</a></li>
 </ul>
 </li>
-<li><a href="#org2cb0c30">Dash</a></li>
-<li><a href="#org79112dc">Dash Functional</a></li>
-<li><a href="#org7ef8a75">Dired</a>
+<li><a href="#org408291e">Dash</a></li>
+<li><a href="#org951ed79">Dash Functional</a></li>
+<li><a href="#org03e9875">Dired</a>
 <ul>
-<li><a href="#orgdd0cdc3">Dired</a></li>
-<li><a href="#orgc095138">Diredfl</a></li>
-<li><a href="#org4677e6b">Uniquify</a></li>
-<li><a href="#org23c362d">Diff-hl</a></li>
+<li><a href="#org30c1e75">Dired</a></li>
+<li><a href="#orge4cf893">Diredfl</a></li>
+<li><a href="#org11216ff">Uniquify</a></li>
+<li><a href="#org7c716e5">Diff-hl</a></li>
 </ul>
 </li>
-<li><a href="#orge5fc30e">Easy Kill</a></li>
-<li><a href="#org8ac6be3">Electric Operator</a></li>
-<li><a href="#orgbf3ad07">English</a>
+<li><a href="#orgbd33e52">Easy Kill</a></li>
+<li><a href="#orgd8c4435">English</a>
 <ul>
-<li><a href="#org510813d">Dict</a></li>
-<li><a href="#orgfb54c8c">Spell</a></li>
+<li><a href="#orgf06c4c6">Dict</a></li>
+<li><a href="#orga10bbde">Spell</a></li>
 </ul>
 </li>
-<li><a href="#org934c1f8">Eldoc</a>
+<li><a href="#org511de86">Eldoc</a>
 <ul>
-<li><a href="#orge40291c">Eldoc Mode</a></li>
-<li><a href="#orgb48c6e6">Eldoc Box</a></li>
+<li><a href="#org67f722a">Eldoc Mode</a></li>
+<li><a href="#org84e61f8">Eldoc Box</a></li>
 </ul>
 </li>
-<li><a href="#orgcd8a05e">Fill Column</a>
+<li><a href="#orgb7382b4">Fill Column</a>
 <ul>
-<li><a href="#org8d9f282">Unfill</a></li>
-<li><a href="#org7e24832">Visual-fill-column</a></li>
+<li><a href="#orgfb24f34">Unfill</a></li>
+<li><a href="#org4e96b01">Visual-fill-column</a></li>
 </ul>
 </li>
-<li><a href="#org17a08f1">Flycheck</a></li>
-<li><a href="#org1026f03">Grab Mac Link</a></li>
-<li><a href="#orgbb8e213">Grep</a></li>
-<li><a href="#orgf191867">Highlight</a>
+<li><a href="#org277c1da">Flycheck</a></li>
+<li><a href="#org3d0585e">Grab Mac Link</a></li>
+<li><a href="#org91b3e92">Grep</a></li>
+<li><a href="#org35641f9">Highlight</a>
 <ul>
-<li><a href="#org5fbc3c8">cl-lib-highlight</a></li>
-<li><a href="#org040784f">Color Identifiers Mode</a></li>
-<li><a href="#org132edf1">hl-line</a></li>
-<li><a href="#org7c5a6bc">Highlight Indent Guides</a></li>
-<li><a href="#org65bf94a">Highlight Number</a></li>
+<li><a href="#orge2deb0c">cl-lib-highlight</a></li>
+<li><a href="#orgff3ffd3">Color Identifiers Mode</a></li>
+<li><a href="#org78d24e6">hl-line</a></li>
+<li><a href="#org9e96b71">Highlight Indent Guides</a></li>
+<li><a href="#orgde6a4dd">Highlight Number</a></li>
 </ul>
 </li>
-<li><a href="#org0fce54b">Helpful</a></li>
-<li><a href="#orgc64e9d4">Htmlize</a></li>
-<li><a href="#orga7c9709">iBuffer</a>
+<li><a href="#orgeb9a94a">Helpful</a></li>
+<li><a href="#org428914e">Htmlize</a></li>
+<li><a href="#org70c5f5e">Hydra</a></li>
+<li><a href="#orgf39d300">iBuffer</a>
 <ul>
-<li><a href="#orga506f95">ibuffer</a></li>
-<li><a href="#orgcc144b8">ibuffer vc</a></li>
-<li><a href="#org31e99bb">Other settings</a></li>
+<li><a href="#org3651caa">ibuffer</a></li>
+<li><a href="#orgffe8c3e">ibuffer vc</a></li>
+<li><a href="#org95791fd">Other settings</a></li>
 </ul>
 </li>
-<li><a href="#org6b5c373">imenu-list</a></li>
-<li><a href="#org5f79856">Indent</a>
+<li><a href="#orgcb87654">imenu-list</a></li>
+<li><a href="#org249f5a9">Indent</a>
 <ul>
-<li><a href="#org4c18c1e">aggressive indent</a></li>
+<li><a href="#orgad18f21">aggressive indent</a></li>
+<li><a href="#orged79f06">indent-tools</a></li>
 </ul>
 </li>
-<li><a href="#orgabd7f81">iSearch</a></li>
-<li><a href="#orgbbc555b">Ivy, Counsel and Swiper</a>
+<li><a href="#org21974b4">iSearch</a></li>
+<li><a href="#orgc7ef4ed">Ivy, Counsel and Swiper</a>
 <ul>
-<li><a href="#orgfc38ad6">Ivy</a></li>
-<li><a href="#org8b6a249">Counsel</a></li>
-<li><a href="#org29c9004">Swiper</a></li>
-<li><a href="#org118e1a8">Ivy Rich</a></li>
-<li><a href="#org18f64dd">Ivy Posframe</a></li>
-<li><a href="#org8dcfc24">Ivy all-the-icons</a></li>
-<li><a href="#org53dbf25">Ivy Yasnippets</a></li>
-<li><a href="#orgedbd3b1">Counsel Projectile</a></li>
+<li><a href="#org2ad4cd3">Ivy</a></li>
+<li><a href="#orge79d2e0">Counsel</a></li>
+<li><a href="#org0beba9c">Swiper</a></li>
+<li><a href="#orgb84452c">Ivy Rich</a></li>
+<li><a href="#org2110be6">Ivy Posframe</a></li>
+<li><a href="#org91d11f9">Ivy all-the-icons</a></li>
+<li><a href="#org9417bae">Ivy Yasnippets</a></li>
+<li><a href="#orgc25656a">Counsel Projectile</a></li>
 </ul>
 </li>
-<li><a href="#org16aaa42">Keycast</a></li>
-<li><a href="#orgf718387">Large File</a></li>
-<li><a href="#org46d1d38">Link Hint</a></li>
-<li><a href="#orga8be92f">List Unicode Display</a></li>
-<li><a href="#org88831d9">mmm-mode</a></li>
-<li><a href="#org304f164">Multiple Cursors</a></li>
-<li><a href="#orgb31632f">Outline and Outshine</a>
+<li><a href="#org6de2aff">Keycast</a></li>
+<li><a href="#org8919a61">Large File</a></li>
+<li><a href="#org59cedb7">Link Hint</a></li>
+<li><a href="#orgcebadff">List Unicode Display</a></li>
+<li><a href="#org2d1aa88">mmm-mode</a></li>
+<li><a href="#orga15fe7e">Multiple Cursors</a></li>
+<li><a href="#orga777819">Outline and Outshine</a>
 <ul>
-<li><a href="#orgcbab681">Outline</a></li>
-<li><a href="#orgf4f8fa4">Outshine</a></li>
+<li><a href="#org4096faf">Outline</a></li>
+<li><a href="#orgc9aa954">Outshine</a></li>
 </ul>
 </li>
-<li><a href="#orga83e11d">Pangu Spacing</a></li>
-<li><a href="#orgff630d0">Paper Break Lines</a></li>
-<li><a href="#org31a80df">Parens</a>
+<li><a href="#org1ed7c87">Pangu Spacing</a></li>
+<li><a href="#orgeb3f0a8">Paper Break Lines</a></li>
+<li><a href="#orge5c0dbc">Parens</a>
 <ul>
-<li><a href="#orgeb75ac4">Smartparens</a></li>
-<li><a href="#org4d146e4">Parinfer</a></li>
-<li><a href="#org9c97591">Rainbow Delimiters</a></li>
+<li><a href="#org707908e">Smartparens</a></li>
+<li><a href="#org3ec4eda">Parinfer</a></li>
+<li><a href="#org9ac74f0">Rainbow Delimiters</a></li>
 </ul>
 </li>
-<li><a href="#orgad2485c">PDF Tools</a></li>
-<li><a href="#org33599f7">Pretty</a>
+<li><a href="#org6c0650a">PDF Tools</a></li>
+<li><a href="#org80ef3a2">Pretty</a>
 <ul>
-<li><a href="#org887600c">Pretty Mode</a></li>
-<li><a href="#org4de17e9">ipretty</a></li>
-<li><a href="#org04fc9c0">Pretty Font</a></li>
+<li><a href="#orgeeafca7">Pretty Mode</a></li>
+<li><a href="#org998a20f">ipretty</a></li>
+<li><a href="#org884d7e3">Pretty Font</a></li>
 </ul>
 </li>
-<li><a href="#orgaa84885">Prescient</a></li>
-<li><a href="#org8a0785f">Projectile</a></li>
-<li><a href="#orge0970b8">Recentf</a></li>
-<li><a href="#orgc2754ba">Smex/Amx</a></li>
-<li><a href="#org2720ffe">Subword</a></li>
-<li><a href="#org2fd6219">Symbol Overlay</a></li>
-<li><a href="#org2750f94">Treemacs</a></li>
-<li><a href="#org06a6b81">Undo Tree</a></li>
-<li><a href="#org6693573">Version Control</a>
+<li><a href="#org1b755a9">Prescient</a></li>
+<li><a href="#org3f36ee7">Projectile</a></li>
+<li><a href="#org3db6a1f">Recentf</a></li>
+<li><a href="#orgf6175d5">Smex/Amx</a></li>
+<li><a href="#org0ff6ecd">Subword</a></li>
+<li><a href="#orgdec3f43">Symbol Overlay</a></li>
+<li><a href="#orge15968a">Treemacs</a></li>
+<li><a href="#orgffd1e4a">Undo Tree</a></li>
+<li><a href="#orgf3e1747">Version Control</a>
 <ul>
-<li><a href="#org9e5effa">Useful Simple Packages</a></li>
-<li><a href="#org39adbe4">Git Modes</a></li>
-<li><a href="#org40ccbbf">Magit</a></li>
-<li><a href="#orgeeb266b">Magit Org Todos</a></li>
-<li><a href="#orgd7fe170">Forge</a></li>
-<li><a href="#orgaeb9f6e">Transient</a></li>
-<li><a href="#org1330cf8">Git Commit</a></li>
-<li><a href="#org96bdc75">Git Messenger</a></li>
-<li><a href="#orgf7df233">Git Gutter</a></li>
-<li><a href="#org34b1e3a">Github Gist</a></li>
+<li><a href="#org4fecec9">Useful Simple Packages</a></li>
+<li><a href="#orgdc52630">Git Modes</a></li>
+<li><a href="#org6bbd0e5">Magit</a></li>
+<li><a href="#orge767fea">Magit Org Todos</a></li>
+<li><a href="#orgb19e47f">Forge</a></li>
+<li><a href="#org555620c">Transient</a></li>
+<li><a href="#org5980c9f">Git Commit</a></li>
+<li><a href="#org8651ef7">Git Messenger</a></li>
+<li><a href="#orgf473c93">Git Gutter</a></li>
+<li><a href="#org039dbbd">Github Gist</a></li>
 </ul>
 </li>
-<li><a href="#org5fd58ff">Which Function</a></li>
-<li><a href="#orgf73fe60">Which Key</a></li>
-<li><a href="#org996d750">Whitespace</a></li>
-<li><a href="#org999cbba">Writeroom Mode</a></li>
-<li><a href="#org3de1ec6">Yasnippet</a></li>
+<li><a href="#org7dfc3f3">Which Function</a></li>
+<li><a href="#orgf19b260">Which Key</a></li>
+<li><a href="#org0bf4a4a">Whitespace</a></li>
+<li><a href="#orgb480b31">Writeroom Mode</a></li>
+<li><a href="#org0c5ae01">Yasnippet</a></li>
 </ul>
 </li>
-<li><a href="#org01d51a8">Languages</a>
+<li><a href="#orgd4a4473">Languages</a>
 <ul>
-<li><a href="#org4935b60">Simple Supported Languages</a></li>
-<li><a href="#org2c35465">Language Server Protocol</a>
+<li><a href="#org2fa02a1">Simple Supported Languages</a></li>
+<li><a href="#orge187d75">Language Server Protocol</a>
 <ul>
-<li><a href="#org282373d">lsp-mode</a></li>
-<li><a href="#org1561024">lsp-ui</a></li>
-<li><a href="#org68d0ca4">company-lsp</a></li>
-<li><a href="#org14e412f">lsp-treemacs</a></li>
+<li><a href="#orgd7c68ea">lsp-mode</a></li>
+<li><a href="#org4aaf4de">lsp-ui</a></li>
+<li><a href="#org3cb7467">company-lsp</a></li>
+<li><a href="#org24ea22c">lsp-treemacs</a></li>
 </ul>
 </li>
-<li><a href="#org04df4f2">Debug Adapter Protocol</a>
+<li><a href="#org663b6e8">Debug Adapter Protocol</a>
 <ul>
-<li><a href="#orga95a6a9">Dap Mode</a></li>
+<li><a href="#org030d474">Dap Mode</a></li>
 </ul>
 </li>
-<li><a href="#org8a80315">C/C++/Object-C (Clangd)</a></li>
-<li><a href="#org01ba5e0">Haskell</a>
+<li><a href="#orgca2ed6c">C/C++/Object-C (Clangd)</a></li>
+<li><a href="#org14ef9e4">Haskell</a>
 <ul>
-<li><a href="#org6c588e1">Haskell-Mode</a></li>
-<li><a href="#org2ed4dec">LSP Haskell</a></li>
-<li><a href="#org2fe4b7e">intero</a></li>
-<li><a href="#orgdbef667">Structured Haskell Mode</a></li>
-<li><a href="#org105dcf8">haskell snippets</a></li>
+<li><a href="#org9df52e4">Haskell-Mode</a></li>
+<li><a href="#org844a6c0">LSP Haskell</a></li>
+<li><a href="#orgdeee4c4">intero</a></li>
+<li><a href="#orgb3ba756">Structured Haskell Mode</a></li>
+<li><a href="#org68221be">haskell snippets</a></li>
 </ul>
 </li>
-<li><a href="#orgc338770">Lisp</a>
+<li><a href="#org2692db5">HTML</a></li>
+<li><a href="#org7a1830c">JavaScript &amp; TypeScript</a></li>
+<li><a href="#orgb04fd3c">Lisp</a>
 <ul>
-<li><a href="#org07b3c7c">lisp-mode</a></li>
-<li><a href="#orgd3168b6">Highlight-quoted</a></li>
-<li><a href="#org181c31c">elisp-def</a></li>
+<li><a href="#org57ad82d">lisp-mode</a></li>
+<li><a href="#org668d3fe">Highlight-quoted</a></li>
+<li><a href="#org8e49743">elisp-def</a></li>
 </ul>
 </li>
-<li><a href="#org04cbd18">Markdown</a></li>
-<li><a href="#org74e48d0">Pandoc</a></li>
-<li><a href="#org4923f12">Python</a>
+<li><a href="#orgb3c98ff">Markdown</a></li>
+<li><a href="#org94b189c">Pandoc</a></li>
+<li><a href="#org730d8fc">Python</a>
 <ul>
-<li><a href="#org4befeae">Python Mode</a></li>
-<li><a href="#orgc7db6f9">black</a></li>
-<li><a href="#org0cdb7d0">py-isort</a></li>
-<li><a href="#org245b1e8">Python Docstring</a></li>
-<li><a href="#orgc9f5b41">Sphinx Doc</a></li>
-<li><a href="#org77aad38">flycheck-prospector</a></li>
+<li><a href="#org037d3fe">Python Mode</a></li>
+<li><a href="#orgdf6208b">black</a></li>
+<li><a href="#org7fe6b66">py-isort</a></li>
+<li><a href="#orgfbc61e0">Python Docstring</a></li>
+<li><a href="#org7c079d2">Sphinx Doc</a></li>
+<li><a href="#org3b734fe">flycheck-prospector</a></li>
+<li><a href="#org8c1c346">pyimport</a></li>
 </ul>
 </li>
-<li><a href="#org79699eb">Rust</a></li>
+<li><a href="#orge19b376">Rust</a></li>
 </ul>
 </li>
-<li><a href="#org0f8caec">Org Mode</a>
+<li><a href="#org32a423d">Org Mode</a>
 <ul>
-<li><a href="#org0c30460">Load</a></li>
-<li><a href="#orgd73feaa">OX Org</a></li>
-<li><a href="#orgf1eecf0">Basic Configs</a></li>
-<li><a href="#org78176ba">Org-Agenda</a></li>
-<li><a href="#orgcd32f37">Org Bullets</a></li>
-<li><a href="#orgf172cd7">Org Capture</a></li>
-<li><a href="#org34c7ae7">Org Cliplink</a></li>
-<li><a href="#org813d815">Org Clock</a></li>
-<li><a href="#org5080d95">Org Extra Jar &#x2013; ob-ditaa &amp; ob-plantuml</a></li>
-<li><a href="#org7299604">Org Pdfview</a></li>
-<li><a href="#org9757b46">Org Pomodoro</a></li>
-<li><a href="#orga278faf">Org Toc</a></li>
-<li><a href="#org4f5c0f5">Org Wc</a></li>
+<li><a href="#org8408f6d">Load</a></li>
+<li><a href="#org1cb0db3">OX Org</a></li>
+<li><a href="#org2b4d9a6">Basic Configs</a></li>
+<li><a href="#orgd71b810">Org-Agenda</a></li>
+<li><a href="#org0978c56">Org Bullets</a></li>
+<li><a href="#org82a0261">Org Capture</a></li>
+<li><a href="#orga6c596f">Org Cliplink</a></li>
+<li><a href="#org8c0d4cc">Org Clock</a></li>
+<li><a href="#org054db4b">Org Extra Jar &#x2013; ob-ditaa &amp; ob-plantuml</a></li>
+<li><a href="#org92fe6c9">Org Pdfview</a></li>
+<li><a href="#orgd5660bd">Org Pomodoro</a></li>
+<li><a href="#orge7beb45">Org Toc</a></li>
+<li><a href="#org4cf7cd5">Org Wc</a></li>
 </ul>
 </li>
-<li><a href="#org679b1fd">Themes</a>
+<li><a href="#org7851337">Themes</a>
 <ul>
-<li><a href="#org28e299f">Main Theme</a></li>
-<li><a href="#orgb5a3b99">Font</a></li>
-<li><a href="#org7dbd4cd">Mode Line</a></li>
+<li><a href="#org210bf66">Main Theme</a></li>
+<li><a href="#org4c1a22c">Font</a></li>
+<li><a href="#org364d17d">Mode Line</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org12f0b46">Epilogue</a></li>
+<li><a href="#org1fc5e16">Epilogue</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-org36fc584" class="outline-2">
-<h2 id="org36fc584">Prologue</h2>
-<div class="outline-text-2" id="text-org36fc584">
+<div id="outline-container-org03747a6" class="outline-2">
+<h2 id="org03747a6">Prologue</h2>
+<div class="outline-text-2" id="text-org03747a6">
 <p>
 A Straightforward Emacs Configuration Bundle.
 </p>
@@ -583,9 +587,9 @@ not sure if it would work well well on Linux or Windows.
 </p>
 </div>
 
-<div id="outline-container-org331a641" class="outline-3">
-<h3 id="org331a641"><b>NOTICE</b></h3>
-<div class="outline-text-3" id="text-org331a641">
+<div id="outline-container-orgbe81428" class="outline-3">
+<h3 id="orgbe81428"><b>NOTICE</b></h3>
+<div class="outline-text-3" id="text-orgbe81428">
 <ul class="org-ul">
 <li>This file is a literature programing source file, and generates <code>init.el</code></li>
 <li>Almost all in one file.</li>
@@ -600,9 +604,9 @@ not sure if it would work well well on Linux or Windows.
 </div>
 </div>
 
-<div id="outline-container-org5b83279" class="outline-3">
-<h3 id="org5b83279">Screenshots</h3>
-<div class="outline-text-3" id="text-org5b83279">
+<div id="outline-container-org4d63dda" class="outline-3">
+<h3 id="org4d63dda">Screenshots</h3>
+<div class="outline-text-3" id="text-org4d63dda">
 
 <figure>
 <img src="./screenshot1.png" alt="screenshot1.png">
@@ -624,9 +628,9 @@ not sure if it would work well well on Linux or Windows.
 </div>
 </div>
 
-<div id="outline-container-orgcc0bc64" class="outline-2">
-<h2 id="orgcc0bc64">Dependencies</h2>
-<div class="outline-text-2" id="text-orgcc0bc64">
+<div id="outline-container-orgff2e709" class="outline-2">
+<h2 id="orgff2e709">Dependencies</h2>
+<div class="outline-text-2" id="text-orgff2e709">
 <ul class="org-ul">
 <li>Emacs</li>
 <li>git</li>
@@ -636,9 +640,9 @@ not sure if it would work well well on Linux or Windows.
 </div>
 </div>
 
-<div id="outline-container-orgf8b9011" class="outline-2">
-<h2 id="orgf8b9011">Installation</h2>
-<div class="outline-text-2" id="text-orgf8b9011">
+<div id="outline-container-orgcbb2581" class="outline-2">
+<h2 id="orgcbb2581">Installation</h2>
+<div class="outline-text-2" id="text-orgcbb2581">
 <p>
 To install, clone this repo to  <span>  <code>~/.emacs.d</code>  </span> :
 </p>
@@ -662,9 +666,9 @@ You can regenerate  <span>  <code>init.el</code>  </span>  by <code>make generat
 </div>
 </div>
 
-<div id="outline-container-org9d1f691" class="outline-2">
-<h2 id="org9d1f691">Updates</h2>
-<div class="outline-text-2" id="text-org9d1f691">
+<div id="outline-container-org1e11229" class="outline-2">
+<h2 id="org1e11229">Updates</h2>
+<div class="outline-text-2" id="text-org1e11229">
 <p>
 Update this config with running <code>make update</code> or <code>git pull</code> after a <code>make
 clean-build</code> and restart Emacs.
@@ -690,13 +694,13 @@ If you encounter any errors while updating, you may need to kill Emacs and run
 </div>
 </div>
 
-<div id="outline-container-org4caf934" class="outline-2">
-<h2 id="org4caf934">Custom Configuration</h2>
-<div class="outline-text-2" id="text-org4caf934">
+<div id="outline-container-org11731a4" class="outline-2">
+<h2 id="org11731a4">Custom Configuration</h2>
+<div class="outline-text-2" id="text-org11731a4">
 </div>
-<div id="outline-container-org545bbed" class="outline-3">
-<h3 id="org545bbed">Default Custom Configuration</h3>
-<div class="outline-text-3" id="text-org545bbed">
+<div id="outline-container-org61ee64a" class="outline-3">
+<h3 id="org61ee64a">Default Custom Configuration</h3>
+<div class="outline-text-3" id="text-org61ee64a">
 <p>
 This file includes all of the customizable variables of my configuration.
 </p>
@@ -706,27 +710,27 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </p>
 </div>
 
-<div id="outline-container-org511ca2b" class="outline-4">
-<h4 id="org511ca2b">Header</h4>
-<div class="outline-text-4" id="text-org511ca2b">
+<div id="outline-container-orgb275ab6" class="outline-4">
+<h4 id="orgb275ab6">Header</h4>
+<div class="outline-text-4" id="text-orgb275ab6">
 <div class="org-src-container">
-<pre class="src src-elisp"><span style="color: #6272a4;">;;; </span><span style="color: #61bfff; background-color: #44475a; font-weight: bold;">config.el --- User config file.                    -*- lexical-binding: t; -*-</span>
+<pre class="src src-elisp"><span style="color: #6272a4;">;;; </span><span style="color: #6272a4;">config.el --- User config file.                    -*- lexical-binding: t; -*-</span>
 
 <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">Author: Nasy <a href="mailto:nasyxx+emacs%40gmail.com">&lt;nasyxx+emacs@gmail.com&gt;</a></span>
 
-<span style="color: #6272a4;">;;; </span><span style="color: #61bfff; background-color: #44475a; font-weight: bold;">Commentary:</span>
+<span style="color: #6272a4;">;;; </span><span style="color: #6272a4;">Commentary:</span>
 
 <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">Nasy's Custom Config file.</span>
 
-<span style="color: #6272a4;">;;; </span><span style="color: #61bfff; background-color: #44475a; font-weight: bold;">Code:</span>
+<span style="color: #6272a4;">;;; </span><span style="color: #6272a4;">Code:</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org7a00aac" class="outline-4">
-<h4 id="org7a00aac">Constants And Variables</h4>
-<div class="outline-text-4" id="text-org7a00aac">
+<div id="outline-container-org1fba3c1" class="outline-4">
+<h4 id="org1fba3c1">Constants And Variables</h4>
+<div class="outline-text-4" id="text-org1fba3c1">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">defconst</span> <span style="color: #f8f8f2;">*is-a-mac*</span>  (eq system-type <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">darwin</span><span style="color: #6272a4;">))</span>
 
@@ -763,9 +767,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-orgcfc5881" class="outline-4">
-<h4 id="orgcfc5881">UI Settings</h4>
-<div class="outline-text-4" id="text-orgcfc5881">
+<div id="outline-container-org7685b00" class="outline-4">
+<h4 id="org7685b00">UI Settings</h4>
+<div class="outline-text-4" id="text-org7685b00">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #6272a4;">;; </span><span style="color: #6272a4;">Theme</span>
 (<span style="color: #ff79c6; font-style: italic;">defvar</span> <span style="color: #f8f8f2;">nasy:theme</span> <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">doom-dracula</span><span style="color: #6272a4;">)</span>
@@ -781,7 +785,7 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
                <span style="color: #bd93f9;">'</span>(alpha . (<span style="color: #ff5555; font-weight: bold;">80</span> . <span style="color: #ff5555; font-weight: bold;">75</span><span style="color: #6272a4;">)))</span>
 
   (add-to-list <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">default-frame-alist</span>
-               <span style="color: #bd93f9;">'</span>(font . <span style="color: #f1fa8c;">"OperatorMonoLig Nerd Font-14"</span><span style="color: #6272a4;">))</span>
+               <span style="color: #bd93f9;">'</span>(font . <span style="color: #f1fa8c;">"OperatorMonoSSmLig Nerd Font-13"</span><span style="color: #6272a4;">))</span>
 
   (<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">stop-minimizing-window</span> (<span style="color: #6272a4;">)</span>
   <span style="color: #8995ba;">"Stop minimizing window under macOS."</span>
@@ -796,13 +800,13 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-org71be5b0" class="outline-4">
-<h4 id="org71be5b0">Default Settings</h4>
-<div class="outline-text-4" id="text-org71be5b0">
+<div id="outline-container-org8b8dfd2" class="outline-4">
+<h4 id="org8b8dfd2">Default Settings</h4>
+<div class="outline-text-4" id="text-org8b8dfd2">
 </div>
-<div id="outline-container-org9d9561e" class="outline-5">
-<h5 id="org9d9561e">Cursor</h5>
-<div class="outline-text-5" id="text-org9d9561e">
+<div id="outline-container-org8cb09e6" class="outline-5">
+<h5 id="org8cb09e6">Cursor</h5>
+<div class="outline-text-5" id="text-org8cb09e6">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq-default</span>
   blink-cursor-interval <span style="color: #ff5555; font-weight: bold;">.6</span>
@@ -812,9 +816,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-org1a95503" class="outline-5">
-<h5 id="org1a95503">Visual</h5>
-<div class="outline-text-5" id="text-org1a95503">
+<div id="outline-container-orgbedf180" class="outline-5">
+<h5 id="orgbedf180">Visual</h5>
+<div class="outline-text-5" id="text-orgbedf180">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq-default</span>
  fill-column                    <span style="color: #ff5555; font-weight: bold;">80</span>
@@ -828,9 +832,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-org1792efa" class="outline-5">
-<h5 id="org1792efa">Company</h5>
-<div class="outline-text-5" id="text-org1792efa">
+<div id="outline-container-orgf39e43b" class="outline-5">
+<h5 id="orgf39e43b">Company</h5>
+<div class="outline-text-5" id="text-orgf39e43b">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq-default</span>
  company-idle-delay <span style="color: #ff5555; font-weight: bold;">.5</span><span style="color: #6272a4;">)</span>
@@ -839,9 +843,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-org643a455" class="outline-5">
-<h5 id="org643a455">Helm</h5>
-<div class="outline-text-5" id="text-org643a455">
+<div id="outline-container-orgab62223" class="outline-5">
+<h5 id="orgab62223">Helm</h5>
+<div class="outline-text-5" id="text-orgab62223">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #6272a4;">;; </span><span style="color: #6272a4;">(setq-default</span>
 <span style="color: #6272a4;">;;  </span><span style="color: #6272a4;">;; brew install rg   if you'd like to use rg as my doing</span>
@@ -851,9 +855,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-orge337775" class="outline-5">
-<h5 id="orge337775">Shell</h5>
-<div class="outline-text-5" id="text-orge337775">
+<div id="outline-container-org51dd270" class="outline-5">
+<h5 id="org51dd270">Shell</h5>
+<div class="outline-text-5" id="text-org51dd270">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq-default</span>
  shell-file-name <span style="color: #f1fa8c;">"/bin/zsh"</span><span style="color: #6272a4;">)</span>
@@ -862,9 +866,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-org934c64c" class="outline-5">
-<h5 id="org934c64c">Languages</h5>
-<div class="outline-text-5" id="text-org934c64c">
+<div id="outline-container-org935423c" class="outline-5">
+<h5 id="org935423c">Languages</h5>
+<div class="outline-text-5" id="text-org935423c">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq-default</span>
  haskell-stylish-on-save nil
@@ -875,9 +879,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-orgfefa113" class="outline-5">
-<h5 id="orgfefa113">Pandoc</h5>
-<div class="outline-text-5" id="text-orgfefa113">
+<div id="outline-container-org391ebc6" class="outline-5">
+<h5 id="org391ebc6">Pandoc</h5>
+<div class="outline-text-5" id="text-org391ebc6">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq-default</span>
  org-pandoc-options-for-context     <span style="color: #bd93f9;">'</span>((template . <span style="color: #f1fa8c;">"~/.emacs.d/nasy-context.tex"</span>))  <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">I have no idea why I cannot set it as a variable.</span>
@@ -887,9 +891,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-orga2348ef" class="outline-5">
-<h5 id="orga2348ef">Parens</h5>
-<div class="outline-text-5" id="text-orga2348ef">
+<div id="outline-container-orgd9319b0" class="outline-5">
+<h5 id="orgd9319b0">Parens</h5>
+<div class="outline-text-5" id="text-orgd9319b0">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq-default</span>
  show-paren-style                                <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">expression</span>
@@ -901,9 +905,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-orgdf0542e" class="outline-5">
-<h5 id="orgdf0542e">Whitespace</h5>
-<div class="outline-text-5" id="text-orgdf0542e">
+<div id="outline-container-org20f8332" class="outline-5">
+<h5 id="org20f8332">Whitespace</h5>
+<div class="outline-text-5" id="text-org20f8332">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq-default</span>
  whitespace-line-column <span style="color: #ff5555; font-weight: bold;">80</span>
@@ -915,9 +919,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-org302e13a" class="outline-5">
-<h5 id="org302e13a">Start</h5>
-<div class="outline-text-5" id="text-org302e13a">
+<div id="outline-container-org7f561e4" class="outline-5">
+<h5 id="org7f561e4">Start</h5>
+<div class="outline-text-5" id="text-org7f561e4">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq-default</span>
  initial-scratch-message     (concat <span style="color: #f1fa8c;">";; Happy hacking, "</span> user-login-name <span style="color: #f1fa8c;">" - Emacs &#9829; you!\n\n"</span><span style="color: #6272a4;">)</span>
@@ -930,9 +934,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-org7f789c5" class="outline-5">
-<h5 id="org7f789c5">Config After initialization</h5>
-<div class="outline-text-5" id="text-org7f789c5">
+<div id="outline-container-orgebeb7c0" class="outline-5">
+<h5 id="orgebeb7c0">Config After initialization</h5>
+<div class="outline-text-5" id="text-orgebeb7c0">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #6272a4;">;; </span><span style="color: #6272a4;">(defun nasy:config-after ()</span>
 <span style="color: #6272a4;">;;   </span><span style="color: #6272a4;">"Set configuration need to be set after init."</span>
@@ -950,9 +954,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-org1d04d1d" class="outline-4">
-<h4 id="org1d04d1d">Custom Faces</h4>
-<div class="outline-text-4" id="text-org1d04d1d">
+<div id="outline-container-orgdcc1355" class="outline-4">
+<h4 id="orgdcc1355">Custom Faces</h4>
+<div class="outline-text-4" id="text-orgdcc1355">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">nasy:set-face</span> (<span style="color: #6272a4;">)</span>
   <span style="color: #8995ba;">"Set custom face."</span>
@@ -969,9 +973,9 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-orge3d311c" class="outline-4">
-<h4 id="orge3d311c">Key Bindings</h4>
-<div class="outline-text-4" id="text-orge3d311c">
+<div id="outline-container-orgde31c8c" class="outline-4">
+<h4 id="orgde31c8c">Key Bindings</h4>
+<div class="outline-text-4" id="text-orgde31c8c">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">when</span> *is-a-mac*
   (<span style="color: #ff79c6; font-style: italic;">setq</span> mac-option-modifier  <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">meta</span><span style="color: #6272a4;">)</span>
@@ -1006,21 +1010,21 @@ You can find it in  <span>  <code>config/nasy-config.el</code>  </span>
 </div>
 </div>
 
-<div id="outline-container-orgd670c65" class="outline-4">
-<h4 id="orgd670c65">Epoligue</h4>
-<div class="outline-text-4" id="text-orgd670c65">
+<div id="outline-container-org3524fec" class="outline-4">
+<h4 id="org3524fec">Epoligue</h4>
+<div class="outline-text-4" id="text-org3524fec">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">provide</span> <span style="color: #bd93f9;">'</span><span style="color: #8be9fd;">nasy-config</span><span style="color: #6272a4;">)</span>
-<span style="color: #6272a4;">;;; </span><span style="color: #61bfff; background-color: #44475a; font-weight: bold;">nasy-config.el ends here</span>
+<span style="color: #6272a4;">;;; </span><span style="color: #6272a4;">nasy-config.el ends here</span>
 </pre>
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org4b76ae9" class="outline-3">
-<h3 id="org4b76ae9">Example Custom Configuration</h3>
-<div class="outline-text-3" id="text-org4b76ae9">
+<div id="outline-container-orgb3489a9" class="outline-3">
+<h3 id="orgb3489a9">Example Custom Configuration</h3>
+<div class="outline-text-3" id="text-orgb3489a9">
 <p>
 To add your own customization, use  <kbd>M-x</kbd> <kbd>customize</kbd>
  etc. and/or create a file  <span>  <code>config/user-config.el</code>
@@ -1044,9 +1048,9 @@ To add your own customization, use  <kbd>M-x</kbd> <kbd>customize</kbd>
 </div>
 </div>
 
-<div id="outline-container-org529c623" class="outline-3">
-<h3 id="org529c623">dashboard</h3>
-<div class="outline-text-3" id="text-org529c623">
+<div id="outline-container-org14de1bd" class="outline-3">
+<h3 id="org14de1bd">dashboard</h3>
+<div class="outline-text-3" id="text-org14de1bd">
 <p>
 If you want to start with <a href="https://github.com/rakanalh/emacs-dashboard">dashboard</a>, you need to set
 </p>
@@ -1066,9 +1070,9 @@ to the issue <a href="https://github.com/rakanalh/emacs-dashboard/issues/69">her
 </div>
 </div>
 
-<div id="outline-container-org51da1bb" class="outline-3">
-<h3 id="org51da1bb"><b>NOTICE:</b></h3>
-<div class="outline-text-3" id="text-org51da1bb">
+<div id="outline-container-org8331c07" class="outline-3">
+<h3 id="org8331c07"><b>NOTICE:</b></h3>
+<div class="outline-text-3" id="text-org8331c07">
 <ul class="org-ul">
 <li>Functions added to <code>nasy:config-before-hook</code> will be run before loading <code>custom.el</code>.</li>
 <li>Functions added to <code>nasy:config-after-hook</code> will be run after init.</li>
@@ -1077,9 +1081,9 @@ to the issue <a href="https://github.com/rakanalh/emacs-dashboard/issues/69">her
 </div>
 </div>
 
-<div id="outline-container-orgbe186eb" class="outline-2">
-<h2 id="orgbe186eb">The Configuration</h2>
-<div class="outline-text-2" id="text-orgbe186eb">
+<div id="outline-container-orgc5f9668" class="outline-2">
+<h2 id="orgc5f9668">The Configuration</h2>
+<div class="outline-text-2" id="text-orgc5f9668">
 <p>
 One thing to note is that this file generates a file named  <span>
 <code>init.el</code>.  </span>  You <b>should not</b> edit that file directly and make any
@@ -1088,28 +1092,28 @@ changes here and regenerate it from Emacs org-mode using  <kbd>C-c</kbd>
 </p>
 </div>
 
-<div id="outline-container-orgee38a09" class="outline-3">
-<h3 id="orgee38a09">Bootstrap</h3>
-<div class="outline-text-3" id="text-orgee38a09">
+<div id="outline-container-orgad82407" class="outline-3">
+<h3 id="orgad82407">Bootstrap</h3>
+<div class="outline-text-3" id="text-orgad82407">
 <p>
 In this section, the configuration needs to occur early in emacs startup.
 </p>
 </div>
 
-<div id="outline-container-org60d597f" class="outline-4">
-<h4 id="org60d597f">File Header</h4>
-<div class="outline-text-4" id="text-org60d597f">
+<div id="outline-container-orgf04950b" class="outline-4">
+<h4 id="orgf04950b">File Header</h4>
+<div class="outline-text-4" id="text-orgf04950b">
 <p>
 This includes some necessary headers.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp"><span style="color: #6272a4;">;;; </span><span style="color: #61bfff; background-color: #44475a; font-weight: bold;">init.el --- Nasy's emacs.d init file.            -*- lexical-binding: t; -*-</span>
+<pre class="src src-elisp"><span style="color: #6272a4;">;;; </span><span style="color: #6272a4;">init.el --- Nasy's emacs.d init file.            -*- lexical-binding: t; -*-</span>
 <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">Copyright (C) 2018  Nasy</span>
 
 <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">Author: Nasy <a href="mailto:nasyxx+emacs%40gmail.com">&lt;nasyxx+emacs@gmail.com&gt;</a></span>
 
-<span style="color: #6272a4;">;;; </span><span style="color: #61bfff; background-color: #44475a; font-weight: bold;">Commentary:</span>
+<span style="color: #6272a4;">;;; </span><span style="color: #6272a4;">Commentary:</span>
 
 <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">Nasy's emacs.d init file.  For macOS and Emacs 26, Emacs 27.</span>
 </pre>
@@ -1117,9 +1121,9 @@ This includes some necessary headers.
 </div>
 </div>
 
-<div id="outline-container-org67a272a" class="outline-4">
-<h4 id="org67a272a">Lexical Binding</h4>
-<div class="outline-text-4" id="text-org67a272a">
+<div id="outline-container-org3837796" class="outline-4">
+<h4 id="org3837796">Lexical Binding</h4>
+<div class="outline-text-4" id="text-org3837796">
 <p>
 This makes it so that the file that is produced from tangling this file uses
 lexical scoping.
@@ -1132,9 +1136,9 @@ lexical scoping.
 </div>
 </div>
 
-<div id="outline-container-org5f6e1f3" class="outline-4">
-<h4 id="org5f6e1f3">Some Default Settings</h4>
-<div class="outline-text-4" id="text-org5f6e1f3">
+<div id="outline-container-org6c62893" class="outline-4">
+<h4 id="org6c62893">Some Default Settings</h4>
+<div class="outline-text-4" id="text-org6c62893">
 <p>
 Some default settings are here, including <code>debug-on-error</code>, <code>message-log-max</code>,
 <code>load-prefer-newer</code> and <code>ad-redefinition-action</code>.
@@ -1150,9 +1154,9 @@ Some default settings are here, including <code>debug-on-error</code>, <code>mes
 </div>
 </div>
 
-<div id="outline-container-org773700c" class="outline-4">
-<h4 id="org773700c">Is A Mac?</h4>
-<div class="outline-text-4" id="text-org773700c">
+<div id="outline-container-orgafa78d9" class="outline-4">
+<h4 id="orgafa78d9">Is A Mac?</h4>
+<div class="outline-text-4" id="text-orgafa78d9">
 <p>
 If this os is macOS?
 </p>
@@ -1164,9 +1168,9 @@ If this os is macOS?
 </div>
 </div>
 
-<div id="outline-container-org85fbbf2" class="outline-4">
-<h4 id="org85fbbf2">Packages Manager</h4>
-<div class="outline-text-4" id="text-org85fbbf2">
+<div id="outline-container-org73ab907" class="outline-4">
+<h4 id="org73ab907">Packages Manager</h4>
+<div class="outline-text-4" id="text-org73ab907">
 <p>
 I use <a href="https://github.com/raxod502/straight.el">straight.el</a> as my packages manager.
 </p>
@@ -1203,9 +1207,9 @@ At the same time, I use <a href="https://github.com/jwiegley/use-package">use-pa
 </div>
 </div>
 
-<div id="outline-container-org9c36d9a" class="outline-4">
-<h4 id="org9c36d9a">Garbage Collection</h4>
-<div class="outline-text-4" id="text-org9c36d9a">
+<div id="outline-container-org1fe65e2" class="outline-4">
+<h4 id="org1fe65e2">Garbage Collection</h4>
+<div class="outline-text-4" id="text-org1fe65e2">
 <p>
 Adjust garbage collection thresholds during startup, and thereafter
 </p>
@@ -1224,9 +1228,9 @@ Adjust garbage collection thresholds during startup, and thereafter
 </div>
 </div>
 
-<div id="outline-container-orge9eacf9" class="outline-4">
-<h4 id="orge9eacf9">Benchmark</h4>
-<div class="outline-text-4" id="text-orge9eacf9">
+<div id="outline-container-orgf0f2e61" class="outline-4">
+<h4 id="orgf0f2e61">Benchmark</h4>
+<div class="outline-text-4" id="text-orgf0f2e61">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">benchmark-init</span>
   <span style="color: #ffb86c;">:demand</span>   t
@@ -1237,9 +1241,9 @@ Adjust garbage collection thresholds during startup, and thereafter
 </div>
 </div>
 
-<div id="outline-container-org75b78a6" class="outline-4">
-<h4 id="org75b78a6">Expand load-path</h4>
-<div class="outline-text-4" id="text-org75b78a6">
+<div id="outline-container-org35b92dc" class="outline-4">
+<h4 id="org35b92dc">Expand load-path</h4>
+<div class="outline-text-4" id="text-org35b92dc">
 <div class="org-src-container">
 <pre class="src src-elisp">(add-to-list <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">load-path</span> (expand-file-name <span style="color: #f1fa8c;">"lisp"</span>   user-emacs-directory<span style="color: #6272a4;">))</span>
 (add-to-list <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">load-path</span> (expand-file-name <span style="color: #f1fa8c;">"config"</span> user-emacs-directory<span style="color: #6272a4;">))</span>
@@ -1248,9 +1252,9 @@ Adjust garbage collection thresholds during startup, and thereafter
 </div>
 </div>
 
-<div id="outline-container-org2e50b51" class="outline-4">
-<h4 id="org2e50b51">No Littering</h4>
-<div class="outline-text-4" id="text-org2e50b51">
+<div id="outline-container-orgdba4892" class="outline-4">
+<h4 id="orgdba4892">No Littering</h4>
+<div class="outline-text-4" id="text-orgdba4892">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">no-littering</span>
   <span style="color: #ffb86c;">:straight</span> t<span style="color: #6272a4;">)</span>
@@ -1259,9 +1263,9 @@ Adjust garbage collection thresholds during startup, and thereafter
 </div>
 </div>
 
-<div id="outline-container-org615a2de" class="outline-4">
-<h4 id="org615a2de">Early Load Org Mode</h4>
-<div class="outline-text-4" id="text-org615a2de">
+<div id="outline-container-orgdb3214a" class="outline-4">
+<h4 id="orgdb3214a">Early Load Org Mode</h4>
+<div class="outline-text-4" id="text-orgdb3214a">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">require</span> <span style="color: #bd93f9;">'</span><span style="color: #8be9fd;">subr-x</span><span style="color: #6272a4;">)</span>
 (straight-use-package <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">git</span><span style="color: #6272a4;">)</span>
@@ -1301,13 +1305,13 @@ Adjust garbage collection thresholds during startup, and thereafter
 </div>
 </div>
 
-<div id="outline-container-org130bb54" class="outline-3">
-<h3 id="org130bb54">Basic Configs</h3>
-<div class="outline-text-3" id="text-org130bb54">
+<div id="outline-container-org4617ca2" class="outline-3">
+<h3 id="org4617ca2">Basic Configs</h3>
+<div class="outline-text-3" id="text-org4617ca2">
 </div>
-<div id="outline-container-org83ec75e" class="outline-4">
-<h4 id="org83ec75e">Hooks &amp; Custom Require</h4>
-<div class="outline-text-4" id="text-org83ec75e">
+<div id="outline-container-org6bfbb39" class="outline-4">
+<h4 id="org6bfbb39">Hooks &amp; Custom Require</h4>
+<div class="outline-text-4" id="text-org6bfbb39">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">defvar</span> <span style="color: #f8f8f2;">nasy:config-before-hook</span> nil
   <span style="color: #8995ba;">"Hooks to run config functions before load custom.el."</span><span style="color: #6272a4;">)</span>
@@ -1330,9 +1334,9 @@ Adjust garbage collection thresholds during startup, and thereafter
 </div>
 </div>
 
-<div id="outline-container-orgcdae79d" class="outline-4">
-<h4 id="orgcdae79d">Compile</h4>
-<div class="outline-text-4" id="text-orgcdae79d">
+<div id="outline-container-orgeab24a8" class="outline-4">
+<h4 id="orgeab24a8">Compile</h4>
+<div class="outline-text-4" id="text-orgeab24a8">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">async</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -1404,9 +1408,9 @@ Adjust garbage collection thresholds during startup, and thereafter
 </div>
 </div>
 
-<div id="outline-container-orgbe7e2f9" class="outline-4">
-<h4 id="orgbe7e2f9">general.el</h4>
-<div class="outline-text-4" id="text-orgbe7e2f9">
+<div id="outline-container-org8b19479" class="outline-4">
+<h4 id="org8b19479">general.el</h4>
+<div class="outline-text-4" id="text-org8b19479">
 <p>
 I use general.el to set some variables, but key-bindings.
 </p>
@@ -1425,9 +1429,9 @@ I use general.el to set some variables, but key-bindings.
 </div>
 </div>
 
-<div id="outline-container-org6196ea6" class="outline-4">
-<h4 id="org6196ea6">Disable Some Features</h4>
-<div class="outline-text-4" id="text-org6196ea6">
+<div id="outline-container-orgfef9848" class="outline-4">
+<h4 id="orgfef9848">Disable Some Features</h4>
+<div class="outline-text-4" id="text-orgfef9848">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq</span> use-file-dialog        nil
       use-dialog-box         nil
@@ -1445,9 +1449,9 @@ I use general.el to set some variables, but key-bindings.
 </div>
 </div>
 
-<div id="outline-container-org22c8674" class="outline-4">
-<h4 id="org22c8674">Auto Compression</h4>
-<div class="outline-text-4" id="text-org22c8674">
+<div id="outline-container-org323064d" class="outline-4">
+<h4 id="org323064d">Auto Compression</h4>
+<div class="outline-text-4" id="text-org323064d">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">jka-compr</span>
   <span style="color: #ffb86c;">:init</span> (auto-compression-mode<span style="color: #6272a4;">))</span>
@@ -1456,9 +1460,9 @@ I use general.el to set some variables, but key-bindings.
 </div>
 </div>
 
-<div id="outline-container-orgd86f192" class="outline-4">
-<h4 id="orgd86f192">Nice Scrolling</h4>
-<div class="outline-text-4" id="text-orgd86f192">
+<div id="outline-container-orgad558b6" class="outline-4">
+<h4 id="orgad558b6">Nice Scrolling</h4>
+<div class="outline-text-4" id="text-orgad558b6">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq</span> scroll-margin                   <span style="color: #ff5555; font-weight: bold;">0</span>
       scroll-conservatively           <span style="color: #ff5555; font-weight: bold;">100000</span>
@@ -1468,9 +1472,9 @@ I use general.el to set some variables, but key-bindings.
 </div>
 </div>
 
-<div id="outline-container-orga3b6403" class="outline-4">
-<h4 id="orga3b6403">Text Scale</h4>
-<div class="outline-text-4" id="text-orga3b6403">
+<div id="outline-container-orgeae25d5" class="outline-4">
+<h4 id="orgeae25d5">Text Scale</h4>
+<div class="outline-text-4" id="text-orgeae25d5">
 <div class="org-src-container">
 <pre class="src src-elisp">(straight-use-package <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">default-text-scale</span><span style="color: #6272a4;">)</span>
 </pre>
@@ -1478,9 +1482,9 @@ I use general.el to set some variables, but key-bindings.
 </div>
 </div>
 
-<div id="outline-container-org3b689d4" class="outline-4">
-<h4 id="org3b689d4">Shell</h4>
-<div class="outline-text-4" id="text-org3b689d4">
+<div id="outline-container-orgdbe2eab" class="outline-4">
+<h4 id="orgdbe2eab">Shell</h4>
+<div class="outline-text-4" id="text-orgdbe2eab">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">require</span> <span style="color: #bd93f9;">'</span><span style="color: #8be9fd;">shell</span><span style="color: #6272a4;">)</span>
 
@@ -1563,9 +1567,9 @@ I use general.el to set some variables, but key-bindings.
 </div>
 </div>
 
-<div id="outline-container-org214e6ba" class="outline-4">
-<h4 id="org214e6ba">Term</h4>
-<div class="outline-text-4" id="text-org214e6ba">
+<div id="outline-container-orgf59f0f8" class="outline-4">
+<h4 id="orgf59f0f8">Term</h4>
+<div class="outline-text-4" id="text-orgf59f0f8">
 <p>
 Emacs libvterm intergration
 </p>
@@ -1585,9 +1589,9 @@ Emacs libvterm intergration
 </div>
 </div>
 
-<div id="outline-container-org4fb1a3f" class="outline-4">
-<h4 id="org4fb1a3f">Scratch Message</h4>
-<div class="outline-text-4" id="text-org4fb1a3f">
+<div id="outline-container-orga3541a5" class="outline-4">
+<h4 id="orga3541a5">Scratch Message</h4>
+<div class="outline-text-4" id="text-orga3541a5">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">scratch</span>
   <span style="color: #ffb86c;">:demand</span>   t
@@ -1597,9 +1601,9 @@ Emacs libvterm intergration
 </div>
 </div>
 
-<div id="outline-container-orgc3ad723" class="outline-4">
-<h4 id="orgc3ad723">Dashboard</h4>
-<div class="outline-text-4" id="text-orgc3ad723">
+<div id="outline-container-org46bac30" class="outline-4">
+<h4 id="org46bac30">Dashboard</h4>
+<div class="outline-text-4" id="text-org46bac30">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">dashboard</span>
   <span style="color: #ffb86c;">:demand</span>   t
@@ -1626,9 +1630,9 @@ Emacs libvterm intergration
 </div>
 </div>
 
-<div id="outline-container-org1350869" class="outline-4">
-<h4 id="org1350869">Window</h4>
-<div class="outline-text-4" id="text-org1350869">
+<div id="outline-container-org07b779d" class="outline-4">
+<h4 id="org07b779d">Window</h4>
+<div class="outline-text-4" id="text-org07b779d">
 <div class="org-src-container">
 <pre class="src src-elisp">(add-hook <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">after-init-hook</span> <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">winner-mode</span><span style="color: #6272a4;">)</span>
 
@@ -1669,11 +1673,11 @@ Emacs libvterm intergration
 </div>
 </div>
 
-<div id="outline-container-orgd053dd7" class="outline-4">
-<h4 id="orgd053dd7">History, Saving and Session</h4>
-<div class="outline-text-4" id="text-orgd053dd7">
+<div id="outline-container-org29ea3b8" class="outline-4">
+<h4 id="org29ea3b8">History, Saving and Session</h4>
+<div class="outline-text-4" id="text-org29ea3b8">
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq</span> desktop-path              (list user-emacs-directory<span style="color: #6272a4;">)</span>
+<pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq</span> desktop-path              (list user-emacs-directory no-littering-var-directory<span style="color: #6272a4;">)</span>
       desktop-auto-save-timeout <span style="color: #ff5555; font-weight: bold;">600</span><span style="color: #6272a4;">)</span>
 (desktop-save-mode t<span style="color: #6272a4;">)</span>
 (<span style="color: #ff79c6; font-style: italic;">setq</span> desktop-save <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">if-exists</span><span style="color: #6272a4;">)</span>
@@ -1752,9 +1756,9 @@ Emacs libvterm intergration
 </div>
 </div>
 
-<div id="outline-container-org16e30a2" class="outline-4">
-<h4 id="org16e30a2">Auto Save (Super Save)</h4>
-<div class="outline-text-4" id="text-org16e30a2">
+<div id="outline-container-orge3921f3" class="outline-4">
+<h4 id="orge3921f3">Auto Save (Super Save)</h4>
+<div class="outline-text-4" id="text-orge3921f3">
 <p>
 I use super save to auto save files.
 </p>
@@ -1770,9 +1774,9 @@ I use super save to auto save files.
 </div>
 </div>
 
-<div id="outline-container-org86196e7" class="outline-4">
-<h4 id="org86196e7">Minibuffer</h4>
-<div class="outline-text-4" id="text-org86196e7">
+<div id="outline-container-org322a418" class="outline-4">
+<h4 id="org322a418">Minibuffer</h4>
+<div class="outline-text-4" id="text-org322a418">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq</span> enable-recursive-minibuffers t<span style="color: #6272a4;">)</span>
 
@@ -1791,9 +1795,9 @@ I use super save to auto save files.
 </div>
 </div>
 
-<div id="outline-container-org0ee8ff7" class="outline-4">
-<h4 id="org0ee8ff7">Disable Mouse</h4>
-<div class="outline-text-4" id="text-org0ee8ff7">
+<div id="outline-container-org9a30a3b" class="outline-4">
+<h4 id="org9a30a3b">Disable Mouse</h4>
+<div class="outline-text-4" id="text-org9a30a3b">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">disable-mouse</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -1809,13 +1813,13 @@ I use super save to auto save files.
 </div>
 </div>
 
-<div id="outline-container-orgcf8b906" class="outline-3">
-<h3 id="orgcf8b906">Custom Functions</h3>
-<div class="outline-text-3" id="text-orgcf8b906">
+<div id="outline-container-orgafea7bf" class="outline-3">
+<h3 id="orgafea7bf">Custom Functions</h3>
+<div class="outline-text-3" id="text-orgafea7bf">
 </div>
-<div id="outline-container-org8a4251d" class="outline-4">
-<h4 id="org8a4251d">Reload the init-file</h4>
-<div class="outline-text-4" id="text-org8a4251d">
+<div id="outline-container-orgc9b008c" class="outline-4">
+<h4 id="orgc9b008c">Reload the init-file</h4>
+<div class="outline-text-4" id="text-orgc9b008c">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">radian-reload-init</span> (<span style="color: #6272a4;">)</span>
   <span style="color: #8995ba;">"Reload init.el."</span>
@@ -1842,9 +1846,9 @@ I use super save to auto save files.
 </div>
 </div>
 
-<div id="outline-container-org6a3805f" class="outline-4">
-<h4 id="org6a3805f">Insert Date</h4>
-<div class="outline-text-4" id="text-org6a3805f">
+<div id="outline-container-org8be62ca" class="outline-4">
+<h4 id="org8be62ca">Insert Date</h4>
+<div class="outline-text-4" id="text-org8be62ca">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">nasy:insert-current-date</span> (<span style="color: #6272a4;">)</span>
   <span style="color: #8995ba;">"Insert current date."</span>
@@ -1860,9 +1864,9 @@ I use super save to auto save files.
 </div>
 </div>
 
-<div id="outline-container-org634d825" class="outline-4">
-<h4 id="org634d825">Rearrange split windows</h4>
-<div class="outline-text-4" id="text-org634d825">
+<div id="outline-container-orgc2b9ffc" class="outline-4">
+<h4 id="orgc2b9ffc">Rearrange split windows</h4>
+<div class="outline-text-4" id="text-orgc2b9ffc">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">split-window-horizontally-instead</span> (<span style="color: #6272a4;">)</span>
   <span style="color: #8995ba;">"Kill any other windows and re-split such that the current window is on the</span>
@@ -1905,9 +1909,9 @@ I use super save to auto save files.
 </div>
 </div>
 
-<div id="outline-container-org6b8f51b" class="outline-4">
-<h4 id="org6b8f51b">Posframe Helper</h4>
-<div class="outline-text-4" id="text-org6b8f51b">
+<div id="outline-container-orgbb78b60" class="outline-4">
+<h4 id="orgbb78b60">Posframe Helper</h4>
+<div class="outline-text-4" id="text-orgbb78b60">
 <div class="org-src-container">
 <pre class="src src-elisp">
 (<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">posframe-poshandler-frame-top-center</span> (info<span style="color: #6272a4;">)</span>
@@ -1921,9 +1925,9 @@ I use super save to auto save files.
 </div>
 </div>
 
-<div id="outline-container-orgd0904f4" class="outline-3">
-<h3 id="orgd0904f4">Editor</h3>
-<div class="outline-text-3" id="text-orgd0904f4">
+<div id="outline-container-org2d0c4b3" class="outline-3">
+<h3 id="org2d0c4b3">Editor</h3>
+<div class="outline-text-3" id="text-org2d0c4b3">
 <p>
 Here is the editor config, including some features and functions.
 </p>
@@ -1936,18 +1940,18 @@ Here is the editor config, including some features and functions.
 </div>
 </div>
 
-<div id="outline-container-org05a5c4b" class="outline-4">
-<h4 id="org05a5c4b">Default Settings</h4>
-<div class="outline-text-4" id="text-org05a5c4b">
+<div id="outline-container-org88e0128" class="outline-4">
+<h4 id="org88e0128">Default Settings</h4>
+<div class="outline-text-4" id="text-org88e0128">
 <p>
 Default settings for editor.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgdbde022" class="outline-4">
-<h4 id="orgdbde022">Diminish</h4>
-<div class="outline-text-4" id="text-orgdbde022">
+<div id="outline-container-org07d3626" class="outline-4">
+<h4 id="org07d3626">Diminish</h4>
+<div class="outline-text-4" id="text-org07d3626">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">diminish</span>
   <span style="color: #ffb86c;">:demand</span>   t
@@ -1957,9 +1961,9 @@ Default settings for editor.
 </div>
 </div>
 
-<div id="outline-container-orgf997a1d" class="outline-4">
-<h4 id="orgf997a1d">FLX</h4>
-<div class="outline-text-4" id="text-orgf997a1d">
+<div id="outline-container-org7b1acd8" class="outline-4">
+<h4 id="org7b1acd8">FLX</h4>
+<div class="outline-text-4" id="text-org7b1acd8">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">flx</span>
   <span style="color: #ffb86c;">:straight</span> t<span style="color: #6272a4;">)</span>
@@ -1968,9 +1972,9 @@ Default settings for editor.
 </div>
 </div>
 
-<div id="outline-container-org1948064" class="outline-4">
-<h4 id="org1948064">Advance Words Count</h4>
-<div class="outline-text-4" id="text-org1948064">
+<div id="outline-container-orgdf0a741" class="outline-4">
+<h4 id="orgdf0a741">Advance Words Count</h4>
+<div class="outline-text-4" id="text-orgdf0a741">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">advance-words-count</span>
   <span style="color: #ffb86c;">:straight</span> (advance-words-count <span style="color: #ffb86c;">:type</span> git <span style="color: #ffb86c;">:host</span> github <span style="color: #ffb86c;">:repo</span> <span style="color: #f1fa8c;">"LdBeth/advance-words-count.el"</span><span style="color: #6272a4;">))</span>
@@ -1979,9 +1983,9 @@ Default settings for editor.
 </div>
 </div>
 
-<div id="outline-container-org598dd4c" class="outline-4">
-<h4 id="org598dd4c">Anzu</h4>
-<div class="outline-text-4" id="text-org598dd4c">
+<div id="outline-container-org088d137" class="outline-4">
+<h4 id="org088d137">Anzu</h4>
+<div class="outline-text-4" id="text-org088d137">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">anzu</span>
   <span style="color: #ffb86c;">:defer</span> t
@@ -1993,9 +1997,9 @@ Default settings for editor.
 </div>
 </div>
 
-<div id="outline-container-orgce00e5e" class="outline-4">
-<h4 id="orgce00e5e">Auto Insert</h4>
-<div class="outline-text-4" id="text-orgce00e5e">
+<div id="outline-container-org57928cb" class="outline-4">
+<h4 id="org57928cb">Auto Insert</h4>
+<div class="outline-text-4" id="text-org57928cb">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">autoinsert</span>
   <span style="color: #ffb86c;">:init</span>
@@ -2080,9 +2084,9 @@ Default settings for editor.
 </div>
 </div>
 
-<div id="outline-container-orgb0a8f5c" class="outline-4">
-<h4 id="orgb0a8f5c">Beacon</h4>
-<div class="outline-text-4" id="text-orgb0a8f5c">
+<div id="outline-container-org00e5a03" class="outline-4">
+<h4 id="org00e5a03">Beacon</h4>
+<div class="outline-text-4" id="text-org00e5a03">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">beacon</span>
   <span style="color: #ffb86c;">:disabled</span> t
@@ -2095,9 +2099,9 @@ Default settings for editor.
 </div>
 </div>
 
-<div id="outline-container-org5246aec" class="outline-4">
-<h4 id="org5246aec">Beginend</h4>
-<div class="outline-text-4" id="text-org5246aec">
+<div id="outline-container-orgfbd4c34" class="outline-4">
+<h4 id="orgfbd4c34">Beginend</h4>
+<div class="outline-text-4" id="text-orgfbd4c34">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">beginend</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2107,9 +2111,9 @@ Default settings for editor.
 </div>
 </div>
 
-<div id="outline-container-orgd5dd494" class="outline-4">
-<h4 id="orgd5dd494">Carbon Now sh</h4>
-<div class="outline-text-4" id="text-orgd5dd494">
+<div id="outline-container-orgb128b81" class="outline-4">
+<h4 id="orgb128b81">Carbon Now sh</h4>
+<div class="outline-text-4" id="text-orgb128b81">
 <p>
 Emacs to carbon.now.sh integration.
 </p>
@@ -2132,9 +2136,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org176ba39" class="outline-4">
-<h4 id="org176ba39">Cheat Sh</h4>
-<div class="outline-text-4" id="text-org176ba39">
+<div id="outline-container-orgf3e8662" class="outline-4">
+<h4 id="orgf3e8662">Cheat Sh</h4>
+<div class="outline-text-4" id="text-orgf3e8662">
 <div class="org-src-container">
 <pre class="src src-elisp">(straight-use-package <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">cheat-sh</span><span style="color: #6272a4;">)</span>
 </pre>
@@ -2142,13 +2146,13 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-orgaea7453" class="outline-4">
-<h4 id="orgaea7453">Company</h4>
-<div class="outline-text-4" id="text-orgaea7453">
+<div id="outline-container-org2c742f5" class="outline-4">
+<h4 id="org2c742f5">Company</h4>
+<div class="outline-text-4" id="text-org2c742f5">
 </div>
-<div id="outline-container-orgf5d2213" class="outline-5">
-<h5 id="orgf5d2213">Company</h5>
-<div class="outline-text-5" id="text-orgf5d2213">
+<div id="outline-container-org8e0b7d3" class="outline-5">
+<h5 id="org8e0b7d3">Company</h5>
+<div class="outline-text-5" id="text-org8e0b7d3">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">company</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2207,9 +2211,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org26a343b" class="outline-5">
-<h5 id="org26a343b">Company Try Hard</h5>
-<div class="outline-text-5" id="text-org26a343b">
+<div id="outline-container-orga85b49e" class="outline-5">
+<h5 id="orga85b49e">Company Try Hard</h5>
+<div class="outline-text-5" id="text-orga85b49e">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">company-try-hard</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2220,9 +2224,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-orgafb1137" class="outline-5">
-<h5 id="orgafb1137">Company Quickhelp</h5>
-<div class="outline-text-5" id="text-orgafb1137">
+<div id="outline-container-org6fc6252" class="outline-5">
+<h5 id="org6fc6252">Company Quickhelp</h5>
+<div class="outline-text-5" id="text-org6fc6252">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">company-quickhelp</span>
   <span style="color: #ffb86c;">:after</span> company
@@ -2236,9 +2240,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org420dc8e" class="outline-5">
-<h5 id="org420dc8e">Company Math</h5>
-<div class="outline-text-5" id="text-org420dc8e">
+<div id="outline-container-org588f2b0" class="outline-5">
+<h5 id="org588f2b0">Company Math</h5>
+<div class="outline-text-5" id="text-org588f2b0">
 <div class="org-src-container">
 <pre class="src src-elisp">(straight-use-package <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">company-math</span><span style="color: #6272a4;">)</span>
 </pre>
@@ -2246,9 +2250,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org1b94c1f" class="outline-5">
-<h5 id="org1b94c1f">Company Flx</h5>
-<div class="outline-text-5" id="text-org1b94c1f">
+<div id="outline-container-orga6e592f" class="outline-5">
+<h5 id="orga6e592f">Company Flx</h5>
+<div class="outline-text-5" id="text-orga6e592f">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">company-flx</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2259,9 +2263,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-orgb660d57" class="outline-5">
-<h5 id="orgb660d57">Company Box</h5>
-<div class="outline-text-5" id="text-orgb660d57">
+<div id="outline-container-orgafa3661" class="outline-5">
+<h5 id="orgafa3661">Company Box</h5>
+<div class="outline-text-5" id="text-orgafa3661">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">when</span> *c-box*
   (<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">company-box</span>
@@ -2319,9 +2323,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org2cb0c30" class="outline-4">
-<h4 id="org2cb0c30">Dash</h4>
-<div class="outline-text-4" id="text-org2cb0c30">
+<div id="outline-container-org408291e" class="outline-4">
+<h4 id="org408291e">Dash</h4>
+<div class="outline-text-4" id="text-org408291e">
 <div class="org-src-container">
 <pre class="src src-elisp">(straight-use-package <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">dash</span><span style="color: #6272a4;">)</span>
 </pre>
@@ -2329,9 +2333,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org79112dc" class="outline-4">
-<h4 id="org79112dc">Dash Functional</h4>
-<div class="outline-text-4" id="text-org79112dc">
+<div id="outline-container-org951ed79" class="outline-4">
+<h4 id="org951ed79">Dash Functional</h4>
+<div class="outline-text-4" id="text-org951ed79">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">dash-functional</span>
   <span style="color: #ffb86c;">:demand</span>   t
@@ -2341,13 +2345,13 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org7ef8a75" class="outline-4">
-<h4 id="org7ef8a75">Dired</h4>
-<div class="outline-text-4" id="text-org7ef8a75">
+<div id="outline-container-org03e9875" class="outline-4">
+<h4 id="org03e9875">Dired</h4>
+<div class="outline-text-4" id="text-org03e9875">
 </div>
-<div id="outline-container-orgdd0cdc3" class="outline-5">
-<h5 id="orgdd0cdc3">Dired</h5>
-<div class="outline-text-5" id="text-orgdd0cdc3">
+<div id="outline-container-org30c1e75" class="outline-5">
+<h5 id="org30c1e75">Dired</h5>
+<div class="outline-text-5" id="text-org30c1e75">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">dired</span>
   <span style="color: #ffb86c;">:init</span>
@@ -2362,9 +2366,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-orgc095138" class="outline-5">
-<h5 id="orgc095138">Diredfl</h5>
-<div class="outline-text-5" id="text-orgc095138">
+<div id="outline-container-orge4cf893" class="outline-5">
+<h5 id="orge4cf893">Diredfl</h5>
+<div class="outline-text-5" id="text-orge4cf893">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">diredfl</span>
   <span style="color: #ffb86c;">:after</span> dired
@@ -2375,9 +2379,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org4677e6b" class="outline-5">
-<h5 id="org4677e6b">Uniquify</h5>
-<div class="outline-text-5" id="text-org4677e6b">
+<div id="outline-container-org11216ff" class="outline-5">
+<h5 id="org11216ff">Uniquify</h5>
+<div class="outline-text-5" id="text-org11216ff">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">uniquify</span>
   <span style="color: #ffb86c;">:init</span>  <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">nicer naming of buffers for files with identical names</span>
@@ -2390,9 +2394,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org23c362d" class="outline-5">
-<h5 id="org23c362d">Diff-hl</h5>
-<div class="outline-text-5" id="text-org23c362d">
+<div id="outline-container-org7c716e5" class="outline-5">
+<h5 id="org7c716e5">Diff-hl</h5>
+<div class="outline-text-5" id="text-org7c716e5">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">diff-hl</span>
   <span style="color: #ffb86c;">:after</span> dired
@@ -2405,9 +2409,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-orge5fc30e" class="outline-4">
-<h4 id="orge5fc30e">Easy Kill</h4>
-<div class="outline-text-4" id="text-orge5fc30e">
+<div id="outline-container-orgbd33e52" class="outline-4">
+<h4 id="orgbd33e52">Easy Kill</h4>
+<div class="outline-text-4" id="text-orgbd33e52">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">easy-kill</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2424,25 +2428,13 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org8ac6be3" class="outline-4">
-<h4 id="org8ac6be3">Electric Operator</h4>
-<div class="outline-text-4" id="text-org8ac6be3">
-<div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">electric-operator</span>
-  <span style="color: #ffb86c;">:straight</span> t
-  <span style="color: #ffb86c;">:hook</span> ((python-mode c-mode c++-mode haskell-mode<span style="color: #6272a4;">)))</span>
-</pre>
+<div id="outline-container-orgd8c4435" class="outline-4">
+<h4 id="orgd8c4435">English</h4>
+<div class="outline-text-4" id="text-orgd8c4435">
 </div>
-</div>
-</div>
-
-<div id="outline-container-orgbf3ad07" class="outline-4">
-<h4 id="orgbf3ad07">English</h4>
-<div class="outline-text-4" id="text-orgbf3ad07">
-</div>
-<div id="outline-container-org510813d" class="outline-5">
-<h5 id="org510813d">Dict</h5>
-<div class="outline-text-5" id="text-org510813d">
+<div id="outline-container-orgf06c4c6" class="outline-5">
+<h5 id="orgf06c4c6">Dict</h5>
+<div class="outline-text-5" id="text-orgf06c4c6">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">bing-dict</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2459,9 +2451,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-orgfb54c8c" class="outline-5">
-<h5 id="orgfb54c8c">Spell</h5>
-<div class="outline-text-5" id="text-orgfb54c8c">
+<div id="outline-container-orga10bbde" class="outline-5">
+<h5 id="orga10bbde">Spell</h5>
+<div class="outline-text-5" id="text-orga10bbde">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">if</span> *ispell*
     (<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">ispell</span>
@@ -2480,13 +2472,13 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-org934c1f8" class="outline-4">
-<h4 id="org934c1f8">Eldoc</h4>
-<div class="outline-text-4" id="text-org934c1f8">
+<div id="outline-container-org511de86" class="outline-4">
+<h4 id="org511de86">Eldoc</h4>
+<div class="outline-text-4" id="text-org511de86">
 </div>
-<div id="outline-container-orge40291c" class="outline-5">
-<h5 id="orge40291c">Eldoc Mode</h5>
-<div class="outline-text-5" id="text-orge40291c">
+<div id="outline-container-org67f722a" class="outline-5">
+<h5 id="org67f722a">Eldoc Mode</h5>
+<div class="outline-text-5" id="text-org67f722a">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">eldoc</span>
   <span style="color: #ffb86c;">:hook</span> ((org-mode . eldoc-mode<span style="color: #6272a4;">)))</span>
@@ -2495,9 +2487,9 @@ Try:  <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>
 </div>
 </div>
 
-<div id="outline-container-orgb48c6e6" class="outline-5">
-<h5 id="orgb48c6e6">Eldoc Box</h5>
-<div class="outline-text-5" id="text-orgb48c6e6">
+<div id="outline-container-org84e61f8" class="outline-5">
+<h5 id="org84e61f8">Eldoc Box</h5>
+<div class="outline-text-5" id="text-org84e61f8">
 <p>
 Disabled by default due to it causes lots of cpu.
 </p>
@@ -2514,13 +2506,13 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-orgcd8a05e" class="outline-4">
-<h4 id="orgcd8a05e">Fill Column</h4>
-<div class="outline-text-4" id="text-orgcd8a05e">
+<div id="outline-container-orgb7382b4" class="outline-4">
+<h4 id="orgb7382b4">Fill Column</h4>
+<div class="outline-text-4" id="text-orgb7382b4">
 </div>
-<div id="outline-container-org8d9f282" class="outline-5">
-<h5 id="org8d9f282">Unfill</h5>
-<div class="outline-text-5" id="text-org8d9f282">
+<div id="outline-container-orgfb24f34" class="outline-5">
+<h5 id="orgfb24f34">Unfill</h5>
+<div class="outline-text-5" id="text-orgfb24f34">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">unfill</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2530,9 +2522,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org7e24832" class="outline-5">
-<h5 id="org7e24832">Visual-fill-column</h5>
-<div class="outline-text-5" id="text-org7e24832">
+<div id="outline-container-org4e96b01" class="outline-5">
+<h5 id="org4e96b01">Visual-fill-column</h5>
+<div class="outline-text-5" id="text-org4e96b01">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">visual-fill-column</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2551,9 +2543,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org17a08f1" class="outline-4">
-<h4 id="org17a08f1">Flycheck</h4>
-<div class="outline-text-4" id="text-org17a08f1">
+<div id="outline-container-org277c1da" class="outline-4">
+<h4 id="org277c1da">Flycheck</h4>
+<div class="outline-text-4" id="text-org277c1da">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">flycheck</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2587,9 +2579,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org1026f03" class="outline-4">
-<h4 id="org1026f03">Grab Mac Link</h4>
-<div class="outline-text-4" id="text-org1026f03">
+<div id="outline-container-org3d0585e" class="outline-4">
+<h4 id="org3d0585e">Grab Mac Link</h4>
+<div class="outline-text-4" id="text-org3d0585e">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">grab-mac-link</span>
   <span style="color: #ffb86c;">:defer</span>    t
@@ -2599,9 +2591,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-orgbb8e213" class="outline-4">
-<h4 id="orgbb8e213">Grep</h4>
-<div class="outline-text-4" id="text-orgbb8e213">
+<div id="outline-container-org91b3e92" class="outline-4">
+<h4 id="org91b3e92">Grep</h4>
+<div class="outline-text-4" id="text-org91b3e92">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">setq-default</span> grep-highlight-matches t
               grep-scroll-output t<span style="color: #6272a4;">)</span>
@@ -2613,13 +2605,13 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-orgf191867" class="outline-4">
-<h4 id="orgf191867">Highlight</h4>
-<div class="outline-text-4" id="text-orgf191867">
+<div id="outline-container-org35641f9" class="outline-4">
+<h4 id="org35641f9">Highlight</h4>
+<div class="outline-text-4" id="text-org35641f9">
 </div>
-<div id="outline-container-org5fbc3c8" class="outline-5">
-<h5 id="org5fbc3c8">cl-lib-highlight</h5>
-<div class="outline-text-5" id="text-org5fbc3c8">
+<div id="outline-container-orge2deb0c" class="outline-5">
+<h5 id="orge2deb0c">cl-lib-highlight</h5>
+<div class="outline-text-5" id="text-orge2deb0c">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">cl-lib-highlight</span>
   <span style="color: #ffb86c;">:after</span> lisp-mode
@@ -2631,9 +2623,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org040784f" class="outline-5">
-<h5 id="org040784f">Color Identifiers Mode</h5>
-<div class="outline-text-5" id="text-org040784f">
+<div id="outline-container-orgff3ffd3" class="outline-5">
+<h5 id="orgff3ffd3">Color Identifiers Mode</h5>
+<div class="outline-text-5" id="text-orgff3ffd3">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">color-identifiers-mode</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2643,9 +2635,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org132edf1" class="outline-5">
-<h5 id="org132edf1">hl-line</h5>
-<div class="outline-text-5" id="text-org132edf1">
+<div id="outline-container-org78d24e6" class="outline-5">
+<h5 id="org78d24e6">hl-line</h5>
+<div class="outline-text-5" id="text-org78d24e6">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">hl-line</span>
   <span style="color: #ffb86c;">:hook</span> ((after-init . global-hl-line-mode<span style="color: #6272a4;">)))</span>
@@ -2654,9 +2646,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org7c5a6bc" class="outline-5">
-<h5 id="org7c5a6bc">Highlight Indent Guides</h5>
-<div class="outline-text-5" id="text-org7c5a6bc">
+<div id="outline-container-org9e96b71" class="outline-5">
+<h5 id="org9e96b71">Highlight Indent Guides</h5>
+<div class="outline-text-5" id="text-org9e96b71">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">highlight-indent-guides</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2667,9 +2659,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org65bf94a" class="outline-5">
-<h5 id="org65bf94a">Highlight Number</h5>
-<div class="outline-text-5" id="text-org65bf94a">
+<div id="outline-container-orgde6a4dd" class="outline-5">
+<h5 id="orgde6a4dd">Highlight Number</h5>
+<div class="outline-text-5" id="text-orgde6a4dd">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">highlight-numbers</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2683,9 +2675,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org0fce54b" class="outline-4">
-<h4 id="org0fce54b">Helpful</h4>
-<div class="outline-text-4" id="text-org0fce54b">
+<div id="outline-container-orgeb9a94a" class="outline-4">
+<h4 id="orgeb9a94a">Helpful</h4>
+<div class="outline-text-4" id="text-orgeb9a94a">
 <p>
 <a href="https://github.com/Wilfred/helpful">https://github.com/Wilfred/helpful</a>
 </p>
@@ -2705,9 +2697,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-orgc64e9d4" class="outline-4">
-<h4 id="orgc64e9d4">Htmlize</h4>
-<div class="outline-text-4" id="text-orgc64e9d4">
+<div id="outline-container-org428914e" class="outline-4">
+<h4 id="org428914e">Htmlize</h4>
+<div class="outline-text-4" id="text-org428914e">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">htmlize</span>
   <span style="color: #ffb86c;">:defer</span> t
@@ -2718,13 +2710,163 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-orga7c9709" class="outline-4">
-<h4 id="orga7c9709">iBuffer</h4>
-<div class="outline-text-4" id="text-orga7c9709">
+<div id="outline-container-org70c5f5e" class="outline-4">
+<h4 id="org70c5f5e">Hydra</h4>
+<div class="outline-text-4" id="text-org70c5f5e">
+<div class="org-src-container">
+<pre class="src src-elisp"><span style="color: #6272a4;">;;</span><span style="color: #6272a4;">----------------------------------------------------------------------------</span>
+<span style="color: #6272a4;">;; </span><span style="color: #6272a4;">Hydra</span>
+</pre>
 </div>
-<div id="outline-container-orga506f95" class="outline-5">
-<h5 id="orga506f95">ibuffer</h5>
-<div class="outline-text-5" id="text-orga506f95">
+
+<div class="org-src-container">
+<pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">hydra</span>
+  <span style="color: #ffb86c;">:straight</span> t
+  <span style="color: #ffb86c;">:bind</span> ((<span style="color: #f1fa8c;">"C-x 9"</span> . hydra-unicode/body<span style="color: #6272a4;">)</span>
+         (<span style="color: #f1fa8c;">"C-x |"</span> . hydra-window/body<span style="color: #6272a4;">)</span>
+         <span style="color: #ffb86c;">:map</span> dired-mode-map
+         (<span style="color: #f1fa8c;">"."</span> . hydra-dired/body<span style="color: #6272a4;">))</span>
+  <span style="color: #ffb86c;">:config</span>
+  <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">insert unicode</span>
+  (<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">nasy:insert-unicode</span> (unicode-name<span style="color: #6272a4;">)</span>
+    <span style="color: #8995ba;">"Same as C-x 8 enter UNICODE-NAME."</span>
+    (insert-char (gethash unicode-name (ucs-names<span style="color: #6272a4;">))))</span>
+  (<span style="color: #ff79c6; font-style: italic;">defhydra</span> hydra-unicode (<span style="color: #ffb86c;">:hint</span> nil<span style="color: #6272a4;">)</span>
+    <span style="color: #8995ba;">"</span>
+<span style="color: #8995ba;">    Unicode  _e_ &#8364;  _s_ ZERO WIDTH SPACE</span>
+<span style="color: #8995ba;">             _f_ &#9792;  _o_ &#176;   _m_ &#181;</span>
+<span style="color: #8995ba;">             _r_ &#9794;  _a_ &#8594;   _l_ &#955;</span>
+<span style="color: #8995ba;">    "</span>
+    (<span style="color: #f1fa8c;">"e"</span> (nasy:insert-unicode <span style="color: #f1fa8c;">"EURO SIGN"</span><span style="color: #6272a4;">))</span>
+    (<span style="color: #f1fa8c;">"r"</span> (nasy:insert-unicode <span style="color: #f1fa8c;">"MALE SIGN"</span><span style="color: #6272a4;">))</span>
+    (<span style="color: #f1fa8c;">"f"</span> (nasy:insert-unicode <span style="color: #f1fa8c;">"FEMALE SIGN"</span><span style="color: #6272a4;">))</span>
+    (<span style="color: #f1fa8c;">"s"</span> (nasy:insert-unicode <span style="color: #f1fa8c;">"ZERO WIDTH SPACE"</span><span style="color: #6272a4;">))</span>
+    (<span style="color: #f1fa8c;">"o"</span> (nasy:insert-unicode <span style="color: #f1fa8c;">"DEGREE SIGN"</span><span style="color: #6272a4;">))</span>
+    (<span style="color: #f1fa8c;">"a"</span> (nasy:insert-unicode <span style="color: #f1fa8c;">"RIGHTWARDS ARROW"</span><span style="color: #6272a4;">))</span>
+    (<span style="color: #f1fa8c;">"m"</span> (nasy:insert-unicode <span style="color: #f1fa8c;">"MICRO SIGN"</span><span style="color: #6272a4;">))</span>
+    (<span style="color: #f1fa8c;">"l"</span> (nasy:insert-unicode <span style="color: #f1fa8c;">"GREEK SMALL LETTER LAMBDA"</span><span style="color: #6272a4;">)))</span>
+
+
+  (<span style="color: #ff79c6; font-style: italic;">defhydra</span> hydra-dired (<span style="color: #ffb86c;">:hint</span> nil <span style="color: #ffb86c;">:color</span> pink<span style="color: #6272a4;">)</span>
+    <span style="color: #8995ba;">"</span>
+<span style="color: #8995ba;">  _+_ mkdir          _v_iew           _m_ark             _(_ details        _i_nsert-subdir    wdired</span>
+<span style="color: #8995ba;">  _C_opy             _O_ view other   _U_nmark all       _)_ omit-mode      _$_ hide-subdir    C-x C-q : edit</span>
+<span style="color: #8995ba;">  _D_elete           _o_pen other     _u_nmark           _l_ redisplay      _w_ kill-subdir    C-c C-c : commit</span>
+<span style="color: #8995ba;">  _R_ename           _M_ chmod        _t_oggle           _g_ revert buf     _e_ ediff          C-c ESC : abort</span>
+<span style="color: #8995ba;">  _Y_ rel symlink    _G_ chgrp        _E_xtension mark   _s_ort             _=_ pdiff</span>
+<span style="color: #8995ba;">  _S_ymlink          ^ ^              _F_ind marked      _._ toggle hydra   \\ flyspell</span>
+<span style="color: #8995ba;">  _r_sync            ^ ^              ^ ^                ^ ^                _?_ summary</span>
+<span style="color: #8995ba;">  _z_ compress-file  _A_ find regexp</span>
+<span style="color: #8995ba;">  _Z_ compress       _Q_ repl regexp</span>
+
+<span style="color: #8995ba;">  T - tag prefix</span>
+<span style="color: #8995ba;">  "</span>
+    (<span style="color: #f1fa8c;">"\\"</span> dired-do-ispell<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"("</span> dired-hide-details-mode<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">")"</span> dired-omit-mode<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"+"</span> dired-create-directory<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"="</span> diredp-ediff)         <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">smart diff</span>
+    (<span style="color: #f1fa8c;">"?"</span> dired-summary<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"$"</span> diredp-hide-subdir-nomove<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"A"</span> dired-do-find-regexp<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"C"</span> dired-do-copy)        <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">Copy all marked files</span>
+    (<span style="color: #f1fa8c;">"D"</span> dired-do-delete<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"E"</span> dired-mark-extension<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"e"</span> dired-ediff-files<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"F"</span> dired-do-find-marked-files<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"G"</span> dired-do-chgrp<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"g"</span> revert-buffer)        <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">read all directories again (refresh)</span>
+    (<span style="color: #f1fa8c;">"i"</span> dired-maybe-insert-subdir<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"l"</span> dired-do-redisplay)   <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">relist the marked or singel directory</span>
+    (<span style="color: #f1fa8c;">"M"</span> dired-do-chmod<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"m"</span> dired-mark<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"O"</span> dired-display-file<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"o"</span> dired-find-file-other-window<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"Q"</span> dired-do-find-regexp-and-replace<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"R"</span> dired-do-rename<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"r"</span> dired-do-rsynch<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"S"</span> dired-do-symlink<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"s"</span> dired-sort-toggle-or-edit<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"t"</span> dired-toggle-marks<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"U"</span> dired-unmark-all-marks<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"u"</span> dired-unmark<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"v"</span> dired-view-file)      <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">q to exit, s to search, = gets line #</span>
+    (<span style="color: #f1fa8c;">"w"</span> dired-kill-subdir<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"Y"</span> dired-do-relsymlink<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"z"</span> diredp-compress-this-file<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"Z"</span> dired-do-compress<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"q"</span> nil<span style="color: #6272a4;">)</span>
+    (<span style="color: #f1fa8c;">"."</span> nil <span style="color: #ffb86c;">:color</span> blue<span style="color: #6272a4;">)))</span>
+
+(<span style="color: #ff79c6; font-style: italic;">defhydra</span> hydra-window (<span style="color: #6272a4;">)</span>
+  <span style="color: #8995ba;">"</span>
+<span style="color: #8995ba;">Movement^^        ^Split^         ^Switch^              ^Resize^</span>
+<span style="color: #8995ba;">----------------------------------------------------------------</span>
+<span style="color: #8995ba;">_h_ &#8592;           _v_ertical      _b_uffer                _q_ X&#8592;</span>
+<span style="color: #8995ba;">_j_ &#8595;           _x_ horizontal  _f_ind files    _w_ X&#8595;</span>
+<span style="color: #8995ba;">_k_ &#8593;           _z_ undo        _a_ce 1         _e_ X&#8593;</span>
+<span style="color: #8995ba;">_l_ &#8594;           _Z_ reset       _s_wap          _r_ X&#8594;</span>
+<span style="color: #8995ba;">_F_ollow                _D_lt Other     _S_ave          max_i_mize</span>
+<span style="color: #8995ba;">_SPC_ cancel    _o_nly this     _d_elete</span>
+<span style="color: #8995ba;">"</span>
+  (<span style="color: #f1fa8c;">"h"</span> windmove-left<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"j"</span> windmove-down<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"k"</span> windmove-up<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"l"</span> windmove-right<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"q"</span> hydra-move-splitter-left<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"w"</span> hydra-move-splitter-down<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"e"</span> hydra-move-splitter-up<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"r"</span> hydra-move-splitter-right<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"b"</span> helm-mini<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"f"</span> helm-find-files<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"F"</span> follow-mode<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"a"</span> (<span style="color: #ff79c6; font-style: italic;">lambda</span> (<span style="color: #6272a4;">)</span>
+         (<span style="color: #ff79c6; font-style: italic;">interactive</span><span style="color: #6272a4;">)</span>
+         (ace-window <span style="color: #ff5555; font-weight: bold;">1</span><span style="color: #6272a4;">)</span>
+         (add-hook <span style="color: #bd93f9;">#'</span><span style="color: #61bfff;">ace-window-end-once-hook</span>
+                   <span style="color: #bd93f9;">#'</span><span style="color: #61bfff;">hydra-window/body</span><span style="color: #6272a4;">)))</span>
+  (<span style="color: #f1fa8c;">"v"</span> (<span style="color: #ff79c6; font-style: italic;">lambda</span> (<span style="color: #6272a4;">)</span>
+         (<span style="color: #ff79c6; font-style: italic;">interactive</span><span style="color: #6272a4;">)</span>
+         (split-window-right<span style="color: #6272a4;">)</span>
+         (windmove-right<span style="color: #6272a4;">)))</span>
+
+  (<span style="color: #f1fa8c;">"x"</span> (<span style="color: #ff79c6; font-style: italic;">lambda</span> (<span style="color: #6272a4;">)</span>
+         (<span style="color: #ff79c6; font-style: italic;">interactive</span><span style="color: #6272a4;">)</span>
+         (split-window-below<span style="color: #6272a4;">)</span>
+         (windmove-down<span style="color: #6272a4;">)))</span>
+
+  (<span style="color: #f1fa8c;">"s"</span> (<span style="color: #ff79c6; font-style: italic;">lambda</span> (<span style="color: #6272a4;">)</span>
+         (<span style="color: #ff79c6; font-style: italic;">interactive</span><span style="color: #6272a4;">)</span>
+         (ace-window <span style="color: #ff5555; font-weight: bold;">4</span><span style="color: #6272a4;">)</span>
+         (add-hook <span style="color: #bd93f9;">#'</span><span style="color: #61bfff;">ace-window-end-once-hook</span>
+                   <span style="color: #bd93f9;">#'</span><span style="color: #61bfff;">hydra-window/body</span><span style="color: #6272a4;">)))</span>
+  (<span style="color: #f1fa8c;">"S"</span> save-buffer<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"d"</span> delete-window<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"D"</span> (<span style="color: #ff79c6; font-style: italic;">lambda</span> (<span style="color: #6272a4;">)</span>
+         (<span style="color: #ff79c6; font-style: italic;">interactive</span><span style="color: #6272a4;">)</span>
+         (ace-window <span style="color: #ff5555; font-weight: bold;">16</span><span style="color: #6272a4;">)</span>
+         (add-hook <span style="color: #bd93f9;">#'</span><span style="color: #61bfff;">ace-window-end-once-hook</span>
+                   <span style="color: #bd93f9;">#'</span><span style="color: #61bfff;">hydra-window/body</span><span style="color: #6272a4;">)))</span>
+
+  (<span style="color: #f1fa8c;">"o"</span> delete-other-windows<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"i"</span> ace-maximize-window<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"z"</span> (<span style="color: #ff79c6; font-style: italic;">progn</span>
+         (winner-undo<span style="color: #6272a4;">)</span>
+         (<span style="color: #ff79c6; font-style: italic;">setq</span> this-command <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">winner-undo</span><span style="color: #6272a4;">)))</span>
+  (<span style="color: #f1fa8c;">"Z"</span> winner-redo<span style="color: #6272a4;">)</span>
+  (<span style="color: #f1fa8c;">"SPC"</span> nil<span style="color: #6272a4;">))</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf39d300" class="outline-4">
+<h4 id="orgf39d300">iBuffer</h4>
+<div class="outline-text-4" id="text-orgf39d300">
+</div>
+<div id="outline-container-org3651caa" class="outline-5">
+<h5 id="org3651caa">ibuffer</h5>
+<div class="outline-text-5" id="text-org3651caa">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">ibuffer</span>
   <span style="color: #ffb86c;">:bind</span> ((<span style="color: #f1fa8c;">"C-x C-b"</span> . ibuffer<span style="color: #6272a4;">))</span>
@@ -2771,9 +2913,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-orgcc144b8" class="outline-5">
-<h5 id="orgcc144b8">ibuffer vc</h5>
-<div class="outline-text-5" id="text-orgcc144b8">
+<div id="outline-container-orgffe8c3e" class="outline-5">
+<h5 id="orgffe8c3e">ibuffer vc</h5>
+<div class="outline-text-5" id="text-orgffe8c3e">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">ibuffer-vc</span>
   <span style="color: #ffb86c;">:after</span> ibuffer
@@ -2783,9 +2925,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org31e99bb" class="outline-5">
-<h5 id="org31e99bb">Other settings</h5>
-<div class="outline-text-5" id="text-org31e99bb">
+<div id="outline-container-org95791fd" class="outline-5">
+<h5 id="org95791fd">Other settings</h5>
+<div class="outline-text-5" id="text-org95791fd">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">ibuffer</span>
   <span style="color: #ffb86c;">:config</span>
@@ -2818,9 +2960,9 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org6b5c373" class="outline-4">
-<h4 id="org6b5c373">imenu-list</h4>
-<div class="outline-text-4" id="text-org6b5c373">
+<div id="outline-container-orgcb87654" class="outline-4">
+<h4 id="orgcb87654">imenu-list</h4>
+<div class="outline-text-4" id="text-orgcb87654">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">imenu-list</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2831,15 +2973,16 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 
-<div id="outline-container-org5f79856" class="outline-4">
-<h4 id="org5f79856">Indent</h4>
-<div class="outline-text-4" id="text-org5f79856">
+<div id="outline-container-org249f5a9" class="outline-4">
+<h4 id="org249f5a9">Indent</h4>
+<div class="outline-text-4" id="text-org249f5a9">
 </div>
-<div id="outline-container-org4c18c1e" class="outline-5">
-<h5 id="org4c18c1e">aggressive indent</h5>
-<div class="outline-text-5" id="text-org4c18c1e">
+<div id="outline-container-orgad18f21" class="outline-5">
+<h5 id="orgad18f21">aggressive indent</h5>
+<div class="outline-text-5" id="text-orgad18f21">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">aggressive-indent</span>
+  <span style="color: #ffb86c;">:disabled</span> t
   <span style="color: #ffb86c;">:straight</span> t
   <span style="color: #ffb86c;">:hook</span> (((emacs-lisp-mode
            lisp-mode
@@ -2848,11 +2991,23 @@ Disabled by default due to it causes lots of cpu.
 </div>
 </div>
 </div>
+
+<div id="outline-container-orged79f06" class="outline-5">
+<h5 id="orged79f06">indent-tools</h5>
+<div class="outline-text-5" id="text-orged79f06">
+<div class="org-src-container">
+<pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">indent-tools</span>
+  <span style="color: #ffb86c;">:straight</span> t
+  <span style="color: #ffb86c;">:bind</span> ((<span style="color: #f1fa8c;">"C-c TAB"</span> . indent-tools-hydra/body<span style="color: #6272a4;">)))</span>
+</pre>
+</div>
+</div>
+</div>
 </div>
 
-<div id="outline-container-orgabd7f81" class="outline-4">
-<h4 id="orgabd7f81">iSearch</h4>
-<div class="outline-text-4" id="text-orgabd7f81">
+<div id="outline-container-org21974b4" class="outline-4">
+<h4 id="org21974b4">iSearch</h4>
+<div class="outline-text-4" id="text-org21974b4">
 <p>
 I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </p>
@@ -2896,13 +3051,13 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-orgbbc555b" class="outline-4">
-<h4 id="orgbbc555b">Ivy, Counsel and Swiper</h4>
-<div class="outline-text-4" id="text-orgbbc555b">
+<div id="outline-container-orgc7ef4ed" class="outline-4">
+<h4 id="orgc7ef4ed">Ivy, Counsel and Swiper</h4>
+<div class="outline-text-4" id="text-orgc7ef4ed">
 </div>
-<div id="outline-container-orgfc38ad6" class="outline-5">
-<h5 id="orgfc38ad6">Ivy</h5>
-<div class="outline-text-5" id="text-orgfc38ad6">
+<div id="outline-container-org2ad4cd3" class="outline-5">
+<h5 id="org2ad4cd3">Ivy</h5>
+<div class="outline-text-5" id="text-org2ad4cd3">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">ivy</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2932,9 +3087,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org8b6a249" class="outline-5">
-<h5 id="org8b6a249">Counsel</h5>
-<div class="outline-text-5" id="text-org8b6a249">
+<div id="outline-container-orge79d2e0" class="outline-5">
+<h5 id="orge79d2e0">Counsel</h5>
+<div class="outline-text-5" id="text-orge79d2e0">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">counsel</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2958,9 +3113,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org29c9004" class="outline-5">
-<h5 id="org29c9004">Swiper</h5>
-<div class="outline-text-5" id="text-org29c9004">
+<div id="outline-container-org0beba9c" class="outline-5">
+<h5 id="org0beba9c">Swiper</h5>
+<div class="outline-text-5" id="text-org0beba9c">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">swiper</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -2974,9 +3129,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org118e1a8" class="outline-5">
-<h5 id="org118e1a8">Ivy Rich</h5>
-<div class="outline-text-5" id="text-org118e1a8">
+<div id="outline-container-orgb84452c" class="outline-5">
+<h5 id="orgb84452c">Ivy Rich</h5>
+<div class="outline-text-5" id="text-orgb84452c">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">ivy-rich</span>
   <span style="color: #ffb86c;">:after</span>    counsel
@@ -3009,9 +3164,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org18f64dd" class="outline-5">
-<h5 id="org18f64dd">Ivy Posframe</h5>
-<div class="outline-text-5" id="text-org18f64dd">
+<div id="outline-container-org2110be6" class="outline-5">
+<h5 id="org2110be6">Ivy Posframe</h5>
+<div class="outline-text-5" id="text-org2110be6">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">ivy-posframe</span>
   <span style="color: #ffb86c;">:demand</span>   t
@@ -3028,9 +3183,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org8dcfc24" class="outline-5">
-<h5 id="org8dcfc24">Ivy all-the-icons</h5>
-<div class="outline-text-5" id="text-org8dcfc24">
+<div id="outline-container-org91d11f9" class="outline-5">
+<h5 id="org91d11f9">Ivy all-the-icons</h5>
+<div class="outline-text-5" id="text-org91d11f9">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">all-the-icons-ivy</span>
   <span style="color: #ffb86c;">:disabled</span> t
@@ -3050,9 +3205,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org53dbf25" class="outline-5">
-<h5 id="org53dbf25">Ivy Yasnippets</h5>
-<div class="outline-text-5" id="text-org53dbf25">
+<div id="outline-container-org9417bae" class="outline-5">
+<h5 id="org9417bae">Ivy Yasnippets</h5>
+<div class="outline-text-5" id="text-org9417bae">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">ivy-yasnippet</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3062,9 +3217,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-orgedbd3b1" class="outline-5">
-<h5 id="orgedbd3b1">Counsel Projectile</h5>
-<div class="outline-text-5" id="text-orgedbd3b1">
+<div id="outline-container-orgc25656a" class="outline-5">
+<h5 id="orgc25656a">Counsel Projectile</h5>
+<div class="outline-text-5" id="text-orgc25656a">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">counsel-projectile</span>
   <span style="color: #ffb86c;">:after</span>    projectile
@@ -3077,9 +3232,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org16aaa42" class="outline-4">
-<h4 id="org16aaa42">Keycast</h4>
-<div class="outline-text-4" id="text-org16aaa42">
+<div id="outline-container-org6de2aff" class="outline-4">
+<h4 id="org6de2aff">Keycast</h4>
+<div class="outline-text-4" id="text-org6de2aff">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">keycast</span>
   <span style="color: #ffb86c;">:disabled</span> t
@@ -3090,9 +3245,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-orgf718387" class="outline-4">
-<h4 id="orgf718387">Large File</h4>
-<div class="outline-text-4" id="text-orgf718387">
+<div id="outline-container-org8919a61" class="outline-4">
+<h4 id="org8919a61">Large File</h4>
+<div class="outline-text-4" id="text-org8919a61">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">vlf</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3109,9 +3264,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org46d1d38" class="outline-4">
-<h4 id="org46d1d38">Link Hint</h4>
-<div class="outline-text-4" id="text-org46d1d38">
+<div id="outline-container-org59cedb7" class="outline-4">
+<h4 id="org59cedb7">Link Hint</h4>
+<div class="outline-text-4" id="text-org59cedb7">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">link-hint</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3122,9 +3277,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-orga8be92f" class="outline-4">
-<h4 id="orga8be92f">List Unicode Display</h4>
-<div class="outline-text-4" id="text-orga8be92f">
+<div id="outline-container-orgcebadff" class="outline-4">
+<h4 id="orgcebadff">List Unicode Display</h4>
+<div class="outline-text-4" id="text-orgcebadff">
 <div class="org-src-container">
 <pre class="src src-elisp">(straight-use-package <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">list-unicode-display</span><span style="color: #6272a4;">)</span>
 </pre>
@@ -3132,9 +3287,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org88831d9" class="outline-4">
-<h4 id="org88831d9">mmm-mode</h4>
-<div class="outline-text-4" id="text-org88831d9">
+<div id="outline-container-org2d1aa88" class="outline-4">
+<h4 id="org2d1aa88">mmm-mode</h4>
+<div class="outline-text-4" id="text-org2d1aa88">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">mmm-auto</span>
   <span style="color: #ffb86c;">:demand</span> t
@@ -3147,9 +3302,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org304f164" class="outline-4">
-<h4 id="org304f164">Multiple Cursors</h4>
-<div class="outline-text-4" id="text-org304f164">
+<div id="outline-container-orga15fe7e" class="outline-4">
+<h4 id="orga15fe7e">Multiple Cursors</h4>
+<div class="outline-text-4" id="text-orga15fe7e">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">multiple-cursors</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3167,15 +3322,16 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-orgb31632f" class="outline-4">
-<h4 id="orgb31632f">Outline and Outshine</h4>
-<div class="outline-text-4" id="text-orgb31632f">
+<div id="outline-container-orga777819" class="outline-4">
+<h4 id="orga777819">Outline and Outshine</h4>
+<div class="outline-text-4" id="text-orga777819">
 </div>
-<div id="outline-container-orgcbab681" class="outline-5">
-<h5 id="orgcbab681">Outline</h5>
-<div class="outline-text-5" id="text-orgcbab681">
+<div id="outline-container-org4096faf" class="outline-5">
+<h5 id="org4096faf">Outline</h5>
+<div class="outline-text-5" id="text-org4096faf">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">outline</span>
+  <span style="color: #ffb86c;">:disabled</span> t
   <span style="color: #ffb86c;">:hook</span> (((prog-mode conf-mode bibtex-mode LaTeX-mode) . outline-minor-mode<span style="color: #6272a4;">))</span>
   <span style="color: #ffb86c;">:bind</span> (<span style="color: #ffb86c;">:map</span> outline-minor-mode-map
               (<span style="color: #f1fa8c;">"&lt;tab&gt;"</span> . outline-toggle-children<span style="color: #6272a4;">))</span>
@@ -3185,11 +3341,12 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-orgf4f8fa4" class="outline-5">
-<h5 id="orgf4f8fa4">Outshine</h5>
-<div class="outline-text-5" id="text-orgf4f8fa4">
+<div id="outline-container-orgc9aa954" class="outline-5">
+<h5 id="orgc9aa954">Outshine</h5>
+<div class="outline-text-5" id="text-orgc9aa954">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">outshine</span>
+  <span style="color: #ffb86c;">:disabled</span> t
   <span style="color: #ffb86c;">:demand</span>   t
   <span style="color: #ffb86c;">:straight</span> t
   <span style="color: #ffb86c;">:bind</span> (<span style="color: #ffb86c;">:map</span> outshine-mode-map
@@ -3202,9 +3359,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-orga83e11d" class="outline-4">
-<h4 id="orga83e11d">Pangu Spacing</h4>
-<div class="outline-text-4" id="text-orga83e11d">
+<div id="outline-container-org1ed7c87" class="outline-4">
+<h4 id="org1ed7c87">Pangu Spacing</h4>
+<div class="outline-text-4" id="text-org1ed7c87">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">pangu-spacing</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3215,9 +3372,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-orgff630d0" class="outline-4">
-<h4 id="orgff630d0">Paper Break Lines</h4>
-<div class="outline-text-4" id="text-orgff630d0">
+<div id="outline-container-orgeb3f0a8" class="outline-4">
+<h4 id="orgeb3f0a8">Paper Break Lines</h4>
+<div class="outline-text-4" id="text-orgeb3f0a8">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">page-break-lines</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3228,9 +3385,9 @@ I only use <code>rg</code> to search, so I disabled the key-map of isearch.
 </div>
 </div>
 
-<div id="outline-container-org31a80df" class="outline-4">
-<h4 id="org31a80df">Parens</h4>
-<div class="outline-text-4" id="text-org31a80df">
+<div id="outline-container-orge5c0dbc" class="outline-4">
+<h4 id="orge5c0dbc">Parens</h4>
+<div class="outline-text-4" id="text-orge5c0dbc">
 <p>
 I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimiters</code> instead of <code>paredit</code>.
 </p>
@@ -3241,9 +3398,9 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-orgeb75ac4" class="outline-5">
-<h5 id="orgeb75ac4">Smartparens</h5>
-<div class="outline-text-5" id="text-orgeb75ac4">
+<div id="outline-container-org707908e" class="outline-5">
+<h5 id="org707908e">Smartparens</h5>
+<div class="outline-text-5" id="text-org707908e">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">smartparens-config</span>
   <span style="color: #ffb86c;">:straight</span> smartparens
@@ -3255,9 +3412,9 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-org4d146e4" class="outline-5">
-<h5 id="org4d146e4">Parinfer</h5>
-<div class="outline-text-5" id="text-org4d146e4">
+<div id="outline-container-org3ec4eda" class="outline-5">
+<h5 id="org3ec4eda">Parinfer</h5>
+<div class="outline-text-5" id="text-org3ec4eda">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">parinfer</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3280,9 +3437,9 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-org9c97591" class="outline-5">
-<h5 id="org9c97591">Rainbow Delimiters</h5>
-<div class="outline-text-5" id="text-org9c97591">
+<div id="outline-container-org9ac74f0" class="outline-5">
+<h5 id="org9ac74f0">Rainbow Delimiters</h5>
+<div class="outline-text-5" id="text-org9ac74f0">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">rainbow-delimiters</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3293,9 +3450,9 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-orgad2485c" class="outline-4">
-<h4 id="orgad2485c">PDF Tools</h4>
-<div class="outline-text-4" id="text-orgad2485c">
+<div id="outline-container-org6c0650a" class="outline-4">
+<h4 id="org6c0650a">PDF Tools</h4>
+<div class="outline-text-4" id="text-org6c0650a">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">pdf-tools</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3327,13 +3484,13 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-org33599f7" class="outline-4">
-<h4 id="org33599f7">Pretty</h4>
-<div class="outline-text-4" id="text-org33599f7">
+<div id="outline-container-org80ef3a2" class="outline-4">
+<h4 id="org80ef3a2">Pretty</h4>
+<div class="outline-text-4" id="text-org80ef3a2">
 </div>
-<div id="outline-container-org887600c" class="outline-5">
-<h5 id="org887600c">Pretty Mode</h5>
-<div class="outline-text-5" id="text-org887600c">
+<div id="outline-container-orgeeafca7" class="outline-5">
+<h5 id="orgeeafca7">Pretty Mode</h5>
+<div class="outline-text-5" id="text-orgeeafca7">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">pretty-mode</span>
   <span style="color: #ffb86c;">:demand</span> t
@@ -3551,9 +3708,9 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-org4de17e9" class="outline-5">
-<h5 id="org4de17e9">ipretty</h5>
-<div class="outline-text-5" id="text-org4de17e9">
+<div id="outline-container-org998a20f" class="outline-5">
+<h5 id="org998a20f">ipretty</h5>
+<div class="outline-text-5" id="text-org998a20f">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">ipretty</span>
   <span style="color: #ffb86c;">:defer</span> t
@@ -3564,9 +3721,9 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-org04fc9c0" class="outline-5">
-<h5 id="org04fc9c0">Pretty Font</h5>
-<div class="outline-text-5" id="text-org04fc9c0">
+<div id="outline-container-org884d7e3" class="outline-5">
+<h5 id="org884d7e3">Pretty Font</h5>
+<div class="outline-text-5" id="text-org884d7e3">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #6272a4;">;; </span><span style="color: #6272a4;">https://github.com/tonsky/FiraCode/wiki/Emacs-instructions</span>
 <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">This works when using emacs --daemon + emacsclient</span>
@@ -3700,9 +3857,9 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-orgaa84885" class="outline-4">
-<h4 id="orgaa84885">Prescient</h4>
-<div class="outline-text-4" id="text-orgaa84885">
+<div id="outline-container-org1b755a9" class="outline-4">
+<h4 id="org1b755a9">Prescient</h4>
+<div class="outline-text-4" id="text-org1b755a9">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">prescient</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3723,15 +3880,14 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-org8a0785f" class="outline-4">
-<h4 id="org8a0785f">Projectile</h4>
-<div class="outline-text-4" id="text-org8a0785f">
+<div id="outline-container-org3f36ee7" class="outline-4">
+<h4 id="org3f36ee7">Projectile</h4>
+<div class="outline-text-4" id="text-org3f36ee7">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">projectile</span>
   <span style="color: #ffb86c;">:defer</span>    t
   <span style="color: #ffb86c;">:straight</span> t
   <span style="color: #ffb86c;">:diminish</span>
-  <span style="color: #ffb86c;">:bind</span> ((<span style="color: #f1fa8c;">"C-c TAB"</span> . projectile-find-other-file<span style="color: #6272a4;">))</span>
   <span style="color: #ffb86c;">:bind-keymap</span> (<span style="color: #f1fa8c;">"C-c C-p"</span> . projectile-command-map<span style="color: #6272a4;">)</span>
   <span style="color: #ffb86c;">:hook</span> ((after-init . projectile-global-mode<span style="color: #6272a4;">))</span>
   <span style="color: #ffb86c;">:config</span> (<span style="color: #ff79c6; font-style: italic;">setq</span> projectile-indexing-method      <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">hybrid</span>
@@ -3745,9 +3901,9 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-orge0970b8" class="outline-4">
-<h4 id="orge0970b8">Recentf</h4>
-<div class="outline-text-4" id="text-orge0970b8">
+<div id="outline-container-org3db6a1f" class="outline-4">
+<h4 id="org3db6a1f">Recentf</h4>
+<div class="outline-text-4" id="text-org3db6a1f">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">recentf</span>
   <span style="color: #ffb86c;">:hook</span> ((after-init . recentf-mode<span style="color: #6272a4;">))</span>
@@ -3763,9 +3919,9 @@ I use <code>smartparens</code>, <code>parinfer</code> with <code>rainbow-delimit
 </div>
 </div>
 
-<div id="outline-container-orgc2754ba" class="outline-4">
-<h4 id="orgc2754ba">Smex/Amx</h4>
-<div class="outline-text-4" id="text-orgc2754ba">
+<div id="outline-container-orgf6175d5" class="outline-4">
+<h4 id="orgf6175d5">Smex/Amx</h4>
+<div class="outline-text-4" id="text-orgf6175d5">
 <p>
 Now use amx instead of smex.
 </p>
@@ -3786,9 +3942,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org2720ffe" class="outline-4">
-<h4 id="org2720ffe">Subword</h4>
-<div class="outline-text-4" id="text-org2720ffe">
+<div id="outline-container-org0ff6ecd" class="outline-4">
+<h4 id="org0ff6ecd">Subword</h4>
+<div class="outline-text-4" id="text-org0ff6ecd">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">subword</span>
   <span style="color: #ffb86c;">:defer</span> t
@@ -3798,9 +3954,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org2fd6219" class="outline-4">
-<h4 id="org2fd6219">Symbol Overlay</h4>
-<div class="outline-text-4" id="text-org2fd6219">
+<div id="outline-container-orgdec3f43" class="outline-4">
+<h4 id="orgdec3f43">Symbol Overlay</h4>
+<div class="outline-text-4" id="text-orgdec3f43">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">symbol-overlay</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3814,9 +3970,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org2750f94" class="outline-4">
-<h4 id="org2750f94">Treemacs</h4>
-<div class="outline-text-4" id="text-org2750f94">
+<div id="outline-container-orge15968a" class="outline-4">
+<h4 id="orge15968a">Treemacs</h4>
+<div class="outline-text-4" id="text-orge15968a">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">treemacs</span>
   <span style="color: #ffb86c;">:defer</span> t
@@ -3899,9 +4055,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org06a6b81" class="outline-4">
-<h4 id="org06a6b81">Undo Tree</h4>
-<div class="outline-text-4" id="text-org06a6b81">
+<div id="outline-container-orgffd1e4a" class="outline-4">
+<h4 id="orgffd1e4a">Undo Tree</h4>
+<div class="outline-text-4" id="text-orgffd1e4a">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">undo-tree</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3914,13 +4070,13 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org6693573" class="outline-4">
-<h4 id="org6693573">Version Control</h4>
-<div class="outline-text-4" id="text-org6693573">
+<div id="outline-container-orgf3e1747" class="outline-4">
+<h4 id="orgf3e1747">Version Control</h4>
+<div class="outline-text-4" id="text-orgf3e1747">
 </div>
-<div id="outline-container-org9e5effa" class="outline-5">
-<h5 id="org9e5effa">Useful Simple Packages</h5>
-<div class="outline-text-5" id="text-org9e5effa">
+<div id="outline-container-org4fecec9" class="outline-5">
+<h5 id="org4fecec9">Useful Simple Packages</h5>
+<div class="outline-text-5" id="text-org4fecec9">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">dolist</span> (package <span style="color: #bd93f9;">'</span>(git-blamed
                    git-timemachine<span style="color: #6272a4;">))</span>
@@ -3931,9 +4087,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org39adbe4" class="outline-5">
-<h5 id="org39adbe4">Git Modes</h5>
-<div class="outline-text-5" id="text-org39adbe4">
+<div id="outline-container-orgdc52630" class="outline-5">
+<h5 id="orgdc52630">Git Modes</h5>
+<div class="outline-text-5" id="text-orgdc52630">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">git-modes</span>
   <span style="color: #ffb86c;">:straight</span> t<span style="color: #6272a4;">)</span>
@@ -3942,9 +4098,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org40ccbbf" class="outline-5">
-<h5 id="org40ccbbf">Magit</h5>
-<div class="outline-text-5" id="text-org40ccbbf">
+<div id="outline-container-org6bbd0e5" class="outline-5">
+<h5 id="org6bbd0e5">Magit</h5>
+<div class="outline-text-5" id="text-org6bbd0e5">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">magit</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -3967,9 +4123,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-orgeeb266b" class="outline-5">
-<h5 id="orgeeb266b">Magit Org Todos</h5>
-<div class="outline-text-5" id="text-orgeeb266b">
+<div id="outline-container-orge767fea" class="outline-5">
+<h5 id="orge767fea">Magit Org Todos</h5>
+<div class="outline-text-5" id="text-orge767fea">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">magit-org-todos</span>
   <span style="color: #ffb86c;">:after</span>    org
@@ -3980,9 +4136,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-orgd7fe170" class="outline-5">
-<h5 id="orgd7fe170">Forge</h5>
-<div class="outline-text-5" id="text-orgd7fe170">
+<div id="outline-container-orgb19e47f" class="outline-5">
+<h5 id="orgb19e47f">Forge</h5>
+<div class="outline-text-5" id="text-orgb19e47f">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">forge</span>
   <span style="color: #ffb86c;">:straight</span> t<span style="color: #6272a4;">)</span>
@@ -3991,9 +4147,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-orgaeb9f6e" class="outline-5">
-<h5 id="orgaeb9f6e">Transient</h5>
-<div class="outline-text-5" id="text-orgaeb9f6e">
+<div id="outline-container-org555620c" class="outline-5">
+<h5 id="org555620c">Transient</h5>
+<div class="outline-text-5" id="text-org555620c">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">transient</span>
   <span style="color: #ffb86c;">:straight</span> t<span style="color: #6272a4;">)</span>
@@ -4002,9 +4158,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org1330cf8" class="outline-5">
-<h5 id="org1330cf8">Git Commit</h5>
-<div class="outline-text-5" id="text-org1330cf8">
+<div id="outline-container-org5980c9f" class="outline-5">
+<h5 id="org5980c9f">Git Commit</h5>
+<div class="outline-text-5" id="text-org5980c9f">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">git-commit</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4014,9 +4170,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org96bdc75" class="outline-5">
-<h5 id="org96bdc75">Git Messenger</h5>
-<div class="outline-text-5" id="text-org96bdc75">
+<div id="outline-container-org8651ef7" class="outline-5">
+<h5 id="org8651ef7">Git Messenger</h5>
+<div class="outline-text-5" id="text-org8651ef7">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">git-messenger</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4028,9 +4184,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-orgf7df233" class="outline-5">
-<h5 id="orgf7df233">Git Gutter</h5>
-<div class="outline-text-5" id="text-orgf7df233">
+<div id="outline-container-orgf473c93" class="outline-5">
+<h5 id="orgf473c93">Git Gutter</h5>
+<div class="outline-text-5" id="text-orgf473c93">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">git-gutter</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4049,9 +4205,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org34b1e3a" class="outline-5">
-<h5 id="org34b1e3a">Github Gist</h5>
-<div class="outline-text-5" id="text-org34b1e3a">
+<div id="outline-container-org039dbbd" class="outline-5">
+<h5 id="org039dbbd">Github Gist</h5>
+<div class="outline-text-5" id="text-org039dbbd">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">gist</span>
   <span style="color: #ffb86c;">:straight</span> t<span style="color: #6272a4;">)</span>
@@ -4061,9 +4217,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org5fd58ff" class="outline-4">
-<h4 id="org5fd58ff">Which Function</h4>
-<div class="outline-text-4" id="text-org5fd58ff">
+<div id="outline-container-org7dfc3f3" class="outline-4">
+<h4 id="org7dfc3f3">Which Function</h4>
+<div class="outline-text-4" id="text-org7dfc3f3">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">which-func</span>
   <span style="color: #ffb86c;">:disabled</span> t
@@ -4074,9 +4230,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-orgf73fe60" class="outline-4">
-<h4 id="orgf73fe60">Which Key</h4>
-<div class="outline-text-4" id="text-orgf73fe60">
+<div id="outline-container-orgf19b260" class="outline-4">
+<h4 id="orgf19b260">Which Key</h4>
+<div class="outline-text-4" id="text-orgf19b260">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">which-key</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4086,9 +4242,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org996d750" class="outline-4">
-<h4 id="org996d750">Whitespace</h4>
-<div class="outline-text-4" id="text-org996d750">
+<div id="outline-container-org0bf4a4a" class="outline-4">
+<h4 id="org0bf4a4a">Whitespace</h4>
+<div class="outline-text-4" id="text-org0bf4a4a">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">whitespace</span>
   <span style="color: #ffb86c;">:preface</span>
@@ -4127,9 +4283,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org999cbba" class="outline-4">
-<h4 id="org999cbba">Writeroom Mode</h4>
-<div class="outline-text-4" id="text-org999cbba">
+<div id="outline-container-orgb480b31" class="outline-4">
+<h4 id="orgb480b31">Writeroom Mode</h4>
+<div class="outline-text-4" id="text-orgb480b31">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">writeroom-mode</span>
   <span style="color: #ffb86c;">:defer</span> t
@@ -4175,9 +4331,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org3de1ec6" class="outline-4">
-<h4 id="org3de1ec6">Yasnippet</h4>
-<div class="outline-text-4" id="text-org3de1ec6">
+<div id="outline-container-org0c5ae01" class="outline-4">
+<h4 id="org0c5ae01">Yasnippet</h4>
+<div class="outline-text-4" id="text-org0c5ae01">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">yasnippet</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4190,13 +4346,13 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org01d51a8" class="outline-3">
-<h3 id="org01d51a8">Languages</h3>
-<div class="outline-text-3" id="text-org01d51a8">
+<div id="outline-container-orgd4a4473" class="outline-3">
+<h3 id="orgd4a4473">Languages</h3>
+<div class="outline-text-3" id="text-orgd4a4473">
 </div>
-<div id="outline-container-org4935b60" class="outline-4">
-<h4 id="org4935b60">Simple Supported Languages</h4>
-<div class="outline-text-4" id="text-org4935b60">
+<div id="outline-container-org2fa02a1" class="outline-4">
+<h4 id="org2fa02a1">Simple Supported Languages</h4>
+<div class="outline-text-4" id="text-org2fa02a1">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">let</span> ((languages <span style="color: #bd93f9;">'</span>(elvish-mode
                    fish-mode
@@ -4213,13 +4369,13 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org2c35465" class="outline-4">
-<h4 id="org2c35465">Language Server Protocol</h4>
-<div class="outline-text-4" id="text-org2c35465">
+<div id="outline-container-orge187d75" class="outline-4">
+<h4 id="orge187d75">Language Server Protocol</h4>
+<div class="outline-text-4" id="text-orge187d75">
 </div>
-<div id="outline-container-org282373d" class="outline-5">
-<h5 id="org282373d">lsp-mode</h5>
-<div class="outline-text-5" id="text-org282373d">
+<div id="outline-container-orgd7c68ea" class="outline-5">
+<h5 id="orgd7c68ea">lsp-mode</h5>
+<div class="outline-text-5" id="text-orgd7c68ea">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">lsp-mode</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4242,9 +4398,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org1561024" class="outline-5">
-<h5 id="org1561024">lsp-ui</h5>
-<div class="outline-text-5" id="text-org1561024">
+<div id="outline-container-org4aaf4de" class="outline-5">
+<h5 id="org4aaf4de">lsp-ui</h5>
+<div class="outline-text-5" id="text-org4aaf4de">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">lsp-ui</span>
   <span style="color: #ffb86c;">:demand</span> t
@@ -4272,9 +4428,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org68d0ca4" class="outline-5">
-<h5 id="org68d0ca4">company-lsp</h5>
-<div class="outline-text-5" id="text-org68d0ca4">
+<div id="outline-container-org3cb7467" class="outline-5">
+<h5 id="org3cb7467">company-lsp</h5>
+<div class="outline-text-5" id="text-org3cb7467">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">company-lsp</span>
   <span style="color: #ffb86c;">:defer</span> t
@@ -4300,9 +4456,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org14e412f" class="outline-5">
-<h5 id="org14e412f">lsp-treemacs</h5>
-<div class="outline-text-5" id="text-org14e412f">
+<div id="outline-container-org24ea22c" class="outline-5">
+<h5 id="org24ea22c">lsp-treemacs</h5>
+<div class="outline-text-5" id="text-org24ea22c">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #6272a4;">;; </span><span style="color: #6272a4;">(use-package lsp-treemacs</span>
 <span style="color: #6272a4;">;;   </span><span style="color: #6272a4;">:straight (lsp-treemacs :type git :host github :repo "emacs-lsp/lsp-treemacs"))</span>
@@ -4312,13 +4468,13 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org04df4f2" class="outline-4">
-<h4 id="org04df4f2">Debug Adapter Protocol</h4>
-<div class="outline-text-4" id="text-org04df4f2">
+<div id="outline-container-org663b6e8" class="outline-4">
+<h4 id="org663b6e8">Debug Adapter Protocol</h4>
+<div class="outline-text-4" id="text-org663b6e8">
 </div>
-<div id="outline-container-orga95a6a9" class="outline-5">
-<h5 id="orga95a6a9">Dap Mode</h5>
-<div class="outline-text-5" id="text-orga95a6a9">
+<div id="outline-container-org030d474" class="outline-5">
+<h5 id="org030d474">Dap Mode</h5>
+<div class="outline-text-5" id="text-org030d474">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">dap-mode</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4330,9 +4486,9 @@ Now use amx instead of smex.
 </div>
 </div>
 
-<div id="outline-container-org8a80315" class="outline-4">
-<h4 id="org8a80315">C/C++/Object-C (Clangd)</h4>
-<div class="outline-text-4" id="text-org8a80315">
+<div id="outline-container-orgca2ed6c" class="outline-4">
+<h4 id="orgca2ed6c">C/C++/Object-C (Clangd)</h4>
+<div class="outline-text-4" id="text-orgca2ed6c">
 <p>
 I use clangd
 </p>
@@ -4348,18 +4504,18 @@ I use clangd
 </div>
 </div>
 
-<div id="outline-container-org01ba5e0" class="outline-4">
-<h4 id="org01ba5e0">Haskell</h4>
-<div class="outline-text-4" id="text-org01ba5e0">
+<div id="outline-container-org14ef9e4" class="outline-4">
+<h4 id="org14ef9e4">Haskell</h4>
+<div class="outline-text-4" id="text-org14ef9e4">
 <p>
 Include haskell-mode, lsp-haskell, intero and structured haskell mode.  Also
 inlcude haskell-snippets.
 </p>
 </div>
 
-<div id="outline-container-org6c588e1" class="outline-5">
-<h5 id="org6c588e1">Haskell-Mode</h5>
-<div class="outline-text-5" id="text-org6c588e1">
+<div id="outline-container-org9df52e4" class="outline-5">
+<h5 id="org9df52e4">Haskell-Mode</h5>
+<div class="outline-text-5" id="text-org9df52e4">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">haskell-mode</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4395,6 +4551,7 @@ inlcude haskell-snippets.
   <span style="color: #ffb86c;">:init</span>
   (<span style="color: #ff79c6; font-style: italic;">setq</span> haskell-mode-stylish-haskell-path            <span style="color: #f1fa8c;">"stylish-haskell"</span>
         haskell-indentation-layout-offset            <span style="color: #ff5555; font-weight: bold;">4</span>
+        haskell-indentation-left-offset              <span style="color: #ff5555; font-weight: bold;">4</span>
         haskell-process-suggest-haskell-docs-imports t
         haskell-process-suggest-remove-import-lines  t
         haskell-process-auto-import-loaded-modules   t
@@ -4456,9 +4613,9 @@ inlcude haskell-snippets.
 </div>
 </div>
 
-<div id="outline-container-org2ed4dec" class="outline-5">
-<h5 id="org2ed4dec">LSP Haskell</h5>
-<div class="outline-text-5" id="text-org2ed4dec">
+<div id="outline-container-org844a6c0" class="outline-5">
+<h5 id="org844a6c0">LSP Haskell</h5>
+<div class="outline-text-5" id="text-org844a6c0">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">lsp-haskell</span>
   <span style="color: #ffb86c;">:demand</span>   t
@@ -4476,9 +4633,9 @@ inlcude haskell-snippets.
 </div>
 </div>
 
-<div id="outline-container-org2fe4b7e" class="outline-5">
-<h5 id="org2fe4b7e">intero</h5>
-<div class="outline-text-5" id="text-org2fe4b7e">
+<div id="outline-container-orgdeee4c4" class="outline-5">
+<h5 id="orgdeee4c4">intero</h5>
+<div class="outline-text-5" id="text-orgdeee4c4">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">when</span> *intero*
   (<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">intero</span>
@@ -4493,9 +4650,9 @@ inlcude haskell-snippets.
 </div>
 </div>
 
-<div id="outline-container-orgdbef667" class="outline-5">
-<h5 id="orgdbef667">Structured Haskell Mode</h5>
-<div class="outline-text-5" id="text-orgdbef667">
+<div id="outline-container-orgb3ba756" class="outline-5">
+<h5 id="orgb3ba756">Structured Haskell Mode</h5>
+<div class="outline-text-5" id="text-orgb3ba756">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">if</span> (<span style="color: #ff79c6; font-style: italic;">and</span> *struct-hs* *struct-hs-path*<span style="color: #6272a4;">)</span>
     (<span style="color: #ff79c6; font-style: italic;">progn</span>
@@ -4515,9 +4672,9 @@ inlcude haskell-snippets.
 </div>
 </div>
 
-<div id="outline-container-org105dcf8" class="outline-5">
-<h5 id="org105dcf8">haskell snippets</h5>
-<div class="outline-text-5" id="text-org105dcf8">
+<div id="outline-container-org68221be" class="outline-5">
+<h5 id="org68221be">haskell snippets</h5>
+<div class="outline-text-5" id="text-org68221be">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">haskell-snippets</span>
   <span style="color: #ffb86c;">:straight</span> t<span style="color: #6272a4;">)</span>
@@ -4527,13 +4684,38 @@ inlcude haskell-snippets.
 </div>
 </div>
 
-<div id="outline-container-orgc338770" class="outline-4">
-<h4 id="orgc338770">Lisp</h4>
-<div class="outline-text-4" id="text-orgc338770">
+<div id="outline-container-org2692db5" class="outline-4">
+<h4 id="org2692db5">HTML</h4>
+<div class="outline-text-4" id="text-org2692db5">
+<div class="org-src-container">
+<pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">lsp-mode</span>
+  <span style="color: #ffb86c;">:straight</span> t
+  <span style="color: #ffb86c;">:hook</span> ((html-mode . lsp<span style="color: #6272a4;">)))</span>
+</pre>
 </div>
-<div id="outline-container-org07b3c7c" class="outline-5">
-<h5 id="org07b3c7c">lisp-mode</h5>
-<div class="outline-text-5" id="text-org07b3c7c">
+</div>
+</div>
+
+<div id="outline-container-org7a1830c" class="outline-4">
+<h4 id="org7a1830c">JavaScript &amp; TypeScript</h4>
+<div class="outline-text-4" id="text-org7a1830c">
+<div class="org-src-container">
+<pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">lsp-mode</span>
+  <span style="color: #ffb86c;">:disabled</span> t
+  <span style="color: #ffb86c;">:straight</span> t
+  <span style="color: #ffb86c;">:hook</span> ((javascript-mode . lsp<span style="color: #6272a4;">)))</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb04fd3c" class="outline-4">
+<h4 id="orgb04fd3c">Lisp</h4>
+<div class="outline-text-4" id="text-orgb04fd3c">
+</div>
+<div id="outline-container-org57ad82d" class="outline-5">
+<h5 id="org57ad82d">lisp-mode</h5>
+<div class="outline-text-5" id="text-org57ad82d">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">lisp-mode</span>
   <span style="color: #ffb86c;">:preface</span>
@@ -4551,9 +4733,9 @@ inlcude haskell-snippets.
 </div>
 </div>
 
-<div id="outline-container-orgd3168b6" class="outline-5">
-<h5 id="orgd3168b6">Highlight-quoted</h5>
-<div class="outline-text-5" id="text-orgd3168b6">
+<div id="outline-container-org668d3fe" class="outline-5">
+<h5 id="org668d3fe">Highlight-quoted</h5>
+<div class="outline-text-5" id="text-org668d3fe">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">highlight-quoted</span>
   <span style="color: #ffb86c;">:defer</span> t
@@ -4564,9 +4746,9 @@ inlcude haskell-snippets.
 </div>
 </div>
 
-<div id="outline-container-org181c31c" class="outline-5">
-<h5 id="org181c31c">elisp-def</h5>
-<div class="outline-text-5" id="text-org181c31c">
+<div id="outline-container-org8e49743" class="outline-5">
+<h5 id="org8e49743">elisp-def</h5>
+<div class="outline-text-5" id="text-org8e49743">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">elisp-def</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4577,9 +4759,9 @@ inlcude haskell-snippets.
 </div>
 </div>
 
-<div id="outline-container-org04cbd18" class="outline-4">
-<h4 id="org04cbd18">Markdown</h4>
-<div class="outline-text-4" id="text-org04cbd18">
+<div id="outline-container-orgb3c98ff" class="outline-4">
+<h4 id="orgb3c98ff">Markdown</h4>
+<div class="outline-text-4" id="text-orgb3c98ff">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">markdown-mode</span>
   <span style="color: #ffb86c;">:defer</span> t
@@ -4595,9 +4777,9 @@ inlcude haskell-snippets.
 </div>
 </div>
 
-<div id="outline-container-org74e48d0" class="outline-4">
-<h4 id="org74e48d0">Pandoc</h4>
-<div class="outline-text-4" id="text-org74e48d0">
+<div id="outline-container-org94b189c" class="outline-4">
+<h4 id="org94b189c">Pandoc</h4>
+<div class="outline-text-4" id="text-org94b189c">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">pandoc-mode</span>
   <span style="color: #ffb86c;">:straight</span> t<span style="color: #6272a4;">)</span>
@@ -4606,19 +4788,22 @@ inlcude haskell-snippets.
 </div>
 </div>
 
-<div id="outline-container-org4923f12" class="outline-4">
-<h4 id="org4923f12">Python</h4>
-<div class="outline-text-4" id="text-org4923f12">
+<div id="outline-container-org730d8fc" class="outline-4">
+<h4 id="org730d8fc">Python</h4>
+<div class="outline-text-4" id="text-org730d8fc">
 <p>
 Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flycheck-prospector.
 </p>
 </div>
 
-<div id="outline-container-org4befeae" class="outline-5">
-<h5 id="org4befeae">Python Mode</h5>
-<div class="outline-text-5" id="text-org4befeae">
+<div id="outline-container-org037d3fe" class="outline-5">
+<h5 id="org037d3fe">Python Mode</h5>
+<div class="outline-text-5" id="text-org037d3fe">
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">python</span>
+<pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">require</span> <span style="color: #bd93f9;">'</span><span style="color: #8be9fd;">python</span><span style="color: #6272a4;">)</span>
+
+(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">python-mode</span>
+  <span style="color: #ffb86c;">:straight</span> t
   <span style="color: #ffb86c;">:commands</span> python-mode
   <span style="color: #ffb86c;">:mode</span> (<span style="color: #f1fa8c;">"\\.py\\'"</span> . python-mode<span style="color: #6272a4;">)</span>
   <span style="color: #ffb86c;">:interpreter</span> ((<span style="color: #f1fa8c;">"python"</span>  . python-mode<span style="color: #6272a4;">)</span>
@@ -4634,6 +4819,69 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
     (<span style="color: #ff79c6; font-style: italic;">when</span> (projectile-file-exists-p <span style="color: #f1fa8c;">"pylintrc"</span><span style="color: #6272a4;">)</span>
       (<span style="color: #ff79c6; font-style: italic;">setq</span> flycheck-pylintrc <span style="color: #f1fa8c;">"pylintrc"</span><span style="color: #6272a4;">)))</span>
 
+  (<span style="color: #ff79c6; font-style: italic;">defcustom</span> <span style="color: #f8f8f2;">nasy:python-buffer</span> <span style="color: #f1fa8c;">"vterm"</span>
+    <span style="color: #8995ba;">"Nasy Python Buffer"</span>
+    <span style="color: #ffb86c;">:group</span> <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">python-mode</span>
+    <span style="color: #ffb86c;">:type</span> <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">string</span><span style="color: #6272a4;">)</span>
+
+  (<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">nasy:python-send-buffer</span> (<span style="color: #6272a4;">)</span>
+    <span style="color: #8995ba;">"Send current buffer to the running python process."</span>
+    (<span style="color: #ff79c6; font-style: italic;">interactive</span><span style="color: #6272a4;">)</span>
+    (<span style="color: #ff79c6; font-style: italic;">let</span> ((proc (get-buffer-process nasy:python-buffer<span style="color: #6272a4;">)))</span>
+      (<span style="color: #ff79c6; font-style: italic;">unless</span> proc
+        (<span style="color: #f1fa8c;">error</span> <span style="color: #f1fa8c;">"No process found"</span><span style="color: #6272a4;">))</span>
+      (save-buffer<span style="color: #6272a4;">)</span>
+      (comint-simple-send proc
+                          (format <span style="color: #f1fa8c;">"</span><span style="color: #f1fa8c;">\</span><span style="color: #f1fa8c;">%load %s"</span> (buffer-file-name<span style="color: #6272a4;">)))</span>
+      (pop-to-buffer nasy:python-buffer<span style="color: #6272a4;">)))</span>
+
+  (<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">nasy:python-send-region</span> (begin end<span style="color: #6272a4;">)</span>
+    <span style="color: #8995ba;">"Evaluate the code in region from BEGIN to END in the python repl.</span>
+<span style="color: #8995ba;">if the region is unset, the current line will be used."</span>
+    (<span style="color: #ff79c6; font-style: italic;">interactive</span> <span style="color: #f1fa8c;">"r"</span><span style="color: #6272a4;">)</span>
+    (<span style="color: #ff79c6; font-style: italic;">unless</span> (use-region-p<span style="color: #6272a4;">)</span>
+      (<span style="color: #ff79c6; font-style: italic;">setq</span> begin (line-beginning-position<span style="color: #6272a4;">)</span>
+            end (line-end-position<span style="color: #6272a4;">)))</span>
+    (<span style="color: #ff79c6; font-style: italic;">let*</span> ((text (buffer-substring-no-properties begin end<span style="color: #6272a4;">))</span>
+           (proc (get-buffer-process nasy:python-buffer<span style="color: #6272a4;">)))</span>
+      (<span style="color: #ff79c6; font-style: italic;">unless</span> proc
+        (<span style="color: #f1fa8c;">error</span> <span style="color: #f1fa8c;">"No process found"</span><span style="color: #6272a4;">))</span>
+      (comint-simple-send proc text<span style="color: #6272a4;">)</span>
+      (display-buffer nasy:python-buffer<span style="color: #6272a4;">)))</span>
+
+  (<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">nasy:python-send-defun</span> (<span style="color: #61bfff;">&amp;optional</span> arg<span style="color: #6272a4;">)</span>
+    <span style="color: #8995ba;">"Send the current defun to inferior Python process.</span>
+<span style="color: #8995ba;">When ARG is non-nil do not include decorators."</span>
+    (<span style="color: #ff79c6; font-style: italic;">interactive</span> (list current-prefix-arg t<span style="color: #6272a4;">))</span>
+    (nasy:python-send-region
+     (<span style="color: #ff79c6; font-style: italic;">progn</span>
+         (end-of-line <span style="color: #ff5555; font-weight: bold;">1</span><span style="color: #6272a4;">)</span>
+         (<span style="color: #ff79c6; font-style: italic;">while</span> (<span style="color: #ff79c6; font-style: italic;">and</span> (<span style="color: #ff79c6; font-style: italic;">or</span> (python-nav-beginning-of-defun<span style="color: #6272a4;">)</span>
+                         (beginning-of-line <span style="color: #ff5555; font-weight: bold;">1</span><span style="color: #6272a4;">))</span>
+                     (&gt; (current-indentation) <span style="color: #ff5555; font-weight: bold;">0</span><span style="color: #6272a4;">)))</span>
+         (<span style="color: #ff79c6; font-style: italic;">when</span> (not arg<span style="color: #6272a4;">)</span>
+           (<span style="color: #ff79c6; font-style: italic;">while</span> (<span style="color: #ff79c6; font-style: italic;">and</span> (forward-line <span style="color: #ff5555; font-weight: bold;">-1</span><span style="color: #6272a4;">)</span>
+                       (looking-at (<span style="color: #ff79c6; font-style: italic;">python-rx</span> decorator<span style="color: #6272a4;">))))</span>
+           (forward-line <span style="color: #ff5555; font-weight: bold;">1</span><span style="color: #6272a4;">))</span>
+         (point-marker<span style="color: #6272a4;">)</span>
+       (<span style="color: #ff79c6; font-style: italic;">progn</span>
+         (<span style="color: #ff79c6; font-style: italic;">or</span> (python-nav-end-of-defun<span style="color: #6272a4;">)</span>
+             (end-of-line <span style="color: #ff5555; font-weight: bold;">1</span><span style="color: #6272a4;">))</span>
+         (point-marker<span style="color: #6272a4;">)))))</span>
+
+  (<span style="color: #ff79c6; font-style: italic;">defun</span> <span style="color: #50fa7b;">nasy:python-switch-to-shell</span> (<span style="color: #6272a4;">)</span>
+    <span style="color: #8995ba;">"Switch to inferior Python process buffer."</span>
+    (<span style="color: #ff79c6; font-style: italic;">interactive</span> <span style="color: #f1fa8c;">"p"</span><span style="color: #6272a4;">)</span>
+    (<span style="color: #ff79c6; font-style: italic;">let</span> ((proc (get-buffer-process nasy:python-buffer<span style="color: #6272a4;">)))</span>
+      (<span style="color: #ff79c6; font-style: italic;">unless</span> proc
+        (<span style="color: #f1fa8c;">error</span> <span style="color: #f1fa8c;">"No process found"</span><span style="color: #6272a4;">))</span>
+      (pop-to-buffer nasy:python-buffer<span style="color: #6272a4;">)))</span>
+
+  <span style="color: #ffb86c;">:bind</span> (<span style="color: #ffb86c;">:map</span> python-mode-map
+              (<span style="color: #f1fa8c;">"C-c C-b"</span> . nasy:python-send-buffer<span style="color: #6272a4;">)</span>
+              (<span style="color: #f1fa8c;">"C-c C-r"</span> . nasy:python-send-region<span style="color: #6272a4;">)</span>
+              (<span style="color: #f1fa8c;">"C-c C-c"</span> . nasy:python-send-defun<span style="color: #6272a4;">)</span>
+              (<span style="color: #f1fa8c;">"C-c C-z"</span> . nasy:python-switch-to-shell<span style="color: #6272a4;">))</span>
   <span style="color: #ffb86c;">:hook</span> ((python-mode . lsp<span style="color: #6272a4;">)</span>
          (python-mode . setq-after<span style="color: #6272a4;">))</span>
   <span style="color: #ffb86c;">:init</span>
@@ -4642,13 +4890,21 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
                 python-indent-guess-indent-offset     nil
                 python-shell-completion-native-enable nil
                 python-shell-interpreter              <span style="color: #f1fa8c;">"ipython3"</span>
-                python-shell-interpreter-args         <span style="color: #f1fa8c;">"-i --simple-prompt"</span>
-                py-ipython-command-args               <span style="color: #f1fa8c;">"-i --simple-prompt"</span>
+                python-shell-interpreter-args         <span style="color: #f1fa8c;">"-i"</span>
+                py-ipython-command-args               <span style="color: #f1fa8c;">"-i"</span>
                 py-python-command                     <span style="color: #f1fa8c;">"python3"</span>
                 flycheck-python-pycompile-executable  <span style="color: #f1fa8c;">"python3"</span>
                 flycheck-python-pylint-executable     <span style="color: #f1fa8c;">"python3"</span>
                 python-mode-modeline-display          <span style="color: #f1fa8c;">"Python"</span>
-                python-skeleton-autoinsert            t<span style="color: #6272a4;">)</span>
+                python-skeleton-autoinsert            t
+                py-python-command                     <span style="color: #f1fa8c;">"python3"</span>
+                py-python2-command                    <span style="color: #f1fa8c;">"python2"</span>
+                py-python3-command                    <span style="color: #f1fa8c;">"python3"</span>
+                py-ipython-command                    <span style="color: #f1fa8c;">"ptipython"</span>
+                py-ipython2-command                   <span style="color: #f1fa8c;">"ipython2"</span>
+                py-ipython3-command                   <span style="color: #f1fa8c;">"ipython3"</span>
+                py-set-fill-column-p                  t
+                py-shell-name                         <span style="color: #f1fa8c;">"vterm"</span><span style="color: #6272a4;">)</span>
 
   <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">A list here https://github.com/palantir/python-language-server/blob/develop/vscode-client/package.json#L23-L230</span>
   <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">I prefer pydocstyle and black, so disabled yapf, though, pydocstyle still cannot be abled.</span>
@@ -4692,9 +4948,9 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
 </div>
 </div>
 
-<div id="outline-container-orgc7db6f9" class="outline-5">
-<h5 id="orgc7db6f9">black</h5>
-<div class="outline-text-5" id="text-orgc7db6f9">
+<div id="outline-container-orgdf6208b" class="outline-5">
+<h5 id="orgdf6208b">black</h5>
+<div class="outline-text-5" id="text-orgdf6208b">
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #6272a4;">;; </span><span style="color: #6272a4;">Now you can use it in lsp.</span>
 <span style="color: #6272a4;">;; </span><span style="color: #6272a4;">NOTICE you have to config black though pyproject.toml.</span>
@@ -4707,9 +4963,9 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
 </div>
 </div>
 
-<div id="outline-container-org0cdb7d0" class="outline-5">
-<h5 id="org0cdb7d0">py-isort</h5>
-<div class="outline-text-5" id="text-org0cdb7d0">
+<div id="outline-container-org7fe6b66" class="outline-5">
+<h5 id="org7fe6b66">py-isort</h5>
+<div class="outline-text-5" id="text-org7fe6b66">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">py-isort</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4719,9 +4975,9 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
 </div>
 </div>
 
-<div id="outline-container-org245b1e8" class="outline-5">
-<h5 id="org245b1e8">Python Docstring</h5>
-<div class="outline-text-5" id="text-org245b1e8">
+<div id="outline-container-orgfbc61e0" class="outline-5">
+<h5 id="orgfbc61e0">Python Docstring</h5>
+<div class="outline-text-5" id="text-orgfbc61e0">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">python-docstring</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4731,9 +4987,9 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
 </div>
 </div>
 
-<div id="outline-container-orgc9f5b41" class="outline-5">
-<h5 id="orgc9f5b41">Sphinx Doc</h5>
-<div class="outline-text-5" id="text-orgc9f5b41">
+<div id="outline-container-org7c079d2" class="outline-5">
+<h5 id="org7c079d2">Sphinx Doc</h5>
+<div class="outline-text-5" id="text-org7c079d2">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">sphinx-doc</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -4743,9 +4999,9 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
 </div>
 </div>
 
-<div id="outline-container-org77aad38" class="outline-5">
-<h5 id="org77aad38">flycheck-prospector</h5>
-<div class="outline-text-5" id="text-org77aad38">
+<div id="outline-container-org3b734fe" class="outline-5">
+<h5 id="org3b734fe">flycheck-prospector</h5>
+<div class="outline-text-5" id="text-org3b734fe">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">flycheck-prospector</span>
   <span style="color: #ffb86c;">:disabled</span> t
@@ -4759,11 +5015,24 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
 </div>
 </div>
 </div>
+
+<div id="outline-container-org8c1c346" class="outline-5">
+<h5 id="org8c1c346">pyimport</h5>
+<div class="outline-text-5" id="text-org8c1c346">
+<div class="org-src-container">
+<pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">pyimport</span>
+  <span style="color: #ffb86c;">:straight</span> t
+  <span style="color: #ffb86c;">:bind</span> (<span style="color: #ffb86c;">:map</span> python-mode-map
+              (<span style="color: #f1fa8c;">"C-c C-i"</span> . pyimport-insert-missing<span style="color: #6272a4;">)))</span>
+</pre>
+</div>
+</div>
+</div>
 </div>
 
-<div id="outline-container-org79699eb" class="outline-4">
-<h4 id="org79699eb">Rust</h4>
-<div class="outline-text-4" id="text-org79699eb">
+<div id="outline-container-orge19b376" class="outline-4">
+<h4 id="orge19b376">Rust</h4>
+<div class="outline-text-4" id="text-orge19b376">
 <p>
 Include rust-mode, rls and Cargo.
 </p>
@@ -4791,13 +5060,13 @@ Include rust-mode, rls and Cargo.
 </div>
 </div>
 
-<div id="outline-container-org0f8caec" class="outline-3">
-<h3 id="org0f8caec">Org Mode</h3>
-<div class="outline-text-3" id="text-org0f8caec">
+<div id="outline-container-org32a423d" class="outline-3">
+<h3 id="org32a423d">Org Mode</h3>
+<div class="outline-text-3" id="text-org32a423d">
 </div>
-<div id="outline-container-org0c30460" class="outline-4">
-<h4 id="org0c30460">Load</h4>
-<div class="outline-text-4" id="text-org0c30460">
+<div id="outline-container-org8408f6d" class="outline-4">
+<h4 id="org8408f6d">Load</h4>
+<div class="outline-text-4" id="text-org8408f6d">
 <p>
 I use <code>org</code> with <code>org-plus-contrib</code>
 </p>
@@ -4812,9 +5081,9 @@ I use <code>org</code> with <code>org-plus-contrib</code>
 </div>
 </div>
 
-<div id="outline-container-orgd73feaa" class="outline-4">
-<h4 id="orgd73feaa">OX Org</h4>
-<div class="outline-text-4" id="text-orgd73feaa">
+<div id="outline-container-org1cb0db3" class="outline-4">
+<h4 id="org1cb0db3">OX Org</h4>
+<div class="outline-text-4" id="text-org1cb0db3">
 <p>
 Other <code>ox-_</code> packages.
 </p>
@@ -4838,9 +5107,9 @@ Other <code>ox-_</code> packages.
 </div>
 </div>
 
-<div id="outline-container-orgf1eecf0" class="outline-4">
-<h4 id="orgf1eecf0">Basic Configs</h4>
-<div class="outline-text-4" id="text-orgf1eecf0">
+<div id="outline-container-org2b4d9a6" class="outline-4">
+<h4 id="org2b4d9a6">Basic Configs</h4>
+<div class="outline-text-4" id="text-org2b4d9a6">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">org</span>
   <span style="color: #ffb86c;">:demand</span> t
@@ -5118,9 +5387,9 @@ Other <code>ox-_</code> packages.
 </div>
 </div>
 
-<div id="outline-container-org78176ba" class="outline-4">
-<h4 id="org78176ba">Org-Agenda</h4>
-<div class="outline-text-4" id="text-org78176ba">
+<div id="outline-container-orgd71b810" class="outline-4">
+<h4 id="orgd71b810">Org-Agenda</h4>
+<div class="outline-text-4" id="text-orgd71b810">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">org-agenda</span>
   <span style="color: #ffb86c;">:init</span> (<span style="color: #ff79c6; font-style: italic;">setq-default</span> org-agenda-clockreport-parameter-plist <span style="color: #bd93f9;">'</span>(<span style="color: #ffb86c;">:link</span> t <span style="color: #ffb86c;">:maxlevel</span> <span style="color: #ff5555; font-weight: bold;">3</span><span style="color: #6272a4;">))</span>
@@ -5210,9 +5479,9 @@ Other <code>ox-_</code> packages.
 </div>
 </div>
 
-<div id="outline-container-orgcd32f37" class="outline-4">
-<h4 id="orgcd32f37">Org Bullets</h4>
-<div class="outline-text-4" id="text-orgcd32f37">
+<div id="outline-container-org0978c56" class="outline-4">
+<h4 id="org0978c56">Org Bullets</h4>
+<div class="outline-text-4" id="text-org0978c56">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">org-bullets</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -5222,9 +5491,9 @@ Other <code>ox-_</code> packages.
 </div>
 </div>
 
-<div id="outline-container-orgf172cd7" class="outline-4">
-<h4 id="orgf172cd7">Org Capture</h4>
-<div class="outline-text-4" id="text-orgf172cd7">
+<div id="outline-container-org82a0261" class="outline-4">
+<h4 id="org82a0261">Org Capture</h4>
+<div class="outline-text-4" id="text-org82a0261">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">org-capture</span>
   <span style="color: #ffb86c;">:demand</span> t
@@ -5268,9 +5537,9 @@ Other <code>ox-_</code> packages.
 </div>
 </div>
 
-<div id="outline-container-org34c7ae7" class="outline-4">
-<h4 id="org34c7ae7">Org Cliplink</h4>
-<div class="outline-text-4" id="text-org34c7ae7">
+<div id="outline-container-orga6c596f" class="outline-4">
+<h4 id="orga6c596f">Org Cliplink</h4>
+<div class="outline-text-4" id="text-orga6c596f">
 <div class="org-src-container">
 <pre class="src src-elisp">(straight-use-package <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">org-cliplink</span><span style="color: #6272a4;">)</span>
 </pre>
@@ -5278,9 +5547,9 @@ Other <code>ox-_</code> packages.
 </div>
 </div>
 
-<div id="outline-container-org813d815" class="outline-4">
-<h4 id="org813d815">Org Clock</h4>
-<div class="outline-text-4" id="text-org813d815">
+<div id="outline-container-org8c0d4cc" class="outline-4">
+<h4 id="org8c0d4cc">Org Clock</h4>
+<div class="outline-text-4" id="text-org8c0d4cc">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">org-clock</span>
   <span style="color: #ffb86c;">:preface</span>
@@ -5322,9 +5591,9 @@ Other <code>ox-_</code> packages.
 </div>
 </div>
 
-<div id="outline-container-org5080d95" class="outline-4">
-<h4 id="org5080d95">Org Extra Jar &#x2013; ob-ditaa &amp; ob-plantuml</h4>
-<div class="outline-text-4" id="text-org5080d95">
+<div id="outline-container-org054db4b" class="outline-4">
+<h4 id="org054db4b">Org Extra Jar &#x2013; ob-ditaa &amp; ob-plantuml</h4>
+<div class="outline-text-4" id="text-org054db4b">
 <p>
 Include ob-ditaa and ob-plantuml
 </p>
@@ -5364,9 +5633,9 @@ Include ob-ditaa and ob-plantuml
 </div>
 </div>
 
-<div id="outline-container-org7299604" class="outline-4">
-<h4 id="org7299604">Org Pdfview</h4>
-<div class="outline-text-4" id="text-org7299604">
+<div id="outline-container-org92fe6c9" class="outline-4">
+<h4 id="org92fe6c9">Org Pdfview</h4>
+<div class="outline-text-4" id="text-org92fe6c9">
 <div class="org-src-container">
 <pre class="src src-elisp">(straight-use-package <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">org-pdfview</span><span style="color: #6272a4;">)</span>
 </pre>
@@ -5374,9 +5643,9 @@ Include ob-ditaa and ob-plantuml
 </div>
 </div>
 
-<div id="outline-container-org9757b46" class="outline-4">
-<h4 id="org9757b46">Org Pomodoro</h4>
-<div class="outline-text-4" id="text-org9757b46">
+<div id="outline-container-orgd5660bd" class="outline-4">
+<h4 id="orgd5660bd">Org Pomodoro</h4>
+<div class="outline-text-4" id="text-orgd5660bd">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">org-pomodoro</span>
   <span style="color: #ffb86c;">:after</span> org-agenda
@@ -5388,9 +5657,9 @@ Include ob-ditaa and ob-plantuml
 </div>
 </div>
 
-<div id="outline-container-orga278faf" class="outline-4">
-<h4 id="orga278faf">Org Toc</h4>
-<div class="outline-text-4" id="text-orga278faf">
+<div id="outline-container-orge7beb45" class="outline-4">
+<h4 id="orge7beb45">Org Toc</h4>
+<div class="outline-text-4" id="text-orge7beb45">
 <div class="org-src-container">
 <pre class="src src-elisp">(straight-use-package <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">toc-org</span><span style="color: #6272a4;">)</span>
 </pre>
@@ -5398,9 +5667,9 @@ Include ob-ditaa and ob-plantuml
 </div>
 </div>
 
-<div id="outline-container-org4f5c0f5" class="outline-4">
-<h4 id="org4f5c0f5">Org Wc</h4>
-<div class="outline-text-4" id="text-org4f5c0f5">
+<div id="outline-container-org4cf7cd5" class="outline-4">
+<h4 id="org4cf7cd5">Org Wc</h4>
+<div class="outline-text-4" id="text-org4cf7cd5">
 <div class="org-src-container">
 <pre class="src src-elisp">(straight-use-package <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">org-wc</span><span style="color: #6272a4;">)</span>
 </pre>
@@ -5409,13 +5678,13 @@ Include ob-ditaa and ob-plantuml
 </div>
 </div>
 
-<div id="outline-container-org679b1fd" class="outline-3">
-<h3 id="org679b1fd">Themes</h3>
-<div class="outline-text-3" id="text-org679b1fd">
+<div id="outline-container-org7851337" class="outline-3">
+<h3 id="org7851337">Themes</h3>
+<div class="outline-text-3" id="text-org7851337">
 </div>
-<div id="outline-container-org28e299f" class="outline-4">
-<h4 id="org28e299f">Main Theme</h4>
-<div class="outline-text-4" id="text-org28e299f">
+<div id="outline-container-org210bf66" class="outline-4">
+<h4 id="org210bf66">Main Theme</h4>
+<div class="outline-text-4" id="text-org210bf66">
 <p>
 I use doom-themes.
 </p>
@@ -5434,9 +5703,9 @@ I use doom-themes.
 </div>
 </div>
 
-<div id="outline-container-orgb5a3b99" class="outline-4">
-<h4 id="orgb5a3b99">Font</h4>
-<div class="outline-text-4" id="text-orgb5a3b99">
+<div id="outline-container-org4c1a22c" class="outline-4">
+<h4 id="org4c1a22c">Font</h4>
+<div class="outline-text-4" id="text-org4c1a22c">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">emojify</span>
   <span style="color: #ffb86c;">:straight</span> t
@@ -5454,9 +5723,9 @@ I use doom-themes.
 </div>
 </div>
 
-<div id="outline-container-org7dbd4cd" class="outline-4">
-<h4 id="org7dbd4cd">Mode Line</h4>
-<div class="outline-text-4" id="text-org7dbd4cd">
+<div id="outline-container-org364d17d" class="outline-4">
+<h4 id="org364d17d">Mode Line</h4>
+<div class="outline-text-4" id="text-org364d17d">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #ff79c6; font-style: italic;">use-package</span> <span style="color: #8be9fd;">nyan-mode</span>
   <span style="color: #ffb86c;">:demand</span> t
@@ -5601,9 +5870,9 @@ I use doom-themes.
 </div>
 </div>
 
-<div id="outline-container-org12f0b46" class="outline-2">
-<h2 id="org12f0b46">Epilogue</h2>
-<div class="outline-text-2" id="text-org12f0b46">
+<div id="outline-container-org1fc5e16" class="outline-2">
+<h2 id="org1fc5e16">Epilogue</h2>
+<div class="outline-text-2" id="text-org1fc5e16">
 <div class="org-src-container">
 <pre class="src src-elisp">(run-hooks <span style="color: #bd93f9;">'</span><span style="color: #61bfff;">nasy:config-before-hook</span><span style="color: #6272a4;">)</span>
 
@@ -5614,7 +5883,7 @@ I use doom-themes.
 
 (<span style="color: #ff79c6; font-style: italic;">when</span> *server*
   (server-start<span style="color: #6272a4;">))</span>
-<span style="color: #6272a4;">;;; </span><span style="color: #61bfff; background-color: #44475a; font-weight: bold;">init.el ends here</span>
+<span style="color: #6272a4;">;;; </span><span style="color: #6272a4;">init.el ends here</span>
 </pre>
 </div>
 
@@ -5627,7 +5896,7 @@ Hope you enjoy it.
 <div id="postamble" class="status">
 <p class="date">Date: 2018-10-09 Tue 00:00</p>
 <p class="author">Author: Nasy</p>
-<p class="date">Created: 2019-03-26 Tue 10:03</p>
+<p class="date">Created: 2019-04-05 Fri 15:55</p>
 <p class="validation"></p>
 </div>
 <script>window.klipse_settings = {selector_eval_html: '.src-html',
