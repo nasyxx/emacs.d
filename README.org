@@ -3210,15 +3210,26 @@ Now use amx instead of smex.
     :straight t)
 #+end_src
 
-*** Undo Tree
+*** Undo/Redo
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
-  ;; Undo Tree
+  ;; Undo/Redo
 #+end_src
+
+**** Undo Propose
+
+#+begin_src elisp
+  (use-package undo-propose
+    :straight t
+    :config (undo-propose-wrap redo))
+#+end_src
+
+**** Undo tree
 
 #+begin_src elisp
   (use-package undo-tree
+    :disabled t
     :straight t
     :hook ((after-init . global-undo-tree-mode))
     :init (setq undo-tree-visualizer-diff       t
