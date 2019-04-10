@@ -3957,18 +3957,18 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
       (interactive (list current-prefix-arg t))
       (nasy:python-send-region
        (progn
-           (end-of-line 1)
-           (while (and (or (python-nav-beginning-of-defun)
-                           (beginning-of-line 1))
-                       (> (current-indentation) 0)))
-           (when (not arg)
-             (while (and (forward-line -1)
-                         (looking-at (python-rx decorator))))
-             (forward-line 1))
-           (point-marker)
+         (end-of-line 1)
+         (while (and (or (python-nav-beginning-of-defun)
+                      (beginning-of-line 1))
+                   (> (current-indentation) 0)))
+         (when (not arg)
+           (while (and (forward-line -1)
+                     (looking-at (python-rx decorator))))
+           (forward-line 1))
+         (point-marker)
          (progn
            (or (python-nav-end-of-defun)
-               (end-of-line 1))
+              (end-of-line 1))
            (point-marker)))))
 
     (defun nasy:python-switch-to-shell ()
@@ -4015,34 +4015,15 @@ Include python-mode, blacken, py-isort, python-docstring, sphinx-doc and flychec
     ;; The default line-length is 88 when using black, you can add a file named "pyproject.yaml" that contains
     ;; [tool.black]
     ;; line-length = 79
-    (with-eval-after-load 'lsp-clients
-      (setq lsp-clients-python-settings
-            (plist-put lsp-clients-python-settings
-                       :configurationSources ["pydocstyle" "pycodestyle" "pyflakes" "pylint"])
-            lsp-clients-python-settings
-            (plist-put lsp-clients-python-settings
-                       :plugins.pydocstyle.enabled t)
-            lsp-clients-python-settings
-            (plist-put lsp-clients-python-settings
-                       :plugins.yapf.enabled nil)
-            lsp-clients-python-settings
-            (plist-put lsp-clients-python-settings
-                       :plugins.jedi_definition.follow_imports t)
-            lsp-clients-python-settings
-            (plist-put lsp-clients-python-settings
-                       :plugins.jedi_definition.follow_builtin_imports t)
-            lsp-clients-python-settings
-            (plist-put lsp-clients-python-settings
-                       :plugins.jedi_signature_help.enabled t)
-            lsp-clients-python-settings
-            (plist-put lsp-clients-python-settings
-                       :plugins.jedi_symbols.enabled t)
-            lsp-clients-python-settings
-            (plist-put lsp-clients-python-settings
-                       :plugins.pydocstyle.matchDir "[^\\.].*")
-            lsp-clients-python-settings
-            (plist-put lsp-clients-python-settings
-                       :plugins.pyls_mypy.live_mode nil)))
+    (with-eval-after-load 'lsp-pyls
+      (setq lsp-pyls-configuration-sources                          ["pydocstyle" "pycodestyle" "pyflakes" "pylint"]
+            lsp-pyls-plugins-pydocstyle-enabled                     t
+            lsp-pyls-plugins-yapf-enabled                           t
+            lsp-pyls-plugins-jedi-definition-follow-imports         t
+            lsp-pyls-plugins-jedi-definition-follow-builtin-imports t
+            lsp-pyls-plugins-jedi-signature-help-enabled            t
+            lsp-pyls-plugins-jedi-symbols-enabled                   t
+            lsp-pyls-plugins-pyls_mypy-live-mode                    nil))
     :config
     (unless *blacken*
       (add-hook #'before-save-hook #'lsp-format-buffer nil t)))
