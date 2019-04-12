@@ -2316,7 +2316,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     :init (defun nasy:swiper-at-point (sym)
             "Use `swiper' to search for the `sym' at point."
             (interactive (list (thing-at-point 'symbol)))
-            (swiper sym))
+            (swiper-isearch sym))
     :bind (("C-s" . nasy:swiper-at-point)))
 #+end_src
 
