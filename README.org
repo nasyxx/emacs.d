@@ -348,7 +348,7 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
    calendar-longitude          102.8329
    user-mail-address           "nasyxx@gmail.com"
    initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))
-   nasy:theme                  'doom-dracula
+   nasy:theme                  'doom-vibrant
    ,*debug*                     nil
    ,*struct-hs-path*            nil
    ,*vterm*                     "/Users/Nasy/src/emacs-libvterm")
