@@ -3301,7 +3301,8 @@ Now use amx instead of smex.
 
 #+begin_src elisp
   (use-package transient
-    :straight t)
+    :straight t
+    :init (setq transient-default-level 5))
 #+end_src
 
 **** Git Commit
