@@ -114,6 +114,8 @@ You can find it in @@html: <span> @@ ~config/nasy-config.el~ @@html: </span> @@
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (defconst *is-a-mac*  (eq system-type 'darwin))
 
+  (defvar   *risky-var* t)  ;; If nil, disable risky-local-variable
+
   (defconst *clangd*    (or (executable-find "clangd")  ;; usually
                             (executable-find "/usr/local/opt/llvm/bin/clangd")))  ;; macOS
 
@@ -351,7 +353,8 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
    nasy:theme                  'doom-dracula
    ,*debug*                     nil
    ,*struct-hs-path*            nil
-   ,*vterm*                     "/Users/Nasy/src/emacs-libvterm")
+   ,*vterm*                     "/Users/Nasy/src/emacs-libvterm"
+   ,*risky-var*                 nil)
   (provide 'user-config)
 #+end_src
 
@@ -724,6 +727,9 @@ I use general.el to set some variables, but key-bindings.
 
   (when (fboundp 'set-scroll-bar-mode)
     (set-scroll-bar-mode nil))
+
+  (unless *risky-var*
+    (advice-add 'risky-local-variable-p :override #'ignore))
 #+end_src
 
 *** Auto Compression
