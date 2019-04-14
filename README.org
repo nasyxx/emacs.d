@@ -1742,8 +1742,8 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 **** Eldoc Mode
 
 #+begin_src elisp
-  (use-package eldoc
-    :hook ((org-mode . eldoc-mode)))
+  ;; (use-package eldoc
+  ;;   :hook ((org-mode . (lambda () (eldoc-mode 1)))))
 #+end_src
 
 **** Eldoc Box
