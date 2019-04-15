@@ -445,6 +445,17 @@ Some default settings are here, including ~debug-on-error~, ~message-log-max~,
                 ad-redefinition-action 'accept)
 #+end_src
 
+*** Macros & Alias
+
+#+begin_src elisp
+  (defmacro λ! (&rest body)
+    "A shortcut for inline interactive lambdas."
+    (declare (doc-string 1))
+    `(lambda () (interactive) ,@body))
+
+  (defalias 'lambda! 'λ!)
+#+end_src
+
 *** Is A Mac?
 
 If this os is macOS?
