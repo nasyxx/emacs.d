@@ -2329,7 +2329,42 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
             "Use `swiper' to search for the `sym' at point."
             (interactive (list (thing-at-point 'symbol)))
             (swiper-isearch sym))
-    :bind (("C-s" . nasy:swiper-at-point)))
+    :bind (("C-s" . nasy:swiper-at-point))
+    :config
+    (defun nasy:swiper-isearch-function (str)
+      "Collect STR matches in the current buffer for `swiper-isearch'."
+      (let* ((re-full (funcall ivy--regex-function str))
+             (re (ivy-re-to-str re-full)))
+        (unless (string= re "")
+          (let ((re (if (string-match "\\`\\(.*\\)[\\]|\\'" re)
+                        (match-string 1 re)
+                      re))
+                (pt-hist (cdr (assoc str swiper--isearch-point-history)))
+                cands
+                idx-found
+                (idx 0))
+            (with-ivy-window
+              (save-excursion
+                (goto-char (point-min))
+                (while (re-search-forward re nil t)
+                  (unless idx-found
+                    (when (or
+                           (eq (match-beginning 0) pt-hist)
+                           (>= (match-beginning 0) (cdar swiper--isearch-point-history)))
+                      (push (cons str (match-beginning 0)) swiper--isearch-point-history)
+                      (setq idx-found idx)))
+                  (cl-incf idx)
+                  (let ((line (buffer-substring
+                               (line-beginning-position)
+                               (line-end-position))))
+                    (put-text-property 0 1 'point (point) line)
+                    (push line cands))
+                  (forward-line 1))))
+            (setq ivy--old-re re)
+            (when idx-found
+              (ivy-set-index idx-found))
+            (setq ivy--old-cands (nreverse cands))))))
+    (advice-add #'swiper-isearch-function :override #'nasy:swiper-isearch-function))
 #+end_src
 
 **** Ivy Rich
