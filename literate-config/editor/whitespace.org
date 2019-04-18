@@ -25,8 +25,14 @@
 
 
   (use-package whitespace-cleanup-mode
+    :demand   t
     :straight t
-    :init (gsetq whitespace-cleanup-mode-only-if-initially-clean nil)
+    :init
+    (gsetq whitespace-cleanup-mode-only-if-initially-clean nil)
+    (gsetq-default whitespace-style
+                   '(face tabs spaces trailing space-before-tab
+                          newline indentation empty space-after-tab
+                          space-mark tab-mark newline-mark))
     :hook ((after-init . global-whitespace-cleanup-mode))
     :diminish (whitespace-cleanup-mode)
     :bind (("<remap> <just-one-space>" . cycle-spacing)))

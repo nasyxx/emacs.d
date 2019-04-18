@@ -1,4 +1,4 @@
-# Created 2019-04-19 Fri 01:36
+# Created 2019-04-19 Fri 02:16
 #+OPTIONS: ':nil *:t -:t ::t <:t H:5 \n:nil ^:{} arch:headline author:t
 #+OPTIONS: creator:nil d:(not "LOGBOOK") date:t e:t
 #+OPTIONS: email:nil f:t inline:t num:nil p:nil pri:nil prop:nil stat:t tags:t
@@ -280,13 +280,13 @@ When using straight.el, the org version is needed to custom set.
 
 *** Core
 
-** Load Custom Config
+**** Load Custom Config
 
 Here includes all of the customizable variables of my configuration.
 
 You can custom it in  ~custom/user-config.el~ 
 
-*** Custom Config Hooks
+***** Custom Config Hooks
 
 #+BEGIN_SRC elisp
   (defvar nasy/config-before-hook nil
@@ -302,7 +302,7 @@ You can custom it in  ~custom/user-config.el~
   	  #'(lambda () (run-hooks 'nasy/config-after-hook)))
 #+END_SRC
 
-*** Custom Configs
+***** Custom Configs
 
 #+BEGIN_SRC elisp
   (defgroup nasy nil
@@ -416,7 +416,7 @@ You can custom it in  ~custom/user-config.el~
     :type 'symbol)
 #+END_SRC
 
-*** macOS Frame
+***** macOS Frame
 
 #+BEGIN_SRC elisp
   (when *is-a-mac*
@@ -440,7 +440,7 @@ You can custom it in  ~custom/user-config.el~
         (suspend-frame))))
 #+END_SRC
 
-*** macOS Key Binings
+***** macOS Key Binings
 
 #+BEGIN_SRC elisp
   (when *is-a-mac*
@@ -470,7 +470,7 @@ You can custom it in  ~custom/user-config.el~
     (global-unset-key (kbd "<magnify-up>")))
 #+END_SRC
 
-*** Disable Some Features
+***** Disable Some Features
 
 #+BEGIN_SRC elisp
   (setq use-file-dialog        nil
@@ -484,16 +484,16 @@ You can custom it in  ~custom/user-config.el~
     (set-scroll-bar-mode nil))
 #+END_SRC
 
-*** Default Settings
+***** Default Settings
 
-**** Company
+****** Company
 
 #+BEGIN_SRC elisp
   (setq-default
    company-idle-delay .5)
 #+END_SRC
 
-**** Cursor
+****** Cursor
 
 #+BEGIN_SRC elisp
   (setq-default
@@ -504,7 +504,7 @@ You can custom it in  ~custom/user-config.el~
   (blink-cursor-mode t)
 #+END_SRC
 
-**** Helm
+****** Helm
 
 #+BEGIN_SRC elisp
   ;; (setq-default
@@ -512,7 +512,7 @@ You can custom it in  ~custom/user-config.el~
   ;;  helm-ag-base-command "rg --no-heading --smart-case")
 #+END_SRC
 
-**** Languages
+****** Languages
 
 #+BEGIN_SRC elisp
   (setq-default
@@ -521,7 +521,7 @@ You can custom it in  ~custom/user-config.el~
    lsp-rust-rls-command    '("rls"))
 #+END_SRC
 
-**** Pandoc
+****** Pandoc
 
 #+BEGIN_SRC elisp
   (setq-default
@@ -529,7 +529,7 @@ You can custom it in  ~custom/user-config.el~
    org-pandoc-options-for-context-pdf '((template . "~/.emacs.d/nasy-context.tex")))
 #+END_SRC
 
-**** Parens
+****** Parens
 
 #+BEGIN_SRC elisp
   (setq-default
@@ -539,7 +539,7 @@ You can custom it in  ~custom/user-config.el~
    sp-show-pair-from-inside                        t)
 #+END_SRC
 
-**** Scrolling
+****** Scrolling
 
 #+BEGIN_SRC elisp
   (setq scroll-margin                   0
@@ -547,14 +547,14 @@ You can custom it in  ~custom/user-config.el~
         scroll-preserve-screen-position 'always)
 #+END_SRC
 
-**** Shell
+****** Shell
 
 #+BEGIN_SRC elisp
   (setq-default
    shell-file-name "/bin/zsh")
 #+END_SRC
 
-**** Start
+****** Start
 
 #+BEGIN_SRC elisp
   (setq-default
@@ -565,7 +565,7 @@ You can custom it in  ~custom/user-config.el~
   )
 #+END_SRC
 
-**** Visual
+****** Visual
 
 #+BEGIN_SRC elisp
   (setq-default
@@ -577,7 +577,7 @@ You can custom it in  ~custom/user-config.el~
    tooltip-delay                  1.5)
 #+END_SRC
 
-**** Whitespace
+****** Whitespace
 
 #+BEGIN_SRC elisp
   (setq-default
@@ -587,7 +587,7 @@ You can custom it in  ~custom/user-config.el~
   			  lines-tail empty))
 #+END_SRC
 
-*** Mess
+***** Mess
 
 #+BEGIN_SRC elisp
   (setq-default
@@ -616,7 +616,7 @@ You can custom it in  ~custom/user-config.el~
   (delete-selection-mode t)
 #+END_SRC
 
-*** Config After initialization
+***** Config After initialization
 
 #+BEGIN_SRC elisp
   (defun nasy/config-after ()
@@ -632,7 +632,7 @@ You can custom it in  ~custom/user-config.el~
   (add-hook 'nasy/config-after-hook  #'nasy/config-after)
 #+END_SRC
 
-*** Custom Faces
+***** Custom Faces
 
 #+BEGIN_SRC elisp
   (defun nasy/set-face ()
@@ -648,7 +648,7 @@ You can custom it in  ~custom/user-config.el~
   (add-hook 'nasy/config-before-hook #'nasy/set-face)
 #+END_SRC
 
-*** Load User Custom
+***** Load User Custom
 
 #+BEGIN_SRC elisp
   (require 'user-config nil t)
@@ -656,7 +656,7 @@ You can custom it in  ~custom/user-config.el~
 
 
 
-** Compile
+**** Compile
 
 #+BEGIN_SRC elisp
   (use-package async
@@ -726,14 +726,14 @@ You can custom it in  ~custom/user-config.el~
         (ansi-color-apply-on-region compilation-filter-start (point-max)))))
 #+END_SRC
 
-** Auto Compression
+**** Auto Compression
 
 #+BEGIN_SRC elisp
   (require 'jka-compr)
   (auto-compression-mode)
 #+END_SRC
 
-** History, Saving and Session
+**** History, Saving and Session
 
 #+BEGIN_SRC elisp
   (setq desktop-path              (list user-emacs-directory no-littering-var-directory)
@@ -812,7 +812,7 @@ You can custom it in  ~custom/user-config.el~
   		  kill-ring))))
 #+END_SRC
 
-** Auto Save (Super Save)
+**** Auto Save (Super Save)
 
 I use super save to auto save files.
 
@@ -824,7 +824,7 @@ I use super save to auto save files.
   	       super-save-remote-files        nil))
 #+END_SRC
 
-** Text Scale
+**** Text Scale
 
 #+BEGIN_SRC elisp
   (use-package default-text-scale
@@ -832,9 +832,9 @@ I use super save to auto save files.
     :straight t)
 #+END_SRC
 
-** Custom Functions
+**** Custom Functions
 
-*** Reload the init-file
+***** Reload the init-file
 
 #+BEGIN_SRC elisp
   (defun radian-reload-init ()
@@ -859,7 +859,7 @@ I use super save to auto save files.
     (message "Evaluating %s... done." (buffer-name)))
 #+END_SRC
 
-*** Insert Date
+***** Insert Date
 
 #+BEGIN_SRC elisp
   (defun nasy:insert-current-date ()
@@ -873,7 +873,7 @@ I use super save to auto save files.
     (insert (file-relative-name buffer-file-name)))
 #+END_SRC
 
-*** Posframe Helper
+***** Posframe Helper
 
 #+BEGIN_SRC elisp
   (defun posframe-poshandler-frame-top-center (info)
@@ -885,7 +885,7 @@ I use super save to auto save files.
 
 *** Basic
 
-** Dashboard
+**** Dashboard
 
 #+BEGIN_SRC elisp
   (use-package dashboard
@@ -910,7 +910,7 @@ I use super save to auto save files.
     :config (dashboard-setup-startup-hook))
 #+END_SRC
 
-** Disable Mouse
+**** Disable Mouse
 
 #+BEGIN_SRC elisp
   (use-package disable-mouse
@@ -921,7 +921,7 @@ I use super save to auto save files.
      "<mouse-5>" (lambda! (scroll-up 1))))
 #+END_SRC
 
-** Minibuffer
+**** Minibuffer
 
 #+BEGIN_SRC elisp
   (setq enable-recursive-minibuffers t)
@@ -938,7 +938,7 @@ I use super save to auto save files.
   (add-hook #'mouse-leave-buffer-hook #'helper:kill-minibuffer)
 #+END_SRC
 
-** Scratch Message
+**** Scratch Message
 
 #+BEGIN_SRC elisp
   (use-package scratch
@@ -946,9 +946,9 @@ I use super save to auto save files.
     :straight t)
 #+END_SRC
 
-** Shell & Term
+**** Shell & Term
 
-*** Shell
+***** Shell
 
 #+BEGIN_SRC elisp
   (require 'shell)
@@ -1029,7 +1029,7 @@ I use super save to auto save files.
     (exec-path-from-shell-initialize))
 #+END_SRC
 
-*** Term
+***** Term
 
 Emacs libvterm intergration
 
@@ -1043,7 +1043,7 @@ https://github.com/akermu/emacs-libvterm
         (require 'vterm))))
 #+END_SRC
 
-** Window
+**** Window
 
 #+BEGIN_SRC elisp
   (add-hook 'after-init-hook 'winner-mode)
@@ -1287,7 +1287,7 @@ Try:
 
 *** Company
 
-** Company
+**** Company
 
 #+BEGIN_SRC elisp
   (use-package company
@@ -1344,7 +1344,7 @@ Try:
   	(mapcar #'company-backend-with-yas company-backends)))
 #+END_SRC
 
-** Company Try Hard
+**** Company Try Hard
 
 #+BEGIN_SRC elisp
   (use-package company-try-hard
@@ -1353,7 +1353,7 @@ Try:
   	 ("C-z" . company-try-hard)))
 #+END_SRC
 
-** Company Quickhelp
+**** Company Quickhelp
 
 #+BEGIN_SRC elisp
   (use-package company-quickhelp
@@ -1365,7 +1365,7 @@ Try:
     :init (setq pos-tip-use-relative-coordinates t))
 #+END_SRC
 
-** Company Math
+**** Company Math
 
 #+BEGIN_SRC elisp
   (use-package company-math
@@ -1373,7 +1373,7 @@ Try:
     :straight t)
 #+END_SRC
 
-** Company Flx
+**** Company Flx
 
 #+BEGIN_SRC elisp
   (use-package company-flx
@@ -1382,7 +1382,7 @@ Try:
     :ghook #'after-init-hook)
 #+END_SRC
 
-** Company Box
+**** Company Box
 
 #+BEGIN_SRC elisp
   (when *c-box*
@@ -1455,7 +1455,7 @@ Try:
 
 *** Dired
 
-** Dired
+**** Dired
 
 #+BEGIN_SRC elisp
   (use-package dired
@@ -1468,7 +1468,7 @@ Try:
   	      ("C-c C-p" . wdired-change-to-wdired-mode)))
 #+END_SRC
 
-** Diredfl
+**** Diredfl
 
 #+BEGIN_SRC elisp
   (use-package diredfl
@@ -1477,7 +1477,7 @@ Try:
     :hook ((after-init . diredfl-global-mode)))
 #+END_SRC
 
-** Uniquify
+**** Uniquify
 
 #+BEGIN_SRC elisp
   (use-package uniquify
@@ -1488,7 +1488,7 @@ Try:
   	uniquify-ignore-buffers-re   "^\\*"))
 #+END_SRC
 
-** Diff-hl (only for dired)
+**** Diff-hl (only for dired)
 
 #+BEGIN_SRC elisp
   (use-package diff-hl
@@ -1498,7 +1498,7 @@ Try:
   	 (magit-post-refresh . diff-hl-magit-post-refresh)))
 #+END_SRC
 
-** Dired Hacks Utils
+**** Dired Hacks Utils
 
 #+BEGIN_SRC elisp
   (use-package dired-hacks-utils
@@ -1506,7 +1506,7 @@ Try:
     :straight t)
 #+END_SRC
 
-** Dired Filter
+**** Dired Filter
 
 #+BEGIN_SRC elisp
   (use-package dired-filter
@@ -1533,7 +1533,7 @@ Try:
   		 (extension "zip" "rar" "gz" "bz2" "tar")))))
 #+END_SRC
 
-** Dired avfs
+**** Dired avfs
 
 #+BEGIN_SRC elisp
   (when (executable-find "avfsd")
@@ -1542,7 +1542,7 @@ Try:
       :straight t))
 #+END_SRC
 
-** Dired Rainbow
+**** Dired Rainbow
 
 #+BEGIN_SRC elisp
   (use-package dired-rainbow
@@ -1572,7 +1572,7 @@ Try:
     (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))
 #+END_SRC
 
-** Dired Subtree/ranger
+**** Dired Subtree/ranger
 
 #+BEGIN_SRC elisp
   (use-package dired-subtree
@@ -1584,7 +1584,7 @@ Try:
     :straight t)
 #+END_SRC
 
-** Dired Narrow
+**** Dired Narrow
 
 #+BEGIN_SRC elisp
   (use-package dired-narrow
@@ -1596,7 +1596,7 @@ Try:
   	      ("<right>" . dired-narrow-enter-directory)))
 #+END_SRC
 
-** Dired Collapse
+**** Dired Collapse
 
 #+BEGIN_SRC elisp
   (use-package dired-collapse
@@ -1710,7 +1710,7 @@ Disabled by default due to it causes lots of cpu.
 
 *** Highlight
 
-** cl-lib-highlight
+**** cl-lib-highlight
 
 #+BEGIN_SRC elisp
   (use-package cl-lib-highlight
@@ -1720,7 +1720,7 @@ Disabled by default due to it causes lots of cpu.
     (cl-lib-highlight-initialize))
 #+END_SRC
 
-** Color Identifiers Mode
+**** Color Identifiers Mode
 
 #+BEGIN_SRC elisp
   (use-package color-identifiers-mode
@@ -1728,14 +1728,14 @@ Disabled by default due to it causes lots of cpu.
     :hook ((after-init . global-color-identifiers-mode)))
 #+END_SRC
 
-** hl-line
+**** hl-line
 
 #+BEGIN_SRC elisp
   (use-package hl-line
     :hook ((after-init . global-hl-line-mode)))
 #+END_SRC
 
-** Highlight Indent Guides
+**** Highlight Indent Guides
 
 #+BEGIN_SRC elisp
   (use-package highlight-indent-guides
@@ -1744,7 +1744,7 @@ Disabled by default due to it causes lots of cpu.
     :ghook '(prog-mode-hook text-mode-hook org-mode-hook))
 #+END_SRC
 
-** Highlight Number
+**** Highlight Number
 
 #+BEGIN_SRC elisp
   (use-package highlight-numbers
@@ -1918,7 +1918,7 @@ Disabled by default due to it causes lots of cpu.
 
 *** iBuffer
 
-** ibuffer
+**** ibuffer
 
 #+BEGIN_SRC elisp
   (use-package ibuffer
@@ -1966,7 +1966,7 @@ Disabled by default due to it causes lots of cpu.
     :hook ((ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "Normal")))))
 #+END_SRC
 
-** ibuffer vc
+**** ibuffer vc
 
 #+BEGIN_SRC elisp
   (use-package ibuffer-vc
@@ -1974,7 +1974,7 @@ Disabled by default due to it causes lots of cpu.
     :straight t)
 #+END_SRC
 
-** Other settings
+**** Other settings
 
 #+BEGIN_SRC elisp
   (use-package ibuffer
@@ -2060,7 +2060,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 *** Ivy, Counsel and Swiper
 
-** Ivy
+**** Ivy
 
 #+BEGIN_SRC elisp
   (use-package ivy
@@ -2087,7 +2087,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     :diminish ivy-mode)
 #+END_SRC
 
-** Counsel
+**** Counsel
 
 #+BEGIN_SRC elisp
   (use-package counsel
@@ -2114,7 +2114,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     :diminish counsel-mode)
 #+END_SRC
 
-** Swiper
+**** Swiper
 
 #+BEGIN_SRC elisp
   (use-package swiper
@@ -2268,7 +2268,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     (advice-add #'swiper--init :before (lambda! (setq nasy-swiper-isearch-last-point nil nasy-swiper-isearch-last-line nil))))
 #+END_SRC
 
-** Ivy Rich
+**** Ivy Rich
 
 #+BEGIN_SRC elisp
   (use-package ivy-rich
@@ -2299,7 +2299,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     (ivy-rich-mode))
 #+END_SRC
 
-** Ivy Posframe
+**** Ivy Posframe
 
 #+BEGIN_SRC elisp
   (use-package ivy-posframe
@@ -2314,7 +2314,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     (ivy-posframe-enable))
 #+END_SRC
 
-** Ivy Yasnippets
+**** Ivy Yasnippets
 
 #+BEGIN_SRC elisp
   (use-package ivy-yasnippet
@@ -2322,7 +2322,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
     :bind (("C-:" . ivy-yasnippet)))
 #+END_SRC
 
-** Counsel Projectile
+**** Counsel Projectile
 
 #+BEGIN_SRC elisp
   (use-package counsel-projectile
@@ -2426,7 +2426,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
   (add-hook 'after-init-hook 'show-paren-mode)
 #+END_SRC
 
-** Smartparens
+**** Smartparens
 
 #+BEGIN_SRC elisp
   (use-package smartparens-config
@@ -2436,7 +2436,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     :init (gsetq sp-hybrid-kill-entire-symbol nil))
 #+END_SRC
 
-** Parinfer
+**** Parinfer
 
 #+BEGIN_SRC elisp
   (use-package parinfer
@@ -2453,7 +2453,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     :ghook lisp-modes-hooks)
 #+END_SRC
 
-** Rainbow Delimiters
+**** Rainbow Delimiters
 
 #+BEGIN_SRC elisp
   (use-package rainbow-delimiters
@@ -2461,7 +2461,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     :ghook '(prog-mode-hook text-mode-hook org-src-mode-hook))
 #+END_SRC
 
-** Highlight Parentheses
+**** Highlight Parentheses
 
 #+BEGIN_SRC elisp
   (use-package highlight-parentheses
@@ -2503,7 +2503,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 
 *** Pretty
 
-** Pretty Mode
+**** Pretty Mode
 
 #+BEGIN_SRC elisp
   (use-package pretty-mode
@@ -2719,7 +2719,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
   	       :logic :sets :arithmetic-double :arithmetic-triple)))
 #+END_SRC
 
-** ipretty
+**** ipretty
 
 #+BEGIN_SRC elisp
   (use-package ipretty
@@ -2728,7 +2728,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     :ghook 'after-init-hook)
 #+END_SRC
 
-** Pretty Font
+**** Pretty Font
 
 #+BEGIN_SRC elisp
   ;; https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
@@ -3043,7 +3043,7 @@ Now use amx instead of smex.
 
 *** Version Control
 
-** Useful Simple Packages
+**** Useful Simple Packages
 
 #+BEGIN_SRC elisp
   (dolist (package '(git-blamed
@@ -3052,7 +3052,7 @@ Now use amx instead of smex.
     (require package nil t))
 #+END_SRC
 
-** Git Modes
+**** Git Modes
 
 #+BEGIN_SRC elisp
   (use-package git-modes
@@ -3060,7 +3060,7 @@ Now use amx instead of smex.
     :straight t)
 #+END_SRC
 
-** Magit
+**** Magit
 
 #+BEGIN_SRC elisp
   (use-package magit
@@ -3081,7 +3081,7 @@ Now use amx instead of smex.
   (straight-use-package 'magit-todos)
 #+END_SRC
 
-** Magit Org Todos
+**** Magit Org Todos
 
 #+BEGIN_SRC elisp
   (use-package magit-org-todos
@@ -3090,7 +3090,7 @@ Now use amx instead of smex.
     :config   (magit-org-todos-autoinsert))
 #+END_SRC
 
-** Forge
+**** Forge
 
 #+BEGIN_SRC elisp
   (use-package forge
@@ -3098,7 +3098,7 @@ Now use amx instead of smex.
     :straight t)
 #+END_SRC
 
-** Transient
+**** Transient
 
 #+BEGIN_SRC elisp
   (use-package transient
@@ -3106,7 +3106,7 @@ Now use amx instead of smex.
     :init (gsetq transient-default-level 5))
 #+END_SRC
 
-** Git Commit
+**** Git Commit
 
 #+BEGIN_SRC elisp
   (use-package git-commit
@@ -3114,7 +3114,7 @@ Now use amx instead of smex.
     :hook ((git-commit-mode . goto-address-mode)))
 #+END_SRC
 
-** Git Messenger
+**** Git Messenger
 
 #+BEGIN_SRC elisp
   (use-package git-messenger
@@ -3124,7 +3124,7 @@ Now use amx instead of smex.
   	 ("p" . git-messenger:popup-message)))
 #+END_SRC
 
-** Git Gutter
+**** Git Gutter
 
 #+BEGIN_SRC elisp
   (use-package git-gutter
@@ -3144,7 +3144,7 @@ Now use amx instead of smex.
   	   "n"   'git-gutter:next-hunk))
 #+END_SRC
 
-** Github Gist
+**** Github Gist
 
 #+BEGIN_SRC elisp
   (use-package gist
@@ -3197,8 +3197,14 @@ Now use amx instead of smex.
   
   
   (use-package whitespace-cleanup-mode
+    :demand   t
     :straight t
-    :init (gsetq whitespace-cleanup-mode-only-if-initially-clean nil)
+    :init
+    (gsetq whitespace-cleanup-mode-only-if-initially-clean nil)
+    (gsetq-default whitespace-style
+  		 '(face tabs spaces trailing space-before-tab
+  			newline indentation empty space-after-tab
+  			space-mark tab-mark newline-mark))
     :hook ((after-init . global-whitespace-cleanup-mode))
     :diminish (whitespace-cleanup-mode)
     :bind (("<remap> <just-one-space>" . cycle-spacing)))
@@ -3264,7 +3270,7 @@ Now use amx instead of smex.
 
 *** English
 
-** Dict
+**** Dict
 
 #+BEGIN_SRC elisp
   (use-package bing-dict
@@ -3279,7 +3285,7 @@ Now use amx instead of smex.
   	      (no-littering-expand-var-file-name "bing-dict/bing-dict-save.el")))
 #+END_SRC
 
-** Spell
+**** Spell
 
 #+BEGIN_SRC elisp
   (if *ispell*
@@ -3314,7 +3320,7 @@ Now use amx instead of smex.
 
 *** Language Server Protocol & Debug Adapter Protocol
 
-** lsp-mode
+**** lsp-mode
 
 #+BEGIN_SRC elisp
   (use-package lsp-mode
@@ -3336,7 +3342,7 @@ Now use amx instead of smex.
   	       lsp-enable-on-type-formatting nil))
 #+END_SRC
 
-** lsp-ui
+**** lsp-ui
 
 #+BEGIN_SRC elisp
   (use-package lsp-ui
@@ -3361,7 +3367,7 @@ Now use amx instead of smex.
   	 lsp-ui-flycheck-enable t))
 #+END_SRC
 
-** company-lsp
+**** company-lsp
 
 #+BEGIN_SRC elisp
   (use-package company-lsp
@@ -3385,7 +3391,7 @@ Now use amx instead of smex.
   	 company-lsp-cache-candidates    nil))
 #+END_SRC
 
-** Dap Mode
+**** Dap Mode
 
 #+BEGIN_SRC elisp
   (use-package dap-mode
@@ -3412,7 +3418,7 @@ I use clangd.
 Include haskell-mode, lsp-haskell, intero and structured haskell mode.  Also
 inlcude haskell-snippets.
 
-** Haskell-Mode
+**** Haskell-Mode
 
 #+BEGIN_SRC elisp
   (use-package haskell-mode
@@ -3508,7 +3514,7 @@ inlcude haskell-snippets.
   	    (xref-find-definitions and-then-find-this-tag)))))))
 #+END_SRC
 
-** LSP Haskell
+**** LSP Haskell
 
 #+BEGIN_SRC elisp
   (use-package lsp-haskell
@@ -3525,7 +3531,7 @@ inlcude haskell-snippets.
     )
 #+END_SRC
 
-** intero
+**** intero
 
 #+BEGIN_SRC elisp
   (when *intero*
@@ -3538,7 +3544,7 @@ inlcude haskell-snippets.
       (define-key intero-mode-map (kbd "C-c C-r") nil)))
 #+END_SRC
 
-** Structured Haskell Mode
+**** Structured Haskell Mode
 
 #+BEGIN_SRC elisp
   (if *struct-hs*
@@ -3556,7 +3562,7 @@ inlcude haskell-snippets.
   		       "please install it and config its variables *struct-hs-path* in user-config.el\n")))))
 #+END_SRC
 
-** haskell snippets
+**** haskell snippets
 
 #+BEGIN_SRC elisp
   (use-package haskell-snippets
@@ -3583,7 +3589,7 @@ inlcude haskell-snippets.
 
 *** Lisp
 
-** lisp-mode
+**** lisp-mode
 
 #+BEGIN_SRC elisp
   (use-package lisp-mode
@@ -3599,7 +3605,7 @@ inlcude haskell-snippets.
   	 ("C-x C-e" . eval-last-sexp-or-region)))
 #+END_SRC
 
-** Highlight-quoted
+**** Highlight-quoted
 
 #+BEGIN_SRC elisp
   (use-package highlight-quoted
@@ -3608,7 +3614,7 @@ inlcude haskell-snippets.
     :hook ((emacs-lisp-mode . highlight-quoted-mode)))
 #+END_SRC
 
-** elisp-def
+**** elisp-def
 
 #+BEGIN_SRC elisp
   (use-package elisp-def
@@ -3642,7 +3648,7 @@ inlcude haskell-snippets.
 
 Include python-mode, black, py-isort, python-docstring and sphinx-doc.
 
-** Python Mode
+**** Python Mode
 
 #+BEGIN_SRC elisp
   (require 'python)
@@ -3773,7 +3779,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
       (add-hook #'before-save-hook #'lsp-format-buffer nil t)))
 #+END_SRC
 
-** black
+**** black
 
 #+BEGIN_SRC elisp
   ;; Now you can use it in lsp.
@@ -3784,7 +3790,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
       :hook ((python-mode    . blacken-mode))))
 #+END_SRC
 
-** py-isort
+**** py-isort
 
 #+BEGIN_SRC elisp
   (use-package py-isort
@@ -3792,7 +3798,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     :hook (before-save . py-isort-before-save))
 #+END_SRC
 
-** Python Docstring
+**** Python Docstring
 
 #+BEGIN_SRC elisp
   (use-package python-docstring
@@ -3800,7 +3806,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     :hook ((python-mode . python-docstring-mode)))
 #+END_SRC
 
-** Sphinx Doc
+**** Sphinx Doc
 
 #+BEGIN_SRC elisp
   (use-package sphinx-doc
@@ -3808,7 +3814,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     :hook ((python-mode . sphinx-doc-mode)))
 #+END_SRC
 
-** pyimport
+**** pyimport
 
 #+BEGIN_SRC elisp
   (use-package pyimport
@@ -3877,7 +3883,6 @@ Other ~ox-_~ packages.
 
 #+BEGIN_SRC elisp
   (use-package org
-    :demand t
     :preface
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
   

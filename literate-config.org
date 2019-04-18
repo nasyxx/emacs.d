@@ -136,23 +136,23 @@ changes here and regenerate it from Emacs org-mode using @@html: <kbd>C-c</kbd>
 
 ** Bootstrap
 
-#+include: "literate-config/bootstrap/README.org" :minlevel 3
+#+include: "literate-config/bootstrap/README.org"
 
 ** Editor
 
-#+include: "literate-config/editor/README.org" :minlevel 3
+#+include: "literate-config/editor/README.org"
 
 ** Languages
 
-#+include: "literate-config/lang/README.org" :minlevel 3
+#+include: "literate-config/lang/README.org"
 
 ** Org Mode
 
-#+include: "literate-config/org/README.org" :minlevel 3
+#+include: "literate-config/org/README.org"
 
 ** Themes
 
-#+include: "literate-config/themes/README.org" :minlevel 3
+#+include: "literate-config/themes/README.org"
 
 * Epilogue
 

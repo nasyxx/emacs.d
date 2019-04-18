@@ -37,11 +37,11 @@ Other ~ox-_~ packages.
 
 * Basic Configs
 
-#+include: "basic.org" :minlevel 2
+#+include: "basic.org"
 
 * Org Agenda
 
-#+include: "agenda.org" :minlevel 2
+#+include: "agenda.org"
 
 * Org Bullets
 
@@ -53,7 +53,7 @@ Other ~ox-_~ packages.
 
 * Org Capture
 
-#+include: "capture.org" :minlevel 2
+#+include: "capture.org"
 
 * Org Cliplink
 
@@ -65,11 +65,11 @@ Other ~ox-_~ packages.
 
 * Org clock
 
-#+include: "clock.org" :minlevel 2
+#+include: "clock.org"
 
 * Org Extra Jar -- ob-ditaa & ob-plantuml
 
-#+include: "extra-jar.org" :minlevel 2
+#+include: "extra-jar.org"
 
 * Org PDF view
 

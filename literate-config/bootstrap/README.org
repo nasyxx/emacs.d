@@ -56,7 +56,7 @@ Some default settings are here, including ~debug-on-error~, ~message-log-max~,
 
 * Macros & Alias
 
-#+include: "macros-and-alias.org" :minlevel 2
+#+include: "macros-and-alias.org"
 
 * Is A Mac?
 
@@ -68,7 +68,7 @@ If this os is macOS?
 
 * Packages Manager
 
-#+include: "package-manager.org" :minlevel 2
+#+include: "package-manager.org"
 
 * Garbage Collection
 
@@ -114,16 +114,16 @@ Adjust garbage collection thresholds during startup, and thereafter
 
 * Key Definition
 
-#+include: "keydef.org" :minlevel 2
+#+include: "keydef.org"
 
 * Load Org
 
-#+include: "early-load-org-mode.org" :minlevel 2
+#+include: "early-load-org-mode.org"
 
 * Core
 
-#+include: "core.org" :minlevel 2
+#+include: "core.org"
 
 * Basic
 
-#+include: "basic.org" :minlevel 2
+#+include: "basic.org"

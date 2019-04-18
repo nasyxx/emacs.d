@@ -42,7 +42,7 @@ Here is the editor config, including some features and functions.
 
 * Auto Insert
 
-#+include: "auto-insert.org" :minlevel 2
+#+include: "auto-insert.org"
 
 * Beacon (Disabled)
 
@@ -90,7 +90,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 
 * Company
 
-#+include: "company.org" :minlevel 2
+#+include: "company.org"
 
 * Dash
 
@@ -110,7 +110,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 
 * Dired
 
-#+include: "dired.org" :minlevel 2
+#+include: "dired.org"
 
 * Easy Kill
 
@@ -167,7 +167,7 @@ Disabled by default due to it causes lots of cpu.
 
 * Flycheck
 
-#+include: "flycheck.org" :minlevel 2
+#+include: "flycheck.org"
 
 * Grab Mac Link
 
@@ -189,7 +189,7 @@ Disabled by default due to it causes lots of cpu.
 
 * Highlight
 
-#+include: "highlight.org" :minlevel 2
+#+include: "highlight.org"
 
 * Helpful
 
@@ -219,11 +219,11 @@ Disabled by default due to it causes lots of cpu.
 
 * Hydra
 
-#+include: "hydra.org" :minlevel 2
+#+include: "hydra.org"
 
 * iBuffer
 
-#+include: "ibuffer.org" :minlevel 2
+#+include: "ibuffer.org"
 
 * imenu list
 
@@ -281,7 +281,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 * Ivy, Counsel and Swiper
 
-#+include: "ivy.org" :minlevel 2
+#+include: "ivy.org"
 
 * Large File
 
@@ -371,7 +371,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 * Parens
 
-#+include: "parens.org" :minlevel 2
+#+include: "parens.org"
 
 * PDF Tools
 
@@ -406,7 +406,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 * Pretty
 
-#+include: "pretty.org" :minlevel 2
+#+include: "pretty.org"
 
 * Prescient
 
@@ -497,7 +497,7 @@ Now use amx instead of smex.
 
 * Treemacs
 
-#+include: "treemacs.org" :minlevel 2
+#+include: "treemacs.org"
 
 * Undo/Redo
 
@@ -511,7 +511,7 @@ Now use amx instead of smex.
 
 * Version Control
 
-#+include: "version-control.org" :minlevel 2
+#+include: "version-control.org"
 
 * Which Function
 
@@ -531,11 +531,11 @@ Now use amx instead of smex.
 
 * Whitespace
 
-#+include: "whitespace.org" :minlevel 2
+#+include: "whitespace.org"
 
 * Writeroom Mode
 
-#+include: "writeroom.org" :minlevel 2
+#+include: "writeroom.org"
 
 * Yasnipeet
 

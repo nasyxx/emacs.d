@@ -42,4 +42,4 @@ I use doom-themes.
 
 * Mode Line
 
-#+include: "modeline.org" :minlevel 2
+#+include: "modeline.org"

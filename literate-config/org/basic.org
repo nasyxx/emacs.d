@@ -1,6 +1,5 @@
 #+begin_src elisp
   (use-package org
-    :demand t
     :preface
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
 

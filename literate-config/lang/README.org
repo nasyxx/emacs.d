@@ -6,7 +6,7 @@
 
 * English
 
-#+include: "english.org" :minlevel 2
+#+include: "english.org"
 
 * Simple Supported Languages
 
@@ -27,7 +27,7 @@
 
 * Language Server Protocol & Debug Adapter Protocol
 
-#+include: "lsp-dap.org" :minlevel 2
+#+include: "lsp-dap.org"
 
 * C/C++/Object-C (Clangd)
 
@@ -43,7 +43,7 @@ I use clangd.
 
 * Haskell
 
-#+include: "haskell.org" :minlevel 2
+#+include: "haskell.org"
 
 * HTML
 
@@ -64,7 +64,7 @@ I use clangd.
 
 * Lisp
 
-#+include: "lisp.org" :minlevel 2
+#+include: "lisp.org"
 
 * Markdown
 
@@ -90,7 +90,7 @@ I use clangd.
 
 * Python
 
-#+include: "python.org" :minlevel 2
+#+include: "python.org"
 
 * Rust
 
