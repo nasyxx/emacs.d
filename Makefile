@@ -6,7 +6,8 @@ generate:
 	@echo "Generate init.el from README.org."
 	mkdir -p custom && \
 		emacs -Q --batch --find-file "literate-config.org" -f "org-org-export-to-org" && \
-		mv "literate-config.org.org" "README.org" && \
+		tail -n +2 "literate-config.org.org" > "README.org" && \
+		rm "literate-config.org.org" && \
 		emacs -Q --batch --find-file "README.org" -f "org-babel-tangle"
 .PHONY: generate
 
