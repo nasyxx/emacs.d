@@ -1,0 +1,41 @@
+* cl-lib-highlight
+
+#+begin_src elisp
+  (use-package cl-lib-highlight
+    :after lisp-mode
+    :straight t
+    :config
+    (cl-lib-highlight-initialize))
+#+end_src
+
+* Color Identifiers Mode
+
+#+begin_src elisp
+  (use-package color-identifiers-mode
+    :straight t
+    :hook ((after-init . global-color-identifiers-mode)))
+#+end_src
+
+* hl-line
+
+#+begin_src elisp
+  (use-package hl-line
+    :hook ((after-init . global-hl-line-mode)))
+#+end_src
+
+* Highlight Indent Guides
+
+#+begin_src elisp
+  (use-package highlight-indent-guides
+    :straight t
+    :init (setq highlight-indent-guides-responsive 'stack)
+    :ghook '(prog-mode-hook text-mode-hook org-mode-hook))
+#+end_src
+
+* Highlight Number
+
+#+begin_src elisp
+  (use-package highlight-numbers
+    :straight t
+    :ghook '(after-init-hook prog-mode-hook text-mode-hook org-mode-hook))
+#+end_src

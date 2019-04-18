@@ -1,0 +1,49 @@
+I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
+
+#+begin_src elisp
+  (add-hook 'after-init-hook 'show-paren-mode)
+#+end_src
+
+* Smartparens
+
+#+begin_src elisp
+  (use-package smartparens-config
+    :straight smartparens
+    :hook ((after-init . show-smartparens-global-mode)
+           (after-init . smartparens-global-mode))
+    :init (gsetq sp-hybrid-kill-entire-symbol nil))
+#+end_src
+
+* Parinfer
+
+#+begin_src elisp
+  (use-package parinfer
+    :straight t
+    :bind (("C-," . parinfer-toggle-mode))
+    :init (gsetq parinfer-extensions
+                 '(defaults       ; should be included.
+                    pretty-parens  ; different paren styles for different modes.
+                    ;; evil           ; If you use Evil.
+                    ;; lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
+                    ;; paredit        ; Introduce some paredit commands.
+                    smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+                    smart-yank))   ; Yank behavior depend on mode.
+    :ghook lisp-modes-hooks)
+#+end_src
+
+* Rainbow Delimiters
+
+#+begin_src elisp
+  (use-package rainbow-delimiters
+    :straight t
+    :ghook '(prog-mode-hook text-mode-hook org-src-mode-hook))
+#+end_src
+
+* Highlight Parentheses
+
+#+begin_src elisp
+  (use-package highlight-parentheses
+    :straight t
+    :init (gsetq hl-paren-highlight-adjacent t)
+    :hook ((after-init . global-highlight-parentheses-mode)))
+#+end_src

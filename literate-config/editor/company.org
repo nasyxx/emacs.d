@@ -1,0 +1,154 @@
+* Company
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Company
+#+end_src
+
+#+begin_src elisp
+  (use-package company
+    :straight t
+    :init
+    (setq-default company-minimum-prefix-length .2
+                  company-transformers '(company-sort-by-backend-importance)
+                  company-require-match nil
+                  company-tooltip-align-annotations t
+                  company-dabbrev-other-buffers 'all
+                  company-dabbrev-downcase nil
+                  company-dabbrev-ignore-case t
+                  company-gtags-executable "gtags")
+    :hook ((after-init . global-company-mode))
+    :bind (("M-C-/" . company-complete)
+           :map company-mode-map
+           ("M-/"   . company-complete)
+           :map company-active-map
+           ("M-/"   . company-complete)
+           ("<tab>" . company-other-backend)
+           ("C-n"   . company-select-next)
+           ("C-p"   . company-select-previous))
+    :config
+    (defvar my-prev-whitespace-mode nil)
+    (make-variable-buffer-local 'my-prev-whitespace-mode)
+    (defun pre-popup-draw ()
+      "Turn off whitespace mode before showing company complete tooltip"
+      (if whitespace-mode
+          (progn
+            (setq my-prev-whitespace-mode t)
+            (whitespace-mode -1)
+            (setq my-prev-whitespace-mode t))))
+    (defun post-popup-draw ()
+      "Restore previous whitespace mode after showing company tooltip"
+      (if my-prev-whitespace-mode
+          (progn
+            (whitespace-mode 1)
+            (setq my-prev-whitespace-mode nil))))
+    (advice-add 'company-pseudo-tooltip-unhide :before #'pre-popup-draw)
+    (advice-add 'company-pseudo-tooltip-hide :after #'post-popup-draw)
+
+    (diminish 'company-mode "CMP")
+    (defun company-backend-with-yas (backends)
+      "Add :with company-yasnippet to company BACKENDS.
+    Taken from https://github.com/syl20bnr/spacemacs/pull/179."
+      (if (and (listp backends) (memq 'company-yasnippet backends))
+          backends
+        (append (if (consp backends)
+                    backends
+                  (list backends))
+                '(:with company-yasnippet))))
+    ;; add yasnippet to all backends
+    (gsetq company-backends
+          (mapcar #'company-backend-with-yas company-backends)))
+#+end_src
+
+* Company Try Hard
+
+#+begin_src elisp
+  (use-package company-try-hard
+    :straight t
+    :bind (:map company-active-map
+           ("C-z" . company-try-hard)))
+#+end_src
+
+* Company Quickhelp
+
+#+begin_src elisp
+  (use-package company-quickhelp
+    :after company
+    :straight t
+    :bind (:map company-active-map
+                ("C-c h" . company-quickhelp-manual-begin))
+    :ghook #'after-init-hook
+    :init (setq pos-tip-use-relative-coordinates t))
+#+end_src
+
+* Company Math
+
+#+begin_src elisp
+  (use-package company-math
+    :defer    t
+    :straight t)
+#+end_src
+
+* Company Flx
+
+#+begin_src elisp
+  (use-package company-flx
+    :straight t
+    :after company
+    :ghook #'after-init-hook)
+#+end_src
+
+* Company Box
+
+#+begin_src elisp
+  (when *c-box*
+    (use-package company-box
+      :defer    t
+      :straight t
+      :after (all-the-icons company)
+      :init
+      (setq company-box-icons-alist 'company-box-icons-all-the-icons)
+      :ghook 'company-mode-hook
+      :config
+      (setq company-box-backends-colors '((company-lsp      . "#e0f9b5")
+                                          (company-elisp    . "#e0f9b5")
+                                          (company-files    . "#ffffc2")
+                                          (company-keywords . "#ffa5a5")
+                                          (company-capf     . "#bfcfff")
+                                          (company-dabbrev  . "#bfcfff")))
+      (setq company-box-icons-unknown (concat (all-the-icons-material "find_in_page") " "))
+      (setq company-box-icons-elisp
+            (list
+             (concat (all-the-icons-faicon "tag") " ")
+             (concat (all-the-icons-faicon "cog") " ")
+             (concat (all-the-icons-faicon "cube") " ")
+             (concat (all-the-icons-material "color_lens") " ")))
+      (setq company-box-icons-yasnippet (concat (all-the-icons-faicon "bookmark") " "))
+      (setq company-box-icons-lsp
+            `((1 .  ,(concat (all-the-icons-faicon   "text-height")    " ")) ;; Text
+              (2 .  ,(concat (all-the-icons-faicon   "tags")           " ")) ;; Method
+              (3 .  ,(concat (all-the-icons-faicon   "tag" )           " ")) ;; Function
+              (4 .  ,(concat (all-the-icons-faicon   "tag" )           " ")) ;; Constructor
+              (5 .  ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Field
+              (6 .  ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Variable
+              (7 .  ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Class
+              (8 .  ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Interface
+              (9 .  ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Module
+              (10 . ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Property
+              (11 . ,(concat (all-the-icons-material "settings_system_daydream") " ")) ;; Unit
+              (12 . ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Value
+              (13 . ,(concat (all-the-icons-material "storage")        " ")) ;; Enum
+              (14 . ,(concat (all-the-icons-material "closed_caption") " ")) ;; Keyword
+              (15 . ,(concat (all-the-icons-faicon   "bookmark")       " ")) ;; Snippet
+              (16 . ,(concat (all-the-icons-material "color_lens")     " ")) ;; Color
+              (17 . ,(concat (all-the-icons-faicon   "file-text-o")    " ")) ;; File
+              (18 . ,(concat (all-the-icons-material "refresh")        " ")) ;; Reference
+              (19 . ,(concat (all-the-icons-faicon   "folder-open")    " ")) ;; Folder
+              (20 . ,(concat (all-the-icons-material "closed_caption") " ")) ;; EnumMember
+              (21 . ,(concat (all-the-icons-faicon   "square")         " ")) ;; Constant
+              (22 . ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Struct
+              (23 . ,(concat (all-the-icons-faicon   "calendar")       " ")) ;; Event
+              (24 . ,(concat (all-the-icons-faicon   "square-o")       " ")) ;; Operator
+              (25 . ,(concat (all-the-icons-faicon   "arrows")         " "))) ;; TypeParameter
+            )))
+#+end_src

@@ -1,0 +1,33 @@
+#+begin_src elisp
+  (use-package whitespace
+    :preface
+    (defun no-trailing-whitespace ()
+      "Turn off display of trailing whitespace in this buffer."
+      (setq show-trailing-whitespace nil))
+    :init
+    (gsetq-default show-trailing-whitespace t)
+
+    ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
+    (dolist (hook '(artist-mode-hook
+                    picture-mode-hook
+                    special-mode-hook
+                    Info-mode-hook
+                    eww-mode-hook
+                    term-mode-hook
+                    vterm-mode-hook
+                    comint-mode-hook
+                    compilation-mode-hook
+                    twittering-mode-hook
+                    minibuffer-setup-hook
+                    fundamental-mode))
+      (add-hook hook #'no-trailing-whitespace))
+    :diminish whitespace-mode)
+
+
+  (use-package whitespace-cleanup-mode
+    :straight t
+    :init (gsetq whitespace-cleanup-mode-only-if-initially-clean nil)
+    :hook ((after-init . global-whitespace-cleanup-mode))
+    :diminish (whitespace-cleanup-mode)
+    :bind (("<remap> <just-one-space>" . cycle-spacing)))
+#+end_src

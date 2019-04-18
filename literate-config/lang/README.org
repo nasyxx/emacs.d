@@ -1,0 +1,116 @@
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Languages
+  ;;----------------------------------------------------------------------------
+#+end_src
+
+* English
+
+#+include: "english.org" :minlevel 2
+
+* Simple Supported Languages
+
+#+begin_src elisp
+  (let ((languages '(elvish-mode
+                     fish-mode
+                     toml-mode
+                     yaml-mode))
+        (extras    '(fish-completion
+                     ob-elvish)))
+    (dolist (language languages)
+      (straight-use-package language)
+      (require language nil t))
+    (dolist (extra extras)
+      (straight-use-package extra)
+      (require extra nil t)))
+#+end_src
+
+* Language Server Protocol & Debug Adapter Protocol
+
+#+include: "lsp-dap.org" :minlevel 2
+
+* C/C++/Object-C (Clangd)
+
+I use clangd.
+
+#+begin_src elisp
+  (when *clangd*
+    (use-package lsp-mode
+      :straight t
+      :hook (((c-mode c++-mode objc-mode) . lsp))
+      :init (setq-default lsp-clients-clangd-executable *clangd*)))
+#+end_src
+
+* Haskell
+
+#+include: "haskell.org" :minlevel 2
+
+* HTML
+
+#+begin_src elisp
+  (use-package lsp-mode
+    :straight t
+    :hook ((html-mode . lsp)))
+#+end_src
+
+* JavaScript & TypeScript
+
+#+begin_src elisp
+  (use-package lsp-mode
+    :disabled t
+    :straight t
+    :hook ((javascript-mode . lsp)))
+#+end_src
+
+* Lisp
+
+#+include: "lisp.org" :minlevel 2
+
+* Markdown
+
+#+begin_src elisp
+  (use-package markdown-mode
+    :defer t
+    :straight t
+    :mode ("INSTALL\\'"
+           "CONTRIBUTORS\\'"
+           "LICENSE\\'"
+           "README\\'"
+           "\\.markdown\\'"
+           "\\.md\\'"))
+#+end_src
+
+* Pandoc
+
+#+begin_src elisp
+  (use-package pandoc-mode
+    :defer    t
+    :straight t)
+#+end_src
+
+* Python
+
+#+include: "python.org" :minlevel 2
+
+* Rust
+
+Include rust-mode, rls and Cargo.
+
+#+begin_src elisp
+  (when *rust*
+    (use-package rust-mode
+      :defer t
+      :straight t
+      :hook ((rust-mode . (lambda () (setq-local tab-width 4)))
+             (rust-mode . lsp))
+      :config
+      (when *rls*
+        (add-hook #'rust-mode-hook #'lsp)
+        (add-hook #'rust-mode-hook #'(lambda () (add-to-list 'flycheck-disabled-checkers 'rust-cargo))))))
+
+  (use-package cargo
+    :after rust-mode
+    :straight t
+    :hook ((toml-mode . cargo-minor-mode)
+           (rust-mode . cargo-minor-mode)))
+#+end_src

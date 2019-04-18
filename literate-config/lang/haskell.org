@@ -1,0 +1,154 @@
+Include haskell-mode, lsp-haskell, intero and structured haskell mode.  Also
+inlcude haskell-snippets.
+
+* Haskell-Mode
+
+#+begin_src elisp
+  (use-package haskell-mode
+    :straight t
+    :preface
+    (define-minor-mode stack-exec-path-mode
+      "If this is a stack project, set `exec-path' to the path \"stack exec\" would use."
+      nil
+      :lighter ""
+      :global nil
+      (if stack-exec-path-mode
+          (when (and (executable-find "stack")
+                     (locate-dominating-file default-directory "stack.yaml"))
+            (setq-local
+             exec-path
+             (seq-uniq
+              (append (list (concat (string-trim-right (shell-command-to-string "stack path --local-install-root")) "/bin"))
+                      (parse-colon-path
+                       (replace-regexp-in-string "[\r\n]+\\'" ""
+                                                 (shell-command-to-string "stack path --bin-path"))))
+              'string-equal)))
+        (kill-local-variable 'exec-path)))
+
+    :gfhook '(subword-mode
+              haskell-auto-insert-module-template
+              haskell-collapse-mode
+              stack-exec-path-mode
+              interactive-haskell-mode
+              (lambda () (getq-local tab-width 4)))
+    :bind (("C-x a a" . align)
+           :map haskell-mode-map
+           ("C-c h" . hoogle)
+           ("C-o"   . open-line))
+    :init
+    (gsetq haskell-mode-stylish-haskell-path            "stylish-haskell"
+           haskell-indentation-layout-offset            4
+           haskell-indentation-left-offset              4
+           haskell-process-suggest-haskell-docs-imports t
+           haskell-process-suggest-remove-import-lines  t
+           haskell-process-auto-import-loaded-modules   t
+           haskell-process-log                          t
+           haskell-process-suggest-hayoo-imports        t
+           haskell-process-suggest-hoogle-imports       t
+           haskell-process-suggest-remove-import-lines  t
+           haskell-tags-on-save                         t
+           haskell-completing-read-function             'helm--completing-read-default
+           haskell-doc-show-global-types                t
+           haskell-svg-render-images                    t
+           haskell-doc-chop-off-context                 nil)
+
+    (unless *struct-hs*
+      (add-hook #'haskell-mode-hook #'haskell-indentation-mode))
+
+    (unless (fboundp 'align-rules-list)
+      (defvar align-rules-list nil))
+
+    (add-to-list 'align-rules-list
+                 '(haskell-types
+                   (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
+                   (modes quote (haskell-mode literate-haskell-mode))))
+    (add-to-list 'align-rules-list
+                 '(haskell-assignment
+                   (regexp . "\\(\\s-+\\)=\\s-+")
+                   (modes quote (haskell-mode literate-haskell-mode))))
+    (add-to-list 'align-rules-list
+                 '(haskell-arrows
+                   (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
+                   (modes quote (haskell-mode literate-haskell-mode))))
+    (add-to-list 'align-rules-list
+                 '(haskell-left-arrows
+                   (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
+                   (modes quote (haskell-mode literate-haskell-mode))))
+
+    :config
+    (push 'haskell-mode page-break-lines-modes)
+    (defun haskell-mode-generate-tags (&optional and-then-find-this-tag)
+      "Generate tags using Hasktags.  This is synchronous function.
+
+    If optional AND-THEN-FIND-THIS-TAG argument is present it is used
+    with function `xref-find-definitions' after new table was
+    generated."
+      (interactive)
+      (let* ((dir (haskell-cabal--find-tags-dir))
+             (command (haskell-cabal--compose-hasktags-command dir)))
+        (if (not command)
+            (error "Unable to compose hasktags command")
+          ;; I disabled the noisy shell command output.
+          ;; The original is (shell-command command)
+          (call-process-shell-command command nil "*Shell Command Output*" t)
+          (haskell-mode-message-line "Tags generated.")
+          (when and-then-find-this-tag
+            (let ((tags-file-name dir))
+              (xref-find-definitions and-then-find-this-tag)))))))
+#+end_src
+
+* LSP Haskell
+
+#+begin_src elisp
+  (use-package lsp-haskell
+    :demand   t
+    :straight t
+    :hook ((haskell-mode   . lsp)
+           (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+           (haskell-mode   . delete-company-lsp))
+    ;; You can set the lsp-haskell settings here
+    ;; (lsp-haskell-set-hlint-on)                    ;; default on
+    ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
+    ;; (lsp-haskell-set-liquid-on)                   ;; default off
+    ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
+    )
+#+end_src
+
+* intero
+
+#+begin_src elisp
+  (when *intero*
+    (use-package intero
+      :straight t
+      :after haskell-mode
+      :hook (haskell-mode . (lambda () (intero-global-mode 1)))
+      :config
+      (define-key intero-mode-map (kbd "M-?") nil)
+      (define-key intero-mode-map (kbd "C-c C-r") nil)))
+#+end_src
+
+* Structured Haskell Mode
+
+#+begin_src elisp
+  (if *struct-hs*
+      (progn
+        (add-to-list 'load-path *struct-hs-path*)
+        (require 'shm)
+        (setq shm-program-name *struct-hs*)
+        (add-hook #'haskell-mode-hook #'structured-haskell-mode))
+    (progn
+      (when *struct-hs*
+        (message (concat "*NOTE* about structured-haskell-mode:\n"
+                         "https://github.com/projectional-haskell/structured-haskell-mode\n"
+                         "No structured-haskell-mode elisp find.\n"
+                         "If you want to use it, \n"
+                         "please install it and config its variables *struct-hs-path* in user-config.el\n")))))
+#+end_src
+
+* haskell snippets
+
+#+begin_src elisp
+  (use-package haskell-snippets
+    :defer    t
+    :straight t)
+#+end_src

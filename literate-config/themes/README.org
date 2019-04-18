@@ -1,0 +1,45 @@
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Themes
+  ;;----------------------------------------------------------------------------
+#+end_src
+
+* Main Theme
+
+I use doom-themes.
+
+#+begin_src elisp
+  (use-package doom-themes
+    :demand   t
+    :straight t
+    :config
+    (load-theme *theme* t)
+    (doom-themes-treemacs-config)  ;; The doom themes havn't finished it yet.
+    (doom-themes-visual-bell-config)
+    (doom-themes-org-config))
+#+end_src
+
+* Font
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Font
+#+end_src
+
+#+begin_src elisp
+  (use-package emojify
+    :straight t
+    :commands emojify-mode
+    :hook ((after-init . global-emojify-mode))
+    :init (setq emojify-emoji-styles '(unicode github)
+                emojify-display-style 'unicode))
+
+  (use-package all-the-icons
+    :demand t
+    :init (setq inhibit-compacting-font-caches t)
+    :straight t)
+#+end_src
+
+* Mode Line
+
+#+include: "modeline.org" :minlevel 2

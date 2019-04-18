@@ -1,0 +1,29 @@
+#+begin_src elisp
+  (use-package flycheck
+    :straight t
+    :preface
+    (defun save-buffer-maybe-show-errors ()
+      "Save buffer and show errors if any."
+      (interactive)
+      (save-buffer)
+      (when (not flycheck-current-errors)
+        (flycheck-list-errors)))
+    :commands (flycheck-mode
+               flycheck-next-error
+               flycheck-previous-error)
+    ;; :bind (("C-x C-s" . save-buffer-maybe-show-errors))
+    :hook ((after-init . global-flycheck-mode))
+    :init (setq flycheck-display-errors-function
+                #'flycheck-display-error-messages-unless-error-list)
+    :config (defalias 'show-error-at-point-soon
+              'flycheck-show-error-at-point)
+    (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space))
+
+
+  (use-package flycheck-package
+    :after flycheck
+    :straight t
+    :config
+    (with-eval-after-load 'elisp-mode
+      (flycheck-package-setup)))
+#+end_src

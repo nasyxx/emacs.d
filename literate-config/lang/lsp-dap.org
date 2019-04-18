@@ -1,0 +1,80 @@
+* lsp-mode
+
+#+begin_src elisp
+  (use-package lsp-mode
+    :straight t
+    :commands lsp
+    :preface
+    (defun delete-company-lsp ()
+      "Delete company-lsp added by lsp-mode from company-backends"
+      (when 'company-backends
+        (gsetq company-backends (delete 'company-lsp company-backends)
+               company-backends (delete 'intero-company company-backends))))
+    :hook ((lsp-after-open . lsp-enable-imenu)
+           ((lsp-mode
+             lsp-after-open
+             prog-mode
+             company-box-mode
+             company-mode) . delete-company-lsp))
+    :init (gsetq lsp-prefer-flymake            nil
+                 lsp-enable-on-type-formatting nil))
+#+end_src
+
+* lsp-ui
+
+#+begin_src elisp
+  (use-package lsp-ui
+    :after lsp-mode
+    :straight t
+    :commands lsp-ui-mode
+    :bind (:map lsp-ui-mode-map
+                ("M-,"  . lsp-ui-peek-find-definitions)
+                ("M-?"  . lsp-ui-peek-find-references)
+                ("C-c u"   . lsp-ui-imenu)
+                ("C-c C-a" . lsp-ui-sideline-apply-code-actions))
+    :ghook 'lsp-mode-hook
+    :init
+    (gsetq lsp-ui-doc-position 'at-point
+           lsp-ui-doc-header nil
+           lsp-ui-doc-border "violet"
+           ;; lsp-ui-doc-include-signature t
+           lsp-ui-sideline-update-mode 'point
+           lsp-ui-sideline-delay 1
+           lsp-ui-sideline-ignore-duplicate t
+           lsp-ui-peek-always-show t
+           lsp-ui-flycheck-enable t))
+#+end_src
+
+* company-lsp
+
+#+begin_src elisp
+  (use-package company-lsp
+    :defer t
+    :after (lsp-mode company)
+    :straight t
+    :commands company-lsp
+    :init
+    (general-pushnew
+     '(company-lsp
+       company-files
+       company-dabbrev-code
+       company-gtags
+       company-etags
+       company-keywords
+       :with company-yasnippet)
+     company-backends)
+    (gsetq company-lsp-async               t
+           company-lsp-enable-recompletion t
+           company-lsp-enable-snippet      t
+           company-lsp-cache-candidates    nil))
+#+end_src
+
+* Dap Mode
+
+#+begin_src elisp
+  (use-package dap-mode
+    :defer    t
+    :straight t
+    :config
+    (require 'dap-python))
+#+end_src

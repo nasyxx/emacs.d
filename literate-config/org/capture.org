@@ -1,0 +1,39 @@
+#+begin_src elisp
+  (use-package org-capture
+    :demand t
+    :init
+    (unless (boundp 'org-capture-templates)
+      (defvar org-capture-templates nil))
+
+    (add-to-list 'org-capture-templates '("t" "Tasks"))
+
+    (add-to-list 'org-capture-templates
+                 '("tr" "Book Reading Task" entry
+                   (file+olp "~/notes/task.org" "Reading" "Book")
+                   "* TODO %^{book name}\n%u\n%a\n" :clock-in t :clock-resume t))
+
+    (add-to-list 'org-capture-templates
+                 '("tw" "Work Task" entry
+                   (file+headline "~/notes/task.org" "Work")
+                   "* TODO %^{task name}\n%u\n%a\n" :clock-in t :clock-resume t))
+
+    (add-to-list 'org-capture-templates
+                 '("T" "Thoughts" entry
+                   (file "~/notes/thoughts.org")
+                   "* %t - %^{heading}\n\n%?"))
+
+    (add-to-list 'org-capture-templates
+                 '("j" "Journal" entry
+                   (file "~/notes/journal.org")
+                   "* %U - %^{heading}\n  %?"))
+
+    (add-to-list 'org-capture-templates
+                 '("i" "Inbox" entry
+                   (file "~/notes/inbox.org")
+                   "* %U - %^{heading} %^g\n %?\n"))
+
+    (add-to-list 'org-capture-templates
+                 '("n" "Notes" entry
+                   (file "~/notes/notes.org")
+                   "* %^{heading} %t %^g\n  %?\n")))
+#+end_src

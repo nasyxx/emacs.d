@@ -1,0 +1,106 @@
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Org Mode
+  ;;----------------------------------------------------------------------------
+#+end_src
+
+* Load
+
+I use ~org~ with ~org-plus-contrib~
+
+#+begin_src elisp
+  (use-package org
+    :straight org-plus-contrib)
+
+  (require 'org-tempo nil t)
+#+end_src
+
+* OX Org
+
+Other ~ox-_~ packages.
+
+#+begin_src elisp
+  (straight-use-package 'ox-rst)
+
+
+  (with-eval-after-load 'ox
+    (let ((oxs '(ox-md
+                 ox-rst)))
+      (dolist (language oxs)
+        (require language nil t))))
+
+
+  (use-package ox-pandoc
+    :after    ox
+    :straight t)
+#+end_src
+
+* Basic Configs
+
+#+include: "basic.org" :minlevel 2
+
+* Org Agenda
+
+#+include: "agenda.org" :minlevel 2
+
+* Org Bullets
+
+#+begin_src elisp
+  (use-package org-bullets
+    :straight t
+    :hook ((org-mode . (lambda () (org-bullets-mode 1)))))
+#+end_src
+
+* Org Capture
+
+#+include: "capture.org" :minlevel 2
+
+* Org Cliplink
+
+#+begin_src elisp
+  (use-package org-cliplink
+    :defer    t
+    :straight t)
+#+end_src
+
+* Org clock
+
+#+include: "clock.org" :minlevel 2
+
+* Org Extra Jar -- ob-ditaa & ob-plantuml
+
+#+include: "extra-jar.org" :minlevel 2
+
+* Org PDF view
+
+#+begin_src elisp
+  (use-package org-pdfview
+    :defer    t
+    :straight t)
+#+end_src
+
+* Org Pomodoro
+
+#+begin_src elisp
+  (use-package org-pomodoro
+    :after org-agenda
+    :init (gsetq org-pomodoro-keep-killed-pomodoro-time t)
+    :bind (:map org-agenda-mode-map
+                ("P" . org-pomodoro)))
+#+end_src
+
+* Org Toc
+
+#+begin_src elisp
+  (use-package toc-org
+    :defer    t
+    :straight t)
+#+end_src
+
+* Org Wc
+
+#+begin_src elisp
+  (use-package org-wc
+    :defer    t
+    :straight t)
+#+end_src

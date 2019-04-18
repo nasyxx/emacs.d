@@ -1,0 +1,15 @@
+#+begin_src elisp :exports none
+;;----------------------------------------------------------------------------
+;; Macros & Alias.
+#+end_src
+
+Useful Macros and Alias.
+
+#+begin_src elisp
+  (defmacro λ! (&rest body)
+    "A shortcut for inline interactive lambdas."
+    (declare (doc-string 1))
+    `(lambda () (interactive) ,@body))
+
+  (defalias 'lambda! 'λ!)
+#+end_src

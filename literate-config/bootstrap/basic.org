@@ -1,0 +1,263 @@
+* Dashboard
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Dashboard
+#+end_src
+
+#+begin_src elisp
+  (use-package dashboard
+    :demand   t
+    :after    org
+    :straight t
+    :bind
+    ;; https://github.com/rakanalh/emacs-dashboard/issues/45
+    (:map dashboard-mode-map
+          ("<down-mouse-1>" . nil)
+          ("<mouse-1>"      . widget-button-click)
+          ("<mouse-2>"      . widget-button-click))
+    :init (setq dashboard-startup-banner 'official
+                dashboard-center-content t
+                show-week-agenda-p       t
+                dashboard-items '((recents   . 10)
+                                  (bookmarks . 3 )
+                                  (projects  . 5 )
+                                  (agenda    . 5 )
+                                  ;; (registers . 5 )
+                                  ))
+    :config (dashboard-setup-startup-hook))
+#+end_src
+
+* Disable Mouse
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Disable Mouse
+#+end_src
+
+#+begin_src elisp
+  (use-package disable-mouse
+    :straight t
+    :config
+    (general-define-key
+     "<mouse-4>" (lambda! (scroll-down 1))
+     "<mouse-5>" (lambda! (scroll-up 1))))
+#+end_src
+
+* Minibuffer
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Minibuffer
+#+end_src
+
+#+begin_src elisp
+  (setq enable-recursive-minibuffers t)
+
+  (minibuffer-depth-indicate-mode)
+
+  ;; https://www.reddit.com/r/emacs/comments/4d8gvt/how_do_i_automatically_close_the_minibuffer_after/
+  (defun helper:kill-minibuffer ()
+    "Exit the minibuffer if it is active."
+    (when (and (>= (recursion-depth) 1)
+             (active-minibuffer-window))
+      (abort-recursive-edit)))
+
+  (add-hook #'mouse-leave-buffer-hook #'helper:kill-minibuffer)
+#+end_src
+
+* Scratch Message
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Scratch Message
+#+end_src
+
+#+begin_src elisp
+  (use-package scratch
+    :demand   t
+    :straight t)
+#+end_src
+
+* Shell & Term
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Shell & Term
+#+end_src
+
+** Shell
+
+#+begin_src elisp
+  (require 'shell)
+
+  (use-package cmd-to-echo
+    :defer    t
+    :straight t)
+
+
+  (use-package command-log-mode
+    :defer    t
+    :straight t)
+
+
+  (defun nasy:shell-command-in-view-mode (start end command &optional output-buffer replace &rest other-args)
+    "Put \"*Shell Command Output*\" buffers into view-mode."
+    (unless (or output-buffer replace)
+      (with-current-buffer "*Shell Command Output*"
+        (view-mode 1))))
+  (advice-add 'shell-command-on-region :after 'nasy:shell-command-in-view-mode)
+
+
+  (use-package exec-path-from-shell
+    :demand   *is-a-mac*
+    :straight t
+    :preface
+    ;; Non-Forking Shell Command To String
+    ;; https://github.com/bbatsov/projectile/issues/1044
+    ;;--------------------------------------------------------------------------
+
+    (defun call-process-to-string (program &rest args)
+      (with-temp-buffer
+        (apply 'call-process program nil (current-buffer) nil args)
+        (buffer-string)))
+
+    (defun get-call-process-args-from-shell-command (command)
+      (cl-destructuring-bind
+          (the-command . args) (split-string command " ")
+        (let ((binary-path (executable-find the-command)))
+          (when binary-path
+            (cons binary-path args)))))
+
+    (defun shell-command-to-string (command)
+      (let ((call-process-args
+             (get-call-process-args-from-shell-command command)))
+        (if call-process-args
+            (apply 'call-process-to-string call-process-args)
+          (shell-command-to-string command))))
+
+    (defun try-call-process (command)
+      (let ((call-process-args
+             (get-call-process-args-from-shell-command command)))
+        (if call-process-args
+            (apply 'call-process-to-string call-process-args))))
+
+    (advice-add 'shell-command-to-string :before-until 'try-call-process)
+
+    (use-package noflet :straight t)
+
+    (defun call-with-quick-shell-command (fn &rest args)
+      (noflet ((shell-command-to-string
+                (&rest args)
+                (or (apply 'try-call-process args) (apply this-fn args))))
+              (apply fn args)))
+
+    (advice-add 'projectile-find-file :around 'call-with-quick-shell-command)
+    :init (setq shell-command-switch "-ic")
+    :config
+    (when nil (message "PATH: %s, INFO: %s" (getenv "PATH")
+                       (getenv "ENVIRONMENT_SETUP_DONE"))
+          (setq exec-path-from-shell-debug t))
+    (setq exec-path-from-shell-arguments (list "-l"))
+    (setq exec-path-from-shell-check-startup-files nil)
+    (add-to-list 'exec-path-from-shell-variables "SHELL")
+    (add-to-list 'exec-path-from-shell-variables "GOPATH")
+    (add-to-list 'exec-path-from-shell-variables "ENVIRONMENT_SETUP_DONE")
+    (add-to-list 'exec-path-from-shell-variables "PYTHONPATH")
+    (exec-path-from-shell-initialize))
+#+end_src
+
+** Term
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Term
+#+end_src
+
+Emacs libvterm intergration
+
+https://github.com/akermu/emacs-libvterm
+
+#+begin_src elisp
+  (when *vterm*
+    (progn
+      (add-to-list 'load-path *vterm*)
+      (let (vterm-install)
+        (require 'vterm))))
+#+end_src
+
+* Window
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Window
+#+end_src
+
+#+begin_src elisp
+  (add-hook 'after-init-hook 'winner-mode)
+
+  (use-package switch-window
+    :straight t
+    :init (setq-default switch-window-shortcut-style 'alphabet
+                        switch-window-timeout nil))
+
+  ;; When splitting window, show (other-buffer) in the new window
+  (defun split-window-func-with-other-buffer (split-function)
+    "Split window with `SPLIT-FUNCTION'."
+    (lambda (&optional arg)
+      "Split this window and switch to the new window unless ARG is provided."
+      (interactive "P")
+      (funcall split-function)
+      (let ((target-window (next-window)))
+        (set-window-buffer target-window (other-buffer))
+        (unless arg
+          (select-window target-window)))))
+
+  (defun toggle-delete-other-windows ()
+    "Delete other windows in frame if any, or restore previous window config."
+    (interactive)
+    (if (and winner-mode
+             (equal (selected-window) (next-window)))
+        (winner-undo)
+      (delete-other-windows)))
+
+  (defun split-window-horizontally-instead ()
+    "Kill any other windows and re-split such that the current window is on the top half of the frame."
+    (interactive)
+    (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+      (delete-other-windows)
+      (split-window-horizontally)
+      (when other-buffer
+        (set-window-buffer (next-window) other-buffer))))
+
+  (defun split-window-vertically-instead ()
+    "Kill any other windows and re-split such that the current window is on the left half of the frame."
+    (interactive)
+    (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+      (delete-other-windows)
+      (split-window-vertically)
+      (when other-buffer
+        (set-window-buffer (next-window) other-buffer))))
+
+  ;; Borrowed from http://postmomentum.ch/blog/201304/blog-on-emacs
+  (defun nasy/split-window()
+    "Split the window to see the most recent buffer in the other window.
+  Call a second time to restore the original window configuration."
+    (interactive)
+    (if (eq last-command 'nasy-split-window)
+        (progn
+          (jump-to-register :nasy-split-window)
+          (setq this-command 'nasy-unsplit-window))
+      (window-configuration-to-register :nasy/split-window)
+      (switch-to-buffer-other-window nil)))
+
+  (general-define-key
+   :prefix "C-x"
+   "1" 'toggle-delete-other-windows
+   "2" '(split-window-func-with-other-buffer 'split-window-vertically)
+   "3" '(split-window-func-with-other-buffer 'split-window-horizontally)
+   "|" 'split-window-horizontally-instead
+   "_" 'split-window-vertically-instead
+   "x" 'nasy/split-window
+   "o" 'switch-window)
+#+end_src

@@ -1,0 +1,32 @@
+* lisp-mode
+
+#+begin_src elisp
+  (use-package lisp-mode
+    :preface
+    (defun eval-last-sexp-or-region (prefix)
+      "Eval region from BEG to END if active, otherwise the last sexp."
+      (interactive "P")
+      (if (and (mark) (use-region-p))
+          (eval-region (min (point) (mark)) (max (point) (mark)))
+        (pp-eval-last-sexp prefix)))
+    :bind (("<remap> <eval-expression>" . pp-eval-expression)
+           :map emacs-lisp-mode-map
+           ("C-x C-e" . eval-last-sexp-or-region)))
+#+end_src
+
+* Highlight-quoted
+
+#+begin_src elisp
+  (use-package highlight-quoted
+    :defer t
+    :straight t
+    :hook ((emacs-lisp-mode . highlight-quoted-mode)))
+#+end_src
+
+* elisp-def
+
+#+begin_src elisp
+  (use-package elisp-def
+    :straight t
+    :hook (((emacs-lisp-mode ielm-mode) . elisp-def-mode)))
+#+end_src

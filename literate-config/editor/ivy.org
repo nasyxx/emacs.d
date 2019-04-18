@@ -1,0 +1,271 @@
+* Ivy
+
+#+begin_src elisp
+  (use-package ivy
+    :straight t
+    :ghook 'after-init-hook
+    :init (gsetq
+           ivy-wrap                     t
+           ivy-use-virtual-buffers      t
+           ivy-virtual-abbreviate       'fullpath
+           ivy-count-format             ""
+           projectile-completion-system 'ivy
+           ivy-magic-tilde              nil
+           ivy-initial-inputs-alist '((Man-completion-table . "^")
+                                      (woman . "^"))
+           ivy-re-builders-alist    '((t . ivy--regex-fuzzy)))
+    :bind (("C-c C-r" . ivy-resume)
+           :map ivy-minibuffer-map
+           ("RET"   . ivy-alt-done)
+           ("C-j"   . ivy-immediate-done)
+           ("C-RET" . ivy-immediate-done)
+           ("<up>"  . ivy-previous-line-or-history)
+           :map ivy-occur-mode-map
+           ("C-c C-q" . ivy-wgrep-change-to-wgrep-mode))
+    :diminish ivy-mode)
+#+end_src
+
+* Counsel
+
+#+begin_src elisp
+  (use-package counsel
+    :straight t
+    :ghook 'after-init-hook
+    :bind (("M-x"   . counsel-M-x)
+           ("C-x :" . counsel-minibuffer-history)
+           :map counsel-find-file-map
+           ("<left>"  . counsel-up-directory)
+           ("<right>" . counsel-down-directory))
+    :init (gsetq counsel-mode-override-describe-bindings t
+                 counsel-find-file-at-point t
+                 counsel-grep-base-command
+                 "rg -i -M 120 --no-heading --line-number --color never %s %s")
+    :config
+    (gsetq counsel-yank-pop-height ivy-height)
+    (general-define-key
+     :prefix "C-c C-a"
+     "o" 'counsel-outline
+     "i" 'counsel-imenu
+     "p" 'counsel-list-processes
+     "d" 'counsel-dash
+     "u" 'counsel-unicode-char)
+    :diminish counsel-mode)
+#+end_src
+
+* Swiper
+
+#+begin_src elisp
+  (use-package swiper
+    :straight t
+    :init (defun nasy/swiper-at-point (sym)
+            "Use `swiper' to search for the `sym' at point."
+            (interactive (list (thing-at-point 'symbol)))
+            (swiper-isearch sym))
+    :bind (("C-s" . nasy/swiper-at-point)
+           :map swiper-map
+           ("C-s" . nasy/swiper-isearch-forward)
+           ("C-r" . nasy/swiper-isearch-backward))
+    :config
+    (defun nasy*ivy--insert-minibuffer (text)
+      "Insert TEXT into minibuffer with appropriate cleanup."
+      (let ((resize-mini-windows nil)
+            (update-fn (ivy-state-update-fn ivy-last))
+            (old-mark (marker-position (mark-marker)))
+            deactivate-mark)
+        (ivy--cleanup)
+        (when (and update-fn (not (memq this-command '(ivy-call nasy/swiper-isearch-forward nasy/swiper-isearch-backward))))
+          (funcall update-fn))
+        (ivy--insert-prompt)
+        ;; Do nothing if while-no-input was aborted.
+        (when (stringp text)
+          (if ivy-display-function
+              (funcall ivy-display-function text)
+            (ivy-display-function-fallback text)))
+        (unless (frame-root-window-p (minibuffer-window))
+          (with-selected-window (minibuffer-window)
+            (set-window-text-height nil
+                                    (+ ivy-height
+                                       (if ivy-add-newline-after-prompt
+                                           1
+                                         0)))))
+        ;; prevent region growing due to text remove/add
+        (when (region-active-p)
+          (set-mark old-mark))))
+    (advice-add #'ivy--insert-minibuffer :override #'nasy*ivy--insert-minibuffer)
+
+    (defun nasy*swiper-isearch-function (str)
+      "Collect STR matches in the current buffer for `swiper-isearch'."
+      (let* ((re-full (funcall ivy--regex-function str))
+             (re (ivy-re-to-str re-full)))
+        (unless (string= re "")
+          (let ((re (if (string-match "\\`\\(.*\\)[\\]|\\'" re)
+                        (match-string 1 re)
+                      re))
+                (pt-hist (cdr (assoc str swiper--isearch-point-history)))
+                cands
+                idx-found
+                (prev-lb -1)
+                prev-line
+                (i 0)
+                (idx 0))
+            (with-ivy-window
+              (save-excursion
+                (goto-char (point-min))
+                (while (re-search-forward re nil t)
+                  (unless idx-found
+                    (when (or
+                           (eq (match-beginning 0) pt-hist)
+                           (>= (match-beginning 0) (cdar swiper--isearch-point-history)))
+                      (push (cons str (match-beginning 0)) swiper--isearch-point-history)
+                      (setq idx-found idx)))
+                  (let* ((lb (line-beginning-position))
+                         (line
+                          (if (= lb prev-lb)
+                              prev-line
+                            (setq i 0)
+                            (buffer-substring
+                             lb
+                             (line-end-position)))))
+                    (put-text-property i (1+ i) 'point (point) line)
+                    (put-text-property 0 1 'num i line)
+                    (when (= i 0)
+                      (cl-incf idx)
+                      (push line cands)
+                      (setq prev-lb lb)
+                      (setq prev-line line))
+                    (cl-incf i)))))
+            (setq ivy--old-re re)
+            (when idx-found
+              (ivy-set-index idx-found))
+            (setq ivy--old-cands (nreverse cands))))))
+    (advice-add #'swiper-isearch-function :override #'nasy*swiper-isearch-function)
+
+    (defvar-local nasy-swiper-isearch-last-line nil)
+    (defvar-local nasy-swiper-isearch-last-point nil)
+
+    (defun nasy-swiper-isearch-forward (x)
+      (let ((i 1)
+            (l (length x))
+            (p (get-text-property 0 'point x)))
+        (goto-char p)
+        (when (and nasy-swiper-isearch-last-line (= nasy-swiper-isearch-last-line (line-beginning-position)))
+          ;; finding the right pos
+          (while (and p nasy-swiper-isearch-last-point (<= p nasy-swiper-isearch-last-point) (< i l))
+            (setq p (get-text-property i 'point x))
+            (cl-incf i))
+          (if p (goto-char p)))
+        (setq nasy-swiper-isearch-last-line (line-beginning-position))
+        (setq nasy-swiper-isearch-last-point p)))
+
+    (defun nasy-swiper-isearch-backward (x)
+      (let* ((l (length x))
+             (i (get-text-property 0 'num x))
+             (p (get-text-property i 'point x))
+             (lb (progn (goto-char p) (line-beginning-position))))
+        (while (and p nasy-swiper-isearch-last-point (>= p nasy-swiper-isearch-last-point) (<= 0 i))
+          (cl-decf i)
+          (setq p (if (< i 0) nil (get-text-property i 'point x))))
+        (if p
+            (progn
+              (goto-char p)
+              (setq nasy-swiper-isearch-last-line (line-beginning-position))
+              (setq nasy-swiper-isearch-last-point p))
+          (setq nasy-swiper-isearch-last-line nil)
+          (setq nasy-swiper-isearch-last-point nil))))
+
+    (defun nasy-swiper-isearch-action (x)
+      "Move to X for `swiper-isearch'."
+      (if (> (length x) 0)
+          (with-ivy-window
+            (unless (eq ivy-exit 'done)
+              (if (string= "C-r" (key-description (this-command-keys)))
+                  (nasy-swiper-isearch-backward x)
+                (nasy-swiper-isearch-forward x)))
+            (isearch-range-invisible (line-beginning-position)
+                                     (line-end-position))
+            (unless (eq ivy-exit 'done)
+              (swiper--cleanup)
+              (swiper--add-overlays (ivy--regex ivy-text))
+              (swiper--add-cursor-overlay)))
+        (swiper--cleanup)))
+    (advice-add #'swiper-isearch-action :override #'nasy-swiper-isearch-action)
+
+    (defun nasy/swiper-isearch-forward ()
+      (interactive)
+      (ivy-call)
+      (unless (with-ivy-window nasy-swiper-isearch-last-point)
+        (let ((ivy-calling t))
+          (ivy-next-line-or-history))))
+
+    (defun nasy/swiper-isearch-backward ()
+      (interactive)
+      (ivy-call)
+      (unless (with-ivy-window nasy-swiper-isearch-last-point)
+        (let ((ivy-calling t))
+          (ivy-previous-line-or-history 1))))
+    (advice-add #'swiper--init :before (lambda! (setq nasy-swiper-isearch-last-point nil nasy-swiper-isearch-last-line nil))))
+#+end_src
+
+* Ivy Rich
+
+#+begin_src elisp
+  (use-package ivy-rich
+    :after    counsel
+    :demand   t
+    :straight t
+    :config
+    (defun ivy-rich-switch-buffer-icon (candidate)
+      "ivy rich switch-buffer icon"
+      (with-current-buffer
+          (get-buffer candidate)
+        (let ((icon (all-the-icons-icon-for-mode major-mode)))
+          (if (symbolp icon)
+              (all-the-icons-icon-for-mode 'fundamental-mode)
+            icon))))
+    (gsetq ivy-rich--display-transformers-list
+           '(ivy-switch-buffer
+             (:columns
+              ((ivy-rich-switch-buffer-icon :width 2)
+               (ivy-rich-candidate (:width 30))
+               (ivy-rich-switch-buffer-size (:width 7))
+               (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right))
+               (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))
+               (ivy-rich-switch-buffer-project (:width 15 :face success))
+               (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))
+              :predicate
+              (lambda (cand) (get-buffer cand)))))
+    (ivy-rich-mode))
+#+end_src
+
+* Ivy Posframe
+
+#+begin_src elisp
+  (use-package ivy-posframe
+    :demand   t
+    :straight t
+    :config
+    (defun ivy-posframe-display-at-frame-top-center (str)
+      (ivy-posframe--display str #'posframe-poshandler-frame-top-center))
+
+    (gsetq ivy-display-function #'ivy-posframe-display-at-frame-top-center)
+
+    (ivy-posframe-enable))
+#+end_src
+
+* Ivy Yasnippets
+
+#+begin_src elisp
+  (use-package ivy-yasnippet
+    :straight t
+    :bind (("C-:" . ivy-yasnippet)))
+#+end_src
+
+* Counsel Projectile
+
+#+begin_src elisp
+  (use-package counsel-projectile
+    :after    projectile
+    :straight t
+    :bind (:map projectile-command-map ("/" . counsel-projectile-rg))
+    :ghook 'after-init-hook)
+#+end_src

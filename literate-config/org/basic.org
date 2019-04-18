@@ -1,0 +1,273 @@
+#+begin_src elisp
+  (use-package org
+    :demand t
+    :preface
+    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+
+    ;; Exclude DONE state tasks from refile targets
+    (defun verify-refile-target ()
+      "Exclude todo keywords with a done state from refile targets."
+      (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+    (setq org-refile-target-verify-function 'verify-refile-target)
+
+    (defun org-refile-anywhere (&optional goto default-buffer rfloc msg)
+      "A version of `org-refile' which allows refiling to any subtree."
+      (interactive "P")
+      (let ((org-refile-target-verify-function))
+        (org-refile goto default-buffer rfloc msg)))
+
+    (defun org-agenda-refile-anywhere (&optional goto rfloc no-update)
+      "A version of `org-agenda-refile' which allows refiling to any subtree."
+      (interactive "P")
+      (let ((org-refile-target-verify-function))
+        (org-agenda-refile goto rfloc no-update)))
+
+    ;; The original from spacemacs chinese layer shows as follow.
+    ;;   (defadvice org-html-paragraph (before org-html-paragraph-advice
+    ;;                                         (paragraph contents info) activate)
+    ;;     "Join consecutive Chinese lines into a single long line without
+    ;; unwanted space when exporting org-mode to html."
+    ;;     (let* ((origin-contents (ad-get-arg 1))
+    ;;            (fix-regexp "[[:multibyte:]]")
+    ;;            (fixed-contents
+    ;;             (replace-regexp-in-string
+    ;;              (concat
+    ;;               "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
+    ;;       (ad-set-arg 1 fixed-contents)))
+
+    (defun nasy/org-html-paragraph-advice (orig paragraph contents &rest args)
+      "Join consecutive Chinese lines into a single long line without
+  unwanted space when exporting org-mode to html."
+      (let* ((fix-regexp "[[:multibyte:]]")
+             (fixed-contents
+              (replace-regexp-in-string
+               (concat
+                "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents)))
+        (apply orig paragraph fixed-contents args)))
+    (advice-add #'org-html-paragraph :around #'nasy/org-html-paragraph-advice)
+
+    (defun nasy/org-fix-saveplace ()
+      "Fix a problem with saveplace.el putting you back in a folded position"
+      (when (outline-invisible-p)
+        (save-excursion
+          (outline-previous-visible-heading 1)
+          (org-show-subtree))))
+
+    :bind (("C-c l" . org-store-link)
+           ("C-c a" . org-agenda)
+           ("C-c c" . org-capture)
+           :map org-mode-map
+           ("C-M-<up>" . org-up-element)
+           ("M-h"      . nil)
+           ("C-c g"    . org-mac-grab-link)
+           ("C-c _"    . org-edit-special)
+           :map org-src-mode-map
+           ("C-c _"    . org-edit-src-exit))
+    :hook ((org-mode . auto-fill-mode)
+           (org-mode . nasy/org-fix-saveplace))
+    :init
+    (gsetq
+     org-archive-mark-done nil
+     org-archive-location  "%s_archive::* Archive"
+     org-archive-mark-done nil
+
+     org-catch-invisible-edits 'smart
+
+     org-default-notes-file "~/notes/default.org"
+
+     org-edit-timestamp-down-means-later t
+
+     org-ellipsis " ﹅"
+
+     org-export-backends                           '(ascii html latex md)
+     org-export-coding-system                      'utf-8
+     org-export-kill-product-buffer-when-displayed t
+     org-export-with-broken-links                  'mark
+     org-export-with-sub-superscripts              '{}
+     org-use-sub-superscripts                      '{}
+
+     org-fast-tag-selection-single-key 'expert
+
+     org-highlight-latex-and-related: '(native latex script entities)
+
+     org-hide-emphasis-markers t
+     org-hide-leading-stars    nil
+
+     org-html-checkbox-type       'uncode
+     org-html-doctype             "html5"
+     org-html-html5-fancy         t
+     org-html-htmlize-output-type 'inline-css
+     org-html-klipsify-src        t
+     org-html-mathjax-options     '((path          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML")
+                                    (scale         "100")
+                                    (align         "center")
+                                    (font          "Neo-Euler")
+                                    (linebreaks    "false")
+                                    (autonumber    "AMS")
+                                    (indent        "0em")
+                                    (multlinewidth "85%")
+                                    (tagindent     ".8em")
+                                    (tagside       "right"))
+     org-html-with-latex          'mathjax
+     org-html-validation-link     nil
+
+     org-indent-mode-turns-on-hiding-stars nil
+
+     org-pretty-entities t
+
+     ;; org time
+     ;; org-display-custom-times         t  ;; should setq-default
+     org-time-stamp-custom-formats    '("<%a %b %d, %Y>" . "<%a %b %d %H:%M:%S %Y>")
+     org-export-date-timestamp-format "%b %d, %Y"
+
+     ;; org latex
+     org-latex-compiler "lualatex"
+     org-latex-default-packages-alist
+     (quote
+      (("AUTO" "inputenc" t
+        ("pdflatex"))
+       ("T1" "fontenc" t
+        ("pdflatex"))
+       ("" "graphicx" t nil)
+       ("" "grffile" t nil)
+       ("" "longtable" t nil)
+       ("" "wrapfig" nil nil)
+       ("" "rotating" nil nil)
+       ("normalem" "ulem" t nil)
+       ("" "amsmath" t nil)
+       ("" "textcomp" t nil)
+       ("" "amssymb" t nil)
+       ("" "capt-of" nil nil)
+       ("colorlinks,unicode,linkcolor=blue,anchorcolor=blue,citecolor=green,filecolor=black,urlcolor=blue"
+        "hyperref" t nil)
+       ("" "luatexja-fontspec" t nil)
+       ("" "listings" t nil)))
+     org-latex-default-table-environment "longtable"
+     org-latex-listings t
+     org-latex-listings-langs
+     (quote
+      ((emacs-lisp   "Lisp")
+       (lisp         "Lisp")
+       (clojure      "Lisp")
+       (c            "C")
+       (cc           "C++")
+       (fortran      "fortran")
+       (perl         "Perl")
+       (cperl        "Perl")
+       (Python       "python")
+       (python       "Python")
+       (ruby         "Ruby")
+       (html         "HTML")
+       (xml          "XML")
+       (tex          "TeX")
+       (latex        "[LaTeX]TeX")
+       (sh           "bash")
+       (shell-script "bash")
+       (gnuplot      "Gnuplot")
+       (ocaml        "Caml")
+       (caml         "Caml")
+       (sql          "SQL")
+       (sqlite       "sql")
+       (makefile     "make")
+       (R            "r")))
+     org-latex-pdf-process
+     (quote
+      ("lualatex -shell-escape -interaction nonstopmode %f"
+       "lualatex -shell-escape -interaction nonstopmode %f"))
+     org-latex-tables-booktabs t
+
+     org-level-color-stars-only nil
+     org-list-indent-offset 2
+     org-log-done t
+
+     org-outline-path-complete-in-steps nil
+
+     org-refile-allow-creating-parent-nodes 'confirm
+     org-refile-targets                     '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))
+     org-refile-use-cache                   nil
+     org-refile-use-outline-path            t
+
+     org-startup-indented  t
+     org-startup-folded    'content
+     org-startup-truncated nil
+
+     org-src-lang-modes '(("C"         . c)
+                          ("C++"       . c++)
+                          ("asymptote" . asy)
+                          ("bash"      . sh)
+                          ("beamer"    . latex)
+                          ("calc"      . fundamental)
+                          ("cpp"       . c++)
+                          ("ditaa"     . artist)
+                          ("dot"       . fundamental)
+                          ("elisp"     . emacs-lisp)
+                          ("ocaml"     . tuareg)
+                          ("screen"    . shell-script)
+                          ("shell"     . sh)
+                          ("sqlite"    . sql))
+
+     org-support-shift-select t
+
+     org-tags-column 80
+
+     ;; to-do settings
+     org-todo-keywords        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
+                                      (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
+                                      (sequence "WAITING(w@/!)" "DELEGATED(e!)" "HOLD(h)" "|" "CANCELLED(c@/!)")))
+     org-todo-repeat-to-state "NEXT"
+     org-todo-keyword-faces   (quote (("NEXT" :inherit warning)
+                                      ("PROJECT" :inherit font-lock-string-face))))
+    (gsetq org-display-custom-times t)
+    :config
+    ;; --------
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     `((ditaa      . t)
+       (dot        . t)
+       (elvish     . t)
+       (emacs-lisp . t)
+       (gnuplot    . t)
+       (haskell    . nil)
+       (latex      . t)
+       (ledger     . t)
+       (ocaml      . nil)
+       (octave     . t)
+       (plantuml   . t)
+       (python     . t)
+       (R          . t)
+       (ruby       . t)
+       (screen     . nil)
+       (,(if (locate-library "ob-sh") 'sh 'shell) . t)
+       (sql . nil)
+       (sqlite . t)))
+
+    (gsetq org-babel-python-command "python3")
+
+    ;; --------
+    (gsetq luamagick
+           '(luamagick
+             :programs ("lualatex" "convert")
+             :description "pdf > png"
+             :message "you need to install lualatex and imagemagick."
+             :use-xcolor t
+             :image-input-type "pdf"
+             :image-output-type "png"
+             :image-size-adjust (1.0 . 1.0)
+             :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+             :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+    (add-to-list 'org-preview-latex-process-alist luamagick)
+
+    (gsetq luasvg
+           '(luasvg
+             :programs ("lualatex" "dvisvgm")
+             :description "dvi > svg"
+             :message "you need to install lualatex and dvisvgm."
+             :use-xcolor t
+             :image-input-type "dvi"
+             :image-output-type "svg"
+             :image-size-adjust (1.7 . 1.5)
+             :latex-compiler ("lualatex -interaction nonstopmode -output-format dvi -output-directory %o %f")
+             :image-converter ("dvisvgm %f -n -b min -c %S -o %O")))
+    (add-to-list 'org-preview-latex-process-alist luasvg)
+    (gsetq org-preview-latex-default-process 'luasvg))
+#+end_src

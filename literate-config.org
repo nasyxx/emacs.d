@@ -1,0 +1,178 @@
+#+PROPERTY: header-args:elisp :tangle (concat (file-name-directory (buffer-file-name)) "init.el")
+#+PROPERTY: header-args:emacs-lisp :tangle (concat (file-name-directory (buffer-file-name)) "custom/user-config-example.el")
+#+STARTUP: overview
+#+OPTIONS: ':nil *:t -:t ::t <:t H:5 \n:nil ^:{} arch:headline author:t
+#+OPTIONS: creator:nil d:(not "LOGBOOK") date:t e:t
+#+OPTIONS: email:nil f:t inline:t num:nil p:nil pri:nil prop:nil stat:t tags:t
+#+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
+#+TITLE: Emacs Configuration
+#+DATE: <2018-10-09 Tue>
+#+AUTHOR: Nasy
+#+EMAIL: nasyxx@gmail.com
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+
+#+HTML_HEAD: <style>kbd {border-style: outset;} pre.src:before {top: -4px; box-shadow: 3px 3px 3px #eee; border-color: #ccc; padding: 0;}</style>
+#+HTML_HEAD: <style>#content {background-color: #fff0f8;} body,pre.src {background-color: #282a36; transition: box-shadow 2s}</style>
+#+HTML_HEAD: <style>pre.src {text-shadow: 0 0 10px #000; box-shadow: 1px 1px 5px #7a378b; color: #9e579d;}</style>
+#+HTML_HEAD: <style>pre.src:hover{box-shadow: 1px 1px 10px #7a378b;}</style>
+
+#+LATEX_HEADER: \setmainjfont[BoldFont=PingFang SC]{FandolSong}
+#+LATEX_HEADER: \setsansfont{PingFang SC}
+
+* Prologue
+
+A Straightforward Emacs Configuration Bundle.
+
+This is my Emacs configuration in literate form, and it is towards macOS.  I am
+not sure if it would work well well on Linux or Windows.
+
+** *NOTICE*
+
++ This file is a literature programing source file, and generates ~init.el~
++ Almost all in one file.
++ Use straight.el to manage packages.
++ For macOS GUI.
++ Now only tested with GNU Emacs 27.0.50 in macOS 10.14.
++ Font
+    - Fira Code Symbol
+
+** Screenshots
+
+[[./screenshot1.png]]
+
+[[./screenshot2.png]]
+
+[[./screenshot3.png]]
+
+* Dependencies
+
++ Emacs
++ git
++ make (optional)
++ ...
+
+* Installation
+
+To install, clone this repo to @@html: <span> @@ ~~/.emacs.d~ @@html: </span> @@:
+
+#+begin_src shell
+  git clone https://github.com/nasyxx/emacs.d.git ~/.emacs.d
+  make config
+#+end_src
+
+Upon the first time staring up emacs, other third-party packages will be
+automatically clone to the @@html: <span> @@ ~straight~: @@html: </span> @@ folder
+and installed.  If you encounter any errors at that stage, try restarting Emacs,
+and maybe running ~make clean-all~ before doing so.
+
+You can regenerate @@html: <span> @@ ~init.el~ @@html: </span> @@ by ~make generate~.
+
+* Updates
+
+Update this config with running ~make update~ or ~git pull~ after a ~make
+clean-build~ and restart Emacs.
+
+And I guess you'll need to update third-party packages regularly too if you
+have not modificated the ~straight-check-for-modifications~ in @@html: <span> @@
+~config/nasy-config.el~: @@html: </span> @@
+
+
++ @@html: <kbd>M-x</kbd> <kbd>straight-pull-all</kbd> <kbd>RET</kbd> @@
++ @@html: <kbd>M-x</kbd> <kbd>straight-rebuild-all</kbd> <kbd>RET</kbd> @@
+
+If you encounter any errors while updating, you may need to kill Emacs and run
+~make clean~. If you still meet errors after doing that, you probably need to run
+~make clean-all~ and restart Emacs.
+
+* Custom Configuration
+
+** Example Custom Configuration
+
+To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @@
+ etc. and/or create a file @@html: <span> @@ ~custom/user-config.el~ @@html:
+ </span> @@ which looks like this (when you ~make~ or ~make generate~, below will
+ generate to @@html: <span> @@ ~custom/user-config-example.el~ @@html: </span> @@):
+
+#+begin_src emacs-lisp
+  (setq-default
+   calendar-latitude     24.8801
+   calendar-longitude    102.8329
+   user-mail-address     "nasyxx@gmail.com"
+   initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))
+   ,*theme*            'doom-dracula
+   ,*debug*               t
+   ,*struct-hs*      nil
+   ,*vterm*               "/Users/Nasy/src/emacs-libvterm"
+   ,*risky-var*           nil)
+  (provide 'user-config)
+#+end_src
+
+** dashboard
+
+If you want to start with [[https://github.com/rakanalh/emacs-dashboard][dashboard]], you need to set
+
+~(setq initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))~
+
+in your ~custom/user-config.el~.
+
+*Launching emacs from command line with a file name causes errors*.  Please refer
+to the issue [[https://github.com/rakanalh/emacs-dashboard/issues/69][here]].  Hope someone could fix it.
+
+** *NOTICE:*
+
+- Functions added to ~nasy/config-before-hook~ will be run before loading ~custom.el~.
+- Functions added to ~nasy/config-after-hook~ will be run after init.
+
+* The Configuration
+
+One thing to note is that this file generates a file named @@html: <span> @@
+~init.el~. @@html: </span> @@ You *should not* edit that file directly and make any
+changes here and regenerate it from Emacs org-mode using @@html: <kbd>C-c</kbd>
+<kbd>C-v</kbd> <kbd>t</kbd> @@.
+
+** Bootstrap
+
+#+include: "literate-config/bootstrap/README.org" :minlevel 3
+
+** Editor
+
+#+include: "literate-config/editor/README.org" :minlevel 3
+
+** Languages
+
+#+include: "literate-config/lang/README.org" :minlevel 3
+
+** Org Mode
+
+#+include: "literate-config/org/README.org" :minlevel 3
+
+** Themes
+
+#+include: "literate-config/themes/README.org" :minlevel 3
+
+* Epilogue
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Epilogue
+  ;;----------------------------------------------------------------------------
+#+end_src
+
+#+begin_src elisp
+  (run-hooks 'nasy/config-before-hook)
+
+  (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
+
+  (when (file-exists-p custom-file)
+    (load custom-file))
+
+  (when *server*
+    (server-start))
+  ;;; init.el ends here
+#+end_src
+
+Hope you enjoy it.

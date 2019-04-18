@@ -1,0 +1,37 @@
+#+begin_src elisp
+  (use-package org-clock
+    :preface
+    (defun show-org-clock-in-header-line ()
+      "Show the clocked-in task in header line"
+      (setq-default header-line-format '((" " org-mode-line-string ""))))
+
+    (defun hide-org-clock-from-header-line ()
+      "Hide the clocked-in task from header line"
+      (setq-default header-line-format nil))
+    :init
+    (gsetq org-clock-persist t
+           org-clock-in-resume t
+           ;; Save clock data and notes in the LOGBOOK drawer
+           org-clock-into-drawer t
+           ;; Save state changes in the LOGBOOK drawer
+           org-log-into-drawer t
+           ;; Removes clocked tasks with 0:00 duration
+           org-clock-out-remove-zero-time-clocks t
+           ;; Show clock sums as hours and minutes, not "n days" etc.
+           org-time-clocksum-format
+           '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+    :hook ((org-clock-in . show-org-clock-in-header-line)
+           ((org-clock-out . org-clock-cancel) . hide-org-clock-from-header))
+    :bind (:map org-clock-mode-line-map
+               ([header-line mouse-2] . org-clock-goto)
+               ([header-line mouse-1] . org-clock-menu))
+    :config
+    (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
+      (add-hook 'org-clock-in-hook
+                (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                                    (concat "tell application \"org-clock-statusbar\" to clock in \""
+                                            org-clock-current-task "\""))))
+      (add-hook 'org-clock-out-hook
+                (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                                    "tell application \"org-clock-statusbar\" to clock out")))))
+#+end_src

@@ -1,0 +1,624 @@
+#+begin_src elisp :exports none
+;;----------------------------------------------------------------------------
+;; Core
+#+end_src
+
+* Load Custom Config
+
+Here includes all of the customizable variables of my configuration.
+
+You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @@
+
+** Custom Config Hooks
+
+#+begin_src elisp
+  (defvar nasy/config-before-hook nil
+    "Hooks to run config functions before load custom.el.")
+
+  (defvar nasy/config-after-hook nil
+    "Hooks to run config functions after.")
+
+  (add-hook 'nasy/config-after-hook
+            #'(lambda () (message "Hi~ Hope you have fun with this config.")))
+
+  (add-hook 'after-init-hook
+            #'(lambda () (run-hooks 'nasy/config-after-hook)))
+#+end_src
+
+** Custom Configs
+
+#+begin_src elisp
+  (defgroup nasy nil
+    "Nasy Emacs Custom Configurations."
+    :group 'emacs)
+
+  (defcustom lisp-modes-hooks '(cider-repl-mode-hook
+                                clojure-mode-hook
+                                clojurec-mode-hook
+                                clojurescript-mode-hook
+                                clojurex-mode-hook
+                                common-lisp-mode-hook
+                                emacs-lisp-mode-hook
+                                eshell-mode-hook
+                                geiser-repl-mode-hook
+                                gerbil-mode-hook
+                                inf-clojure-mode-hook
+                                inferior-emacs-lisp-mode-hook
+                                inferior-lisp-mode-hook
+                                inferior-scheme-mode-hook
+                                lisp-interaction-mode-hook
+                                lisp-mode-hook
+                                monroe-mode-hook
+                                racket-mode-hook
+                                racket-repl-mode-hook
+                                scheme-interaction-mode-hook
+                                scheme-mode-hook
+                                slime-repl-mode-hook
+                                stumpwm-mode-hook)
+    "List of lisp-related modes hooks."
+    :type '(repeat symbol)
+    :group 'nasy)
+
+  (defcustom *clangd* (or (executable-find "clangd")  ;; usually
+                         (executable-find "/usr/local/opt/llvm/bin/clangd"))  ;; macOS
+    "Clangd path.  If nil, will not use clangd."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *eldoc-box* nil
+    "Whether to use eloc-box or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *nix* nil
+    "Nix path.  If nil, will not use nix."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *rust* (or (executable-find "rustc")
+                        (executable-find "cargo")
+                        (executable-find "rustup"))
+    "The Rust path.  If nil, will not use Rust."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *rls* (or (executable-find "rls")
+                       (executable-find "~/.cargo/bin/rls"))
+    "The rls path.  If nil, will not use rls."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *debug* t
+    "Whether to use debug or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *server* t
+    "Whether to use server or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *intero* t
+    "Whether to use intero or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *struct-hs* (executable-find "structured-haskell-mode")
+    "The structured-haskell-mode path.  If nil, will not use structured-haskell-mode."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *blacken* nil
+    "Whether to use blacken or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *c-box* nil
+    "Whether to use company box or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *vterm* nil
+    "Whether to use vterm or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *ispell* (executable-find "aspell")
+    "The Ispell.  If nil, will not use Ispell."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *font* "OperatorMonoSSmLig Nerd Font-12"
+    "The font."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *theme* 'doom-dracula
+    "The Theme."
+    :group 'nasy
+    :type 'symbol)
+#+end_src
+
+** macOS Frame
+
+#+begin_src elisp
+  (when *is-a-mac*
+    (add-to-list 'default-frame-alist
+                 '(ns-transparent-titlebar . t))
+
+    (add-to-list 'default-frame-alist
+                 '(ns-appearance . dark))
+
+    (add-to-list 'default-frame-alist
+                 '(alpha . (80 . 75)))
+
+    (add-to-list 'default-frame-alist
+                 `(font . ,*font*))
+
+    (defun stop-minimizing-window ()
+      "Stop minimizing window under macOS."
+      (interactive)
+      (unless (and *is-a-mac*
+                   window-system)
+        (suspend-frame))))
+#+end_src
+
+** macOS Key Binings
+
+#+begin_src elisp
+  (when *is-a-mac*
+    (setq mac-option-modifier  'meta
+          mac-command-modifier 'hyper)
+
+    (general-define-key
+     "C-z" 'stop-minimizing-window
+
+     ;; cursor Movement
+     "H-<up>"   'beginning-of-buffer
+     "H-<down>" 'end-of-buffer
+     "H-l"      'goto-line
+
+     ;; text Operations
+     "H-a" 'mark-whole-buffer
+     "H-v" 'yank
+     "H-c" 'kill-ring-save
+     "H-s" 'save-buffer
+     "H-z" 'undo
+     "H-w" (lambda! (delete-window))
+     "M-¥" (lambda! (insert "\\"))
+     "H-<backspace>" (lambda! (kill-line 0)))
+
+    ;; unset
+    (global-unset-key (kbd "<magnify-down>"))
+    (global-unset-key (kbd "<magnify-up>")))
+#+end_src
+
+** Disable Some Features
+
+#+begin_src elisp
+  (setq use-file-dialog        nil
+        use-dialog-box         nil
+        inhibit-startup-screen t)
+
+  (when (fboundp 'tool-bar-mode)
+    (tool-bar-mode -1))
+
+  (when (fboundp 'set-scroll-bar-mode)
+    (set-scroll-bar-mode nil))
+#+end_src
+
+** Default Settings
+
+*** Company
+
+#+begin_src elisp
+  (setq-default
+   company-idle-delay .5)
+#+end_src
+
+*** Cursor
+
+#+begin_src elisp
+  (setq-default
+    blink-cursor-interval .6
+    blink-matching-paren  t
+    cursor-in-non-selected-windows t)
+
+  (blink-cursor-mode t)
+#+end_src
+
+*** Helm
+
+#+begin_src elisp
+  ;; (setq-default
+  ;;  ;; brew install rg   if you'd like to use rg as my doing
+  ;;  helm-ag-base-command "rg --no-heading --smart-case")
+#+end_src
+
+*** Languages
+
+#+begin_src elisp
+  (setq-default
+   haskell-stylish-on-save nil
+   blacken-line-length     80
+   lsp-rust-rls-command    '("rls"))
+#+end_src
+
+*** Pandoc
+
+#+begin_src elisp
+  (setq-default
+   org-pandoc-options-for-context     '((template . "~/.emacs.d/nasy-context.tex"))  ;; I have no idea why I cannot set it as a variable.
+   org-pandoc-options-for-context-pdf '((template . "~/.emacs.d/nasy-context.tex")))
+#+end_src
+
+*** Parens
+
+#+begin_src elisp
+  (setq-default
+   show-paren-style                                'expression
+   sp-autoinsert-quote-if-followed-by-closing-pair t
+   sp-base-key-bindings                            'paredit
+   sp-show-pair-from-inside                        t)
+#+end_src
+
+*** Scrolling
+
+#+begin_src elisp
+  (setq scroll-margin                   0
+        scroll-conservatively           100000
+        scroll-preserve-screen-position 'always)
+#+end_src
+
+*** Shell
+
+#+begin_src elisp
+  (setq-default
+   shell-file-name "/bin/zsh")
+#+end_src
+
+*** Start
+
+#+begin_src elisp
+  (setq-default
+   initial-scratch-message     (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+   dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+   ;; initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; It will cause error if you start emacs from Command line with file name
+                                                                            ;; https://github.com/rakanalh/emacs-dashboard/issues/69
+  )
+#+end_src
+
+*** Visual
+
+#+begin_src elisp
+  (setq-default
+   fill-column                    80
+   visual-fill-column-width       100
+   word-wrap                      t
+   highlight-indent-guides-method 'column
+   tab-width                      8
+   tooltip-delay                  1.5)
+#+end_src
+
+*** Whitespace
+
+#+begin_src elisp
+  (setq-default
+   whitespace-line-column 80
+   whitespace-style       '(face spaces tabs newline
+                            space-mark tab-mark newline-mark
+                            lines-tail empty))
+#+end_src
+
+** Mess
+
+#+begin_src elisp
+  (setq-default
+     bookmark-default-file (no-littering-expand-var-file-name ".bookmarks.el")
+     buffers-menu-max-size 30
+     case-fold-search      t
+     column-number-mode    t
+     dired-dwim-target     t
+     ediff-split-window-function 'split-window-horizontally
+     ediff-window-setup-function 'ediff-setup-windows-plain
+     indent-tabs-mode      nil
+     line-move-visual      t
+     make-backup-files     nil
+     mouse-yank-at-point   t
+     require-final-newline t
+     save-interprogram-paste-before-kill t
+     set-mark-command-repeat-pop    t
+     tab-always-indent              'complete
+     truncate-lines                 nil
+     truncate-partial-width-windows nil)
+
+  (fset 'yes-or-no-p 'y-or-n-p)
+
+  (global-auto-revert-mode t)
+
+  (delete-selection-mode t)
+#+end_src
+
+** Config After initialization
+
+#+begin_src elisp
+  (defun nasy/config-after ()
+    "Set configuration need to be set after init."
+    (setq-default
+     ;; helm-allow-mouse                  t
+     ;; helm-follow-mode-persistent       t
+     ;; helm-move-to-line-cycle-in-source nil
+     ;; helm-source-names-using-follow    '("Buffers" "kill-buffer" "Occur")
+     debug-on-error *debug*))
+
+
+  (add-hook 'nasy/config-after-hook  #'nasy/config-after)
+#+end_src
+
+** Custom Faces
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (defun nasy/set-face ()
+    "Set custom face."
+    (set-face-attribute 'org-meta-line               nil                                             :slant   'italic)
+    (set-face-attribute 'org-block-begin-line        nil                                             :slant   'italic)
+    (set-face-attribute 'org-block-end-line          nil                                             :slant   'italic)
+    (set-face-attribute 'font-lock-comment-face      nil                                             :slant   'italic)
+    (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
+    (set-face-attribute 'show-paren-match            nil :background "#bfcfff" :foreground "#dc322f" :weight  'ultra-bold)
+    (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified)
+    (set-face-attribute 'which-func                  nil                       :foreground "#333"))
+  (add-hook 'nasy/config-before-hook #'nasy/set-face)
+#+end_src
+
+** Load User Custom
+
+#+begin_src elisp
+  (require 'user-config nil t)
+#+end_src
+
+
+
+* Compile
+
+#+begin_src elisp
+  (use-package async
+    :straight t
+    :config
+    (dired-async-mode            1)
+    (async-bytecomp-package-mode 1))
+
+  (use-package auto-compile
+    :demand   t
+    :straight t
+    :config
+    (auto-compile-on-load-mode)
+    (auto-compile-on-save-mode))
+
+  (setq-default compilation-scroll-output t)
+
+  (use-package alert
+    :defer    t
+    :straight t
+    :preface
+    (defun alert-after-compilation-finish (buf result)
+      "Use `alert' to report compilation RESULT if BUF is hidden."
+      (when (buffer-live-p buf)
+        (unless (catch 'is-visible
+                  (walk-windows (lambda (w)
+                                  (when (eq (window-buffer w) buf)
+                                    (throw 'is-visible t))))
+                  nil)
+          (alert (concat "Compilation " result)
+                 :buffer buf
+                 :category 'compilation)))))
+
+
+  (use-package compile
+    :defer t
+    :preface
+    (defvar nasy/last-compilation-buffer nil
+      "The last buffer in which compilation took place.")
+
+    (defun nasy/save-compilation-buffer (&rest _)
+      "Save the compilation buffer to find it later."
+      (setq nasy/last-compilation-buffer next-error-last-buffer))
+    (advice-add 'compilation-start :after 'nasy/save-compilation-buffer)
+
+    (defun nasy/find-prev-compilation (orig &rest args)
+      "Find the previous compilation buffer, if present, and recompile there."
+      (if (and (null edit-command)
+               (not (derived-mode-p 'compilation-mode))
+               nasy:last-compilation-buffer
+               (buffer-live-p (get-buffer nasy/last-compilation-buffer)))
+          (with-current-buffer nasy/last-compilation-buffer
+            (apply orig args))
+        (apply orig args)))
+    :bind (([f6] . recompile))
+    :hook ((compilation-finish-functions . alert-after-compilation-finish)))
+
+
+  (use-package ansi-color
+    :defer    t
+    :after    compile
+    :straight t
+    :hook ((compilation-filter . colourise-compilation-buffer))
+    :config
+    (defun colourise-compilation-buffer ()
+      (when (eq major-mode 'compilation-mode)
+        (ansi-color-apply-on-region compilation-filter-start (point-max)))))
+#+end_src
+
+* Auto Compression
+
+#+begin_src elisp
+  (require 'jka-compr)
+  (auto-compression-mode)
+#+end_src
+
+* History, Saving and Session
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; History, Saving and Session
+#+end_src
+
+#+begin_src elisp
+  (setq desktop-path              (list user-emacs-directory no-littering-var-directory)
+        desktop-auto-save-timeout 600)
+  (desktop-save-mode t)
+  (setq desktop-save 'if-exists)
+
+
+  (defun nasy:desktop-time-restore (orig &rest args)
+    (let ((start-time (current-time)))
+      (prog1
+          (apply orig args)
+        (message "Desktop restored in %.2fms"
+                 (benchmark-init/time-subtract-millis (current-time)
+                                                 start-time)))))
+  (advice-add 'desktop-read :around 'nasy:desktop-time-restore)
+
+  (defun nasy:desktop-time-buffer-create (orig ver filename &rest args)
+    (let ((start-time (current-time)))
+      (prog1
+          (apply orig ver filename args)
+        (message "Desktop: %.2fms to restore %s"
+                 (benchmark-init/time-subtract-millis (current-time)
+                                                 start-time)
+                 (when filename
+                   (abbreviate-file-name filename))))))
+  (advice-add 'desktop-create-buffer :around 'nasy:desktop-time-buffer-create)
+
+  (setq-default kill-ring-max 300)
+
+  (setq-default history-length 3000
+                history-delete-duplicates t
+                savehist-additional-variables
+                '(mark-ring
+                  global-mark-ring
+                  search-ring
+                  regexp-search-ring
+                  extended-command-history)
+                savehist-autosave-interval 60)
+
+  (add-hook #'after-init-hook #'savehist-mode)
+
+  (use-package session
+    :defer    t
+    :straight t
+    :hook ((after-init . session-initialize))
+    :init
+    (setq session-save-file (no-littering-expand-var-file-name ".session")
+          session-name-disable-regexp "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)"
+          session-save-file-coding-system 'utf-8
+          desktop-globals-to-save
+          (append '((comint-input-ring        . 50)
+                    (compile-history          . 30)
+                    desktop-missing-file-warning
+                    (dired-regexp-history     . 20)
+                    (extended-command-history . 30)
+                    (face-name-history        . 20)
+                    (file-name-history        . 100)
+                    (grep-find-history        . 30)
+                    (grep-history             . 30)
+                    (ivy-history              . 100)
+                    (magit-revision-history   . 50)
+                    (minibuffer-history       . 50)
+                    (org-clock-history        . 50)
+                    (org-refile-history       . 50)
+                    (org-tags-history         . 50)
+                    (query-replace-history    . 60)
+                    (read-expression-history  . 60)
+                    (regexp-history           . 60)
+                    (regexp-search-ring       . 20)
+                    register-alist
+                    (search-ring              . 20)
+                    (shell-command-history    . 50)
+                    tags-file-name
+                    tags-table-list
+                    kill-ring))))
+#+end_src
+
+* Auto Save (Super Save)
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Auto Save
+  ;; I use super save to auto save files.
+#+end_src
+
+I use super save to auto save files.
+
+#+begin_src elisp
+  (use-package super-save
+    :straight t
+    :ghook 'after-init-hook
+    :init (gsetq super-save-auto-save-when-idle nil
+                 super-save-remote-files        nil))
+#+end_src
+
+* Text Scale
+
+#+begin_src elisp
+  (use-package default-text-scale
+    :defer    t
+    :straight t)
+#+end_src
+
+* Custom Functions
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Custom Functions
+  ;;----------------------------------------------------------------------------
+#+end_src
+
+** Reload the init-file
+
+#+begin_src elisp
+  (defun radian-reload-init ()
+    "Reload init.el."
+    (interactive)
+    (straight-transaction
+      (straight-mark-transaction-as-init)
+      (message "Reloading init.el...")
+      (load user-init-file nil 'nomessage)
+      (message "Reloading init.el... done.")))
+
+  (defun radian-eval-buffer ()
+    "Evaluate the current buffer as Elisp code."
+    (interactive)
+    (message "Evaluating %s..." (buffer-name))
+    (straight-transaction
+      (if (null buffer-file-name)
+          (eval-buffer)
+        (when (string= buffer-file-name user-init-file)
+          (straight-mark-transaction-as-init))
+        (load-file buffer-file-name)))
+    (message "Evaluating %s... done." (buffer-name)))
+#+end_src
+
+** Insert Date
+
+#+begin_src elisp
+  (defun nasy:insert-current-date ()
+    "Insert current date."
+    (interactive)
+    (insert (shell-command-to-string "echo -n $(date +'%b %d, %Y')")))
+
+  (defun nasy:insert-current-filename ()
+    "Insert current buffer filename."
+    (interactive)
+    (insert (file-relative-name buffer-file-name)))
+#+end_src
+
+** Posframe Helper
+
+#+begin_src elisp
+  (defun posframe-poshandler-frame-top-center (info)
+    (cons (/ (- (plist-get info :parent-frame-width)
+                (plist-get info :posframe-width))
+             2)
+          (round (* 0.02 (x-display-pixel-height)))))
+#+end_src

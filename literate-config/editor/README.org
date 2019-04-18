@@ -1,0 +1,550 @@
+Here is the editor config, including some features and functions.
+
+#+begin_src elisp
+  ;;----------------------------------------------------------------------------
+  ;; Editor
+  ;;----------------------------------------------------------------------------
+#+end_src
+
+* Diminish
+
+#+begin_src elisp
+  (use-package diminish
+    :demand   t
+    :straight t)
+#+end_src
+
+* FLX
+
+#+begin_src elisp
+  (use-package flx
+    :defer    t
+    :straight t)
+#+end_src
+
+* Advance Words Count
+
+#+begin_src elisp
+  (use-package advance-words-count
+    :defer    t
+    :straight (advance-words-count :type git :host github :repo "LdBeth/advance-words-count.el"))
+#+end_src
+
+* Anzu
+
+#+begin_src elisp
+  (use-package anzu
+    :defer    t
+    :straight t
+    :hook ((after-init . global-anzu-mode))
+    :bind ([remap query-replace] . anzu-query-replace-regexp))
+#+end_src
+
+* Auto Insert
+
+#+include: "auto-insert.org" :minlevel 2
+
+* Beacon (Disabled)
+
+#+begin_src elisp
+  (use-package beacon
+    :disabled t
+    :straight t
+    :init (setq beacon-size  7
+                beacon-color "#f85e9f")
+    :hook ((after-init . beacon-mode)))
+#+end_src
+
+* Beginend
+
+#+begin_src elisp
+  (use-package beginend
+    :straight t
+    :hook ((after-init . beginend-global-mode)))
+#+end_src
+
+* Carbon Now sh
+
+Emacs to carbon.now.sh integration.
+
+https://github.com/veelenga/carbon-now-sh.el
+
+Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
+
+#+begin_src elisp
+  ;; Emacs to carbon.now.sh integration
+  ;; https://github.com/veelenga/carbon-now-sh.el
+  ;; (carbon-now-sh)
+  (use-package carbon-now-sh
+    :defer    t
+    :straight t)
+#+end_src
+
+* Cheat Sh
+
+#+begin_src elisp
+  (use-package cheat-sh
+    :defer    t
+    :straight t)
+#+end_src
+
+* Company
+
+#+include: "company.org" :minlevel 2
+
+* Dash
+
+#+begin_src elisp
+  (use-package dash
+    :defer    t
+    :straight t)
+#+end_src
+
+* Dash Functional
+
+#+begin_src elisp
+  (use-package dash-functional
+    :defer    t
+    :straight t)
+#+end_src
+
+* Dired
+
+#+include: "dired.org" :minlevel 2
+
+* Easy Kill
+
+#+begin_src elisp
+  (use-package easy-kill
+    :straight t
+    :bind (([remap kill-ring-save] . easy-kill)
+           ([remap mark-sexp]      . easy-mark)))
+#+end_src
+
+#+begin_src elisp
+  (use-package thingopt
+    :defer    t
+    :straight t)
+#+end_src
+
+* Eldoc Box
+
+Disabled by default due to it causes lots of cpu.
+
+#+begin_src elisp
+  (when *eldoc-box*
+    (use-package eldoc-box
+      :straight t
+      :hook ((eldoc-mode . eldoc-box-hover-mode)
+             (eldoc-mode . eldoc-box-hover-at-point-mode))))
+#+end_src
+
+* Fill Column
+
+** Unfill
+
+#+begin_src elisp
+  (use-package unfill
+    :straight t
+    :bind (("M-q" . unfill-toggle)))
+#+end_src
+
+** Visual-fill-column
+
+#+begin_src elisp
+  (use-package visual-fill-column
+    :straight t
+    :preface
+    (defun maybe-adjust-visual-fill-column ()
+      "Readjust visual fill column when the global font size is modified.
+  This is helpful for writeroom-mode, in particular."
+      (if visual-fill-column-mode
+          (add-hook 'after-setting-font-hook 'visual-fill-column--adjust-window nil t)
+        (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t)))
+    :hook ((visual-line-mode        . visual-fill-column-mode        )
+           (visual-fill-column-mode . maybe-adjust-visual-fill-column)))
+#+end_src
+
+* Flycheck
+
+#+include: "flycheck.org" :minlevel 2
+
+* Grab Mac Link
+
+#+begin_src elisp
+  (use-package grab-mac-link
+    :defer    t
+    :straight t)
+#+end_src
+
+* Grep
+
+#+begin_src elisp
+  (setq-default grep-highlight-matches t
+                grep-scroll-output t)
+
+  (when *is-a-mac*
+    (setq-default locate-command "mdfind"))
+#+end_src
+
+* Highlight
+
+#+include: "highlight.org" :minlevel 2
+
+* Helpful
+
+[[https://github.com/Wilfred/helpful]]
+
+#+begin_src elisp
+  (use-package helpful
+    :straight t
+    :bind (("C-c C-d" . helpful-at-point))
+    :config (general-define-key
+             :prefix "C-h"
+             "f" 'helpful-callable
+             "v" 'helpful-variable
+             "k" 'helpful-key
+             "F" 'helpful-function
+             "C" 'helpful-command))
+#+end_src
+
+* Htmlize
+
+#+begin_src elisp
+  (use-package htmlize
+    :defer t
+    :straight t
+    :init (setq htmlize-pre-style t))
+#+end_src
+
+* Hydra
+
+#+include: "hydra.org" :minlevel 2
+
+* iBuffer
+
+#+include: "ibuffer.org" :minlevel 2
+
+* imenu list
+
+#+begin_src elisp
+  (use-package imenu-list
+    :straight t
+    :bind (("C-." . imenu-list-smart-toggle))
+    :init (setq imenu-list-auto-resize t))
+#+end_src
+
+* indent-tools
+
+#+begin_src elisp
+  (use-package indent-tools
+    :straight t
+    :bind (("C-c TAB" . indent-tools-hydra/body)))
+#+end_src
+
+* iSearch
+
+I only use ~rg~ to search, so I disabled the key-map of isearch.
+
+#+begin_src elisp
+  (use-package isearch
+    :preface
+    ;; Search back/forth for the symbol at point
+    ;; See http://www.emacswiki.org/emacs/SearchAtPoint
+    (defun isearch-yank-symbol ()
+      "*Put symbol at current point into search string."
+      (interactive)
+      (let ((sym (thing-at-point 'symbol)))
+        (if sym
+            (progn
+              (setq isearch-regexp t
+                    isearch-string (concat "\\_<" (regexp-quote sym) "\\_>")
+                    isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
+                    isearch-yank-flag t))
+          (ding)))
+      (isearch-search-and-update))
+
+    ;; http://www.emacswiki.org/emacs/ZapToISearch
+    (defun isearch-exit-other-end (rbeg rend)
+      "Exit isearch, but at the other end of the search string.
+  This is useful when followed by an immediate kill."
+      (interactive "r")
+      (isearch-exit)
+      (goto-char isearch-other-end))
+
+    :bind (:map isearch-mode-map
+                ([remap isearch-delete-char] . isearch-del-char)
+                ("C-M-w"                     . isearch-yank-symbol)
+                ([(control return)]              . isearch-exit-other-end)
+                ("C-c C-o"                   . isearch-occur)))
+#+end_src
+
+* Ivy, Counsel and Swiper
+
+#+include: "ivy.org" :minlevel 2
+
+* Large File
+
+#+begin_src elisp
+  (use-package vlf
+    :straight t
+    :init
+    (defun ffap-vlf ()
+      "Find file at point with VLF."
+      (interactive)
+      (let ((file (ffap-file-at-point)))
+        (unless (file-exists-p file)
+          (error "File does not exist: %s" file))
+        (vlf file))))
+#+end_src
+
+* Link Hint
+
+#+begin_src elisp
+  (use-package link-hint
+    :straight t
+    :bind (("C-c l o" . link-hint-open-link)
+           ("C-c l c" . link-hint-copy-link))
+    :config
+    (general-define-key
+     :prefix "C-c l")
+    "o" 'link-hint-open-link
+    "c" 'link-hint-copy-link)
+#+end_src
+
+* List Unicode Display
+
+#+begin_src elisp
+  (use-package list-unicode-display
+    :defer    t
+    :straight t)
+#+end_src
+
+* mmm-mode
+
+#+begin_src elisp
+  (use-package mmm-auto
+    :demand t
+    :straight mmm-mode
+    :init (gsetq
+           mmm-global-mode
+           'buffers-with-submode-classes
+           mmm-submode-decoration-level 2))
+#+end_src
+
+* Multiple Cursors
+
+#+begin_src elisp
+  (use-package multiple-cursors
+    :straight t
+    :bind (("C-<"     . mc/mark-previous-like-this)
+           ("C->"     . mc/mark-next-like-this)
+           ("C-+"     . mc/mark-next-like-this)
+           ("C-c C-<" . mc/mark-all-like-this))
+    :config
+    ;; From active region to multiple cursors:
+    (general-define-key
+     :preface "C-c m"
+     "r" 'set=rectangular-region-anchor
+     "c" 'mc/edit-lines
+     "e" 'mc/edit-ends-of-lines
+     "a" 'mc/edit-beginnings-of-lines))
+#+end_src
+
+* Pangu Spacing
+
+#+begin_src elisp
+  (use-package pangu-spacing
+    :straight t
+    :init (gsetq pangu-spacing-real-insert-separtor t)
+    :hook ((after-init . global-pangu-spacing-mode)))
+#+end_src
+
+* Paper Break Lines
+
+#+begin_src elisp
+  (use-package page-break-lines
+    :straight t
+    :hook ((after-init . global-page-break-lines-mode))
+    :diminish page-break-lines-mode)
+#+end_src
+
+* Parens
+
+#+include: "parens.org" :minlevel 2
+
+* PDF Tools
+
+#+begin_src elisp
+  (use-package pdf-tools
+    :defer t
+    :straight t
+    :config
+    (setq-default pdf-view-display-size 'fit-width)
+    (bind-keys :map pdf-view-mode-map
+               ("\\" . hydra-pdftools/body)
+               ("<s-spc>" .  pdf-view-scroll-down-or-next-page)
+               ("g"  . pdf-view-first-page)
+               ("G"  . pdf-view-last-page)
+               ("l"  . image-forward-hscroll)
+               ("h"  . image-backward-hscroll)
+               ("j"  . pdf-view-next-page)
+               ("k"  . pdf-view-previous-page)
+               ("e"  . pdf-view-goto-page)
+               ("u"  . pdf-view-revert-buffer)
+               ("al" . pdf-annot-list-annotations)
+               ("ad" . pdf-annot-delete)
+               ("aa" . pdf-annot-attachment-dired)
+               ("am" . pdf-annot-add-markup-annotation)
+               ("at" . pdf-annot-add-text-annotation)
+               ("y"  . pdf-view-kill-ring-save)
+               ("i"  . pdf-misc-display-metadata)
+               ("s"  . pdf-occur)
+               ("b"  . pdf-view-set-slice-from-bounding-box)
+               ("r"  . pdf-view-reset-slice)))
+#+end_src
+
+* Pretty
+
+#+include: "pretty.org" :minlevel 2
+
+* Prescient
+
+#+begin_src elisp
+  (use-package prescient
+    :straight t
+    :hook ((after-init . prescient-persist-mode)))
+
+
+  (use-package ivy-prescient
+    :straight t
+    :init (gsetq ivy-prescient-retain-classic-highlighting t)
+    :ghook 'after-init-hook)
+
+
+  (use-package company-prescient
+    :straight t
+    :ghook 'after-init-hook)
+#+end_src
+
+* Projectile
+
+#+begin_src elisp
+  (use-package projectile
+    :defer    t
+    :straight t
+    :diminish
+    :bind-keymap ("C-c C-p" . projectile-command-map)
+    :hook ((after-init . projectile-global-mode))
+    :config (gsetq projectile-indexing-method      'hybrid
+                   projectile-require-project-root 'prompt
+                   projectile-project-root-files-top-down-recurring
+                   (append '("compile_commands.json"
+                             ".cquery")
+                           projectile-project-root-files-top-down-recurring)))
+#+end_src
+
+* Recentf
+
+#+begin_src elisp
+  (use-package recentf
+    :hook ((after-init . recentf-mode))
+    :init (gsetq
+           recentf-save-file       "~/.emacs.d/var/recentf"
+           recentf-max-saved-items 100
+           recentf-exclude         '("/tmp/" "/ssh:"))
+    :config
+    (add-to-list 'recentf-exclude no-littering-var-directory)
+    (add-to-list 'recentf-exclude no-littering-etc-directory))
+#+end_src
+
+* Smex/Amx
+
+Now use amx instead of smex.
+
+#+begin_src elisp
+  (use-package smex
+    :disabled t
+    :straight t
+    :init (setq-default smex-save-file (no-littering-expand-var-file-name ".smex-items"))
+    :bind (("<remap> <execute-extended-command>" . smex)))
+
+  (use-package amx
+    :straight t
+    :init (setq-default amx-save-file (no-littering-expand-var-file-name ".amx-items"))
+    :bind (("<remap> <execute-extended-command>" . amx)))
+#+end_src
+
+* Subword
+
+#+begin_src elisp
+  (use-package subword
+    :defer t
+    :diminish (subword-mode))
+#+end_src
+
+* Symbol Overlay
+
+#+begin_src elisp
+  (use-package symbol-overlay
+    :straight t
+    :bind (("M-i"  . symbol-overlay-put)
+           ("M-n"  . symbol-overlay-switch-forward)
+           ("M-p"  . symbol-overlay-switch-backward)
+           ("<f8>" . symbol-overlay-remove-all)
+           ("<f7>" . symbol-overlay-mode)))
+#+end_src
+
+* Treemacs
+
+#+include: "treemacs.org" :minlevel 2
+
+* Undo/Redo
+
+** Undo Propose
+
+#+begin_src elisp
+  (use-package undo-propose
+    :straight t
+    :config (undo-propose-wrap redo))
+#+end_src
+
+* Version Control
+
+#+include: "version-control.org" :minlevel 2
+
+* Which Function
+
+#+begin_src elisp
+  (use-package which-func
+    :defer t
+    :ghook 'after-init-hook)
+#+end_src
+
+* Which Key
+
+#+begin_src elisp
+  (use-package which-key
+    :straight t
+    :ghook 'after-init-hook)
+#+end_src
+
+* Whitespace
+
+#+include: "whitespace.org" :minlevel 2
+
+* Writeroom Mode
+
+#+include: "writeroom.org" :minlevel 2
+
+* Yasnipeet
+
+#+begin_src elisp
+  (use-package yasnippet
+    :straight t
+    :hook (after-init . yas-global-mode))
+
+  (use-package yasnippet-snippets
+    :defer    t
+    :straight t)
+#+end_src

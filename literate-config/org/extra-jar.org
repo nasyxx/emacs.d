@@ -1,0 +1,33 @@
+Include ob-ditaa and ob-plantuml
+
+#+begin_src elisp
+  (use-package org
+    :preface
+    (defun grab-ditaa (url jar-name)
+      "Download URL and extract JAR-NAME as `org-ditaa-jar-path'."
+      (message "Grabbing " jar-name " for org.")
+      (let ((zip-temp (make-temp-name (no-littering-expand-var-file-name "emacs-ditaa"))))
+        (unwind-protect
+            (progn
+              (when (executable-find "unzip")
+                (url-copy-file url zip-temp)
+                (shell-command (concat "unzip -p " (shell-quote-argument zip-temp)
+                                       " " (shell-quote-argument jar-name) " > "
+                                       (shell-quote-argument org-ditaa-jar-path)))))
+          (when (file-exists-p zip-temp)
+            (delete-file zip-temp)))))
+    :config
+    (unless (and (boundp 'org-ditaa-jar-path)
+                 (file-exists-p org-ditaa-jar-path))
+      (let ((jar-name "ditaa0_9.jar")
+            (url "http://jaist.dl.sourceforge.net/project/ditaa/ditaa/0.9/ditaa0_9.zip"))
+        (setq org-ditaa-jar-path (no-littering-expand-var-file-name jar-name))
+        (unless (file-exists-p org-ditaa-jar-path)
+          (grab-ditaa url jar-name))))
+
+    (let ((jar-name "plantuml.jar")
+          (url "http://jaist.dl.sourceforge.net/project/plantuml/plantuml.jar"))
+      (setq org-plantuml-jar-path (no-littering-expand-var-file-name jar-name))
+      (unless (file-exists-p org-plantuml-jar-path)
+        (url-copy-file url org-plantuml-jar-path))))
+#+end_src

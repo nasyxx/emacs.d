@@ -1,0 +1,108 @@
+* Useful Simple Packages
+
+#+begin_src elisp
+  (dolist (package '(git-blamed
+                     git-timemachine))
+    (straight-use-package package)
+    (require package nil t))
+#+end_src
+
+* Git Modes
+
+#+begin_src elisp
+  (use-package git-modes
+    :defer    t
+    :straight t)
+#+end_src
+
+* Magit
+
+#+begin_src elisp
+  (use-package magit
+    :straight t
+    :hook ((magit-popup-mode-hook . no-trailing-whitespace))
+    :init (gsetq magit-diff-refine-hunk t)
+    :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
+           ("C-x g"      . magit-status)
+           ("C-x M-g"    . magit-dispatch-popup)
+           :map magit-status-mode-map
+           ("C-M-<up>"   . magit-section-up)
+           :map vc-prefix-map
+           ("f"          . vc-git-grep))
+    :config (with-eval-after-load 'magit-todos
+              (magit-todos-mode))
+    (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+
+  (straight-use-package 'magit-todos)
+#+end_src
+
+* Magit Org Todos
+
+#+begin_src elisp
+  (use-package magit-org-todos
+    :after    org
+    :straight t
+    :config   (magit-org-todos-autoinsert))
+#+end_src
+
+* Forge
+
+#+begin_src elisp
+  (use-package forge
+    :defer    t
+    :straight t)
+#+end_src
+
+* Transient
+
+#+begin_src elisp
+  (use-package transient
+    :straight t
+    :init (gsetq transient-default-level 5))
+#+end_src
+
+* Git Commit
+
+#+begin_src elisp
+  (use-package git-commit
+    :straight t
+    :hook ((git-commit-mode . goto-address-mode)))
+#+end_src
+
+* Git Messenger
+
+#+begin_src elisp
+  (use-package git-messenger
+    :straight t
+    :init (gsetq git-messenger:show-detail t)
+    :bind (:map vc-prefix-map
+           ("p" . git-messenger:popup-message)))
+#+end_src
+
+* Git Gutter
+
+#+begin_src elisp
+  (use-package git-gutter
+    :straight t
+    :diminish
+    :hook (after-init . global-git-gutter-mode)
+    :init (setq git-gutter:visual-line t
+                git-gutter:disabled-modes '(asm-mode image-mode)
+                git-gutter:modified-sign "■"
+                git-gutter:added-sign "●"
+                git-gutter:deleted-sign "✘")
+
+    :config (general-define-key
+             :prefix "C-x"
+             "v =" 'git-gutter:popup-hunk
+             "p"   'git-gutter:previous-hunk
+             "n"   'git-gutter:next-hunk))
+#+end_src
+
+* Github Gist
+
+#+begin_src elisp
+  (use-package gist
+    :defer    t
+    :straight t)
+#+end_src

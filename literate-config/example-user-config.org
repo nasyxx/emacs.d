@@ -1,0 +1,20 @@
+* Example Custom Configuration
+
+To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @@
+ etc. and/or create a file @@html: <span> @@ ~custom/user-config.el~ @@html:
+ </span> @@ which looks like this (when you ~make~ or ~make generate~, below will
+ generate to @@html: <span> @@ ~custom/user-config-example.el~ @@html: </span> @@):
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/user-config-example.el")
+  (setq-default
+   calendar-latitude     24.8801
+   calendar-longitude    102.8329
+   user-mail-address     "nasyxx@gmail.com"
+   initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))
+   ,*theme*            'doom-dracula
+   ,*debug*               t
+   ,*struct-hs*      nil
+   ,*vterm*               "/Users/Nasy/src/emacs-libvterm"
+   ,*risky-var*           nil)
+  (provide 'user-config)
+#+end_src

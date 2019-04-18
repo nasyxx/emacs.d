@@ -4,13 +4,16 @@ all: help
 ## Generate init.el from README.org
 generate:
 	@echo "Generate init.el from README.org."
-	mkdir -p config && emacs -Q --batch --find-file "README.org" -f "org-babel-tangle"
+	mkdir -p custom && \
+		emacs -Q --batch --find-file "literate-config.org" -f "org-org-export-to-org" && \
+		mv "literate-config.org.org" "README.org" && \
+		emacs -Q --batch --find-file "README.org" -f "org-babel-tangle"
 .PHONY: generate
 
 ## Copy example config to user config.
 config: generate
 	@echo "Generate user config from example config."
-	cp config/user-config-example.el config/user-config.el
+	cp custom/user-config-example.el custom/user-config.el
 
 ## Clean build (straight/)
 clean-build:

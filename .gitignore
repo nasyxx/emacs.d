@@ -10,9 +10,8 @@
 
 .cache
 anaconda-mode
-config/nasy-config.el
-config/user-config-example.el
-config/user-config.el
+custom/user-config-example.el
+custom/user-config.el
 emojis
 straight
 url/
