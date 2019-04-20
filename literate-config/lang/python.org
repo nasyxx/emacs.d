@@ -35,7 +35,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
           (error "No process found"))
         (save-buffer)
         (comint-simple-send proc
-                            (concat "%load " (format "%s" (buffer-file-name))))
+                            (concat "%run " (format "%s" (buffer-file-name))))
         (pop-to-buffer nasy*python-buffer)))
 
     (defun nasy/python-send-region (begin end)
