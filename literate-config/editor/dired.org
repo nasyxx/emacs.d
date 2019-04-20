@@ -59,21 +59,28 @@
                 ("/" . dired-filter-map))
     :hook ((dired-mode . dired-filter-mode)
            (dired-mode . dired-filter-group-mode))
-    :init (setq dired-filter-revert 'never
-                dired-filter-group-saved-groups
-                '(("default")
-                  ("PDF"
-                   (extension . "pdf"))
-                  ("LaTeX"
-                   (extension "tex" "bib"))
-                  ("Source"
-                   (extension "c" "cpp" "hs" "rb" "py" "r" "cs" "el" "lisp" "html" "js" "css"))
-                  ("Doc"
-                   (extension "md" "rst" "txt"))
-                  ("Org"
-                   (extension . "org"))
-                  ("Archives"
-                   (extension "zip" "rar" "gz" "bz2" "tar")))))
+    :init (gsetq dired-filter-revert 'never
+                 dired-filter-group-saved-groups
+                 '(("default"
+                    ("Git"
+                     (directory . ".git")
+                     (file . ".gitignore"))
+                    ("Directory"
+                     (directory))
+                    ("PDF"
+                     (extension . "pdf"))
+                    ("LaTeX"
+                     (extension "tex" "bib"))
+                    ("Source"
+                     (extension "c" "cpp" "hs" "rb" "py" "r" "cs" "el" "lisp" "html" "js" "css"))
+                    ("Doc"
+                     (extension "md" "rst" "txt"))
+                    ("Org"
+                     (extension . "org"))
+                    ("Archives"
+                     (extension "zip" "rar" "gz" "bz2" "tar"))
+                    ("Images"
+                     (extension "jpg" "JPG" "webp" "png" "PNG" "jpeg" "JPEG" "bmp" "BMP" "TIFF" "tiff" "gif" "GIF"))))))
 #+end_src
 
 * Dired avfs
