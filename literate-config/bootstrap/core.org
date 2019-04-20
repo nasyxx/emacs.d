@@ -113,7 +113,7 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'boolean)
 
-  (defcustom *c-box* nil
+  (defcustom *c-box* t
     "Whether to use company box or not."
     :group 'nasy
     :type 'boolean)
