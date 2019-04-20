@@ -11,9 +11,10 @@
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 27.0.50 (Org mode 9.1.9)
 
-* WAITING Split single init to multiple files.
-SCHEDULED: <2019-02-10 Sun>
+* DONE Split single init to multiple files.
+CLOSED: [2019-05-14 Tue 10:38] SCHEDULED: <2019-02-10 Sun>
 :LOGBOOK:
+- State "DONE"       from "WAITING"    [2019-05-14 Tue 10:38]
 - State "WAITING"    from              [2019-01-10 Thu 13:14]
   Split single init to multiple files.
 :END:
