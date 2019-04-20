@@ -9,14 +9,14 @@
   (use-package company
     :straight t
     :init
-    (setq-default company-minimum-prefix-length .2
-                  company-transformers '(company-sort-by-backend-importance)
-                  company-require-match nil
-                  company-tooltip-align-annotations t
-                  company-dabbrev-other-buffers 'all
-                  company-dabbrev-downcase nil
-                  company-dabbrev-ignore-case t
-                  company-gtags-executable "gtags")
+    (gsetq company-minimum-prefix-length .2
+           company-require-match nil
+           company-transformers '(company-sort-by-backend-importance)
+           company-tooltip-align-annotations t
+           company-dabbrev-other-buffers 'all
+           company-dabbrev-downcase nil
+           company-dabbrev-ignore-case t
+           company-gtags-executable "gtags")
     :hook ((after-init . global-company-mode))
     :bind (("M-C-/" . company-complete)
            :map company-mode-map
