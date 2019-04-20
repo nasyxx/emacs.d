@@ -30,7 +30,7 @@ inlcude haskell-snippets.
               haskell-collapse-mode
               stack-exec-path-mode
               interactive-haskell-mode
-              (lambda () (getq-local tab-width 4)))
+              (lambda () (gsetq-local tab-width 4)))
     :bind (("C-x a a" . align)
            :map haskell-mode-map
            ("C-c h" . hoogle)
