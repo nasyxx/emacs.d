@@ -418,7 +418,6 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
   (use-package ivy-prescient
     :straight t
-    :init (gsetq ivy-prescient-retain-classic-highlighting t)
     :ghook 'after-init-hook)
 
 
