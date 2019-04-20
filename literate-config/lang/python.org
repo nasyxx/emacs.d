@@ -35,7 +35,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
           (error "No process found"))
         (save-buffer)
         (comint-simple-send proc
-                            (format "\%load %s" (buffer-file-name)))
+                            (concat "%load " (format "%s" (buffer-file-name))))
         (pop-to-buffer nasy*python-buffer)))
 
     (defun nasy/python-send-region (begin end)
@@ -120,7 +120,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
              lsp-pyls-plugins-jedi-symbols-enabled                   t
              lsp-pyls-plugins-pyls_mypy-live-mode                    nil))
     :config
-    (general
+    (general-define-key
      :prefix "C-c"
      :keymaps 'python-mode-map
      "C-b" 'nasy/python-send-buffer
