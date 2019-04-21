@@ -3,7 +3,8 @@ I use [[https://github.com/raxod502/straight.el][straight.el]] as my packages ma
 #+begin_src elisp
   (setq straight-recipes-gnu-elpa-use-mirror t
         straight-repository-branch           "develop"
-        straight-check-for-modifications     'live)
+        straight-check-for-modifications     'live
+        straight-vc-git-default-clone-depth  1)
 
   (defvar bootstrap-version)
 
@@ -18,6 +19,20 @@ I use [[https://github.com/raxod502/straight.el][straight.el]] as my packages ma
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
+#+end_src
+
+Some packages need to re-register, due to they cannot only do shadow-clone.
+
+#+begin_src elisp
+  (straight-register-package
+     '(magit :type git :host github
+             :repo "magit/magit"
+             :depth full))
+
+  (straight-register-package
+     '(git-commit :type git :host github
+                  :repo "magit/magit"
+                  :depth full))
 #+end_src
 
 At the same time, I use [[https://github.com/jwiegley/use-package][use-package]] to manage packages in one file.
