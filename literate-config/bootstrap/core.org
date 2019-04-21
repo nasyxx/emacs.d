@@ -464,22 +464,23 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 #+end_src
 
 #+begin_src elisp
-  (setq desktop-path              (list user-emacs-directory no-littering-var-directory)
-        desktop-auto-save-timeout 600)
+  (gsetq desktop-path              (list user-emacs-directory no-littering-var-directory)
+         desktop-dirname           (list user-emacs-directory no-littering-var-directory)
+         desktop-auto-save-timeout 600)
   (desktop-save-mode t)
-  (setq desktop-save 'if-exists)
+  (gsetq desktop-save 'if-exists)
 
 
-  (defun nasy:desktop-time-restore (orig &rest args)
+  (defun nasy/desktop-time-restore (orig &rest args)
     (let ((start-time (current-time)))
       (prog1
           (apply orig args)
         (message "Desktop restored in %.2fms"
                  (benchmark-init/time-subtract-millis (current-time)
                                                  start-time)))))
-  (advice-add 'desktop-read :around 'nasy:desktop-time-restore)
+  (advice-add 'desktop-read :around 'nasy/desktop-time-restore)
 
-  (defun nasy:desktop-time-buffer-create (orig ver filename &rest args)
+  (defun nasy/desktop-time-buffer-create (orig ver filename &rest args)
     (let ((start-time (current-time)))
       (prog1
           (apply orig ver filename args)
@@ -488,19 +489,19 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
                                                  start-time)
                  (when filename
                    (abbreviate-file-name filename))))))
-  (advice-add 'desktop-create-buffer :around 'nasy:desktop-time-buffer-create)
+  (advice-add 'desktop-create-buffer :around 'nasy/desktop-time-buffer-create)
 
-  (setq-default kill-ring-max 300)
+  (gsetq kill-ring-max 300)
 
-  (setq-default history-length 3000
-                history-delete-duplicates t
-                savehist-additional-variables
-                '(mark-ring
-                  global-mark-ring
-                  search-ring
-                  regexp-search-ring
-                  extended-command-history)
-                savehist-autosave-interval 60)
+  (gsetq history-length 3000
+         history-delete-duplicates t
+         savehist-additional-variables
+         '(mark-ring
+           global-mark-ring
+           search-ring
+           regexp-search-ring
+           extended-command-history)
+         savehist-autosave-interval 60)
 
   (add-hook #'after-init-hook #'savehist-mode)
 
