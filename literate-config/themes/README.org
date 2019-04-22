@@ -21,24 +21,7 @@ I use doom-themes.
 
 * Font
 
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; Font
-#+end_src
-
-#+begin_src elisp
-  (use-package emojify
-    :straight t
-    :commands emojify-mode
-    :hook ((after-init . global-emojify-mode))
-    :init (setq emojify-emoji-styles '(unicode github)
-                emojify-display-style 'unicode))
-
-  (use-package all-the-icons
-    :demand t
-    :init (setq inhibit-compacting-font-caches t)
-    :straight t)
-#+end_src
+#+include: "font.org"
 
 * Mode Line
 

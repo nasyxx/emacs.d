@@ -14,6 +14,7 @@ generate:
 ## Copy example config to user config.
 config: generate
 	@echo "Generate user config from example config."
+	mkdir -p etc/cnfonts/v4 && emacs -Q --batch --find-file "./literate-config/themes/cnfonts.org" -f "org-babel-tangle"
 	cp custom/user-config-example.el custom/user-config.el
 
 ## Clean build (straight/)

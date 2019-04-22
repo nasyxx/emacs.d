@@ -101,9 +101,10 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
    calendar-longitude    102.8329
    user-mail-address     "nasyxx@gmail.com"
    initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))
-   ,*theme*            'doom-dracula
+   cnfonts-profiles      '("nasy-profile" "profile1" "profile2" "profile3")
+   ,*theme*               'doom-dracula
    ,*debug*               t
-   ,*struct-hs*      nil
+   ,*struct-hs*           nil
    ,*vterm*               "/Users/Nasy/src/emacs-libvterm"
    ,*risky-var*           nil)
   (provide 'user-config)
