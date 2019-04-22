@@ -1,0 +1,44 @@
+* Emojify and all-the-icons
+
+#+begin_src elisp
+  (use-package emojify
+    :straight t
+    :commands emojify-mode
+    :hook ((after-init . global-emojify-mode))
+    :init (setq emojify-emoji-styles '(unicode github)
+                emojify-display-style 'unicode))
+
+  (use-package all-the-icons
+    :demand t
+    :init (setq inhibit-compacting-font-caches t)
+    :straight t)
+#+end_src
+
+* cn-fonts
+
+https://github.com/tumashu/cnfonts
+
+I use cn-fonts, you can see my example cnfonts profile [[https://github.com/nasyxx/emacs.d/tree/master/literate-config/themes/cnfonts.org][here]]
+
+This example profile will automatically generate to ~etc/cnfonts/nasy-profile.el~.
+
+#+begin_src elisp
+  (use-package cnfonts
+    :straight t
+    :init
+    (gsetq cnfonts-directory (no-littering-expand-etc-file-name "cnfonts"))
+    :hook ((after-init . cnfonts-enable))
+    :config
+    (defun nasy/set-symbol-fonts (fontsize-list)
+     "Set symbol fonts with FONTSIZE-LIST."
+     (let* ((fontname "Fira Code Symbol")
+            (fontsize (nth 0 fontsize-list))
+            (fontspec (font-spec :name fontname
+                                 :size fontsize
+                                 :weight 'normal
+                                 :slant 'normal)))
+       (if (cnfonts--fontspec-valid-p fontspec)
+          (set-fontset-font t '(#Xe100 . #Xe16f) fontspec)
+         (message "Font %S not exists！" fontname))))
+    (add-hook #'cnfonts-set-font-finish-hook #'nasy/set-symbol-fonts))
+#+end_src
