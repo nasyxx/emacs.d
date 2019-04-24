@@ -20,25 +20,61 @@ https://github.com/tumashu/cnfonts
 
 I use cn-fonts, you can see my example cnfonts profile [[https://github.com/nasyxx/emacs.d/tree/master/literate-config/themes/cnfonts.org][here]]
 
-This example profile will automatically generate to ~etc/cnfonts/nasy-profile.el~.
+This example profile will automatically generate to
+~etc/cnfonts/nasy-profile.el~.
+
+But disabled for it's tooo slow.
 
 #+begin_src elisp
   (use-package cnfonts
+    :disabled t
     :straight t
     :init
     (gsetq cnfonts-directory (no-littering-expand-etc-file-name "cnfonts"))
     :hook ((after-init . cnfonts-enable))
     :config
     (defun nasy/set-symbol-fonts (fontsize-list)
-     "Set symbol fonts with FONTSIZE-LIST."
-     (let* ((fontname "Fira Code Symbol")
-            (fontsize (nth 0 fontsize-list))
-            (fontspec (font-spec :name fontname
-                                 :size fontsize
-                                 :weight 'normal
-                                 :slant 'normal)))
-       (if (cnfonts--fontspec-valid-p fontspec)
-          (set-fontset-font t '(#Xe100 . #Xe16f) fontspec)
-         (message "Font %S not exists！" fontname))))
-    (add-hook #'cnfonts-set-font-finish-hook #'nasy/set-symbol-fonts))
+      "Set symbol fonts with FONTSIZE-LIST."
+      (let* ((fontname "Fira Code Symbol")
+             (fontsize (nth 0 fontsize-list))
+             (fontspec (font-spec :name fontname
+                                  :size fontsize
+                                  :weight 'normal
+                                  :slant 'normal)))
+        (if (cnfonts--fontspec-valid-p fontspec)
+            (set-fontset-font t '(#Xe100 . #Xe16f) fontspec)
+          (message "Font %S not exists！" fontname))))
+    (defun nasy/set-symbol-extra-fonts (fontsize-list)
+      "Set extra symbol fonts with FONTSIZE-LIST."
+      (let* ((fontname "Arial")
+             (fontsize (nth 0 fontsize-list))
+             (fontspec (font-spec :name fontname
+                                  :size fontsize
+                                  :weight 'normal
+                                  :slant 'normal)))
+        (if (cnfonts--fontspec-valid-p fontspec)
+            (set-fontset-font t '(#X1d400 . #X1d744) fontspec)
+          (message "Font %S not exists！" fontname))))
+    (add-hook #'cnfonts-set-font-finish-hook #'nasy/set-symbol-fonts)
+    (add-hook #'cnfonts-set-font-finish-hook #'nasy/set-symbol-extra-fonts))
+#+end_src
+
+* set fonts
+
+#+begin_src elisp
+  (set-face-attribute
+   'default nil
+   :font (font-spec :name "-*-OperatorMonoSSmLig Nerd Font-normal-normal-normal-*-*-110-*-*-m-0-iso10646-1"
+                    :weight 'normal
+                    :slant 'normal
+                    :size 12.0))
+
+  (dolist (charset '(kana han symbol cjk-misc bopomofo))
+    (set-fontset-font
+     (frame-parameter nil 'font)
+     charset
+     (font-spec :name "-*-PingFang SC-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
+                :weight 'normal
+                :slant 'normal
+                :size 16.0)))
 #+end_src
