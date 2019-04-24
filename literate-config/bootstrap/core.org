@@ -123,6 +123,11 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'boolean)
 
+  (defcustom *org-headline-rescale* t
+    "Whether to rescale org-headline or not."
+    :group 'nasy
+    :type 'boolean)
+
   (defcustom *ispell* (executable-find "aspell")
     "The Ispell.  If nil, will not use Ispell."
     :group 'nasy
@@ -248,7 +253,7 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 
 #+begin_src elisp
   (setq-default
-   show-paren-style                                'expression
+   show-paren-style                                'parenthesis
    sp-autoinsert-quote-if-followed-by-closing-pair t
    sp-base-key-bindings                            'paredit
    sp-show-pair-from-inside                        t)
@@ -357,10 +362,14 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     (set-face-attribute 'org-block-end-line          nil                                             :slant   'italic)
     (set-face-attribute 'font-lock-comment-face      nil                                             :slant   'italic)
     (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
-    (set-face-attribute 'show-paren-match            nil :background "#bfcfff" :foreground "#dc322f" :weight  'ultra-bold)
-    (set-face-attribute 'show-paren-match-expression nil :background "#543e5c"                       :inherit 'unspecified)
-    (set-face-attribute 'which-func                  nil                       :foreground "#333"))
-  (add-hook 'nasy/config-before-hook #'nasy/set-face)
+    (set-face-attribute 'show-paren-match            nil :background "#a1de93" :foreground "#705772" :weight  'ultra-bold)
+    (set-face-attribute 'sp-show-pair-match-face     nil :background "#a1de93" :foreground "#705772" :weight  'ultra-bold)
+    (when *org-headline-rescale*
+      (set-face-attribute 'org-level-1 nil :height 1.6 :inherit 'outline-1)
+      (set-face-attribute 'org-level-2 nil :height 1.4 :inherit 'outline-2)
+      (set-face-attribute 'org-level-3 nil :height 1.2 :inherit 'outline-3)
+      (set-face-attribute 'org-level-4 nil :height 1.1 :inherit 'outline-4)))
+  (add-hook 'nasy/config-after-hook #'nasy/set-face)
 #+end_src
 
 ** Load User Custom
