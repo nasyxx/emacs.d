@@ -124,6 +124,10 @@ Adjust garbage collection thresholds during startup, and thereafter
 
 #+include: "core.org"
 
+* Dashboard
+
+#+include: "dashboard.org"
+
 * Basic
 
 #+include: "basic.org"
