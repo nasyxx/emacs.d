@@ -233,7 +233,23 @@
                (ivy-rich-switch-buffer-project (:width 15 :face success))
                (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))
               :predicate
-              (lambda (cand) (get-buffer cand)))))
+              (lambda (cand) (get-buffer cand)))
+             counsel-M-x
+             (:columns
+              ((counsel-M-x-transformer (:width 40))  ; thr original transfomer
+               (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))  ; return the docstring of the command
+             counsel-describe-function
+             (:columns
+              ((counsel-describe-function-transformer (:width 40))  ; the original transformer
+               (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))  ; return the docstring of the function
+             counsel-describe-variable
+             (:columns
+              ((counsel-describe-variable-transformer (:width 40))  ; the original transformer
+               (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))  ; return the docstring of the variable
+             counsel-recentf
+             (:columns
+              ((ivy-rich-candidate (:width 0.8)) ; return the candidate itself
+               (ivy-rich-file-last-modified-time (:face font-lock-comment-face)))))) ; return the last modified time of the file
     (ivy-rich-mode))
 #+end_src
 
