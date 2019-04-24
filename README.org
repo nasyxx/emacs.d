@@ -102,7 +102,7 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
    user-mail-address     "nasyxx@gmail.com"
    initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))
    cnfonts-profiles      '("nasy-profile" "profile1" "profile2" "profile3")
-   ,*theme*               'doom-dracula
+   ,*theme*               'doom-vibrant
    ,*debug*               t
    ,*struct-hs*           nil
    ,*vterm*               "/Users/Nasy/src/emacs-libvterm"
