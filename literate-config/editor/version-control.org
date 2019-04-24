@@ -86,11 +86,11 @@
     :straight t
     :diminish
     :hook (after-init . global-git-gutter-mode)
-    :init (setq git-gutter:visual-line t
-                git-gutter:disabled-modes '(asm-mode image-mode)
-                git-gutter:modified-sign "■"
-                git-gutter:added-sign "●"
-                git-gutter:deleted-sign "✘")
+    :init (gsetq git-gutter:visual-line t
+                 git-gutter:disabled-modes '(asm-mode image-mode)
+                 git-gutter:modified-sign "❚"
+                 git-gutter:added-sign "✚"
+                 git-gutter:deleted-sign "✘")
 
     :config (general-define-key
              :prefix "C-x"

@@ -48,7 +48,19 @@ Other ~ox-_~ packages.
 #+begin_src elisp
   (use-package org-bullets
     :straight t
-    :hook ((org-mode . (lambda () (org-bullets-mode 1)))))
+    :hook ((org-mode . (lambda () (org-bullets-mode 1))))
+    :init (gsetq org-bullets-bullet-list
+                 '(;;; Large
+                   "♥"
+                   "✿"
+                   "❀"
+                   "◉"
+                   "✸"
+                   "•")))
+                   ;; ♥ ● ○ ◇ ✚ ✜ ☯ ◆ ♠ ♣ ♦ ☢ ❀ ◆ ◖ ▶
+                   ;;; Small
+                   ;; ► • ★ ▸
+
 #+end_src
 
 * Org Capture
