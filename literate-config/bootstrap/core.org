@@ -565,7 +565,9 @@ I use super save to auto save files.
     :straight t
     :ghook 'after-init-hook
     :init (gsetq super-save-auto-save-when-idle nil
-                 super-save-remote-files        nil))
+                 super-save-remote-files        nil)
+    :config
+    (remove-hook  #'mouse-leave-buffer-hook #'super-save-command))
 #+end_src
 
 * Text Scale
