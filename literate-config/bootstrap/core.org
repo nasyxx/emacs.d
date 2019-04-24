@@ -334,6 +334,9 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
      truncate-lines                 nil
      truncate-partial-width-windows nil)
 
+  (when *is-a-mac*
+    (setq line-move-visual nil))
+
   (fset 'yes-or-no-p 'y-or-n-p)
 
   (global-auto-revert-mode t)
