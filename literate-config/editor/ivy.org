@@ -240,16 +240,17 @@
 * Ivy Posframe
 
 #+begin_src elisp
-  (use-package ivy-posframe
-    :demand   t
-    :straight t
-    :config
-    (defun ivy-posframe-display-at-frame-top-center (str)
-      (ivy-posframe--display str #'posframe-poshandler-frame-top-center))
+  (when *ivy-posframe*
+    (use-package ivy-posframe
+      :demand   t
+      :straight t
+      :config
+      (defun ivy-posframe-display-at-frame-top-center (str)
+        (ivy-posframe--display str #'posframe-poshandler-frame-top-center))
 
-    (gsetq ivy-display-function #'ivy-posframe-display-at-frame-top-center)
+      (gsetq ivy-display-function #'ivy-posframe-display-at-frame-top-center)
 
-    (ivy-posframe-enable))
+      (ivy-posframe-enable)))
 #+end_src
 
 * Ivy Yasnippets

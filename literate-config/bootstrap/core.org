@@ -118,6 +118,11 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'boolean)
 
+  (defcustom *ivy-posframe* nil
+    "Whether to use ivy-posframe or not."
+    :group 'nasy
+    :type 'boolean)
+
   (defcustom *vterm* nil
     "Whether to use vterm or not."
     :group 'nasy
