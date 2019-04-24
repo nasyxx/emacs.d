@@ -27,13 +27,13 @@
   (minibuffer-depth-indicate-mode)
 
   ;; https://www.reddit.com/r/emacs/comments/4d8gvt/how_do_i_automatically_close_the_minibuffer_after/
-  (defun helper:kill-minibuffer ()
+  (defun helper/kill-minibuffer ()
     "Exit the minibuffer if it is active."
     (when (and (>= (recursion-depth) 1)
              (active-minibuffer-window))
       (abort-recursive-edit)))
 
-  (add-hook #'mouse-leave-buffer-hook #'helper:kill-minibuffer)
+  (add-hook #'mouse-leave-buffer-hook #'helper/kill-minibuffer)
 #+end_src
 
 * Scratch Message
