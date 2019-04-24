@@ -39,3 +39,17 @@
     :straight t
     :ghook '(after-init-hook prog-mode-hook text-mode-hook org-mode-hook))
 #+end_src
+
+* Rainbow-Mode
+
+#+begin_src elisp
+  (use-package rainbow-mode
+    :straight t
+    :hook (((after-init
+             text-mode
+             org-mode
+             css-mode
+             html-mode
+             prog-mode). rainbow-mode))
+    :diminish rainbow-mode)
+#+end_src
