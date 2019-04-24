@@ -1,33 +1,3 @@
-* Dashboard
-
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; Dashboard
-#+end_src
-
-#+begin_src elisp
-  (use-package dashboard
-    :demand   t
-    :after    org
-    :straight t
-    :bind
-    ;; https://github.com/rakanalh/emacs-dashboard/issues/45
-    (:map dashboard-mode-map
-          ("<down-mouse-1>" . nil)
-          ("<mouse-1>"      . widget-button-click)
-          ("<mouse-2>"      . widget-button-click))
-    :init (setq dashboard-startup-banner 'official
-                dashboard-center-content t
-                show-week-agenda-p       t
-                dashboard-items '((recents   . 10)
-                                  (bookmarks . 3 )
-                                  (projects  . 5 )
-                                  (agenda    . 5 )
-                                  ;; (registers . 5 )
-                                  ))
-    :config (dashboard-setup-startup-hook))
-#+end_src
-
 * Disable Mouse
 
 #+begin_src elisp :exports none
