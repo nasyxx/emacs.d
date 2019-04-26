@@ -4,8 +4,7 @@
     :config
     (general-define-key
      :prefix "C-x"
-     "9" 'hydra-unicode/body
-     "|" 'hydra-window/body)
+     "9" 'hydra-unicode/body)
     (general-define-key
      :keymaps 'dired-mode-map
      "." 'hydra-dired/body)
@@ -78,58 +77,5 @@
       ("z" diredp-compress-this-file)
       ("Z" dired-do-compress)
       ("q" nil)
-      ("." nil :color blue))
-
-    (defhydra hydra-window ()
-      "
-    Movement^^        ^Split^         ^Switch^		^Resize^
-    ----------------------------------------------------------------
-    _<left>_ ←       	_v_ ertical    	_b_uffer	_h_ X←
-    _<down>_ ↓        	_x_ horizontal	_f_ind files	_j_ X↓
-    _<up>_ ↑        	_z_ undo      	_a_ce 1		_k_ X↑
-    _<right>_ →        	_Z_ reset      	_s_wap		_l_ X→
-    _F_ ollow		_D_lt Other   	_S_ave		max_i_mize
-    _q_ cancel	_o_nly this   	_d_elete
-    "
-      ("<left>" windmove-left)
-      ("<down>" windmove-down)
-      ("<up>" windmove-up)
-      ("<right>" windmove-right)
-      ("h" hydra-move-splitter-left)
-      ("j" hydra-move-splitter-down)
-      ("k" hydra-move-splitter-up)
-      ("l" hydra-move-splitter-right)
-      ("b" helm-mini)
-      ("f" helm-find-files)
-      ("F" follow-mode)
-      ("a" (lambda!
-             (ace-window 1)
-             (add-hook #'ace-window-end-once-hook
-                       #'hydra-window/body)))
-      ("v" (lambda!
-             (split-window-right)
-             (windmove-right)))
-
-      ("x" (lambda!
-             (split-window-below)
-             (windmove-down)))
-
-      ("s" (lambda!
-             (ace-window 4)
-             (add-hook #'ace-window-end-once-hook
-                       #'hydra-window/body)))
-      ("S" save-buffer)
-      ("d" delete-window)
-      ("D" (lambda!
-             (ace-window 16)
-             (add-hook #'ace-window-end-once-hook
-                       #'hydra-window/body)))
-
-      ("o" delete-other-windows)
-      ("i" ace-maximize-window)
-      ("z" (progn
-             (winner-undo)
-             (setq this-command 'winner-undo)))
-      ("Z" winner-redo)
-      ("q" nil)))
+      ("." nil :color blue)))
 #+end_src

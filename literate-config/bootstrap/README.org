@@ -124,6 +124,15 @@ Adjust garbage collection thresholds during startup, and thereafter
 
 #+include: "core.org"
 
+* Window
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Window
+#+end_src
+
+#+include: "window.org"
+
 * Dashboard
 
 #+include: "dashboard.org"

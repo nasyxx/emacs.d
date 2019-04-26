@@ -1,0 +1,153 @@
+* Ace Window
+
+#+begin_src elisp
+  (use-package ace-window
+    :defer    t
+    :straight t
+    :bind (("M-o" . ace-window))
+    :config
+    (set-face-attribute
+     'aw-leading-char-face nil
+     :foreground "deep sky blue"
+     :weight 'bold
+     :height 3.0)
+    (set-face-attribute
+     'aw-mode-line-face nil
+     :inherit 'mode-line-buffer-id
+     :foreground "lawn green")
+    (gsetq-default cursor-in-non-selected-windows 'hollow)
+    (gsetq aw-reverse-frame-list t
+           aw-keys '(?a ?s ?d ?f ?j ?k ?l)
+           aw-dispatch-always t
+           aw-dispatch-alist
+           '((?w hydra-window-size/body)
+             (?o hydra-window-scroll/body)
+             (?\; hydra-frame-window/body)
+             (?0 delete-frame)
+             (?1 delete-other-frames)
+             (?2 make-frame)
+             (?x aw-delete-window "Ace - Delete Window")
+             (?c aw-swap-window "Ace - Swap Window")
+             (?n aw-flip-window)
+             (?v aw-split-window-vert "Ace - Split Vert Window")
+             (?h aw-split-window-horz "Ace - Split Horz Window")
+             (?\- aw-split-window-vert "Ace - Split Vert Window")
+             (?\| aw-split-window-horz "Ace - Split Horz Window")
+             (?m delete-other-windows "Ace - Maximize Window")
+             (?g delete-other-windows)
+             (?b balance-windows)
+             (?u (lambda ()
+                   (progn
+                     (winner-undo)
+                     (setq this-command 'winner-undo)))
+                 (?r winner-redo))))
+    (with-eval-after-load 'hydra
+      (defhydra hydra-window-size (:color violet)
+        "Windows size"
+        ("h" shrink-window-horizontally "shrink horizontal")
+        ("j" shrink-window "shrink vertical")
+        ("k" enlarge-window "enlarge vertical")
+        ("l" enlarge-window-horizontally "enlarge horizontal"))
+      (defhydra hydra-window-scroll (:color violet)
+        "Scroll other window"
+        ("n" joe-scroll-other-window "scroll")
+        ("p" joe-scroll-other-window-down "scroll down"))
+      (defhydra hydra-frame-window (:color violet :hint nil)
+        "
+  ^Delete^                       ^Frame resize^             ^Window^                Window Size^^^^^^   ^Text^                         (__)
+  _0_: delete-frame              _g_: resize-frame-right    _t_: toggle               ^ ^ _k_ ^ ^        _K_                           (oo)
+  _1_: delete-other-frames       _H_: resize-frame-left     _e_: ace-swap-win         _h_ ^+^ _l_        ^+^                     /------\\/
+  _2_: make-frame                _F_: fullscreen            ^ ^                       ^ ^ _j_ ^ ^        _J_                    / |    ||
+  _d_: kill-and-delete-frame     _n_: new-frame-right       _w_: ace-delete-window    _b_alance^^^^      ^ ^                   *  /\\---/\\  ~~  C-x f ;
+  "
+        ("0" delete-frame :exit t)
+        ("1" delete-other-frames :exit t)
+        ("2" make-frame  :exit t)
+        ("b" balance-windows)
+        ("d" kill-and-delete-frame :exit t)
+        ("e" ace-swap-window)
+        ("F" toggle-frame-fullscreen)   ;; is <f11>
+        ("g" resize-frame-right :exit t)
+        ("H" resize-frame-left :exit t)  ;; aw-dispatch-alist uses h, I rebind here so hjkl can be used for size
+        ("n" new-frame-right :exit t)
+        ("r" reverse-windows)
+        ("t" toggle-window-spilt)
+        ("w" ace-delete-window :exit t)
+        ("x" delete-frame :exit t)
+        ("K" text-scale-decrease)
+        ("J" text-scale-increase)
+        ("h" shrink-window-horizontally)
+        ("k" shrink-window)
+        ("j" enlarge-window)
+        ("l" enlarge-window-horizontally)))
+    (ace-window-display-mode t))
+#+end_src
+
+* Switch-Window
+
+#+begin_src elisp
+  (use-package switch-window
+    :straight t
+    :init (setq-default switch-window-shortcut-style 'alphabet
+                        switch-window-timeout nil)
+    :config
+    ;; When splitting window, show (other-buffer) in the new window
+    (defun split-window-func-with-other-buffer (split-function)
+      "Split window with `SPLIT-FUNCTION'."
+      (lambda (&optional arg)
+        "Split this window and switch to the new window unless ARG is provided."
+        (interactive "P")
+        (funcall split-function)
+        (let ((target-window (next-window)))
+          (set-window-buffer target-window (other-buffer))
+          (unless arg
+            (select-window target-window)))))
+
+    (defun toggle-delete-other-windows ()
+      "Delete other windows in frame if any, or restore previous window config."
+      (interactive)
+      (if (and winner-mode
+               (equal (selected-window) (next-window)))
+          (winner-undo)
+        (delete-other-windows)))
+
+    (defun split-window-horizontally-instead ()
+      "Kill any other windows and re-split such that the current window is on the top half of the frame."
+      (interactive)
+      (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+        (delete-other-windows)
+        (split-window-horizontally)
+        (when other-buffer
+          (set-window-buffer (next-window) other-buffer))))
+
+    (defun split-window-vertically-instead ()
+      "Kill any other windows and re-split such that the current window is on the left half of the frame."
+      (interactive)
+      (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+        (delete-other-windows)
+        (split-window-vertically)
+        (when other-buffer
+          (set-window-buffer (next-window) other-buffer))))
+
+    ;; Borrowed from http://postmomentum.ch/blog/201304/blog-on-emacs
+    (defun nasy/split-window()
+      "Split the window to see the most recent buffer in the other window.
+    Call a second time to restore the original window configuration."
+      (interactive)
+      (if (eq last-command 'nasy-split-window)
+          (progn
+            (jump-to-register :nasy-split-window)
+            (setq this-command 'nasy-unsplit-window))
+        (window-configuration-to-register :nasy/split-window)
+        (switch-to-buffer-other-window nil)))
+
+    (general-define-key
+     :prefix "C-x"
+     "1" 'toggle-delete-other-windows
+     "2" (split-window-func-with-other-buffer 'split-window-vertically)
+     "3" (split-window-func-with-other-buffer 'split-window-horizontally)
+     "|" 'split-window-horizontally-instead
+     "_" 'split-window-vertically-instead
+     "x" 'nasy/split-window
+     "o" 'switch-window))
+#+end_src
