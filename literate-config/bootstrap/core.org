@@ -142,6 +142,11 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     "The Theme."
     :group 'nasy
     :type 'symbol)
+
+  (defcustom *dvorak* nil
+    "Whether to use dvorak or not."
+    :group 'nasy
+    :type 'boolean)
 #+end_src
 
 ** macOS Frame
@@ -165,7 +170,7 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
         (suspend-frame))))
 #+end_src
 
-** macOS Key Binings
+** macOS Key Bindings
 
 #+begin_src elisp
   (when *is-a-mac*
@@ -193,6 +198,24 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     ;; unset
     (global-unset-key (kbd "<magnify-down>"))
     (global-unset-key (kbd "<magnify-up>")))
+#+end_src
+
+** Dvorak Key Bindings
+
+#+begin_src elisp
+  (add-hook #'nasy/config-after-hook
+	    #'(lambda ()
+		(when *dvorak*
+		  (general-define-key
+		   :keymaps 'key-translation-map
+		   "C-," "C-x"
+		   "C-x" "C-,"
+		   "M-," "M-x"
+		   "M-x" "M-,"
+		   "C-c" "C-."
+		   "C-." "C-c"
+		   "M-c" "M-."
+		   "M-." "M-c"))))
 #+end_src
 
 ** Disable Some Features
@@ -389,8 +412,6 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 #+begin_src elisp
   (require 'user-config nil t)
 #+end_src
-
-
 
 * Compile
 
