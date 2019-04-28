@@ -199,13 +199,13 @@ Disabled by default due to it causes lots of cpu.
   (use-package helpful
     :straight t
     :bind (("C-c C-d" . helpful-at-point))
-    :config (general-define-key
-             :prefix "C-h"
-             "f" 'helpful-callable
-             "v" 'helpful-variable
-             "k" 'helpful-key
-             "F" 'helpful-function
-             "C" 'helpful-command))
+    :init (general-define-key
+           :prefix "C-h"
+           "f" 'helpful-callable
+           "v" 'helpful-variable
+           "k" 'helpful-key
+           "F" 'helpful-function
+           "C" 'helpful-command))
 #+end_src
 
 * Htmlize
