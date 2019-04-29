@@ -33,7 +33,9 @@
               (magit-todos-mode))
     (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
-  (straight-use-package 'magit-todos)
+  (use-package magit-todos
+    :defer    t
+    :straight t)
 #+end_src
 
 * Magit Org Todos
@@ -42,7 +44,7 @@
   (use-package magit-org-todos
     :after    org
     :straight t
-    :config   (magit-org-todos-autoinsert))
+    :hook     ((after-init . magit-org-todos-autoinsert)))
 #+end_src
 
 * Forge
