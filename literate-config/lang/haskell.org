@@ -101,6 +101,7 @@ inlcude haskell-snippets.
 
 #+begin_src elisp
   (use-package lsp-haskell
+    :demand   t
     :straight t
     :hook ((haskell-mode   . lsp)
            (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
