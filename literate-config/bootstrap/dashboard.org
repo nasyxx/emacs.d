@@ -11,6 +11,7 @@
           ("<up>"           . widget-backward)
           ("<down>"         . widget-forward))
     :diminish (dashboard-mode page-break-lines-mode)
+    :hook ((dashboard-mode . (lambda () (gsetq-local tab-width 1))))
     :init
     (gsetq dashboard-startup-banner 'official
            dashboard-center-content t
@@ -48,8 +49,7 @@
       "Insert into SECTION-NAME a LIST of items, expanding ACTION and passing REST to widget creation."
       `(when (car ,list)
          (mapc (lambda (el)
-                 (let ((widget nil)
-                       (tab-width 1))
+                 (let ((widget nil))
                    (insert "\n    ")
                    (when (display-graphic-p)
                      (insert (when-let ((path (car (last (split-string ,@rest " - ")))))
@@ -67,7 +67,7 @@
                                     (t (let ((matcher (all-the-icons-match-to-alist path all-the-icons-dir-icon-alist)))
                                          (apply (car matcher) (list (cadr matcher) :v-adjust 0.01)))))
                                  (all-the-icons-icon-for-file (file-name-nondirectory path)))))
-                     (insert " "))
+                     (insert "\t"))
                    (setq widget
                          (widget-create 'push-button
                                         :action ,action
@@ -77,6 +77,27 @@
                                         :format "%[%t%]"
                                         ,@rest))))
                ,list)))
+
+
+    (defmacro dashboard-insert-shortcut (shortcut-char
+                                           search-label
+                                           &optional no-next-line)
+        "Insert a shortcut SHORTCUT-CHAR for a given SEARCH-LABEL.
+  Optionally, provide NO-NEXT-LINE to move the cursor forward a line."
+        `(progn
+           (eval-when-compile (defvar dashboard-mode-map))
+           (let ((sym (make-symbol (format "Jump to \"%s\"" ,search-label))))
+             (fset sym (lambda ()
+                         (interactive)
+                         (unless (search-forward ,search-label (point-max) t)
+                           (search-backward ,search-label (point-min) t))
+                         ,@(unless no-next-line
+                             '((forward-line 1)))
+                         (back-to-indentation)
+                         (if (display-graphic-p) (widget-forward 1))))
+             (eval-after-load 'dashboard
+               (define-key dashboard-mode-map ,shortcut-char sym)))))
+
 
     ;; Recentf
     (defun dashboard-insert-recents (list-size)
