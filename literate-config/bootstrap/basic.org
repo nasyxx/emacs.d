@@ -45,7 +45,7 @@
 
 #+begin_src elisp
   (use-package scratch
-    :demand   t
+    :defer    t
     :straight t)
 #+end_src
 

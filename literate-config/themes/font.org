@@ -9,7 +9,6 @@
                 emojify-display-style 'unicode))
 
   (use-package all-the-icons
-    :demand t
     :init (setq inhibit-compacting-font-caches t)
     :straight t)
 #+end_src

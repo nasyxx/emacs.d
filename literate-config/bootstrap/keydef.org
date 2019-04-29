@@ -1,8 +1,7 @@
 #+begin_src elisp
   (use-package general
-    :demand   t
     :straight t
-    :config
+    :init
     (defalias 'gsetq #'general-setq)
     (defalias 'gsetq-local #'general-setq-local)
     (defalias 'gsetq-default #'general-setq-default))

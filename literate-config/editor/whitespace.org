@@ -25,7 +25,6 @@
 
 
   (use-package whitespace-cleanup-mode
-    :demand   t
     :straight t
     :init
     (gsetq whitespace-cleanup-mode-only-if-initially-clean nil)

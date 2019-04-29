@@ -324,7 +324,6 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 #+begin_src elisp
   (use-package mmm-auto
-    :demand t
     :straight mmm-mode
     :init (gsetq
            mmm-global-mode

@@ -10,7 +10,6 @@ I use doom-themes.
 
 #+begin_src elisp
   (use-package doom-themes
-    :demand   t
     :straight t
     :config
     (load-theme *theme* t)
@@ -27,12 +26,11 @@ I use doom-themes.
 
 #+begin_src elisp
   (use-package nyan-mode
-    :demand t
     :straight t
     :init (setq nyan-animate-nyancat t
                 nyan-bar-length 16
                 nyan-wavy-trail t)
-    :config (nyan-mode 1))
+    :hook ((after-init . nyan-mode)))
 #+end_src
 
 #+begin_src elisp
