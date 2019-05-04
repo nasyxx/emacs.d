@@ -410,6 +410,7 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 ** Load User Custom
 
 #+begin_src elisp
+  (require 'user-config-example nil t)
   (require 'user-config nil t)
 #+end_src
 
