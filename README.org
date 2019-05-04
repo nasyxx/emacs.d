@@ -60,7 +60,7 @@ To install, clone this repo to @@html: <span> @@ ~~/.emacs.d~ @@html: </span> @@
 
 #+BEGIN_SRC shell
   git clone https://github.com/nasyxx/emacs.d.git ~/.emacs.d
-  make config
+  make generate
 #+END_SRC
 
 Upon the first time staring up emacs, other third-party packages will be
@@ -97,16 +97,17 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
 
 #+BEGIN_SRC elisp
   (setq-default
-   calendar-latitude     24.8801
-   calendar-longitude    102.8329
-   user-mail-address     "nasyxx@gmail.com"
+   ;; calendar-latitude     24.8801
+   ;; calendar-longitude    102.8329
+   ;; user-mail-address     "nasyxx@gmail.com"
    initial-buffer-choice #'(lambda () (get-buffer "*dashboard*"))
    cnfonts-profiles      '("nasy-profile" "profile1" "profile2" "profile3")
    ,*theme*               'doom-vibrant
    ,*debug*               t
    ,*struct-hs*           nil
-   ,*vterm*               "/Users/Nasy/src/emacs-libvterm"
-   ,*risky-var*           nil)
+   ;; *vterm*               "/Users/Nasy/src/emacs-libvterm"
+   ,*risky-var*           nil
+   ,*dvorak*              nil)
   (provide 'user-config)
 #+END_SRC
 
