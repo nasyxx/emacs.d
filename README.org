@@ -108,7 +108,7 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
    ;; *vterm*               "/Users/Nasy/src/emacs-libvterm"
    ,*risky-var*           nil
    ,*dvorak*              nil)
-  (provide 'user-config)
+  (provide 'user-config-example)
 #+END_SRC
 
 ** dashboard
