@@ -4,18 +4,13 @@ all: help
 ## Generate init.el from README.org
 generate:
 	@echo "Generate init.el from README.org and literate-config.org."
-	mkdir -p custom && \
+	@mkdir -p custom && \
 		emacs -Q --batch --find-file "README.org" -f "org-babel-tangle" && \
 		emacs -Q --batch --find-file "literate-config.org" -f "org-org-export-to-org" && \
 		emacs -Q --batch --find-file "literate-config.org.org" -f "org-babel-tangle" && \
-		rm "literate-config.org.org"
+		rm "literate-config.org.org" && \
+		echo "If you want to customize, simply change/create custom/user-config.el"
 .PHONY: generate
-
-## Copy example config to user config.
-config: generate
-	@echo "Generate user config from example config."
-	mkdir -p etc/cnfonts/v4 && emacs -Q --batch --find-file "./literate-config/themes/cnfonts.org" -f "org-babel-tangle"
-	cp custom/user-config-example.el custom/user-config.el
 
 ## Clean build (straight/)
 clean-build:
@@ -26,11 +21,6 @@ clean-build:
 clean-etc:
 	rm -rf etc
 .PHONY: clean-etc
-
-## Clean python (anaconda-mode/)
-clean-python:
-	rm -rf anaconda-mode
-.PHONY: clean-python
 
 ## Clean var (var/)
 clean-var:
