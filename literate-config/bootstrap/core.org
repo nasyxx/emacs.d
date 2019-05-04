@@ -204,18 +204,18 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 
 #+begin_src elisp
   (add-hook #'nasy/config-after-hook
-	    #'(lambda ()
-		(when *dvorak*
-		  (general-define-key
-		   :keymaps 'key-translation-map
-		   "C-," "C-x"
-		   "C-x" "C-,"
-		   "M-," "M-x"
-		   "M-x" "M-,"
-		   "C-c" "C-."
-		   "C-." "C-c"
-		   "M-c" "M-."
-		   "M-." "M-c"))))
+            #'(lambda ()
+                (when *dvorak*
+                  (general-define-key
+                   :keymaps 'key-translation-map
+                   "C-," "C-x"
+                   "C-x" "C-,"
+                   "M-," "M-x"
+                   "M-x" "M-,"
+                   "C-c" "C-."
+                   "C-." "C-c"
+                   "M-c" "M-."
+                   "M-." "M-c"))))
 #+end_src
 
 ** Disable Some Features
