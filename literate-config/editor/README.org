@@ -499,6 +499,16 @@ Now use amx instead of smex.
 
 * Undo/Redo
 
+** Point History
+
+#+begin_src elisp
+  (use-package point-history
+    :straight (point-history :type git :host github :repo "blue0513/point-history")
+    :hook ((after-init . point-history-mode))
+    :bind (("C-c C-/" . point-history-show))
+    :init (gsetq point-history-ignore-buffer "^ \\*Minibuf\\|^ \\*point-history-show*"))
+#+end_src
+
 ** Undo Propose
 
 #+begin_src elisp
