@@ -1,0 +1,32 @@
+* Doom-themes
+
+#+begin_src elisp
+  (use-package doom-themes
+    :straight t
+    :config
+    (doom-themes-treemacs-config)  ;; The doom themes havn't finished it yet.
+    (doom-themes-visual-bell-config)
+    (doom-themes-org-config))
+#+end_src
+
+* Darktooth-theme
+
+#+begin_src elisp
+  (use-package darktooth-theme
+    :straight t
+    :config
+    (darktooth-modeline))
+#+end_src
+
+* Soothe-theme
+
+#+begin_src elisp
+  (use-package soothe-theme
+    :straight t)
+#+end_src
+
+* Load Theme
+
+#+begin_src elisp
+  (load-theme *theme* t)
+#+end_src

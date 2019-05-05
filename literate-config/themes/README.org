@@ -8,15 +8,7 @@
 
 I use doom-themes.
 
-#+begin_src elisp
-  (use-package doom-themes
-    :straight t
-    :config
-    (load-theme *theme* t)
-    (doom-themes-treemacs-config)  ;; The doom themes havn't finished it yet.
-    (doom-themes-visual-bell-config)
-    (doom-themes-org-config))
-#+end_src
+#+include: "main-theme.org"
 
 * Font
 
