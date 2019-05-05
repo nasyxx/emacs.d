@@ -216,6 +216,8 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
                    "C-." "C-c"
                    "M-c" "M-."
                    "M-." "M-c"))))
+
+  (general-define-key "C-c M-d" 'nasy/toogle-dvorak)
 #+end_src
 
 ** Disable Some Features
@@ -658,4 +660,39 @@ I use super save to auto save files.
                 (plist-get info :posframe-width))
              2)
           (round (* 0.02 (x-display-pixel-height)))))
+#+end_src
+
+** Toogle Dvorak Key Bindings
+
+#+begin_src elisp
+  (defun nasy/toogle-dvorak ()
+    "Toogle dvorak key bindings."
+    (interactive)
+    (if (not *dvorak*)
+        (progn
+          (general-define-key
+           :keymaps 'key-translation-map
+           "C-," "C-x"
+           "C-x" "C-,"
+           "M-," "M-x"
+           "M-x" "M-,"
+           "C-c" "C-."
+           "C-." "C-c"
+           "M-c" "M-."
+           "M-." "M-c")
+          (gsetq *dvorak* t)
+          (message "Use Dvorak key bindings."))
+      (progn
+        (general-define-key
+           :keymaps 'key-translation-map
+           "C-," nil
+           "C-x" nil
+           "M-," nil
+           "M-x" nil
+           "C-c" nil
+           "C-." nil
+           "M-c" nil
+           "M-." nil)
+        (gsetq *dvorak* nil)
+        (message "Use normal key bindings."))))
 #+end_src
