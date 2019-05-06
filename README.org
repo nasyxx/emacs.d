@@ -36,9 +36,6 @@ not sure if it would work well well on Linux or Windows.
 - Use straight.el to manage packages.
 - For macOS GUI.
 - Now only tested with GNU Emacs 26.2/27.0.50 of macOS 10.14.
-- Font
-  - Operator Mono SSm
-  - Fira Code Symbol
 
 ** Screenshots
 
@@ -80,8 +77,8 @@ And I guess you'll need to update third-party packages regularly too if you
 have not modificated the ~straight-check-for-modifications~ in @@html: <span> @@
 ~config/nasy-config.el~: @@html: </span> @@
 
-+ @@html: <kbd>M-x</kbd> <kbd>straight-pull-all</kbd> <kbd>RET</kbd> @@
-+ @@html: <kbd>M-x</kbd> <kbd>straight-rebuild-all</kbd> <kbd>RET</kbd> @@
+- @@html: <kbd>M-x</kbd> <kbd>straight-pull-all</kbd> <kbd>RET</kbd> @@
+- @@html: <kbd>M-x</kbd> <kbd>straight-rebuild-all</kbd> <kbd>RET</kbd> @@
 
 If you encounter any errors while updating, you may need to kill Emacs and run
 ~make clean~. If you still meet errors after doing that, you probably need to run
@@ -127,6 +124,28 @@ to the issue [[https://github.com/rakanalh/emacs-dashboard/issues/69][here]].  H
 
 - Functions added to ~nasy/config-before-hook~ will be run before loading ~custom.el~.
 - Functions added to ~nasy/config-after-hook~ will be run after init.
+
+* Features
+
+** Summary
+
+- Package Manager :: straight.el with --depth=1
+- Font ::
+    + Adjust with cnfonts
+    + Operator Mono SSm
+        - Patched with [[https://github.com/ryanoasis/nerd-fonts][nerd-font]] and [[https://github.com/kiliman/operator-mono-lig][operator-mono-lig]].
+    + Fira Code Symbol
+- Languages ::
+    + lsp-mode/lsp-dap
+    + Haskell
+    + Python
+    + Lisp
+    + HTML/CSS/JavaScript/TypeScript
+    + Rust
+- Themes ::
+    + Doom Themes
+    + Darktooth
+    + Soothe
 
 * The Configuration
 
