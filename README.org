@@ -28,13 +28,14 @@ A Straightforward Emacs Configuration Bundle.
 This is my Emacs configuration in literate form, and it is towards macOS.  I am
 not sure if it would work well well on Linux or Windows.
 
+- My Blog :: https://nasy.moe/
+- Complete Literate Configuration :: https://emacs.nasy.moe/
+
 ** *NOTICE*
 
-- This file is a literature programing source file, and generates ~init.el~
-- Almost all in one file.
 - Use straight.el to manage packages.
 - For macOS GUI.
-- Now only tested with GNU Emacs 27.0.50 in macOS 10.14.
+- Now only tested with GNU Emacs 26.2/27.0.50 of macOS 10.14.
 - Font
   - Operator Mono SSm
   - Fira Code Symbol
@@ -51,7 +52,7 @@ not sure if it would work well well on Linux or Windows.
 
 - Emacs
 - git
-- make (optional)
+- make
 - ...
 
 * Installation
@@ -66,7 +67,7 @@ To install, clone this repo to @@html: <span> @@ ~~/.emacs.d~ @@html: </span> @@
 Upon the first time staring up emacs, other third-party packages will be
 automatically clone to the @@html: <span> @@ ~straight~: @@html: </span> @@ folder
 and installed.  If you encounter any errors at that stage, try restarting Emacs,
-and maybe running ~make clean-all~ before doing so.
+and maybe running ~make clean-build~ before doing so.
 
 You can regenerate @@html: <span> @@ ~init.el~ @@html: </span> @@ by ~make generate~.
 
