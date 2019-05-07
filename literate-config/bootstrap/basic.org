@@ -135,7 +135,8 @@
     (add-to-list 'exec-path-from-shell-variables "ENVIRONMENT_SETUP_DONE")
     (add-to-list 'exec-path-from-shell-variables "PYTHONPATH")
     (add-to-list 'exec-path-from-shell-variables "PKG_CONFIG_PATH")
-    (exec-path-from-shell-initialize))
+    (exec-path-from-shell-initialize)
+    (add-to-list 'exec-path "~/.pyenv/shims/"))
 #+end_src
 
 ** Term
