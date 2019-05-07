@@ -217,7 +217,7 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
                    "M-c" "M-."
                    "M-." "M-c"))))
 
-  (general-define-key "C-c M-d" 'nasy/toogle-dvorak)
+  (general-define-key "C-x C-d" 'nasy/toogle-dvorak)
 #+end_src
 
 ** Disable Some Features
