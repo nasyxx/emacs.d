@@ -48,7 +48,7 @@ I use clangd.
 * HTML
 
 #+begin_src elisp
-  (use-package lsp-mode
+  (use-package lsp-html
     :straight t
     :hook ((html-mode . lsp)))
 #+end_src
