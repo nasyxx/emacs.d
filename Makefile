@@ -5,11 +5,11 @@ all: help
 generate:
 	@echo "Generate init.el from README.org and literate-config.org."
 	@mkdir -p custom && \
-		emacs -Q --batch --find-file "README.org" -f "org-babel-tangle" && \
-		emacs -Q --batch --find-file "literate-config.org" -f "org-org-export-to-org" && \
+		emacs -Q --batch --find-file "README.org" -f "org-babel-tangle"
+	@emacs -Q --batch --find-file "literate-config.org" -f "org-org-export-to-org" && \
 		emacs -Q --batch --find-file "literate-config.org.org" -f "org-babel-tangle" && \
-		rm "literate-config.org.org" && \
-		echo "If you want to customize, you can simply change/create custom/user-config.el"
+		rm -rf "literate-config.org.org"
+	@echo "If you want to customize, you can simply change/create custom/user-config.el"
 .PHONY: generate
 
 ## Clean build (straight/)
