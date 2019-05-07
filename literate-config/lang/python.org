@@ -83,6 +83,13 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
               delete-company-lsp
               setq-after)
     :init
+    (general-define-key
+     :prefix "C-c"
+     :keymaps 'python-mode-map
+     "C-b" 'nasy/python-send-buffer
+     "C-r" 'nasy/python-send-region
+     "C-c" 'nasy/python-send-defun
+     "C-z" 'nasy/python-switch-to-shell)
     (gsetq python-indent-offset                  4
            indent-tabs-mode                      nil
            python-indent-guess-indent-offset     nil
@@ -120,13 +127,6 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
              lsp-pyls-plugins-jedi-symbols-enabled                   t
              lsp-pyls-plugins-pyls_mypy-live-mode                    nil))
     :config
-    (general-define-key
-     :prefix "C-c"
-     :keymaps 'python-mode-map
-     "C-b" 'nasy/python-send-buffer
-     "C-r" 'nasy/python-send-region
-     "C-c" 'nasy/python-send-defun
-     "C-z" 'nasy/python-switch-to-shell)
     (unless *blacken*
       (add-hook #'before-save-hook #'lsp-format-buffer nil t)))
 #+end_src
