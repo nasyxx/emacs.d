@@ -3,8 +3,11 @@
 #+begin_src elisp
   (use-package doom-themes
     :straight t
+    :init (gsetq doom-dracula-brighter-comments t
+                 doom-dracula-colorful-headers  t
+                 doom-dracula-comment-bg        t)
     :config
-    (doom-themes-treemacs-config)  ;; The doom themes havn't finished it yet.
+    (doom-themes-treemacs-config)
     (doom-themes-visual-bell-config)
     (doom-themes-org-config))
 #+end_src
@@ -22,6 +25,7 @@
 
 #+begin_src elisp
   (use-package soothe-theme
+    :defer    t
     :straight t)
 #+end_src
 
