@@ -49,7 +49,7 @@ I use clangd.
 
 #+begin_src elisp
   (use-package lsp-html
-    :straight t
+    :straight lsp-mode
     :hook ((html-mode . lsp)))
 #+end_src
 
