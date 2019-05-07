@@ -90,6 +90,9 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
      "C-r" 'nasy/python-send-region
      "C-c" 'nasy/python-send-defun
      "C-z" 'nasy/python-switch-to-shell)
+    (general-define-key
+     :keymaps 'python-mode-map
+     "<S-return>" 'nasy/python-send-region)
     (gsetq python-indent-offset                  4
            indent-tabs-mode                      nil
            python-indent-guess-indent-offset     nil
