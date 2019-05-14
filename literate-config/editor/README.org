@@ -208,6 +208,12 @@ Disabled by default due to it causes lots of cpu.
            "C" 'helpful-command))
 #+end_src
 
+* Helm
+
+https://github.com/emacs-helm/helm
+
+#+include: "helm.org"
+
 * Htmlize
 
 #+begin_src elisp

@@ -253,14 +253,6 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
   (blink-cursor-mode t)
 #+end_src
 
-*** Helm
-
-#+begin_src elisp
-  ;; (setq-default
-  ;;  ;; brew install rg   if you'd like to use rg as my doing
-  ;;  helm-ag-base-command "rg --no-heading --smart-case")
-#+end_src
-
 *** Languages
 
 #+begin_src elisp
