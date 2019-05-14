@@ -287,7 +287,9 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 * Ivy, Counsel and Swiper
 
-#+include: "ivy.org"
+Now disabled.
+
+# #+include: "ivy.org"
 
 * Large File
 
@@ -422,6 +424,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 
   (use-package ivy-prescient
+    :disabled t
     :straight t
     :ghook 'after-init-hook)
 
