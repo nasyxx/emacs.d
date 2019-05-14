@@ -174,8 +174,9 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 
 #+begin_src elisp
   (when *is-a-mac*
-    (setq mac-option-modifier  'meta
-          mac-command-modifier 'hyper)
+    (gsetq mac-option-modifier  'meta
+           mac-command-modifier 'hyper
+           mac-right-command-modifier 'control)
 
     (general-define-key
      "C-z" 'stop-minimizing-window
@@ -216,8 +217,6 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
                    "C-." "C-c"
                    "M-c" "M-."
                    "M-." "M-c"))))
-
-  (general-define-key "C-x C-d" 'nasy/toogle-dvorak)
 #+end_src
 
 ** Disable Some Features
