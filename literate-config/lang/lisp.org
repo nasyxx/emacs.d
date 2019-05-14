@@ -9,8 +9,8 @@
       (if (and (mark) (use-region-p))
           (eval-region (min (point) (mark)) (max (point) (mark)))
         (pp-eval-last-sexp prefix)))
-    :bind (("<remap> <eval-expression>" . pp-eval-expression)
-           :map emacs-lisp-mode-map
+    :bind (:map emacs-lisp-mode-map
+           ("<remap> <eval-expression>" . pp-eval-expression)
            ("C-x C-e" . eval-last-sexp-or-region)))
 #+end_src
 
