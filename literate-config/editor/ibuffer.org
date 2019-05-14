@@ -4,45 +4,53 @@
   (use-package ibuffer
     :bind (("C-x C-b" . ibuffer))
     :init
-    (setq ibuffer-saved-filter-groups
-          '(("Normal"
-             ("Dired"      (mode . dired-mode))
-             ("Emacs"     (or
-                           (name . "^\\*dashboard\\*$" )
-                           (name . "^\\*scratch\\*$"   )
-                           (name . "^\\*Messages\\*$"  )
-                           (name . "^\\*Backtrace\\*$" )
-                           (name . "^\\*Pp Eval Output\\*$")))
-             ("Text"      (or
-                           (mode . org-mode)
-                           (mode . markdown)
-                           (mode . rst-mode)
-                           (mode . text-mode)))
-             ("TeX"        (mode . tex-mode))
-             ("Languages" (or
-                           (mode . emacs-lisp-mode)
-                           (mode . haskell-mode)
-                           (mode . javascript-mode)
-                           (mode . lisp-mode)
-                           (mode . python-mode)
-                           (mode . ruby-mode)
-                           (mode . rust-mode)
-                           (mode . html-mode)
-                           (mode . css-mode)
-                           (mode . prog-mode)))
-             ("GNUs"      (or
-                           (mode . message-mode)
-                           (mode . bbdb-mode)
-                           (mode . mail-mode)
-                           (mode . gnus-group-mode)
-                           (mode . gnus-summary-mode)
-                           (mode . gnus-article-mode)
-                           (name . "^\\.bbdb$")
-                           (name . "^\\.newsrc-dribble")))
-             ("Helm"       (mode . helm-major-mode))
-             ))
-          ibuffer-show-empty-filter-groups nil
-          ibuffer-default-sorting-mode     'filename/process)
+    (gsetq ibuffer-saved-filter-groups
+           '(("Normal"
+              ("Dired"      (mode . dired-mode))
+              ("Emacs"     (or
+                            (name . "^\\*dashboard\\*$" )
+                            (name . "^\\*scratch\\*$"   )
+                            (name . "^\\*Messages\\*$"  )
+                            (name . "^\\*Backtrace\\*$" )))
+              ("Text"      (or
+                            (mode . org-mode)
+                            (mode . markdown)
+                            (mode . rst-mode)
+                            (mode . text-mode)))
+              ("TeX"        (mode . tex-mode))
+              ("Languages" (or
+                            (mode . emacs-lisp-mode)
+                            (mode . haskell-mode)
+                            (mode . javascript-mode)
+                            (mode . lisp-mode)
+                            (mode . python-mode)
+                            (mode . ruby-mode)
+                            (mode . rust-mode)
+                            (mode . html-mode)
+                            (mode . css-mode)
+                            (mode . prog-mode)))
+              ("GNUs"      (or
+                            (mode . message-mode)
+                            (mode . bbdb-mode)
+                            (mode . mail-mode)
+                            (mode . gnus-group-mode)
+                            (mode . gnus-summary-mode)
+                            (mode . gnus-article-mode)
+                            (name . "^\\.bbdb$")
+                            (name . "^\\.newsrc-dribble")))
+              ("Magit"      (name . "^magit"))
+              ("Help"      (or
+                            (name . "^\\*Help\\*$")
+                            (name . "^\\*Apropos\\*$")
+                            (name . "^\\*info\\*$")
+                            (name . "^\\*helpful")))
+              ("Custom"    (or
+                            (mode . custom-mode)
+                            (name . "^\\*Customize")))
+              ("Helm"       (mode . helm-major-mode))
+              ))
+           ibuffer-show-empty-filter-groups nil
+           ibuffer-default-sorting-mode     'filename/process)
     :hook ((ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "Normal")))))
 #+end_src
 
