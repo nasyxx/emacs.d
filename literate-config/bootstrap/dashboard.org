@@ -1,6 +1,6 @@
 #+begin_src elisp
   (use-package dashboard
-    :after    org
+    :after    (all-the-icons org)
     :straight t
     :bind
     ;; https://github.com/rakanalh/emacs-dashboard/issues/45
@@ -13,131 +13,16 @@
     :diminish (dashboard-mode page-break-lines-mode)
     :hook ((dashboard-mode . (lambda () (gsetq-local tab-width 1))))
     :init
-    (gsetq dashboard-startup-banner 'official
-           dashboard-center-content t
-           show-week-agenda-p       t
+    (gsetq dashboard-startup-banner    'official
+           dashboard-center-content    t
+           dashboard-set-heading-icons nil
+           dashboard-set-file-icons    t
+           dashboard-set-init-info     nil
+           show-week-agenda-p          t
            dashboard-items '((recents   . 10)
                              (bookmarks . 5)
-                             (projects  . 5)))
-                             ;; (agenda    . 5 )
+                             (projects  . 5)
+                             (agenda    . 5)))
                              ;; (registers . 5 )
-
-    (dashboard-setup-startup-hook)
-    :config
-    ;; Thanks https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-dashboard.el
-    ;; Add heading icons
-    (defun dashboard-insert-heading-icon (heading &optional _shortcut)
-      "Add heading icons to dashboard."
-      (when (display-graphic-p)
-        ;; Load `all-the-icons' if it's unavailable
-        (unless (featurep 'all-the-icons)
-          (require 'all-the-icons nil t))
-
-        (insert (cond
-                 ((string-equal heading "Recent Files:")
-                  (all-the-icons-octicon "history" :height 1.2 :v-adjust 0.0 :face 'dashboard-heading))
-                 ((string-equal heading "Bookmarks:")
-                  (all-the-icons-octicon "bookmark" :height 1.2 :v-adjust 0.0 :face 'dashboard-heading))
-                 ((string-equal heading "Projects:")
-                  (all-the-icons-octicon "file-directory" :height 1.2 :v-adjust 0.0 :face 'dashboard-heading))))
-        (insert " ")))
-    (advice-add #'dashboard-insert-heading :before #'dashboard-insert-heading-icon)
-
-    ;; Add file icons
-    ;; MUST redefine the sections because of the macro `dashboard-insert-section-list'
-    (defmacro dashboard-insert-section-list (section-name list action &rest rest)
-      "Insert into SECTION-NAME a LIST of items, expanding ACTION and passing REST to widget creation."
-      `(when (car ,list)
-         (mapc (lambda (el)
-                 (let ((widget nil))
-                   (insert "\n    ")
-                   (when (display-graphic-p)
-                     (insert (when-let ((path (car (last (split-string ,@rest " - ")))))
-                               (if (file-directory-p path)
-                                   (cond
-                                    ((and (fboundp 'tramp-tramp-file-p)
-                                        (tramp-tramp-file-p default-directory))
-                                     (all-the-icons-octicon "file-directory" :height 1.0 :v-adjust 0.01))
-                                    ((file-symlink-p path)
-                                     (all-the-icons-octicon "file-symlink-directory" :height 1.0 :v-adjust 0.01))
-                                    ((all-the-icons-dir-is-submodule path)
-                                     (all-the-icons-octicon "file-submodule" :height 1.0 :v-adjust 0.01))
-                                    ((file-exists-p (format "%s/.git" path))
-                                     (all-the-icons-octicon "repo" :height 1.1 :v-adjust 0.01))
-                                    (t (let ((matcher (all-the-icons-match-to-alist path all-the-icons-dir-icon-alist)))
-                                         (apply (car matcher) (list (cadr matcher) :v-adjust 0.01)))))
-                                 (all-the-icons-icon-for-file (file-name-nondirectory path)))))
-                     (insert "\t"))
-                   (setq widget
-                         (widget-create 'push-button
-                                        :action ,action
-                                        :mouse-face 'highlight
-                                        :button-prefix ""
-                                        :button-suffix ""
-                                        :format "%[%t%]"
-                                        ,@rest))))
-               ,list)))
-
-
-    (defmacro dashboard-insert-shortcut (shortcut-char
-                                           search-label
-                                           &optional no-next-line)
-        "Insert a shortcut SHORTCUT-CHAR for a given SEARCH-LABEL.
-  Optionally, provide NO-NEXT-LINE to move the cursor forward a line."
-        `(progn
-           (eval-when-compile (defvar dashboard-mode-map))
-           (let ((sym (make-symbol (format "Jump to \"%s\"" ,search-label))))
-             (fset sym (lambda ()
-                         (interactive)
-                         (unless (search-forward ,search-label (point-max) t)
-                           (search-backward ,search-label (point-min) t))
-                         ,@(unless no-next-line
-                             '((forward-line 1)))
-                         (back-to-indentation)
-                         (if (display-graphic-p) (widget-forward 1))))
-             (eval-after-load 'dashboard
-               (define-key dashboard-mode-map ,shortcut-char sym)))))
-
-
-    ;; Recentf
-    (defun dashboard-insert-recents (list-size)
-      "Add the list of LIST-SIZE items from recently edited files."
-      (recentf-mode)
-      (dashboard-insert-section
-       "Recent Files:"
-       recentf-list
-       list-size
-       "r"
-       `(lambda (&rest ignore) (find-file-existing ,el))
-       (abbreviate-file-name el)))
-
-    ;; Bookmarks
-    (defun dashboard-insert-bookmarks (list-size)
-      "Add the list of LIST-SIZE items of bookmarks."
-      (require 'bookmark)
-      (dashboard-insert-section
-       "Bookmarks:"
-       (dashboard-subseq (bookmark-all-names)
-                         0 list-size)
-       list-size
-       "m"
-       `(lambda (&rest ignore) (bookmark-jump ,el))
-       (let ((file (bookmark-get-filename el)))
-         (if file
-             (format "%s - %s" el (abbreviate-file-name file))
-           el))))
-
-    ;; Projectile
-    (defun dashboard-insert-projects (list-size)
-      "Add the list of LIST-SIZE items of projects."
-      (require 'projectile)
-      (projectile-load-known-projects)
-      (dashboard-insert-section
-       "Projects:"
-       (dashboard-subseq (projectile-relevant-known-projects)
-                         0 list-size)
-       list-size
-       "p"
-       `(lambda (&rest ignore) (projectile-switch-project-by-name ,el))
-       (abbreviate-file-name el))))
+    (dashboard-setup-startup-hook))
 #+end_src
