@@ -16,8 +16,17 @@
              prog-mode
              company-box-mode
              company-mode) . delete-company-lsp))
-    :init (gsetq lsp-prefer-flymake            nil
-                 lsp-enable-on-type-formatting nil))
+    :init (gsetq lsp-print-io                   t
+                 lsp-print-performance          t
+                 lsp-inhibit-message            t
+                 lsp-report-if-no-buffer        t
+                 lsp-keep-workspace-alive       nil
+                 lsp-enable-snippet             t
+                 lsp-restart                    'auto-restart
+                 lsp-document-sync-method       'full
+                 lsp-eldoc-render-all           t
+                 lsp-prefer-flymake             nil
+                 lsp-enable-on-type-formatting  t))
 #+end_src
 
 * lsp-ui

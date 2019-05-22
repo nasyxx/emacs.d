@@ -131,7 +131,8 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
              lsp-pyls-plugins-pyls_mypy-live-mode                    nil))
     :config
     (unless *blacken*
-      (add-hook #'before-save-hook #'lsp-format-buffer nil t)))
+      (add-hook #'python-mode-hook
+                #'(lambda () (add-hook #'before-save-hook #'lsp-format-buffer nil t)))))
 #+end_src
 
 * black
