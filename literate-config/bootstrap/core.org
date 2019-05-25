@@ -147,6 +147,36 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     "Whether to use dvorak or not."
     :group 'nasy
     :type 'boolean)
+
+  (defcustom *font* "OperatorMonoSSmLig Nerd Font Mono"
+   "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'string)
+
+  (defcustom *font-size* 12.0
+   "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'float)
+
+  (defcustom *font-weight* 'normal
+   "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'symbol)
+
+  (defcustom *font-cjk* "Xingkai SC"
+   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'string)
+
+  (defcustom *font-size-cjk* 16.0
+   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'float)
+
+  (defcustom *font-weight-cjk* 'light
+   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'symbol)
 #+end_src
 
 ** macOS Frame

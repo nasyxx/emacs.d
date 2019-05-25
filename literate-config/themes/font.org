@@ -61,20 +61,23 @@ But disabled for it's tooo slow.
 * set fonts
 
 #+begin_src elisp
-  (set-face-attribute
-   'default nil
-   :font (font-spec :name "-*-OperatorMonoSSmLig Nerd Font Mono-normal-normal-normal-*-*-110-*-*-m-0-iso10646-1"
-                    :weight 'normal
-                    :slant 'normal
-                    :size 12.0))
+  (defun nasy/set-font ()
+    "Nasy set font"
+    (interactive)
+    (set-face-attribute
+     'default nil
+     :font (font-spec :name   *font*
+                      :weight *font-weight*
+                      :size   *font-size*))
 
-  (when (display-graphic-p)
-    (dolist (charset '(kana han symbol cjk-misc bopomofo))
-      (set-fontset-font
-       (frame-parameter nil 'font)
-       charset
-       (font-spec :name "-*-PingFang SC-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
-                  :weight 'normal
-                  :slant 'normal
-                  :size 16.0))))
+    (when (display-graphic-p)
+      (dolist (charset '(kana han symbol cjk-misc bopomofo))
+        (set-fontset-font
+         (frame-parameter nil 'font)
+         charset
+         (font-spec :name   *font-cjk*
+                    :weight *font-weight-cjk*
+                    :size   *font-size-cjk*)))))
+
+  (nasy/set-font)
 #+end_src
