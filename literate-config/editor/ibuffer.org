@@ -12,6 +12,7 @@
                             (name . "^\\*scratch\\*$"   )
                             (name . "^\\*Messages\\*$"  )
                             (name . "^\\*Backtrace\\*$" )))
+              ("Term"       (mode . vterm-mode))
               ("Text"      (or
                             (mode . org-mode)
                             (mode . markdown)
