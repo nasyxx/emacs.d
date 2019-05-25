@@ -3,7 +3,6 @@ I use [[https://github.com/raxod502/straight.el][straight.el]] as my packages ma
 #+begin_src elisp
   (setq straight-recipes-gnu-elpa-use-mirror t
         straight-repository-branch           "develop"
-        straight-check-for-modifications     'live
         straight-vc-git-default-clone-depth  1)
 
   (defvar bootstrap-version)
