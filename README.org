@@ -105,7 +105,9 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
    ,*struct-hs*           nil
    ;; *vterm*               "/Users/Nasy/src/emacs-libvterm"
    ,*risky-var*           nil
-   ,*dvorak*              nil)
+   ,*dvorak*              nil
+   ,*font-cjk*            "Kaiti SC"
+   ,*font-weight-cjk*     'normal)
   (provide 'user-config-example)
 #+END_SRC
 
