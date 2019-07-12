@@ -616,6 +616,7 @@ I use super save to auto save files.
     :gfhook '(lambda () (remove-hook #'mouse-leave-buffer-hook #'super-save-command))
     :init (gsetq super-save-auto-save-when-idle nil
                  super-save-remote-files        nil
+                 super-save-hook-triggers       nil
                  super-save-triggers
                  '(ibuffer other-window windmove-up windmove-down windmove-left windmove-right next-buffer previous-buffer)))
 #+end_src
