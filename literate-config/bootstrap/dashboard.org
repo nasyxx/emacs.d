@@ -15,6 +15,7 @@
     :init
     (gsetq dashboard-startup-banner    'official
            dashboard-center-content    t
+           dashboard-show-shortcuts    t
            dashboard-set-heading-icons nil
            dashboard-set-file-icons    t
            dashboard-set-init-info     nil
