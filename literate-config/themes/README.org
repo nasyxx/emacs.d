@@ -4,15 +4,15 @@
   ;;----------------------------------------------------------------------------
 #+end_src
 
+* Font
+
+#+include: "font.org"
+
 * Main Theme
 
 I use doom-themes.
 
 #+include: "main-theme.org"
-
-* Font
-
-#+include: "font.org"
 
 * Mode Line
 
