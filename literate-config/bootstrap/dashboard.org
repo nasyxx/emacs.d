@@ -1,6 +1,6 @@
 #+begin_src elisp
   (use-package dashboard
-    :after    (all-the-icons org)
+    :after    (all-the-icons org projectile page-break-lines)
     :straight t
     :bind
     ;; https://github.com/rakanalh/emacs-dashboard/issues/45
