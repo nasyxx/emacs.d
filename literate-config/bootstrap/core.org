@@ -148,7 +148,7 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'boolean)
 
-  (defcustom *font* "OperatorMonoSSmLig Nerd Font Mono"
+  (defcustom *font* "OperatorMonoSSmLig Nerd Font"
    "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
    :group 'nasy
    :type 'string)
