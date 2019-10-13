@@ -36,6 +36,7 @@
 
 #+begin_src elisp
   (use-package highlight-numbers
+    :disabled t
     :straight t
     :ghook '(after-init-hook prog-mode-hook text-mode-hook org-mode-hook))
 #+end_src
