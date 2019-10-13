@@ -195,37 +195,38 @@
      org-latex-compiler "lualatex"
      org-latex-default-packages-alist
      (quote
-      (("AUTO" "inputenc" t
-        ("pdflatex"))
-       ("T1" "fontenc" t
-        ("pdflatex"))
-       ("" "graphicx" t nil)
-       ("" "grffile" t nil)
-       ("" "longtable" t nil)
-       ("" "wrapfig" nil nil)
-       ("" "rotating" nil nil)
-       ("normalem" "ulem" t nil)
-       ("" "amsmath" t nil)
-       ("" "textcomp" t nil)
-       ("" "amssymb" t nil)
-       ("" "capt-of" nil nil)
+      (("AUTO" "inputenc"  t   ("pdflatex"))
+       ("T1"   "fontenc"   t   ("pdflatex"))
+       (""     "graphicx"  t   nil)
+       (""     "grffile"   t   nil)
+       (""     "longtable" t   nil)
+       (""     "booktabs"  t   nil)
+       (""     "wrapfig"   nil nil)
+       (""     "rotating"  nil nil)
+       ("normalem" "ulem"  t   nil)
+       (""     "amsmath"   t   nil)
+       (""     "textcomp"  t   nil)
+       (""     "amssymb"   t   nil)
+       (""     "capt-of"   nil nil)
        ("colorlinks,unicode,linkcolor=blue,anchorcolor=blue,citecolor=green,filecolor=black,urlcolor=blue"
         "hyperref" t nil)
-       ("" "luatexja-fontspec" t nil)
-       ("" "listings" t nil)))
+       (""            "luatexja-fontspec" t nil)
+       (""            "listings"          t nil)
+       ("cache=false" "minted"            t nil)))
      org-latex-default-table-environment "longtable"
-     org-latex-listings t
+     org-latex-listings 'minted
      org-latex-listings-langs
      (quote
       ((emacs-lisp   "Lisp")
        (lisp         "Lisp")
        (clojure      "Lisp")
        (c            "C")
+       (C            "C")
        (cc           "C++")
        (fortran      "fortran")
        (perl         "Perl")
        (cperl        "Perl")
-       (Python       "python")
+       (Python       "Python")
        (python       "Python")
        (ruby         "Ruby")
        (html         "HTML")
@@ -240,6 +241,7 @@
        (sql          "SQL")
        (sqlite       "sql")
        (makefile     "make")
+       (make         "make")
        (R            "r")))
      org-latex-pdf-process
      (quote
@@ -268,6 +270,8 @@
                           ("bash"      . sh)
                           ("beamer"    . latex)
                           ("calc"      . fundamental)
+                          ("makefile"  . fundamental)
+                          ("make"      . fundamental)
                           ("cpp"       . c++)
                           ("ditaa"     . artist)
                           ("dot"       . fundamental)
