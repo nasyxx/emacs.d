@@ -148,6 +148,11 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'boolean)
 
+  (defcustom *mouse-color* "black"
+    "Mouse color."
+    :group 'nasy
+    :type 'string)
+
   (defcustom *font* "OperatorMonoSSmLig Nerd Font"
    "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
    :group 'nasy
@@ -281,6 +286,11 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     cursor-in-non-selected-windows t)
 
   (blink-cursor-mode t)
+
+  (add-hook 'nasy/config-after-hook
+            #'(lambda ()
+                (when (fboundp 'set-mouse-color)
+                  (set-mouse-color *mouse-color*))))
 #+end_src
 
 *** Languages
