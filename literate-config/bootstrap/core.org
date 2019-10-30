@@ -65,6 +65,11 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'string)
 
+  (defcustom *ccls* (executable-find "ccls")  ;; macOS
+    "Ccls path.  If nil, will not use ccls."
+    :group 'nasy
+    :type 'string)
+
   (defcustom *eldoc-box* nil
     "Whether to use eloc-box or not."
     :group 'nasy
