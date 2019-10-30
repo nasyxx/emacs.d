@@ -14,10 +14,11 @@
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 
 #+HTML_HEAD: <style>kbd {border-style: outset;} pre.src:before {top: -4px; box-shadow: 3px 3px 3px #eee; border-color: #ccc; padding: 0;}</style>
-#+HTML_HEAD: <style>#content {background-color: #fff0f8;} body,pre.src {background-color: #282a36; transition: box-shadow 2s}</style>
-#+HTML_HEAD: <style>pre.src {text-shadow: 0 0 10px #000; box-shadow: 1px 1px 5px #7a378b; color: #9e579d;}</style>
-#+HTML_HEAD: <style>pre.src:hover{box-shadow: 1px 1px 10px #7a378b;}</style>
-#+HTML_HEAD: <style>#text-table-of-contents ul li ul li ul li ul:{background-color:#39375b;} #table-of-contents a:hover {background-color: #745cg97;}</style>
+#+HTML_HEAD: <style>#content {background-color: #e0ffcd;} body,pre.src {background-color: #282a36; transition: box-shadow 2s}</style>
+#+HTML_HEAD: <style>pre.src {text-shadow: 2px 2px 10px; box-shadow: 1px 1px 5px #7a378b; color: #39375b; background-color: #ffffd2;}</style>
+#+HTML_HEAD: <style>pre.src:hover{box-shadow: 1px 1px 10px #c0ffc2, 1px 1px 5px #7a378b;}</style>
+#+HTML_HEAD: <style>#table-of-contents h2 {background-color: #ffcab0; color: #745c97;} </style>
+#+HTML_HEAD: <style>#table-of-contents {background: #745c97;} #table-of-contents a {color: #e0ffcd;} ul.nav li.active a {background-color: #f69d9d;} ul.nav li.active ul li a {background-color: #ffcab0;} ul.nav li.active ul li.active a {background-color: #ffebbb;} #table-of-contents a:hover {background-color: #d597ce;}</style>
 
 #+LATEX_HEADER: \setmainjfont[BoldFont=PingFang SC]{FandolSong}
 #+LATEX_HEADER: \setsansfont{PingFang SC}
