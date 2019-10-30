@@ -74,6 +74,7 @@
      company-backends)
     (gsetq company-lsp-async               t
            company-lsp-enable-recompletion t
+           company-transformers            nil
            company-lsp-enable-snippet      t
            company-lsp-cache-candidates    nil)
     :config
@@ -84,8 +85,24 @@
 
 #+begin_src elisp
   (use-package dap-mode
-    :defer    t
+    :straight t)
+  (use-package dap-python)
+  (use-package dap-lldb)
+#+end_src
+
+* Helm Lsp
+
+#+begin_src elisp
+  (use-package helm-lsp
+    :straight t)
+#+end_src
+
+* lsp-treemacs
+
+#+begin_src elisp
+  (use-package lsp-treemacs
     :straight t
     :config
-    (require 'dap-python))
+    (lsp-metals-treeview-enable t)
+    (gsetq lsp-metals-treeview-show-when-views-received t))
 #+end_src
