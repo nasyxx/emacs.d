@@ -17,6 +17,7 @@
 #+HTML_HEAD: <style>#content {background-color: #fff0f8;} body,pre.src {background-color: #282a36; transition: box-shadow 2s}</style>
 #+HTML_HEAD: <style>pre.src {text-shadow: 0 0 10px #000; box-shadow: 1px 1px 5px #7a378b; color: #9e579d;}</style>
 #+HTML_HEAD: <style>pre.src:hover{box-shadow: 1px 1px 10px #7a378b;}</style>
+#+HTML_HEAD: <style>#text-table-of-contents ul li ul li ul li ul:{background-color:#39375b;} #table-of-contents a:hover {background-color: #745cg97;}</style>
 
 #+LATEX_HEADER: \setmainjfont[BoldFont=PingFang SC]{FandolSong}
 #+LATEX_HEADER: \setsansfont{PingFang SC}
