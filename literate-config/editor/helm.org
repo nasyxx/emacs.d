@@ -16,7 +16,8 @@
            helm-apropos-fuzzy-match    t
            helm-lisp-fuzzy-completion  t
            helm-allow-mouse            t
-           helm-follow-mode-persistent t)
+           helm-follow-mode-persistent t
+           helm-ff-lynx-style-map      t)
 
     (when (executable-find "curl")
       (gsetq helm-google-suggest-use-curl-p t))
