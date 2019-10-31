@@ -82,9 +82,14 @@ https://gitlab.com/koral/gcmh/blob/master/gcmh.el
 #+end_src
 
 #+begin_src elisp
-  (setq garbage-collection-messages t)
   (straight-use-package 'gcmh)
-  (gcmh-mode)
+  (use-package gcmh
+    :demand t
+    :init
+    (setq gcmh-verbose t
+          gcmh-high-cons-threshold #x20000000)
+    :config
+    (gcmh-mode))
 #+end_src
 
 * Benchmark
