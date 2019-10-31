@@ -210,56 +210,7 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
         (suspend-frame))))
 #+end_src
 
-** macOS Key Bindings
-
-#+begin_src elisp
-  (when *is-a-mac*
-    (gsetq mac-option-modifier  'meta
-           mac-command-modifier 'hyper
-           mac-right-command-modifier 'control)
-
-    (general-define-key
-     "C-z" 'stop-minimizing-window
-
-     ;; cursor Movement
-     "H-<up>"   'beginning-of-buffer
-     "H-<down>" 'end-of-buffer
-     "H-l"      'goto-line
-
-     ;; text Operations
-     "H-a" 'mark-whole-buffer
-     "H-v" 'yank
-     "H-c" 'kill-ring-save
-     "H-s" 'save-buffer
-     "H-z" 'undo
-     "H-w" (lambda! (delete-window))
-     "M-¥" (lambda! (insert "\\"))
-     "H-<backspace>" (lambda! (kill-line 0)))
-
-    ;; unset
-    (global-unset-key (kbd "<magnify-down>"))
-    (global-unset-key (kbd "<magnify-up>")))
-#+end_src
-
-** Dvorak Key Bindings
-
-#+begin_src elisp
-  (add-hook #'nasy/config-after-hook
-            #'(lambda ()
-                (when *dvorak*
-                  (general-define-key
-                   :keymaps 'key-translation-map
-                   "C-," "C-x"
-                   "C-x" "C-,"
-                   "M-," "M-x"
-                   "M-x" "M-,"
-                   "C-c" "C-."
-                   "C-." "C-c"
-                   "M-c" "M-."
-                   "M-." "M-c"))))
-#+end_src
-
-** Disable Some Features
+* Disable Some Features
 
 #+begin_src elisp
   (setq use-file-dialog        nil

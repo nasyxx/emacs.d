@@ -96,12 +96,6 @@ https://gitlab.com/koral/gcmh/blob/master/gcmh.el
     :hook ((after-init . benchmark-init/deactivate)))
 #+end_src
 
-* Expand load-path
-
-#+begin_src elisp
-  (add-to-list 'load-path (expand-file-name "custom" user-emacs-directory))
-#+end_src
-
 * No Littering
 
 https://github.com/emacscollective/no-littering
@@ -109,6 +103,18 @@ https://github.com/emacscollective/no-littering
 #+begin_src elisp
   (straight-use-package 'no-littering)
   (require 'no-littering)
+#+end_src
+
+* Define Nasy Custom
+
+#+include: "custom.org"
+
+* Expand load-path and load user custom
+
+#+begin_src elisp
+  (add-to-list 'load-path (expand-file-name "custom" user-emacs-directory))
+  (require 'user-config-example)
+  (require 'user-config nil t)
 #+end_src
 
 * Key Definition

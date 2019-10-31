@@ -1,0 +1,353 @@
+Here includes all of the customizable variables of my configuration.
+
+You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @@
+
+* Custom Config Hooks
+
+#+begin_src elisp
+  (defvar nasy/config-before-hook nil
+    "Hooks to run config functions before load custom.el.")
+
+  (defvar nasy/config-after-hook nil
+    "Hooks to run config functions after.")
+
+  (add-hook 'nasy/config-after-hook
+            #'(lambda () (message "Hi~ Hope you have fun with this config.")))
+
+  (add-hook 'after-init-hook
+            #'(lambda () (run-hooks 'nasy/config-after-hook)))
+#+end_src
+
+* Custom
+
+#+begin_src elisp
+  (defgroup nasy nil
+    "Nasy Emacs Custom Configurations."
+    :group 'emacs)
+
+  (defcustom lisp-modes-hooks '(cider-repl-mode-hook
+                                clojure-mode-hook
+                                clojurec-mode-hook
+                                clojurescript-mode-hook
+                                clojurex-mode-hook
+                                common-lisp-mode-hook
+                                emacs-lisp-mode-hook
+                                eshell-mode-hook
+                                geiser-repl-mode-hook
+                                gerbil-mode-hook
+                                inf-clojure-mode-hook
+                                inferior-emacs-lisp-mode-hook
+                                inferior-lisp-mode-hook
+                                inferior-scheme-mode-hook
+                                lisp-interaction-mode-hook
+                                lisp-mode-hook
+                                monroe-mode-hook
+                                racket-mode-hook
+                                racket-repl-mode-hook
+                                scheme-interaction-mode-hook
+                                scheme-mode-hook
+                                slime-repl-mode-hook
+                                stumpwm-mode-hook)
+    "List of lisp-related modes hooks."
+    :type '(repeat symbol)
+    :group 'nasy)
+
+  (defcustom *clangd* (executable-find "clangd")
+    "Clangd path.  If nil, will not use clangd."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *ccls* (executable-find "ccls")  ;; macOS
+    "Ccls path.  If nil, will not use ccls."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *eldoc-box* nil
+    "Whether to use eloc-box or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *nix* nil
+    "Nix path.  If nil, will not use nix."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *rust* (or (executable-find "rustc")
+                        (executable-find "cargo")
+                        (executable-find "rustup"))
+    "The Rust path.  If nil, will not use Rust."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *rls* (executable-find "rls")
+    "The rls path.  If nil, will not use rls."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *debug* t
+    "Whether to use debug or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *server* t
+    "Whether to use server or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *intero* t
+    "Whether to use intero or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *struct-hs* (executable-find "structured-haskell-mode")
+    "The structured-haskell-mode path.  If nil, will not use structured-haskell-mode."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *blacken* nil
+    "Whether to use blacken or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *c-box* t
+    "Whether to use company box or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *ivy-posframe* nil
+    "Whether to use ivy-posframe or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *vterm* nil
+    "Whether to use vterm or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *org-headline-rescale* t
+    "Whether to rescale org-headline or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *ispell* (executable-find "aspell")
+    "The Ispell.  If nil, will not use Ispell."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *theme* 'doom-dracula
+    "The Theme."
+    :group 'nasy
+    :type 'symbol)
+
+  (defcustom *dvorak* nil
+    "Whether to use dvorak or not."
+    :group 'nasy
+    :type 'boolean)
+
+  (defcustom *mouse-color* "black"
+    "Mouse color."
+    :group 'nasy
+    :type 'string)
+
+  (defcustom *font* "OperatorMonoSSmLig Nerd Font"
+   "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'string)
+
+  (defcustom *font-size* 12.0
+   "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'float)
+
+  (defcustom *font-weight* 'normal
+   "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'symbol)
+
+  (defcustom *font-cjk* "Xingkai SC"
+   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'string)
+
+  (defcustom *font-size-cjk* 16.0
+   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'float)
+
+  (defcustom *font-weight-cjk* 'light
+   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'symbol)
+#+end_src
+
+* Default Settings
+
+** Company
+
+#+begin_src elisp
+  (setq-default
+   company-idle-delay .5)
+#+end_src
+
+** Cursor
+
+#+begin_src elisp
+  (setq-default
+    blink-cursor-interval .6
+    blink-matching-paren  t
+    cursor-in-non-selected-windows t)
+
+  (blink-cursor-mode t)
+
+  (add-hook 'nasy/config-after-hook
+            #'(lambda ()
+                (when (fboundp 'set-mouse-color)
+                  (set-mouse-color *mouse-color*))))
+#+end_src
+
+** Languages
+
+#+begin_src elisp
+  (setq-default
+   haskell-stylish-on-save nil
+   blacken-line-length     80
+   lsp-rust-rls-command    '("rls"))
+#+end_src
+
+** Pandoc
+
+#+begin_src elisp
+  (setq-default
+   org-pandoc-options-for-context     '((template . "~/.emacs.d/nasy-context.tex"))  ;; I have no idea why I cannot set it as a variable.
+   org-pandoc-options-for-context-pdf '((template . "~/.emacs.d/nasy-context.tex")))
+#+end_src
+
+** Parens
+
+#+begin_src elisp
+  (setq-default
+   show-paren-style                                'parenthesis
+   sp-autoinsert-quote-if-followed-by-closing-pair t
+   sp-base-key-bindings                            'paredit
+   sp-show-pair-from-inside                        t)
+#+end_src
+
+** Scrolling
+
+#+begin_src elisp
+  (setq hscroll-margin                  7
+        scroll-margin                   7
+        hscroll-step                    7
+        scroll-step                     7
+        scroll-conservatively           100000
+        scroll-preserve-screen-position 'always
+        mac-mouse-wheel-smooth-scroll    nil)
+#+end_src
+
+** Shell
+
+#+begin_src elisp
+  (setq-default
+   shell-file-name "/bin/zsh")
+#+end_src
+
+** Start
+
+#+begin_src elisp
+  (setq-default
+   initial-scratch-message     (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+   dashboard-banner-logo-title (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n")
+   ;; initial-buffer-choice       #'(lambda () (get-buffer "*dashboard*"))  ;; It will cause error if you start emacs from Command line with file name
+                                                                            ;; https://github.com/rakanalh/emacs-dashboard/issues/69
+  )
+#+end_src
+
+** Visual
+
+#+begin_src elisp
+  (setq-default
+   fill-column                    80
+   visual-fill-column-width       100
+   word-wrap                      t
+   highlight-indent-guides-method 'column
+   tab-width                      8
+   tooltip-delay                  1.5)
+#+end_src
+
+** Whitespace
+
+#+begin_src elisp
+  (setq-default
+   whitespace-line-column 80
+   whitespace-style       '(face spaces tabs newline
+                            space-mark tab-mark newline-mark
+                            lines-tail empty))
+#+end_src
+
+** Mess
+
+#+begin_src elisp
+  (setq-default
+     bookmark-default-file (no-littering-expand-var-file-name ".bookmarks.el")
+     buffers-menu-max-size 30
+     case-fold-search      t
+     column-number-mode    t
+     dired-dwim-target     t
+     ediff-split-window-function 'split-window-horizontally
+     ediff-window-setup-function 'ediff-setup-windows-plain
+     indent-tabs-mode      nil
+     line-move-visual      t
+     make-backup-files     nil
+     mouse-yank-at-point   t
+     require-final-newline t
+     save-interprogram-paste-before-kill t
+     set-mark-command-repeat-pop    t
+     tab-always-indent              'complete
+     truncate-lines                 nil
+     truncate-partial-width-windows nil)
+
+  (when *is-a-mac*
+    (setq line-move-visual nil))
+
+  (fset 'yes-or-no-p 'y-or-n-p)
+
+  (global-auto-revert-mode t)
+
+  (delete-selection-mode t)
+#+end_src
+
+** Config After initialization
+
+#+begin_src elisp
+  (defun nasy/config-after ()
+    "Set configuration need to be set after init."
+    (setq-default
+     ;; helm-allow-mouse                  t
+     ;; helm-follow-mode-persistent       t
+     ;; helm-move-to-line-cycle-in-source nil
+     ;; helm-source-names-using-follow    '("Buffers" "kill-buffer" "Occur")
+     debug-on-error *debug*))
+
+
+  (add-hook 'nasy/config-after-hook  #'nasy/config-after)
+#+end_src
+
+** Custom Faces
+
+#+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
+  (defun nasy/set-face ()
+    "Set custom face."
+    (set-face-attribute 'org-meta-line               nil                                             :slant   'italic)
+    (set-face-attribute 'org-block-begin-line        nil                                             :slant   'italic)
+    (set-face-attribute 'org-block-end-line          nil                                             :slant   'italic)
+    (set-face-attribute 'font-lock-comment-face      nil                                             :slant   'italic)
+    (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
+    (set-face-attribute 'show-paren-match            nil :background "#a1de93" :foreground "#705772" :weight  'ultra-bold)
+    (set-face-attribute 'sp-show-pair-match-face     nil :background "#a1de93" :foreground "#705772" :weight  'ultra-bold)
+    (when *org-headline-rescale*
+      (set-face-attribute 'org-level-1 nil :height 1.6 :inherit 'outline-1)
+      (set-face-attribute 'org-level-2 nil :height 1.4 :inherit 'outline-2)
+      (set-face-attribute 'org-level-3 nil :height 1.2 :inherit 'outline-3)
+      (set-face-attribute 'org-level-4 nil :height 1.1 :inherit 'outline-4)))
+  (add-hook 'nasy/config-after-hook #'nasy/set-face)
+#+end_src
