@@ -123,7 +123,11 @@ https://github.com/emacscollective/no-littering
 
 * Load Org
 
-#+include: "early-load-org-mode.org"
+When using straight.el, the org version is needed to custom set.
+
+#+begin_src elisp
+  (straight-use-package 'org-plus-contrib)
+#+end_src
 
 * Core
 

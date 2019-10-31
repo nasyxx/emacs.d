@@ -1,5 +1,0 @@
-When using straight.el, the org version is needed to custom set.
-
-#+begin_src elisp
-  (straight-use-package 'org-plus-contrib)
-#+end_src
