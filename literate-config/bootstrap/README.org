@@ -72,7 +72,9 @@ If this os is macOS?
 
 * Garbage Collection
 
-Adjust garbage collection thresholds during startup, and thereafter
+Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
+
+https://gitlab.com/koral/gcmh/blob/master/gcmh.el
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
@@ -80,13 +82,9 @@ Adjust garbage collection thresholds during startup, and thereafter
 #+end_src
 
 #+begin_src elisp
-  (let ((normal-gc-cons-threshold (* 128 1024 1024))
-        (init-gc-cons-threshold (* 256 1024 1024)))
-    (setq gc-cons-threshold init-gc-cons-threshold)
-    (add-hook #'emacs-startup-hook
-              (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
-
-  (add-hook 'focus-out-hook #'garbage-collect)
+  (setq garbage-collection-messages t)
+  (straight-use-package 'gcmh)
+  (gcmh-mode)
 #+end_src
 
 * Benchmark
