@@ -20,22 +20,9 @@ I use [[https://github.com/raxod502/straight.el][straight.el]] as my packages ma
     (load bootstrap-file nil 'nomessage))
 #+end_src
 
-Some packages need to re-register, due to they cannot only do shadow-clone.
+At the same time, I use [[https://github.com/jwiegley/use-package][use-package]] to manage packages' loading.
 
 #+begin_src elisp
-  (straight-register-package
-     '(magit :type git :host github
-             :repo "magit/magit"
-             :depth full))
-
-  (straight-register-package
-     '(git-commit :type git :host github
-                  :repo "magit/magit"
-                  :depth full))
-#+end_src
-
-At the same time, I use [[https://github.com/jwiegley/use-package][use-package]] to manage packages in one file.
-
-#+begin_src elisp
+  (setq straight-enable-use-package-integration nil)
   (straight-use-package 'use-package)
 #+end_src
