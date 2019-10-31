@@ -99,15 +99,16 @@ https://gitlab.com/koral/gcmh/blob/master/gcmh.el
 * Expand load-path
 
 #+begin_src elisp
-  (add-to-list 'load-path (expand-file-name "lisp"   user-emacs-directory))
   (add-to-list 'load-path (expand-file-name "custom" user-emacs-directory))
 #+end_src
 
 * No Littering
 
+https://github.com/emacscollective/no-littering
+
 #+begin_src elisp
-  (use-package no-littering
-    :straight t)
+  (straight-use-package 'no-littering)
+  (require 'no-littering)
 #+end_src
 
 * Key Definition
