@@ -138,6 +138,10 @@ When using straight.el, the org version is needed to custom set.
 
 #+include: "core.org"
 
+* Custom Functions
+
+#+include: "cusfuncs.org"
+
 * Window
 
 #+begin_src elisp :exports none
