@@ -144,11 +144,6 @@ When using straight.el, the org version is needed to custom set.
 
 * Window
 
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; Window
-#+end_src
-
 #+include: "window.org"
 
 * Dashboard

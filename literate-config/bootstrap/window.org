@@ -1,9 +1,13 @@
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Window
+#+end_src
+
 * Ace Window
 
 #+begin_src elisp
+  (straight-use-package 'ace-window)
   (use-package ace-window
-    :defer    t
-    :straight t
     :bind (("M-o" . ace-window))
     :config
     (set-face-attribute
@@ -86,10 +90,10 @@
 * Switch-Window
 
 #+begin_src elisp
+  (straight-use-package 'switch-window)
   (use-package switch-window
-    :straight t
-    :init (setq-default switch-window-shortcut-style 'alphabet
-                        switch-window-timeout nil)
+    :init (gsetq-default switch-window-shortcut-style 'alphabet
+                         switch-window-timeout nil)
     :config
     ;; When splitting window, show (other-buffer) in the new window
     (defun split-window-func-with-other-buffer (split-function)
