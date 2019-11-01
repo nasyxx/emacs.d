@@ -6,12 +6,7 @@
 #+end_src
 
 #+begin_src elisp
-  (use-package disable-mouse
-    :straight t
-    :config
-    (general-define-key
-     "<mouse-4>" (lambda! (scroll-down 1))
-     "<mouse-5>" (lambda! (scroll-up 1))))
+  (straight-use-package 'disable-mouse)
 #+end_src
 
 * Minibuffer

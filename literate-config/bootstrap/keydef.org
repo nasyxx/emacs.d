@@ -94,3 +94,11 @@ https://github.com/noctuid/general.el
         (gsetq *dvorak* nil)
         (message "Use normal key bindings."))))
 #+end_src
+
+* Mouse Key Bindings
+
+#+begin_src elisp
+  (general-define-key
+   "<mouse-4>" (lambda! (scroll-down 1))
+   "<mouse-5>" (lambda! (scroll-up 1)))
+#+end_src
