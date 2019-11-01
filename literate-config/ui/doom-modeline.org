@@ -53,7 +53,7 @@
     ;; nasy/time
     (doom-modeline-def-modeline 'main
       '(bar workspace-name window-number matches buffer-info remote-host buffer-position selection-info)
-      '(misc-info persp-name lsp irc mu4e github debug fancy-battery minor-modes input-method major-mode process vcs checker " " process nasy/time))
+      '(misc-info persp-name lsp irc mu4e github debug battery minor-modes input-method major-mode process vcs checker " " process nasy/time))
 
     (doom-modeline-def-modeline 'minimal
       '(bar matches " " buffer-info)
@@ -61,7 +61,7 @@
 
     (doom-modeline-def-modeline 'special
       '(bar window-number matches buffer-position selection-info)
-      '(misc-info lsp irc-buffers debug fancy-battery minor-modes input-method major-mode process nasy/time))
+      '(misc-info lsp irc-buffers debug battery minor-modes input-method major-mode process nasy/time))
 
     (doom-modeline-def-modeline 'media
       '(bar window-number buffer-size buffer-info)
@@ -73,7 +73,7 @@
 
     (doom-modeline-def-modeline 'project
       '(bar window-number " " buffer-default-directory)
-      '(misc-info mu4e github debug fancy-battery " " major-mode " " process nasy/time))
+      '(misc-info mu4e github debug battery " " major-mode " " process nasy/time))
 
     ;; Change behaviors
     (defun nasy/doom-modeline-update-buffer-file-name (&rest _)
