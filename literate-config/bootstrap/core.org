@@ -211,8 +211,8 @@
 I use super save to auto save files.
 
 #+begin_src elisp
+  (straight-use-package 'super-save)
   (use-package super-save
-    :straight t
     :ghook 'after-init-hook
     :gfhook '(lambda () (remove-hook #'mouse-leave-buffer-hook #'super-save-command))
     :init (gsetq super-save-auto-save-when-idle nil
@@ -225,7 +225,8 @@ I use super save to auto save files.
 * Text Scale
 
 #+begin_src elisp
+  (straight-use-package 'default-text-scale)
   (use-package default-text-scale
-    :defer    t
-    :straight t)
+    :commands default-text-scale-mode
+    :ghook 'after-init-hook)
 #+end_src
