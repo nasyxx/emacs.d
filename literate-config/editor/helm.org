@@ -1,9 +1,8 @@
 * Helm
 
 #+begin_src elisp
+  (straight-use-package 'helm)
   (use-package helm-config
-    :defer    3
-    :straight helm
     :diminish helm-mode
     :hook ((after-init . helm-mode)
            (after-init . helm-autoresize-mode))
@@ -34,7 +33,7 @@
            "rg --color=always --colors 'match:fg:black' --colors 'match:bg:yellow' --smart-case --no-heading --line-number %s %s %s"
            helm-grep-ag-pipe-cmd-switches
            '("--colors 'match:fg:black'" "--colors 'match:bg:yellow'"))
-    :config
+
     (general-define-key
      "M-x"     'helm-M-x
      "M-y"     'helm-show-kill-ring
@@ -59,6 +58,7 @@
      :keymaps 'minibuffer-local-map
      "C-c C-l" 'helm-minibuffer-history)
 
+    :config
     (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 
     (require 'helm-buffers)
