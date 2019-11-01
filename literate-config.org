@@ -4,6 +4,11 @@
 
 #+include: "literate-config/bootstrap/README.org"
 
+* UI
+
+#+include: "literate-config/ui/README.org"
+
+
 * Editor
 
 #+include: "literate-config/editor/README.org"
@@ -15,10 +20,6 @@
 * Org Mode
 
 #+include: "literate-config/org/README.org"
-
-* Themes
-
-#+include: "literate-config/themes/README.org"
 
 * Epilogue
 

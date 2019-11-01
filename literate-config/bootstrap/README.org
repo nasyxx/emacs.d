@@ -146,10 +146,6 @@ When using straight.el, the org version is needed to custom set.
 
 #+include: "window.org"
 
-* Dashboard
-
-#+include: "dashboard.org"
-
 * Basic
 
 #+include: "basic.org"

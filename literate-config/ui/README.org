@@ -1,6 +1,6 @@
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
-  ;; Themes
+  ;; UI
   ;;----------------------------------------------------------------------------
 #+end_src
 
@@ -35,3 +35,7 @@ I use doom-themes.
 # #+include: "spaceline.org"
 
 #+include: "doom-modeline.org"
+
+* Dashboard
+
+#+include: "dashboard.org"

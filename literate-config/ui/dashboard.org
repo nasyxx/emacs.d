@@ -1,7 +1,7 @@
 #+begin_src elisp
+  (straight-use-package 'dashboard)
   (use-package dashboard
-    :after    (all-the-icons org projectile page-break-lines)
-    :straight t
+    :demand t
     :bind
     ;; https://github.com/rakanalh/emacs-dashboard/issues/45
     (:map dashboard-mode-map
@@ -18,12 +18,13 @@
            dashboard-show-shortcuts    t
            dashboard-set-heading-icons t
            dashboard-set-file-icons    t
-           dashboard-set-init-info     nil
+           dashboard-set-init-info     t
            show-week-agenda-p          t
            dashboard-items '((recents   . 10)
                              (bookmarks . 5)
-                             (projects  . 5)
-                             (agenda    . 5)))
-                             ;; (registers . 5 )
+                             ;;(registers . 5 )
+                             ;;(agenda    . 5)
+                             (projects  . 5)))
+    :config
     (dashboard-setup-startup-hook))
 #+end_src
