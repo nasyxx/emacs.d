@@ -41,24 +41,26 @@
 * Compile
 
 #+begin_src elisp
-  (use-package async
-    :straight t
+  ;; https://github.com/jwiegley/emacs-async
+  (straight-use-package 'async)
+  (use-package dired-async
+    :commands dired-async-mode)
+  (use-package async-bytecomp
     :config
-    (dired-async-mode            1)
-    (async-bytecomp-package-mode 1))
+    (gsetq async-bytecomp-allowed-packages '(all))
+    (async-bytecomp-package-mode))
 
-  (use-package auto-compile
-    :demand   t
-    :straight t
-    :config
-    (auto-compile-on-load-mode)
-    (auto-compile-on-save-mode))
+  ;; (straight-use-package 'auto-compile)
+  ;; (require 'auto-compile)
+  ;; (auto-compile-on-load-mode)
+  ;; (auto-compile-on-save-mode)
 
   (setq-default compilation-scroll-output t)
 
+  ;; https://github.com/jwiegley/alert
+  (straight-use-package 'alert)
   (use-package alert
     :defer    t
-    :straight t
     :preface
     (defun alert-after-compilation-finish (buf result)
       "Use `alert' to report compilation RESULT if BUF is hidden."
@@ -99,13 +101,11 @@
 
   (use-package ansi-color
     :defer    t
-    :after    compile
-    :straight t
-    :hook ((compilation-filter . colourise-compilation-buffer))
-    :config
+    :preface
     (defun colourise-compilation-buffer ()
       (when (eq major-mode 'compilation-mode)
-        (ansi-color-apply-on-region compilation-filter-start (point-max)))))
+        (ansi-cOLOR-APPLY-on-region compilation-filter-start (point-max))))
+    :hook ((compilation-filter . colourise-compilation-buffer)))
 #+end_src
 
 * Auto Compression
