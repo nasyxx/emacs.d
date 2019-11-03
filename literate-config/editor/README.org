@@ -9,33 +9,27 @@ Here is the editor config, including some features and functions.
 * Diminish
 
 #+begin_src elisp
-  (use-package diminish
-    :demand   t
-    :straight t)
+  (straight-use-package 'diminish)
 #+end_src
 
 * FLX
 
 #+begin_src elisp
-  (use-package flx
-    :defer    t
-    :straight t)
+  (straight-use-package 'flx)
 #+end_src
 
 * Advance Words Count
 
 #+begin_src elisp
-  (use-package advance-words-count
-    :defer    t
-    :straight (advance-words-count :type git :host github :repo "LdBeth/advance-words-count.el"))
+  (straight-use-package '(advance-words-count :type git :host github :repo "LdBeth/advance-words-count.el"))
 #+end_src
 
 * Anzu
 
 #+begin_src elisp
+  (straight-use-package 'anzu)
   (use-package anzu
     :defer    t
-    :straight t
     :hook ((after-init . global-anzu-mode))
     :bind ([remap query-replace] . anzu-query-replace-regexp))
 #+end_src
@@ -58,8 +52,8 @@ Here is the editor config, including some features and functions.
 * Beginend
 
 #+begin_src elisp
+  (straight-use-package 'beginend)
   (use-package beginend
-    :straight t
     :hook ((after-init . beginend-global-mode)))
 #+end_src
 
@@ -75,17 +69,13 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
   ;; Emacs to carbon.now.sh integration
   ;; https://github.com/veelenga/carbon-now-sh.el
   ;; (carbon-now-sh)
-  (use-package carbon-now-sh
-    :defer    t
-    :straight t)
+  (straight-use-package 'carbon-now-sh)
 #+end_src
 
 * Cheat Sh
 
 #+begin_src elisp
-  (use-package cheat-sh
-    :defer    t
-    :straight t)
+  (straight-use-package 'cheat-sh)
 #+end_src
 
 * Company
@@ -95,17 +85,13 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 * Dash
 
 #+begin_src elisp
-  (use-package dash
-    :defer    t
-    :straight t)
+  (straight-use-package 'dash)
 #+end_src
 
 * Dash Functional
 
 #+begin_src elisp
-  (use-package dash-functional
-    :defer    t
-    :straight t)
+  (straight-use-package 'dash-functional)
 #+end_src
 
 * Dired
@@ -115,16 +101,14 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
 * Easy Kill
 
 #+begin_src elisp
+  (straight-use-package 'easy-kill)
   (use-package easy-kill
-    :straight t
     :bind (([remap kill-ring-save] . easy-kill)
            ([remap mark-sexp]      . easy-mark)))
 #+end_src
 
 #+begin_src elisp
-  (use-package thingopt
-    :defer    t
-    :straight t)
+  (straight-use-package 'thingopt)
 #+end_src
 
 * Eldoc Box
@@ -133,8 +117,8 @@ Disabled by default due to it causes lots of cpu.
 
 #+begin_src elisp
   (when *eldoc-box*
+    (straight-use-package 'eldoc-box)
     (use-package eldoc-box
-      :straight t
       :hook ((eldoc-mode . eldoc-box-hover-mode)
              (eldoc-mode . eldoc-box-hover-at-point-mode))))
 #+end_src
@@ -144,16 +128,16 @@ Disabled by default due to it causes lots of cpu.
 ** Unfill
 
 #+begin_src elisp
+  (straight-use-package 'unfill)
   (use-package unfill
-    :straight t
     :bind (("M-q" . unfill-toggle)))
 #+end_src
 
 ** Visual-fill-column
 
 #+begin_src elisp
+  (straight-use-package 'visual-fill-column)
   (use-package visual-fill-column
-    :straight t
     :preface
     (defun maybe-adjust-visual-fill-column ()
       "Readjust visual fill column when the global font size is modified.
@@ -172,19 +156,17 @@ Disabled by default due to it causes lots of cpu.
 * Grab Mac Link
 
 #+begin_src elisp
-  (use-package grab-mac-link
-    :defer    t
-    :straight t)
+  (straight-use-package 'grab-mac-link)
 #+end_src
 
 * Grep
 
 #+begin_src elisp
-  (setq-default grep-highlight-matches t
-                grep-scroll-output t)
+  (gsetq-default grep-highlight-matches t
+                 grep-scroll-output t)
 
   (when *is-a-mac*
-    (setq-default locate-command "mdfind"))
+    (gsetq-default locate-command "mdfind"))
 #+end_src
 
 * Highlight
@@ -196,8 +178,8 @@ Disabled by default due to it causes lots of cpu.
 [[https://github.com/Wilfred/helpful]]
 
 #+begin_src elisp
+  (straight-use-package 'helpful)
   (use-package helpful
-    :straight t
     :bind (("C-c C-d" . helpful-at-point))
     :init (general-define-key
            :prefix "C-h"
@@ -217,10 +199,10 @@ https://github.com/emacs-helm/helm
 * Htmlize
 
 #+begin_src elisp
+  (straight-use-package 'htmlize)
   (use-package htmlize
     :defer t
-    :straight t
-    :init (setq htmlize-pre-style t))
+    :init (gsetq htmlize-pre-style t))
 #+end_src
 
 * Hydra
@@ -234,8 +216,8 @@ https://github.com/emacs-helm/helm
 * imenu list
 
 #+begin_src elisp
+  (straight-use-package 'imenu-list)
   (use-package imenu-list
-    :straight t
     :bind (("C-." . imenu-list-smart-toggle))
     :init (setq imenu-list-auto-resize t))
 #+end_src
@@ -243,8 +225,8 @@ https://github.com/emacs-helm/helm
 * indent-tools
 
 #+begin_src elisp
+  (straight-use-package 'indent-tools)
   (use-package indent-tools
-    :straight t
     :bind (("C-c TAB" . indent-tools-hydra/body)))
 #+end_src
 
@@ -294,8 +276,8 @@ Now disabled.
 * Large File
 
 #+begin_src elisp
+  (straight-use-package 'vlf)
   (use-package vlf
-    :straight t
     :init
     (defun ffap-vlf ()
       "Find file at point with VLF."
@@ -309,8 +291,8 @@ Now disabled.
 * Link Hint
 
 #+begin_src elisp
+  (straight-use-package 'link-hint)
   (use-package link-hint
-    :straight t
     :bind (("C-c l o" . link-hint-open-link)
            ("C-c l c" . link-hint-copy-link))
     :config
@@ -323,16 +305,14 @@ Now disabled.
 * List Unicode Display
 
 #+begin_src elisp
-  (use-package list-unicode-display
-    :defer    t
-    :straight t)
+  (straight-use-package 'list-unicode-display)
 #+end_src
 
 * mmm-mode
 
 #+begin_src elisp
+  (straight-use-package 'mmm-mode)
   (use-package mmm-auto
-    :straight mmm-mode
     :init (gsetq
            mmm-global-mode
            'buffers-with-submode-classes
@@ -342,8 +322,8 @@ Now disabled.
 * Multiple Cursors
 
 #+begin_src elisp
+  (straight-use-package 'multiple-cursors)
   (use-package multiple-cursors
-    :straight t
     :bind (("C-<"     . mc/mark-previous-like-this)
            ("C->"     . mc/mark-next-like-this)
            ("C-+"     . mc/mark-next-like-this)
@@ -361,8 +341,8 @@ Now disabled.
 * Pangu Spacing
 
 #+begin_src elisp
+  (straight-use-package 'pangu-spacing)
   (use-package pangu-spacing
-    :straight t
     :init (gsetq pangu-spacing-real-insert-separtor t)
     :hook ((after-init . global-pangu-spacing-mode)))
 #+end_src
@@ -370,8 +350,8 @@ Now disabled.
 * Paper Break Lines
 
 #+begin_src elisp
+  (straight-use-package 'page-break-lines)
   (use-package page-break-lines
-    :straight t
     :hook ((after-init . global-page-break-lines-mode))
     :diminish page-break-lines-mode)
 #+end_src
@@ -383,11 +363,11 @@ Now disabled.
 * PDF Tools
 
 #+begin_src elisp
+  (straight-use-package 'pdf-tools)
   (use-package pdf-tools
     :defer t
-    :straight t
     :config
-    (setq-default pdf-view-display-size 'fit-width)
+    (gsetq-default pdf-view-display-size 'fit-width)
     (bind-keys :map pdf-view-mode-map
                ("\\" . hydra-pdftools/body)
                ("<s-spc>" .  pdf-view-scroll-down-or-next-page)
@@ -418,28 +398,29 @@ Now disabled.
 * Prescient
 
 #+begin_src elisp
+  (straight-use-package 'prescient)
+  ;; (straight-use-package 'ivy-prescient)
+  (straight-use-package 'company-prescient)
+
   (use-package prescient
-    :straight t
     :hook ((after-init . prescient-persist-mode)))
 
 
   (use-package ivy-prescient
     :disabled t
-    :straight t
     :ghook 'after-init-hook)
 
 
   (use-package company-prescient
-    :straight t
     :ghook 'after-init-hook)
 #+end_src
 
 * Projectile
 
 #+begin_src elisp
+  (straight-use-package 'projectile)
   (use-package projectile
-    :defer    t
-    :straight t
+    :defer t
     :diminish
     :bind-keymap ("C-c C-p" . projectile-command-map)
     :hook ((after-init . projectile-global-mode))
@@ -455,7 +436,7 @@ Now disabled.
 
 #+begin_src elisp
   (use-package recentf
-    :hook ((after-init . recentf-mode))
+    :ghook 'after-init-hook
     :init (gsetq
            recentf-save-file       "~/.emacs.d/var/recentf"
            recentf-max-saved-items 100
@@ -470,14 +451,8 @@ Now disabled.
 Now use amx instead of smex.
 
 #+begin_src elisp
-  (use-package smex
-    :disabled t
-    :straight t
-    :init (setq-default smex-save-file (no-littering-expand-var-file-name ".smex-items"))
-    :bind (("<remap> <execute-extended-command>" . smex)))
-
+  (straight-use-package 'amx)
   (use-package amx
-    :straight t
     :init (setq-default amx-save-file (no-littering-expand-var-file-name ".amx-items"))
     :bind (("<remap> <execute-extended-command>" . amx)))
 #+end_src
@@ -493,8 +468,8 @@ Now use amx instead of smex.
 * Symbol Overlay
 
 #+begin_src elisp
+  (straight-use-package 'symbol-overlay)
   (use-package symbol-overlay
-    :straight t
     :bind (("M-i"  . symbol-overlay-put)
            ("M-n"  . symbol-overlay-switch-forward)
            ("M-p"  . symbol-overlay-switch-backward)
@@ -511,9 +486,9 @@ Now use amx instead of smex.
 ** Point History
 
 #+begin_src elisp
+  (straight-use-package '(point-history :type git :host github :repo "blue0513/point-history"))
   (use-package point-history
-    :straight (point-history :type git :host github :repo "blue0513/point-history")
-    :hook ((after-init . point-history-mode))
+    :ghook 'after-init-hook
     :bind (("C-c C-/" . point-history-show))
     :init (gsetq point-history-ignore-buffer "^ \\*Minibuf\\|^ \\*point-history-show*"))
 #+end_src
@@ -521,8 +496,9 @@ Now use amx instead of smex.
 ** Undo Propose
 
 #+begin_src elisp
+  (straight-use-package 'undo-propose)
   (use-package undo-propose
-    :straight t
+    :defer
     :config (undo-propose-wrap redo))
 #+end_src
 
@@ -541,8 +517,8 @@ Now use amx instead of smex.
 * Which Key
 
 #+begin_src elisp
+  (straight-use-package 'which-key)
   (use-package which-key
-    :straight t
     :ghook 'after-init-hook)
 #+end_src
 
@@ -557,11 +533,15 @@ Now use amx instead of smex.
 * Yasnipeet
 
 #+begin_src elisp
-  (use-package yasnippet
-    :straight t
-    :hook (after-init . yas-global-mode))
+  (straight-use-package 'yasnippet)
+  (straight-use-package 'yasnippet-snippets)
 
-  (use-package yasnippet-snippets
-    :defer    t
-    :straight t)
+  (use-package yasnippet
+    :defer t
+    :bind (:map yas-minor-mode-map
+                ("C-'" . yas-expand))
+    :commands (yas-minor-mode)
+    :hook ((prog-mode . yas-minor-mode))
+    :config (yas-reload-all)
+    :diminish yas-minor-mode)
 #+end_src

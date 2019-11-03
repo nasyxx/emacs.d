@@ -6,8 +6,8 @@
 #+end_src
 
 #+begin_src elisp
+  (straight-use-package 'company)
   (use-package company
-    :straight t
     :init
     (gsetq company-minimum-prefix-length .2
            company-require-match nil
@@ -45,7 +45,6 @@
     (advice-add 'company-pseudo-tooltip-unhide :before #'pre-popup-draw)
     (advice-add 'company-pseudo-tooltip-hide :after #'post-popup-draw)
 
-    (diminish 'company-mode "CMP")
     (defun company-backend-with-yas (backends)
       "Add :with company-yasnippet to company BACKENDS.
     Taken from https://github.com/syl20bnr/spacemacs/pull/179."
@@ -57,14 +56,15 @@
                 '(:with company-yasnippet))))
     ;; add yasnippet to all backends
     (gsetq company-backends
-          (mapcar #'company-backend-with-yas company-backends)))
+           (mapcar #'company-backend-with-yas company-backends))
+    :diminish company-mode)
 #+end_src
 
 * Company Try Hard
 
 #+begin_src elisp
+  (straight-use-package 'company-try-hard)
   (use-package company-try-hard
-    :straight t
     :bind (:map company-active-map
            ("C-z" . company-try-hard)))
 #+end_src
@@ -72,28 +72,26 @@
 * Company Quickhelp
 
 #+begin_src elisp
+  (straight-use-package 'company-quickhelp)
   (use-package company-quickhelp
     :after company
-    :straight t
     :bind (:map company-active-map
                 ("C-c h" . company-quickhelp-manual-begin))
     :ghook #'after-init-hook
-    :init (setq pos-tip-use-relative-coordinates t))
+    :init (gsetq pos-tip-use-relative-coordinates t))
 #+end_src
 
 * Company Math
 
 #+begin_src elisp
-  (use-package company-math
-    :defer    t
-    :straight t)
+  (straight-use-package 'company-math)
 #+end_src
 
 * Company Flx
 
 #+begin_src elisp
+  (straight-use-package 'company-flx)
   (use-package company-flx
-    :straight t
     :after company
     :ghook #'after-init-hook)
 #+end_src
@@ -102,9 +100,9 @@
 
 #+begin_src elisp
   (when *c-box*
+    (straight-use-package 'company-box)
     (use-package company-box
       :defer    t
-      :straight t
       :after (all-the-icons company)
       :init
       (setq company-box-icons-alist 'company-box-icons-all-the-icons)

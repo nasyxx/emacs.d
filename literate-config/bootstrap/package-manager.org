@@ -3,9 +3,10 @@ I use [[https://github.com/raxod502/straight.el][straight.el]] as my packages ma
 https://github.com/raxod502/straight.el
 
 #+begin_src elisp
-  (setq straight-recipes-gnu-elpa-use-mirror t
-        straight-repository-branch           "develop"
-        straight-vc-git-default-clone-depth  1)
+  (setq straight-recipes-gnu-elpa-use-mirror    t
+        straight-repository-branch              "develop"
+        straight-vc-git-default-clone-depth     1
+        straight-enable-use-package-integration nil)
 
   (defvar bootstrap-version)
 
@@ -25,6 +26,5 @@ https://github.com/raxod502/straight.el
 At the same time, I use [[https://github.com/jwiegley/use-package][use-package]] to manage packages' loading.
 
 #+begin_src elisp
-  (setq straight-enable-use-package-integration nil)
   (straight-use-package 'use-package)
 #+end_src

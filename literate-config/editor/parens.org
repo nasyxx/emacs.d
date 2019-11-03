@@ -7,8 +7,8 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 * Smartparens
 
 #+begin_src elisp
+  (straight-use-package 'smartparens)
   (use-package smartparens-config
-    :straight smartparens
     :hook ((after-init . show-smartparens-global-mode)
            (after-init . smartparens-global-mode))
     :init (gsetq sp-hybrid-kill-entire-symbol nil))
@@ -17,8 +17,8 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 * Parinfer
 
 #+begin_src elisp
+  (straight-use-package 'parinfer)
   (use-package parinfer
-    :straight t
     :bind (("C-," . parinfer-toggle-mode))
     :init (gsetq parinfer-extensions
                  '(defaults       ; should be included.
@@ -34,16 +34,16 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 * Rainbow Delimiters
 
 #+begin_src elisp
+  (straight-use-package 'rainbow-delimiters)
   (use-package rainbow-delimiters
-    :straight t
     :ghook '(prog-mode-hook text-mode-hook org-src-mode-hook))
 #+end_src
 
 * Highlight Parentheses
 
 #+begin_src elisp
+  (straight-use-package 'highlight-parentheses)
   (use-package highlight-parentheses
-    :straight t
     :init (gsetq hl-paren-highlight-adjacent t)
     :hook ((after-init . global-highlight-parentheses-mode)))
 #+end_src

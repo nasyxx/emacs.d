@@ -3,19 +3,18 @@ Clangd or ccls.
 * clangd
 
 #+begin_src elisp
-  (when *clangd*
-    (use-package lsp-mode
-      :straight t
-      :hook (((c-mode c++-mode objc-mode) . lsp-deferred))
-      :init (setq-default lsp-clients-clangd-executable *clangd*)))
+  (use-package lsp-mode
+    :if *clangd*
+    :hook (((c-mode c++-mode objc-mode) . lsp-deferred))
+    :init (setq-default lsp-clients-clangd-executable *clangd*))
 #+end_src
 
 * ccls
 
 #+begin_src elisp
   (when *ccls*
+    (straight-use-package 'ccls)
     (use-package ccls
-      :straight t
       :hook (((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp-deferred))))
       :init (gsetq ccls-executable *ccls*
                    ccls-initialization-options

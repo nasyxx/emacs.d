@@ -1,9 +1,9 @@
 * Pretty Mode
 
 #+begin_src elisp
+  (straight-use-package 'pretty-mode)
   (use-package pretty-mode
-    :demand t
-    :straight t
+    :commands (turn-on-pretty-mode global-prettify-symbols-mode)
     :hook (((text-mode
              org-mode)  . turn-on-pretty-mode)
            (after-init  . global-prettify-symbols-mode)
@@ -217,9 +217,9 @@
 * ipretty
 
 #+begin_src elisp
+  (straight-use-package 'ipretty)
   (use-package ipretty
     :defer    t
-    :straight t
     :ghook 'after-init-hook)
 #+end_src
 

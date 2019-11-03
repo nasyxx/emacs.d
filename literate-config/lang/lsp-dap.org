@@ -1,9 +1,9 @@
 * lsp-mode
 
 #+begin_src elisp
+  (straight-use-package 'lsp-mode)
   (use-package lsp-mode
-    :straight t
-    :commands lsp
+    :commands (lsp lsp-deferred)
     :preface
     (defun delete-company-lsp ()
       "Delete company-lsp added by lsp-mode from company-backends"
@@ -16,25 +16,28 @@
              prog-mode
              company-box-mode
              company-mode) . delete-company-lsp))
-    :init (gsetq lsp-print-io                   t
-                 lsp-print-performance          t
-                 lsp-inhibit-message            t
-                 lsp-report-if-no-buffer        t
-                 lsp-keep-workspace-alive       nil
-                 lsp-enable-snippet             t
-                 lsp-restart                    'auto-restart
-                 lsp-document-sync-method       'full
-                 lsp-eldoc-render-all           t
-                 lsp-prefer-flymake             nil
-                 lsp-enable-on-type-formatting  t))
+    :init (gsetq lsp-print-io                     t
+                 lsp-print-performance            t
+                 lsp-inhibit-message              t
+                 lsp-report-if-no-buffer          t
+                 lsp-keep-workspace-alive         nil
+                 lsp-enable-snippet               t
+                 lsp-restart                      'auto-restart
+                 lsp-document-sync-method         'full
+                 lsp-eldoc-render-all             t
+                 lsp-enable-completion-at-point   t
+                 lsp-enable-xref                  t
+                 lsp-enable-indentation           t
+                 lsp-prefer-flymake               nil
+                 lsp-enable-on-type-formatting    t
+                 lsp-enable-semantic-highlighting t))
 #+end_src
 
 * lsp-ui
 
 #+begin_src elisp
+  (straight-use-package 'lsp-ui)
   (use-package lsp-ui
-    :after lsp-mode
-    :straight t
     :commands lsp-ui-mode
     :bind (:map lsp-ui-mode-map
                 ("M-,"  . lsp-ui-peek-find-definitions)
@@ -57,21 +60,22 @@
 * company-lsp
 
 #+begin_src elisp
+  (straight-use-package 'company-lsp)
   (use-package company-lsp
+    :after company
     :defer t
-    :after (lsp-mode company)
-    :straight t
     :commands company-lsp
     :init
-    (general-pushnew
-     '(company-lsp
-       company-files
-       company-dabbrev-code
-       company-gtags
-       company-etags
-       company-keywords
-       :with company-yasnippet)
-     company-backends)
+    (with-eval-after-load 'company-mode
+      (general-pushnew
+       '(company-lsp
+         company-files
+         company-dabbrev-code
+         company-gtags
+         company-etags
+         company-keywords
+         :with company-yasnippet)
+       company-backends))
     (gsetq company-lsp-async               t
            company-lsp-enable-recompletion t
            company-transformers            nil
@@ -84,24 +88,22 @@
 * Dap Mode
 
 #+begin_src elisp
-  (use-package dap-mode
-    :straight t)
-  (use-package dap-python)
-  (use-package dap-lldb)
+  (straight-use-package 'dap-mode)
 #+end_src
 
 * Helm Lsp
 
 #+begin_src elisp
-  (use-package helm-lsp
-    :straight t)
+  (straight-use-package 'helm-lsp)
+  (use-package helm-lsp :commands helm-lsp-workspace-symbol)
 #+end_src
 
 * lsp-treemacs
 
 #+begin_src elisp
+  (straight-use-package 'lsp-treemacs)
   (use-package lsp-treemacs
-    :straight t
+    :commands lsp-treemacs-errors-list
     :config
     (lsp-metals-treeview-enable t)
     (gsetq lsp-metals-treeview-show-when-views-received t))

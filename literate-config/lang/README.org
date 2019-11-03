@@ -18,11 +18,9 @@
         (extras    '(fish-completion
                      ob-elvish)))
     (dolist (language languages)
-      (straight-use-package language)
-      (require language nil t))
+      (straight-use-package language))
     (dolist (extra extras)
-      (straight-use-package extra)
-      (require extra nil t)))
+      (straight-use-package extra)))
 #+end_src
 
 * Language Server Protocol & Debug Adapter Protocol
@@ -41,8 +39,7 @@
 
 #+begin_src elisp
   (use-package lsp-html
-    :straight lsp-mode
-    :hook ((html-mode . lsp)))
+    :hook ((html-mode . lsp-deferred)))
 #+end_src
 
 * JavaScript & TypeScript
@@ -50,8 +47,7 @@
 #+begin_src elisp
   (use-package lsp-mode
     :disabled t
-    :straight t
-    :hook ((javascript-mode . lsp)))
+    :hook ((javascript-mode . lsp-deferred)))
 #+end_src
 
 * Lisp
@@ -61,9 +57,9 @@
 * Markdown
 
 #+begin_src elisp
+  (straight-use-package 'markdown-mode)
   (use-package markdown-mode
     :defer t
-    :straight t
     :mode ("INSTALL\\'"
            "CONTRIBUTORS\\'"
            "LICENSE\\'"
@@ -75,9 +71,7 @@
 * Pandoc
 
 #+begin_src elisp
-  (use-package pandoc-mode
-    :defer    t
-    :straight t)
+  (straight-use-package 'pandoc-mode)
 #+end_src
 
 * Python
@@ -90,19 +84,18 @@ Include rust-mode, rls and Cargo.
 
 #+begin_src elisp
   (when *rust*
+    (straight-use-package 'rust-mode)
+    (straight-use-package 'cargo)
     (use-package rust-mode
       :defer t
-      :straight t
       :hook ((rust-mode . (lambda () (setq-local tab-width 4)))
-             (rust-mode . lsp))
+             (rust-mode . lsp-deferred))
       :config
       (when *rls*
-        (add-hook #'rust-mode-hook #'lsp)
-        (add-hook #'rust-mode-hook #'(lambda () (add-to-list 'flycheck-disabled-checkers 'rust-cargo))))))
+        (add-hook #'rust-mode-hook #'(lambda () (add-to-list 'flycheck-disabled-checkers 'rust-cargo)))))
 
-  (use-package cargo
-    :after rust-mode
-    :straight t
-    :hook ((toml-mode . cargo-minor-mode)
-           (rust-mode . cargo-minor-mode)))
+    (use-package cargo
+      :after rust-mode
+      :hook ((toml-mode . cargo-minor-mode)
+             (rust-mode . cargo-minor-mode))))
 #+end_src

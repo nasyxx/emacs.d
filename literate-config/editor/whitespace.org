@@ -23,9 +23,8 @@
       (add-hook hook #'no-trailing-whitespace))
     :diminish whitespace-mode)
 
-
+  (straight-use-package 'whitespace-cleanup-mode)
   (use-package whitespace-cleanup-mode
-    :straight t
     :init
     (gsetq whitespace-cleanup-mode-only-if-initially-clean nil)
     (gsetq-default whitespace-style

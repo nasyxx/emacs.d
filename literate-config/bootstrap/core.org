@@ -98,7 +98,6 @@
     :bind (([f6] . recompile))
     :hook ((compilation-finish-functions . alert-after-compilation-finish)))
 
-
   (use-package ansi-color
     :defer    t
     :preface

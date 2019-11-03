@@ -58,15 +58,14 @@
 * ibuffer vc
 
 #+begin_src elisp
-  (use-package ibuffer-vc
-    :after ibuffer
-    :straight t)
+  (straight-use-package 'ibuffer-vc)
 #+end_src
 
 * Other settings
 
 #+begin_src elisp
   (use-package ibuffer
+    :defer t
     :config
     (define-ibuffer-column size-h
       (:name "Size" :inline t)

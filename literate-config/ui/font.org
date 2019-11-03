@@ -1,16 +1,16 @@
 * Emojify and all-the-icons
 
 #+begin_src elisp
+  (straight-use-package 'emojify)
   (use-package emojify
-    :straight t
     :commands emojify-mode
     :hook ((after-init . global-emojify-mode))
-    :init (setq emojify-emoji-styles '(unicode github)
-                emojify-display-style 'unicode))
+    :init (gsetq emojify-emoji-styles '(unicode github)
+                 emojify-display-style 'unicode))
 
+  (straight-use-package 'all-the-icons)
   (use-package all-the-icons
-    :init (setq inhibit-compacting-font-caches t)
-    :straight t)
+    :init (gsetq inhibit-compacting-font-caches t))
 #+end_src
 
 * cn-fonts

@@ -3,10 +3,8 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
 * Python Mode
 
 #+begin_src elisp
-  (require 'python)
-
+  (straight-use-package 'python-mode)
   (use-package python-mode
-    :straight t
     :commands python-mode
     :mode ("\\.py\\'" . python-mode)
     :interpreter (("python"  . python-mode)
@@ -79,7 +77,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
         (unless proc
           (error "No process found"))
         (pop-to-buffer nasy*python-buffer)))
-    :gfhook '(lsp
+    :gfhook '(lsp-deferred
               delete-company-lsp
               setq-after)
     :init
@@ -141,40 +139,40 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
   ;; Now you can use it in lsp.
   ;; NOTICE you have to config black though pyproject.toml.
   (when *blacken*
+    (straight-use-package 'blacken)
     (use-package blacken
-      :straight t
-      :hook ((python-mode    . blacken-mode))))
+      :hook ((python-mode . blacken-mode))))
 #+end_src
 
 * py-isort
 
 #+begin_src elisp
+  (straight-use-package 'py-isort)
   (use-package py-isort
-    :straight t
-    :hook (before-save . py-isort-before-save))
+    :hook ((before-save . py-isort-before-save)))
 #+end_src
 
 * Python Docstring
 
 #+begin_src elisp
+  (straight-use-package 'python-docstring)
   (use-package python-docstring
-    :straight t
     :hook ((python-mode . python-docstring-mode)))
 #+end_src
 
 * Sphinx Doc
 
 #+begin_src elisp
+  (straight-use-package 'sphinx-doc)
   (use-package sphinx-doc
-    :straight t
     :hook ((python-mode . sphinx-doc-mode)))
 #+end_src
 
 * pyimport
 
 #+begin_src elisp
+  (straight-use-package 'pyimport)
   (use-package pyimport
-    :straight t
     :bind (:map python-mode-map
                 ("C-c C-i" . pyimport-insert-missing)))
 #+end_src

@@ -1,51 +1,54 @@
 * cl-lib-highlight
 
 #+begin_src elisp
-  (use-package cl-lib-highlight
-    :after lisp-mode
-    :straight t
-    :config
-    (cl-lib-highlight-initialize))
+  (straight-use-package 'cl-lib-highlight)
+  (with-eval-after-load 'lisp-mode
+    (use-package cl-lib-highlight
+      :config
+      (cl-lib-highlight-initialize)))
 #+end_src
 
 * Color Identifiers Mode
 
 #+begin_src elisp
+  (straight-use-package 'color-identifiers-mode)
   (use-package color-identifiers-mode
-    :straight t
+    :defer t
     :hook ((after-init . global-color-identifiers-mode)))
 #+end_src
 
 * hl-line
 
 #+begin_src elisp
+  (straight-use-package 'hl-line)
   (use-package hl-line
+    :defer t
     :hook ((after-init . global-hl-line-mode)))
 #+end_src
 
 * Highlight Indent Guides
 
 #+begin_src elisp
+  (straight-use-package 'highlight-indent-guides)
   (use-package highlight-indent-guides
-    :straight t
-    :init (setq highlight-indent-guides-responsive 'stack)
+    :init (gsetq highlight-indent-guides-responsive 'stack)
     :ghook '(prog-mode-hook text-mode-hook org-mode-hook))
 #+end_src
 
 * Highlight Number
 
 #+begin_src elisp
-  (use-package highlight-numbers
-    :disabled t
-    :straight t
-    :ghook '(after-init-hook prog-mode-hook text-mode-hook org-mode-hook))
+  ;; (straight-use-package 'highlight-numbers)
+  ;; (use-package highlight-numbers
+  ;;   :disabled t
+  ;;   :ghook '(after-init-hook prog-mode-hook text-mode-hook org-mode-hook))
 #+end_src
 
 * Rainbow-Mode
 
 #+begin_src elisp
+  (straight-use-package 'rainbow-mode)
   (use-package rainbow-mode
-    :straight t
     :hook (((after-init
              text-mode
              org-mode

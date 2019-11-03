@@ -1,6 +1,6 @@
 #+begin_src elisp
+  (straight-use-package 'doom-modeline)
   (use-package doom-modeline
-    :straight t
     :hook ((after-init . doom-modeline-mode))
     :init (gsetq
            doom-modeline-height                   25

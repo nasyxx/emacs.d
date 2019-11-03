@@ -14,9 +14,9 @@
 * Diredfl
 
 #+begin_src elisp
+  (straight-use-package 'diredfl)
   (use-package diredfl
     :after dired
-    :straight t
     :hook ((after-init . diredfl-global-mode)))
 #+end_src
 
@@ -25,18 +25,18 @@
 #+begin_src elisp
   (use-package uniquify
     :init  ;; nicer naming of buffers for files with identical names
-    (setq uniquify-buffer-name-style   'reverse
-          uniquify-separator           " • "
-          uniquify-after-kill-buffer-p t
-          uniquify-ignore-buffers-re   "^\\*"))
+    (gsetq uniquify-buffer-name-style   'reverse
+           uniquify-separator           " • "
+           uniquify-after-kill-buffer-p t
+           uniquify-ignore-buffers-re   "^\\*"))
 #+end_src
 
 * Diff-hl (only for dired)
 
 #+begin_src elisp
+  (straight-use-package 'diff-hl)
   (use-package diff-hl
     :after dired
-    :straight t
     :hook ((dired-mode . diff-hl-dired-mode)
            (magit-post-refresh . diff-hl-magit-post-refresh)))
 #+end_src
@@ -44,17 +44,15 @@
 * Dired Hacks Utils
 
 #+begin_src elisp
-  (use-package dired-hacks-utils
-    :after    dired
-    :straight t)
+  (straight-use-package 'dired-hacks-utils)
 #+end_src
 
 * Dired Filter
 
 #+begin_src elisp
+  (straight-use-package 'dired-filter)
   (use-package dired-filter
     :after    dired
-    :straight t
     :bind (:map dired-mode-map
                 ("/" . dired-filter-map))
     :hook ((dired-mode . dired-filter-mode)
@@ -87,18 +85,15 @@
 
 #+begin_src elisp
   (when (executable-find "avfsd")
-    (use-package dired-avfs
-      :after    dired
-      :straight t))
+    (straight-use-package 'dired-avfs))
 #+end_src
 
 * Dired Rainbow
 
 #+begin_src elisp
+  (straight-use-package 'dired-rainbow)
   (use-package dired-rainbow
-    :after    dired
-    :commands dired-rainbow-define dired-rainbow-define-chmod
-    :straight t
+    :after dired
     :config
     (dired-rainbow-define-chmod directory "#6cb2eb" "d.*")
     (dired-rainbow-define html        "#eb5286" ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
@@ -125,21 +120,17 @@
 * Dired Subtree/ranger
 
 #+begin_src elisp
-  (use-package dired-subtree
-    :defer    t
-    :straight t)
+  (straight-use-package 'dired-subtree)
 
-  (use-package dired-ranger
-    :defer    t
-    :straight t)
+  (straight-use-package 'dired-ranger)
 #+end_src
 
 * Dired Narrow
 
 #+begin_src elisp
+  (straight-use-package 'dired-narrow)
   (use-package dired-narrow
     :after    dired
-    :straight t
     :bind (:map dired-narrow-map
                 ("<down>"  . dired-narrow-next-file)
                 ("<up>"    . dired-narrow-previous-file)
@@ -149,8 +140,7 @@
 * Dired Collapse
 
 #+begin_src elisp
+  (straight-use-package 'dired-collapse)
   (use-package dired-collapse
-    :after    dired
-    :straight t
     :ghook 'dired-mode-hook)
 #+end_src

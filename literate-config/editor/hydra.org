@@ -1,6 +1,7 @@
 #+begin_src elisp
+  (straight-use-package 'hydra)
   (use-package hydra
-    :straight t
+    :defer t
     :config
     (general-define-key
      :prefix "C-x"

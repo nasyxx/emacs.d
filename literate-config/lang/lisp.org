@@ -17,16 +17,16 @@
 * Highlight-quoted
 
 #+begin_src elisp
+  (straight-use-package 'highlight-quoted)
   (use-package highlight-quoted
     :defer t
-    :straight t
     :hook ((emacs-lisp-mode . highlight-quoted-mode)))
 #+end_src
 
 * elisp-def
 
 #+begin_src elisp
+  (straight-use-package 'elisp-def)
   (use-package elisp-def
-    :straight t
     :hook (((emacs-lisp-mode ielm-mode) . elisp-def-mode)))
 #+end_src

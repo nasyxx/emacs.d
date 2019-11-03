@@ -4,8 +4,8 @@ inlcude haskell-snippets.
 * Haskell-Mode
 
 #+begin_src elisp
+  (straight-use-package 'haskell-mode)
   (use-package haskell-mode
-    :straight t
     :preface
     (define-minor-mode stack-exec-path-mode
       "If this is a stack project, set `exec-path' to the path \"stack exec\" would use."
@@ -100,12 +100,13 @@ inlcude haskell-snippets.
 * LSP Haskell
 
 #+begin_src elisp
+  (straight-use-package 'lsp-haskell)
   (use-package lsp-haskell
-    :demand   t
-    :straight t
-    :hook ((haskell-mode   . lsp)
+    :hook ((haskell-mode   . lsp-deferred)
            (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
            (haskell-mode   . delete-company-lsp))
+    :init
+    (gsetq lsp-haskell-process-path-hie "hie-wrapper")
     ;; You can set the lsp-haskell settings here
     ;; (lsp-haskell-set-hlint-on)                    ;; default on
     ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
@@ -118,10 +119,9 @@ inlcude haskell-snippets.
 
 #+begin_src elisp
   (when *intero*
+    (straight-use-package 'intero)
     (use-package intero
-      :straight t
-      :after haskell-mode
-      :hook (haskell-mode . (lambda () (intero-global-mode 1)))
+      :hook ((haskell-mode . intero-mode))
       :config
       (define-key intero-mode-map (kbd "M-?") nil)
       (define-key intero-mode-map (kbd "C-c C-r") nil)))
@@ -148,7 +148,5 @@ inlcude haskell-snippets.
 * haskell snippets
 
 #+begin_src elisp
-  (use-package haskell-snippets
-    :defer    t
-    :straight t)
+  (straight-use-package 'haskell-snippets)
 #+end_src

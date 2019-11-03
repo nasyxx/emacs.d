@@ -1,7 +1,7 @@
 #+begin_src elisp
+  (straight-use-package 'writeroom-mode)
   (use-package writeroom-mode
     :defer t
-    :straight t
     :preface
     (define-minor-mode prose-mode
       "Set up a buffer for prose editing.

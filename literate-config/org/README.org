@@ -9,9 +9,7 @@
 I use ~org~ with ~org-plus-contrib~
 
 #+begin_src elisp
-  (use-package org
-    :straight org-plus-contrib)
-
+  (straight-use-package 'org-plus-contrib)
   (require 'org-tempo nil t)
 #+end_src
 
@@ -20,19 +18,12 @@ I use ~org~ with ~org-plus-contrib~
 Other ~ox-_~ packages.
 
 #+begin_src elisp
-  (straight-use-package 'ox-rst)
-
-
   (with-eval-after-load 'ox
-    (let ((oxs '(ox-md
-                 ox-rst)))
+    (let ((oxs '(ox-rst
+                 ox-pandoc)))
       (dolist (language oxs)
+        (straight-use-package language)
         (require language nil t))))
-
-
-  (use-package ox-pandoc
-    :after    ox
-    :straight t)
 #+end_src
 
 * Basic Configs
@@ -46,8 +37,8 @@ Other ~ox-_~ packages.
 * Org Bullets
 
 #+begin_src elisp
+  (straight-use-package 'org-bullets)
   (use-package org-bullets
-    :straight t
     :hook ((org-mode . (lambda () (org-bullets-mode 1))))
     :init (gsetq org-bullets-bullet-list
                  '(;;; Large
@@ -70,9 +61,7 @@ Other ~ox-_~ packages.
 * Org Cliplink
 
 #+begin_src elisp
-  (use-package org-cliplink
-    :defer    t
-    :straight t)
+  (straight-use-package 'org-cliplink)
 #+end_src
 
 * Org clock
@@ -86,9 +75,7 @@ Other ~ox-_~ packages.
 * Org PDF view
 
 #+begin_src elisp
-  (use-package org-pdfview
-    :defer    t
-    :straight t)
+  (straight-use-package 'org-pdfview)
 #+end_src
 
 * Org Pomodoro
@@ -104,15 +91,11 @@ Other ~ox-_~ packages.
 * Org Toc
 
 #+begin_src elisp
-  (use-package toc-org
-    :defer    t
-    :straight t)
+  (straight-use-package 'toc-org)
 #+end_src
 
 * Org Wc
 
 #+begin_src elisp
-  (use-package org-wc
-    :defer    t
-    :straight t)
+  (straight-use-package 'org-wc)
 #+end_src

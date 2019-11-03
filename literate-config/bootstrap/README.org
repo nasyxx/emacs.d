@@ -87,7 +87,8 @@ https://gitlab.com/koral/gcmh/blob/master/gcmh.el
     :demand t
     :init
     (setq gcmh-verbose t
-          gcmh-high-cons-threshold #x20000000)
+          gcmh-lows-cons-threshold #x800000
+          gcmh-high-cons-threshold #x8000000)
     :config
     (gcmh-mode))
 #+end_src
@@ -95,9 +96,9 @@ https://gitlab.com/koral/gcmh/blob/master/gcmh.el
 * Benchmark
 
 #+begin_src elisp
+  (straight-use-package 'benchmark-init)
   (use-package benchmark-init
-    :demand   t
-    :straight t
+    :demand t
     :hook ((after-init . benchmark-init/deactivate)))
 #+end_src
 

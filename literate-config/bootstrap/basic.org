@@ -39,9 +39,7 @@
 #+end_src
 
 #+begin_src elisp
-  (use-package scratch
-    :defer    t
-    :straight t)
+  (straight-use-package 'scratch)
 #+end_src
 
 * Shell & Term
@@ -56,14 +54,10 @@
 #+begin_src elisp
   (require 'shell)
 
-  (use-package cmd-to-echo
-    :defer    t
-    :straight t)
+  (straight-use-package 'cmd-to-echo)
 
 
-  (use-package command-log-mode
-    :defer    t
-    :straight t)
+  (straight-use-package 'command-log-mode)
 
 
   (defun nasy:shell-command-in-view-mode (start end command &optional output-buffer replace &rest other-args)
@@ -74,9 +68,9 @@
   (advice-add 'shell-command-on-region :after 'nasy:shell-command-in-view-mode)
 
 
+  (straight-use-package 'exec-path-from-shell)
   (use-package exec-path-from-shell
     :demand   *is-a-mac*
-    :straight t
     :preface
     ;; Non-Forking Shell Command To String
     ;; https://github.com/bbatsov/projectile/issues/1044
@@ -109,7 +103,7 @@
 
     (advice-add 'shell-command-to-string :before-until 'try-call-process)
 
-    (use-package noflet :straight t)
+    (straight-use-package 'noflet)
 
     (defun call-with-quick-shell-command (fn &rest args)
       (noflet ((shell-command-to-string
@@ -118,13 +112,13 @@
               (apply fn args)))
 
     (advice-add 'projectile-find-file :around 'call-with-quick-shell-command)
-    :init (setq shell-command-switch "-ic")
+    :init (gsetq shell-command-switch "-ic")
     :config
     (when nil (message "PATH: %s, INFO: %s" (getenv "PATH")
                        (getenv "ENVIRONMENT_SETUP_DONE"))
           (setq exec-path-from-shell-debug t))
-    (setq exec-path-from-shell-arguments (list "-l"))
-    (setq exec-path-from-shell-check-startup-files nil)
+    (gsetq exec-path-from-shell-arguments (list "-l")
+           exec-path-from-shell-check-startup-files nil)
     (add-to-list 'exec-path-from-shell-variables "SHELL")
     (add-to-list 'exec-path-from-shell-variables "GOPATH")
     (add-to-list 'exec-path-from-shell-variables "ENVIRONMENT_SETUP_DONE")

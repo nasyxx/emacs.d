@@ -17,17 +17,17 @@ I use doom-themes.
 * Mode Line
 
 #+begin_src elisp
+  (straight-use-package 'nyan-mode)
   (use-package nyan-mode
-    :straight t
-    :init (setq nyan-animate-nyancat t
-                nyan-bar-length 16
-                nyan-wavy-trail t)
+    :init (gsetq nyan-animate-nyancat t
+                 nyan-bar-length 16
+                 nyan-wavy-trail t)
     :hook ((after-init . nyan-mode)))
 #+end_src
 
 #+begin_src elisp
+  (straight-use-package 'minions)
   (use-package minions
-    :straight t
     :hook ((after-init . minions-mode))
     :init (gsetq minions-mode-line-lighter "✬"))
 #+end_src

@@ -1,8 +1,8 @@
 * Doom-themes
 
 #+begin_src elisp
+  (straight-use-package 'doom-themes)
   (use-package doom-themes
-    :straight t
     :init (gsetq doom-dracula-brighter-comments t
                  doom-dracula-colorful-headers  t
                  doom-dracula-comment-bg        t)
@@ -15,8 +15,8 @@
 * Darktooth-theme
 
 #+begin_src elisp
+  (straight-use-package 'darktooth-theme)
   (use-package darktooth-theme
-    :straight t
     :config
     (darktooth-modeline))
 #+end_src
@@ -24,9 +24,7 @@
 * Soothe-theme
 
 #+begin_src elisp
-  (use-package soothe-theme
-    :defer    t
-    :straight t)
+  (straight-use-package 'soothe-theme)
 #+end_src
 
 * Load Theme

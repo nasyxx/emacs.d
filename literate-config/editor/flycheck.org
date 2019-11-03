@@ -1,6 +1,8 @@
 #+begin_src elisp
+  (straight-use-package 'flycheck)
+  (straight-use-package 'flycheck-package)
+
   (use-package flycheck
-    :straight t
     :preface
     (defun save-buffer-maybe-show-errors ()
       "Save buffer and show errors if any."
@@ -22,8 +24,7 @@
 
   (use-package flycheck-package
     :after flycheck
-    :straight t
-    :config
+    :init
     (with-eval-after-load 'elisp-mode
       (flycheck-package-setup)))
 #+end_src
