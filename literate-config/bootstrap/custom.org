@@ -337,17 +337,18 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 #+begin_src elisp :tangle (concat (file-name-directory (buffer-file-name)) "config/nasy-config.el")
   (defun nasy/set-face ()
     "Set custom face."
-    (set-face-attribute 'org-meta-line               nil                                             :slant   'italic)
-    (set-face-attribute 'org-block-begin-line        nil                                             :slant   'italic)
-    (set-face-attribute 'org-block-end-line          nil                                             :slant   'italic)
+    (with-eval-after-load 'org
+      (set-face-attribute 'org-meta-line               nil                                             :slant   'italic)
+      (set-face-attribute 'org-block-begin-line        nil                                             :slant   'italic)
+      (set-face-attribute 'org-block-end-line          nil                                             :slant   'italic)
+      (when *org-headline-rescale*
+        (set-face-attribute 'org-level-1 nil :height 1.6 :inherit 'outline-1)
+        (set-face-attribute 'org-level-2 nil :height 1.4 :inherit 'outline-2)
+        (set-face-attribute 'org-level-3 nil :height 1.2 :inherit 'outline-3)
+        (set-face-attribute 'org-level-4 nil :height 1.1 :inherit 'outline-4)))
     (set-face-attribute 'font-lock-comment-face      nil                                             :slant   'italic)
     (set-face-attribute 'font-lock-keyword-face      nil                                             :slant   'italic)
     (set-face-attribute 'show-paren-match            nil :background "#a1de93" :foreground "#705772" :weight  'ultra-bold)
-    (set-face-attribute 'sp-show-pair-match-face     nil :background "#a1de93" :foreground "#705772" :weight  'ultra-bold)
-    (when *org-headline-rescale*
-      (set-face-attribute 'org-level-1 nil :height 1.6 :inherit 'outline-1)
-      (set-face-attribute 'org-level-2 nil :height 1.4 :inherit 'outline-2)
-      (set-face-attribute 'org-level-3 nil :height 1.2 :inherit 'outline-3)
-      (set-face-attribute 'org-level-4 nil :height 1.1 :inherit 'outline-4)))
+    (set-face-attribute 'sp-show-pair-match-face     nil :background "#a1de93" :foreground "#705772" :weight  'ultra-bold))
   (add-hook 'nasy/config-after-hook #'nasy/set-face)
 #+end_src

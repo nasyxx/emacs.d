@@ -1,5 +1,6 @@
 #+begin_src elisp
   (use-package org-capture
+    :defer t
     :init
     (unless (boundp 'org-capture-templates)
       (defvar org-capture-templates nil))

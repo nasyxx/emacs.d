@@ -10,20 +10,6 @@ I use ~org~ with ~org-plus-contrib~
 
 #+begin_src elisp
   (straight-use-package 'org-plus-contrib)
-  (require 'org-tempo nil t)
-#+end_src
-
-* OX Org
-
-Other ~ox-_~ packages.
-
-#+begin_src elisp
-  (with-eval-after-load 'ox
-    (let ((oxs '(ox-rst
-                 ox-pandoc)))
-      (dolist (language oxs)
-        (straight-use-package language)
-        (require language nil t))))
 #+end_src
 
 * Basic Configs
@@ -39,7 +25,10 @@ Other ~ox-_~ packages.
 #+begin_src elisp
   (straight-use-package 'org-bullets)
   (use-package org-bullets
-    :hook ((org-mode . (lambda () (org-bullets-mode 1))))
+    :preface
+    (defun nasy/org-bullets-mode ()
+      (org-bullets-mode 1))
+    :hook ((org-mode . nasy/org-bullets-mode))
     :init (gsetq org-bullets-bullet-list
                  '(;;; Large
                    "♥"
@@ -82,7 +71,7 @@ Other ~ox-_~ packages.
 
 #+begin_src elisp
   (use-package org-pomodoro
-    :after org-agenda
+    :defer t
     :init (gsetq org-pomodoro-keep-killed-pomodoro-time t)
     :bind (:map org-agenda-mode-map
                 ("P" . org-pomodoro)))

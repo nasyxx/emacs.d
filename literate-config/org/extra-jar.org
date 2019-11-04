@@ -2,6 +2,7 @@ Include ob-ditaa and ob-plantuml
 
 #+begin_src elisp
   (use-package org
+    :defer t
     :preface
     (defun grab-ditaa (url jar-name)
       "Download URL and extract JAR-NAME as `org-ditaa-jar-path'."
