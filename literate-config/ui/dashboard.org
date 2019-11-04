@@ -8,10 +8,12 @@
           ("<down-mouse-1>" . nil)
           ("<mouse-1>"      . widget-button-click)
           ("<mouse-2>"      . widget-button-click)
-          ("<up>"           . widget-backward)
-          ("<down>"         . widget-forward))
+          ("<up>"           . dashboard-previous-line)
+          ("<down>"         . dashboard-next-line)
+          ("TAB"            . dashboard-next-line))
     :diminish (dashboard-mode page-break-lines-mode)
-    :hook ((dashboard-mode . (lambda () (gsetq-local tab-width 1))))
+    :hook ((dashboard-mode . (lambda () (gsetq-local tab-width 1)))
+           (after-init     . dashboard-setup-startup-hook))
     :init
     (gsetq dashboard-startup-banner    'official
            dashboard-center-content    t
@@ -26,5 +28,5 @@
                              ;;(agenda    . 5)
                              (projects  . 5)))
     :config
-    (dashboard-setup-startup-hook))
+    (advice-add 'dashboard-next-line :after #'(lambda (&rest r) (forward-char 2))))
 #+end_src
