@@ -15,7 +15,11 @@ Clangd or ccls.
   (when *ccls*
     (straight-use-package 'ccls)
     (use-package ccls
-      :hook (((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp-deferred))))
+      :preface
+      (defun ccls/load ()
+        (require 'ccls)
+        (lsp-deferred))
+      :hook (((c-mode c++-mode objc-mode) . ccls/load))
       :init (gsetq ccls-executable *ccls*
                    ccls-initialization-options
                    '(:clang (:extraArgs
