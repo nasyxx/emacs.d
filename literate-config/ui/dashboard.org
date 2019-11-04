@@ -1,20 +1,18 @@
 #+begin_src elisp
   (straight-use-package 'dashboard)
   (use-package dashboard
-    :demand t
     :bind
     ;; https://github.com/rakanalh/emacs-dashboard/issues/45
-    (:map dashboard-mode-map
-          ("<down-mouse-1>" . nil)
-          ("<mouse-1>"      . widget-button-click)
-          ("<mouse-2>"      . widget-button-click)
-          ("<up>"           . dashboard-previous-line)
-          ("<down>"         . dashboard-next-line)
-          ("TAB"            . dashboard-next-line))
     :diminish (dashboard-mode page-break-lines-mode)
-    :hook ((dashboard-mode . (lambda () (gsetq-local tab-width 1)))
-           (after-init     . dashboard-setup-startup-hook))
+    :hook ((dashboard-mode . (lambda () (gsetq-local tab-width 1))))
     :init
+    (general-define-key
+     :keymaps 'dashboard-mode-map
+     "<down-mouse-1>" nil
+     "<mouse-1>"      'widget-button-click
+     "<mouse-2>"      'widget-button-click
+     "<up>"           'dashboard-previous-line
+     "<down>"         'dashboard-next-line)
     (gsetq dashboard-startup-banner    'official
            dashboard-center-content    t
            dashboard-show-shortcuts    t
@@ -27,6 +25,8 @@
                              ;;(registers . 5 )
                              ;;(agenda    . 5)
                              (projects  . 5)))
+    (dashboard-setup-startup-hook)
     :config
-    (advice-add 'dashboard-next-line :after #'(lambda (&rest r) (forward-char 2))))
+    (advice-add 'dashboard-next-line :after #'(lambda (&rest r) (forward-char 2)))
+    (advice-add 'widget-forward :after #'(lambda (&rest r) (forward-char 2))))
 #+end_src
