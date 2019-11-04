@@ -36,6 +36,10 @@ update: clean-build
 	git pull && make generate
 .PHONY: update
 
+# Update docs
+docs:
+	org2html README.org && git checkout gh-pages && git commit -a -m "Update docs." && git push && git checkout master
+
 # COLORS
 GREEN  := $(shell tput -Txterm setaf 2)
 YELLOW := $(shell tput -Txterm setaf 3)
