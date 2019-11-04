@@ -6,7 +6,8 @@ https://github.com/raxod502/straight.el
   (setq straight-recipes-gnu-elpa-use-mirror    t
         straight-repository-branch              "develop"
         straight-vc-git-default-clone-depth     1
-        straight-enable-use-package-integration nil)
+        straight-enable-use-package-integration nil
+        straight-check-for-modifications        '(find-when-checking))
 
   (defvar bootstrap-version)
 
