@@ -18,7 +18,7 @@
   (straight-use-package 'magit)
   (use-package magit
     :defer t
-    :commands (magit-status)
+    :commands magit-status
     :hook ((magit-popup-mode-hook . no-trailing-whitespace)
            (git-commit-mode . goto-address-mode))
     :init (gsetq magit-diff-refine-hunk t)
@@ -41,6 +41,7 @@
 #+begin_src elisp
   (straight-use-package 'magit-org-todos)
   (use-package magit-org-todos
+    :defer t
     :config (magit-org-todos-autoinsert))
 #+end_src
 
