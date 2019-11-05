@@ -34,6 +34,9 @@
     (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
   (straight-use-package 'magit-todos)
+  (use-package magit-todos
+    :defer t
+    :hook ((magit-status-mode . magit-todos-mode)))
 #+end_src
 
 * Magit Org Todos
