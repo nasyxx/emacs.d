@@ -19,7 +19,20 @@ CLOSED: [2019-05-14 Tue 10:38] SCHEDULED: <2019-02-10 Sun>
   Split single init to multiple files.
 :END:
 
-* HOLD ibuffer
+* DONE ibuffer
+CLOSED: [2019-11-05 Tue 13:38]
+:LOGBOOK:
+- State "DONE"       from "HOLD"       [2019-11-05 Tue 13:38]
+:END:
 
-** HOLD add more programming languages to ibuffer saved filter groups
-SCHEDULED: <2019-02-01 Fri>
+** DONE add more programming languages to ibuffer saved filter groups
+CLOSED: [2019-11-05 Tue 13:38] SCHEDULED: <2019-02-01 Fri>
+:LOGBOOK:
+- State "DONE"       from "HOLD"       [2019-11-05 Tue 13:38]
+:END:
+
+* TODO Company mode
+
+** TODO Key Bindings
+
+** TODO Backends
