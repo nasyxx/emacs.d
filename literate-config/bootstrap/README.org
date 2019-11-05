@@ -86,9 +86,10 @@ https://gitlab.com/koral/gcmh
   (use-package gcmh
     :demand t
     :init
-    (setq gcmh-verbose t
+    (setq gcmh-verbose             t
           gcmh-lows-cons-threshold #x800000
-          gcmh-high-cons-threshold #x8000000)
+          gcmh-high-cons-threshold #x80000000
+          gcmh-idle-delay          300)
     :config
     (gcmh-mode))
 #+end_src
