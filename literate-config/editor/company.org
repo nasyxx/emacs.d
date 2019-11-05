@@ -10,7 +10,7 @@
   (use-package company
     :init
     (gsetq company-minimum-prefix-length .2
-           company-require-match nil
+           company-require-match 'company-explicit-action-p
            company-transformers '(company-sort-by-backend-importance)
            company-tooltip-align-annotations t
            company-dabbrev-other-buffers 'all
@@ -18,12 +18,13 @@
            company-dabbrev-ignore-case t
            company-gtags-executable "gtags")
     :hook ((after-init . global-company-mode))
-    :bind (("M-C-/" . company-complete)
+    :bind (("M-/"   . company-complete)
+           ("C-M-/" . company-files)
            :map company-mode-map
-           ("M-/"   . company-complete)
+           ("M-/"   . company-other-backend)
            :map company-active-map
-           ("M-/"   . company-complete)
-           ("<tab>" . company-other-backend)
+           ("<tab>" . company-complete)
+           ("M-/"   . company-other-backend)
            ("C-n"   . company-select-next)
            ("C-p"   . company-select-previous))
     :config
