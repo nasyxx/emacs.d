@@ -2,7 +2,7 @@
 
 #+begin_src elisp
   (straight-use-package 'cl-lib-highlight)
-  (with-eval-after-load 'lisp-mode
+  (with-eval-after-load 'emacs-lisp-mode
     (use-package cl-lib-highlight
       :config
       (cl-lib-highlight-initialize)))
