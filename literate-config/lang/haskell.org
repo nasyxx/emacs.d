@@ -102,7 +102,11 @@ inlcude haskell-snippets.
 #+begin_src elisp
   (straight-use-package 'lsp-haskell)
   (use-package lsp-haskell
-    :hook ((haskell-mode   . lsp-deferred)
+    :preface
+    (defun start-lsp-haskell ()
+      (require 'lsp-haskell)
+      (lsp-deferred))
+    :hook ((haskell-mode   . start-lsp-haskell)
            (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
            (haskell-mode   . delete-company-lsp))
     :init
