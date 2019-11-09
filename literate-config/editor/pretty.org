@@ -185,9 +185,10 @@
            (python-mode . (lambda ()
                             (mapc (lambda (pair) (push pair prettify-symbols-alist))
                                   '(;; Syntax
-                                    ("def"    . (#x1d521 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
+                                    ;;("def"    . (#x1d521 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
+                                    ("def"    . #x1D487)  ;; 𝒇 1 111
                                     ("List"   . #x1d543)  ;; 𝕃 𝕷
-                                    ("list"   . #x1d55d)  ;; 𝕝 𝖑
+                                    ("list"   . (#x1d55d (Br . Bl) #x2006 (Br . Bl) #x2005))  ;; 𝕝   𝖑
                                     ("Dict"   . #x1d53B)  ;; 𝔻 𝕯
                                     ("dict"   . #x1d555)  ;; 𝕕 𝖉
                                     ("Set"    . #x1d61a)  ;; 𝔖 𝘚
