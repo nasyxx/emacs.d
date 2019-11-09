@@ -33,6 +33,4 @@
 
 #+begin_src elisp
   (load-theme *theme* t)
-  (with-eval-after-load *theme*
-    (color-identifiers:regenerate-colors))
 #+end_src
