@@ -28,5 +28,6 @@
 #+begin_src elisp
   (straight-use-package 'elisp-def)
   (use-package elisp-def
+    :defer t
     :hook (((emacs-lisp-mode ielm-mode) . elisp-def-mode)))
 #+end_src
