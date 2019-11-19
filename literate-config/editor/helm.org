@@ -4,6 +4,7 @@
   (straight-use-package 'helm)
   (use-package helm-config
     :diminish helm-mode
+    :commands nasy/helm
     :hook ((after-init . helm-mode)
            (after-init . helm-autoresize-mode))
     :init
