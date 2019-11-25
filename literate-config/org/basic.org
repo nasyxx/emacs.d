@@ -150,6 +150,13 @@
 
      org-ellipsis " ﹅"
 
+     org-emphasis-regexp-components ;; markup chinesee without space
+        (list (concat " \t('\"{"            "[:nonascii:]")
+              (concat "- \t.,:!?;'\")}\\["  "[:nonascii:]")
+              " \t\r\n,\"'"
+              "."
+              1)
+
      org-export-backends                           '(ascii html latex md)
      org-export-coding-system                      'utf-8
      org-export-kill-product-buffer-when-displayed t
