@@ -37,10 +37,10 @@
         "project  : " (file-name-nondirectory (directory-file-name (or projectile-project-root default-directory))) \n
         "license  : GPL-3.0+\n\n"
         "At pick'd leisure\n"
-        "Which shall be shortly, single I'll resolve you,\n"
+        "  Which shall be shortly, single I'll resolve you,\n"
         "Which to you shall seem probable, of every\n"
-        "These happen'd accidents\n"
-        " -- The Tempest\n"
+        "  These happen'd accidents\n"
+        "                          -- The Tempest\n"
         "\"\"\"\n"))
 
     (define-auto-insert
