@@ -88,8 +88,8 @@ https://gitlab.com/koral/gcmh
     :init
     (setq gcmh-verbose             t
           gcmh-lows-cons-threshold #x800000
-          gcmh-high-cons-threshold #x800000
-          gcmh-idle-delay          300)
+          gcmh-high-cons-threshold #x400000000
+          gcmh-idle-delay          3600)
     :config
     (gcmh-mode))
 #+end_src
