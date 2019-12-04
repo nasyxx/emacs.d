@@ -75,7 +75,6 @@
 #+begin_src elisp
   (straight-use-package 'company-quickhelp)
   (use-package company-quickhelp
-    :after company
     :bind (:map company-active-map
                 ("C-c h" . company-quickhelp-manual-begin))
     :ghook #'after-init-hook
@@ -93,7 +92,6 @@
 #+begin_src elisp
   (straight-use-package 'company-flx)
   (use-package company-flx
-    :after company
     :ghook #'after-init-hook)
 #+end_src
 
