@@ -300,6 +300,7 @@
      org-todo-keyword-faces   (quote (("NEXT" :inherit warning)
                                       ("PROJECT" :inherit font-lock-string-face))))
     (gsetq org-display-custom-times t)
+    (nasy/add-company-backend 'org-mode 'company-tabnine)
     :config
     ;; --------
     (org-babel-do-load-languages
