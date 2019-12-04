@@ -106,9 +106,7 @@ inlcude haskell-snippets.
     (defun start-lsp-haskell ()
       (require 'lsp-haskell)
       (lsp-deferred))
-    :hook ((haskell-mode   . start-lsp-haskell)
-           (lsp-after-open . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
-           (haskell-mode   . delete-company-lsp))
+    :hook ((haskell-mode   . start-lsp-haskell))
     :init
     (gsetq lsp-haskell-process-path-hie "hie-wrapper")
     ;; You can set the lsp-haskell settings here
