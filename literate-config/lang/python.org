@@ -77,9 +77,6 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
         (unless proc
           (error "No process found"))
         (pop-to-buffer nasy*python-buffer)))
-    :gfhook '(lsp-deferred
-              delete-company-lsp
-              setq-after)
     :init
     (general-define-key
      :prefix "C-c"
@@ -118,19 +115,54 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     ;; The default line-length is 88 when using black, you can add a file named "pyproject.yaml" that contains
     ;; [tool.black]
     ;; line-length = 79
-    (with-eval-after-load 'lsp-pyls
-      (gsetq lsp-pyls-configuration-sources                          ["pydocstyle" "pycodestyle" "pyflakes" "pylint"]
-             lsp-pyls-plugins-pydocstyle-enabled                     t
-             lsp-pyls-plugins-yapf-enabled                           t
-             lsp-pyls-plugins-jedi-definition-follow-imports         t
-             lsp-pyls-plugins-jedi-definition-follow-builtin-imports t
-             lsp-pyls-plugins-jedi-signature-help-enabled            t
-             lsp-pyls-plugins-jedi-symbols-enabled                   t
-             lsp-pyls-plugins-pyls_mypy-live-mode                    nil))
+    ;; (with-eval-after-load 'lsp-pyls
+    ;;   (gsetq lsp-pyls-configuration-sources                          ["pydocstyle" "pycodestyle" "pyflakes" "pylint"]
+    ;;          lsp-pyls-plugins-pydocstyle-enabled                     t
+    ;;          lsp-pyls-plugins-yapf-enabled                           t
+    ;;          lsp-pyls-plugins-jedi-definition-follow-imports         t
+    ;;          lsp-pyls-plugins-jedi-definition-follow-builtin-imports t
+    ;;          lsp-pyls-plugins-jedi-signature-help-enabled            t
+    ;;          lsp-pyls-plugins-jedi-symbols-enabled                   t
+    ;;          lsp-pyls-plugins-pyls_mypy-live-mode                    nil))
     :config
     (unless *blacken*
       (add-hook #'python-mode-hook
                 #'(lambda () (add-hook #'before-save-hook #'lsp-format-buffer nil t)))))
+#+end_src
+
+* lsp-python-ms
+
+#+begin_src elisp
+  (straight-use-package 'lsp-python-ms)
+  (use-package lsp-python-ms
+    :defer t
+    :preface
+    (defun start-lsp-ms ()
+     "Start lsp-python-ms."
+     (require 'lsp-python-ms)
+     (lsp))
+    :init (gsetq lsp-python-ms-nupkg-channel "daily"
+                 lsp-python-ms-executable    "~/.local/bin/Microsoft.Python.LanguageServer"
+                 lsp-python-ms-errors        ["inherit-non-class"
+                                              "too-many-function-arguments"
+                                              "too-many-positional-arguments-before-star"
+                                              "no-method-argument"
+                                              "parameter-already-specified"
+                                              "parameter-missing"
+                                              "positional-argument-after-keyword"
+                                              "positional-only-named"
+                                              "return-in-init"
+                                              "typing-generic-arguments"
+                                              "typing-newtype-arguments"
+                                              "typing-typevar-arguments"
+                                              "unknown-parameter-name"
+                                              "unresolved-import"
+                                              "undefined-variable"]
+                 lsp-python-ms-warnings      ["no-cls-argument"
+                                              "no-self-argument"
+                                              "variable-not-defined-globally"
+                                              "variable-not-defined-nonlocal"])
+    :hook ((python-mode . start-lsp-ms)))
 #+end_src
 
 * black
