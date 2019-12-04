@@ -33,6 +33,10 @@ CLOSED: [2019-11-05 Tue 13:38] SCHEDULED: <2019-02-01 Fri>
 
 * TODO Company mode
 
-** TODO Key Bindings
+** DONE Key Bindings
+CLOSED: [2019-12-04 Wed 09:35]
+:LOGBOOK:
+- State "DONE"       from "NEXT"       [2019-12-04 Wed 09:35]
+:END:
 
 ** TODO Backends
