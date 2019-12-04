@@ -81,10 +81,24 @@
     :init (gsetq pos-tip-use-relative-coordinates t))
 #+end_src
 
+* Company Tabnine
+
+#+begin_src elisp
+  (straight-use-package 'company-tabnine)
+  (gsetq company-tabnine-log-file-path
+         (concat company-tabnine-binaries-folder "/log"))
+#+end_src
+
 * Company Math
 
 #+begin_src elisp
   (straight-use-package 'company-math)
+#+end_src
+
+* Company Dict
+
+#+begin_src elisp
+  (straight-use-package 'company-dict)
 #+end_src
 
 * Company Flx
