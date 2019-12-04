@@ -5,44 +5,204 @@
   ;; Company
 #+end_src
 
+** Preface Functions
+
+#+begin_src elisp
+  ;; Borrow from doom emacs.
+  (defvar nasy/company-backend-alist
+   '((text-mode company-dabbrev company-yasnippet company-ispell company-files)
+     (prog-mode company-capf company-yasnippet company-files)
+     (conf-mode company-capf company-dabbrev-code company-yasnippet company-files))
+   "An alist matching modes to company backends. The backends for any mode is
+  built from this.")
+
+
+  (defun nasy-enlist (exp)
+   "Return EXP wrapped in a list, or as-is if already a list."
+   (declare (pure t) (side-effect-free t))
+   (if (listp exp) exp (list exp)))
+
+
+  (defun nasy/add-company-backend (modes &rest backends)
+   "Prepends BACKENDS (in order) to `company-backends' in MODES.
+  MODES should be one symbol or a list of them, representing major or minor modes.
+  This will overwrite backends for MODES on consecutive uses.
+  If the car of BACKENDS is nil, unset the backends for MODES.
+  Examples:
+   (nasy/add-company-backend 'js2-mode
+     'company-tide 'company-yasnippet)
+   (nasy/add-company-backend 'sh-mode
+     '(company-shell :with company-yasnippet))
+   (nasy/add-company-backend '(c-mode c++-mode)
+     '(:separate company-irony-c-headers company-irony))
+   (nasy/add-company-backend 'sh-mode nil)  ; unsets backends for sh-mode"
+   (declare (indent defun))
+   (dolist (mode (nasy-enlist modes))
+     (if (null (car backends))
+         (setq nasy/company-backend-alist
+               (delq (assq mode nasy/company-backend-alist)
+                     nasy/company-backend-alist))
+       (setf (alist-get mode nasy/company-backend-alist)
+             backends))))
+
+  (defun nasy/company-backends ()
+   (let (backends)
+     (let ((mode major-mode)
+           (modes (list major-mode)))
+       (while (setq mode (get mode 'derived-mode-parent))
+         (push mode modes))
+       (dolist (mode modes)
+         (dolist (backend (append (cdr (assq mode nasy/company-backend-alist))
+                                  (default-value 'company-backends)))
+           (push backend backends)))
+       (delete-dups
+        (append (cl-loop for (mode . backends) in nasy/company-backend-alist
+                         if (or (eq major-mode mode)  ; major modes
+                                (and (boundp mode)
+                                     (symbol-value mode))) ; minor modes
+                         append backends)
+                (nreverse backends))))))
+
+
+  (defun nasy/company-init-backends-h ()
+   "Set `company-backends' for the current buffer."
+   (if (not company-mode)
+       (remove-hook 'change-major-mode-after-body-hook #'nasy/company-init-backends-h 'local)
+     (unless (eq major-mode 'fundamental-mode)
+       (setq-local company-backends (nasy/company-backends)))
+     (add-hook 'change-major-mode-after-body-hook #'nasy/company-init-backends-h nil 'local)))
+
+  (put 'nasy/company-init-backends-h 'permanent-local-hook t)
+#+end_src
+
+** Company Mode
+
 #+begin_src elisp
   (straight-use-package 'company)
   (use-package company
+    :commands (nasy/company-backends
+               nasy/company-init-backends-h
+               nasy/company-has-completion-p
+               nasy/company-toggle-auto-completion
+               nasy/company-complete
+               nasy/company-dabbrev
+               nasy/company-whole-lines
+               nasy/company-dict-or-keywords
+               nasy/company-dabbrev-code-previous)
+    :preface
+    (defun nasy/company-has-completion-p ()
+      "Return non-nil if a completion candidate exists at point."
+      (and (company-manual-begin)
+           (= company-candidates-length 1)))
+
+    (defun nasy/company-toggle-auto-completion ()
+      "Toggle as-you-type code completion."
+      (interactive)
+      (require 'company)
+      (setq company-idle-delay (unless company-idle-delay 0.2))
+      (message "Auto completion %s"
+               (if company-idle-delay "enabled" "disabled")))
+
+    (defun nasy/company-complete ()
+      "Bring up the completion popup. If only one result, complete it."
+      (interactive)
+      (require 'company)
+      (when (ignore-errors
+              (/= (point)
+                  (cdr (bounds-of-thing-at-point 'symbol))))
+        (save-excursion (insert " ")))
+      (when (and (company-manual-begin)
+                 (= company-candidates-length 1))
+        (company-complete-common)))
+
+    (defun nasy/company-dabbrev ()
+      "Invokes `company-dabbrev-code' in prog-mode buffers and `company-dabbrev'
+    everywhere else."
+      (interactive)
+      (call-interactively
+       (if (derived-mode-p 'prog-mode)
+           #'company-dabbrev-code
+         #'company-dabbrev)))
+
+    (defun nasy/company-whole-lines (command &optional arg &rest ignored)
+      "`company-mode' completion backend that completes whole-lines, akin to vim's
+    C-x C-l."
+      (interactive (list 'interactive))
+      (require 'company)
+      (pcase command
+        (`interactive (company-begin-backend 'nasy/company-whole-lines))
+        (`prefix      (company-grab-line "^[\t\s]*\\(.+\\)" 1))
+        (`candidates
+         (all-completions
+          arg
+          (delete-dups
+           (split-string
+            (replace-regexp-in-string
+             "^[\t\s]+" ""
+             (concat (buffer-substring-no-properties (point-min) (line-beginning-position))
+                     (buffer-substring-no-properties (line-end-position) (point-max))))
+            "\\(\r\n\\|[\n\r]\\)" t))))))
+
+    (defun nasy/company-dict-or-keywords ()
+      "`company-mode' completion combining `company-dict' and `company-keywords'."
+      (interactive)
+      (require 'company-dict)
+      (require 'company-keywords)
+      (let ((company-backends '((company-keywords company-dict))))
+        (call-interactively #'company-complete)))
+
+    (defun nasy/company-dabbrev-code-previous ()
+      "TODO"
+      (interactive)
+      (require 'company-dabbrev)
+      (let ((company-selection-wrap-around t))
+        (call-interactively #'nasy/company-dabbrev)
+        (company-select-previous-or-abort)))
+
     :init
-    (gsetq company-minimum-prefix-length .2
-           company-require-match 'company-explicit-action-p
-           company-transformers '(company-sort-by-backend-importance)
+    (add-to-list 'completion-styles 'initials t)
+    (gsetq company-tooltip-limit             14
+           company-dabbrev-downcase          nil
+           company-dabbrev-ignore-case       t
+           company-global-modes
+           '(not erc-mode message-mode help-mode gud-mode eshell-mode)
+           company-backends                  '(company-capf)
+           company-frontends
+           '(company-pseudo-tooltip-frontend
+             company-echo-metadata-frontend)
+           company-dabbrev-other-buffers     'all
            company-tooltip-align-annotations t
-           company-dabbrev-other-buffers 'all
-           company-dabbrev-downcase nil
-           company-dabbrev-ignore-case t
-           company-gtags-executable "gtags")
-    :hook ((after-init . global-company-mode))
-    :bind (("M-/"   . company-complete)
-           ("C-M-/" . company-files)
+           company-require-match             'never)
+    :hook ((company-mode . nasy/company-init-backends-h))
+    :bind (("M-/"   . company-files)
+           ("M-C-/" . nasy/company-complete)
            :map company-mode-map
-           ("M-/"   . company-other-backend)
+           ("M-/"   . nasy/company-complete)
            :map company-active-map
-           ("<tab>" . company-complete)
            ("M-/"   . company-other-backend)
            ("C-n"   . company-select-next)
            ("C-p"   . company-select-previous))
     :config
-    (defvar my-prev-whitespace-mode nil)
-    (make-variable-buffer-local 'my-prev-whitespace-mode)
+    (global-company-mode +1)
+    (defvar nasy/prev-whitespace-mode nil)
+    (make-variable-buffer-local 'nasy/prev-whitespace-mode)
+    (defvar nasy/show-trailing-whitespace nil)
+    (make-variable-buffer-local 'nasy/show-trailing-whitespace)
     (defun pre-popup-draw ()
       "Turn off whitespace mode before showing company complete tooltip"
       (if whitespace-mode
           (progn
-            (setq my-prev-whitespace-mode t)
-            (whitespace-mode -1)
-            (setq my-prev-whitespace-mode t))))
+            (gsetq my-prev-whitespace-mode t)
+            (whitespace-mode -1)))
+      (gsetq nasy/show-trailing-whitespace show-trailing-whitespace)
+      (gsetq show-trailing-whitespace nil))
     (defun post-popup-draw ()
       "Restore previous whitespace mode after showing company tooltip"
-      (if my-prev-whitespace-mode
+      (if nasy/prev-whitespace-mode
           (progn
             (whitespace-mode 1)
-            (setq my-prev-whitespace-mode nil))))
+            (gsetq nasy/prev-whitespace-mode nil)))
+      (gsetq show-trailing-whitespace nasy/show-trailing-whitespace))
     (advice-add 'company-pseudo-tooltip-unhide :before #'pre-popup-draw)
     (advice-add 'company-pseudo-tooltip-hide :after #'post-popup-draw)
 
@@ -56,8 +216,8 @@
                   (list backends))
                 '(:with company-yasnippet))))
     ;; add yasnippet to all backends
-    (gsetq company-backends
-           (mapcar #'company-backend-with-yas company-backends))
+    ;; (gsetq company-backends
+    ;;        (mapcar #'company-backend-with-yas company-backends))
     :diminish company-mode)
 #+end_src
 
