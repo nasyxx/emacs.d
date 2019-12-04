@@ -10,16 +10,6 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     :interpreter (("python"  . python-mode)
                   ("python3" . python-mode))
     :preface
-    ;; TODO: Need improve.
-    (defun setq-after ()
-      "setq after python mode."
-      (when (projectile-file-exists-p "mypy.ini")
-        (gsetq flycheck-python-mypy-ini "mypy.ini"
-               flycheck-mypy.ini        "mypy.ini"))
-
-      (when (projectile-file-exists-p "pylintrc")
-        (gsetq flycheck-pylintrc "pylintrc")))
-
     (defcustom nasy*python-buffer "vterm"
       "Nasy Python Buffer"
       :group 'python-mode
@@ -92,20 +82,6 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
            indent-tabs-mode                      nil
            python-indent-guess-indent-offset     nil
            python-shell-completion-native-enable nil
-           python-shell-interpreter              "ipython3"
-           python-shell-interpreter-args         "-i"
-           py-ipython-command-args               "-i"
-           py-python-command                     "python3"
-           flycheck-python-pycompile-executable  "python3"
-           flycheck-python-pylint-executable     "python3"
-           python-mode-modeline-display          "Python"
-           python-skeleton-autoinsert            t
-           py-python-command                     "python3"
-           py-python2-command                    "python2"
-           py-python3-command                    "python3"
-           py-ipython-command                    "ptipython"
-           py-ipython2-command                   "ipython2"
-           py-ipython3-command                   "ipython3"
            py-set-fill-column-p                  t
            py-shell-name                         nasy*python-buffer)
 
