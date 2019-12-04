@@ -42,7 +42,7 @@
                 ("M-?"  . lsp-ui-peek-find-references)
                 ("C-c u"   . lsp-ui-imenu)
                 ("C-c C-a" . lsp-ui-sideline-apply-code-actions))
-    :ghook 'lsp-mode-hook
+    :hook ((lsp-after-open . lsp-ui-mode))
     :init
     (gsetq lsp-ui-doc-position 'at-point
            lsp-ui-doc-header nil
