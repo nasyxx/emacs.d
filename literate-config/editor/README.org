@@ -412,7 +412,7 @@ Now disabled.
 
 
   (use-package company-prescient
-    :ghook 'after-init-hook)
+    :hook ((company-mode . company-prescient-mode)))
 #+end_src
 
 * Projectile
