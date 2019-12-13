@@ -41,12 +41,3 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
     :defer t
     :ghook '(prog-mode-hook text-mode-hook org-src-mode-hook))
 #+end_src
-
-* Highlight Parentheses
-
-#+begin_src elisp
-  (straight-use-package 'highlight-parentheses)
-  (use-package highlight-parentheses
-    :init (gsetq hl-paren-highlight-adjacent t)
-    :hook ((after-init . global-highlight-parentheses-mode)))
-#+end_src
