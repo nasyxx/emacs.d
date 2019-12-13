@@ -38,6 +38,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 #+begin_src elisp
   (straight-use-package 'rainbow-delimiters)
   (use-package rainbow-delimiters
+    :defer t
     :ghook '(prog-mode-hook text-mode-hook org-src-mode-hook))
 #+end_src
 
