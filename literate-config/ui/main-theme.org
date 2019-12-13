@@ -17,16 +17,18 @@
 * Darktooth-theme
 
 #+begin_src elisp
-  (straight-use-package 'darktooth-theme)
-  (use-package darktooth-theme
-    :config
-    (darktooth-modeline))
+  (when (eq *theme* 'darktooth-theme)
+    (straight-use-package 'darktooth-theme)
+    (use-package darktooth-theme
+      :config
+      (darktooth-modeline)))
 #+end_src
 
 * Soothe-theme
 
 #+begin_src elisp
-  (straight-use-package 'soothe-theme)
+  (when (eq *theme* 'soothe-theme)
+    (straight-use-package 'soothe-theme))
 #+end_src
 
 * Load Theme
