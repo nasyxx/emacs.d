@@ -1,42 +1,21 @@
 # Custom
 .emacs.desktop*
-.historian
-.session
-.smex-items
-.zsh_history
-.mc-lists.el
-.bookmarks.el
-.lsp-session*
 
-.cache
-anaconda-mode
-custom/user-config-example.el
-custom/user-config.el
-emojis
+custom
 straight
-url/
 var/
 etc/
 
-patches/
-
-ltximg/
-
-custom.el
-ditaa0_9.jar
-forge-database.sqlite
-history
 init.html
 init.el
-plantuml.jar
-projectile-bookmarks.eld
-nix-buffer
+
 README.html
 index.html
-recentf
 
-# Created by https://www.gitignore.io/api/emacs
-# Edit at https://www.gitignore.io/?templates=emacs
+Emacs.app
+
+# Created by https://www.gitignore.io/api/emacs,macOS
+# Edit at https://www.gitignore.io/?templates=emacs,macOS
 
 ### Emacs ###
 # -*- mode: gitignore; -*-
@@ -89,4 +68,32 @@ flycheck_*.el
 /network-security.data
 
 
-# End of https://www.gitignore.io/api/emacs
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# End of https://www.gitignore.io/api/emacs,macOS
