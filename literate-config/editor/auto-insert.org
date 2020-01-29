@@ -5,7 +5,7 @@
       '("\\.py" . "Python Language")
       '("Python Language"
         "#!/usr/bin/env python3\n"
-        "# -*- coding: utf-8 -*-\n"
+        "# -*- coding: utf-8 -*-\n\n"
         "r\"\"\"\n"
         "Life's pathetic, have fun (\"▔□▔)/hi~♡ Nasy.\n\n"
         "Excited without bugs::\n\n"
