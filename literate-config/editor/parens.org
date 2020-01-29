@@ -9,8 +9,7 @@ I use ~smartparens~, ~parinfer~ with ~rainbow-delimiters~ instead of ~paredit~.
 #+begin_src elisp
   (straight-use-package 'smartparens)
   (use-package smartparens-config
-    :hook ((after-init . show-smartparens-global-mode)
-           (after-init . smartparens-global-mode))
+    :hook ((after-init . smartparens-global-mode))
     :init (gsetq sp-hybrid-kill-entire-symbol nil))
 #+end_src
 
