@@ -459,6 +459,23 @@ It's for ivy.
 #     :bind (("<remap> <execute-extended-command>" . amx)))
 # #+end_src
 
+* Snails
+
+A modern, easy-to-expand fuzzy search framework
+
+https://github.com/manateelazycat/snails
+
+Not work now.
+
+# #+begin_src elisp
+#   (straight-use-package
+#    '(snails :no-byte-compile t :type git :host github :repo "manateelazycat/snails"))
+#   (use-package snails
+#     :commands snails
+#     :init
+#     (general-define-key
+#      "C-s" 'snails))
+# #+end_src
 
 * Subword
 
