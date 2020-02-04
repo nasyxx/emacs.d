@@ -450,12 +450,15 @@ Now disabled.
 
 Now use amx instead of smex.
 
-#+begin_src elisp
-  (straight-use-package 'amx)
-  (use-package amx
-    :init (setq-default amx-save-file (no-littering-expand-var-file-name ".amx-items"))
-    :bind (("<remap> <execute-extended-command>" . amx)))
-#+end_src
+It's for ivy.
+
+# #+begin_src elisp
+#   (straight-use-package 'amx)
+#   (use-package amx
+#     :init (setq-default amx-save-file (no-littering-expand-var-file-name ".amx-items"))
+#     :bind (("<remap> <execute-extended-command>" . amx)))
+# #+end_src
+
 
 * Subword
 
