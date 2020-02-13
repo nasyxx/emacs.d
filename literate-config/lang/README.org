@@ -99,3 +99,11 @@ Include rust-mode, rls and Cargo.
       :hook ((toml-mode . cargo-minor-mode)
              (rust-mode . cargo-minor-mode))))
 #+end_src
+
+* Yaml
+
+#+begin_src elisp
+  (use-package lsp-yaml
+    :defer t
+    :hook ((yaml-mode . lsp-deferred)))
+#+end_src
