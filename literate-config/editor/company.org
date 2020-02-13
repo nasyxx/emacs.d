@@ -155,7 +155,7 @@
 
     :init
     (add-to-list 'completion-styles 'initials t)
-    (gsetq company-tooltip-limit             14
+    (gsetq company-tooltip-limit             10
            company-dabbrev-downcase          nil
            company-dabbrev-ignore-case       t
            company-global-modes
@@ -166,16 +166,20 @@
              company-echo-metadata-frontend)
            company-dabbrev-other-buffers     'all
            company-tooltip-align-annotations t
+           company-minimum-prefix-length     2
+           company-idle-delay                .2
+           company-tooltip-idle-delay        .2
            company-require-match             'never)
     :hook ((company-mode . nasy/company-init-backends-h))
-    :bind (("M-/"   . company-files)
-           ("M-C-/" . nasy/company-complete)
+    :bind (("M-/"     . company-files)
+           ("M-C-/"   . nasy/company-complete)
+           ("C-<tab>" . nasy/company-complete)
            :map company-mode-map
-           ("M-/"   . nasy/company-complete)
+           ("M-/" . nasy/company-complete)
            :map company-active-map
-           ("M-/"   . company-other-backend)
-           ("C-n"   . company-select-next)
-           ("C-p"   . company-select-previous))
+           ("M-/" . company-other-backend)
+           ("C-n" . company-select-next)
+           ("C-p" . company-select-previous))
     :config
     (global-company-mode +1)
     (defvar nasy/prev-whitespace-mode nil)
