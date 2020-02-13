@@ -29,14 +29,6 @@
 * Highlight Indent Guides
 
 #+begin_src elisp
-
-* Highlight Number
-
-#+begin_src elisp
-  ;; (straight-use-package 'highlight-numbers)
-  ;; (use-package highlight-numbers
-  ;;   :disabled t
-  ;;   :ghook '(after-init-hook prog-mode-hook text-mode-hook org-mode-hook))
   (when *highlight-indent-guides*
     (straight-use-package 'highlight-indent-guides)
     (use-package highlight-indent-guides
