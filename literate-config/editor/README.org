@@ -429,14 +429,23 @@ Now disabled.
   (use-package projectile
     :defer t
     :diminish
+    :commands (projectile-project-root
+               projectile-project-name
+               projectile-project-p
+               projectile-locate-dominating-file)
     :bind-keymap ("C-c C-p" . projectile-command-map)
-    :hook ((after-init . projectile-global-mode))
-    :config (gsetq projectile-indexing-method      'hybrid
-                   projectile-require-project-root 'prompt
-                   projectile-project-root-files-top-down-recurring
-                   (append '("compile_commands.json"
-                             ".cquery")
-                           projectile-project-root-files-top-down-recurring)))
+    :ghook '(after-find-file dired-before-readin-hook minibuffer-setup-hook)
+    :init
+    (gsetq projectile-indexing-method      'hybrid
+           projectile-require-project-root 'prompt)
+    (general-define-key
+     [remap find-tag] #'projectile-find-tag)
+    :config
+    (gsetq projectile-project-root-files-top-down-recurring
+           (append '("compile_commands.json"
+                     ".cquery")
+                   projectile-project-root-files-top-down-recurring))
+    (projectile-mode +1))
 #+end_src
 
 * Recentf
