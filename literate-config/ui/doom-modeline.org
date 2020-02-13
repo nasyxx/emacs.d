@@ -3,22 +3,30 @@
   (use-package doom-modeline
     :hook ((after-init . doom-modeline-mode))
     :init (gsetq
-           doom-modeline-height                   25
-           doom-modeline-bar-width                3
-           doom-modeline-buffer-file-name-style   'relative-from-project
-           doom-modeline-icon                     t
-           doom-modeline-major-mode-icon          t
-           doom-modeline-major-mode-color-icon    t
-           doom-modeline-buffer-state-icon        t
-           doom-modeline-buffer-modification-icon t
-           doom-modeline-minor-modes              t
-           doom-modeline-enable-word-count        t
-           doom-modeline-checker-simple-format    nil
-           doom-modeline-vcs-max-length           12
-           doom-modeline-persp-name               t
-           doom-modeline-lsp                      t
-           doom-modeline-github                   t
-           doom-modeline-github-interval          (* 30 60)
+           doom-modeline-height                      25
+           doom-modeline-bar-width                   3
+           doom-modeline-project-detection           'project  ;; changed
+           doom-modeline-buffer-file-name-style      'relative-to-project  ;; changed
+           doom-modeline-icon                        t  ;; changed
+           doom-modeline-major-mode-icon             t
+           doom-modeline-major-mode-color-icon       t
+           doom-modeline-buffer-state-icon           t
+           doom-modeline-buffer-modification-icon    t
+           doom-modeline-unicode-fallback            t  ;; changed
+           doom-modeline-minor-modes                 t
+           doom-modeline-enable-word-count           t
+           doom-modeline-continuous-word-count-modes '(markdown-mode gfm-mode org-mode text-mode)
+           doom-modeline-buffer-encoding             nil
+           doom-modeline-indent-info                 nil
+           doom-modeline-checker-simple-format       nil
+           doom-modeline-number-limit                99
+           doom-modeline-vcs-max-length              12
+           doom-modeline-persp-name                  t
+           doom-modeline-display-default-persp-name  t
+           doom-modeline-lsp                         t
+           doom-modeline-github                      t
+           doom-modeline-github-interval             (* 30 60)
+           doom-modeline-modal-icon                  nil
 
            doom-modeline-env-version       t
            doom-modeline-env-enable-python t
@@ -35,6 +43,8 @@
            doom-modeline-env-elixir-executable "iex"
            doom-modeline-env-rust-executable   "rustc"
 
+           doom-modeline-env-load-string "..."
+
            doom-modeline-mu4e        t
            doom-modeline-irc         t
            doom-modeline-irc-stylize 'identity)
@@ -44,7 +54,7 @@
       (when (doom-modeline--active)
         (propertize
          (format-time-string " %b %d, %Y - %H:%M ")
-         'face (when (doom-modeline--active) `(:foreground "#1b335f" :background "#fab95b")))))
+         'face (when (doom-modeline--active) `(:foreground "#1b335f" :background "#c0ffc2")))))
 
     ;; Remove
     ;; modals (evil, god, ryo and xah-fly-keys, etc.), parrot
@@ -52,28 +62,28 @@
     ;; Add
     ;; nasy/time
     (doom-modeline-def-modeline 'main
-      '(bar workspace-name window-number matches buffer-info remote-host buffer-position selection-info)
-      '(misc-info persp-name lsp irc mu4e github debug battery minor-modes input-method major-mode process vcs checker " " process nasy/time))
+      '(bar workspace-name matches buffer-info buffer-position word-count selection-info " " misc-info process)
+      '(grip github debug lsp minor-modes major-mode vcs checker nasy/time "        "))
 
     (doom-modeline-def-modeline 'minimal
-      '(bar matches " " buffer-info)
-      '(media-info major-mode " " nasy/time))
+      '(bar matches buffer-info-simple)
+      '(media-info major-mode nasy/time "        "))
 
     (doom-modeline-def-modeline 'special
-      '(bar window-number matches buffer-position selection-info)
-      '(misc-info lsp irc-buffers debug battery minor-modes input-method major-mode process nasy/time))
+      '(bar window-number modals matches buffer-info buffer-position word-count parrot selection-info)
+      '(misc-info battery irc-buffers debug minor-modes input-method indent-info buffer-encoding major-mode process nasy/time))
 
     (doom-modeline-def-modeline 'media
       '(bar window-number buffer-size buffer-info)
-      '(misc-info media-info major-mode process vcs " " nasy/time))
+      '(misc-info media-info major-mode process vcs nasy/time))
 
     (doom-modeline-def-modeline 'pdf
       '(bar window-number buffer-size buffer-info pdf-pages)
-      '(misc-info " " major-mode process vcs " " nasy/time))
+      '(misc-info major-mode process vcs nasy/time))
 
     (doom-modeline-def-modeline 'project
-      '(bar window-number " " buffer-default-directory)
-      '(misc-info mu4e github debug battery " " major-mode " " process nasy/time))
+      '(bar window-number buffer-default-directory)
+      '(misc-info major-mode nasy/time "       "))
 
     ;; Change behaviors
     (defun nasy/doom-modeline-update-buffer-file-name (&rest _)
@@ -90,6 +100,10 @@
                             'help-echo "Buffer name
       mouse-1: Previous buffer\nmouse-3: Next buffer"
                             'local-map mode-line-buffer-identification-keymap)))))
-    (advice-add #'doom-modeline-update-buffer-file-name :override #'nasy/doom-modeline-update-buffer-file-name))
+    (advice-add #'doom-modeline-update-buffer-file-name :override #'nasy/doom-modeline-update-buffer-file-name)
+
+    (set-face-attribute 'mode-line nil :font "OpenDyslexic" :background "#2d334a")
+    (set-face-attribute 'mode-line-inactive nil :font "OpenDyslexic" ))
+
 
 #+end_src
