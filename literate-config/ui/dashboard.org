@@ -13,7 +13,7 @@
      "<mouse-2>"      'widget-button-click
      "<up>"           'dashboard-previous-line
      "<down>"         'dashboard-next-line)
-    (gsetq dashboard-startup-banner    'official
+    (gsetq dashboard-startup-banner    (concat user-emacs-directory "ue.png")
            dashboard-center-content    t
            dashboard-show-shortcuts    t
            dashboard-set-heading-icons t
