@@ -3,6 +3,52 @@
 ;; Core
 #+end_src
 
+* Core Functions
+
+#+begin_src elisp
+  ;;; Borrow from doom emacs.
+  (define-error 'n-error "Error in Nasy Emacs core")
+  (define-error 'n-hook-error "Error in a Nasy startup hook" 'Nasy-error)
+
+  (defun nasy-enlist (exp)
+   "Return EXP wrapped in a list, or as-is if already a list."
+   (declare (pure t) (side-effect-free t))
+   (if (listp exp) exp (list exp)))
+
+  (defun nasy/try-run-hook (hook)
+    "Run HOOK (a hook function), but handle errors better, to make debugging
+  issues easier.
+  Meant to be used with `run-hook-wrapped'."
+    (message "Running hook: %s" hook)
+    (condition-case e
+        (funcall hook)
+      ((debug error)
+       (signal 'n-hook-error (list hook e))))
+    ;; return nil so `run-hook-wrapped' won't short circuit
+    nil)
+
+
+  ;; File+dir local variables are initialized after the major mode and its hooks
+  ;; have run. If you want hook functions to be aware of these customizations, add
+  ;; them to MODE-local-vars-hook instead.
+  (defun nasy/run-local-var-hooks-h ()
+    "Run MODE-local-vars-hook after local variables are initialized."
+    (run-hook-wrapped (intern-soft (format "%s-local-vars-hook" major-mode))
+                      #'nasy/try-run-hook))
+  (add-hook 'hack-local-variables-hook #'nasy/run-local-var-hooks-h)
+
+  ;; If the user has disabled `enable-local-variables', then
+  ;; `hack-local-variables-hook' is never triggered, so we trigger it at the end
+  ;; of `after-change-major-mode-hook':
+  (defun nasy/run-local-var-hooks-if-necessary-h ()
+    "Run `nasy/run-local-var-hooks-h' if `enable-local-variables' is disabled."
+    (unless enable-local-variables
+      (nasy/run-local-var-hooks-h)))
+  (add-hook 'after-change-major-mode-hook
+            #'nasy/run-local-var-hooks-if-necessary-h
+            'append)
+#+end_src
+
 * macOS Frame
 
 #+begin_src elisp
