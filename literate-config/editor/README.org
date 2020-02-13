@@ -443,7 +443,6 @@ Now disabled.
 
 #+begin_src elisp
   (use-package recentf
-    :ghook 'after-init-hook
     :init (gsetq
            recentf-save-file       "~/.emacs.d/var/recentf"
            recentf-max-saved-items 100
