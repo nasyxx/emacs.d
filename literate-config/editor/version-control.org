@@ -58,8 +58,7 @@
 
 #+begin_src elisp
   (straight-use-package 'transient)
-  (use-package transient
-    :init (gsetq transient-default-level 5))
+  (gsetq transient-default-level 5)
 #+end_src
 
 * Git Messenger
