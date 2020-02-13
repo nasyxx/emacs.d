@@ -86,7 +86,7 @@ Clangd or ccls.
 
            line)))
 
-      (with-eval-after-load 'lsp-methods
+      (after! lsp-methods
         ;;; Override
         ;; This deviated from the original in that it highlights pattern appeared in symbol
         (defun lsp--symbol-information-to-xref (pattern symbol)

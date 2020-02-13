@@ -7,10 +7,10 @@
                  doom-dracula-colorful-headers  t
                  doom-dracula-comment-bg        t)
     :config
-    (with-eval-after-load 'treemacs
+    (after! treemacs
       (doom-themes-treemacs-config))
     (doom-themes-visual-bell-config)
-    (with-eval-after-load 'org
+    (after! org
       (doom-themes-org-config)))
 #+end_src
 

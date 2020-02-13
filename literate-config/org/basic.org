@@ -355,7 +355,7 @@
     (gsetq org-preview-latex-default-process 'luasvg)
 
     (require 'org-tempo nil t)
-    (with-eval-after-load 'ox
+    (after! ox
       (let ((oxs '(ox-rst
                    ox-pandoc)))
         (dolist (language oxs)

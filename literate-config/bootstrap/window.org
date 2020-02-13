@@ -45,7 +45,7 @@
                      (winner-undo)
                      (setq this-command 'winner-undo)))
                  (?r winner-redo))))
-    (with-eval-after-load 'hydra
+    (after! hydra
       (defhydra hydra-window-size (:color violet)
         "Windows size"
         ("h" shrink-window-horizontally "shrink horizontal")

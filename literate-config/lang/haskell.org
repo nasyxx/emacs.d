@@ -76,7 +76,8 @@ inlcude haskell-snippets.
                    (modes quote (haskell-mode literate-haskell-mode))))
 
     :config
-    (push 'haskell-mode page-break-lines-modes)
+    (after! page-break-lines
+      (push 'haskell-mode page-break-lines-modes))
     (defun haskell-mode-generate-tags (&optional and-then-find-this-tag)
       "Generate tags using Hasktags.  This is synchronous function.
 
