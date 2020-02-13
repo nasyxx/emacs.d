@@ -169,14 +169,3 @@
     :defer t
     :init (gsetq helm-dash-docsets-path "~/.docsets"))
 #+end_src
-
-* Helm Ls Git
-
-#+begin_src elisp
-  (straight-use-package 'helm-ls-git)
-  (use-package helm-ls-git
-    :defer t
-    :bind (("C-<f6>"   . helm-ls-git-ls)
-           ("C-x g"    . helm-ls-git-ls)
-           ("C-x C-d"  . helm-browse-project)))
-#+end_src
