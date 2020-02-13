@@ -17,12 +17,6 @@
   built from this.")
 
 
-  (defun nasy-enlist (exp)
-   "Return EXP wrapped in a list, or as-is if already a list."
-   (declare (pure t) (side-effect-free t))
-   (if (listp exp) exp (list exp)))
-
-
   (defun nasy/add-company-backend (modes &rest backends)
    "Prepends BACKENDS (in order) to `company-backends' in MODES.
   MODES should be one symbol or a list of them, representing major or minor modes.
