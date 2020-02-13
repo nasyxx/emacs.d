@@ -81,6 +81,11 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'string)
 
+  (defcustom *highlight-indent-guides* t
+    "Whether to use highlight-indent-guides or not."
+    :group 'nasy
+    :type 'boolean)
+
   (defcustom *debug* t
     "Whether to use debug or not."
     :group 'nasy
