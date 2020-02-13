@@ -109,14 +109,15 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
 * lsp-python-ms
 
 #+begin_src elisp
-  (straight-use-package 'lsp-python-ms)
+  ;; (straight-use-package 'lsp-python-ms)
   (use-package lsp-python-ms
+    :disabled t
     :defer t
     :preface
     (defun start-lsp-ms ()
      "Start lsp-python-ms."
      (require 'lsp-python-ms)
-     (lsp))
+     (lsp-deferred))
     :init (gsetq lsp-python-ms-nupkg-channel "daily"
                  lsp-python-ms-executable    "~/.local/bin/Microsoft.Python.LanguageServer"
                  lsp-python-ms-errors        ["inherit-non-class"
@@ -132,8 +133,8 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
                                               "typing-newtype-arguments"
                                               "typing-typevar-arguments"
                                               "unknown-parameter-name"
-                                              "unresolved-import"
-                                              "undefined-variable"]
+                                              "undefined-variable"
+                                              "unresolved-import"]
                  lsp-python-ms-warnings      ["no-cls-argument"
                                               "no-self-argument"
                                               "variable-not-defined-globally"
