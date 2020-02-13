@@ -149,6 +149,13 @@ Disabled by default due to it causes lots of cpu.
            (visual-fill-column-mode . maybe-adjust-visual-fill-column)))
 #+end_src
 
+* Find File in Project
+
+#+begin_src elisp
+  (straight-use-package 'find-file-in-project)
+  (gsetq ffip-use-rust-fd t)
+#+end_src
+
 * Flycheck
 
 #+include: "flycheck.org"
