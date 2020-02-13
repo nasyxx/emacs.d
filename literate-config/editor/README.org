@@ -160,6 +160,30 @@ Disabled by default due to it causes lots of cpu.
 
 #+include: "flycheck.org"
 
+* Fuz.el
+
+Fast and precise fuzzy scoring/matching utils for Emacs, powered by rust
+
+https://github.com/rustify-emacs/fuz.el
+
+#+begin_src elisp
+  (straight-use-package 'fuz)
+  (straight-use-package 'helm-fuz)
+  (use-package fuz
+    :defer t
+    :init
+    (defun load-fuz ()
+      "Load fuz.el."
+      (require 'fuz)
+      (unless (require 'fuz-core nil t)
+        (fuz-build-and-load-dymod)))
+    :hook ((after-init . load-fuz))
+    :config
+    (after! helm
+      (require 'helm-fuz)
+      (helm-fuz-mode)))
+#+end_src
+
 * Grab Mac Link
 
 #+begin_src elisp
