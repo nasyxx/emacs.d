@@ -275,49 +275,62 @@
     (use-package company-box
       :defer    t
       :after (all-the-icons company)
+      :preface
+      (defun nasy/company-box-icons--yasnippet-fn (candidate)
+        (when (get-text-property 0 'yas-annotation candidate)
+          'Yasnippet))
+
+      (defun nasy/company-box-icons--elisp-fn (candidate)
+        (when (derived-mode-p 'emacs-lisp-mode)
+          (let ((sym (intern candidate)))
+            (cond ((fboundp sym)  'ElispFunction)
+                  ((boundp sym)   'ElispVariable)
+                  ((featurep sym) 'ElispFeature)
+                  ((facep sym)    'ElispFace)))))
       :init
       (setq company-box-icons-alist 'company-box-icons-all-the-icons)
       :ghook 'company-mode-hook
       :config
-      (setq company-box-backends-colors '((company-lsp      . "#e0f9b5")
-                                          (company-elisp    . "#e0f9b5")
-                                          (company-files    . "#ffffc2")
-                                          (company-keywords . "#ffa5a5")
-                                          (company-capf     . "#bfcfff")
-                                          (company-dabbrev  . "#bfcfff")))
-      (setq company-box-icons-unknown (concat (all-the-icons-material "find_in_page") " "))
-      (setq company-box-icons-elisp
-            (list
-             (concat (all-the-icons-faicon "tag") " ")
-             (concat (all-the-icons-faicon "cog") " ")
-             (concat (all-the-icons-faicon "cube") " ")
-             (concat (all-the-icons-material "color_lens") " ")))
-      (setq company-box-icons-yasnippet (concat (all-the-icons-faicon "bookmark") " "))
-      (setq company-box-icons-lsp
-            `((1 .  ,(concat (all-the-icons-faicon   "text-height")    " ")) ;; Text
-              (2 .  ,(concat (all-the-icons-faicon   "tags")           " ")) ;; Method
-              (3 .  ,(concat (all-the-icons-faicon   "tag" )           " ")) ;; Function
-              (4 .  ,(concat (all-the-icons-faicon   "tag" )           " ")) ;; Constructor
-              (5 .  ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Field
-              (6 .  ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Variable
-              (7 .  ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Class
-              (8 .  ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Interface
-              (9 .  ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Module
-              (10 . ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Property
-              (11 . ,(concat (all-the-icons-material "settings_system_daydream") " ")) ;; Unit
-              (12 . ,(concat (all-the-icons-faicon   "cog" )           " ")) ;; Value
-              (13 . ,(concat (all-the-icons-material "storage")        " ")) ;; Enum
-              (14 . ,(concat (all-the-icons-material "closed_caption") " ")) ;; Keyword
-              (15 . ,(concat (all-the-icons-faicon   "bookmark")       " ")) ;; Snippet
-              (16 . ,(concat (all-the-icons-material "color_lens")     " ")) ;; Color
-              (17 . ,(concat (all-the-icons-faicon   "file-text-o")    " ")) ;; File
-              (18 . ,(concat (all-the-icons-material "refresh")        " ")) ;; Reference
-              (19 . ,(concat (all-the-icons-faicon   "folder-open")    " ")) ;; Folder
-              (20 . ,(concat (all-the-icons-material "closed_caption") " ")) ;; EnumMember
-              (21 . ,(concat (all-the-icons-faicon   "square")         " ")) ;; Constant
-              (22 . ,(concat (all-the-icons-faicon   "cube")           " ")) ;; Struct
-              (23 . ,(concat (all-the-icons-faicon   "calendar")       " ")) ;; Event
-              (24 . ,(concat (all-the-icons-faicon   "square-o")       " ")) ;; Operator
-              (25 . ,(concat (all-the-icons-faicon   "arrows")         " "))) ;; TypeParameter
-            )))
+      (gsetq company-box-show-single-candidate t
+             company-box-backends-colors       nil
+             company-box-max-candidates        50
+             company-box-icons-alist           'company-box-icons-all-the-icons
+             company-box-icons-functions
+             '(nasy/company-box-icons--yasnippet-fn
+               company-box-icons--lsp
+               nasy/company-box-icons--elisp-fn
+               company-box-icons--acphp)
+             company-box-icons-all-the-icons
+             `((Unknown       . ,(all-the-icons-material "find_in_page"             :height 0.8 :face 'all-the-icons-purple))
+               (Text          . ,(all-the-icons-material "text_fields"              :height 0.8 :face 'all-the-icons-green))
+               (Method        . ,(all-the-icons-material "functions"                :height 0.8 :face 'all-the-icons-yellow))
+               (Function      . ,(all-the-icons-material "functions"                :height 0.8 :face 'all-the-icons-yellow))
+               (Constructor   . ,(all-the-icons-material "functions"                :height 0.8 :face 'all-the-icons-yellow))
+               (Field         . ,(all-the-icons-material "functions"                :height 0.8 :face 'all-the-icons-yellow))
+               (Variable      . ,(all-the-icons-material "adjust"                   :height 0.8 :face 'all-the-icons-blue))
+               (Class         . ,(all-the-icons-material "class"                    :height 0.8 :face 'all-the-icons-cyan))
+               (Interface     . ,(all-the-icons-material "settings_input_component" :height 0.8 :face 'all-the-icons-cyan))
+               (Module        . ,(all-the-icons-material "view_module"              :height 0.8 :face 'all-the-icons-cyan))
+               (Property      . ,(all-the-icons-material "settings"                 :height 0.8 :face 'all-the-icons-lorange))
+               (Unit          . ,(all-the-icons-material "straighten"               :height 0.8 :face 'all-the-icons-red))
+               (Value         . ,(all-the-icons-material "filter_1"                 :height 0.8 :face 'all-the-icons-red))
+               (Enum          . ,(all-the-icons-material "plus_one"                 :height 0.8 :face 'all-the-icons-lorange))
+               (Keyword       . ,(all-the-icons-material "filter_center_focus"      :height 0.8 :face 'all-the-icons-lgreen))
+               (Snippet       . ,(all-the-icons-material "short_text"               :height 0.8 :face 'all-the-icons-lblue))
+               (Color         . ,(all-the-icons-material "color_lens"               :height 0.8 :face 'all-the-icons-green))
+               (File          . ,(all-the-icons-material "insert_drive_file"        :height 0.8 :face 'all-the-icons-green))
+               (Reference     . ,(all-the-icons-material "collections_bookmark"     :height 0.8 :face 'all-the-icons-silver))
+               (Folder        . ,(all-the-icons-material "folder"                   :height 0.8 :face 'all-the-icons-green))
+               (EnumMember    . ,(all-the-icons-material "people"                   :height 0.8 :face 'all-the-icons-lorange))
+               (Constant      . ,(all-the-icons-material "pause_circle_filled"      :height 0.8 :face 'all-the-icons-blue))
+               (Struct        . ,(all-the-icons-material "streetview"               :height 0.8 :face 'all-the-icons-blue))
+               (Event         . ,(all-the-icons-material "event"                    :height 0.8 :face 'all-the-icons-yellow))
+               (Operator      . ,(all-the-icons-material "control_point"            :height 0.8 :face 'all-the-icons-red))
+               (TypeParameter . ,(all-the-icons-material "class"                    :height 0.8 :face 'all-the-icons-red))
+               ;; (Template   . ,(company-box-icons-image "Template.png"))))
+               (Yasnippet     . ,(all-the-icons-material "short_text"               :height 0.8 :face 'all-the-icons-green))
+               (ElispFunction . ,(all-the-icons-material "functions"                :height 0.8 :face 'all-the-icons-red))
+               (ElispVariable . ,(all-the-icons-material "check_circle"             :height 0.8 :face 'all-the-icons-blue))
+               (ElispFeature  . ,(all-the-icons-material "stars"                    :height 0.8 :face 'all-the-icons-orange))
+               (ElispFace     . ,(all-the-icons-material "format_paint"             :height 0.8 :face 'all-the-icons-pink))))))
 #+end_src
