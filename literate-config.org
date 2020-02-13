@@ -33,6 +33,8 @@
 
   (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
 
+  (add-hook 'after-init-hook #'(lambda () (run-hooks 'nasy/config-after-hook)))
+
   (when (file-exists-p custom-file)
     (load custom-file))
 
