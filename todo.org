@@ -31,7 +31,11 @@ CLOSED: [2019-11-05 Tue 13:38] SCHEDULED: <2019-02-01 Fri>
 - State "DONE"       from "HOLD"       [2019-11-05 Tue 13:38]
 :END:
 
-* TODO Company mode
+* DONE Company mode
+CLOSED: [2020-02-13 Thu 14:17]
+:LOGBOOK:
+- State "DONE"       from "NEXT"       [2020-02-13 Thu 14:17]
+:END:
 
 ** DONE Key Bindings
 CLOSED: [2019-12-04 Wed 09:35]
@@ -39,4 +43,8 @@ CLOSED: [2019-12-04 Wed 09:35]
 - State "DONE"       from "NEXT"       [2019-12-04 Wed 09:35]
 :END:
 
-** TODO Backends
+** DONE Backends
+CLOSED: [2020-02-13 Thu 14:17]
+:LOGBOOK:
+- State "DONE"       from "NEXT"       [2020-02-13 Thu 14:17]
+:END:
