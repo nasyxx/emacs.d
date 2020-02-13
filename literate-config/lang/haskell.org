@@ -105,16 +105,20 @@ inlcude haskell-snippets.
   (use-package lsp-haskell
     :preface
     (defun start-lsp-haskell ()
+      (require 'lsp)
       (require 'lsp-haskell)
       (lsp-deferred))
-    :hook ((haskell-mode   . start-lsp-haskell))
-    :init
-    (gsetq lsp-haskell-process-path-hie "hie-wrapper")
+    :defer t
+    :hook ((haskell-mode . start-lsp-haskell))
+    ;; :init
+    ;; (gsetq lsp-haskell-process-path-hie "hie-8.6.5")
     ;; You can set the lsp-haskell settings here
     ;; (lsp-haskell-set-hlint-on)                    ;; default on
     ;; (lsp-haskell-set-max-number-of-problems 100)  ;; default 100
     ;; (lsp-haskell-set-liquid-on)                   ;; default off
     ;; (lsp-haskell-set-completion-snippets-on)      ;; default on
+    ;; (gsetq lsp-haskell-process-path-hie "ghcide")
+    ;; (gsetq lsp-haskell-process-args-hie '())
     )
 #+end_src
 
