@@ -108,26 +108,6 @@
             :buffer "*helm org inbuffer*")))
 #+end_src
 
-* Helm Company
-
-#+begin_src elisp
-  (straight-use-package 'helm-company)
-  (use-package helm-company
-    :defer t
-    :bind (:map
-           company-mode-map ("C-:" . helm-company)
-           :map
-           company-active-map ("C-:" . helm-company)))
-#+end_src
-
-* Helm Shell
-
-#+begin_src elisp
-  (use-package helm-eshell
-    :defer t
-    :bind (:map eshell-mode-map
-                ("C-c C-l" . helm-eshell-history)))
-#+end_src
 
 * Helm Descbings
 
