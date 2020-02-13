@@ -3,6 +3,10 @@
 #+begin_src elisp
   (use-package ibuffer
     :bind (("C-x C-b" . ibuffer))
+    :preface
+    (defun ibuffer-switch-to-normal ()
+      "ibuffer swith to normal filter groups."
+      (ibuffer-switch-to-saved-filter-groups "Normal"))
     :init
     (gsetq ibuffer-saved-filter-groups
            '(("Normal"
@@ -52,7 +56,7 @@
               ))
            ibuffer-show-empty-filter-groups nil
            ibuffer-default-sorting-mode     'filename/process)
-    :hook ((ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "Normal")))))
+    :hook ((ibuffer-mode . ibuffer-switch-to-normal)))
 #+end_src
 
 * ibuffer vc
