@@ -13,9 +13,6 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 
   (add-hook 'nasy/config-after-hook
             #'(lambda () (message "Hi~ Hope you have fun with this config.")))
-
-  (add-hook 'after-init-hook
-            #'(lambda () (run-hooks 'nasy/config-after-hook)))
 #+end_src
 
 * Custom
