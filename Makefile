@@ -38,7 +38,7 @@ update: clean-build
 
 # Update docs
 docs:
-	org2html README.org && git checkout gh-pages && && mv README.html index.html && git commit -am "Update docs." && git push && git checkout master
+	org2html README.org && git checkout gh-pages && mv README.html index.html && git commit -am "Update docs." && git push && git checkout master
 
 # COLORS
 GREEN  := $(shell tput -Txterm setaf 2)
