@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: pseudocode
+# key: pseudo
+# --
+\begin{algorithm}
+  \caption{$1}\labal{$2}
+  \begin{algorithmic}[1]
+    \Procedure{$3}$4
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}

@@ -561,7 +561,10 @@ Not work now.
     :bind (:map yas-minor-mode-map
                 ("C-'" . yas-expand))
     :commands (yas-minor-mode)
-    :hook ((prog-mode . yas-minor-mode))
-    :config (yas-reload-all)
-    :diminish yas-minor-mode)
+    :hook ((prog-mode      . yas-minor-mode)
+           (yas-minor-mode . (lambda ()
+                               (add-to-list
+                                'yas-snippet-dirs
+                                (concat user-emacs-directory "snippets")))))
+    :config (yas-reload-all))
 #+end_src
