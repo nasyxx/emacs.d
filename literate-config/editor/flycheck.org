@@ -12,11 +12,19 @@
         (flycheck-list-errors)))
     :commands (flycheck-mode
                flycheck-next-error
-               flycheck-previous-error)
+               flycheck-previous-error
+               flycheck-add-next-checker)
     ;; :bind (("C-x C-s" . save-buffer-maybe-show-errors))
     :hook ((after-init . global-flycheck-mode))
-    :init (setq flycheck-display-errors-function
-                #'flycheck-display-error-messages-unless-error-list)
+    :init (gsetq flycheck-display-errors-function
+                 #'flycheck-display-error-messages-unless-error-list
+                 flycheck-check-syntax-automatically '(save mode-enabled)
+                 flycheck-display-errors-delay       0.25)
+    :bind (:map flycheck-error-list-mode-map
+                ("C-n"    . flycheck-error-list-next-error)
+                ("C-p"    . flycheck-error-list-previous-error)
+                ("RET"    . flycheck-error-list-goto-error)
+                ([return] . flycheck-error-list-goto-error))
     :config (defalias 'show-error-at-point-soon
               'flycheck-show-error-at-point)
     (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space))
@@ -25,6 +33,6 @@
   (use-package flycheck-package
     :after flycheck
     :init
-    (with-eval-after-load 'elisp-mode
+    (after! elisp-mode
       (flycheck-package-setup)))
 #+end_src
