@@ -148,17 +148,22 @@
     :init (gsetq projectile-completion-system 'helm))
 #+end_src
 
-* Helm Ag
+* Helm rg
 
 #+begin_src elisp
-  (straight-use-package 'helm-ag)
-  (use-package helm-ag
+  (straight-use-package 'helm-rg)
+  (use-package helm-rg
     :defer t
-    :init (gsetq  ;; brew install rg
-           helm-ag-base-command         "rg --no-heading --smart-case"
-           helm-ag-fuzzy-match          t
-           helm-ag-use-grep-ignore-list t
-           helm-ag-use-agignore         t))
+    :init
+    (general-define-key
+     :keymaps 'helm-rg-map
+     "C-c C-e" #'helm-rg--bounce)
+    (general-define-key
+     :keymaps 'helm-rg--bounce-mode-map
+     "q" #'kill-current-buffer
+     "C-c C-c" (lambda! (helm-rg--bounce-dump) (kill-current-buffer))
+     "C-x C-c" #'helm-rg--bounce-dump-current-file
+     "C-c C-k" #'kill-current-buffer))
 #+end_src
 
 * Helm Dash
