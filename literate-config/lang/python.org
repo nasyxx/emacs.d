@@ -74,11 +74,11 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
         (flycheck-add-next-checker 'lsp-ui             'python-pytype)
         (flycheck-add-next-checker 'python-pytype      'python-flake8)))
 
-
     (defun start-lsp-pyls ()
       "Start lsp-python-ms."
       (require 'lsp-pyls)
       (lsp-deferred))
+
     :init
     (general-define-key
      :prefix "C-c"
@@ -106,7 +106,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     ;; [tool.black]
     ;; line-length = 79
     (after! lsp-pyls
-      (gsetq lsp-pyls-configuration-sources                          ["pydocstyle" "pycodestyle" "pyflakes" "flake8"]
+      (gsetq lsp-pyls-configuration-sources                          ["flake8"]
              lsp-pyls-plugins-pydocstyle-enabled                     t
              lsp-pyls-plugins-yapf-enabled                           nil
              lsp-pyls-plugins-jedi-definition-follow-imports         t
@@ -115,8 +115,8 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
              lsp-pyls-plugins-jedi-symbols-enabled                   t
              lsp-pyls-plugins-flake8-enabled                         t
              lsp-pyls-plugins-pyls_mypy-live-mode                    nil))
-    :hook ((after-init  . python-flycheck-setup)
-           (python-mode . start-lsp-pyls))
+    :hook ((after-init  . python-flycheck-setup))
+           ;; (python-mode . start-lsp-pyls))
     :config
     (unless *blacken*
       (add-hook #'python-mode-hook
@@ -128,7 +128,6 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
 #+begin_src elisp
   ;; (straight-use-package 'lsp-python-ms)
   (use-package lsp-python-ms
-    :disabled t
     :defer t
     :preface
     (defun start-lsp-ms ()
@@ -183,8 +182,8 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
       :error-patterns
       ((warning line-start "File \"" (file-name) "\", line " line ", " (message (one-or-more (not (any "[")))) "[" (id (one-or-more not-newline)) "]"))
       :modes python-mode
-      :predicate flycheck-buffer-saved-p
-      :next-checkers (python-flake8))
+      :predicate flycheck-buffer-saved-p)
+      ;; :next-checkers (python-flake8))
 
     (add-to-list 'flycheck-checkers 'python-pytype t))
 #+end_src
