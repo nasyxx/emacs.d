@@ -15,9 +15,10 @@ https://github.com/noctuid/general.el
 
 #+begin_src elisp
   (when *is-a-mac*
-    (gsetq mac-option-modifier  'meta
-           mac-command-modifier 'hyper
-           mac-right-command-modifier 'control)
+    (gsetq mac-option-modifier        'meta
+           mac-command-modifier       'hyper
+           mac-right-command-modifier 'super
+           mac-function-modifier      'super)
 
     (general-define-key
      "C-z" 'stop-minimizing-window
