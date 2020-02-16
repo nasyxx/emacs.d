@@ -131,9 +131,9 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     :defer t
     :preface
     (defun start-lsp-mspyls ()
-     "Start lsp-python-ms."
-     (require 'lsp-python-ms)
-     (lsp-deferred))
+      "Start lsp-python-ms."
+      (require 'lsp-python-ms)
+      (lsp-deferred))
     :init (gsetq lsp-python-ms-nupkg-channel "daily"
                  lsp-python-ms-executable    "~/.local/bin/Microsoft.Python.LanguageServer"
                  lsp-python-ms-errors        ["inherit-non-class"
