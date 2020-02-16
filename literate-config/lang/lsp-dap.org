@@ -44,15 +44,15 @@
                 ("C-c C-a" . lsp-ui-sideline-apply-code-actions))
     :hook ((lsp-after-open . lsp-ui-mode))
     :init
-    (gsetq lsp-ui-doc-position 'at-point
-           lsp-ui-doc-header nil
-           lsp-ui-doc-border "violet"
-           ;; lsp-ui-doc-include-signature t
-           lsp-ui-sideline-update-mode 'point
-           lsp-ui-sideline-delay 1
+    (gsetq lsp-ui-doc-position              'at-point
+           lsp-ui-doc-header                nil
+           lsp-ui-doc-border                "violet"
+           lsp-ui-doc-include-signature     t
+           lsp-ui-sideline-update-mode      'point
+           lsp-ui-sideline-delay            1
            lsp-ui-sideline-ignore-duplicate t
-           lsp-ui-peek-always-show t
-           lsp-ui-flycheck-enable t))
+           lsp-ui-peek-always-show          t
+           lsp-ui-flycheck-enable           t))
 #+end_src
 
 * company-lsp
