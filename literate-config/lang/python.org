@@ -130,7 +130,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
   (use-package lsp-python-ms
     :defer t
     :preface
-    (defun start-lsp-ms ()
+    (defun start-lsp-mspyls ()
      "Start lsp-python-ms."
      (require 'lsp-python-ms)
      (lsp-deferred))
@@ -155,7 +155,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
                                               "no-self-argument"
                                               "variable-not-defined-globally"
                                               "variable-not-defined-nonlocal"])
-    :hook ((python-mode . start-lsp-ms)))
+    :hook ((python-mode . start-lsp-mspyls)))
 
 #+end_src
 
