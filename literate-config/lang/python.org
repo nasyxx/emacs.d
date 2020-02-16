@@ -126,7 +126,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
 * lsp-python-ms
 
 #+begin_src elisp
-  ;; (straight-use-package 'lsp-python-ms)
+  (straight-use-package 'lsp-python-ms)
   (use-package lsp-python-ms
     :defer t
     :preface
