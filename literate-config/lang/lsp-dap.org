@@ -11,24 +11,27 @@
         (gsetq company-backends (delete 'company-lsp company-backends)
                company-backends (delete 'intero-company company-backends))))
     :hook ((lsp-after-open . lsp-enable-imenu))
-    :init (gsetq lsp-log-io                       *debug*
-                 lsp-print-performance            *debug*
-                 lsp-inhibit-message              t
-                 lsp-report-if-no-buffer          *debug*
-                 lsp-keep-workspace-alive         t
-                 lsp-enable-snippet               t
-                 lsp-restart                      'interactive
-                 lsp-auto-configure               nil
-                 lsp-document-sync-method         nil
-                 lsp-auto-execute-action          nil
-                 lsp-eldoc-render-all             t
-                 lsp-enable-completion-at-point   nil
-                 lsp-enable-xref                  t
-                 lsp-enable-indentation           t
-                 lsp-prefer-flymake               nil
-                 lsp-enable-on-type-formatting    t
-                 lsp-signature-auto-activate      t
-                 lsp-enable-semantic-highlighting t))
+    :init (gsetq lsp-log-io                         *debug*
+                 lsp-print-performance              *debug*
+                 lsp-inhibit-message                t
+                 lsp-report-if-no-buffer            *debug*
+                 lsp-keep-workspace-alive           t
+                 lsp-enable-snippet                 t
+                 lsp-auto-guess-root                nil
+                 lsp-restart                        'interactive
+                 lsp-auto-configure                 nil
+                 lsp-document-sync-method           nil
+                 lsp-auto-execute-action            nil
+                 lsp-eldoc-render-all               t
+                 lsp-enable-completion-at-point     nil
+                 lsp-enable-xref                    t
+                 lsp-enable-indentation             t
+                 lsp-diagnostic-package             :auto
+                 lsp-enable-on-type-formatting      t
+                 lsp-signature-auto-activate        t
+                 lsp-enable-semantic-highlighting   t
+                 lsp-signature-render-documentation t
+                 lsp-enable-text-document-color     t))
 #+end_src
 
 * lsp-ui

@@ -71,7 +71,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     (defun python-flycheck-setup ()
       "Add python checker for lsp-ui."
       (after! lsp-ui
-        (flycheck-add-next-checker 'lsp-ui             'python-pytype)
+        (flycheck-add-next-checker 'lsp                'python-pytype)
         (flycheck-add-next-checker 'python-pytype      'python-flake8)))
 
     (defun start-lsp-pyls ()
