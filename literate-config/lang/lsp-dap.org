@@ -31,6 +31,7 @@
                  lsp-signature-auto-activate        t
                  lsp-enable-semantic-highlighting   t
                  lsp-signature-render-documentation t
+                 lsp-eldoc-hook                     nil
                  lsp-enable-text-document-color     t))
 #+end_src
 
