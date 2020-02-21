@@ -220,7 +220,7 @@ https://github.com/rustify-emacs/fuz.el
 
 https://github.com/emacs-helm/helm
 
-#+include: "helm.org"
+# #+include: "helm.org"
 
 * Htmlize
 
@@ -297,7 +297,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 Now disabled.
 
-# #+include: "ivy.org"
+#+include: "ivy.org"
 
 * Large File
 

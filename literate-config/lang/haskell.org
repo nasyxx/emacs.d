@@ -47,7 +47,7 @@ inlcude haskell-snippets.
            haskell-process-suggest-hoogle-imports       t
            haskell-process-suggest-remove-import-lines  t
            haskell-tags-on-save                         t
-           haskell-completing-read-function             'helm--completing-read-default
+           ;; haskell-completing-read-function             'helm--completing-read-default
            haskell-doc-show-global-types                t
            haskell-svg-render-images                    t
            haskell-doc-chop-off-context                 nil)
