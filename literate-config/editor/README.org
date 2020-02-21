@@ -276,9 +276,9 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
       (let ((sym (thing-at-point 'symbol)))
         (if sym
             (progn
-              (setq isearch-regexp t
-                    isearch-string (concat "\\_<" (regexp-quote sym) "\\_>")
-                    isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
+              (setq isearch-regexp    t
+                    isearch-string    (regexp-quote sym)
+                    isearch-message   (mapconcat 'isearch-text-char-description isearch-string "")
                     isearch-yank-flag t))
           (ding)))
       (isearch-search-and-update))
@@ -293,9 +293,9 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
     :bind (:map isearch-mode-map
                 ([remap isearch-delete-char] . isearch-del-char)
-                ("C-M-w"                     . isearch-yank-symbol)
+                ("C-w"                       . isearch-yank-symbol)
                 ([(control return)]              . isearch-exit-other-end)
-                ("C-c C-o"                   . isearch-occur)))
+                ("C-o"                       . isearch-occur)))
 #+end_src
 
 * Ivy, Counsel and Swiper
