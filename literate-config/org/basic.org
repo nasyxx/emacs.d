@@ -219,7 +219,8 @@
         "hyperref" t nil)
        (""            "luatexja-fontspec" t nil)
        (""            "listings"          t nil)
-       (""            "algpseudocode" t nil)
+       (""            "algorithm"         t nil)
+       (""            "algpseudocode"     t nil)
        ("cache=false" "minted"            t nil)))
      org-latex-default-table-environment "longtable"
      org-latex-listings 'minted
