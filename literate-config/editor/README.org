@@ -168,7 +168,6 @@ https://github.com/rustify-emacs/fuz.el
 
 #+begin_src elisp
   (straight-use-package 'fuz)
-  (straight-use-package 'helm-fuz)
   (use-package fuz
     :defer t
     :init
@@ -177,11 +176,7 @@ https://github.com/rustify-emacs/fuz.el
       (require 'fuz)
       (unless (require 'fuz-core nil t)
         (fuz-build-and-load-dymod)))
-    :hook ((after-init . load-fuz))
-    :config
-    (after! helm
-      (require 'helm-fuz)
-      (helm-fuz-mode)))
+    :hook ((after-init . load-fuz)))
 #+end_src
 
 * Grab Mac Link

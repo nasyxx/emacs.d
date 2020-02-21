@@ -182,3 +182,12 @@
     :defer t
     :init (gsetq helm-dash-docsets-path "~/.docsets"))
 #+end_src
+
+* Helm Fuz
+
+#+begin_src elisp
+  (straight-use-package 'helm-fuz)
+  (after! helm
+    (require 'helm-fuz)
+    (helm-fuz-mode))
+#+end_src
