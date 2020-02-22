@@ -57,6 +57,17 @@ Here is the editor config, including some features and functions.
     :hook ((after-init . beginend-global-mode)))
 #+end_src
 
+* Better Jumper
+
+A configurable jump list implementation for Emacs that can be used to easily
+jump back to previous locations.
+
+https://github.com/gilbertw1/better-jumper
+
+#+begin_src elisp
+  (straight-use-package 'better-jumper)
+#+end_src
+
 * Carbon Now sh
 
 Emacs to carbon.now.sh integration.
