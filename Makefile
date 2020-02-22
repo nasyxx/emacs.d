@@ -8,7 +8,7 @@ generate:
 		emacs -Q --batch --find-file "README.org" -f "org-babel-tangle"
 	@emacs -Q --batch --find-file "literate-config.org" -f "org-org-export-to-org" && \
 		emacs -Q --batch --find-file "literate-config.org.org" -f "org-babel-tangle" && \
-		rm -rf "literate-config.org.org"
+		rm -rf "literate-config.org.org" "literate-config.org.org~"
 	@echo "If you want to customize, you can simply change/create custom/user-config.el"
 .PHONY: generate
 
