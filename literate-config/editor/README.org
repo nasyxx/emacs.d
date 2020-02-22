@@ -297,11 +297,13 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
       (isearch-exit)
       (goto-char isearch-other-end))
 
-    :bind (:map isearch-mode-map
-                ([remap isearch-delete-char] . isearch-del-char)
-                ("C-w"                       . isearch-yank-symbol)
-                ([(control return)]              . isearch-exit-other-end)
-                ("C-o"                       . isearch-occur)))
+    :init
+    (general-define-key
+     :keymaps 'isearch-mode-map
+     [remap isearch-delete-char] #'isearch-del-char
+     "C-w"                       #'isearch-yank-symbol
+     [(control return)]              #'isearch-exit-other-end
+     "C-o"                       #'isearch-occur))
 #+end_src
 
 * Ivy, Counsel and Swiper
