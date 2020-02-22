@@ -180,6 +180,12 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
    "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
    :group 'nasy
    :type 'symbol)
+
+
+  (defvar nasy/projectile-fd-binary
+    (or (cl-find-if #'executable-find '("fdfind" "fd"))
+        "fd")
+    "name of `fd-find' executable binary")
 #+end_src
 
 * Default Settings
