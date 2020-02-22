@@ -55,10 +55,6 @@ Some default settings are here, including ~debug-on-error~, ~message-log-max~,
                 gc-cons-threshold      most-positive-fixnum)
 #+end_src
 
-* Macros & Alias
-
-#+include: "macros-and-alias.org"
-
 * Is A Mac?
 
 If this os is macOS?
@@ -66,6 +62,14 @@ If this os is macOS?
 #+begin_src elisp
   (defconst *is-a-mac* (eq system-type 'darwin))
 #+end_src
+
+* Macros & Alias
+
+#+include: "macros-and-alias.org"
+
+* Autoloads
+
+#+include: "autoloads.org"
 
 * Packages Manager
 
