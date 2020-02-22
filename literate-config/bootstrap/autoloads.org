@@ -1,0 +1,13 @@
+Some of them borrowed from doom emacs.
+
+* Buffers
+
+#+include: "buffers.org"
+
+* Projects
+
+#+include: "projects.org"
+
+* Text
+
+#+include: "text.org"

@@ -1,0 +1,50 @@
+#+begin_src elisp
+  ;;;###autoload
+  (defun nasy/delete-backward-word (arg)
+    "Like `backward-kill-word', but doesn't affect the kill-ring."
+    (interactive "p")
+    (let (kill-ring)
+      (backward-kill-word arg)))
+
+  ;;;###autoload
+  (defun nasy/region-active-p ()
+    "Return non-nil if selection is active."
+    (declare (side-effect-free t))
+    (use-region-p))
+
+  ;;;###autoload
+  (defun nasy/region-beginning ()
+    "Return beginning position of selection."
+    (declare (side-effect-free t))
+    (region-beginning))
+
+  ;;;###autoload
+  (defun nasy/region-end ()
+    "Return end position of selection."
+    (declare (side-effect-free t))
+    (region-end))
+
+  ;;;###autoload
+  (defun nasy/thing-at-point-or-region (&optional thing prompt)
+    "Grab the current selection, THING at point, or xref identifier at point.
+  Returns THING if it is a string. Otherwise, if nothing is found at point and
+  PROMPT is non-nil, prompt for a string (if PROMPT is a string it'll be used as
+  the prompting string). Returns nil if all else fails.
+  NOTE: Don't use THING for grabbing symbol-at-point. The xref fallback is smarter
+  in some cases."
+    (declare (side-effect-free t))
+    (cond ((stringp thing)
+           thing)
+          ((nasy/region-active-p)
+           (buffer-substring-no-properties
+            (nasy/region-beginning)
+            (nasy/region-end)))
+          (thing
+           (thing-at-point thing t))
+          ((require 'xref nil t)
+           ;; A little smarter than using `symbol-at-point', though in most cases,
+           ;; xref ends up using `symbol-at-point' anyway.
+           (xref-backend-identifier-at-point (xref-find-backend)))
+          (prompt
+           (read-string (if (stringp prompt) prompt "")))))
+#+end_src
