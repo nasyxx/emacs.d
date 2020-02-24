@@ -121,6 +121,16 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'boolean)
 
+  (defcustom *ivy-fuzzy* nil
+    "Enables fuzzy completion for Ivy searches."
+    :group 'nasy
+    :type  'boolean)
+
+  (defcustom *ivy-prescient* nil
+    "Enables prescient filtering and sorting for Ivy searches."
+    :group 'nasy
+    :type  'boolean)
+
   (defcustom *vterm* nil
     "Whether to use vterm or not."
     :group 'nasy

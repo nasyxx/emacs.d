@@ -1,288 +1,593 @@
-* Ivy
+* Packages
+
+#+begin_src elisp
+  (straight-use-package 'swiper)
+  (straight-use-package 'ivy)
+  (straight-use-package 'ivy-hydra)
+  (straight-use-package 'counsel)
+
+  (straight-use-package 'amx)
+  (straight-use-package 'counsel-projectile)
+#+end_src
+
+* Autoloads
+:PROPERTIES:
+:header-args: elisp :tangle (concat user-emacs-directory "lisp/autoload/" (file-name-nondirectory (buffer-file-name))) :mkdirp t
+:END:
+
+Some of them borrowed from doom-emacs
+
+#+begin_src elisp
+  ;;; lisp/autoload/ivy.el -*- lexical-binding: t; -*-
+
+  (defun nasy/ivy-is-workspace-buffer-p (buffer)
+    (let ((buffer (car buffer)))
+      (when (stringp buffer)
+      (setq buffer (get-buffer buffer)))
+      (nasy/workspace-contains-buffer-p buffer)))
+
+  (defun nasy/ivy-is-workspace-other-buffer-p (buffer)
+    (let ((buffer (car buffer)))
+      (when (stringp buffer)
+      (setq buffer (get-buffer buffer)))
+      (and (not (eq buffer (current-buffer)))
+         (nasy/workspace-contains-buffer-p buffer))))
+
+  ;;;###autoload
+  (defun nasy/ivy-rich-buffer-name (candidate)
+    "Display the buffer name.
+  Buffers that are considered unreal (see `nasy-real-buffer-p') are dimmed with
+  `nasy/ivy-buffer-unreal-face'."
+    (let ((b (get-buffer candidate)))
+      (when (null uniquify-buffer-name-style)
+      (setq candidate (replace-regexp-in-string "<[0-9]+>$" "" candidate)))
+      (cond ((ignore-errors
+             (file-remote-p
+              (buffer-local-value 'default-directory b)))
+           (ivy-append-face candidate 'ivy-remote))
+          ((nasy-unreal-buffer-p b)
+           (ivy-append-face candidate nasy/ivy-buffer-unreal-face))
+          ((not (buffer-file-name b))
+           (ivy-append-face candidate 'ivy-subdir))
+          ((buffer-modified-p b)
+           (ivy-append-face candidate 'ivy-modified-buffer))
+          (candidate))))
+
+  ;;;###autoload
+  (defun nasy/ivy-rich-buffer-icon (candidate)
+    "Display the icon for CANDIDATE buffer."
+    ;; NOTE This is inspired by `all-the-icons-ivy-buffer-transformer', minus the
+    ;; buffer name and extra padding as those are handled by `ivy-rich'.
+    (propertize "\t" 'display
+              (if-let* ((buffer (get-buffer candidate))
+                        (mode (buffer-local-value 'major-mode buffer)))
+                  (or
+                   (all-the-icons-ivy--icon-for-mode mode)
+                   (all-the-icons-ivy--icon-for-mode (get mode 'derived-mode-parent))
+                   (funcall
+                    all-the-icons-ivy-family-fallback-for-buffer
+                    all-the-icons-ivy-name-fallback-for-buffer))
+                (all-the-icons-icon-for-file candidate))))
+
+  ;;;###autoload
+  (defun nasy/ivy-rich-describe-variable-transformer (cand)
+    "Previews the value of the variable in the minibuffer"
+    (let* ((sym (intern cand))
+         (val (and (boundp sym) (symbol-value sym)))
+         (print-level 3))
+      (replace-regexp-in-string
+       "[\n\t\^[\^M\^@\^G]" " "
+       (cond ((booleanp val)
+            (propertize (format "%s" val) 'face
+                        (if (null val)
+                            'font-lock-comment-face
+                          'success)))
+           ((symbolp val)
+            (propertize (format "'%s" val)
+                        'face 'highlight-quoted-symbol))
+           ((keymapp val)
+            (propertize "<keymap>" 'face 'font-lock-constant-face))
+           ((listp val)
+            (prin1-to-string val))
+           ((stringp val)
+            (propertize (format "%S" val) 'face 'font-lock-string-face))
+           ((numberp val)
+            (propertize (format "%s" val) 'face 'highlight-numbers-number))
+           ((format "%s" val)))
+       t)))
+
+
+  ;;
+  ;; Library
+
+  (defun nasy/ivy/switch-buffer-preview ()
+    (let (ivy-use-virtual-buffers ivy--virtual-buffers)
+      (counsel--switch-buffer-update-fn)))
+
+  (defalias 'nasy/ivy/switch-buffer-preview-all #'counsel--switch-buffer-update-fn)
+  (defalias 'nasy/ivy/switch-buffer-unwind      #'counsel--switch-buffer-unwind)
+
+  (defun nasy/ivy--switch-buffer (workspace other)
+    (let ((current (not other))
+        prompt action filter update unwind)
+      (cond ((and workspace current)
+           (setq prompt "Switch to workspace buffer: "
+                 action #'ivy--switch-buffer-action
+                 filter #'nasy/ivy-is-workspace-other-buffer-p))
+          (workspace
+           (setq prompt "Switch to workspace buffer in other window: "
+                 action #'ivy--switch-buffer-other-window-action
+                 filter #'nasy/ivy-is-workspace-buffer-p))
+          (current
+           (setq prompt "Switch to buffer: "
+                 action #'ivy--switch-buffer-action))
+          ((setq prompt "Switch to buffer in other window: "
+                 action #'ivy--switch-buffer-other-window-action)))
+      (when nasy/ivy-buffer-preview
+      (cond ((not (and ivy-use-virtual-buffers
+                       (eq nasy/ivy-buffer-preview 'everything)))
+             (setq update #'nasy/ivy/switch-buffer-preview
+                   unwind #'nasy/ivy/switch-buffer-unwind))
+            ((setq update #'nasy/ivy/switch-buffer-preview-all
+                   unwind #'nasy/ivy/switch-buffer-unwind))))
+      (ivy-read prompt 'internal-complete-buffer
+              :action action
+              :predicate filter
+              :update-fn update
+              :unwind unwind
+              :preselect (buffer-name (other-buffer (current-buffer)))
+              :matcher #'ivy--switch-buffer-matcher
+              :keymap ivy-switch-buffer-map
+              ;; NOTE A clever disguise, needed for virtual buffers.
+              :caller #'ivy-switch-buffer)))
+
+  ;;;###autoload
+  (defun nasy/ivy/switch-workspace-buffer (&optional arg)
+    "Switch to another buffer within the current workspace.
+  If ARG (universal argument), open selection in other-window."
+    (interactive "P")
+    (nasy/ivy--switch-buffer t arg))
+
+  ;;;###autoload
+  (defun nasy/ivy/switch-workspace-buffer-other-window ()
+    "Switch another window to a buffer within the current workspace."
+    (interactive)
+    (nasy/ivy--switch-buffer t t))
+
+  ;;;###autoload
+  (defun nasy/ivy/switch-buffer ()
+    "Switch to another buffer."
+    (interactive)
+    (nasy/ivy--switch-buffer nil nil))
+
+  ;;;###autoload
+  (defun nasy/ivy/switch-buffer-other-window ()
+    "Switch to another buffer in another window."
+    (interactive)
+    (nasy/ivy--switch-buffer nil t))
+
+  ;;;###autoload
+  (defun nasy/ivy-woccur ()
+    "Invoke a wgrep buffer on the current ivy results, if supported."
+    (interactive)
+    (unless (window-minibuffer-p)
+      (user-error "No completion session is active"))
+    (require 'wgrep)
+    (let ((caller (ivy-state-caller ivy-last)))
+      (if-let (occur-fn (plist-get nasy/ivy-edit-functions caller))
+        (ivy-exit-with-action
+         (lambda (_) (funcall occur-fn)))
+      (if-let (occur-fn (plist-get ivy--occurs-list caller))
+          (let ((buffer (generate-new-buffer
+                         (format "*ivy-occur%s \"%s\"*"
+                                 (if caller (concat " " (prin1-to-string caller)) "")
+                                 ivy-text))))
+            (with-current-buffer buffer
+              (let ((inhibit-read-only t))
+                (erase-buffer)
+                (funcall occur-fn))
+              (setf (ivy-state-text ivy-last) ivy-text)
+              (setq ivy-occur-last ivy-last)
+              (setq-local ivy--directory ivy--directory))
+            (ivy-exit-with-action
+             `(lambda (_)
+                (pop-to-buffer ,buffer)
+                (ivy-wgrep-change-to-wgrep-mode))))
+        (user-error "%S doesn't support wgrep" caller)))))
+
+  ;;;###autoload
+  (defun nasy/ivy-yas-prompt (prompt choices &optional display-fn)
+    (yas-completing-prompt prompt choices display-fn #'ivy-completing-read))
+
+  ;;;###autoload
+  (defun nasy/ivy-git-grep-other-window-action (x)
+    "Opens the current candidate in another window."
+    (when (string-match "\\`\\(.*?\\):\\([0-9]+\\):\\(.*\\)\\'" x)
+      (select-window
+       (with-ivy-window
+       (let ((file-name   (match-string-no-properties 1 x))
+             (line-number (match-string-no-properties 2 x)))
+         (find-file-other-window (expand-file-name file-name (ivy-state-directory ivy-last)))
+         (goto-char (point-min))
+         (forward-line (1- (string-to-number line-number)))
+         (re-search-forward (ivy--regex ivy-text t) (line-end-position) t)
+         (run-hooks 'counsel-grep-post-action-hook)
+         (selected-window))))))
+
+  ;;;###autoload
+  (defun nasy/ivy-confirm-delete-file (x)
+    (dired-delete-file x 'confirm-each-subdirectory))
+
+
+  ;;
+  ;;; File searching
+
+  ;;;###autoload
+  (defun nasy/ivy/projectile-find-file ()
+    "A more sensible `counsel-projectile-find-file', which will revert to
+  `counsel-find-file' if invoked from $HOME, `counsel-file-jump' if invoked from a
+  non-project, `projectile-find-file' if in a big project (more than
+  `ivy-sort-max-size' files), or `counsel-projectile-find-file' otherwise.
+  The point of this is to avoid Emacs locking up indexing massive file trees."
+    (interactive)
+    ;; Spoof the command so that ivy/counsel will display the (well fleshed-out)
+    ;; actions list for `counsel-find-file' on C-o. The actions list for the other
+    ;; commands aren't as well configured or are empty.
+    (let ((this-command 'counsel-find-file))
+      (call-interactively
+       (cond ((or (file-equal-p default-directory "~")
+                (when-let (proot (nasy/project-root))
+                  (file-equal-p proot "~")))
+            #'counsel-find-file)
+
+           ((nasy/project-p)
+            (let ((files (projectile-current-project-files)))
+              (if (<= (length files) ivy-sort-max-size)
+                  #'counsel-projectile-find-file
+                #'projectile-find-file)))
+
+           (#'counsel-file-jump)))))
+
+  ;;;###autoload
+  (cl-defun nasy/ivy-file-search (&key query in all-files (recursive t) prompt args)
+    "Conduct a file search using ripgrep.
+  :query STRING
+    Determines the initial input to search for.
+  :in PATH
+    Sets what directory to base the search out of. Defaults to the current
+    project's root.
+  :recursive BOOL
+    Whether or not to search files recursively from the base directory."
+    (declare (indent defun))
+    (unless (executable-find "rg")
+      (user-error "Couldn't find ripgrep in your PATH"))
+    (require 'counsel)
+    (let* ((this-command 'counsel-rg)
+         (project-root (or (nasy/project-root) default-directory))
+         (directory (or in project-root))
+         (args (concat (if all-files " -uu")
+                       (unless recursive " --maxdepth 1")
+                       " "
+                       (mapconcat #'shell-quote-argument args " "))))
+      (setq deactivate-mark t)
+      (counsel-rg
+       (or query
+         (when (nasy/region-active-p)
+           (replace-regexp-in-string
+            "[! |]" (lambda (substr)
+                      (cond ((and (string= substr " ")
+                                (not *ivy-fuzzy*))
+                             "  ")
+                            ((string= substr "|")
+                             "\\\\\\\\|")
+                            ((concat "\\\\" substr))))
+            (rxt-quote-pcre (nasy/thing-at-point-or-region)))))
+       directory args
+       (or prompt
+         (format "rg%s [%s]: "
+                 args
+                 (cond ((equal directory default-directory)
+                        "./")
+                       ((equal directory project-root)
+                        (projectile-project-name))
+                       ((file-relative-name directory project-root))))))))
+
+  ;;;###autoload
+  (defun nasy/ivy/project-search (&optional arg initial-query directory)
+    "Performs a live project search from the project root using ripgrep.
+  If ARG (universal argument), include all files, even hidden or compressed ones,
+  in the search."
+    (interactive "P")
+    (nasy/ivy-file-search :query initial-query :in directory :all-files arg))
+
+  ;;;###autoload
+  (defun nasy/ivy/project-search-from-cwd (&optional arg initial-query)
+    "Performs a project search recursively from the current directory.
+  If ARG (universal argument), include all files, even hidden or compressed ones."
+    (interactive "P")
+    (nasy/ivy/project-search arg initial-query default-directory))
+
+
+  ;;
+  ;;; Wrappers around `counsel-compile'
+
+  ;;;###autoload
+  (defun nasy/ivy/compile ()
+    "Execute a compile command from the current buffer's directory."
+    (interactive)
+    (counsel-compile default-directory))
+
+  ;;;###autoload
+  (defun nasy/ivy/project-compile ()
+    "Execute a compile command from the current project's root."
+    (interactive)
+    (counsel-compile (projectile-project-root)))
+
+  ;;;###autoload
+  (defun nasy/ivy/git-grep-other-window-action ()
+    "Open the current counsel-{ag,rg,git-grep} candidate in other-window."
+    (interactive)
+    (ivy-set-action #'nasy/ivy-git-grep-other-window-action)
+    (setq ivy-exit 'done)
+    (exit-minibuffer))
+#+end_src
+
+* Config
+
+#+begin_src elisp
+  (defvar nasy/ivy-buffer-preview nil
+    "If non-nil, preview buffers while switching, à la `counsel-switch-buffer'.
+  When nil, don't preview anything.
+  When non-nil, preview non-virtual buffers.
+  When 'everything, also preview virtual buffers")
+
+  (defvar nasy/ivy-buffer-unreal-face 'font-lock-comment-face
+    "The face for unreal buffers in `ivy-switch-to-buffer'.")
+
+  (defvar nasy/ivy-edit-functions nil
+    "A plist mapping ivy/counsel commands to commands that generate an editable
+  results buffer.")
+#+end_src
+
+** ivy
 
 #+begin_src elisp
   (use-package ivy
-    :straight t
+    :defer t
     :ghook 'after-init-hook
-    :init (gsetq
-           ivy-wrap                     t
-           ivy-use-virtual-buffers      t
-           ivy-virtual-abbreviate       'fullpath
-           ivy-count-format             ""
-           projectile-completion-system 'ivy
-           ivy-magic-tilde              nil
-           ivy-initial-inputs-alist '((Man-completion-table . "^")
-                                      (woman . "^"))
-           ivy-re-builders-alist    '((t . ivy--regex-fuzzy)))
-    :bind (("C-c C-r" . ivy-resume)
-           :map ivy-minibuffer-map
-           ("RET"   . ivy-alt-done)
-           ("C-j"   . ivy-immediate-done)
-           ("C-RET" . ivy-immediate-done)
-           ("<up>"  . ivy-previous-line-or-history)
-           :map ivy-occur-mode-map
-           ("C-c C-q" . ivy-wgrep-change-to-wgrep-mode))
-    :diminish ivy-mode)
+    :init
+    (let ((standard-search-fn
+           (if *ivy-prescient*
+               #'+ivy-prescient-non-fuzzy
+             #'ivy--regex-plus))
+          (alt-search-fn
+           (if *ivy-fuzzy*
+               #'ivy--regex-fuzzy
+             ;; Ignore order for non-fuzzy searches by default
+             #'ivy--regex-ignore-order)))
+      (gsetq ivy-re-builders-alist
+             `((counsel-rg     . ,standard-search-fn)
+               (swiper         . ,standard-search-fn)
+               (swiper-isearch . ,standard-search-fn)
+               (t . ,alt-search-fn))
+             ivy-more-chars-alist
+             '((counsel-rg . 1)
+               (counsel-search . 2)
+               (t . 3))))
+    (gsetq ivy-height                       15
+           ivy-wrap                         t
+           ivy-fixed-height-minibuffer      t
+           projectile-completion-system     'ivy
+           ;; disable magic slash on non-match
+           ivy-magic-slash-non-match-action nil
+           ;; don't show recent files in switch-buffer
+           ivy-use-virtual-buffers          nil
+           ;; ...but if that ever changes, show their full path
+           ivy-virtual-abbreviate           'full
+           ;; don't quit minibuffer on delete-error
+           ivy-on-del-error-function        #'ignore
+           ;; enable ability to select prompt (alternative to `ivy-immediate-done')
+           ivy-use-selectable-prompt        t)
+    (general-define-key
+     [remap switch-to-buffer]              #'nasy/ivy/switch-buffer
+     [remap switch-to-buffer-other-window] #'nasy/ivy/switch-buffer-other-window
+     [remap persp-switch-to-buffer]        #'nasy/ivy/switch-workspace-buffer)
+    :config
+    ;; Counsel changes a lot of ivy's state at startup; to control for that, we
+    ;; need to load it as early as possible. Some packages (like `ivy-prescient')
+    ;; require this.
+    (require 'counsel nil t)
+
+    ;; Highlight each ivy candidate including the following newline, so that it
+    ;; extends to the right edge of the window
+    (setf (alist-get 't ivy-format-functions-alist)
+          #'ivy-format-function-line)
+
+    ;; Integrate `ivy' with `better-jumper'; ensure a jump point is registered
+    ;; before jumping to new locations with ivy
+    (setf (alist-get 't ivy-hooks-alist)
+          (lambda ()
+            (with-ivy-window
+              (setq nasy/ivy--origin (point-marker)))))
+
+    (add-hook 'minibuffer-exit-hook
+      (defun nasy/ivy--set-jump-point-maybe-h ()
+        (and (markerp (bound-and-true-p nasy/ivy--origin))
+             (not (equal (ignore-errors (with-ivy-window (point-marker)))
+                         nasy/ivy--origin))
+             (with-current-buffer (marker-buffer nasy/ivy--origin)
+               (better-jumper-set-jump nasy/ivy--origin)))
+        (setq nasy/ivy--origin nil)))
+
+    (after! yasnippet
+      (add-hook 'yas-prompt-functions #'nasy/ivy-yas-prompt))
+
+    (general-define-key
+      :keymaps 'ivy-minibuffer-map
+      "C-c C-e" #'nasy/ivy-woccur
+      [remap nasy/delete-backward-word] #'ivy-backward-kill-word)
+
+    (ivy-mode +1))
 #+end_src
 
-* Counsel
+** ivy-hydra
+
+#+begin_src elisp
+  (after! ivy
+    (use-package ivy-hydra
+      :commands (ivy-dispatching-done ivy--matcher-desc ivy-hydra/body)
+      :init
+      (general-define-key
+       :keymaps 'ivy-minibuffer-map
+       "C-o" #'ivy-dispatching-done
+       "M-o" #'hydra-ivy/body)
+      :config
+      ;; ivy-hydra rebinds this, so we have to do so again
+      (define-key ivy-minibuffer-map (kbd "M-o") #'hydra-ivy/body)))
+#+end_src
+
+** counsel
 
 #+begin_src elisp
   (use-package counsel
-    :straight t
-    :ghook 'after-init-hook
-    :bind (("M-x"   . counsel-M-x)
-           ("C-x :" . counsel-minibuffer-history)
-           :map counsel-find-file-map
-           ("<left>"  . counsel-up-directory)
-           ("<right>" . counsel-down-directory))
-    :init (gsetq counsel-mode-override-describe-bindings t
-                 counsel-find-file-at-point t
-                 counsel-grep-base-command
-                 "rg -i -M 120 --no-heading --line-number --color never %s %s")
-    :config
-    (gsetq counsel-yank-pop-height ivy-height)
+    :init
+    (gsetq
+     counsel-find-file-at-point         t
+     ;; Don't use ^ as initial input. Set this here because `counsel' defines more
+     ;; of its own, on top of the defaults.
+     ivy-initial-inputs-alist           nil
+     ;; helpful
+     counsel-describe-function-function #'helpful-callable
+     counsel-describe-variable-function #'helpful-variable)
     (general-define-key
-     :prefix "C-c C-a"
-     "o" 'counsel-outline
-     "i" 'counsel-imenu
-     "p" 'counsel-list-processes
-     "d" 'counsel-dash
-     "u" 'counsel-unicode-char)
-    :diminish counsel-mode)
-#+end_src
-
-* Swiper
-
-#+begin_src elisp
-  (use-package swiper
-    :straight t
-    :init (defun nasy/swiper-at-point (sym)
-            "Use `swiper' to search for the `sym' at point."
-            (interactive (list (thing-at-point 'symbol)))
-            (swiper-isearch sym))
-    :bind (("C-s" . nasy/swiper-at-point)
-           :map swiper-map
-           ("C-s" . nasy/swiper-isearch-forward)
-           ("C-r" . nasy/swiper-isearch-backward))
+     [remap apropos]                    #'counsel-apropos
+     [remap bookmark-jump]              #'counsel-bookmark
+     [remap compile]                    #'nasy/ivy/compile
+     [remap describe-bindings]          #'counsel-descbinds
+     [remap describe-face]              #'counsel-faces
+     [remap describe-function]          #'counsel-describe-function
+     [remap describe-variable]          #'counsel-describe-variable
+     [remap execute-extended-command]   #'counsel-M-x
+     [remap find-file]                  #'counsel-find-file
+     [remap find-library]               #'counsel-find-library
+     [remap imenu]                      #'counsel-imenu
+     [remap info-lookup-symbol]         #'counsel-info-lookup-symbol
+     [remap load-theme]                 #'counsel-load-theme
+     [remap locate]                     #'counsel-locate
+     [remap org-set-tags-command]       #'counsel-org-tag
+     [remap projectile-compile-project] #'nasy/ivy/project-compile
+     [remap recentf-open-files]         #'counsel-recentf
+     [remap set-variable]               #'counsel-set-variable
+     [remap swiper]                     #'counsel-grep-or-swiper
+     [remap unicode-chars-list-chars]   #'counsel-unicode-char
+     [remap yank-pop]                   #'counsel-yank-pop)
+    (general-define-key
+     :keymaps 'counsel-find-file-map
+     "<left>"  #'counsel-up-directory
+     "<right>" #'counsel-down-directory)
     :config
-    (defun nasy*ivy--insert-minibuffer (text)
-      "Insert TEXT into minibuffer with appropriate cleanup."
-      (let ((resize-mini-windows nil)
-            (update-fn (ivy-state-update-fn ivy-last))
-            (old-mark (marker-position (mark-marker)))
-            deactivate-mark)
-        (ivy--cleanup)
-        (when (and update-fn (not (memq this-command '(ivy-call nasy/swiper-isearch-forward nasy/swiper-isearch-backward))))
-          (funcall update-fn))
-        (ivy--insert-prompt)
-        ;; Do nothing if while-no-input was aborted.
-        (when (stringp text)
-          (if ivy-display-function
-              (funcall ivy-display-function text)
-            (ivy-display-function-fallback text)))
-        (unless (frame-root-window-p (minibuffer-window))
-          (with-selected-window (minibuffer-window)
-            (set-window-text-height nil
-                                    (+ ivy-height
-                                       (if ivy-add-newline-after-prompt
-                                           1
-                                         0)))))
-        ;; prevent region growing due to text remove/add
-        (when (region-active-p)
-          (set-mark old-mark))))
-    (advice-add #'ivy--insert-minibuffer :override #'nasy*ivy--insert-minibuffer)
+    ;; (set-popup-rule! "^\\*ivy-occur" :size 0.35 :ttl 0 :quit nil)
 
-    (defun nasy*swiper-isearch-function (str)
-      "Collect STR matches in the current buffer for `swiper-isearch'."
-      (let* ((re-full (funcall ivy--regex-function str))
-             (re (ivy-re-to-str re-full)))
-        (unless (string= re "")
-          (let ((re (if (string-match "\\`\\(.*\\)[\\]|\\'" re)
-                        (match-string 1 re)
-                      re))
-                (pt-hist (cdr (assoc str swiper--isearch-point-history)))
-                cands
-                idx-found
-                (prev-lb -1)
-                prev-line
-                (i 0)
-                (idx 0))
-            (with-ivy-window
-              (save-excursion
-                (goto-char (point-min))
-                (while (re-search-forward re nil t)
-                  (unless idx-found
-                    (when (or
-                           (eq (match-beginning 0) pt-hist)
-                           (>= (match-beginning 0) (cdar swiper--isearch-point-history)))
-                      (push (cons str (match-beginning 0)) swiper--isearch-point-history)
-                      (setq idx-found idx)))
-                  (let* ((lb (line-beginning-position))
-                         (line
-                          (if (= lb prev-lb)
-                              prev-line
-                            (setq i 0)
-                            (buffer-substring
-                             lb
-                             (line-end-position)))))
-                    (put-text-property i (1+ i) 'point (point) line)
-                    (put-text-property 0 1 'num i line)
-                    (when (= i 0)
-                      (cl-incf idx)
-                      (push line cands)
-                      (setq prev-lb lb)
-                      (setq prev-line line))
-                    (cl-incf i)))))
-            (setq ivy--old-re re)
-            (when idx-found
-              (ivy-set-index idx-found))
-            (setq ivy--old-cands (nreverse cands))))))
-    (advice-add #'swiper-isearch-function :override #'nasy*swiper-isearch-function)
+    ;; HACK Fix an issue where `counsel-projectile-find-file-action' would try to
+    ;;      open a candidate in an occur buffer relative to the wrong buffer,
+    ;;      causing it to fail to find the file we want.
+    (defadvice! nasy/ivy--run-from-ivy-directory-a (orig-fn &rest args)
+      :around #'counsel-projectile-find-file-action
+      (let ((default-directory (ivy-state-directory ivy-last)))
+        (apply orig-fn args)))
 
-    (defvar-local nasy-swiper-isearch-last-line nil)
-    (defvar-local nasy-swiper-isearch-last-point nil)
+    ;; Record in jumplist when opening files via counsel-{ag,rg,pt,git-grep}
+    (add-hook 'counsel-grep-post-action-hook #'better-jumper-set-jump)
+    (ivy-add-actions
+     'counsel-rg ; also applies to `counsel-rg'
+     '(("O" nasy/ivy-git-grep-other-window-action "open in other window")))
 
-    (defun nasy-swiper-isearch-forward (x)
-      (let ((i 1)
-            (l (length x))
-            (p (get-text-property 0 'point x)))
-        (goto-char p)
-        (when (and nasy-swiper-isearch-last-line (= nasy-swiper-isearch-last-line (line-beginning-position)))
-          ;; finding the right pos
-          (while (and p nasy-swiper-isearch-last-point (<= p nasy-swiper-isearch-last-point) (< i l))
-            (setq p (get-text-property i 'point x))
-            (cl-incf i))
-          (if p (goto-char p)))
-        (setq nasy-swiper-isearch-last-line (line-beginning-position))
-        (setq nasy-swiper-isearch-last-point p)))
+    ;; Make `counsel-compile' projectile-aware (if you prefer it over
+    ;; `nasy/ivy/compile' and `nasy/ivy/project-compile')
+    (add-to-list 'counsel-compile-root-functions #'projectile-project-root)
+    (after! savehist
+      ;; Persist `counsel-compile' history
+      (add-to-list 'savehist-additional-variables 'counsel-compile-history))
 
-    (defun nasy-swiper-isearch-backward (x)
-      (let* ((l (length x))
-             (i (get-text-property 0 'num x))
-             (p (get-text-property i 'point x))
-             (lb (progn (goto-char p) (line-beginning-position))))
-        (while (and p nasy-swiper-isearch-last-point (>= p nasy-swiper-isearch-last-point) (<= 0 i))
-          (cl-decf i)
-          (setq p (if (< i 0) nil (get-text-property i 'point x))))
-        (if p
-            (progn
-              (goto-char p)
-              (setq nasy-swiper-isearch-last-line (line-beginning-position))
-              (setq nasy-swiper-isearch-last-point p))
-          (setq nasy-swiper-isearch-last-line nil)
-          (setq nasy-swiper-isearch-last-point nil))))
+    ;; `counsel-imenu' -- no sorting for imenu. Sort it by appearance in page.
+    (add-to-list 'ivy-sort-functions-alist '(counsel-imenu))
 
-    (defun nasy-swiper-isearch-action (x)
-      "Move to X for `swiper-isearch'."
-      (if (> (length x) 0)
-          (with-ivy-window
-            (unless (eq ivy-exit 'done)
-              (if (string= "C-r" (key-description (this-command-keys)))
-                  (nasy-swiper-isearch-backward x)
-                (nasy-swiper-isearch-forward x)))
-            (isearch-range-invisible (line-beginning-position)
-                                     (line-end-position))
-            (unless (eq ivy-exit 'done)
-              (swiper--cleanup)
-              (swiper--add-overlays (ivy--regex ivy-text))
-              (swiper--add-cursor-overlay)))
-        (swiper--cleanup)))
-    (advice-add #'swiper-isearch-action :override #'nasy-swiper-isearch-action)
+    ;; `counsel-locate'
+    (when *is-a-mac*
+      ;; Use spotlight on mac by default since it doesn't need any additional setup
+      (setq counsel-locate-cmd #'counsel-locate-cmd-mdfind))
 
-    (defun nasy/swiper-isearch-forward ()
-      (interactive)
-      (ivy-call)
-      (unless (with-ivy-window nasy-swiper-isearch-last-point)
-        (let ((ivy-calling t))
-          (ivy-next-line-or-history))))
+    ;; `swiper'
+    ;; Don't mess with font-locking on the dashboard; it causes breakages
+    ;; (add-to-list 'swiper-font-lock-exclude #'+doom-dashboard-mode)
 
-    (defun nasy/swiper-isearch-backward ()
-      (interactive)
-      (ivy-call)
-      (unless (with-ivy-window nasy-swiper-isearch-last-point)
-        (let ((ivy-calling t))
-          (ivy-previous-line-or-history 1))))
-    (advice-add #'swiper--init :before (lambda! (setq nasy-swiper-isearch-last-point nil nasy-swiper-isearch-last-line nil))))
+    ;; `counsel-find-file'
+    (setq counsel-find-file-ignore-regexp "\\(?:^[#.]\\)\\|\\(?:[#~]$\\)\\|\\(?:^Icon?\\)")
+    (dolist (fn '(counsel-rg counsel-find-file))
+      (ivy-add-actions
+       fn '(("p" (lambda (path) (with-ivy-window (insert (file-relative-name path default-directory))))
+             "insert relative path")
+            ("P" (lambda (path) (with-ivy-window (insert path)))
+             "insert absolute path")
+            ("l" (lambda (path) (with-ivy-window (insert (format "[[./%s]]" (file-relative-name path default-directory)))))
+             "insert relative org-link")
+            ("L" (lambda (path) (with-ivy-window (insert (format "[[%s]]" path))))
+             "Insert absolute org-link"))))
+
+    (ivy-add-actions 'counsel-file-jump (plist-get ivy--actions-list 'counsel-find-file))
+
+    ;; `counsel-search': use normal page for displaying results, so that we see
+    ;; custom ddg themes (if one is set).
+    (setf (nth 1 (alist-get 'ddg counsel-search-engines-alist))
+          "https://duckduckgo.com/?q=")
+
+    ;; REVIEW Move this somewhere else and perhaps generalize this so both
+    ;;        ivy/helm users can enjoy it.
+    (defadvice! nasy/ivy--counsel-file-jump-use-fd-rg-a (args)
+      "Change `counsel-file-jump' to use fd or ripgrep, if they are available."
+      :override #'counsel--find-return-list
+      (cl-destructuring-bind (find-program . args)
+          (cond ((executable-find nasy/projectile-fd-binary)
+                 (cons nasy/projectile-fd-binary (list "-t" "f" "-E" ".git")))
+                ((executable-find "rg")
+                 (cons "rg" (list "--files" "--hidden" "--no-messages")))
+                ((cons find-program args)))
+        (unless (listp args)
+          (user-error "`counsel-file-jump-args' is a list now, please customize accordingly."))
+        (counsel--call
+         (cons find-program args)
+         (lambda ()
+           (goto-char (point-min))
+           (let ((offset (if (member find-program (list "rg" nasy/projectile-fd-binary)) 0 2))
+                 files)
+             (while (< (point) (point-max))
+               (push (buffer-substring
+                      (+ offset (line-beginning-position)) (line-end-position)) files)
+               (forward-line 1))
+             (nreverse files)))))))
 #+end_src
 
-* Ivy Rich
-
-#+begin_src elisp
-  (use-package ivy-rich
-    :after    counsel
-    :demand   t
-    :straight t
-    :config
-    (defun ivy-rich-switch-buffer-icon (candidate)
-      "ivy rich switch-buffer icon"
-      (with-current-buffer
-          (get-buffer candidate)
-        (let ((icon (all-the-icons-icon-for-mode major-mode)))
-          (if (symbolp icon)
-              (all-the-icons-icon-for-mode 'fundamental-mode)
-            icon))))
-    (gsetq ivy-rich--display-transformers-list
-           '(ivy-switch-buffer
-             (:columns
-              ((ivy-rich-switch-buffer-icon :width 2)
-               (ivy-rich-candidate (:width 30))
-               (ivy-rich-switch-buffer-size (:width 7))
-               (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right))
-               (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))
-               (ivy-rich-switch-buffer-project (:width 15 :face success))
-               (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))
-              :predicate
-              (lambda (cand) (get-buffer cand)))
-             counsel-M-x
-             (:columns
-              ((counsel-M-x-transformer (:width 40))  ; thr original transfomer
-               (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))  ; return the docstring of the command
-             counsel-describe-function
-             (:columns
-              ((counsel-describe-function-transformer (:width 40))  ; the original transformer
-               (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))  ; return the docstring of the function
-             counsel-describe-variable
-             (:columns
-              ((counsel-describe-variable-transformer (:width 40))  ; the original transformer
-               (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))  ; return the docstring of the variable
-             counsel-recentf
-             (:columns
-              ((ivy-rich-candidate (:width 0.8)) ; return the candidate itself
-               (ivy-rich-file-last-modified-time (:face font-lock-comment-face)))))) ; return the last modified time of the file
-    (ivy-rich-mode))
-#+end_src
-
-* Ivy Posframe
-
-#+begin_src elisp
-  (when *ivy-posframe*
-    (use-package ivy-posframe
-      :demand   t
-      :straight t
-      :config
-      (defun ivy-posframe-display-at-frame-top-center (str)
-        (ivy-posframe--display str #'posframe-poshandler-frame-top-center))
-
-      (gsetq ivy-display-function #'ivy-posframe-display-at-frame-top-center)
-
-      (ivy-posframe-enable)))
-#+end_src
-
-* Ivy Yasnippets
-
-#+begin_src elisp
-  (use-package ivy-yasnippet
-    :straight t
-    :bind (("C-:" . ivy-yasnippet)))
-#+end_src
-
-* Counsel Projectile
+** counsel-projectile
 
 #+begin_src elisp
   (use-package counsel-projectile
-    :after    projectile
-    :straight t
-    :bind (:map projectile-command-map ("/" . counsel-projectile-rg))
-    :ghook 'after-init-hook)
+    :defer t
+    :init
+    (general-define-key
+      [remap projectile-find-file]        #'nasy/ivy/projectile-find-file
+      [remap projectile-find-dir]         #'counsel-projectile-find-dir
+      [remap projectile-switch-to-buffer] #'counsel-projectile-switch-to-buffer
+      [remap projectile-grep]             #'counsel-projectile-grep
+      [remap projectile-ag]               #'counsel-projectile-ag
+      [remap projectile-switch-project]   #'counsel-projectile-switch-project)
+    :config
+    ;; A more sensible `counsel-projectile-find-file' that reverts to
+    ;; `counsel-find-file' if invoked from $HOME, `counsel-file-jump' if invoked
+    ;; from a non-project, `projectile-find-file' if in a big project (more than
+    ;; `ivy-sort-max-size' files), or `counsel-projectile-find-file' otherwise.
+    (setf (alist-get 'projectile-find-file counsel-projectile-key-bindings)
+          #'nasy/ivy/projectile-find-file)
+
+    ;; no highlighting visited files; slows down the filtering
+    (ivy-set-display-transformer #'counsel-projectile-find-file nil))
 #+end_src

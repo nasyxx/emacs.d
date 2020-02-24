@@ -308,7 +308,7 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
 
 * Ivy, Counsel and Swiper
 
-Now disabled.
+Now enabled.
 
 #+include: "ivy.org"
 
