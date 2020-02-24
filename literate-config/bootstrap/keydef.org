@@ -11,7 +11,7 @@ https://github.com/noctuid/general.el
     (defalias 'gsetq-default #'general-setq-default))
 #+end_src
 
-* macOS Key Bindings
+* macOS Special Key Bindings
 
 #+begin_src elisp
   (when *is-a-mac*
@@ -43,7 +43,7 @@ https://github.com/noctuid/general.el
     (global-unset-key (kbd "<magnify-up>")))
 #+end_src
 
-* Dvorak Key Bindings
+* Dvorak Special Key Bindings
 
 #+begin_src elisp
   (add-hook #'nasy/config-after-hook
