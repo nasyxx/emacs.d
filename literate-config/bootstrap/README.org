@@ -63,9 +63,9 @@ If this os is macOS?
   (defconst *is-a-mac* (eq system-type 'darwin))
 #+end_src
 
-* Macros & Alias
+* Core Libs
 
-#+include: "macros-and-alias.org"
+#+include: "core-libs.org"
 
 * Autoloads
 
@@ -141,13 +141,9 @@ When using straight.el, the org version is needed to custom set.
   (straight-use-package 'org-plus-contrib)
 #+end_src
 
-* Core
+* Mixed
 
-#+include: "core.org"
-
-* Custom Functions
-
-#+include: "cusfuncs.org"
+#+include: "mixed.org"
 
 * Window
 

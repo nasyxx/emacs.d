@@ -1,0 +1,124 @@
+Core Libs include useful functions, macros and alias.
+
+* Functions
+
+** Libs
+
+#+begin_src elisp
+  ;;; Borrow from doom emacs.
+  (define-error 'n-error "Error in Nasy Emacs core")
+  (define-error 'n-hook-error "Error in a Nasy startup hook" 'Nasy-error)
+
+  (defun nasy-unquote (exp)
+    "Return EXP unquoted."
+    (declare (pure t) (side-effect-free t))
+    (while (memq (car-safe exp) '(quote function))
+      (setq exp (cadr exp)))
+    exp)
+
+  (defun nasy-enlist (exp)
+   "Return EXP wrapped in a list, or as-is if already a list."
+   (declare (pure t) (side-effect-free t))
+   (if (listp exp) exp (list exp)))
+
+  (defun nasy/try-run-hook (hook)
+    "Run HOOK (a hook function), but handle errors better, to make debugging
+  issues easier.
+  Meant to be used with `run-hook-wrapped'."
+    (message "Running hook: %s" hook)
+    (condition-case e
+        (funcall hook)
+      ((debug error)
+       (signal 'n-hook-error (list hook e))))
+    ;; return nil so `run-hook-wrapped' won't short circuit
+    nil)
+
+
+  ;; File+dir local variables are initialized after the major mode and its hooks
+  ;; have run. If you want hook functions to be aware of these customizations, add
+  ;; them to MODE-local-vars-hook instead.
+  (defun nasy/run-local-var-hooks-h ()
+    "Run MODE-local-vars-hook after local variables are initialized."
+    (run-hook-wrapped (intern-soft (format "%s-local-vars-hook" major-mode))
+                      #'nasy/try-run-hook))
+  (add-hook 'hack-local-variables-hook #'nasy/run-local-var-hooks-h)
+
+  ;; If the user has disabled `enable-local-variables', then
+  ;; `hack-local-variables-hook' is never triggered, so we trigger it at the end
+  ;; of `after-change-major-mode-hook':
+  (defun nasy/run-local-var-hooks-if-necessary-h ()
+    "Run `nasy/run-local-var-hooks-h' if `enable-local-variables' is disabled."
+    (unless enable-local-variables
+      (nasy/run-local-var-hooks-h)))
+  (add-hook 'after-change-major-mode-hook
+            #'nasy/run-local-var-hooks-if-necessary-h
+            'append)
+
+  (defun nasy--resolve-hook-forms (hooks)
+    "Converts a list of modes into a list of hook symbols.
+  If a mode is quoted, it is left as is. If the entire HOOKS list is quoted, the
+  list is returned as-is."
+    (declare (pure t) (side-effect-free t))
+    (let ((hook-list (nasy-enlist (nasy-unquote hooks))))
+      (if (eq (car-safe hooks) 'quote)
+          hook-list
+        (cl-loop for hook in hook-list
+                 if (eq (car-safe hook) 'quote)
+                 collect (cadr hook)
+                 else collect (intern (format "%s-hook" (symbol-name hook)))))))
+#+end_src
+
+
+** Reload the init-file
+
+#+begin_src elisp
+  (defun radian-reload-init ()
+    "Reload init.el."
+    (interactive)
+    (straight-transaction
+      (straight-mark-transaction-as-init)
+      (message "Reloading init.el...")
+      (load user-init-file nil 'nomessage)
+      (message "Reloading init.el... done.")))
+
+  (defun radian-eval-buffer ()
+    "Evaluate the current buffer as Elisp code."
+    (interactive)
+    (message "Evaluating %s..." (buffer-name))
+    (straight-transaction
+      (if (null buffer-file-name)
+          (eval-buffer)
+        (when (string= buffer-file-name user-init-file)
+          (straight-mark-transaction-as-init))
+        (load-file buffer-file-name)))
+    (message "Evaluating %s... done." (buffer-name)))
+#+end_src
+
+** Insert Date
+
+#+begin_src elisp
+  (defun nasy:insert-current-date ()
+    "Insert current date."
+    (interactive)
+    (insert (shell-command-to-string "echo -n $(date +'%b %d, %Y')")))
+
+  (defun nasy:insert-current-filename ()
+    "Insert current buffer filename."
+    (interactive)
+    (insert (file-relative-name buffer-file-name)))
+#+end_src
+
+** Posframe Helper
+
+#+begin_src elisp
+  (defun posframe-poshandler-frame-top-center (info)
+    (cons (/ (- (plist-get info :parent-frame-width)
+                (plist-get info :posframe-width))
+             2)
+          (round (* 0.02 (x-display-pixel-height)))))
+#+end_src
+
+
+* Macros & Alias
+
+#+include: "macros-and-alias.org"
