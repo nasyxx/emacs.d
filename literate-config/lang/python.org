@@ -97,7 +97,10 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
            py-set-fill-column-p                  t
            py-shell-name                         nasy*python-buffer)
 
-    (nasy/add-company-backend 'python-mode '(company-lsp company-files :with company-tabnine company-yasnippet))
+    (nasy/add-company-backend 'python-mode '(company-capf
+                                             company-lsp
+                                             company-files
+                                             :with company-tabnine company-yasnippet))
 
     ;; A list here https://github.com/palantir/python-language-server/blob/develop/vscode-client/package.json#L23-L230
     ;; I prefer pydocstyle and black, so disabled yapf, though, pydocstyle still cannot be abled.

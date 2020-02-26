@@ -4,35 +4,89 @@
   (straight-use-package 'lsp-mode)
   (use-package lsp
     :commands (lsp lsp-deferred)
+    :defer t
     :preface
     (defun delete-company-lsp ()
       "Delete company-lsp added by lsp-mode from company-backends"
       (when 'company-backends
-        (gsetq company-backends (delete 'company-lsp company-backends)
-               company-backends (delete 'intero-company company-backends))))
-    :hook ((lsp-after-open . lsp-enable-imenu))
-    :init (gsetq lsp-log-io                         *debug*
-                 lsp-print-performance              *debug*
-                 lsp-inhibit-message                t
-                 lsp-report-if-no-buffer            *debug*
-                 lsp-keep-workspace-alive           t
-                 lsp-enable-snippet                 t
-                 lsp-auto-guess-root                nil
-                 lsp-restart                        'interactive
-                 lsp-auto-configure                 nil
-                 lsp-document-sync-method           nil
-                 lsp-auto-execute-action            nil
-                 lsp-eldoc-render-all               t
-                 lsp-enable-completion-at-point     nil
-                 lsp-enable-xref                    t
-                 lsp-enable-indentation             t
-                 lsp-diagnostic-package             :auto
-                 lsp-enable-on-type-formatting      t
-                 lsp-signature-auto-activate        t
-                 lsp-enable-semantic-highlighting   t
-                 lsp-signature-render-documentation t
-                 lsp-eldoc-hook                     nil
-                 lsp-enable-text-document-color     t))
+        (gsetq company-backends (delete 'intero-company company-backends)
+               company-backends (delete 'company-lsp    company-backends))))
+    :init
+    (gsetq lsp-log-io                         *debug*
+           lsp-print-performance              *debug*
+           lsp-inhibit-message                t
+           lsp-report-if-no-buffer            *debug*
+           lsp-keep-workspace-alive           t
+           lsp-enable-snippet                 t
+           lsp-auto-guess-root                nil
+           lsp-restart                        'interactive
+           lsp-auto-configure                 nil
+           lsp-document-sync-method           nil
+           lsp-auto-execute-action            nil
+           lsp-eldoc-render-all               t
+           lsp-enable-completion-at-point     t
+           lsp-enable-imenu                   t
+           lsp-enable-xref                    t
+           lsp-enable-links                   t
+           lsp-enable-indentation             t
+           lsp-enable-symbol-highlighting     t
+           lsp-diagnostic-package             :auto
+           lsp-enable-on-type-formatting      t
+           lsp-signature-auto-activate        t
+           lsp-enable-semantic-highlighting   t
+           lsp-signature-render-documentation t
+           lsp-eldoc-hook                     nil
+           lsp-enable-text-document-color     t
+           lsp-prefer-capf                    t)
+
+    (defadvice! nasy/lsp-prompt-if-no-project-a (session file-name)
+      "Prompt for the project root only if no project was found."
+      :after-until #'lsp--calculate-root
+      (cond ((not lsp-auto-guess-root)
+             nil)
+            ((cl-find-if (lambda (dir)
+                           (and (lsp--files-same-host dir file-name)
+                                (file-in-directory-p file-name dir)))
+                         (lsp-session-folders-blacklist session))
+             nil)
+            ((lsp--find-root-interactively session))))
+
+    (defadvice! nasy/lsp-init-a (&optional arg)
+      "Enable `lsp-mode' in the current buffer.
+  Meant to gimp `lsp', which is too eager about installing LSP servers, or
+  prompting to do so, or complaining about no LSP servers, or initializing
+  lsp-ui-mode, company, yasnippet and flycheck. We want LSP to work only if the
+  server is present, and for server installation to be a deliberate act by the
+  end-user. Also, setting up these other packages are handled by their respective
+  modules.
+  Also see:
+  + `nasy/lsp-init-company-h' (on `lsp-mode-hook')
+  + `nasy/lsp-init-ui-flycheck-or-flymake-h' (on `lsp-ui-mode-hook')
+  This also logs the resolved project root, if found, so we know where we are."
+      :override #'lsp
+      (interactive "P")
+      (and (buffer-file-name)
+           (require 'lsp-mode nil t)
+           (setq-local
+            lsp--buffer-workspaces
+            (or (lsp--try-open-in-library-workspace)
+                (lsp--try-project-root-workspaces
+                 (equal arg '(4))
+                 (and arg (not (equal arg 1))))))
+           (prog1 (lsp-mode 1)
+             (setq-local lsp-buffer-uri (lsp--buffer-uri))
+             ;; Announce what project root we're using, for diagnostic purposes
+             (if-let (root (lsp--calculate-root (lsp-session) (buffer-file-name)))
+                 (lsp--info "Guessed project root is %s" (abbreviate-file-name root))
+               (lsp--info "Could not guess project root."))
+             (lsp--info "Connected to %s."
+                        (apply #'concat
+                               (mapcar
+                                (lambda (it) (format "[%s]" (lsp--workspace-print it)))
+                                lsp--buffer-workspaces))))))
+
+    ;; Don't prompt to restart LSP servers while quitting Emacs
+    (add-hook! 'kill-emacs-hook (setq lsp-restart 'ignore)))
 #+end_src
 
 * lsp-ui
@@ -46,7 +100,8 @@
                 ("M-?"     . lsp-ui-peek-find-references)
                 ("C-c u"   . lsp-ui-imenu)
                 ("C-c C-a" . lsp-ui-sideline-apply-code-actions))
-    :hook ((lsp-after-open . lsp-ui-mode))
+    :hook ((lsp-mode    . lsp-ui-mode)
+           (lsp-ui-mode . nasy/lsp-init-ui-flycheck-or-flymake-h))
     :init
     (gsetq lsp-ui-doc-position              'at-point
            lsp-ui-doc-header                nil
@@ -56,7 +111,20 @@
            lsp-ui-sideline-delay            1
            lsp-ui-sideline-ignore-duplicate t
            lsp-ui-peek-always-show          t
-           lsp-ui-flycheck-enable           t))
+           lsp-ui-flycheck-enable           t)
+
+    (defun nasy/lsp-init-ui-flycheck-or-flymake-h ()
+      "Sets up flymake-mode or flycheck-mode, depending on `lsp-prefer-flymake'."
+      (cond ((eq :none lsp-prefer-flymake))
+            (lsp-prefer-flymake
+             (lsp--flymake-setup))
+            ((require 'flycheck nil t)
+             (require 'lsp-ui-flycheck)
+             (let ((old-checker flycheck-checker))
+               (lsp-ui-flycheck-enable t)
+               (when old-checker
+                 (setq-local flycheck-checker old-checker)
+                 (kill-local-variable 'flycheck-check-syntax-automatically)))))))
 #+end_src
 
 * company-lsp
@@ -68,25 +136,16 @@
     :defer t
     :commands company-lsp
     :preface
-    (defun push-company-lsp-backends ()
-     "Push company-lsp to the backends."
-     (general-pushnew
-       '(company-lsp
-         company-files
-         (company-dabbrev company-dabbrev-code)
-         company-keywords
-         company-yasnippet)
-       company-backends))
-    (defun company-lsp-init-h ()
+    (defun nasy/lsp-init-company-h ()
       "Make sure that `company-capf' is disabled since it is incompatible with
   `company-lsp' (see lsp-mode#884)."
       (if (not (bound-and-true-p company-mode))
-          (add-hook 'company-mode-hook #'company-lsp-init-h t t)
+          (add-hook 'company-mode-hook #'nasy/lsp-init-company-h t t)
         (setq-local company-backends
                     (cons 'company-lsp
                           (remq 'company-capf company-backends)))
-        (remove-hook 'company-mode-hook #'company-lsp-init-h t)))
-    :hook ((lsp-mode . company-lsp-init-h))
+        (remove-hook 'company-mode-hook #'nasy/lsp-init-company-h t)))
+    :hook ((lsp-mode . nasy/lsp-init-company-h))
     :init
     (gsetq company-lsp-async               t
            company-lsp-enable-recompletion t
