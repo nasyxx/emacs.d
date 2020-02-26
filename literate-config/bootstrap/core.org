@@ -3,12 +3,19 @@
 ;; Core
 #+end_src
 
-* Core Functions
+* Core Libs
 
 #+begin_src elisp
   ;;; Borrow from doom emacs.
   (define-error 'n-error "Error in Nasy Emacs core")
   (define-error 'n-hook-error "Error in a Nasy startup hook" 'Nasy-error)
+
+  (defun nasy-unquote (exp)
+    "Return EXP unquoted."
+    (declare (pure t) (side-effect-free t))
+    (while (memq (car-safe exp) '(quote function))
+      (setq exp (cadr exp)))
+    exp)
 
   (defun nasy-enlist (exp)
    "Return EXP wrapped in a list, or as-is if already a list."
@@ -47,6 +54,19 @@
   (add-hook 'after-change-major-mode-hook
             #'nasy/run-local-var-hooks-if-necessary-h
             'append)
+
+  (defun nasy--resolve-hook-forms (hooks)
+    "Converts a list of modes into a list of hook symbols.
+  If a mode is quoted, it is left as is. If the entire HOOKS list is quoted, the
+  list is returned as-is."
+    (declare (pure t) (side-effect-free t))
+    (let ((hook-list (nasy-enlist (nasy-unquote hooks))))
+      (if (eq (car-safe hooks) 'quote)
+          hook-list
+        (cl-loop for hook in hook-list
+                 if (eq (car-safe hook) 'quote)
+                 collect (cadr hook)
+                 else collect (intern (format "%s-hook" (symbol-name hook)))))))
 #+end_src
 
 * macOS Frame

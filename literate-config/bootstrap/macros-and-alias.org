@@ -58,6 +58,7 @@ Useful Macros and Alias.
                  (setq body `((after! ,next ,@body))))
                (car body))))))
 
+
   (defmacro prependq! (sym &rest lists)
     "Prepend LISTS to SYM in place."
     `(setq ,sym (append ,@lists ,sym)))
@@ -74,6 +75,7 @@ Useful Macros and Alias.
                       `(funcall ,fetcher ,elt ,list)
                     elt)
                  ,list)))
+
 
   (defmacro defadvice! (symbol arglist &optional docstring &rest body)
     "Define an advice called SYMBOL and add it to PLACES.
@@ -95,6 +97,7 @@ Useful Macros and Alias.
            (dolist (target (cdr targets))
              (advice-add target (car targets) #',symbol))))))
 
+
   (defmacro undefadvice! (symbol _arglist &optional docstring &rest body)
     "Undefine an advice called SYMBOL.
   This has the same signature as `defadvice!' an exists as an easy undefiner when
@@ -110,4 +113,70 @@ Useful Macros and Alias.
       `(dolist (targets (list ,@(nreverse where-alist)))
          (dolist (target (cdr targets))
            (advice-remove target #',symbol)))))
+
+
+  (defmacro add-hook! (hooks &rest rest)
+    "A convenience macro for adding N functions to M hooks.
+  If N and M = 1, there's no benefit to using this macro over `add-hook'.
+  This macro accepts, in order:
+    1. The mode(s) or hook(s) to add to. This is either an unquoted mode, an
+       unquoted list of modes, a quoted hook variable or a quoted list of hook
+       variables.
+    2. Optional properties :local and/or :append, which will make the hook
+       buffer-local or append to the list of hooks (respectively),
+    3. The function(s) to be added: this can be one function, a quoted list
+       thereof, a list of `defun's, or body forms (implicitly wrapped in a
+       lambda).
+  \(fn HOOKS [:append :local] FUNCTIONS)"
+    (declare (indent (lambda (indent-point state)
+                       (goto-char indent-point)
+                       (when (looking-at-p "\\s-*(")
+                         (lisp-indent-defform state indent-point))))
+             (debug t))
+    (let* ((hook-forms (nasy--resolve-hook-forms hooks))
+           (func-forms ())
+           (defn-forms ())
+           append-p
+           local-p
+           remove-p
+           forms)
+      (while (keywordp (car rest))
+        (pcase (pop rest)
+          (:append (setq append-p t))
+          (:local  (setq local-p t))
+          (:remove (setq remove-p t))))
+      (let ((first (car-safe (car rest))))
+        (cond ((null first)
+               (setq func-forms rest))
+
+              ((eq first 'defun)
+               (setq func-forms (mapcar #'cadr rest)
+                     defn-forms rest))
+
+              ((memq first '(quote function))
+               (setq func-forms
+                     (if (cdr rest)
+                         (mapcar #'nasy-unquote rest)
+                       (nasy-enlist (nasy-unquote (car rest))))))
+
+              ((setq func-forms (list `(lambda (&rest _) ,@rest)))))
+        (dolist (hook hook-forms)
+          (dolist (func func-forms)
+            (push (if remove-p
+                      `(remove-hook ',hook #',func ,local-p)
+                    `(add-hook ',hook #',func ,append-p ,local-p))
+                  forms)))
+        (macroexp-progn
+         (append defn-forms
+                 (if append-p
+                     (nreverse forms)
+                   forms))))))
+
+  (defmacro remove-hook! (hooks &rest rest)
+    "A convenience macro for removing N functions from M hooks.
+  Takes the same arguments as `add-hook!'.
+  If N and M = 1, there's no benefit to using this macro over `remove-hook'.
+  \(fn HOOKS [:append :local] FUNCTIONS)"
+    (declare (indent defun) (debug t))
+    `(add-hook! ,hooks :remove ,@rest))
 #+end_src
