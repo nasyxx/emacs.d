@@ -110,7 +110,11 @@ inlcude haskell-snippets.
       (lsp-deferred))
     :defer t
     :hook ((haskell-mode . start-lsp-haskell))
-    ;; :init
+    :init
+    (nasy/add-company-backend 'haskell-mode '(company-capf
+                                              company-lsp
+                                              company-files
+                                              :with company-tabnine company-yasnippet))
     ;; (gsetq lsp-haskell-process-path-hie "hie-8.6.5")
     ;; You can set the lsp-haskell settings here
     ;; (lsp-haskell-set-hlint-on)                    ;; default on
