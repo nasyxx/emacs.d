@@ -8,6 +8,9 @@
 
   (straight-use-package 'amx)
   (straight-use-package 'counsel-projectile)
+
+  (straight-use-package 'ivy-rich)
+  (straight-use-package 'all-the-icons-ivy-rich)
 #+end_src
 
 * Autoloads
@@ -590,4 +593,14 @@ Some of them borrowed from doom-emacs
 
     ;; no highlighting visited files; slows down the filtering
     (ivy-set-display-transformer #'counsel-projectile-find-file nil))
+** icons and rich
+
+#+begin_src elisp
+  (use-package ivy-rich
+    :defer t
+    :ghook 'ivy-mode-hook)
+
+  (use-package all-the-icons-ivy-rich
+    :defer t
+    :ghook 'ivy-mode-hook)
 #+end_src
