@@ -1,3 +1,10 @@
+* Packages
+
+#+begin_src elisp
+  (straight-use-package 'prescient)
+  (straight-use-package 'company-prescient)
+#+end_src
+
 * Company
 
 #+begin_src elisp :exports none
@@ -217,6 +224,14 @@
     ;; (gsetq company-backends
     ;;        (mapcar #'company-backend-with-yas company-backends))
     :diminish company-mode)
+#+end_src
+
+* Company Prescient
+
+#+begin_src elisp
+  (use-package company-prescient
+    :defer t
+    :ghook 'company-prescient-mode)
 #+end_src
 
 * Company Try Hard

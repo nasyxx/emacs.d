@@ -435,26 +435,6 @@ Now enabled.
 
 #+include: "pretty.org"
 
-* Prescient
-
-#+begin_src elisp
-  (straight-use-package 'prescient)
-  ;; (straight-use-package 'ivy-prescient)
-  (straight-use-package 'company-prescient)
-
-  (use-package prescient
-    :hook ((after-init . prescient-persist-mode)))
-
-
-  (use-package ivy-prescient
-    :disabled t
-    :ghook 'after-init-hook)
-
-
-  (use-package company-prescient
-    :hook ((company-mode . company-prescient-mode)))
-#+end_src
-
 * Projectile
 
 #+begin_src elisp
@@ -479,6 +459,17 @@ Now enabled.
                      ".cquery")
                    projectile-project-root-files-top-down-recurring))
     (projectile-mode +1))
+* Prescient
+
+☄️ Simple but effective sorting and filtering for Emacs.
+
+https://github.com/raxod502/prescient.el
+
+#+begin_src elisp
+  (straight-use-package 'prescient)
+  (use-package prescient
+    :defer t
+    :ghook 'prescient-persist-mode)
 #+end_src
 
 * Recentf
