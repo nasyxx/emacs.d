@@ -447,7 +447,7 @@ Now enabled.
                projectile-project-p
                projectile-locate-dominating-file)
     :bind-keymap ("C-c C-p" . projectile-command-map)
-    :ghook '(after-find-file dired-before-readin-hook minibuffer-setup-hook)
+    :ghook '(after-find-file dired-before-readin-hook minibuffer-setup-hook pre-command-hook)
     :init
     (gsetq projectile-indexing-method      'hybrid
            projectile-require-project-root 'prompt)
@@ -457,8 +457,9 @@ Now enabled.
     (gsetq projectile-project-root-files-top-down-recurring
            (append '("compile_commands.json"
                      ".cquery")
-                   projectile-project-root-files-top-down-recurring))
-    (projectile-mode +1))
+                   projectile-project-root-files-top-down-recurring)))
+#+end_src
+
 * Prescient
 
 ☄️ Simple but effective sorting and filtering for Emacs.
