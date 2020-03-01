@@ -178,8 +178,9 @@ Fast and precise fuzzy scoring/matching utils for Emacs, powered by rust
 https://github.com/rustify-emacs/fuz.el
 
 #+begin_src elisp
-  (straight-use-package 'fuz)
+  ;; (straight-use-package 'fuz)
   (use-package fuz
+    :disabled t
     :defer t
     :init
     (defun load-fuz ()
@@ -187,7 +188,7 @@ https://github.com/rustify-emacs/fuz.el
       (require 'fuz)
       (unless (require 'fuz-core nil t)
         (fuz-build-and-load-dymod)))
-    :hook ((after-init . load-fuz)))
+    :hook ((pre-command . load-fuz)))
 #+end_src
 
 * Grab Mac Link
