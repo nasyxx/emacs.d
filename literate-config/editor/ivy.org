@@ -594,7 +594,12 @@ Some of them borrowed from doom-emacs
           #'nasy/ivy/projectile-find-file)
 
     ;; no highlighting visited files; slows down the filtering
-    (ivy-set-display-transformer #'counsel-projectile-find-file nil))
+    (ivy-set-display-transformer #'counsel-projectile-find-file nil)
+
+    ;;
+    (setq counsel-projectile-sort-files t))
+#+end_src
+
 ** ivy-prescient
 
 #+begin_src elisp
