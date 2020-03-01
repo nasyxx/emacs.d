@@ -27,7 +27,6 @@
                              (projects  . 5)))
     (dashboard-setup-startup-hook)
     :config
-    (straight-use-package 'noflet)
     (advice-add 'dashboard-next-line :after #'(lambda (&rest r) (forward-char 2)))
     (advice-add 'widget-forward :after #'(lambda (&rest r) (forward-char 2))))
 #+end_src
