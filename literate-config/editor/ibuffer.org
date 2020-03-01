@@ -65,6 +65,16 @@
   (straight-use-package 'ibuffer-vc)
 #+end_src
 
+* all-the-icons-ibuffer
+
+#+begin_src elisp
+  (straight-use-package 'all-the-icons-ibuffer)
+
+  (use-package all-the-icons-ibuffer
+    :defer t
+    :ghook 'pre-command-hook)
+#+end_src
+
 * Other settings
 
 #+begin_src elisp
