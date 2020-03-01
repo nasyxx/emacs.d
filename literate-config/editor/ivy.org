@@ -6,7 +6,6 @@
   (straight-use-package 'ivy-hydra)
   (straight-use-package 'counsel)
 
-  (straight-use-package 'amx)
   (straight-use-package 'counsel-projectile)
 
   (straight-use-package 'prescient)
