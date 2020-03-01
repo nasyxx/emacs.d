@@ -59,6 +59,11 @@
 
   (straight-use-package 'command-log-mode)
 
+  (straight-use-package 'noflet)
+
+  (use-package noflet
+    :commands (noflet)
+    :defer t)
 
   (defun nasy:shell-command-in-view-mode (start end command &optional output-buffer replace &rest other-args)
     "Put \"*Shell Command Output*\" buffers into view-mode."
@@ -102,8 +107,6 @@
             (apply 'call-process-to-string call-process-args))))
 
     (advice-add 'shell-command-to-string :before-until 'try-call-process)
-
-    (straight-use-package 'noflet)
 
     (defun call-with-quick-shell-command (fn &rest args)
       (noflet ((shell-command-to-string
