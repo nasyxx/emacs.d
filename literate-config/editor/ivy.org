@@ -608,9 +608,9 @@ Some of them borrowed from doom-emacs
 #+begin_src elisp
   (use-package ivy-rich
     :defer t
-    :ghook 'ivy-mode-hook)
+    :ghook 'pre-command-hook)
 
   (use-package all-the-icons-ivy-rich
     :defer t
-    :ghook 'ivy-mode-hook)
+    :ghook 'pre-command-hook)
 #+end_src
