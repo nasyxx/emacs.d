@@ -379,9 +379,10 @@ Some of them borrowed from doom-emacs
              '((counsel-rg . 1)
                (counsel-search . 2)
                (t . 3))))
-    (gsetq ivy-height                       15
-           ivy-wrap                         t
+    (gsetq ivy-wrap                         t
+           ivy-height                       15
            ivy-fixed-height-minibuffer      t
+           ivy-auto-shrink-minibuffer       t
            projectile-completion-system     'ivy
            ;; disable magic slash on non-match
            ivy-magic-slash-non-match-action nil
