@@ -201,7 +201,8 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     (straight-use-package 'blacken)
     (use-package blacken
       :hook ((python-mode . blacken-mode))
-      :init (gsetq blacken-allow-py36  t)))
+      :init (gsetq blacken-allow-py36  t
+                   blacken-line-length nil)))
 #+end_src
 
 * py-isort
