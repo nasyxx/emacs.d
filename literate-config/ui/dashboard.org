@@ -26,7 +26,7 @@
                              (bookmarks . 5)
                              ;;(registers . 5 )
                              ;;(agenda    . 5)
-                             (projects  . 5)))
+                             (projects  . 10)))
     (dashboard-setup-startup-hook)
     :config
     (advice-add 'dashboard-next-line :after #'(lambda (&rest r) (forward-char 2)))
