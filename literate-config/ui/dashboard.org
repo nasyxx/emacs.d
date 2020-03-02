@@ -7,6 +7,8 @@
     :hook ((dashboard-mode . (lambda () (gsetq-local tab-width 1))))
     :init
     (general-define-key
+     "<f5>" 'nasy/dashboard-refresh)
+    (general-define-key
      :keymaps 'dashboard-mode-map
      "<down-mouse-1>" nil
      "<mouse-1>"      'widget-button-click
