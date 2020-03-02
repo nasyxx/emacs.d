@@ -138,10 +138,11 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
       (require 'lsp-python-ms)
       (lsp-deferred))
     :init (gsetq lsp-python-ms-nupkg-channel "daily"
+                 lsp-python-ms-log-level     (if *debug* "Trace" "Error")
+                 lsp-python-ms-information   ["too-many-function-arguments"
+                                              "too-many-positional-arguments-before-star"]
                  lsp-python-ms-executable    "~/.local/bin/Microsoft.Python.LanguageServer"
                  lsp-python-ms-errors        ["inherit-non-class"
-                                              "too-many-function-arguments"
-                                              "too-many-positional-arguments-before-star"
                                               "no-method-argument"
                                               "parameter-already-specified"
                                               "parameter-missing"

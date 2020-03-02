@@ -18,6 +18,7 @@
     :hook ((lsp-mode . nasy/lsp-init))
     :init
     (gsetq lsp-log-io                         *debug*
+           lsp-log-max                        200
            lsp-print-performance              *debug*
            lsp-inhibit-message                t
            lsp-report-if-no-buffer            *debug*
