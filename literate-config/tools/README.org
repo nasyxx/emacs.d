@@ -1,0 +1,24 @@
+* restclient.el
+
+HTTP REST client tool for emacs
+
+https://github.com/pashky/restclient.el
+
+** Packages
+
+#+begin_src elisp
+  (straight-use-package 'restclient)
+  (straight-use-package 'company-restclient)
+  (straight-use-package 'ob-restclient)
+#+end_src
+
+** Configs
+
+#+begin_src elisp
+  (use-package restclient
+    :defer t
+    :init
+    (nasy/add-company-backend
+      'restclient-mode
+      '(company-restclient company-files)))
+#+end_src

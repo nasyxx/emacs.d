@@ -320,11 +320,12 @@
        (plantuml   . t)
        (python     . t)
        (R          . t)
+       (restclient . t)
        (ruby       . t)
        (screen     . nil)
        (,(if (locate-library "ob-sh") 'sh 'shell) . t)
-       (sql . nil)
-       (sqlite . t)))
+       (sql        . nil)
+       (sqlite     . t)))
 
     (gsetq org-babel-python-command "python3")
 

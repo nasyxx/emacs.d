@@ -8,6 +8,10 @@
 
 #+include: "literate-config/editor/README.org"
 
+* Tools
+
+#+include: "literate-config/tools/README.org"
+
 * Languages
 
 #+include: "literate-config/lang/README.org"
