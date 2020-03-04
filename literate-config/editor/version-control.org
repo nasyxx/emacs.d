@@ -36,7 +36,8 @@
   (straight-use-package 'magit-todos)
   (use-package magit-todos
     :defer t
-    :hook ((magit-status-mode . magit-todos-mode)))
+    :init
+    (gsetq magit-todos-exclude-globs '("*.map")))
 #+end_src
 
 * Magit Org Todos
