@@ -381,6 +381,8 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
                         :slant 'italic)
     (set-face-attribute 'font-lock-keyword-face nil
                         :slant 'italic)
+    (set-face-attribute 'font-lock-builtin-face nil
+                        :slant 'italic)
     (set-face-attribute 'show-paren-match       nil
                         :background "#a1de93"
                         :foreground "#705772"
