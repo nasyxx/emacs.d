@@ -8,7 +8,8 @@
                  doom-dracula-comment-bg        t)
     :config
     (after! treemacs
-      (doom-themes-treemacs-config))
+      (doom-themes-treemacs-config)
+      (gsetq doom-themes-treemacs-theme "doom-colors"))
     (doom-themes-visual-bell-config)
     (after! org
       (doom-themes-org-config)))
