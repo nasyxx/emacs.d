@@ -116,6 +116,12 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'boolean)
 
+  (defcustom *ivy-or-helm* 'ivy
+    "Use ivy or helm?"
+    :group 'nasy
+    :type '(choice (const :tag "Use ivy"  ivy)
+                   (const :tag "Use helm" helm)))
+
   (defcustom *ivy-posframe* nil
     "Whether to use ivy-posframe or not."
     :group 'nasy
@@ -191,6 +197,10 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
    :group 'nasy
    :type 'symbol)
 
+  (defcustom *lookup/offline* t
+    "Install and prefer offline dictionary/thesaurus."
+    :group 'nasy
+    :type 'boolean)
 
   (defvar nasy/projectile-fd-binary
     (or (cl-find-if #'executable-find '("fdfind" "fd"))
