@@ -123,15 +123,7 @@
       (turn-on-prettify-symbols-mode)
       (add-hook 'post-command-hook 'nasy/org-prettify-src t t))
 
-    :bind (("C-c l" . org-store-link)
-           ("C-c a" . org-agenda)
-           ("C-c c" . org-capture)
-           :map org-mode-map
-           ("C-M-<up>" . org-up-element)
-           ("M-h"      . nil)
-           ("C-c g"    . org-mac-grab-link)
-           ("C-c _"    . org-edit-special)
-           :map org-src-mode-map
+    :bind (:map org-src-mode-map
            ("C-c _"    . org-edit-src-exit))
     :hook ((org-mode . auto-fill-mode)
            (org-mode . nasy/org-fix-saveplace)
