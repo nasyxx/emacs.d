@@ -72,7 +72,7 @@
 
   (use-package all-the-icons-ibuffer
     :defer t
-    :ghook 'pre-command-hook)
+    :ghook 'after-init-hook)
 #+end_src
 
 * Other settings

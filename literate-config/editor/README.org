@@ -195,7 +195,7 @@ https://github.com/rustify-emacs/fuz.el
       (require 'fuz)
       (unless (require 'fuz-core nil t)
         (fuz-build-and-load-dymod)))
-    :hook ((pre-command . load-fuz)))
+    :hook ((after-init . load-fuz)))
 #+end_src
 
 * Grab Mac Link
@@ -454,7 +454,7 @@ Now enabled.
                projectile-project-p
                projectile-locate-dominating-file)
     :bind-keymap ("C-c C-p" . projectile-command-map)
-    :ghook '(after-find-file dired-before-readin-hook minibuffer-setup-hook pre-command-hook)
+    :ghook '(after-find-file dired-before-readin-hook minibuffer-setup-hook after-init-hook)
     :init
     (gsetq projectile-indexing-method      'hybrid
            projectile-require-project-root 'prompt)

@@ -606,7 +606,7 @@ Some of them borrowed from doom-emacs
 #+begin_src elisp
   (use-package ivy-prescient
     :defer t
-    :ghook 'pre-command-hook)
+    :ghook 'after-init-hook)
 #+end_src
 
 ** icons and rich
@@ -614,9 +614,9 @@ Some of them borrowed from doom-emacs
 #+begin_src elisp
   (use-package ivy-rich
     :defer t
-    :ghook 'pre-command-hook)
+    :ghook 'after-init-hook)
 
   (use-package all-the-icons-ivy-rich
     :defer t
-    :ghook 'pre-command-hook)
+    :ghook 'after-init-hook)
 #+end_src
