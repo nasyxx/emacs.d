@@ -3,6 +3,7 @@
 #+begin_src elisp
   (straight-use-package 'swiper)
   (straight-use-package 'ivy)
+  (straight-use-package 'ivy-xref)
   (straight-use-package 'ivy-hydra)
   (straight-use-package 'counsel)
 
@@ -434,6 +435,14 @@ Some of them borrowed from doom-emacs
       [remap nasy/delete-backward-word] #'ivy-backward-kill-word)
 
     (ivy-mode +1))
+#+end_src
+
+** ivy-xref
+
+#+begin_src elisp
+  (use-package ivy-xref
+    :defer t
+    :init (gsetq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 #+end_src
 
 ** ivy-hydra
