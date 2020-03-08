@@ -215,7 +215,7 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     blink-matching-paren  t
     cursor-in-non-selected-windows t)
 
-  (blink-cursor-mode 0)
+  (blink-cursor-mode 1)
 
   (add-hook 'nasy/config-after-hook
             #'(lambda ()
