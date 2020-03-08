@@ -68,7 +68,6 @@ Core Libs include useful functions, macros and alias.
                  else collect (intern (format "%s-hook" (symbol-name hook)))))))
 #+end_src
 
-
 ** Reload the init-file
 
 #+begin_src elisp
