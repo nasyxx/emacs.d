@@ -66,6 +66,13 @@ https://github.com/gilbertw1/better-jumper
 
 #+begin_src elisp
   (straight-use-package 'better-jumper)
+  (use-package better-jumper
+    :defer t
+    :hook ((after-init              . better-jumper-mode)
+           (better-jumper-post-jump . recenter))
+    :init
+    (general-define-key
+     [remap xref-pop-marker-stack] #'better-jumper-jump-backward))
 #+end_src
 
 * Carbon Now sh
