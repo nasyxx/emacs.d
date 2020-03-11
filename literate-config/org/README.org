@@ -11,7 +11,11 @@ I use ~org~ with ~org-plus-contrib~
 #+begin_src elisp
   (straight-use-package 'org-plus-contrib)
 
+  (straight-use-package 'org-cliplink)
+  (straight-use-package 'org-pdfview)
   (straight-use-package 'org-superstar)
+  (straight-use-package 'toc-org)
+  (straight-use-package 'org-wc)
 #+end_src
 
 * Config
@@ -28,11 +32,6 @@ I use ~org~ with ~org-plus-contrib~
 
 #+include: "capture.org"
 
-* Org Cliplink
-
-#+begin_src elisp
-  (straight-use-package 'org-cliplink)
-#+end_src
 ** Org clock
 
 #+include: "clock.org"
@@ -41,11 +40,6 @@ I use ~org~ with ~org-plus-contrib~
 
 #+include: "extra-jar.org"
 
-** Org PDF view
-
-#+begin_src elisp
-  (straight-use-package 'org-pdfview)
-#+end_src
 
 ** Org Pomodoro
 
@@ -77,16 +71,4 @@ I use ~org~ with ~org-plus-contrib~
      '((?* . ?☯)
        (?+ . ?✚)
        (?- . ?▶))))
-#+end_src
-
-** Org Toc
-
-#+begin_src elisp
-  (straight-use-package 'toc-org)
-#+end_src
-
-** Org Wc
-
-#+begin_src elisp
-  (straight-use-package 'org-wc)
 #+end_src
