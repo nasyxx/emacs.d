@@ -117,7 +117,6 @@ Core Libs include useful functions, macros and alias.
           (round (* 0.02 (x-display-pixel-height)))))
 #+end_src
 
-
 * Macros & Alias
 
 #+include: "macros-and-alias.org"
