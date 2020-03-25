@@ -5,17 +5,12 @@
   (straight-use-package 'company-prescient)
 #+end_src
 
-* Company
-
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; Company
-#+end_src
-
-** Preface Functions
+* Autoloads
 
 #+begin_src elisp
   ;; Borrow from doom emacs.
+
+  ;;;###autoload
   (defvar nasy/company-backend-alist
    '((text-mode company-dabbrev company-yasnippet company-ispell company-files)
      (prog-mode company-capf company-yasnippet company-files)
@@ -24,10 +19,13 @@
   built from this.")
 
 
+  ;;;###autoload
   (defun nasy/add-company-backend (modes &rest backends)
    "Prepends BACKENDS (in order) to `company-backends' in MODES.
+
   MODES should be one symbol or a list of them, representing major or minor modes.
   This will overwrite backends for MODES on consecutive uses.
+
   If the car of BACKENDS is nil, unset the backends for MODES.
   Examples:
    (nasy/add-company-backend 'js2-mode
@@ -37,6 +35,7 @@
    (nasy/add-company-backend '(c-mode c++-mode)
      '(:separate company-irony-c-headers company-irony))
    (nasy/add-company-backend 'sh-mode nil)  ; unsets backends for sh-mode"
+
    (declare (indent defun))
    (dolist (mode (nasy-enlist modes))
      (if (null (car backends))
@@ -46,6 +45,8 @@
        (setf (alist-get mode nasy/company-backend-alist)
              backends))))
 
+
+  ;;;###autoload
   (defun nasy/company-backends ()
    (let (backends)
      (let ((mode major-mode)
@@ -65,6 +66,7 @@
                 (nreverse backends))))))
 
 
+  ;;;###autoload
   (defun nasy/company-init-backends-h ()
    "Set `company-backends' for the current buffer."
    (if (not company-mode)
@@ -74,7 +76,23 @@
      (add-hook 'change-major-mode-after-body-hook #'nasy/company-init-backends-h nil 'local)))
 
   (put 'nasy/company-init-backends-h 'permanent-local-hook t)
+
+
+  ;;;###autoload
+  (defun nasy/company-complete ()
+    "Bring up the completion popup. If only one result, complete it."
+    (interactive)
+    (require 'company)
+    (when (ignore-errors
+            (/= (point)
+                (cdr (bounds-of-thing-at-point 'symbol))))
+      (save-excursion (insert " ")))
+    (when (and (company-manual-begin)
+               (= company-candidates-length 1))
+      (company-complete-common)))
 #+end_src
+
+* Configs
 
 ** Company Mode
 
