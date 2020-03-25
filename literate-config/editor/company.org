@@ -99,6 +99,7 @@
 #+begin_src elisp
   (straight-use-package 'company)
   (use-package company
+    :defer t
     :commands (nasy/company-backends
                nasy/company-init-backends-h
                nasy/company-has-completion-p
@@ -185,7 +186,6 @@
            company-dabbrev-ignore-case       t
            company-global-modes
            '(not erc-mode message-mode help-mode gud-mode eshell-mode)
-           company-backends                  '(company-capf)
            company-frontends
            '(company-pseudo-tooltip-frontend
              company-echo-metadata-frontend)
@@ -206,7 +206,8 @@
            ("C-n" . company-select-next)
            ("C-p" . company-select-previous))
     :config
-    (global-company-mode +1)
+    (global-company-mode 1)
+    (gsetq company-backends '(company-capf))
     (defvar nasy/prev-whitespace-mode nil)
     (make-variable-buffer-local 'nasy/prev-whitespace-mode)
     (defvar nasy/show-trailing-whitespace nil)
