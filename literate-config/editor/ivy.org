@@ -115,37 +115,37 @@ Some of them borrowed from doom-emacs
 
   (defun nasy/ivy--switch-buffer (workspace other)
     (let ((current (not other))
-        prompt action filter update unwind)
+          prompt action filter update unwind)
       (cond ((and workspace current)
-           (setq prompt "Switch to workspace buffer: "
-                 action #'ivy--switch-buffer-action
-                 filter #'nasy/ivy-is-workspace-other-buffer-p))
-          (workspace
-           (setq prompt "Switch to workspace buffer in other window: "
-                 action #'ivy--switch-buffer-other-window-action
-                 filter #'nasy/ivy-is-workspace-buffer-p))
-          (current
-           (setq prompt "Switch to buffer: "
-                 action #'ivy--switch-buffer-action))
-          ((setq prompt "Switch to buffer in other window: "
-                 action #'ivy--switch-buffer-other-window-action)))
+             (setq prompt "Switch to workspace buffer: "
+                   action #'ivy--switch-buffer-action
+                   filter #'nasy/ivy-is-workspace-other-buffer-p))
+            (workspace
+             (setq prompt "Switch to workspace buffer in other window: "
+                   action #'ivy--switch-buffer-other-window-action
+                   filter #'nasy/ivy-is-workspace-buffer-p))
+            (current
+             (setq prompt "Switch to buffer: "
+                   action #'ivy--switch-buffer-action))
+            ((setq prompt "Switch to buffer in other window: "
+                   action #'ivy--switch-buffer-other-window-action)))
       (when nasy/ivy-buffer-preview
-      (cond ((not (and ivy-use-virtual-buffers
-                       (eq nasy/ivy-buffer-preview 'everything)))
-             (setq update #'nasy/ivy/switch-buffer-preview
-                   unwind #'nasy/ivy/switch-buffer-unwind))
-            ((setq update #'nasy/ivy/switch-buffer-preview-all
-                   unwind #'nasy/ivy/switch-buffer-unwind))))
+        (cond ((not (and ivy-use-virtual-buffers
+                      (eq nasy/ivy-buffer-preview 'everything)))
+               (setq update #'nasy/ivy/switch-buffer-preview
+                     unwind #'nasy/ivy/switch-buffer-unwind))
+              ((setq update #'nasy/ivy/switch-buffer-preview-all
+                     unwind #'nasy/ivy/switch-buffer-unwind))))
       (ivy-read prompt 'internal-complete-buffer
-              :action action
-              :predicate filter
-              :update-fn update
-              :unwind unwind
-              :preselect (buffer-name (other-buffer (current-buffer)))
-              :matcher #'ivy--switch-buffer-matcher
-              :keymap ivy-switch-buffer-map
-              ;; NOTE A clever disguise, needed for virtual buffers.
-              :caller #'ivy-switch-buffer)))
+                :action action
+                :predicate filter
+                :update-fn update
+                :unwind unwind
+                :preselect (buffer-name (other-buffer (current-buffer)))
+                :matcher #'ivy--switch-buffer-matcher
+                :keymap ivy-switch-buffer-map
+                ;; NOTE A clever disguise, needed for virtual buffers.
+                :caller #'ivy-switch-buffer)))
 
   ;;;###autoload
   (defun nasy/ivy/switch-workspace-buffer (&optional arg)
