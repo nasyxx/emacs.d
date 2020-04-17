@@ -68,8 +68,8 @@ https://github.com/gilbertw1/better-jumper
   (straight-use-package 'better-jumper)
   (use-package better-jumper
     :defer t
-    :hook ((after-init              . better-jumper-mode)
-           (better-jumper-post-jump . recenter))
+    :hook (((org-mode org-src-mode prog-mode) . turn-on-better-jumper-mode)
+           (better-jumper-post-jump           . recenter))
     :init
     (general-define-key
      [remap xref-pop-marker-stack] #'better-jumper-jump-backward))
