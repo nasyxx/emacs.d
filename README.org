@@ -101,6 +101,7 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
    ;;calendar-longitude       102.8329
    ;;user-mail-address        "nasyxx@gmail.com"
    ;;initial-buffer-choice    #'(lambda () (get-buffer "*dashboard*"))
+   ;;diary-file               ~/dairy/emacs-dairy
    cnfonts-profiles         '("nasy-profile" "profile1" "profile2" "profile3")
    gcmh-high-cons-threshold #x40000000
    ,*theme*                  'doom-vibrant
