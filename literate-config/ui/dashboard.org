@@ -28,6 +28,12 @@
                              ;;(agenda    . 5)
                              (projects  . 10)))
     (dashboard-setup-startup-hook)
+    (defun nasy/dashboard-refresh ()
+     "Refresh dashboard buffer."
+     (interactive)
+     (unless (get-buffer dashboard-buffer-name)
+       (generate-new-buffer "*dashboard*"))
+     (dashboard-refresh-buffer))
     :config
     (advice-add 'dashboard-next-line :after #'(lambda (&rest r) (forward-char 2)))
     (advice-add 'widget-forward :after #'(lambda (&rest r) (forward-char 2))))
