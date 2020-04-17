@@ -623,9 +623,12 @@ Some of them borrowed from doom-emacs
 #+begin_src elisp
   (use-package ivy-rich
     :defer t
-    :ghook 'after-init-hook)
+    :init (ivy-rich-mode 1))
 
   (use-package all-the-icons-ivy-rich
     :defer t
-    :ghook 'after-init-hook)
+    :init
+    (all-the-icons-ivy-rich-mode 1)
+    (after! counsel-projectile
+      (ivy-rich-reload)))
 #+end_src

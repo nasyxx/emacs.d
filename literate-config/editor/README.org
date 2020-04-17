@@ -477,7 +477,7 @@ https://github.com/raxod502/prescient.el
   (straight-use-package 'prescient)
   (use-package prescient
     :defer t
-    :ghook 'prescient-persist-mode)
+    :hook ((after-init . prescient-persist-mode)))
 #+end_src
 
 * Recentf
