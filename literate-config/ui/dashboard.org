@@ -13,8 +13,8 @@
      "<down-mouse-1>" nil
      "<mouse-1>"      'widget-button-click
      "<mouse-2>"      'widget-button-click
-     "<up>"           'dashboard-previous-line
-     "<down>"         'dashboard-next-line)
+     "<up>"           'widget-backward
+     "<down>"         'widget-forward)
     (gsetq dashboard-startup-banner    (concat user-emacs-directory "ue.png")
            dashboard-center-content    t
            dashboard-show-shortcuts    t
