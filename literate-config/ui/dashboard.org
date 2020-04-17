@@ -25,7 +25,7 @@
            dashboard-items '((recents   . 10)
                              (bookmarks . 5)
                              ;;(registers . 5 )
-                             ;;(agenda    . 5)
+                             (agenda    . 5)
                              (projects  . 10)))
     (dashboard-setup-startup-hook)
     (defun nasy/dashboard-refresh ()
