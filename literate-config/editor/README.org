@@ -612,6 +612,6 @@ Not work now.
            (yas-minor-mode . (lambda ()
                                (add-to-list
                                 'yas-snippet-dirs
-                                (concat user-emacs-directory "snippets")))))
+                                (concat user-emacs-directory "extra/snippets")))))
     :config (yas-reload-all))
 #+end_src
