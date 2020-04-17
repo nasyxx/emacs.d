@@ -341,7 +341,7 @@ Some of them borrowed from doom-emacs
 * Config
 
 #+begin_src elisp
-  (defvar nasy/ivy-buffer-preview nil
+  (defvar nasy/ivy-buffer-preview 'everything
     "If non-nil, preview buffers while switching, à la `counsel-switch-buffer'.
   When nil, don't preview anything.
   When non-nil, preview non-virtual buffers.
@@ -396,6 +396,11 @@ Some of them borrowed from doom-emacs
            ;; enable ability to select prompt (alternative to `ivy-immediate-done')
            ivy-use-selectable-prompt        t)
     (general-define-key
+     [remap switch-to-buffer]              #'nasy/ivy/switch-buffer
+     [remap switch-to-buffer-other-window] #'nasy/ivy/switch-buffer-other-window
+     [remap persp-switch-to-buffer]        #'nasy/ivy/switch-workspace-buffer)
+    (general-define-key
+     :keymaps 'ivy-mode-map
      [remap switch-to-buffer]              #'nasy/ivy/switch-buffer
      [remap switch-to-buffer-other-window] #'nasy/ivy/switch-buffer-other-window
      [remap persp-switch-to-buffer]        #'nasy/ivy/switch-workspace-buffer)
