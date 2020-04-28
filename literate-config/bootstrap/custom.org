@@ -162,6 +162,11 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'boolean)
 
+  (defcustom *dvorak-trans* nil
+      "Whether to trans dvorak to qwerty key-bindings or not."
+      :group 'nasy
+      :type 'boolean)
+
   (defcustom *mouse-color* "black"
     "Mouse color."
     :group 'nasy
