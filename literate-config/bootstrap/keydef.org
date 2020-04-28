@@ -48,7 +48,7 @@ https://github.com/noctuid/general.el
 #+begin_src elisp
   (add-hook #'nasy/config-after-hook
             #'(lambda ()
-                (when *dvorak*
+                (when *dvorak-trans*
                   (general-define-key
                    :keymaps 'key-translation-map
                    "C-," "C-x"
@@ -67,7 +67,7 @@ https://github.com/noctuid/general.el
   (defun nasy/toogle-dvorak ()
     "Toogle dvorak key bindings."
     (interactive)
-    (if (not *dvorak*)
+    (if (not *dvorak-trans*)
         (progn
           (general-define-key
            :keymaps 'key-translation-map
@@ -79,7 +79,7 @@ https://github.com/noctuid/general.el
            "C-." "C-c"
            "M-c" "M-."
            "M-." "M-c")
-          (gsetq *dvorak* t)
+          (gsetq *dvorak-trans* t)
           (message "Use Dvorak key bindings."))
       (progn
         (general-define-key
@@ -92,7 +92,7 @@ https://github.com/noctuid/general.el
            "C-." nil
            "M-c" nil
            "M-." nil)
-        (gsetq *dvorak* nil)
+        (gsetq *dvorak-trans* nil)
         (message "Use normal key bindings."))))
 #+end_src
 
