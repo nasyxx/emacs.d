@@ -622,8 +622,6 @@ Not work now.
 
   (use-package yasnippet
     :defer t
-    :bind (:map yas-minor-mode-map
-                ("C-'" . yas-expand))
     :commands (yas-minor-mode)
     :hook (((prog-mode text-mode) . yas-minor-mode))
     :config
