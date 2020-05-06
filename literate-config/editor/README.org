@@ -48,8 +48,10 @@ Here is the editor config, including some features and functions.
     (general-define-key
      "C-:"     #'avy-goto-char
      "C-'"     #'avy-goto-char-2
+     "C-`"     #'avy-goto-char-2
      "M-g e"   #'avy-goto-word-0
      "M-g w"   #'avy-goto-word-1
+     "C-~"     #'avy-goto-word-1
      "C-c C-j" #'avy-resume)
     (when *dvorak*
       (gsetq avy-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s))))
