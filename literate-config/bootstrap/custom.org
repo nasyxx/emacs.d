@@ -251,8 +251,8 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 
 #+begin_src elisp
   (setq-default
-   org-pandoc-options-for-context     '((template . "~/.emacs.d/nasy-context.tex"))  ;; I have no idea why I cannot set it as a variable.
-   org-pandoc-options-for-context-pdf '((template . "~/.emacs.d/nasy-context.tex")))
+   org-pandoc-options-for-context     '((template . "~/.emacs.d/extra/nasy-context.tex"))  ;; I have no idea why I cannot set it as a variable.
+   org-pandoc-options-for-context-pdf '((template . "~/.emacs.d/extra/nasy-context.tex")))
 #+end_src
 
 ** Parens
