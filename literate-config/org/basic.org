@@ -287,12 +287,10 @@
      org-tags-column 80
 
      ;; to-do settings
-     org-todo-keywords        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
-                                      (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
-                                      (sequence "WAITING(w@/!)" "DELEGATED(e!)" "HOLD(h)" "|" "CANCELLED(c@/!)")))
+     org-todo-keywords        (quote ((sequence "TODO(t)" "WIP(w/!)" "WAIT(W@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)" "DONE(d!/!)")))
      org-todo-repeat-to-state "NEXT"
      org-todo-keyword-faces   (quote (("NEXT" :inherit warning)
-                                      ("PROJECT" :inherit font-lock-string-face))))
+                                      ("WAIT" :inherit font-lock-string-face))))
     (gsetq org-display-custom-times t)
     (nasy/add-company-backend 'org-mode 'company-tabnine)
     :config
