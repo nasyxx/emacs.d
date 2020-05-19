@@ -332,7 +332,7 @@
              :latex-compiler ("lualatex -interaction nonstopmode -output-format dvi -output-directory %o %f")
              :image-converter ("dvisvgm %f -n -b min -c %S -o %O")))
     (add-to-list 'org-preview-latex-process-alist luasvg)
-    (gsetq org-preview-latex-default-process 'luabagick)
+    (gsetq org-preview-latex-default-process 'luamagick)
 
     (require 'org-tempo nil t)
     (after! ox
