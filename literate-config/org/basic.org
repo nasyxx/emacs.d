@@ -168,7 +168,7 @@
      org-html-html5-fancy         t
      org-html-htmlize-output-type 'inline-css
      org-html-klipsify-src        t
-     org-html-mathjax-options     '((path          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML")
+     org-html-mathjax-options     '((path          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML")
                                     (scale         "100")
                                     (align         "center")
                                     (font          "Neo-Euler")
