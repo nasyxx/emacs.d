@@ -21,19 +21,6 @@
       (let ((org-refile-target-verify-function))
         (org-agenda-refile goto rfloc no-update)))
 
-    ;; The original from spacemacs chinese layer shows as follow.
-    ;;   (defadvice org-html-paragraph (before org-html-paragraph-advice
-    ;;                                         (paragraph contents info) activate)
-    ;;     "Join consecutive Chinese lines into a single long line without
-    ;; unwanted space when exporting org-mode to html."
-    ;;     (let* ((origin-contents (ad-get-arg 1))
-    ;;            (fix-regexp "[[:multibyte:]]")
-    ;;            (fixed-contents
-    ;;             (replace-regexp-in-string
-    ;;              (concat
-    ;;               "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
-    ;;       (ad-set-arg 1 fixed-contents)))
-
     (defun nasy/org-html-paragraph-advice (orig paragraph contents &rest args)
       "Join consecutive Chinese lines into a single long line without
   unwanted space when exporting org-mode to html."
@@ -257,7 +244,7 @@
      org-outline-path-complete-in-steps nil
 
      org-refile-allow-creating-parent-nodes 'confirm
-     org-refile-targets                     '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))
+     ;; org-refile-targets                     '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))
      org-refile-use-cache                   nil
      org-refile-use-outline-path            t
 
@@ -317,7 +304,7 @@
        (sql        . nil)
        (sqlite     . t)))
 
-    (gsetq org-babel-python-command "python3")
+    (gsetq org-babel-python-command "python")
 
     ;; --------
     (gsetq luamagick
@@ -345,7 +332,7 @@
              :latex-compiler ("lualatex -interaction nonstopmode -output-format dvi -output-directory %o %f")
              :image-converter ("dvisvgm %f -n -b min -c %S -o %O")))
     (add-to-list 'org-preview-latex-process-alist luasvg)
-    (gsetq org-preview-latex-default-process 'luasvg)
+    (gsetq org-preview-latex-default-process 'luabagick)
 
     (require 'org-tempo nil t)
     (after! ox

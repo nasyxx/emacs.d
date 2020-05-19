@@ -18,6 +18,12 @@ I use ~org~ with ~org-plus-contrib~
   (straight-use-package 'org-wc)
 #+end_src
 
+* Autoloads
+
+#+begin_src elisp
+;;
+#+end_src
+
 * Config
 
 ** Basic Configs
