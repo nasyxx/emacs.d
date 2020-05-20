@@ -20,8 +20,10 @@
 #+HTML_HEAD: <style>#table-of-contents h2 {background-color: #ffcab0; color: #745c97;} </style>
 #+HTML_HEAD: <style>#table-of-contents {background: #745c97;} #table-of-contents a {color: #e0ffcd;} ul.nav li.active a {background-color: #f69d9d;} ul.nav li.active ul li a {background-color: #ffcab0;} ul.nav li.active ul li.active a {background-color: #ffebbb;} #table-of-contents a:hover {background-color: #d597ce;}</style>
 
-#+LATEX_HEADER: \setmainjfont[BoldFont=PingFang SC]{FandolSong}
-#+LATEX_HEADER: \setsansfont{PingFang SC}
+#+latex_header: \setmainfont{Cormorant Garamond}
+#+latex_header: \setmainjfont{FandolSong}
+#+latex_header: \setsansfont{Lato}
+#+latex_header: \setsansjfont{PingFang SC}
 
 * Prologue
 
