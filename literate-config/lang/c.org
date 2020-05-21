@@ -20,12 +20,30 @@ Clangd or ccls.
         (require 'ccls)
         (lsp-deferred))
       :hook (((c-mode c++-mode objc-mode) . ccls/load))
-      :init (gsetq ccls-executable *ccls*
-                   ccls-initialization-options
-                   '(:clang (:extraArgs
-                             ["-isysroot"
-                              "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"]))
-                   ccls-sem-highlight-method 'font-lock)
+      :init
+      (gsetq ccls-executable *ccls*
+             ccls-initialization-options
+             '(:clang (:extraArgs
+                       ["-isysroot"
+                        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"])
+               :index (:comments 2)
+               :completion (:detailedLabel t)
+               ccls-sem-highlight-method 'font-lock))
+      (gsetq ccls-sem-function-colors
+             '("#e5b124" "#927754" "#eb992c" "#e2bf8f" "#d67c17"
+               "#88651e" "#e4b953" "#a36526" "#b28927" "#d69855")
+             ccls-sem-macro-colors
+             '("#e79528" "#c5373d" "#e8a272" "#d84f2b" "#a67245"
+               "#e27a33" "#9b4a31" "#b66a1e" "#e27a71" "#cf6d49")
+             ccls-sem-namespace-colors
+             '("#aa96da" "#fcbad3" "#ffffd2" "#a8d8ea" "#ffcfdf"
+               "#fefdca" "#e0f9b5" "#a5dee5" "#eef9bf" "#a7e9af")
+             ccls-sem-parameter-colors
+             '("#aa96da" "#fcbad3" "#ffffd2" "#a8d8ea" "#ffcfdf"
+               "#fefdca" "#e0f9b5" "#a5dee5" "#eef9bf" "#a7e9af")
+             ccls-sem-type-colors
+             '("#e1afc3" "#d533bb" "#9b677f" "#e350b6" "#a04360"
+               "#dd82bc" "#de3864" "#ad3f87" "#dd7a90" "#e0438a"))
       :config
       (ccls-use-default-rainbow-sem-highlight)
       (defun ccls/callee ()
@@ -83,7 +101,6 @@ Clangd or ccls.
            (while (string-match pattern line i)
              (setq i (match-end 0))
              (add-face-text-property (match-beginning 0) (match-end 0) 'isearch t line))
-
            line)))
 
       (after! lsp-methods
