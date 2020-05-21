@@ -133,6 +133,10 @@ https://github.com/emacscollective/no-littering
 
 #+include: "keydef.org"
 
+* Session
+
+#+include: "session.org"
+
 * Load Org
 
 When using straight.el, the org version is needed to custom set.

@@ -113,7 +113,7 @@
   (auto-compression-mode)
 #+end_src
 
-* History, Saving and Session
+* History, Saving, Desktop and Session
 
 #+begin_src elisp :exports none
   ;;----------------------------------------------------------------------------
@@ -121,33 +121,6 @@
 #+end_src
 
 #+begin_src elisp
-  (gsetq desktop-path              (list user-emacs-directory no-littering-var-directory)
-         desktop-dirname           (list user-emacs-directory no-littering-var-directory)
-         desktop-auto-save-timeout 600)
-  (desktop-save-mode t)
-  (gsetq desktop-save 'if-exists)
-
-
-  (defun nasy/desktop-time-restore (orig &rest args)
-    (let ((start-time (current-time)))
-      (prog1
-          (apply orig args)
-        (message "Desktop restored in %.2fms"
-                 (benchmark-init/time-subtract-millis (current-time)
-                                                 start-time)))))
-  (advice-add 'desktop-read :around 'nasy/desktop-time-restore)
-
-  (defun nasy/desktop-time-buffer-create (orig ver filename &rest args)
-    (let ((start-time (current-time)))
-      (prog1
-          (apply orig ver filename args)
-        (message "Desktop: %.2fms to restore %s"
-                 (benchmark-init/time-subtract-millis (current-time)
-                                                 start-time)
-                 (when filename
-                   (abbreviate-file-name filename))))))
-  (advice-add 'desktop-create-buffer :around 'nasy/desktop-time-buffer-create)
-
   (gsetq kill-ring-max 300)
 
   (gsetq history-length 3000
