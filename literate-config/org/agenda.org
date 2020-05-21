@@ -21,7 +21,7 @@
 
     (gsetq
      org-agenda-time-grid
-     '((daily today require-timed)
+     '((daily today weekly require-timed)
        (0 600 900 1200 1300 1600 1800 2000 2200 2400 2600)
        "	"
        "---")))
