@@ -71,8 +71,10 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     (defun python-flycheck-setup ()
       "Add python checker for lsp-ui."
       (after! lsp-ui
-        (flycheck-add-next-checker 'lsp                'python-pytype)
-        (flycheck-add-next-checker 'python-pytype      'python-flake8)))
+        (flycheck-add-next-checker 'lsp              'python-flake8)
+        ;; flake8 already have python-mypy as the next checker
+        ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
+        (flycheck-disable-checker 'python-pylint)))
 
     (defun start-lsp-pyls ()
       "Start lsp-python-ms."
@@ -109,17 +111,18 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     ;; [tool.black]
     ;; line-length = 79
     (after! lsp-pyls
-      (gsetq lsp-pyls-configuration-sources                          ["flake8"]
-             lsp-pyls-plugins-pydocstyle-enabled                     t
-             lsp-pyls-plugins-yapf-enabled                           nil
-             lsp-pyls-plugins-jedi-definition-follow-imports         t
-             lsp-pyls-plugins-jedi-definition-follow-builtin-imports t
-             lsp-pyls-plugins-jedi-signature-help-enabled            t
-             lsp-pyls-plugins-jedi-symbols-enabled                   t
-             lsp-pyls-plugins-flake8-enabled                         t
-             lsp-pyls-plugins-pyls_mypy-live-mode                    nil))
-    :hook ((after-init  . python-flycheck-setup))
-           ;; (python-mode . start-lsp-pyls))
+      (gsetq lsp-pyls-configuration-sources              ["pycodestyle" "pycodestyle" "pylint"]
+             lsp-pyls-plugins-pylint-enabled             nil
+             lsp-pyls-plugins-pycodestyle-enabled        t
+             lsp-pyls-plugins-pydocstyle-enabled         t
+             lsp-pyls-plugins-pydocstyle-convention      "numpy"
+             lsp-pyls-plugins-pydocstyle-add-select.     '("D107" "D413" "D415" "D416")
+             lsp-pyls-plugins-rope-completion-enabled    t
+             lsp-pyls-plugins-autopep8-enabled           t
+             lsp-pyls-plugins-yapf-enabled               nil
+             lsp-pyls-plugins-flake8-enabled             nil))
+    :hook ((after-init  . python-flycheck-setup)
+           (python-mode . start-lsp-pyls))
     :config
     (unless *blacken*
       (add-hook #'python-mode-hook
@@ -158,8 +161,8 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
                  lsp-python-ms-warnings      ["no-cls-argument"
                                               "no-self-argument"
                                               "variable-not-defined-globally"
-                                              "variable-not-defined-nonlocal"])
-    :hook ((python-mode . start-lsp-mspyls)))
+                                              "variable-not-defined-nonlocal"]))
+    ;; :hook ((python-mode . start-lsp-mspyls)))
 
 #+end_src
 
