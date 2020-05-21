@@ -18,7 +18,7 @@
     :hook ((after-init . global-flycheck-mode))
     :init (gsetq flycheck-display-errors-function
                  #'flycheck-display-error-messages-unless-error-list
-                 flycheck-check-syntax-automatically '(save mode-enabled)
+                 flycheck-check-syntax-automatically '(save idle-change mode-enabled)
                  flycheck-display-errors-delay       0.25)
     :bind (:map flycheck-error-list-mode-map
                 ("C-n"    . flycheck-error-list-next-error)
