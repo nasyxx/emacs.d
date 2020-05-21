@@ -129,9 +129,11 @@ https://github.com/emacscollective/no-littering
   (require 'user-config nil t)
 #+end_src
 
-* Key Definition
+* Key Definition and Bindings
 
 #+include: "keydef.org"
+
+#+include: "keybings.org"
 
 * Session
 
