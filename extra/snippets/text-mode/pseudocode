@@ -3,7 +3,7 @@
 # key: pseudo
 # --
 \begin{algorithm}
-  \caption{$1}\labal{$2}
+  \caption{$1}\label{$2}
   \begin{algorithmic}[1]
     \Procedure{$3}$4
     \EndProcedure
