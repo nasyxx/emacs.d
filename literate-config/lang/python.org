@@ -166,8 +166,8 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
 * Flycheck Mypy
 
 #+begin_src elisp
-  ;; (straight-use-package 'flycheck-mypy)
-  (gsetq flycheck-python-mypy-ini "~/config/mypy/config")
+  (straight-use-package 'flycheck-mypy)
+  (gsetq flycheck-python-mypy-ini "~/.config/mypy/config")
 #+end_src
 
 * PyType
