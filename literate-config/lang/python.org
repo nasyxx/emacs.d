@@ -172,25 +172,25 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
 
 * PyType
 
-#+begin_src elisp
-  (after! flycheck
-    (flycheck-def-args-var flycheck-python-pytype-args python-pytype)
+# #+begin_src elisp
+#   (after! flycheck
+#     (flycheck-def-args-var flycheck-python-pytype-args python-pytype)
 
-    (flycheck-define-checker python-pytype
-      "Pytype syntax checker.
+#     (flycheck-define-checker python-pytype
+#       "Pytype syntax checker.
 
-      See url `https://github.com/google/pytype`."
-      :command ("pytype"
-                (eval flycheck-python-pytype-args)
-                source-original)
-      :error-patterns
-      ((warning line-start "File \"" (file-name) "\", line " line ", " (message (one-or-more (not (any "[")))) "[" (id (one-or-more not-newline)) "]"))
-      :modes python-mode
-      :predicate flycheck-buffer-saved-p)
-      ;; :next-checkers (python-flake8))
+#       See url `https://github.com/google/pytype`."
+#       :command ("pytype"
+#                 (eval flycheck-python-pytype-args)
+#                 source-original)
+#       :error-patterns
+#       ((warning line-start "File \"" (file-name) "\", line " line ", " (message (one-or-more (not (any "[")))) "[" (id (one-or-more not-newline)) "]"))
+#       :modes python-mode
+#       :predicate flycheck-buffer-saved-p)
+#       ;; :next-checkers (python-flake8))
 
-    (add-to-list 'flycheck-checkers 'python-pytype t))
-#+end_src
+#     (add-to-list 'flycheck-checkers 'python-pytype t))
+# #+end_src
 
 * black
 
