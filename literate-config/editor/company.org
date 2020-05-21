@@ -181,6 +181,7 @@
 
     :init
     (add-to-list 'completion-styles 'initials t)
+    (setq company-backends '(company-capf))
     (gsetq company-tooltip-limit             10
            company-dabbrev-downcase          nil
            company-dabbrev-ignore-case       t
@@ -207,7 +208,6 @@
            ("C-p" . company-select-previous))
     :config
     (global-company-mode 1)
-    (gsetq company-backends '(company-capf))
     (defvar nasy/prev-whitespace-mode nil)
     (make-variable-buffer-local 'nasy/prev-whitespace-mode)
     (defvar nasy/show-trailing-whitespace nil)
