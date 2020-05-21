@@ -47,4 +47,65 @@
            (xref-backend-identifier-at-point (xref-find-backend)))
           (prompt
            (read-string (if (stringp prompt) prompt "")))))
+
+  ;;;###autoload
+  (defalias 'default/newline #'newline)
+
+  ;;;###autoload
+  (defun default/newline-above ()
+    "Insert an indented new line before the current one."
+    (interactive)
+    (beginning-of-line)
+    (save-excursion (newline))
+    (indent-according-to-mode))
+
+  ;;;###autoload
+  (defun default/newline-below ()
+    "Insert an indented new line after the current one."
+    (interactive)
+    (end-of-line)
+    (newline-and-indent))
+
+  ;;;###autoload
+  (defun default/yank-pop ()
+    "Interactively select what text to insert from the kill ring."
+    (interactive)
+    (call-interactively
+     (cond ((fboundp 'counsel-yank-pop)    #'counsel-yank-pop)
+           ((fboundp 'helm-show-kill-ring) #'helm-show-kill-ring)
+           ((error "No kill-ring search backend available. Enable ivy or helm!")))))
+
+  ;;;###autoload
+  (defun default/yank-buffer-filename ()
+    "Copy the current buffer's path to the kill ring."
+    (interactive)
+    (if-let* ((filename (or buffer-file-name (bound-and-true-p list-buffers-directory))))
+        (message (kill-new (abbreviate-file-name filename)))
+      (error "Couldn't find filename in current buffer")))
+
+  ;;;###autoload
+  (defun default/insert-file-path (arg)
+    "Insert the file name (absolute path if prefix ARG).
+  If `buffer-file-name' isn't set, uses `default-directory'."
+    (interactive "P")
+    (let ((path (or buffer-file-name default-directory)))
+      (insert
+       (if arg
+           (abbreviate-file-name path)
+         (file-name-nondirectory path)))))
+
+  ;;;###autoload
+  (defun default/newline-indent-and-continue-comments-a ()
+    "A replacement for `newline-and-indent'.
+  Continues comments if executed from a commented line, with special support for
+  languages with weak native comment continuation support (like C-family
+  languages)."
+    (interactive)
+    (if (and (sp-point-in-comment)
+             comment-line-break-function)
+        (funcall comment-line-break-function nil)
+      (delete-horizontal-space t)
+      (newline nil t)
+      (indent-according-to-mode)))
+
 #+end_src
