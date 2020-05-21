@@ -58,57 +58,59 @@ https://www.emacswiki.org/emacs/highlight-tail.el
 Many thanks to K. Scarlet
 
 #+begin_src elisp
-  (straight-use-package 'highlight-tail)
+  ;; (straight-use-package 'highlight-tail)
 
-  (use-package highlight-tail
-    :init
-    (gsetq highlight-tail-timer  0.04
-           highlight-tail-steps  40
-           highlight-tail-colors '(("#e0f9b5" . 0)))
-    :ghook '(text-mode-hook prog-mode-hook org-src-mode-hook)
-    :config
-    (defvar blink-cursor-colors
-      (list  "#c0ffc2" "#f69d9d" "#e0f9b5" "#aa96da" "#a8d8ea" "#5b8c5a"))
+  ;; (use-package highlight-tail
+  ;;   :defer t
+  ;;   :commands highlight-tail-get-colors-fade-table-with-key
+  ;;   :ghook '(text-mode-hook prog-mode-hook org-src-mode-hook)
+  ;;   ;; :hook ((after-init . highlight-tail-global-mode))
+  ;;   :config
+  ;;   (setq highlight-tail-timer  0.04
+  ;; 	highlight-tail-steps  40
+  ;; 	highlight-tail-colors '(("#e0f9b5" . 0)))
 
-    (defvar blink-highlight-colors
-      (list "#e0f9b5" "#ffaaa6" "#fefdca" "#ffcfdf" "#a5dee5" "#596157"))
+  ;;   (highlight-tail-mode 1)
 
-    (gsetq blink-cursor-count 0)
+  ;;   (defvar blink-cursor-colors
+  ;;     (list  "#c0ffc2" "#f69d9d" "#e0f9b5" "#aa96da" "#a8d8ea" "#5b8c5a"))
 
-    (define-globalized-minor-mode highlight-tail-global-mode highlight-tail-mode
-      (lambda () (highlight-tail-mode 1))))
+  ;;   (defvar blink-highlight-colors
+  ;;     (list "#e0f9b5" "#ffaaa6" "#fefdca" "#ffcfdf" "#a5dee5" "#596157"))
 
-  (defun blink-cursor-timer-function ()
-    (when (not (internal-show-cursor-p))
-      (when (>= blink-cursor-count (length blink-cursor-colors))
-        (setq blink-cursor-count 0))
-      (let ((color (nth blink-cursor-count blink-cursor-colors))
-            (hl-color (nth blink-cursor-count blink-highlight-colors)))
-        (set-cursor-color color)
-        (setq highlight-tail-colors              `((,hl-color . 0)))
-        (setq highlight-tail-colors-fade-list    nil
-              highlight-tail-nonhtfaces-bgcolors nil
-              highlight-tail-const-overlays-list nil
-              highlight-tail-update-const-overlays-to-this-list nil
-              highlight-tail-face-max nil)
-        (let* ((background-color-name (if (featurep 'xemacs)
-                                          (face-background-name 'default)
-                                        (cdr (assoc 'background-color
-                                                    (frame-parameters)))))
-               (background-color-hex (highlight-tail-hex-from-colorname
-                                      background-color-name)))
-          (setq highlight-tail-default-background-color background-color-name))
-        (setq highlight-tail-colors-with-100
-              (if (= (cdr (nth (1- (length highlight-tail-colors))
-                               highlight-tail-colors))
-                     100)
-                  highlight-tail-colors
-                (append highlight-tail-colors (list '(null . 100)))))
-        (setq highlight-tail-face-max highlight-tail-steps)
-        (highlight-tail-add-colors-fade-table 'start)
-        (highlight-tail-add-colors-fade-table 'default)
-        (highlight-tail-make-faces
-         (highlight-tail-get-colors-fade-table-with-key 'default))
-        (setq blink-cursor-count (+ 1 blink-cursor-count))))
-    (internal-show-cursor nil (not (internal-show-cursor-p))))
+  ;;   (gsetq blink-cursor-count 0)
+
+  ;;   (defun blink-cursor-timer-function ()
+  ;;     (when (not (internal-show-cursor-p))
+  ;;       (when (>= blink-cursor-count (length blink-cursor-colors))
+  ;; 	(setq blink-cursor-count 0))
+  ;;       (let ((color (nth blink-cursor-count blink-cursor-colors))
+  ;; 	    (hl-color (nth blink-cursor-count blink-highlight-colors)))
+  ;; 	(set-cursor-color color)
+  ;; 	(setq highlight-tail-colors `((,hl-color . 0)))
+  ;; 	(setq highlight-tail-colors-fade-list nil
+  ;; 	      highlight-tail-nonhtfaces-bgcolors nil
+  ;; 	      highlight-tail-const-overlays-list nil
+  ;; 	      highlight-tail-update-const-overlays-to-this-list nil
+  ;; 	      highlight-tail-face-max nil)
+  ;; 	(let* ((background-color-name (if (featurep 'xemacs)
+  ;; 					  (face-background-name 'default)
+  ;; 					(cdr (assoc 'background-color
+  ;; 						    (frame-parameters)))))
+  ;; 	       (background-color-hex (highlight-tail-hex-from-colorname
+  ;; 				      background-color-name)))
+  ;; 	  (setq highlight-tail-default-background-color background-color-name))
+  ;; 	(setq highlight-tail-colors-with-100
+  ;; 	      (if (= (cdr (nth (1- (length highlight-tail-colors))
+  ;; 			       highlight-tail-colors))
+  ;; 		     100)
+  ;; 		  highlight-tail-colors
+  ;; 		(append highlight-tail-colors (list '(null . 100)))))
+  ;; 	(setq highlight-tail-face-max highlight-tail-steps)
+  ;; 	(highlight-tail-add-colors-fade-table 'start)
+  ;; 	(highlight-tail-add-colors-fade-table 'default)
+  ;; 	(highlight-tail-make-faces
+  ;; 	 (highlight-tail-get-colors-fade-table-with-key 'default))
+  ;; 	(setq blink-cursor-count (+ 1 blink-cursor-count))))
+  ;;     (internal-show-cursor nil (not (internal-show-cursor-p))))))
 #+end_src
