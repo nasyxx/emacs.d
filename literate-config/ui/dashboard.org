@@ -26,7 +26,7 @@
            dashboard-items '((recents   . 10)
                              (bookmarks . 5)
                              ;; (registers . 5 )
-                             ;; (agenda    . 5)
+                             (agenda    . 5)
                              (projects  . 10))
            dashboard-org-agenda-categories '("Calendar" "Tasks" "Appointments"))
     (setq dashboard-navigator-buttons
