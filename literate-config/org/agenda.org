@@ -5,7 +5,7 @@
     (gsetq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
     (gsetq
      org-agenda-compact-blocks   t
-     org-agenda-include-diary    t
+     org-agenda-include-diary    nil
      org-agenda-span             'week
      org-agenda-start-on-weekday nil
      org-agenda-start-day       "-1d"
@@ -21,8 +21,17 @@
 
     (gsetq
      org-agenda-time-grid
-     '((daily today weekly require-timed)
+     '((daily today weekly require-timed remove-match)
        (0 600 900 1200 1300 1600 1800 2000 2200 2400 2600)
-       "	"
-       "---")))
+       "......"
+       "-----------------------------------------------------")
+     org-agenda-prefix-format
+     '((agenda . " %i %-15c\t%?-15t% s")
+       (todo   . " %i %-15c\t")
+       (tags   . " %i %-15c\t")
+       (search . " %i %-15c\t"))
+     org-agenda-category-icon-alist
+     `(("Tasks"        ,(list (all-the-icons-faicon "tasks"            :height 0.8 :v-adjust 0)) nil nil :ascent center)
+       ("Calendar"     ,(list (all-the-icons-faicon "calendar"         :height 0.8 :v-adjust 0)) nil nil :ascent center)
+       ("Appointments" ,(list (all-the-icons-faicon "calendar-check-o" :height 0.8 :v-adjust 0)) nil nil :ascent center))))
 #+end_src

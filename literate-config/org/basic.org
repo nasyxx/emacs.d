@@ -174,7 +174,7 @@
 
      ;; org time
      ;; org-display-custom-times         t  ;; should setq-default
-     org-time-stamp-custom-formats    '("<%a %b %d, %Y>" . "<%a %b %d %H:%M:%S %Y>")
+     org-time-stamp-custom-formats    '("<%a, %b %d, %Y>" . "<%a, %b %d, %Y at %H:%M>")
      org-export-date-timestamp-format "%b %d, %Y"
 
      ;; org latex
