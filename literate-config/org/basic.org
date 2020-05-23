@@ -173,7 +173,7 @@
      org-pretty-entities t
 
      ;; org time
-     ;; org-display-custom-times         t  ;; should setq-default
+     org-display-custom-times         t
      org-time-stamp-custom-formats    '("<%a, %b %d, %Y>" . "<%a, %b %d, %Y at %H:%M>")
      org-export-date-timestamp-format "%b %d, %Y"
 
@@ -278,7 +278,6 @@
      org-todo-repeat-to-state "NEXT"
      org-todo-keyword-faces   (quote (("NEXT" :inherit warning)
                                       ("WAIT" :inherit font-lock-string-face))))
-    (gsetq org-display-custom-times t)
     (nasy/add-company-backend 'org-mode 'company-tabnine)
     :config
     ;; --------
