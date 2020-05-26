@@ -58,13 +58,10 @@
        (treemacs-git-mode 'deferred))
       (`(t . _)
        (treemacs-git-mode 'simple)))
-    :config
     (general-define-key
-     :keymaps 'global-map
      "M-0" 'treemacs-select-window)
     (general-define-key
-     :prefix "C-x t"
-     :keymaps 'global-map
+     :prefix "C-c t"
      "1"   'treemacs-delete-other-windows
      "t"   'treemacs
      "B"   'treemacs-bookmark
