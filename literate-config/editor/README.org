@@ -160,6 +160,18 @@ Disabled by default due to it causes lots of cpu.
              (eldoc-mode . eldoc-box-hover-at-point-mode))))
 #+end_src
 
+* Expand Region
+
+Emacs extension to increase selected region by semantic units.
+
+https://github.com/magnars/expand-region.el
+
+#+begin_src elisp
+  (straight-use-package 'expand-region)
+  (general-define-key
+   "C-=" #'er/expand-region)
+#+end_src
+
 * Fill Column
 
 ** Unfill
