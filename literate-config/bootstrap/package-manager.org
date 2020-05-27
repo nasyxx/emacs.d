@@ -22,6 +22,20 @@ https://github.com/raxod502/straight.el
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
+
+  (defmacro use-feature (name &rest args)
+    "Like `use-package', but with `straight-use-package-by-default' disabled.
+  NAME and ARGS are as in `use-package'."
+    (declare (indent defun))
+    `(use-package ,name
+       ,@args))
+
+  ;; Feature `straight-x' from package `straight' provides
+  ;; experimental/unstable extensions to straight.el which are not yet
+  ;; ready for official inclusion.
+  (use-feature straight-x
+    ;; Add an autoload for this extremely useful command.
+    :commands (straight-x-fetch-all))
 #+end_src
 
 At the same time, I use [[https://github.com/jwiegley/use-package][use-package]] to manage packages' loading.
