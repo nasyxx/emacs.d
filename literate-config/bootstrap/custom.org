@@ -116,6 +116,13 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'boolean)
 
+  (defcustom *ivy/helm/selectrum* 'selectrum
+      "Use ivy, helm or selectrum?"
+      :group 'nasy
+      :type '(choice (const :tag "Use ivy"       ivy)
+                     (const :tag "Use helm"      helm)
+                     (const :tag "Use selectrum" selectrum)))
+
   (defcustom *ivy-or-helm* 'ivy
     "Use ivy or helm?"
     :group 'nasy
