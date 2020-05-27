@@ -54,9 +54,12 @@
      '((agenda . " %i %+15c\t%?-15t% s")
        (todo   . " %i %+15c\t")
        (tags   . " %i %+15c\t")
-       (search . " %i %+15c\t"))
-     org-agenda-category-icon-alist
-     `(("Tasks"        ,(list (all-the-icons-faicon  "tasks"            :height 0.8 :v-adjust 0)) nil nil :ascent center)
-       ("Calendar"     ,(list (all-the-icons-octicon "calendar"         :height 0.8 :v-adjust 0)) nil nil :ascent center)
-       ("Appointments" ,(list (all-the-icons-faicon  "calendar-check-o" :height 0.8 :v-adjust 0)) nil nil :ascent center))))
+       (search . " %i %+15c\t")))
+
+    (after-load-x 'all-the-icons
+      (gsetq
+       org-agenda-category-icon-alist
+       `(("Tasks"        ,(list (all-the-icons-faicon  "tasks"            :height 0.8 :v-adjust 0)) nil nil :ascent center)
+         ("Calendar"     ,(list (all-the-icons-octicon "calendar"         :height 0.8 :v-adjust 0)) nil nil :ascent center)
+         ("Appointments" ,(list (all-the-icons-faicon  "calendar-check-o" :height 0.8 :v-adjust 0)) nil nil :ascent center)))))
 #+end_src
