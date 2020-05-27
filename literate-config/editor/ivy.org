@@ -626,14 +626,15 @@ Some of them borrowed from doom-emacs
 ** icons and rich
 
 #+begin_src elisp
-  (use-package ivy-rich
-    :defer t
-    :init (ivy-rich-mode 1))
+  ;; (use-package ivy-rich
+  ;;   :defer t
+  ;;   :init (ivy-rich-mode 1))
 
-  (use-package all-the-icons-ivy-rich
-    :defer t
-    :init
-    (all-the-icons-ivy-rich-mode 1)
-    (after! counsel-projectile
-      (ivy-rich-reload)))
+  ;; (use-package all-the-icons-ivy-rich
+  ;;   :defer t
+  ;;   :init
+  ;;   (with-eval-after-load 'ivy-rich
+  ;;     (all-the-icons-ivy-rich-mode 1)
+  ;;     (with-eval-after-load 'counsel-project
+  ;;       (ivy-rich-reload))))
 #+end_src
