@@ -1,6 +1,31 @@
 #+begin_src elisp
   (use-package org-agenda
     :defer t
+    :preface
+    (defun org-agenda-log-mode-colorize-block ()
+      "Set different line spacing based on clock time duration."
+      (save-excursion
+        (let* ((colors (cl-case (alist-get 'background-mode (frame-parameters))
+                         ('light
+                          (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))
+                         ('dark
+                          (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))))
+               pos
+               duration)
+          (nconc colors colors)
+          (goto-char (point-min))
+          (while (setq pos (next-single-property-change (point) 'duration))
+            (goto-char pos)
+            (when (and (not (equal pos (point-at-eol)))
+                      (setq duration (org-get-at-bol 'duration)))
+              ;; larger duration bar height
+              (let ((line-height (if (< duration 15) 1.0 (+ 0.5 (/ duration 30))))
+                    (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
+                (overlay-put ov 'face `(:background ,(car colors) :foreground "black"))
+                (setq colors (cdr colors))
+                (overlay-put ov 'line-height line-height)
+                (overlay-put ov 'line-spacing (1- line-height))))))))
+    :hook ((org-agenda-finalize . org-agenda-log-mode-colorize-block))
     :config
     (gsetq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
     (gsetq
