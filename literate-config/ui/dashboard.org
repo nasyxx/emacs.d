@@ -23,11 +23,6 @@
            dashboard-set-init-info     t
            show-week-agenda-p          t
            dashboard-set-navigator     t
-           dashboard-items '((recents   . 10)
-                             (bookmarks . 5)
-                             ;; (registers . 5 )
-                             (agenda    . 5)
-                             (projects  . 10))
            dashboard-org-agenda-categories '("Calendar" "Tasks" "Appointments"))
     (setq dashboard-navigator-buttons
           `(;; line1
@@ -48,7 +43,6 @@
               "Document"
               "Document Page"
               (lambda (&rest _) (browse-url "https://emacs.nasy.moe/"))))))
-    (dashboard-setup-startup-hook)
     (defun nasy/dashboard-refresh ()
       "Refresh dashboard buffer."
       (interactive)
@@ -56,6 +50,12 @@
         (generate-new-buffer "*dashboard*"))
       (dashboard-refresh-buffer))
     :config
+    (dashboard-setup-startup-hook)
+    (gsetq dashboard-items '((recents   . 10)
+                             (bookmarks . 5)
+                             ;; (registers . 5 )
+                             ;; (agenda    . 5)
+                             (projects  . 10)))
     (advice-add 'dashboard-next-line :after #'(lambda (&rest r) (forward-char 2)))
     (advice-add 'widget-forward :after #'(lambda (&rest r) (forward-char 2))))
 #+end_src
