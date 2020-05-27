@@ -14,7 +14,7 @@
   (straight-use-package 'color-identifiers-mode)
   (use-package color-identifiers-mode
     :defer t
-    :hook ((prog-mode . color-identifiers-mode)))
+    :ghook prog-mode-hook)
 #+end_src
 
 * hl-line
