@@ -55,16 +55,16 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
        (progn
          (end-of-line 1)
          (while (and (or (python-nav-beginning-of-defun)
-                      (beginning-of-line 1))
-                   (> (current-indentation) 0)))
+                         (beginning-of-line 1))
+                     (> (current-indentation) 0)))
          (when (not arg)
            (while (and (forward-line -1)
-                     (looking-at (python-rx decorator))))
+                       (looking-at (python-rx decorator))))
            (forward-line 1))
          (point-marker)
          (progn
            (or (python-nav-end-of-defun)
-              (end-of-line 1))
+               (end-of-line 1))
            (point-marker)))))
 
     (defun nasy/python-switch-to-shell ()
@@ -128,7 +128,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
              lsp-pyls-plugins-autopep8-enabled           t
              lsp-pyls-plugins-yapf-enabled               nil
              lsp-pyls-plugins-flake8-enabled             nil))
-    :hook ((python-mode . start-lsp-pyls))
+    :hook ((python-mode . start-lsp-pyls)
            (after-init  . python-flycheck-setup))
 
     :config
