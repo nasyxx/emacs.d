@@ -57,17 +57,7 @@
       (`(t . t)
        (treemacs-git-mode 'deferred))
       (`(t . _)
-       (treemacs-git-mode 'simple)))
-    (general-define-key
-     "M-0" 'treemacs-select-window)
-    (general-define-key
-     :prefix "C-c t"
-     "1"   'treemacs-delete-other-windows
-     "t"   'treemacs
-     "B"   'treemacs-bookmark
-     "C-t" 'treemacs-find-file
-     "M-t" 'treemacs-find-tag))
-
+       (treemacs-git-mode 'simple))))
 
   (straight-use-package 'treemacs-projectile)
   (straight-use-package 'treemacs-icons-dired)

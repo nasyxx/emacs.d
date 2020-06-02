@@ -119,3 +119,14 @@
    "f" "file" "Nasy file keymap")
 #+end_src
 
+* Treemacs
+
+#+begin_src elisp
+  (n/map
+   "t" "n-treemacs" "Nasy treemacs keymap"
+   "1" #'treemacs-delete-other-windows
+   "t" #'treemacs
+   "B" #'treemacs-bookmark
+   "f" #'treemacs-find-file
+   "T" #'treemacs-find-tag)
+#+end_src
