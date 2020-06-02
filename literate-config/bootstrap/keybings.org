@@ -45,7 +45,7 @@
     :prefix-map 'nasy-map)
 
 
-  (defmacro n/map! (key name desc &rest rest)
+  (defmacro n/map (key name desc &rest rest)
     "Nasy keymap define macro."
     (let ((n/name (format "nasy/%s" name)))
       (let ((keymap (intern (concat n/name "-map")))
@@ -61,7 +61,7 @@
 * code map
 
 #+begin_src elisp
-  (n/map!
+  (n/map
    "c" "code" "Nasy code keymap"
    "c" #'compile
    "C" #'recompile
@@ -85,13 +85,6 @@
          #'helm-ivy-global-workspace-symbol)))
 #+end_src
 
-* file map
-
-#+begin_src elisp
-  (n/map!
-   "f" "file" "Nasy file keymap")
-#+end_src
-
 * Company
 
 #+begin_src elisp
@@ -107,7 +100,7 @@
    "C-S-h"      #'company-show-doc-buffer
    "C-s"        #'company-search-candidates
    "M-s"        #'company-filter-candidates
-   [C-tab]      #'company-complete
+   [C-tab]      #'nasy/company-complete
    [tab]        #'company-complete-common-or-cycle
    [backtab]    #'company-select-previous
    [C-return]   #'counsel-company)
@@ -118,3 +111,11 @@
    "C-p"        #'company-search-repeat-backward
    "C-s"        (λ! (company-search-abort) (company-filter-candidates)))
 #+end_src
+
+* file map
+
+#+begin_src elisp
+  (n/map
+   "f" "file" "Nasy file keymap")
+#+end_src
+
