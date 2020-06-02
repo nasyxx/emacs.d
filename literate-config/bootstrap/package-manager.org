@@ -2,6 +2,8 @@ I use [[https://github.com/raxod502/straight.el][straight.el]] as my packages ma
 
 https://github.com/raxod502/straight.el
 
+At the same time, I use [[https://github.com/jwiegley/use-package][use-package]] to manage packages' loading.
+
 #+begin_src elisp
   (setq straight-recipes-gnu-elpa-use-mirror    t
         straight-repository-branch              "develop"
@@ -23,6 +25,8 @@ https://github.com/raxod502/straight.el
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
 
+  (straight-use-package 'use-package)
+
   (defmacro use-feature (name &rest args)
     "Like `use-package', but with `straight-use-package-by-default' disabled.
   NAME and ARGS are as in `use-package'."
@@ -36,10 +40,4 @@ https://github.com/raxod502/straight.el
   (use-feature straight-x
     ;; Add an autoload for this extremely useful command.
     :commands (straight-x-fetch-all))
-#+end_src
-
-At the same time, I use [[https://github.com/jwiegley/use-package][use-package]] to manage packages' loading.
-
-#+begin_src elisp
-  (straight-use-package 'use-package)
 #+end_src
