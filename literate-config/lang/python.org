@@ -81,12 +81,12 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
       "Add python checker for lsp-ui."
       (after! lsp-ui
         (flycheck-add-next-checker 'lsp              'python-flake8)
-        ;; flake8 already have python-mypy as the next checker
+        ;; flake8 already have python-mypy and python-pylint as the next checker
         ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
-        (flycheck-disable-checker 'python-pylint)))
+        (flycheck-remove-next-checker 'python-flake8 'python-pylint)))
 
     (defun start-lsp-pyls ()
-      "Start lsp-python-ms."
+      "Start lsp-pyls."
       (require 'lsp-pyls)
       (lsp-deferred))
 
@@ -120,7 +120,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     ;; [tool.black]
     ;; line-length = 79
     (after! lsp-pyls
-      (gsetq lsp-pyls-configuration-sources              ["pycodestyle" "pycodestyle" "pylint"]
+      (gsetq lsp-pyls-configuration-sources              ["pycodestyle" "pycodestyle"]
              lsp-pyls-plugins-pylint-enabled             nil
              lsp-pyls-plugins-pycodestyle-enabled        t
              lsp-pyls-plugins-pydocstyle-enabled         t
