@@ -220,6 +220,6 @@
   (use-package lsp-treemacs
     :commands lsp-treemacs-errors-list
     :config
-    (lsp-metals-treeview-enable t)
+    (lsp-treemacs-sync-mode t)
     (gsetq lsp-metals-treeview-show-when-views-received t))
 #+end_src
