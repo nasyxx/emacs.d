@@ -106,8 +106,8 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'string)
 
-  (defcustom *blacken* nil
-    "Whether to use blacken or not."
+  (defcustom *pyblack* nil
+    "Whether to use black to reformat python or not."
     :group 'nasy
     :type 'boolean)
 
@@ -250,7 +250,6 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 #+begin_src elisp
   (setq-default
    haskell-stylish-on-save nil
-   blacken-line-length     80
    lsp-rust-rls-command    '("rls"))
 #+end_src
 

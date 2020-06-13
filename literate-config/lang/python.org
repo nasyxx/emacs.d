@@ -5,7 +5,9 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
 #+begin_src elisp
   (let ((packages '(python-mode)))
     (dolist (package packages)
-          (straight-use-package package)))
+      (straight-use-package package)))
+  (when *pyblack*
+    (straight-use-package 'python-black))
 #+end_src
 
 * Python Mode
@@ -132,7 +134,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
            (after-init  . python-flycheck-setup))
 
     :config
-    (unless *blacken*
+    (unless *pyblack*
       (add-hook #'python-mode-hook
                 #'(lambda () (add-hook #'before-save-hook #'lsp-format-buffer nil t)))))
 #+end_src
@@ -208,12 +210,11 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
 #+begin_src elisp
   ;; Now you can use it in lsp.
   ;; NOTICE you have to config black though pyproject.toml.
-  (when *blacken*
-    (straight-use-package 'blacken)
-    (use-package blacken
-      :hook ((python-mode . blacken-mode))
-      :init (gsetq blacken-allow-py36  t
-                   blacken-line-length nil)))
+  (when *pyblack*
+    (use-package python-black
+      :hook ((python-mode . python-black-on-save-mode))
+      :init (gsetq python-black-extra-args
+                   '("--line-length" "79" "-t" "py38"))))
 #+end_src
 
 * py-isort
