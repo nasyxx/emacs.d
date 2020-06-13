@@ -31,10 +31,10 @@
         "    |  ______|______|______|______|______|______|_\n"
         "    |  ___|______|______|______|______|______|____\n\n"
         "author   : Nasy https://nasy.moe\n"
-        "date     : " (format-time-string "%b %e, %Y") \n
-        "email    : Nasy <nasyxx+python@gmail.com>" \n
-        "filename : " (file-name-nondirectory (buffer-file-name)) \n
-        "project  : " (file-name-nondirectory (directory-file-name (or projectile-project-root default-directory))) \n
+        "date     : " (format-time-string "%b %e, %Y") "\n"
+        "email    : Nasy <nasyxx+python@gmail.com>" "\n"
+        "filename : " (file-name-nondirectory (buffer-file-name)) "\n"
+        "project  : " (file-name-nondirectory (directory-file-name (or projectile-project-root default-directory))) "\n"
         "license  : GPL-3.0+\n\n"
         "At pick'd leisure\n"
         "  Which shall be shortly, single I'll resolve you,\n"
