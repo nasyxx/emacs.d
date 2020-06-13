@@ -203,7 +203,8 @@
            company-idle-delay                .2
            company-tooltip-idle-delay        .2
            company-require-match             'never)
-    :hook ((company-mode . nasy/company-init-backends-h))
+    :hook ((company-mode . nasy/company-init-backends-h)
+           (prog-mode    . company-mode))
     :bind (("M-/"     . company-files)
            ("M-C-/"   . nasy/company-complete)
            ("C-<tab>" . nasy/company-complete)
@@ -214,7 +215,6 @@
            ("C-n" . company-select-next)
            ("C-p" . company-select-previous))
     :config
-    (global-company-mode 1)
     (defvar nasy/prev-whitespace-mode nil)
     (make-variable-buffer-local 'nasy/prev-whitespace-mode)
     (defvar nasy/show-trailing-whitespace nil)
