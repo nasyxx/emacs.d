@@ -26,6 +26,12 @@
   properties:
   :definition FN
     Run when jumping to a symbol's definition. Used by `nasy/lookup/definition'.
+  :implementations FN
+    Run when looking for implementations of a symbol in the current project. Used
+    by `nasy/lookup/implementations'.
+  :type-definition FN
+    Run when jumping to a symbol's type definition. Used by
+    `nasy/lookup/type-definition'.
   :references FN
     Run when looking for usage references of a symbol in the current project. Used
     by `nasy/lookup/references'.
@@ -53,6 +59,7 @@
   change the current buffer or window or return non-nil when it succeeds.
   If it doesn't change the current buffer, or it returns nil, the lookup module
   will fall back to the next handler in `nasy/lookup-definition-functions',
+  `nasy/lookup-implementations-functions', `nasy/lookup-type-definition-functions',
   `nasy/lookup-references-functions', `nasy/lookup-file-functions' or
   `nasy/lookup-documentation-functions'.
   Consecutive `set-lookup-handlers!' calls will overwrite previously defined
@@ -60,35 +67,40 @@
   defined for other minor modes or the major mode it's activated in.
   This can be passed nil as its second argument to unset handlers for MODES. e.g.
     (set-lookup-handlers! 'python-mode nil)
-  \(fn MODES &key DEFINITION REFERENCES DOCUMENTATION FILE XREF-BACKEND ASYNC)"
+  \(fn MODES &key DEFINITION IMPLEMENTATIONS TYPE-DEFINITION REFERENCES DOCUMENTATION FILE XREF-BACKEND ASYNC)"
     (declare (indent defun))
     (dolist (mode (nasy-enlist modes))
       (let ((hook (intern (format "%s-hook" mode)))
             (fn   (intern (format "nasy/lookup--init-%s-handlers-h" mode))))
-        (cond ((null (car plist))
-               (remove-hook hook fn)
-               (unintern fn nil))
-              ((fset
-                fn
-                (lambda ()
-                  (cl-destructuring-bind (&key definition references documentation file xref-backend async)
-                      plist
-                    (cl-mapc #'nasy/lookup--set-handler
-                             (list definition
-                                   references
-                                   documentation
-                                   file
-                                   xref-backend)
-                             (list 'nasy/lookup-definition-functions
-                                   'nasy/lookup-references-functions
-                                   'nasy/lookup-documentation-functions
-                                   'nasy/lookup-file-functions
-                                   'xref-backend-functions)
-                             (make-list 5 async)
-                             (make-list 5 (or (eq major-mode mode)
-                                              (and (boundp mode)
-                                                   (symbol-value mode))))))))
-               (add-hook hook fn))))))
+        (if (null (car plist))
+            (progn
+              (remove-hook hook fn)
+              (unintern fn nil))
+          (fset
+           fn
+           (lambda ()
+             (cl-destructuring-bind (&key definition implementations type-definition references documentation file xref-backend async)
+                 plist
+               (cl-mapc #'nasy/lookup--set-handler
+                        (list definition
+                              implementations
+                              type-definition
+                              references
+                              documentation
+                              file
+                              xref-backend)
+                        (list 'nasy/lookup-definition-functions
+                              'nasy/lookup-implementations-functions
+                              'nasy/lookup-type-definition-functions
+                              'nasy/lookup-references-functions
+                              'nasy/lookup-documentation-functions
+                              'nasy/lookup-file-functions
+                              'xref-backend-functions)
+                        (make-list 5 async)
+                        (make-list 5 (or (eq major-mode mode)
+                                         (and (boundp mode)
+                                              (symbol-value mode))))))))
+          (add-hook hook fn)))))
 
 
   ;;
@@ -135,6 +147,8 @@
     (let* ((origin (point-marker))
            (handlers
             (plist-get (list :definition 'nasy/lookup-definition-functions
+                             :implementations 'nasy/lookup-implementations-functions
+                             :type-definition 'nasy/lookup-type-definition-functions
                              :references 'nasy/lookup-references-functions
                              :documentation 'nasy/lookup-documentation-functions
                              :file 'nasy/lookup-file-functions)
@@ -169,23 +183,25 @@
   ;;
   ;;; Lookup backends
 
-  (defun nasy/lookup--xref-show (fn identifier)
+  (defun nasy/lookup--xref-show (fn identifier &optional show-fn)
     (let ((xrefs (funcall fn
                           (xref-find-backend)
                           identifier)))
       (when xrefs
-        (xref--show-xrefs xrefs nil)
+        (funcall (or show-fn #'xref--show-defs)
+                 (lambda () xrefs)
+                 nil)
         (if (cdr xrefs)
             'deferred
           t))))
 
   (defun nasy/lookup-xref-definitions-backend-fn (identifier)
     "Non-interactive wrapper for `xref-find-definitions'"
-    (nasy/lookup--xref-show 'xref-backend-definitions identifier))
+    (nasy/lookup--xref-show 'xref-backend-definitions identifier xref--show-defs))
 
   (defun nasy/lookup-xref-references-backend-fn (identifier)
     "Non-interactive wrapper for `xref-find-references'"
-    (nasy/lookup--xref-show 'xref-backend-references identifier))
+    (nasy/lookup--xref-show 'xref-backend-references identifier xref--show-defs))
 
   (defun nasy/lookup-dumb-jump-backend-fn (_identifier)
     "Look up the symbol at point (or selection) with `dumb-jump', which conducts a
@@ -223,6 +239,28 @@
                        current-prefix-arg))
     (cond ((null identifier) (user-error "Nothing under point"))
           ((nasy/lookup--jump-to :definition identifier nil arg))
+          ((error "Couldn't find the definition of %S" identifier))))
+
+  ;;;###autoload
+  (defun nasy/lookup/implementations (identifier &optional arg)
+    "Jump to the implementations of IDENTIFIER (defaults to the symbol at point).
+  Each function in `nasy/lookup-implementations-functions' is tried until one changes
+  the point or current buffer."
+    (interactive (list (nasy/thing-at-point-or-region)
+                       current-prefix-arg))
+    (cond ((null identifier) (user-error "Nothing under point"))
+          ((nasy/lookup--jump-to :implementations identifier nil arg))
+          ((error "Couldn't find the implementations of %S" identifier))))
+
+  ;;;###autoload
+  (defun nasy/lookup/type-definition (identifier &optional arg)
+    "Jump to the type definition of IDENTIFIER (defaults to the symbol at point).
+  Each function in `nasy/lookup-type-definition-functions' is tried until one changes
+  the point or current buffer."
+    (interactive (list (nasy/thing-at-point-or-region)
+                       current-prefix-arg))
+    (cond ((null identifier) (user-error "Nothing under point"))
+          ((nasy/lookup--jump-to :type-definition identifier nil arg))
           ((error "Couldn't find the definition of %S" identifier))))
 
   ;;;###autoload
@@ -307,7 +345,7 @@
            current-prefix-arg))
     (message "Looking up synonyms for %S" identifier)
     (cond ((and nasy/lookup-dictionary-prefer-offline
-                (require 'synosaurus nil t))
+                (require 'synosaurus-wordnet nil t))
            (unless (executable-find synosaurus-wordnet--command)
              (user-error "Couldn't find %S installed on your system"
                          synosaurus-wordnet--command))
@@ -317,7 +355,7 @@
           ((user-error "No thesaurus backend is available"))))
 #+end_src
 
-* Config
+* Configs
 
 #+begin_src elisp
   (defvar nasy/lookup-definition-functions
@@ -327,6 +365,22 @@
     "Functions for `nasy/lookup/definition' to try, before resorting to `dumb-jump'.
   Stops at the first function to return non-nil or change the current
   window/point.
+  If the argument is interactive (satisfies `commandp'), it is called with
+  `call-interactively' (with no arguments). Otherwise, it is called with one
+  argument: the identifier at point. See `set-lookup-handlers!' about adding to
+  this list.")
+
+  (defvar nasy/lookup-implementations-functions ()
+    "Function for `nasy/lookup/implementations' to try. Stops at the first function to
+  return non-nil or change the current window/point.
+  If the argument is interactive (satisfies `commandp'), it is called with
+  `call-interactively' (with no arguments). Otherwise, it is called with one
+  argument: the identifier at point. See `set-lookup-handlers!' about adding to
+  this list.")
+
+  (defvar nasy/lookup-type-definition-functions ()
+    "Functions for `nasy/lookup/type-definition' to try. Stops at the first function to
+  return non-nil or change the current window/point.
   If the argument is interactive (satisfies `commandp'), it is called with
   `call-interactively' (with no arguments). Otherwise, it is called with one
   argument: the identifier at point. See `set-lookup-handlers!' about adding to
@@ -395,15 +449,18 @@
    [remap xref-find-definitions] #'nasy/lookup/definition
    [remap xref-find-references]  #'nasy/lookup/references)
 
-  (after! xref
+  (after-x xref
     ;; We already have `projectile-find-tag' and `evil-jump-to-tag', no need for
     ;; xref to be one too.
     (remove-hook 'xref-backend-functions #'etags--xref-backend)
     ;; ...however, it breaks `projectile-find-tag', unless we put it back.
-    (defadvice! nasy/lookup--projectile-find-tag-a (orig-fn)
-      :around #'projectile-find-tag
+    (defun nasy/lookup--projectile-find-tag-a (orig-fn)
+      "Fix it back advice."
       (let ((xref-backend-functions '(etags--xref-backend t)))
-        (funcall orig-fn))))
+        (funcall orig-fn)))
+    (advice-add
+     #'projectile-find-tag :around
+     #'nasy/lookup--projectile-find-tag-a))
 #+end_src
 
 ** Dictionary
