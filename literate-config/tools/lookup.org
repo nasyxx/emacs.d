@@ -433,7 +433,8 @@
     :commands dumb-jump-result-follow
     :hook ((dumb-jump-after-jump . better-jumper-set-jump))
     :config
-    (gsetq dumb-jump-aggressive nil
+    (gsetq dumb-jump-prefer-searcher 'rg
+           dumb-jump-aggressive nil
            dumb-jump-selector   'ivy))
 #+end_src
 
