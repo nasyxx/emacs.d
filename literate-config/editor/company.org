@@ -254,7 +254,7 @@
     :bind (:map company-active-map
                 ("C-c h" . company-quickhelp-manual-begin))
     :config
-    (after-load-x 'company
+    (after-x 'company
                   (company-quickhelp-mode))
     (gsetq pos-tip-use-relative-coordinates t))
 #+end_src
@@ -269,7 +269,7 @@
 * Company Flx
 
 #+begin_src elisp
-  (after-load-x 'company
+  (after-x 'company
     (company-flx-mode +1))
 #+end_src
 
@@ -290,7 +290,7 @@
                    (delq 'company-box-icons--elisp
                          company-box-icons-functions)))
 
-      (after-load-x 'all-the-icons
+      (after-x 'all-the-icons
         (gsetq
          company-box-icons-all-the-icons
          (let ((all-the-icons-scale-factor 0.8))

@@ -56,7 +56,7 @@
        (tags   . " %i %+15c\t")
        (search . " %i %+15c\t")))
 
-    (after-load-x 'all-the-icons
+    (after-x 'all-the-icons
       (gsetq
        org-agenda-category-icon-alist
        `(("Tasks"        ,(list (all-the-icons-faicon  "tasks"            :height 0.8 :v-adjust 0)) nil nil :ascent center)

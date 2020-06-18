@@ -449,7 +449,7 @@
    [remap xref-find-definitions] #'nasy/lookup/definition
    [remap xref-find-references]  #'nasy/lookup/references)
 
-  (after-x xref
+  (after-x 'xref
     ;; We already have `projectile-find-tag' and `evil-jump-to-tag', no need for
     ;; xref to be one too.
     (remove-hook 'xref-backend-functions #'etags--xref-backend)

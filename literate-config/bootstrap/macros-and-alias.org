@@ -26,7 +26,7 @@ Useful Macros and Alias.
     (declare (indent 0))
     `(eval '(progn ,@body)))
 
-  (defmacro after-load-x (feature &rest body)
+  (defmacro after-x (feature &rest body)
     "Eval BODY afetr FEATURE have loaded."
     `(with-eval-after-load ,feature
        '(nasy/project-macros ,@body)))

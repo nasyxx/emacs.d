@@ -12,7 +12,7 @@ https://github.com/pashky/restclient.el
 
 #+begin_src elisp
   (straight-use-package 'restclient)
-  (after-load-x 'company
+  (after-x 'company
     (straight-use-package 'company-restclient))
   (straight-use-package 'ob-restclient)
 #+end_src
