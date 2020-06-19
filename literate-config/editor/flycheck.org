@@ -1,34 +1,46 @@
-#+begin_src elisp
-  (straight-use-package 'flycheck)
-  (straight-use-package 'flycheck-package)
+* Packages
 
+#+begin_src elisp
+  (nasy/s-u-p flycheck
+              flycheck-package)
+#+end_src
+
+* Autoloads
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun save-buffer-maybe-show-errors ()
+    "Save buffer and show errors if any."
+    (interactive)
+    (save-buffer)
+    (when (not flycheck-current-errors)
+      (flycheck-list-errors)))
+#+end_src
+
+* Configs
+
+#+begin_src elisp
   (use-package flycheck
-    :preface
-    (defun save-buffer-maybe-show-errors ()
-      "Save buffer and show errors if any."
-      (interactive)
-      (save-buffer)
-      (when (not flycheck-current-errors)
-        (flycheck-list-errors)))
     :commands (flycheck-mode
                flycheck-next-error
                flycheck-previous-error
-               flycheck-add-next-checker)
+               flycheck-add-next-checker
+               save-buffer-maybe-show-errors)
     ;; :bind (("C-x C-s" . save-buffer-maybe-show-errors))
-    :hook ((after-init . global-flycheck-mode))
+    :hook ((prog-mode . flycheck-mode))
     :init (gsetq flycheck-display-errors-function
                  #'flycheck-display-error-messages-unless-error-list
                  flycheck-check-syntax-automatically '(save idle-change mode-enabled)
                  flycheck-display-errors-delay       0.25)
-    :bind (:map flycheck-error-list-mode-map
-                ("C-n"    . flycheck-error-list-next-error)
-                ("C-p"    . flycheck-error-list-previous-error)
-                ("RET"    . flycheck-error-list-goto-error)
-                ([return] . flycheck-error-list-goto-error))
+    :general
+    (:keymaps 'flycheck-error-list-mode-map
+              ("C-n" flycheck-error-list-next-error)
+              ("C-p" flycheck-error-list-previous-error)
+              ("RET" flycheck-error-list-goto-error)
+              ([return]  flycheck-error-list-goto-error))
     :config (defalias 'show-error-at-point-soon
               'flycheck-show-error-at-point)
     (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space))
-
 
   (use-package flycheck-package
     :after flycheck
