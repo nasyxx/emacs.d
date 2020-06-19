@@ -3,6 +3,7 @@ Some of them borrowed from doom emacs.
 * Default
 
 #+begin_src elisp
+  ;;;###autoload
   (defun nasy/lsp-format-region-or-buffer ()
     "Format the buffer (or selection) with LSP."
     (interactive)
