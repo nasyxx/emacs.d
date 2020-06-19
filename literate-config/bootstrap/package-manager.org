@@ -40,4 +40,9 @@ At the same time, I use [[https://github.com/jwiegley/use-package][use-package]]
   (use-feature straight-x
     ;; Add an autoload for this extremely useful command.
     :commands (straight-x-fetch-all))
+
+  (defmacro nasy/s-u-p (&rest packages)
+    "Straight use multiple PACKAGES."
+    `(dolist (package ',packages)
+       (straight-use-package package)))
 #+end_src
