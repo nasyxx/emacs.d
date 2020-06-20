@@ -34,10 +34,10 @@
                  flycheck-display-errors-delay       0.25)
     :general
     (:keymaps 'flycheck-error-list-mode-map
-              ("C-n" flycheck-error-list-next-error)
-              ("C-p" flycheck-error-list-previous-error)
-              ("RET" flycheck-error-list-goto-error)
-              ([return]  flycheck-error-list-goto-error))
+              "C-n" #'flycheck-error-list-next-error
+              "C-p" #'flycheck-error-list-previous-error
+              "RET" #'flycheck-error-list-goto-error
+              [return]  #'flycheck-error-list-goto-error)
     :config (defalias 'show-error-at-point-soon
               'flycheck-show-error-at-point)
     (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space))
