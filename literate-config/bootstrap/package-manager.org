@@ -43,6 +43,13 @@ At the same time, I use [[https://github.com/jwiegley/use-package][use-package]]
 
   (defmacro nasy/s-u-p (&rest packages)
     "Straight use multiple PACKAGES."
-    `(dolist (package ',packages)
-       (straight-use-package package)))
+    (unless (null packages)
+      (let* ((package (car packages))
+             (rest    (cdr packages))
+             (q-p     (boundp package)))
+        `(progn
+           (if ,q-p
+               (straight-use-package ,package)
+             (straight-use-package ',package))
+           (nasy/s-u-p ,@rest)))))
 #+end_src
