@@ -59,10 +59,14 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     :group 'nasy
     :type 'string)
 
-  (defcustom *eldoc-box* nil
-    "Whether to use eloc-box or not."
-    :group 'nasy
-    :type 'boolean)
+  (defvar *eldoc-use* 'eldoc-overlay
+    "Use eldoc-box, eldoc-overlay or not.
+
+  nil means use default.
+
+  box means use eldoc-box.
+
+  overlay means use eldoc-overlay.")
 
   (defcustom *nix* nil
     "Nix path.  If nil, will not use nix."

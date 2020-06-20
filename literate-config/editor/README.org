@@ -6,6 +6,12 @@ Here is the editor config, including some features and functions.
   ;;----------------------------------------------------------------------------
 #+end_src
 
+* Packages
+
+#+begin_src elisp
+  (nasy/s-u-p *eldoc-use* prescient quick-peek)
+#+end_src
+
 * Diminish
 
 #+begin_src elisp
@@ -148,16 +154,27 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
   (straight-use-package 'thingopt)
 #+end_src
 
-* Eldoc Box
+* Eldoc
+
+** eldoc overlay
+
+#+begin_src elisp
+  (use-package eldoc-overlay
+    :if (eq *eldoc-use* 'eldoc-overlay)
+    :defer t
+    :ghook 'eldoc-mode-hook)
+#+end_src
+
+** eldoc box
 
 Disabled by default due to it causes lots of cpu.
 
 #+begin_src elisp
-  (when *eldoc-box*
-    (straight-use-package 'eldoc-box)
-    (use-package eldoc-box
-      :hook ((eldoc-mode . eldoc-box-hover-mode)
-             (eldoc-mode . eldoc-box-hover-at-point-mode))))
+  (use-package eldoc-box
+    :if (eq *eldoc-use* 'eldoc-box)
+    :defer t
+    :hook ((eldoc-mode . eldoc-box-hover-mode)
+           (eldoc-mode . eldoc-box-hover-at-point-mode)))
 #+end_src
 
 * Expand Region
@@ -505,10 +522,26 @@ Now enabled.
 https://github.com/raxod502/prescient.el
 
 #+begin_src elisp
-  (straight-use-package 'prescient)
   (use-package prescient
     :defer t
     :hook ((after-init . prescient-persist-mode)))
+#+end_src
+
+* Quick Peek
+
+An inline pop-up library for Emacs Lisp.
+
+https://github.com/cpitclaudel/quick-peek
+
+#+begin_src elisp
+  (use-package quick-peek
+    :defer t
+    :config
+    (set-face-attribute 'quick-peek-border-face nil
+                        :background "#75b79e"
+                        :height 0.1)
+    (set-face-attribute 'quick-peek-padding-face nil
+                        :height 0.1))
 #+end_src
 
 * Recentf
