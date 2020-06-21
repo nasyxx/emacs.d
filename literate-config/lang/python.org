@@ -105,9 +105,9 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
   (use-package elpy
     :if (eq *py-module* 'elpy)
     :defer t
-    :ghook 'python-mode-hook
     :init
     (gsetq elpy-rpc-virtualenv-path 'current)
+    (advice-add 'python-mode :before 'elpy-enable)
     :config
     (gsetq elpy-modules '(elpy-module-autodoc
                           elpy-module-company
@@ -118,6 +118,13 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     (nasy/add-company-backend 'python-mode '(elpy-company-backend
                                              company-files
                                              :with company-tabnine company-yasnippet))
+
+    (set-lookup-handlers! 'python-mode :async t
+        :documentation #'elpy-doc
+        :definition #'elpy-goto-definition
+        :implementations #'elpy-goto-assignment
+        :references #'xref-find-references)
+
     (advice-add
      'elpy-module-folding :after
      #'(lambda (&rest _)
