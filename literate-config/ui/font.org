@@ -80,5 +80,5 @@ But disabled for it's tooo slow.
                     :weight *font-weight-cjk*
                     :size   *font-size-cjk*)))))
 
-  (nasy/set-font)
+  (add-hook #'after-init-hook #'nasy/set-font)
 #+end_src
