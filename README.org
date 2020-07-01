@@ -109,7 +109,7 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
    ,*theme*                  'doom-vibrant
    ,*debug*                  t
    ,*struct-hs*              nil
-   ;;*vterm*                  "/Users/Nasy/src/emacs-libvterm"
+   ;;*vterm*                  t
    ,*risky-var*              nil
    ,*dvorak*                 nil
    ,*dvorak-trans*           nil

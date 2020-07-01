@@ -115,18 +115,15 @@
               (apply fn args)))
 
     (advice-add 'projectile-find-file :around 'call-with-quick-shell-command)
-    :init (gsetq shell-command-switch "-ic")
+    :init (gsetq shell-command-switch "-ic"
+                 shell-file-name      "zsh")
     :config
-    (when nil (message "PATH: %s, INFO: %s" (getenv "PATH")
-                       (getenv "ENVIRONMENT_SETUP_DONE"))
-          (setq exec-path-from-shell-debug t))
-    (gsetq exec-path-from-shell-arguments (list "-l")
+    ;; (when nil (message "PATH: %s, INFO: %s" (getenv "PATH")
+    ;;                    (getenv "ENVIRONMENT_SETUP_DONE"))
+    ;;       (setq exec-path-from-shell-debug t))
+    (gsetq exec-path-from-shell-arguments nil
            exec-path-from-shell-check-startup-files nil)
     (add-to-list 'exec-path-from-shell-variables "SHELL")
-    (add-to-list 'exec-path-from-shell-variables "GOPATH")
-    (add-to-list 'exec-path-from-shell-variables "ENVIRONMENT_SETUP_DONE")
-    (add-to-list 'exec-path-from-shell-variables "PYTHONPATH")
-    (add-to-list 'exec-path-from-shell-variables "PKG_CONFIG_PATH")
     (exec-path-from-shell-initialize)
     (add-to-list 'exec-path "~/.pyenv/shims/"))
 #+end_src
@@ -144,8 +141,5 @@ https://github.com/akermu/emacs-libvterm
 
 #+begin_src elisp
   (when *vterm*
-    (progn
-      (add-to-list 'load-path *vterm*)
-      (let (vterm-install)
-        (require 'vterm))))
+    (straight-use-package 'vterm))
 #+end_src
