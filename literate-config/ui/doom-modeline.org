@@ -106,12 +106,12 @@
     (set-face-attribute 'mode-line nil
                         :font (font-spec :name   "spot mono"
                                          :weight 'normal
-                                         :size   14)
+                                         :size   15)
                         :background "#2d334a")
     (set-face-attribute 'mode-line-inactive nil
                         :font (font-spec :name   "spot mono"
                                          :weight 'normal
-                                         :size   14)))
+                                         :size   15)))
 
 
 #+end_src
