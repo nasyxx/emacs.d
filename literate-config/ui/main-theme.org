@@ -7,11 +7,11 @@
                  doom-dracula-colorful-headers  t
                  doom-dracula-comment-bg        t)
     :config
-    (after! treemacs
+    (after-x 'treemacs
       (doom-themes-treemacs-config)
       (gsetq doom-themes-treemacs-theme "doom-colors"))
     (doom-themes-visual-bell-config)
-    (after! org
+    (after-x 'org
       (doom-themes-org-config)))
 #+end_src
 
@@ -35,5 +35,5 @@
 * Load Theme
 
 #+begin_src elisp
-  (load-theme *theme* t)
+  (add-hook #'after-init-hook #'(lambda () (load-theme *theme* t)))
 #+end_src
