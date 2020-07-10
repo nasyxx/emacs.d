@@ -1,13 +1,15 @@
 * Packages
 
 #+begin_src elisp
-  (straight-use-package 'prescient)
-  (straight-use-package 'company-prescient)
-  (straight-use-package 'company-quickhelp)
-  (straight-use-package 'company-tabnine)
-  (straight-use-package 'company-math)
-  (straight-use-package 'company-dict)
-  (straight-use-package 'company-flx)
+  (nasy/s-u-p
+   company
+   company-dict
+   company-flx
+   company-math
+   company-prescient
+   company-quickhelp
+   company-tabnine
+   prescient)
   (when *c-box*
     (straight-use-package 'company-box))
 #+end_src
@@ -104,7 +106,6 @@
 ** Company Mode
 
 #+begin_src elisp
-  (straight-use-package 'company)
   (use-package company
     :defer t
     :commands (nasy/company-backends
@@ -188,7 +189,6 @@
 
     :init
     (add-to-list 'completion-styles 'initials t)
-    (setq company-backends '(company-capf))
     (gsetq company-tooltip-limit             10
            company-dabbrev-downcase          nil
            company-dabbrev-ignore-case       t
@@ -215,6 +215,7 @@
            ("C-n" . company-select-next)
            ("C-p" . company-select-previous))
     :config
+    (setq company-backends '(company-capf))
     (defvar nasy/prev-whitespace-mode nil)
     (make-variable-buffer-local 'nasy/prev-whitespace-mode)
     (defvar nasy/show-trailing-whitespace nil)
