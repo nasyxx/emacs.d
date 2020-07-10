@@ -1,29 +1,32 @@
-* Lookup
-
-#+include: "lookup.org"
-
-* restclient.el
-
-HTTP REST client tool for emacs
-
-https://github.com/pashky/restclient.el
-
-** Packages
+* Packages
 
 #+begin_src elisp
+  (nasy/s-u-p all-the-icons)
   (straight-use-package 'restclient)
   (after-x 'company
     (straight-use-package 'company-restclient))
   (straight-use-package 'ob-restclient)
 #+end_src
 
-** Configs
+* Configs
+
+** Emojify and all-the-icons
 
 #+begin_src elisp
-  (use-package restclient
-    :defer t
-    :init
-    (nasy/add-company-backend
-      'restclient-mode
-      '(company-restclient company-files)))
+  (when (version< emacs-version "27")
+    (straight-use-package 'emojify)
+    (use-package emojify
+      :commands emojify-mode
+      :hook ((after-init . global-emojify-mode))
+      :init (gsetq emojify-emoji-styles '(unicode github)
+                   emojify-display-style 'unicode)))
+
+  (use-package all-the-icons
+    :init (gsetq inhibit-compacting-font-caches t))
 #+end_src
+
+
+
+** Lookup
+
+#+include: "lookup.org"
