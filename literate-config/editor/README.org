@@ -9,8 +9,23 @@ Here is the editor config, including some features and functions.
 * Packages
 
 #+begin_src elisp
-  (nasy/s-u-p *eldoc-use* prescient quick-peek)
+  (nasy/s-u-p *eldoc-use*
+              prescient
+              quick-peek
+              which-key)
+
+  (straight-use-package
+   '(tree-sitter :host github
+                 :repo "ubolonton/emacs-tree-sitter"
+                 :files ("lisp/*.el")))
+
+  (straight-use-package
+   '(tree-sitter-langs :host github
+                       :repo "ubolonton/emacs-tree-sitter"
+                       :files ("langs/*.el" "langs/queries")))
 #+end_src
+
+* Configs
 
 * Diminish
 
@@ -619,20 +634,6 @@ system.
 
 https://ubolonton.github.io/emacs-tree-sitter/
 
-** Packages
-#+begin_src elisp
-  (straight-use-package
-   '(tree-sitter :host github
-                 :repo "ubolonton/emacs-tree-sitter"
-                 :files ("lisp/*.el")))
-
-  (straight-use-package
-   '(tree-sitter-langs :host github
-                       :repo "ubolonton/emacs-tree-sitter"
-                       :files ("langs/*.el" "langs/queries")))
-#+end_src
-
-** Configs
 
 #+begin_src elisp
   (use-package tree-sitter
@@ -694,8 +695,8 @@ https://ubolonton.github.io/emacs-tree-sitter/
 * Which Key
 
 #+begin_src elisp
-  (straight-use-package 'which-key)
   (use-package which-key
+    :init (gsetq which-key-allow-imprecise-window-fit nil)
     :ghook 'after-init-hook)
 #+end_src
 
