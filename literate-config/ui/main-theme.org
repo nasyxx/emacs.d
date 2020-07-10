@@ -35,5 +35,9 @@
 * Load Theme
 
 #+begin_src elisp
-  (add-hook #'after-init-hook #'(lambda () (load-theme *theme* t)))
+  (defun nasy/load-theme ()
+    "Nasy load theme function"
+    (load-theme *theme* t))
+
+  (add-hook #'after-init-hook #'nasy/load-theme)
 #+end_src
