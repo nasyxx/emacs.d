@@ -4,45 +4,52 @@
   ;;----------------------------------------------------------------------------
 #+end_src
 
-* English
+* Packages
+
+#+begin_src elisp
+  (nasy/s-u-p
+   company-restclient
+   elvish-mode
+   fish-completion
+   fish-mode
+   markdown-mode
+   ob-elvish
+   ob-restclient
+   pandoc-mode
+   restclient
+   toml-mode
+   yaml-mode)
+
+  (when *rust*
+    (nasy/s-u-p cargo rust-mode))
+#+end_src
+
+* Configs
+
+** English
 
 #+include: "english.org"
 
-* Simple Supported Languages
-
-#+begin_src elisp
-  (let ((languages '(elvish-mode
-                     fish-mode
-                     toml-mode
-                     yaml-mode))
-        (extras    '(fish-completion
-                     ob-elvish)))
-    (dolist (language languages)
-      (straight-use-package language))
-    (dolist (extra extras)
-      (straight-use-package extra)))
-#+end_src
-
-* Language Server Protocol & Debug Adapter Protocol
+** Language Server Protocol & Debug Adapter Protocol
 
 #+include: "lsp-dap.org"
 
-* C/C++/Object-C (Clangd or ccls)
+** C/C++/Object-C (Clangd or ccls)
 
 #+include: "c.org"
 
-* Haskell
+** Haskell
 
 #+include: "haskell.org"
 
-* HTML
+** HTML
 
 #+begin_src elisp
   (use-package lsp-html
     :hook ((html-mode . lsp-deferred)))
 #+end_src
 
-* JavaScript & TypeScript
+** JavaScript & TypeScript
 
 #+begin_src elisp
   (use-package lsp-mode
@@ -50,14 +57,13 @@
     :hook ((javascript-mode . lsp-deferred)))
 #+end_src
 
-* Lisp
+** Lisp
 
 #+include: "lisp.org"
 
-* Markdown
+** Markdown
 
 #+begin_src elisp
-  (straight-use-package 'markdown-mode)
   (use-package markdown-mode
     :defer t
     :mode ("INSTALL\\'"
@@ -68,24 +74,31 @@
            "\\.md\\'"))
 #+end_src
 
-* Pandoc
-
-#+begin_src elisp
-  (straight-use-package 'pandoc-mode)
-#+end_src
-
-* Python
+** Python
 
 #+include: "python.org"
 
-* Rust
+** restclient.el
+
+HTTP REST client tool for emacs
+
+https://github.com/pashky/restclient.el
+
+#+begin_src elisp
+  (use-package restclient
+    :defer t
+    :init
+    (nasy/add-company-backend
+      'restclient-mode
+      '(company-restclient company-files)))
+#+end_src
+
+** Rust
 
 Include rust-mode, rls and Cargo.
 
 #+begin_src elisp
   (when *rust*
-    (straight-use-package 'rust-mode)
-    (straight-use-package 'cargo)
     (use-package rust-mode
       :defer t
       :hook ((rust-mode . (lambda () (setq-local tab-width 4)))
@@ -100,7 +113,7 @@ Include rust-mode, rls and Cargo.
              (rust-mode . cargo-minor-mode))))
 #+end_src
 
-* Yaml
+** Yaml
 
 #+begin_src elisp
   (use-package lsp-yaml
