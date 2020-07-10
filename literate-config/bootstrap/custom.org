@@ -22,29 +22,11 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
     "Nasy Emacs Custom Configurations."
     :group 'emacs)
 
-  (defcustom lisp-modes-hooks '(cider-repl-mode-hook
-                                clojure-mode-hook
-                                clojurec-mode-hook
-                                clojurescript-mode-hook
-                                clojurex-mode-hook
-                                common-lisp-mode-hook
+  (defcustom lisp-modes-hooks '(common-lisp-mode-hook
                                 emacs-lisp-mode-hook
-                                eshell-mode-hook
-                                geiser-repl-mode-hook
-                                gerbil-mode-hook
-                                inf-clojure-mode-hook
-                                inferior-emacs-lisp-mode-hook
-                                inferior-lisp-mode-hook
-                                inferior-scheme-mode-hook
-                                lisp-interaction-mode-hook
                                 lisp-mode-hook
-                                monroe-mode-hook
                                 racket-mode-hook
-                                racket-repl-mode-hook
-                                scheme-interaction-mode-hook
-                                scheme-mode-hook
-                                slime-repl-mode-hook
-                                stumpwm-mode-hook)
+                                scheme-mode-hook)
     "List of lisp-related modes hooks."
     :type '(repeat symbol)
     :group 'nasy)
