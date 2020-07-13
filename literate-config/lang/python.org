@@ -106,6 +106,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     :if (eq *py-module* 'elpy)
     :defer t
     :init
+    ;; (add-to-list 'exec-path "/Users/Nasy/Library/Python/3.7/bin")
     (gsetq elpy-rpc-virtualenv-path 'current)
     (advice-add 'python-mode :before 'elpy-enable)
     :config
