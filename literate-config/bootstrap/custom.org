@@ -50,6 +50,9 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
 
   overlay means use eldoc-overlay.")
 
+  (defvar *flycheck-inline* t
+    "Use flycheck-inline or not.")
+
   (defcustom *nix* nil
     "Nix path.  If nil, will not use nix."
     :group 'nasy
