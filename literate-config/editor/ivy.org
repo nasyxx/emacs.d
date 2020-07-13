@@ -626,15 +626,12 @@ Some of them borrowed from doom-emacs
 ** icons and rich
 
 #+begin_src elisp
-  (defun nasy/--ivy-rich-load ()
-    (all-the-icons-ivy-rich-mode 1))
-
   (use-package all-the-icons-ivy-rich
     :defer t
     :init
     (gsetq all-the-icons-ivy-rich-icon-size 0.7)
     (all-the-icons-ivy-rich-mode 1)
-    (advice-add #'counsel-M-x :before #'nasy/--ivy-rich-load))
+    (advice-add #'counsel-M-x :before #'all-the-icons-ivy-rich-reload))
 
   (use-package ivy-rich
     :defer t
