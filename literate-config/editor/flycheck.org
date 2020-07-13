@@ -3,6 +3,9 @@
 #+begin_src elisp
   (nasy/s-u-p flycheck
               flycheck-package)
+  (when *flycheck-inline*
+    (nasy/s-u-p quick-peek
+                flycheck-inline))
 #+end_src
 
 * Autoloads
@@ -47,4 +50,20 @@
     :init
     (after! elisp-mode
       (flycheck-package-setup)))
+
+  (use-package flycheck-inline
+    :defer t
+    :preface
+    (defun nasy/flycheck-inline-init ()
+      "Flycheck-inline-mode init function"
+      (gsetq flycheck-inline-display-function
+             (lambda (msg pos)
+               (let* ((ov (quick-peek-overlay-ensure-at pos))
+                      (contents (quick-peek-overlay-contents ov)))
+                 (setf (quick-peek-overlay-contents ov)
+                       (concat contents (when contents "\n") msg))
+                 (quick-peek-update ov)))
+             flycheck-inline-clear-function #'quick-peek-hide))
+    :ghook 'flycheck-mode-hook
+    :gfhook 'nasy/flycheck-inline-init)
 #+end_src
