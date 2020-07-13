@@ -11,7 +11,7 @@
       (doom-themes-treemacs-config)
       (gsetq doom-themes-treemacs-theme "doom-colors"))
     (doom-themes-visual-bell-config)
-    (after-x 'org
+    (after-x 'org-mode
       (doom-themes-org-config)))
 #+end_src
 
