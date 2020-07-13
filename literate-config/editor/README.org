@@ -9,10 +9,12 @@ Here is the editor config, including some features and functions.
 * Packages
 
 #+begin_src elisp
-  (nasy/s-u-p *eldoc-use*
-              prescient
+  (nasy/s-u-p prescient
               quick-peek
               which-key)
+
+  (when *eldoc-use*
+    (nasy/s-u-p *eldoc-use*))
 
   (straight-use-package
    '(tree-sitter :host github
