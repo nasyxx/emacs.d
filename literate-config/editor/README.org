@@ -8,13 +8,27 @@ Here is the editor config, including some features and functions.
 
 * Packages
 
+Packages list
+
++ anzu
++ avy
++ diminish
++ explain-pause-mode
++ flx
++ prescient
++ quick-peek
++ tree-sitter
++ which-key
+
 #+begin_src elisp
   (straight-register-package
    '(tree-sitter :host github
                  :repo "ubolonton/emacs-tree-sitter"
                  :files ("lisp/*.el" "langs/*.el" "langs/queries")))
 
-  (nasy/s-u-p explain-pause-mode
+  (nasy/s-u-p anzu avy diminish
+              explain-pause-mode
+              flx
               prescient
               quick-peek
               tree-sitter
@@ -26,42 +40,22 @@ Here is the editor config, including some features and functions.
 
 * Configs
 
-* Diminish
+** Anzu
 
 #+begin_src elisp
-  (straight-use-package 'diminish)
-#+end_src
-
-* FLX
-
-#+begin_src elisp
-  (straight-use-package 'flx)
-#+end_src
-
-* Advance Words Count
-
-#+begin_src elisp
-  (straight-use-package '(advance-words-count :type git :host github :repo "LdBeth/advance-words-count.el"))
-#+end_src
-
-* Anzu
-
-#+begin_src elisp
-  (straight-use-package 'anzu)
   (use-package anzu
     :defer    t
     :hook ((after-init . global-anzu-mode))
     :bind ([remap query-replace] . anzu-query-replace-regexp))
 #+end_src
 
-* Auto Insert
+** Auto Insert
 
 #+include: "auto-insert.org"
 
-* Avy
+** Avy
 
 #+begin_src elisp
-  (straight-use-package 'avy)
   (use-package avy
     :defer t
     :init
@@ -77,8 +71,7 @@ Here is the editor config, including some features and functions.
       (gsetq avy-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s))))
 #+end_src
 
-
-* Beginend
+** Beginend
 
 #+begin_src elisp
   (straight-use-package 'beginend)
@@ -86,7 +79,7 @@ Here is the editor config, including some features and functions.
     :hook ((after-init . beginend-global-mode)))
 #+end_src
 
-* Better Jumper
+** Better Jumper
 
 A configurable jump list implementation for Emacs that can be used to easily
 jump back to previous locations.
@@ -104,13 +97,13 @@ https://github.com/gilbertw1/better-jumper
      [remap xref-pop-marker-stack] #'better-jumper-jump-backward))
 #+end_src
 
-* Carbon Now sh
+** Carbon Now sh
 
 Emacs to carbon.now.sh integration.
 
 https://github.com/veelenga/carbon-now-sh.el
 
-Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
+Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>@@
 
 #+begin_src elisp
   ;; Emacs to carbon.now.sh integration
@@ -119,33 +112,33 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
   (straight-use-package 'carbon-now-sh)
 #+end_src
 
-* Cheat Sh
+** Cheat Sh
 
 #+begin_src elisp
   (straight-use-package 'cheat-sh)
 #+end_src
 
-* Company
+** Company
 
 #+include: "company.org"
 
-* Dash
+** Dash
 
 #+begin_src elisp
   (straight-use-package 'dash)
 #+end_src
 
-* Dash Functional
+** Dash Functional
 
 #+begin_src elisp
   (straight-use-package 'dash-functional)
 #+end_src
 
-* Dired
+** Dired
 
 #+include: "dired.org"
 
-* Easy Kill
+** Easy Kill
 
 #+begin_src elisp
   (straight-use-package 'easy-kill)
@@ -158,9 +151,9 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
   (straight-use-package 'thingopt)
 #+end_src
 
-* Eldoc
+** Eldoc
 
-** eldoc overlay
+*** eldoc overlay
 
 #+begin_src elisp
   (use-package eldoc-overlay
@@ -169,7 +162,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd> @@
     :ghook 'eldoc-mode-hook)
 #+end_src
 
-** eldoc box
+*** eldoc box
 
 Disabled by default due to it causes lots of cpu.
 
@@ -181,7 +174,7 @@ Disabled by default due to it causes lots of cpu.
            (eldoc-mode . eldoc-box-hover-at-point-mode)))
 #+end_src
 
-* Expand Region
+** Expand Region
 
 Emacs extension to increase selected region by semantic units.
 
@@ -193,9 +186,9 @@ https://github.com/magnars/expand-region.el
    "C-=" #'er/expand-region)
 #+end_src
 
-* Fill Column
+** Fill Column
 
-** Unfill
+*** Unfill
 
 #+begin_src elisp
   (straight-use-package 'unfill)
@@ -203,7 +196,7 @@ https://github.com/magnars/expand-region.el
     :bind (("M-q" . unfill-toggle)))
 #+end_src
 
-** Visual-fill-column
+*** Visual-fill-column
 
 #+begin_src elisp
   (straight-use-package 'visual-fill-column)
@@ -219,18 +212,18 @@ https://github.com/magnars/expand-region.el
            (visual-fill-column-mode . maybe-adjust-visual-fill-column)))
 #+end_src
 
-* Find File in Project
+** Find File in Project
 
 #+begin_src elisp
   (straight-use-package 'find-file-in-project)
   (gsetq ffip-use-rust-fd t)
 #+end_src
 
-* Flycheck
+** Flycheck
 
 #+include: "flycheck.org"
 
-* Fuz.el
+** Fuz.el
 
 Fast and precise fuzzy scoring/matching utils for Emacs, powered by rust
 
@@ -250,13 +243,13 @@ https://github.com/rustify-emacs/fuz.el
     :hook ((after-init . load-fuz)))
 #+end_src
 
-* Grab Mac Link
+** Grab Mac Link
 
 #+begin_src elisp
   (straight-use-package 'grab-mac-link)
 #+end_src
 
-* Grep
+** Grep
 
 #+begin_src elisp
   (gsetq-default grep-highlight-matches t
@@ -266,11 +259,11 @@ https://github.com/rustify-emacs/fuz.el
     (gsetq-default locate-command "mdfind"))
 #+end_src
 
-* Highlight
+** Highlight
 
 #+include: "highlight.org"
 
-* Helpful
+** Helpful
 
 [[https://github.com/Wilfred/helpful]]
 
@@ -287,13 +280,13 @@ https://github.com/rustify-emacs/fuz.el
            "C" 'helpful-command))
 #+end_src
 
-* Helm
+** Helm
 
 https://github.com/emacs-helm/helm
 
 # #+include: "helm.org"
 
-* Htmlize
+** Htmlize
 
 #+begin_src elisp
   (straight-use-package 'htmlize)
@@ -302,15 +295,15 @@ https://github.com/emacs-helm/helm
     :init (gsetq htmlize-pre-style t))
 #+end_src
 
-* Hydra
+** Hydra
 
 #+include: "hydra.org"
 
-* iBuffer
+** iBuffer
 
 #+include: "ibuffer.org"
 
-* imenu list
+** imenu list
 
 #+begin_src elisp
   (straight-use-package 'imenu-list)
@@ -319,7 +312,7 @@ https://github.com/emacs-helm/helm
     :init (setq imenu-list-auto-resize t))
 #+end_src
 
-* indent-tools
+** indent-tools
 
 #+begin_src elisp
   (straight-use-package 'indent-tools)
@@ -327,7 +320,7 @@ https://github.com/emacs-helm/helm
     :bind (("C-c TAB" . indent-tools-hydra/body)))
 #+end_src
 
-* iSearch
+** iSearch
 
 I only use ~rg~ to search, so I disabled the key-map of isearch.
 
@@ -366,13 +359,13 @@ I only use ~rg~ to search, so I disabled the key-map of isearch.
      "C-o"                       #'isearch-occur))
 #+end_src
 
-* Ivy, Counsel and Swiper
+** Ivy, Counsel and Swiper
 
 Now enabled.
 
 #+include: "ivy.org"
 
-* Large File
+** Large File
 
 #+begin_src elisp
   (straight-use-package 'vlf)
@@ -387,7 +380,7 @@ Now enabled.
         (vlf file))))
 #+end_src
 
-* Link Hint
+** Link Hint
 
 #+begin_src elisp
   (straight-use-package 'link-hint)
@@ -401,13 +394,13 @@ Now enabled.
     "c" 'link-hint-copy-link)
 #+end_src
 
-* List Unicode Display
+** List Unicode Display
 
 #+begin_src elisp
   (straight-use-package 'list-unicode-display)
 #+end_src
 
-* mmm-mode
+** mmm-mode
 
 #+begin_src elisp
   (straight-use-package 'mmm-mode)
@@ -418,7 +411,7 @@ Now enabled.
            mmm-submode-decoration-level 2))
 #+end_src
 
-* Multiple Cursors
+** Multiple Cursors
 
 #+begin_src elisp
   (straight-use-package 'multiple-cursors)
@@ -437,8 +430,7 @@ Now enabled.
      "a" 'mc/edit-beginnings-of-lines))
 #+end_src
 
-
-* Paper Break Lines
+** Paper Break Lines
 
 #+begin_src elisp
   (straight-use-package 'page-break-lines)
@@ -447,11 +439,11 @@ Now enabled.
     :diminish page-break-lines-mode)
 #+end_src
 
-* Parens
+** Parens
 
 #+include: "parens.org"
 
-* PDF Tools
+** PDF Tools
 
 #+begin_src elisp
   (straight-use-package 'pdf-tools)
@@ -482,11 +474,11 @@ Now enabled.
                ("r"  . pdf-view-reset-slice)))
 #+end_src
 
-* Pretty
+** Pretty
 
 #+include: "pretty.org"
 
-* Projectile
+** Projectile
 
 #+begin_src elisp
   (straight-use-package 'projectile)
@@ -511,7 +503,7 @@ Now enabled.
                    projectile-project-root-files-top-down-recurring)))
 #+end_src
 
-* Prescient
+** Prescient
 
 ☄️ Simple but effective sorting and filtering for Emacs.
 
@@ -523,7 +515,7 @@ https://github.com/raxod502/prescient.el
     :hook ((after-init . prescient-persist-mode)))
 #+end_src
 
-* Quick Peek
+** Quick Peek
 
 An inline pop-up library for Emacs Lisp.
 
@@ -540,7 +532,7 @@ https://github.com/cpitclaudel/quick-peek
                         :height 0.1))
 #+end_src
 
-* Recentf
+** Recentf
 
 #+begin_src elisp
   (use-package recentf
@@ -553,8 +545,7 @@ https://github.com/cpitclaudel/quick-peek
     (add-to-list 'recentf-exclude no-littering-etc-directory))
 #+end_src
 
-
-* Snails
+** Snails
 
 A modern, easy-to-expand fuzzy search framework
 
@@ -572,7 +563,7 @@ Not work now.
 #      "C-s" 'snails))
 # #+end_src
 
-* Subword
+** Subword
 
 #+begin_src elisp
   (use-package subword
@@ -580,7 +571,7 @@ Not work now.
     :diminish (subword-mode))
 #+end_src
 
-* Symbol Overlay
+** Symbol Overlay
 
 #+begin_src elisp
   (straight-use-package 'symbol-overlay)
@@ -592,11 +583,11 @@ Not work now.
            ("<f7>" . symbol-overlay-mode)))
 #+end_src
 
-* Treemacs
+** Treemacs
 
 #+include: "treemacs.org"
 
-* Tree Sitter
+** Tree Sitter
 
 ~emacs-tree-sitter~ is an Emacs binding for tree-sitter, an incremental parsing
 system.
@@ -628,9 +619,9 @@ https://ubolonton.github.io/emacs-tree-sitter/
     :ghook 'tree-sitter-after-on-hook)
 #+end_src
 
-* Undo/Redo
+** Undo/Redo
 
-** Point History
+*** Point History
 
 #+begin_src elisp
   (straight-use-package '(point-history :type git :host github :repo "blue0513/point-history"))
@@ -640,7 +631,7 @@ https://ubolonton.github.io/emacs-tree-sitter/
     :init (gsetq point-history-ignore-buffer "^ \\*Minibuf\\|^ \\*point-history-show*"))
 #+end_src
 
-** Undo Propose
+*** Undo Propose
 
 #+begin_src elisp
   (straight-use-package 'undo-propose)
@@ -649,11 +640,11 @@ https://ubolonton.github.io/emacs-tree-sitter/
     :config (undo-propose-wrap redo))
 #+end_src
 
-* Version Control
+** Version Control
 
 #+include: "version-control.org"
 
-* Which Function
+** Which Function
 
 #+begin_src elisp
   (use-package which-func
@@ -661,7 +652,7 @@ https://ubolonton.github.io/emacs-tree-sitter/
     :ghook 'after-init-hook)
 #+end_src
 
-* Which Key
+** Which Key
 
 #+begin_src elisp
   (use-package which-key
@@ -669,15 +660,15 @@ https://ubolonton.github.io/emacs-tree-sitter/
     :ghook 'after-init-hook)
 #+end_src
 
-* Whitespace
+** Whitespace
 
 #+include: "whitespace.org"
 
-* Writeroom Mode
+** Writeroom Mode
 
 #+include: "writeroom.org"
 
-* Yasnipeet
+** Yasnipeet
 
 #+begin_src elisp
   (straight-use-package 'yasnippet)
