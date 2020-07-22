@@ -101,17 +101,5 @@
                             'help-echo "Buffer name
       mouse-1: Previous buffer\nmouse-3: Next buffer"
                             'local-map mode-line-buffer-identification-keymap)))))
-    (advice-add #'doom-modeline-update-buffer-file-name :override #'nasy/doom-modeline-update-buffer-file-name)
-
-    (set-face-attribute 'mode-line nil
-                        :font (font-spec :name   "spot mono"
-                                         :weight 'normal
-                                         :size   15)
-                        :background "#2d334a")
-    (set-face-attribute 'mode-line-inactive nil
-                        :font (font-spec :name   "spot mono"
-                                         :weight 'normal
-                                         :size   15)))
-
-
+    (advice-add #'doom-modeline-update-buffer-file-name :override #'nasy/doom-modeline-update-buffer-file-name))
 #+end_src

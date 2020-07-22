@@ -62,7 +62,16 @@ But disabled for it's tooo slow.
          charset
          (font-spec :name   *font-cjk*
                     :weight *font-weight-cjk*
-                    :size   *font-size-cjk*)))))
+                    :size   *font-size-cjk*)))
+      (set-face-attribute 'mode-line nil
+                           :font (font-spec :name   "spot mono"
+                                            :weight 'normal
+                                            :size   15)
+                           :background "#2d334a")
+      (set-face-attribute 'mode-line-inactive nil
+                          :font (font-spec :name   "spot mono"
+                                           :weight 'normal
+                                           :size   15))))
 
   (add-hook #'after-init-hook #'nasy/set-font)
 #+end_src
