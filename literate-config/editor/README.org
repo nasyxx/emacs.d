@@ -77,16 +77,6 @@ Here is the editor config, including some features and functions.
       (gsetq avy-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s))))
 #+end_src
 
-* Beacon (Disabled)
-
-#+begin_src elisp
-  (use-package beacon
-    :disabled t
-    :straight t
-    :init (setq beacon-size  7
-                beacon-color "#f85e9f")
-    :hook ((after-init . beacon-mode)))
-#+end_src
 
 * Beginend
 
@@ -447,14 +437,6 @@ Now enabled.
      "a" 'mc/edit-beginnings-of-lines))
 #+end_src
 
-* Pangu Spacing
-
-#+begin_src elisp
-  (straight-use-package 'pangu-spacing)
-  (use-package pangu-spacing
-    :init (gsetq pangu-spacing-real-insert-separtor t)
-    :hook ((after-init . global-pangu-spacing-mode)))
-#+end_src
 
 * Paper Break Lines
 
@@ -571,18 +553,6 @@ https://github.com/cpitclaudel/quick-peek
     (add-to-list 'recentf-exclude no-littering-etc-directory))
 #+end_src
 
-* Smex/Amx
-
-Now use amx instead of smex.
-
-It's for ivy.
-
-# #+begin_src elisp
-#   (straight-use-package 'amx)
-#   (use-package amx
-#     :init (setq-default amx-save-file (no-littering-expand-var-file-name ".amx-items"))
-#     :bind (("<remap> <execute-extended-command>" . amx)))
-# #+end_src
 
 * Snails
 
