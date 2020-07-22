@@ -40,6 +40,10 @@ Packages list
 
 * Configs
 
+#+begin_src elisp
+  (explain-pause-mode 1)
+#+end_src
+
 ** Anzu
 
 #+begin_src elisp
