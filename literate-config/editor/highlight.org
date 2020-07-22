@@ -1,13 +1,3 @@
-* cl-lib-highlight
-
-#+begin_src elisp
-  (straight-use-package 'cl-lib-highlight)
-  (after! emacs-lisp-mode
-    (use-package cl-lib-highlight
-      :config
-      (cl-lib-highlight-initialize)))
-#+end_src
-
 * Color Identifiers Mode
 
 #+begin_src elisp

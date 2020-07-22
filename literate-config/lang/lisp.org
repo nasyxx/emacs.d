@@ -1,4 +1,24 @@
-* lisp-mode
+* Packages
+
+#+begin_src elisp
+  (nasy/s-u-p cl-lib-highlight
+              elisp-def
+              highlight-quoted
+              macrostep
+              parinfer-rust-mode)
+#+end_src
+
+* Configs
+
+** cl-lib-highlight
+
+#+begin_src elisp
+  (after-x 'lisp-mode
+    (use-package cl-lib-highlight
+      :config
+      (cl-lib-highlight-initialize)))
+#+end_src
+
 
 #+begin_src elisp
   (use-package lisp-mode
