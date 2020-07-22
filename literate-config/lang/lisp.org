@@ -1,6 +1,11 @@
 * Packages
 
 #+begin_src elisp
+  (straight-register-package
+   '(parinfer-rust-mode :type git
+                        :host github
+                        :repo "justinbarclay/parinfer-rust-mode"))
+
   (nasy/s-u-p cl-lib-highlight
               elisp-def
               highlight-quoted
@@ -19,6 +24,23 @@
       (cl-lib-highlight-initialize)))
 #+end_src
 
+** elisp-def
+
+#+begin_src elisp
+  (use-package elisp-def
+    :defer t
+    :hook (((emacs-lisp-mode ielm-mode) . elisp-def-mode)))
+#+end_src
+
+** Highlight-quoted
+
+#+begin_src elisp
+  (use-package highlight-quoted
+    :defer t
+    :hook ((emacs-lisp-mode . highlight-quoted-mode)))
+#+end_src
+
+** lisp-mode
 
 #+begin_src elisp
   (use-package lisp-mode
@@ -29,25 +51,29 @@
       (if (and (mark) (use-region-p))
           (eval-region (min (point) (mark)) (max (point) (mark)))
         (pp-eval-last-sexp prefix)))
-    :bind (:map emacs-lisp-mode-map
-           ("<remap> <eval-expression>" . pp-eval-expression)
-           ("C-x C-e" . eval-last-sexp-or-region)))
+    :general
+    (:keymaps 'emacs-lisp-mode-map
+              [remap eval-expression] #'pp-eval-expression
+              "C-x C-e"               #'eval-last-sexp-or-region))
 #+end_src
 
-* Highlight-quoted
+** macrostep
 
 #+begin_src elisp
-  (straight-use-package 'highlight-quoted)
-  (use-package highlight-quoted
+  (use-package macrostep
     :defer t
-    :hook ((emacs-lisp-mode . highlight-quoted-mode)))
+    :general
+    (:keymaps #'emacs-lisp-mode-map
+              "C-c e" #'macrostep-expand))
 #+end_src
 
-* elisp-def
+** parinfer-rust-mode
 
 #+begin_src elisp
-  (straight-use-package 'elisp-def)
-  (use-package elisp-def
+  (use-package parinfer-rust-mode
     :defer t
-    :hook (((emacs-lisp-mode ielm-mode) . elisp-def-mode)))
+    :init
+    (gsetq parinfer-rust-library       (no-littering-expand-var-file-name "parinfer-rust/parinfer-rust-darwin.so")
+           parinfer-rust-auto-download t)
+    :ghook lisp-modes-hooks)
 #+end_src
