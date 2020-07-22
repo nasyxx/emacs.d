@@ -9,22 +9,19 @@ Here is the editor config, including some features and functions.
 * Packages
 
 #+begin_src elisp
-  (nasy/s-u-p prescient
+  (straight-register-package
+   '(tree-sitter :host github
+                 :repo "ubolonton/emacs-tree-sitter"
+                 :files ("lisp/*.el" "langs/*.el" "langs/queries")))
+
+  (nasy/s-u-p explain-pause-mode
+              prescient
               quick-peek
+              tree-sitter
               which-key)
 
   (when *eldoc-use*
     (nasy/s-u-p *eldoc-use*))
-
-  (straight-use-package
-   '(tree-sitter :host github
-                 :repo "ubolonton/emacs-tree-sitter"
-                 :files ("lisp/*.el")))
-
-  (straight-use-package
-   '(tree-sitter-langs :host github
-                       :repo "ubolonton/emacs-tree-sitter"
-                       :files ("langs/*.el" "langs/queries")))
 #+end_src
 
 * Configs
