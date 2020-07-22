@@ -10,9 +10,10 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     (straight-use-package 'python-black))
 
   (let ((module
-         (cond ((eq *py-module* 'elpy)  'elpy)
-               ((eq *py-module* 'pyls)  'lsp-mode)
-               ((eq *py-module* 'mspyls 'lsp-python-ms)))))
+         (cond ((eq *py-module* 'elpy)    'elpy)
+               ((eq *py-module* 'pyls)    'lsp-mode)
+               ((eq *py-module* 'mspyls)  'lsp-python-ms)
+               ((eq *py-module* 'pylance) 'elpy))))
     (straight-use-package module))
 
 #+end_src
@@ -97,34 +98,50 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
   (general-define-key
    :keymaps 'python-mode-map
    "<S-return>" 'nasy/python-send-region)
+
+
+  (defun python-flycheck-setup ()
+    "Add python checker for lsp-ui."
+    (after-x 'lsp-ui
+      (flycheck-add-next-checker 'lsp              'python-flake8))
+      ;; flake8 already have python-mypy and python-pylint as the next checker
+      ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
+    (flycheck-disable-checker 'python-pylint)
+    (flycheck-remove-next-checker 'python-flake8 'python-pylint))
 #+end_src
 
 ** elpy
 
 #+begin_src elisp
   (use-package elpy
-    :if (eq *py-module* 'elpy)
+    :if (or (eq *py-module* 'elpy)
+           (eq *py-module* 'pylance))
     :defer t
     :init
     ;; (add-to-list 'exec-path "/Users/Nasy/Library/Python/3.7/bin")
     (gsetq elpy-rpc-virtualenv-path 'current)
     (advice-add 'python-mode :before 'elpy-enable)
-    :config
-    (gsetq elpy-modules '(elpy-module-autodoc
-                          elpy-module-company
-                          elpy-module-eldoc
+
+
+    (gsetq elpy-modules '(elpy-module-company
                           elpy-module-folding
                           elpy-module-yasnippet))
 
-    (nasy/add-company-backend 'python-mode '(elpy-company-backend
-                                             company-files
-                                             :with company-tabnine company-yasnippet))
+    (when (eq *py-module* 'elpy)
+      (add-to-list 'elpy-modules 'elpy-module-autodoc)
+      (add-to-list 'elpy-modules 'elpy-module-eldoc))
 
-    (set-lookup-handlers! 'python-mode :async t
-        :documentation #'elpy-doc
-        :definition #'elpy-goto-definition
-        :implementations #'elpy-goto-assignment
-        :references #'xref-find-references)
+    :config
+    (when (eq *py-module* 'elpy)
+      (nasy/add-company-backend 'python-mode '(elpy-company-backend
+                                               company-files
+                                               :with company-tabnine company-yasnippet))
+
+      (set-lookup-handlers! 'python-mode :async t
+          :documentation #'elpy-doc
+          :definition #'elpy-goto-definition
+          :implementations #'elpy-goto-assignment
+          :references #'xref-find-references))
 
     (advice-add
      'elpy-module-folding :after
@@ -138,15 +155,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
   (use-package lsp-pyls
     :if (eq *py-module* 'pyls)
     :defer t
-    :preface
-    (defun python-flycheck-setup ()
-      "Add python checker for lsp-ui."
-      (after-x 'lsp-ui
-        (flycheck-add-next-checker 'lsp              'python-flake8)
-        ;; flake8 already have python-mypy and python-pylint as the next checker
-        ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
-        (flycheck-remove-next-checker 'python-flake8 'python-pylint)))
-
+    :init
     (defun start-lsp-pyls ()
       "Start lsp-pyls."
       (require 'lsp-pyls)
@@ -163,7 +172,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
     ;; The default line-length is 88 when using black, you can add a file named "pyproject.yaml" that contains
     ;; [tool.black]
     ;; line-length = 79
-    (gsetq lsp-pyls-configuration-sources              ["pycodestyle" "pycodestyle"]
+    (gsetq lsp-pyls-configuration-sources              ["pycodestyle" "pydocstyle" "flake8"]
            lsp-pyls-plugins-pylint-enabled             nil
            lsp-pyls-plugins-pycodestyle-enabled        t
            lsp-pyls-plugins-pydocstyle-enabled         t
@@ -172,7 +181,7 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
            lsp-pyls-plugins-rope-completion-enabled    t
            lsp-pyls-plugins-autopep8-enabled           t
            lsp-pyls-plugins-yapf-enabled               nil
-           lsp-pyls-plugins-flake8-enabled             nil)
+           lsp-pyls-plugins-flake8-enabled             t)
 
     (unless *pyblack*
       (add-hook #'python-mode-hook
@@ -190,30 +199,103 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
       "Start lsp-python-ms."
       (require 'lsp-python-ms)
       (lsp-deferred))
-    :init (gsetq lsp-python-ms-nupkg-channel "daily"
-                 lsp-python-ms-log-level     (if *debug* "Trace" "Error")
-                 lsp-python-ms-information   ["too-many-function-arguments"
-                                              "too-many-positional-arguments-before-star"]
-                 lsp-python-ms-executable    "~/.local/bin/Microsoft.Python.LanguageServer"
-                 lsp-python-ms-errors        ["inherit-non-class"
-                                              "no-method-argument"
-                                              "parameter-already-specified"
-                                              "parameter-missing"
-                                              "positional-argument-after-keyword"
-                                              "positional-only-named"
-                                              "return-in-init"
-                                              "typing-generic-arguments"
-                                              "typing-newtype-arguments"
-                                              "typing-typevar-arguments"
-                                              "unknown-parameter-name"
-                                              "undefined-variable"
-                                              "unresolved-import"]
-                 lsp-python-ms-warnings      ["no-cls-argument"
-                                              "no-self-argument"
-                                              "variable-not-defined-globally"
-                                              "variable-not-defined-nonlocal"]))
-    ;; :hook ((python-mode . start-lsp-mspyls)))
+    :init
+    (nasy/add-company-backend 'python-mode '(company-capf
+                                             company-files
+                                             :with company-tabnine company-yasnippet))
+    (gsetq
+     lsp-python-ms-nupkg-channel "daily"
+     lsp-python-ms-log-level     (if *debug* "Trace" "Error")
+     lsp-python-ms-executable    (executable-find "Microsoft.Python.LanguageServer")
+     lsp-python-ms-information   ["too-many-function-arguments"
+                                  "too-many-positional-arguments-before-star"]
+     lsp-python-ms-errors        ["inherit-non-class"
+                                  "no-method-argument"
+                                  "parameter-already-specified"
+                                  "parameter-missing"
+                                  "positional-argument-after-keyword"
+                                  "positional-only-named"
+                                  "return-in-init"
+                                  "typing-generic-arguments"
+                                  "typing-newtype-arguments"
+                                  "typing-typevar-arguments"
+                                  "unknown-parameter-name"
+                                  "undefined-variable"]
+     lsp-python-ms-warnings      ["no-cls-argument"
+                                  "no-self-argument"
+                                  "unresolved-import"
+                                  "variable-not-defined-globally"
+                                  "variable-not-defined-nonlocal"])
+    :hook ((python-mode . start-lsp-mspyls)))
+#+end_src
 
+** lsp-pylance
+
+#+begin_src elisp
+  (when (eq *py-module* 'pylance)
+
+    (nasy/add-company-backend 'python-mode
+      '(company-capf
+        elpy-company-backend
+        company-files
+        :with company-tabnine company-yasnippet))
+
+    (defun nasy/lsp-pylance ()
+
+      (require 'lsp-mode)
+
+      (defvar lsp-pylance-executable (executable-find "pylance")
+        "Pylance executable.
+
+      #!/bin/bash
+      set -euo pipefail
+
+      node $HOME/.vscode/extensions/ms-python.vscode-pylance-2020.7.1/server/server.bundle.js --stdio")
+
+      (defvar lsp-pylance-type-checking "basic"
+        "Used to specify the level of type checking analysis performed;
+
+      ,* Default: off
+
+      ,* Available values:
+      - off: No type checking analysis is conducted; unresolved imports/variables diagnostics are produced
+      - basic: Non-type checking-related rules (all rules in off) + basic type checking rules
+      - strict: All type checking rules at the highest severity of error (includes all rules in off and basic categories")
+
+      (lsp-register-custom-settings
+       `(("python.analysis.typeCheckingMode"       lsp-pylance-type-checking
+          "python.analysis.useLibraryCodeForTypes" nil)))
+
+      (lsp-register-client
+       (make-lsp-client
+        :new-connection (lsp-stdio-connection (lambda () lsp-pylance-executable)
+                                              (lambda () (f-exists? lsp-pylance-executable)))
+        :major-modes '(python-mode)
+        :server-id 'pylance
+        :priority 3
+        :initialized-fn (lambda (workspace)
+                          (with-lsp-workspace workspace
+                            (lsp--set-configuration (lsp-configuration-section "python"))))
+        :notification-handlers (lsp-ht ("pylance/beginProgress"  'ignore)
+                                       ("pylance/reportProgress" 'ignore)
+                                       ("pylance/endProgress"    'ignore))))
+
+      (set-lookup-handlers! 'python-mode :async t
+        :documentation #'lsp-describe-thing-at-point
+        :definition #'lsp-find-definition
+        :implementations #'lsp-find-implementation
+        :type-definition #'lsp-find-type-definition
+        :references #'lsp-find-references))
+
+    (defun start-lsp-pylance ()
+      "Start lsp-pylance."
+      (nasy/lsp-pylance)
+      (python-flycheck-setup)
+      (gsetq elpy-modules (remove 'elpy-module-autodoc elpy-modules))
+      (gsetq elpy-modules (remove 'elpy-module-eldoc   elpy-modules))
+      (lsp-deferred))
+
+    (add-hook #'python-mode-hook #'start-lsp-pylance))
 #+end_src
 
 ** Flycheck Mypy
