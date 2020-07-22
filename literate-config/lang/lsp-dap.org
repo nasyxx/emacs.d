@@ -46,6 +46,7 @@
     (defun nasy/lsp-init ()
       "Nasy lsp mode init."
       (lsp-flycheck-enable)
+      (flycheck-inline-mode -1)
       (when lsp-enable-symbol-highlighting
         (add-hook #'lsp-on-idle-hook #'lsp--document-highlight nil t)
         (lsp--info "Symbol highlighting enabled in current buffer."))
@@ -66,6 +67,7 @@
            lsp-auto-configure                 nil
            lsp-document-sync-method           nil
            lsp-auto-execute-action            nil
+           lsp-eldoc-enable-hover             t
            lsp-eldoc-render-all               t
            lsp-enable-completion-at-point     nil
            lsp-enable-imenu                   t
@@ -76,7 +78,8 @@
            lsp-enable-on-type-formatting      t
            lsp-signature-auto-activate        t
            lsp-enable-semantic-highlighting   t
-           lsp-signature-render-documentation nil
+           lsp-signature-render-documentation t
+           lsp-enable-file-watchers           nil
            lsp-enable-text-document-color     t
            lsp-prefer-capf                    t)
 
@@ -108,10 +111,11 @@
            lsp-ui-sideline-show-hover       t
            lsp-ui-sideline-ignore-duplicate t)
     :config
-    (after! lsp-ui
+    (after-x 'lsp-ui
       (require 'lsp-ui-peek)
       (set-lookup-handlers! 'lsp-ui-mode :async t
         :definition 'lsp-ui-peek-find-definitions
+        :implementations 'lsp-ui-peek-find-implementation
         :references 'lsp-ui-peek-find-references)))
 #+end_src
 
