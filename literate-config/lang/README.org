@@ -26,17 +26,13 @@
 
 * Configs
 
-** English
-
-#+include: "english.org"
-
-** Language Server Protocol & Debug Adapter Protocol
-
-#+include: "lsp-dap.org"
-
 ** C/C++/Object-C (Clangd or ccls)
 
 #+include: "c.org"
+
+** English
+
+#+include: "english.org"
 
 ** Haskell
 
@@ -56,6 +52,10 @@
     :disabled t
     :hook ((javascript-mode . lsp-deferred)))
 #+end_src
+
+** Language Server Protocol & Debug Adapter Protocol
+
+#+include: "lsp-dap.org"
 
 ** Lisp
 
