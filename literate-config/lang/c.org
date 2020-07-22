@@ -1,6 +1,30 @@
 Clangd or ccls.
 
-* clangd
+* Packages
+
+#+begin_src elisp
+  (nasy/s-u-p macrostep)
+  (when *ccls*
+      (nasy/s-u-p ccls))
+#+end_src
+
+* Configs
+
+** macrostep
+
+#+begin_src elisp
+  (use-package macrostep
+    :defer t
+    :general
+    (:keymaps 'c-mode-map
+              "C-c e" #'macrostep-expand)
+    (:keymaps 'c++-mode-map
+              "C-c e" #'macrostep-expand)
+    (:keymaps 'objc-mode-map
+              "C-c e" #'macrostep-expand))
+#+end_src
+
+** clangd
 
 #+begin_src elisp
   (use-package lsp-mode
@@ -9,11 +33,10 @@ Clangd or ccls.
     :init (setq-default lsp-clients-clangd-executable *clangd*))
 #+end_src
 
-* ccls
+** ccls
 
 #+begin_src elisp
   (when *ccls*
-    (straight-use-package 'ccls)
     (use-package ccls
       :preface
       (defun ccls/load ()
