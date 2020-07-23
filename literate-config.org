@@ -8,6 +8,10 @@
 
 #+include: "literate-config/editor/README.org"
 
+* Convenience and tools
+
+#+include: "literate-config/convenience/README.org"
+
 * Tools
 
 #+include: "literate-config/tools/README.org"

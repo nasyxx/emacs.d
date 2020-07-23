@@ -1,0 +1,27 @@
+Convenience and tools.
+
+* Packages
+
+#+begin_src elisp
+  (nasy/s-u-p all-the-icons)
+  (when (or (version< emacs-version "27")
+           ,*is-a-mac*)
+    (nasy/s-u-p emojify))
+#+end_src
+
+* Configs
+
+** Emojify and all-the-icons
+
+#+begin_src elisp
+  (when (or (version< emacs-version "27")
+           ,*is-a-mac*)
+    (use-package emojify
+      :commands emojify-mode
+      :hook ((after-init . global-emojify-mode))
+      :init (gsetq emojify-emoji-styles '(unicode github)
+                   emojify-display-style 'unicode)))
+
+  (use-package all-the-icons
+    :init (gsetq inhibit-compacting-font-caches t))
+#+end_src

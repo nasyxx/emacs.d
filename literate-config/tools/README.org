@@ -1,7 +1,6 @@
 * Packages
 
 #+begin_src elisp
-  (nasy/s-u-p all-the-icons)
   (straight-use-package 'restclient)
   (after-x 'company
     (straight-use-package 'company-restclient))
@@ -9,23 +8,6 @@
 #+end_src
 
 * Configs
-
-** Emojify and all-the-icons
-
-#+begin_src elisp
-  (when (version< emacs-version "27")
-    (straight-use-package 'emojify)
-    (use-package emojify
-      :commands emojify-mode
-      :hook ((after-init . global-emojify-mode))
-      :init (gsetq emojify-emoji-styles '(unicode github)
-                   emojify-display-style 'unicode)))
-
-  (use-package all-the-icons
-    :init (gsetq inhibit-compacting-font-caches t))
-#+end_src
-
-
 
 ** Lookup
 
