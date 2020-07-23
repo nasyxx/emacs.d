@@ -46,32 +46,56 @@ But disabled for it's tooo slow.
 * set fonts
 
 #+begin_src elisp
-  (defun nasy/set-font ()
-    "Nasy set font"
-    (interactive)
-    (set-face-attribute
-     'default nil
-     :font (font-spec :name   *font*
-                      :weight *font-weight*
-                      :size   *font-size*))
-
+  (defun nasy/set--font (frame)
+    "Nasy set font for `FRAME'."
     (when (display-graphic-p)
-      (dolist (charset '(kana han symbol cjk-misc bopomofo))
-        (set-fontset-font
-         (frame-parameter nil 'font)
-         charset
-         (font-spec :name   *font-cjk*
-                    :weight *font-weight-cjk*
-                    :size   *font-size-cjk*)))
+      (set-face-attribute
+       'default nil
+       :font (font-spec :name   *font*
+                        :weight *font-weight*
+                        :size   *font-size*))
+
+      (dolist (charset '(kana han cjk-misc bopomofo))
+        (set-fontset-font (frame-parameter nil 'font)
+                          charset
+                          (font-spec :name   *font-cjk*
+                                     :weight *font-weight-cjk*
+                                     :size   *font-size-cjk*)
+                          frame
+                          'prepend))
+
+      (if *is-a-mac*
+           ;; For NS/Cocoa
+          (set-fontset-font t
+                             'symbol
+                             (font-spec :family "Apple Color Emoji")
+                             frame
+                             'prepend)
+         ;; For Linux
+        (set-fontset-font t
+                          'symbol
+                          (font-spec :family "Symbola")
+                          frame
+                          'prepend))
+
       (set-face-attribute 'mode-line nil
-                           :font (font-spec :name   "spot mono"
-                                            :weight 'normal
-                                            :size   15)
-                           :background "#2d334a")
+                          :font (font-spec :name   "spot mono"
+                                           :weight 'normal
+                                           :size   15)
+                          :background "#2d334a")
+
       (set-face-attribute 'mode-line-inactive nil
                           :font (font-spec :name   "spot mono"
                                            :weight 'normal
                                            :size   15))))
 
+  (defun nasy/set-font (&rest _)
+    "Nasy set font."
+    (interactive)
+    (nasy/set--font nil))
+
+
   (add-hook #'after-init-hook #'nasy/set-font)
+  (add-hook #'after-make-frame-functions   #'nasy/set-font)
+  (add-hook #'server-after-make-frame-hook #'nasy/set-font)
 #+end_src
