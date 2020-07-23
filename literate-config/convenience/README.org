@@ -5,8 +5,7 @@ Convenience.
 #+begin_src elisp
   (nasy/s-u-p all-the-icons ob-restclient restclient)
 
-  (when (or (version< emacs-version "27")
-           ,*is-a-mac*)
+  (when (version< emacs-version "27")
     (nasy/s-u-p emojify))
 
   (after-x 'company
@@ -18,8 +17,7 @@ Convenience.
 ** Emojify and all-the-icons
 
 #+begin_src elisp
-  (when (or (version< emacs-version "27")
-           ,*is-a-mac*)
+  (when (version< emacs-version "27")
     (use-package emojify
       :commands emojify-mode
       :hook ((after-init . global-emojify-mode))
