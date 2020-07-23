@@ -1,12 +1,16 @@
-Convenience and tools.
+Convenience.
 
 * Packages
 
 #+begin_src elisp
-  (nasy/s-u-p all-the-icons)
+  (nasy/s-u-p all-the-icons ob-restclient restclient)
+
   (when (or (version< emacs-version "27")
            ,*is-a-mac*)
     (nasy/s-u-p emojify))
+
+  (after-x 'company
+    (nasy/s-u-p company-restclient))
 #+end_src
 
 * Configs
