@@ -4,6 +4,10 @@
   ;;----------------------------------------------------------------------------
 #+end_src
 
+* Dashboard
+
+#+include: "dashboard.org"
+
 * Font
 
 #+include: "font.org"
@@ -36,6 +40,9 @@ I use doom-themes.
 
 #+include: "doom-modeline.org"
 
-* Dashboard
+* Tab Line
 
-#+include: "dashboard.org"
+#+begin_src elisp
+  (add-hook #'after-init-hook #'global-tab-line-mode)
+  (gsetq tab-line-close-tab-function #'kill-buffer)
+#+end_src

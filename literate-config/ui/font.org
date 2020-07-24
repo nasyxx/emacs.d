@@ -87,7 +87,11 @@ But disabled for it's tooo slow.
       (set-face-attribute 'mode-line-inactive nil
                           :font (font-spec :name   "spot mono"
                                            :weight 'normal
-                                           :size   15))))
+                                           :size   15))
+      (set-face-attribute 'tab-line nil
+                          :font (font-spec :name   "spot mono"
+                                           :weight 'normal
+                                           :size   12))))
 
   (defun nasy/set-font (&rest _)
     "Nasy set font."

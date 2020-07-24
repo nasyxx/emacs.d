@@ -406,7 +406,25 @@ You can custom it in @@html: <span> @@ ~custom/user-config.el~ @@html: </span> @
                         :foreground "#705772"
                         :weight     'ultra-bold)
 
-    (after! smartparens-config
+    (after-x 'tab-line
+      (set-face-attribute 'tab-line nil
+                          :background "#303946"
+                          :foreground "#F4FFC9")
+
+      (set-face-attribute 'tab-line-tab nil
+                          :background "#3C78D8")
+
+      (set-face-attribute 'tab-line-tab-current nil
+                          :background "#FFFC67"
+                          :foreground "#222831"
+                          :inherit    'tab-line-tab)
+
+      (set-face-attribute 'tab-line-tab-inactive nil
+                          :background "#5FF967"
+                          :foreground "#222831"
+                          :inherit 'tab-line-tab))
+
+    (after-x 'smartparens-config
       (set-face-attribute 'sp-show-pair-match-face nil
                           :background "#a1de93"
                           :foreground "#705772"
