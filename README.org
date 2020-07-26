@@ -171,6 +171,10 @@ changes here and regenerate it from Emacs org-mode using @@html: <kbd>C-c</kbd>
 
 #+include: "literate-config.org"
 
+* Extra
+
+#+include: "extra/README.org"
+
 * Epilogue
 
 Hope you enjoy it.

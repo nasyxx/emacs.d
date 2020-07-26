@@ -11,6 +11,7 @@ generate:
 	@$(EMACS) -Q --batch --find-file "literate-config.org" -f "org-org-export-to-org" && \
 		$(EMACS) -Q --batch --find-file "literate-config.org.org" -f "org-babel-tangle" && \
 		rm -rf "literate-config.org.org" "literate-config.org.org~"
+	@$(EMACS) -Q --batch --find-file "extra/README.org" -f "org-babel-tangle"
 	@echo "If you want to customize, you can simply change/create custom/user-config.el"
 .PHONY: generate
 

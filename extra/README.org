@@ -1,0 +1,199 @@
+* ConTeX Template
+
+#+begin_src tex :tangle (concat (file-name-directory (buffer-file-name)) "nasy-context.tex")
+  $if(context-lang)$
+  \mainlanguage[$context-lang$]
+  \language[$context-lang$]
+  \setscript[hanzi]
+  $endif$
+  $if(context-dir)$
+  \setupalign[$context-dir$]
+  \setupdirections[bidi=on,method=two]
+  $endif$
+  \usecolors[xwi]
+  \setupcolors[state=start]
+  % Enable hyperlinks
+  \setupinteraction
+    [state=start,
+  $if(title)$
+    title={$title$},
+  $endif$
+  $if(subtitle)$
+    subtitle={$subtitle$},
+  $endif$
+  $if(author)$
+    author={$for(author)$$author$$sep$; $endfor$},
+  $endif$
+  $if(keywords)$
+    keyword={$for(keywords)$$keywords$$sep$; $endfor$},
+  $endif$
+    style=$if(linkstyle)$$linkstyle$$else$bold$endif$,
+    color=$if(linkcolor)$$linkcolor$$else$darkgreen$endif$,
+    contrastcolor=$if(linkcontrastcolor)$$linkcontrastcolor$$else$darkgreen$endif$]
+
+  % make chapter, section bookmarks visible when opening document
+  \placebookmarks[chapter, section, subsection, subsubsection, subsubsubsection, subsubsubsubsection][chapter, section]
+  \setupinteractionscreen[option=bookmark]
+  \setuptagging[state=start]
+
+  $if(papersize)$
+  \setuppapersize[$for(papersize)$$papersize$$sep$,$endfor$]
+  $endif$
+  $if(layout)$
+  \setuplayout[$for(layout)$$layout$$sep$,$endfor$]
+  $endif$
+  $if(pagenumbering)$
+  \setuppagenumbering[$for(pagenumbering)$$pagenumbering$$sep$,$endfor$]
+  $else$
+  \setuppagenumbering[location=footer]
+  $endif$
+  \setuppagenumbering[style=\addff{noonum}\bf]
+  $if(pdfa)$
+  % attempt to generate PDF/A
+  \setupbackend
+    [format=PDF/A-1b:2005,
+     intent=sRGB IEC61966-2.1,
+     profile=sRGB.icc]
+  $endif$
+
+  % use microtypography
+  \definefontfeature[default][default][script=latn, protrusion=quality, expansion=quality, itlc=yes, textitalics=yes, onum=yes, pnum=yes]
+  \definefontfeature[smallcaps][script=latn, protrusion=quality, expansion=quality, smcp=yes, onum=yes, pnum=yes]
+  \definefontfeature[noonum][onum=no]
+  \setupalign[hz,hanging]
+  \setupitaliccorrection[global, always]
+
+  \setupbodyfontenvironment[default][em=italic] % use italic as em, not slanted
+
+  %% \definefont[zhrmzh][name:FandolSong]
+  %% \definefontfallback[zhrmen][name:pingfangsc][0x0000-0x0400][force=yes]
+  %% \definefontsynonym[zhrm][zhrmzh][fallbacks=zhrmen]
+  %% \definefont[Zhrm][zhrm]
+
+  \definefallbackfamily[mainface][rm][fandolsong][preset=range:chinese]
+  \definefontfamily[mainface][rm][$if(mainfont)$$mainfont$$else$baskervillef$endif$]
+  \definefontfamily[mainface][mm][$if(mathfont)$$mathfont$$else$Latin Modern Math$endif$]
+  \definefallbackfamily[mainface][ss][notosanscjksc][preset=range:chinese]
+  \definefontfamily[mainface][ss][$if(sansfont)$$sansfont$$else$lucidagrandeui$endif$]
+  \definefontfamily[mainface][tt][$if(monofont)$$monofont$$else$notosansmonocjksc$endif$][features=none]
+  \setupbodyfont[mainface$if(fontsize)$,$fontsize$$endif$]
+
+  \setupwhitespace[$if(whitespace)$$whitespace$$else$medium$endif$]
+  $if(indenting)$
+  \setupindenting[$for(indenting)$$indenting$$sep$,$endfor$]
+  $endif$
+  $if(interlinespace)$
+  \setupinterlinespace[$for(interlinespace)$$interlinespace$$sep$,$endfor$]
+  $endif$
+
+  \setuphead[chapter]            [style=\tfd,header=empty]
+  \setuphead[section]            [style=\tfc]
+  \setuphead[subsection]         [style=\tfb]
+  \setuphead[subsubsection]      [style=\bf]
+  \setuphead[subsubsubsection]   [style=\sc]
+  \setuphead[subsubsubsubsection][style=\it]
+
+  $if(headertext)$
+  \setupheadertexts$for(headertext)$[$headertext$]$endfor$
+  $endif$
+
+  $if(footertext)$
+  \setupfootertexts$for(footertext)$[$footertext$]$endfor$
+  $endif$
+
+  $if(number-sections)$
+  $else$
+  \setuphead[chapter, section, subsection, subsubsection, subsubsubsection, subsubsubsubsection][number=no]
+  $endif$
+
+  \setupheadtext[content=Table of Contents]
+
+  \setupcombinedlist[content][list={chapter,section,subsection,subsubsection}, alternative=c,]
+  \setuplist[section][width=10mm, style=bold]
+  \setuplist[subsection][width=20mm, margin=1.5em]
+  \setuplist[subsubsection][width=20mm, style=slanted, pagestyle=normal, margin=2em]
+
+  \definedescription
+    [description]
+    [headstyle=bold, style=normal, location=hanging, width=broad, margin=1cm, alternative=hanging]
+
+  \setupitemize[autointro]    % prevent orphan list intro
+  \setupitemize[indentnext=no]
+
+  \setupfloat[figure][default={here,nonumber}]
+  \setupfloat[table][default={here,nonumber}]
+
+  \setupthinrules[width=15em] % width of horizontal rules
+
+  \setupxtable[frame=off]
+  \setupxtable[head][topframe=on,bottomframe=on]
+  \setupxtable[body][]
+  \setupxtable[foot][bottomframe=on]
+
+  $for(header-includes)$
+  $header-includes$
+  $endfor$
+
+  %% Start
+
+  \starttext
+  \setuppagenumber[state=stop]
+  $if(title)$
+  \startalignment[middle]
+    {\tfd $title$}
+
+  $if(subtitle)$
+    \smallskip
+    {\tfa $subtitle$}
+  $endif$
+
+  $if(author)$
+    \smallskip
+    {\tfa $for(author)$$author$$sep$\crlf $endfor$}
+  $endif$
+
+  $if(date)$
+    \smallskip
+    {\tfa $date$}
+  $endif$
+    \bigskip
+  \stopalignment
+  $endif$
+
+  $if(abstract)$
+  \midaligned{\it Abstract}
+  \startnarrower[2*middle]
+  $abstract$
+  \stopnarrower
+  \blank[big]
+  $endif$
+
+  $for(include-before)$
+  $include-before$
+  $endfor$
+
+  $if(toc)$
+  \startcolor[darkgreen]
+  \completecontent
+  \stopcolor
+  \page[yes,blank,odd]
+  $endif$
+
+  $if(lot)$
+  \completelistoftables
+  $endif$
+
+  $if(lof)$
+  \completelistoffigures
+  $endif$
+
+  \setuppagenumber [state=start, way=bychapter]
+  \setcounter[userpage][1]
+
+  $body$
+
+  $for(include-after)$
+  $include-after$
+  $endfor$
+  \stoptext
+#+end_src
