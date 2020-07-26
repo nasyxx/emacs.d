@@ -15,7 +15,7 @@
 
 #+HTML_HEAD: <style>kbd {border-style: outset;} pre.src:before {top: -4px; box-shadow: 3px 3px 3px #eee; border-color: #ccc; padding: 0;}</style>
 #+HTML_HEAD: <style>#content {background-color: #e0ffcd; max-width: 100vw!important;} body,pre.src {background-color: #282a36; transition: box-shadow 2s}</style>
-#+HTML_HEAD: <style>pre.src {text-shadow: 2px 2px 15px; box-shadow: 1px 1px 5px #7a378b; color: #39375b; background-color: #ffffd2; fort-family: Monaco, Console, monospace;}</style>
+#+HTML_HEAD: <style>pre.src {text-shadow: 2px 2px 15px; box-shadow: 1px 1px 5px #7a378b; color: #39375b; background-color: #ffffd2; font-family: Menlo, Monaco, Console, monospace;}</style>
 #+HTML_HEAD: <style>pre.src:hover{box-shadow: 1px 1px 10px #c0ffc2, 1px 1px 5px #7a378b;}</style>
 #+HTML_HEAD: <style>#table-of-contents h2 {background-color: #ffcab0; color: #745c97;} </style>
 #+HTML_HEAD: <style>#table-of-contents {background: #745c97;} #table-of-contents a {color: #e0ffcd;} ul.nav li.active a {background-color: #f69d9d;} ul.nav li.active ul li a {background-color: #ffcab0;} ul.nav li.active ul li.active a {background-color: #ffebbb;} #table-of-contents a:hover {background-color: #d597ce;}</style>
