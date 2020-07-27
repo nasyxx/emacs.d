@@ -1,4 +1,4 @@
-* ConTeX Template
+* ConTeXt Template
 
 #+begin_src tex :tangle (concat (file-name-directory (buffer-file-name)) "nasy-context.tex")
   $if(context-lang)$
