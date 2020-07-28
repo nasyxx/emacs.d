@@ -616,7 +616,9 @@ https://ubolonton.github.io/emacs-tree-sitter/
              ruby-mode-hook
              rust-mode-hook
              typescript-mode-hook)
-    :config (require 'tree-sitter-langs))
+    :config
+    (require 'tree-sitter-langs)
+    (add-to-list 'tree-sitter-major-mode-language-alist '(mhtml-mode . html)))
 
   (use-package tree-sitter-hl
     :defer t
