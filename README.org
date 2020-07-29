@@ -169,7 +169,7 @@ One thing to note is that this file generates a file named @@html: <span> @@
 changes here and regenerate it from Emacs org-mode using @@html: <kbd>C-c</kbd>
 <kbd>C-v</kbd> <kbd>t</kbd> @@.
 
-#+include: "literate-config.org"
+#+include: "literate-config/README.org"
 
 * Extra
 
