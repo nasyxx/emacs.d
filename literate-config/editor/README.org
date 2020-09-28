@@ -1556,8 +1556,7 @@ https://github.com/magit/magit
     :url "https://github.com/magit/magit"
     :tag "git" "tools" "vc"
     :commands magit-status
-    :hook ((magit-popup-mode-hook . no-trailing-whitespace)
-           (git-commit-mode . goto-address-mode))
+    :hook ((magit-popup-mode-hook . no-trailing-whitespace))
     :custom ((magit-diff-refine-hunk . t)
              (vc-handled-backends    . nil))
     :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
@@ -1566,9 +1565,7 @@ https://github.com/magit/magit
            (:magit-status-mode-map
             ("C-M-<up>"  . magit-section-up))
            (:vc-prefix-map
-            ("f"         . vc-git-grep)))
-    :config
-    (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+            ("f"         . vc-git-grep))))
 #+end_src
 
 *** Magit Org Todos                         :magit:orgmode:tools:
