@@ -1,0 +1,23 @@
+* Scratch Message
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Scratch Message
+#+end_src
+
+#+begin_src elisp
+  (straight-use-package 'scratch)
+#+end_src
+
+* Shell & Term
+
+#+begin_src elisp :exports none
+  ;;----------------------------------------------------------------------------
+  ;; Shell & Term
+#+end_src
+
+** Term
+
+Emacs libvterm intergration
+
+https://github.com/akermu/emacs-libvterm

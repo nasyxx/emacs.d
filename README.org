@@ -5,7 +5,6 @@
 #+TITLE: Emacs Configuration
 #+DATE: <2019-04-19 Fri>
 #+AUTHOR: Nasy
-#+PROPERTY: header-args:elisp :tangle (concat (file-name-directory (buffer-file-name)) "custom/user-config-example.el")
 #+STARTUP: overview
 #+LANGUAGE: en
 #+SELECT_TAGS: export
@@ -66,11 +65,11 @@ To install, clone this repo to @@html: <span> @@ ~~/.emacs.d~ @@html: </span> @@
 #+END_SRC
 
 Upon the first time staring up emacs, other third-party packages will be
-automatically clone to the @@html: <span> @@ ~straight~: @@html: </span> @@ folder
+automatically clone to the @@html: <span>@@ ~straight~: @@html: </span>@@ folder
 and installed.  If you encounter any errors at that stage, try restarting Emacs,
 and maybe running ~make clean-build~ before doing so.
 
-You can regenerate @@html: <span> @@ ~init.el~ @@html: </span> @@ by ~make generate~.
+You can regenerate @@html: <span>@@ ~init.el~ @@html: </span>@@ by ~make generate~.
 
 * Updates
 
@@ -79,10 +78,10 @@ clean-build~ and restart Emacs.
 
 And I guess you'll need to update third-party packages regularly too if you
 have not modificated the ~straight-check-for-modifications~ in @@html: <span> @@
-~config/nasy-config.el~: @@html: </span> @@
+~config/nasy-config.el~: @@html: </span>@@
 
-- @@html: <kbd>M-x</kbd> <kbd>straight-pull-all</kbd> <kbd>RET</kbd> @@
-- @@html: <kbd>M-x</kbd> <kbd>straight-rebuild-all</kbd> <kbd>RET</kbd> @@
+- @@html:<kbd>M-x</kbd> <kbd>straight-pull-all</kbd> <kbd>RET</kbd>@@
+- @@html:<kbd>M-x</kbd> <kbd>straight-rebuild-all</kbd> <kbd>RET</kbd>@@
 
 If you encounter any errors while updating, you may need to kill Emacs and run
 ~make clean~. If you still meet errors after doing that, you probably need to run
@@ -97,14 +96,13 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
  </span> @@ which looks like this (when you ~make~ or ~make generate~, below will
  generate to @@html: <span> @@ ~custom/user-config-example.el~ @@html: </span> @@):
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle (concat (file-name-directory (buffer-file-name)) "custom/user-config-example.el")
   (setq-default
    ;;calendar-latitude        24.8801
    ;;calendar-longitude       102.8329
    ;;user-mail-address        "nasyxx@gmail.com"
    ;;initial-buffer-choice    #'(lambda () (get-buffer "*dashboard*"))
    ;;diary-file               ~/dairy/emacs-dairy
-   cnfonts-profiles         '("nasy-profile" "profile1" "profile2" "profile3")
    gcmh-high-cons-threshold #x40000000
    ,*theme*                  'doom-vibrant
    ,*debug*                  t
@@ -153,8 +151,6 @@ to the issue [[https://github.com/rakanalh/emacs-dashboard/issues/69][here]].  H
     + Rust
 - Themes ::
     + Doom Themes
-    + Darktooth
-    + Soothe
 
 * The Configuration
 

@@ -1,0 +1,230 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-langs.el")
+
+* Header                                                                        :noexport:
+
+#+begin_src elisp
+  ;;; nasy-langs.el --- Nasy's Emacs Configuration language file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Languages.
+
+  ;;; Code:
+#+end_src
+
+* Packages
+
+#+begin_src elisp
+  (setq parinfer-rust-auto-download t
+        parinfer-rust-library
+        (no-littering-expand-var-file-name "parinfer-rust/parinfer-rust-darwin.so"))
+
+  (straight-register-package
+   '(parinfer-rust-mode :type git
+                        :host github
+                        :repo "justinbarclay/parinfer-rust-mode"))
+
+  (nasy/s-u-p
+    ;; lisps
+    cl-lib-highlight
+    elisp-def
+    highlight-quoted
+    ipretty
+    macrostep
+    parinfer-rust-mode
+
+    company-restclient
+    elvish-mode
+    fish-completion
+    fish-mode
+    markdown-mode
+    ob-elvish
+    ob-restclient
+    pandoc-mode
+    restclient
+    toml-mode
+    yaml-mode
+    (:when *rust* cargo rust-mode))
+#+end_src
+
+* Configs
+
+** C/C++/Object-C (Clangd or ccls)
+
+#+include: "c.org"
+
+** English
+
+#+include: "english.org"
+
+** Haskell
+
+#+include: "haskell.org"
+
+** HTML
+
+#+begin_src elisp
+  (leaf lsp-html
+    :hook ((html-mode-hook . lsp-deferred)))
+#+end_src
+
+** JavaScript & TypeScript
+
+#+begin_src elisp
+  (leaf lsp-mode
+    :hook ((javascript-mode-hook . lsp-deferred)))
+#+end_src
+
+** Language Server Protocol & Debug Adapter Protocol
+
+#+include: "lsp-dap.org"
+
+** Lisp
+
+*** cl-lib-highlight
+
+#+begin_src elisp
+  (leaf cl-lib-highlight
+    :after lisp-mode
+    :config
+    (cl-lib-highlight-initialize))
+#+end_src
+
+*** elisp-def
+
+ #+begin_src elisp
+   (leaf elisp-def
+     :hook (((emacs-lisp-mode-hook ielm-mode-hook) . elisp-def-mode)))
+ #+end_src
+
+*** Highlight-quoted
+
+ #+begin_src elisp
+   (leaf highlight-quoted
+     :hook ((emacs-lisp-mode-hook . highlight-quoted-mode)))
+ #+end_src
+
+*** ipretty                                         :buffer:emacslisp:pprint:
+
+ Interactive Emacs Lisp pretty-printing.
+
+ ~ipretty.el~ provides interactive functions to pretty-print the result of an
+ expression and a global mode ~ipretty-mode~ that advices ~eval-print-last-sexp~ to
+ pretty print.
+
+ https://framagit.org/steckerhalter/ipretty
+
+ #+begin_src elisp
+   (leaf ipretty
+     :doc "Interactive Emacs Lisp pretty-printing"
+     :url "https://framagit.org/steckerhalter/ipretty"
+     :tag "buffer" "emacslisp" "pprint"
+     :bind (("C-h C-j" . ipretty-last-sexp)
+            ("C-h C-k" . ipretty-last-sexp-other-buffer)))
+     :hook after-init-hook
+ #+end_src
+
+*** lisp-mode
+
+ #+begin_src elisp
+   (leaf lisp-mode
+     :preface
+     (defun eval-last-sexp-or-region (prefix)
+       "Eval region from BEG to END if active, otherwise the last sexp."
+       (interactive "P")
+       (if (and (mark) (use-region-p))
+           (eval-region (min (point) (mark)) (max (point) (mark)))
+         (pp-eval-last-sexp prefix)))
+     :bind
+     (:emacs-lisp-mode-map
+      ([remap eval-expression] . pp-eval-expression)
+      ("C-x C-e"               . eval-last-sexp-or-region)))
+ #+end_src
+
+*** macrostep
+
+ #+begin_src elisp
+   (leaf macrostep
+     :bind
+     (:emacs-lisp-mode-map
+      ("C-c e" . macrostep-expand)))
+ #+end_src
+
+*** parinfer-rust-mode
+
+ #+begin_src elisp
+   (leaf parinfer-rust-mode
+     :custom
+     `(parinfer-rust-library
+       . ,(no-littering-expand-var-file-name "parinfer-rust/parinfer-rust-darwin.so"))
+     (parinfer-rust-auto-download . t)
+     :hook `(,lisp-modes-hooks))
+ #+end_src
+
+** Markdown
+
+#+begin_src elisp
+  (leaf markdown-mode
+    :mode ("INSTALL\\'"
+           "CONTRIBUTORS\\'"
+           "LICENSE\\'"
+           "README\\'"
+           "\\.markdown\\'"
+           "\\.md\\'"))
+#+end_src
+
+** Python
+
+#+include: "python.org"
+
+** restclient.el
+
+HTTP REST client tool for emacs
+
+https://github.com/pashky/restclient.el
+
+#+begin_src elisp
+  (leaf restclient
+    :init
+    (nasy/add-company-backend
+      'restclient-mode
+      '(company-restclient company-files)))
+#+end_src
+
+** Rust
+
+Include rust-mode, rls and Cargo.
+
+# #+begin_src elisp
+  (when *rust*
+    (use-package rust-mode
+      :defer t
+      :hook ((rust-mode . (lambda () (setq-local tab-width 4)))
+             (rust-mode . lsp-deferred))
+      :config
+      (when *rls*
+        (add-hook #'rust-mode-hook #'(lambda () (add-to-list 'flycheck-disabled-checkers 'rust-cargo)))))
+
+    (use-package cargo
+      :after rust-mode
+      :hook ((toml-mode . cargo-minor-mode)
+             (rust-mode . cargo-minor-mode))))
+#+end_src
+
+** Yaml
+
+#+begin_src elisp
+  (leaf lsp-yaml
+    :hook ((yaml-mode-hook . lsp-deferred)))
+#+end_src
+
+* Footer                                                                      :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-langs)
+  ;;; nasy-langs.el ends here
+#+end_src

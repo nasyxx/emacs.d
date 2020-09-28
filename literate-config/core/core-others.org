@@ -1,0 +1,59 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-core-others.el")
+
+* Header                                                                        :noexport:
+
+#+begin_src elisp
+  ;;; nasy-core-others.el  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Core Text file.
+
+  ;;; Code:
+#+end_src
+
+* Functions
+
+** Default
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun nasy/lsp-format-region-or-buffer ()
+    "Format the buffer (or selection) with LSP."
+    (interactive)
+    (unless (bound-and-true-p lsp-mode)
+      (user-error "Not in an LSP buffer"))
+    (call-interactively
+     (if (nasy/region-active-p)
+         #'lsp-format-region
+       #'lsp-format-buffer)))
+#+end_src
+
+** Project Related
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun nasy/project-p (&optional dir)
+    "Return t if DIR (defaults to `default-directory') is a valid project."
+    (and (nasy/project-root dir)
+         t))
+
+  ;;;###autoload
+  (defun nasy/project-root (&optional dir)
+    "Return the project root of DIR (defaults to `default-directory').
+  Returns nil if not in a project."
+    (let ((projectile-project-root (unless dir projectile-project-root))
+          projectile-require-project-root)
+      (projectile-project-root dir)))
+#+end_src
+
+* Footer                                                                        :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-core-others)
+  ;;; nasy-core-others.el ends here
+#+end_src

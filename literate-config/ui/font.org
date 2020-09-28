@@ -44,7 +44,6 @@ But disabled for it's tooo slow.
 #+end_src
 
 * set fonts
-
 #+begin_src elisp
   (defun nasy/set--font (frame)
     "Nasy set font for `FRAME'."
@@ -70,7 +69,7 @@ But disabled for it's tooo slow.
                              'symbol
                              (font-spec :family "Apple Color Emoji")
                              frame
-                             'prepend)
+                             'append)
          ;; For Linux
         (set-fontset-font t
                           'symbol

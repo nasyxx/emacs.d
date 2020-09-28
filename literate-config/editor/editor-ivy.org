@@ -1,118 +1,71 @@
-* Packages
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-editor-ivy.el")
+
+* Header                                                                        :noexport:
 
 #+begin_src elisp
-  (straight-use-package 'swiper)
-  (straight-use-package 'ivy)
-  (straight-use-package 'ivy-xref)
-  (straight-use-package 'ivy-hydra)
-  (straight-use-package 'counsel)
+  ;;; nasy-editor-ivy.el --- Nasy's Emacs Configuration editor ivy file.  -*- lexical-binding: t; -*-
 
-  (straight-use-package 'counsel-projectile)
+  ;; Copyright (C) 2020  Nasy
 
-  (straight-use-package 'prescient)
-  (straight-use-package 'ivy-prescient)
+  ;; Author: Nasy <nasyxx@gmail.com>
 
-  (straight-use-package 'ivy-rich)
-  (straight-use-package 'all-the-icons-ivy-rich)
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Editor Ivy.
+
+  ;;; Code:
 #+end_src
 
 * Autoloads
 :PROPERTIES:
-:header-args: elisp :tangle (concat user-emacs-directory "lisp/autoload/" (file-name-nondirectory (buffer-file-name))) :mkdirp t
+:header-args: elisp :tangle (concat temporary-file-directory "nasy-editor-ivy-function.el")
 :END:
+
+#+begin_src elisp :exports none
+  ;;; nasy-editor-ivy-function.el -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Company Mode.
+
+  ;;; Code:
+#+end_src
 
 Some of them borrowed from doom-emacs
 
 #+begin_src elisp
-  ;;; lisp/autoload/ivy.el -*- lexical-binding: t; -*-
-
+  ;;;###autoload
   (defun nasy/ivy-is-workspace-buffer-p (buffer)
     (let ((buffer (car buffer)))
       (when (stringp buffer)
-      (setq buffer (get-buffer buffer)))
+       (setq buffer (get-buffer buffer)))
       (nasy/workspace-contains-buffer-p buffer)))
 
+  ;;;###autoload
   (defun nasy/ivy-is-workspace-other-buffer-p (buffer)
     (let ((buffer (car buffer)))
       (when (stringp buffer)
-      (setq buffer (get-buffer buffer)))
+       (setq buffer (get-buffer buffer)))
       (and (not (eq buffer (current-buffer)))
          (nasy/workspace-contains-buffer-p buffer))))
 
-  ;;;###autoload
-  (defun nasy/ivy-rich-buffer-name (candidate)
-    "Display the buffer name.
-  Buffers that are considered unreal (see `nasy-real-buffer-p') are dimmed with
-  `nasy/ivy-buffer-unreal-face'."
-    (let ((b (get-buffer candidate)))
-      (when (null uniquify-buffer-name-style)
-      (setq candidate (replace-regexp-in-string "<[0-9]+>$" "" candidate)))
-      (cond ((ignore-errors
-             (file-remote-p
-              (buffer-local-value 'default-directory b)))
-           (ivy-append-face candidate 'ivy-remote))
-          ((nasy-unreal-buffer-p b)
-           (ivy-append-face candidate nasy/ivy-buffer-unreal-face))
-          ((not (buffer-file-name b))
-           (ivy-append-face candidate 'ivy-subdir))
-          ((buffer-modified-p b)
-           (ivy-append-face candidate 'ivy-modified-buffer))
-          (candidate))))
-
-  ;;;###autoload
-  (defun nasy/ivy-rich-buffer-icon (candidate)
-    "Display the icon for CANDIDATE buffer."
-    ;; NOTE This is inspired by `all-the-icons-ivy-buffer-transformer', minus the
-    ;; buffer name and extra padding as those are handled by `ivy-rich'.
-    (propertize "\t" 'display
-              (if-let* ((buffer (get-buffer candidate))
-                        (mode (buffer-local-value 'major-mode buffer)))
-                  (or
-                   (all-the-icons-ivy--icon-for-mode mode)
-                   (all-the-icons-ivy--icon-for-mode (get mode 'derived-mode-parent))
-                   (funcall
-                    all-the-icons-ivy-family-fallback-for-buffer
-                    all-the-icons-ivy-name-fallback-for-buffer))
-                (all-the-icons-icon-for-file candidate))))
-
-  ;;;###autoload
-  (defun nasy/ivy-rich-describe-variable-transformer (cand)
-    "Previews the value of the variable in the minibuffer"
-    (let* ((sym (intern cand))
-         (val (and (boundp sym) (symbol-value sym)))
-         (print-level 3))
-      (replace-regexp-in-string
-       "[\n\t\^[\^M\^@\^G]" " "
-       (cond ((booleanp val)
-            (propertize (format "%s" val) 'face
-                        (if (null val)
-                            'font-lock-comment-face
-                          'success)))
-           ((symbolp val)
-            (propertize (format "'%s" val)
-                        'face 'highlight-quoted-symbol))
-           ((keymapp val)
-            (propertize "<keymap>" 'face 'font-lock-constant-face))
-           ((listp val)
-            (prin1-to-string val))
-           ((stringp val)
-            (propertize (format "%S" val) 'face 'font-lock-string-face))
-           ((numberp val)
-            (propertize (format "%s" val) 'face 'highlight-numbers-number))
-           ((format "%s" val)))
-       t)))
-
-
   ;;
   ;; Library
-
+  ;;;###autoload
   (defun nasy/ivy/switch-buffer-preview ()
     (let (ivy-use-virtual-buffers ivy--virtual-buffers)
       (counsel--switch-buffer-update-fn)))
 
+  ;;;###autoload
   (defalias 'nasy/ivy/switch-buffer-preview-all #'counsel--switch-buffer-update-fn)
+  ;;;###autoload
   (defalias 'nasy/ivy/switch-buffer-unwind      #'counsel--switch-buffer-unwind)
 
+  ;;;###autoload
   (defun nasy/ivy--switch-buffer (workspace other)
     (let ((current (not other))
           prompt action filter update unwind)
@@ -183,23 +136,23 @@ Some of them borrowed from doom-emacs
       (if-let (occur-fn (plist-get nasy/ivy-edit-functions caller))
         (ivy-exit-with-action
          (lambda (_) (funcall occur-fn)))
-      (if-let (occur-fn (plist-get ivy--occurs-list caller))
-          (let ((buffer (generate-new-buffer
-                         (format "*ivy-occur%s \"%s\"*"
-                                 (if caller (concat " " (prin1-to-string caller)) "")
-                                 ivy-text))))
-            (with-current-buffer buffer
-              (let ((inhibit-read-only t))
-                (erase-buffer)
-                (funcall occur-fn))
-              (setf (ivy-state-text ivy-last) ivy-text)
-              (setq ivy-occur-last ivy-last)
-              (setq-local ivy--directory ivy--directory))
-            (ivy-exit-with-action
-             `(lambda (_)
-                (pop-to-buffer ,buffer)
-                (ivy-wgrep-change-to-wgrep-mode))))
-        (user-error "%S doesn't support wgrep" caller)))))
+       (if-let (occur-fn (plist-get ivy--occurs-list caller))
+           (let ((buffer (generate-new-buffer
+                          (format "*ivy-occur%s \"%s\"*"
+                                  (if caller (concat " " (prin1-to-string caller)) "")
+                                  ivy-text))))
+             (with-current-buffer buffer
+               (let ((inhibit-read-only t))
+                 (erase-buffer)
+                 (funcall occur-fn))
+               (setf (ivy-state-text ivy-last) ivy-text)
+               (setq ivy-occur-last ivy-last)
+               (setq-local ivy--directory ivy--directory))
+             (ivy-exit-with-action
+              `(lambda (_)
+                 (pop-to-buffer ,buffer)
+                 (ivy-wgrep-change-to-wgrep-mode))))
+         (user-error "%S doesn't support wgrep" caller)))))
 
   ;;;###autoload
   (defun nasy/ivy-yas-prompt (prompt choices &optional display-fn)
@@ -211,14 +164,14 @@ Some of them borrowed from doom-emacs
     (when (string-match "\\`\\(.*?\\):\\([0-9]+\\):\\(.*\\)\\'" x)
       (select-window
        (with-ivy-window
-       (let ((file-name   (match-string-no-properties 1 x))
-             (line-number (match-string-no-properties 2 x)))
-         (find-file-other-window (expand-file-name file-name (ivy-state-directory ivy-last)))
-         (goto-char (point-min))
-         (forward-line (1- (string-to-number line-number)))
-         (re-search-forward (ivy--regex ivy-text t) (line-end-position) t)
-         (run-hooks 'counsel-grep-post-action-hook)
-         (selected-window))))))
+        (let ((file-name   (match-string-no-properties 1 x))
+              (line-number (match-string-no-properties 2 x)))
+          (find-file-other-window (expand-file-name file-name (ivy-state-directory ivy-last)))
+          (goto-char (point-min))
+          (forward-line (1- (string-to-number line-number)))
+          (re-search-forward (ivy--regex ivy-text t) (line-end-position) t)
+          (run-hooks 'counsel-grep-post-action-hook)
+          (selected-window))))))
 
   ;;;###autoload
   (defun nasy/ivy-confirm-delete-file (x)
@@ -244,7 +197,7 @@ Some of them borrowed from doom-emacs
        (cond ((or (file-equal-p default-directory "~")
                 (when-let (proot (nasy/project-root))
                   (file-equal-p proot "~")))
-            #'counsel-find-file)
+              #'counsel-find-file)
 
            ((nasy/project-p)
             (let ((files (projectile-current-project-files)))
@@ -269,12 +222,12 @@ Some of them borrowed from doom-emacs
       (user-error "Couldn't find ripgrep in your PATH"))
     (require 'counsel)
     (let* ((this-command 'counsel-rg)
-         (project-root (or (nasy/project-root) default-directory))
-         (directory (or in project-root))
-         (args (concat (if all-files " -uu")
-                       (unless recursive " --maxdepth 1")
-                       " "
-                       (mapconcat #'shell-quote-argument args " "))))
+           (project-root (or (nasy/project-root) default-directory))
+           (directory (or in project-root))
+           (args (concat (if all-files " -uu")
+                         (unless recursive " --maxdepth 1")
+                         " "
+                         (mapconcat #'shell-quote-argument args " "))))
       (setq deactivate-mark t)
       (counsel-rg
        (or query
@@ -338,6 +291,11 @@ Some of them borrowed from doom-emacs
     (exit-minibuffer))
 #+end_src
 
+#+begin_src elisp :exports none
+  (provide 'nasy-editor-ivy-function)
+  ;;; nasy-editor-ivy-function.el ends here
+#+end_src
+
 * Config
 
 #+begin_src elisp
@@ -358,13 +316,12 @@ Some of them borrowed from doom-emacs
 ** ivy
 
 #+begin_src elisp
-  (use-package ivy
-    :defer t
-    :ghook 'after-init-hook
+  (leaf ivy
+    :hook after-init-hook
     :init
     (let ((standard-search-fn
            (if *ivy-prescient*
-               #'+ivy-prescient-non-fuzzy
+               #'nasy/ivy-prescient-non-fuzzy
              #'ivy--regex-plus))
           (alt-search-fn
            (if *ivy-fuzzy*
@@ -380,36 +337,34 @@ Some of them borrowed from doom-emacs
              '((counsel-rg . 1)
                (counsel-search . 2)
                (t . 3))))
-    (gsetq ivy-wrap                         t
-           ivy-auto-shrink-minibuffer-alist '((t . t))
-           ivy-height                       15
-           ivy-fixed-height-minibuffer      nil
-           projectile-completion-system     'ivy
-           ;; disable magic slash on non-match
-           ivy-magic-slash-non-match-action nil
-           ;; don't show recent files in switch-buffer
-           ivy-use-virtual-buffers          nil
-           ;; ...but if that ever changes, show their full path
-           ivy-virtual-abbreviate           'full
-           ;; don't quit minibuffer on delete-error
-           ivy-on-del-error-function        #'ignore
-           ;; enable ability to select prompt (alternative to `ivy-immediate-done')
-           ivy-use-selectable-prompt        t)
-    (general-define-key
-     [remap switch-to-buffer]              #'nasy/ivy/switch-buffer
-     [remap switch-to-buffer-other-window] #'nasy/ivy/switch-buffer-other-window
-     [remap persp-switch-to-buffer]        #'nasy/ivy/switch-workspace-buffer)
-    (general-define-key
-     :keymaps 'ivy-mode-map
-     [remap switch-to-buffer]              #'nasy/ivy/switch-buffer
-     [remap switch-to-buffer-other-window] #'nasy/ivy/switch-buffer-other-window
-     [remap persp-switch-to-buffer]        #'nasy/ivy/switch-workspace-buffer)
+    :custom
+    ((ivy-wrap                         . t)
+     (ivy-auto-shrink-minibuffer-alist . '((t . t)))
+     (ivy-height                       . 15)
+     (ivy-fixed-height-minibuffer      . nil)
+     (projectile-completion-system     . 'ivy)
+     ;; disable magic slash on non-match
+     (ivy-magic-slash-non-match-action . nil)
+     ;; don't show recent files in switch-buffer
+     (ivy-use-virtual-buffers          . nil)
+     ;; ...but if that ever changes, show their full path
+     (ivy-virtual-abbreviate           . 'full)
+     ;; don't quit minibuffer on delete-error
+     (ivy-on-del-error-function        . #'ignore)
+     ;; enable ability to select prompt (alternative to `ivy-immediate-done')
+     (ivy-use-selectable-prompt        . t))
+    :bind
+    ([remap switch-to-buffer]               . nasy/ivy/switch-buffer)
+    ([remap switch-to-buffer-other-window]  . nasy/ivy/switch-buffer-other-window)
+    ([remap persp-switch-to-buffer]         . nasy/ivy/switch-workspace-buffer)
+    (:ivy-mode-map
+     ([remap switch-to-buffer]              . nasy/ivy/switch-buffer)
+     ([remap switch-to-buffer-other-window] . nasy/ivy/switch-buffer-other-window)
+     ([remap persp-switch-to-buffer]        . nasy/ivy/switch-workspace-buffer))
+    (:ivy-minibuffer-map
+     ("C-c C-e"                         . nasy/ivy-woccur)
+     ([remap nasy/delete-backward-word] . ivy-backward-kill-word))
     :config
-    ;; Counsel changes a lot of ivy's state at startup; to control for that, we
-    ;; need to load it as early as possible. Some packages (like `ivy-prescient')
-    ;; require this.
-    (require 'counsel nil t)
-
     ;; Highlight each ivy candidate including the following newline, so that it
     ;; extends to the right edge of the window
     (setf (alist-get 't ivy-format-functions-alist)
@@ -417,107 +372,81 @@ Some of them borrowed from doom-emacs
 
     ;; Integrate `ivy' with `better-jumper'; ensure a jump point is registered
     ;; before jumping to new locations with ivy
-    (setf (alist-get 't ivy-hooks-alist)
-          (lambda ()
-            (with-ivy-window
-              (setq nasy/ivy--origin (point-marker)))))
+    ;; (setf (alist-get 't ivy-hooks-alist)
+    ;;       (lambda ()
+    ;;         (with-ivy-window
+    ;;           (setq nasy/ivy--origin (point-marker)))))
 
-    (add-hook 'minibuffer-exit-hook
-      (defun nasy/ivy--set-jump-point-maybe-h ()
-        (and (markerp (bound-and-true-p nasy/ivy--origin))
-             (not (equal (ignore-errors (with-ivy-window (point-marker)))
-                         nasy/ivy--origin))
-             (with-current-buffer (marker-buffer nasy/ivy--origin)
-               (better-jumper-set-jump nasy/ivy--origin)))
-        (setq nasy/ivy--origin nil)))
+    ;; (add-hook 'minibuffer-exit-hook
+    ;;   (defun nasy/ivy--set-jump-point-maybe-h ()
+    ;;     (and (markerp (bound-and-true-p nasy/ivy--origin))
+    ;;          (not (equal (ignore-errors (with-ivy-window (point-marker)))
+    ;;                      nasy/ivy--origin))
+    ;;          (with-current-buffer (marker-buffer nasy/ivy--origin)
+    ;;            (better-jumper-set-jump nasy/ivy--origin)))
+    ;;     (setq nasy/ivy--origin nil)))
 
-    (after! yasnippet
-      (add-hook 'yas-prompt-functions #'nasy/ivy-yas-prompt))
-
-    (general-define-key
-      :keymaps 'ivy-minibuffer-map
-      "C-c C-e" #'nasy/ivy-woccur
-      [remap nasy/delete-backward-word] #'ivy-backward-kill-word)
-
-    (ivy-mode +1))
+    (after-x 'yasnippet
+      (add-hook 'yas-prompt-functions #'nasy/ivy-yas-prompt)))
 #+end_src
 
 ** ivy-xref
 
 #+begin_src elisp
-  (use-package ivy-xref
-    :defer t
-    :init (gsetq xref-show-xrefs-function #'ivy-xref-show-xrefs))
-#+end_src
-
-** ivy-hydra
-
-#+begin_src elisp
-  (after! ivy
-    (use-package ivy-hydra
-      :commands (ivy-dispatching-done ivy--matcher-desc ivy-hydra/body)
-      :init
-      (general-define-key
-       :keymaps 'ivy-minibuffer-map
-       "C-o" #'ivy-dispatching-done
-       "M-o" #'hydra-ivy/body)
-      :config
-      ;; ivy-hydra rebinds this, so we have to do so again
-      (define-key ivy-minibuffer-map (kbd "M-o") #'hydra-ivy/body)))
+  (leaf ivy-xref
+    :custom (xref-show-xrefs-function . #'ivy-xref-show-xrefs))
 #+end_src
 
 ** counsel
 
 #+begin_src elisp
-  (use-package counsel
-    :init
-    (gsetq
-     counsel-find-file-at-point         t
-     ;; Don't use ^ as initial input. Set this here because `counsel' defines more
-     ;; of its own, on top of the defaults.
-     ivy-initial-inputs-alist           nil
-     ;; helpful
-     counsel-describe-function-function #'helpful-callable
-     counsel-describe-variable-function #'helpful-variable)
-    (general-define-key
-     [remap apropos]                    #'counsel-apropos
-     [remap bookmark-jump]              #'counsel-bookmark
-     [remap compile]                    #'nasy/ivy/compile
-     [remap describe-bindings]          #'counsel-descbinds
-     [remap describe-face]              #'counsel-faces
-     [remap describe-function]          #'counsel-describe-function
-     [remap describe-variable]          #'counsel-describe-variable
-     [remap execute-extended-command]   #'counsel-M-x
-     [remap find-file]                  #'counsel-find-file
-     [remap find-library]               #'counsel-find-library
-     [remap imenu]                      #'counsel-imenu
-     [remap info-lookup-symbol]         #'counsel-info-lookup-symbol
-     [remap load-theme]                 #'counsel-load-theme
-     [remap locate]                     #'counsel-locate
-     [remap org-set-tags-command]       #'counsel-org-tag
-     [remap projectile-compile-project] #'nasy/ivy/project-compile
-     [remap recentf-open-files]         #'counsel-recentf
-     [remap set-variable]               #'counsel-set-variable
-     [remap swiper]                     #'counsel-grep-or-swiper
-     [remap unicode-chars-list-chars]   #'counsel-unicode-char
-     [remap yank-pop]                   #'counsel-yank-pop)
-    (general-define-key
-     :keymaps 'counsel-find-file-map
-     "<left>"  #'counsel-up-directory
-     "<right>" #'counsel-down-directory)
+  (leaf counsel
+    :custom
+    (counsel-find-file-at-point         . t)
+    ;; Don't use ^ as initial input. Set this here because `counsel' defines more
+    ;; of its own, on top of the defaults.
+    (ivy-initial-inputs-alist           . nil)
+    ;; helpful
+    (counsel-describe-function-function . #'helpful-callable)
+    (counsel-describe-variable-function . #'helpful-variable)
+    :bind
+    (([remap apropos]                    . counsel-apropos)
+     ([remap bookmark-jump]              . counsel-bookmark)
+     ([remap compile]                    . nasy/ivy/compile)
+     ([remap describe-bindings]          . counsel-descbinds)
+     ([remap describe-face]              . counsel-faces)
+     ([remap describe-function]          . counsel-describe-function)
+     ([remap describe-variable]          . counsel-describe-variable)
+     ([remap execute-extended-command]   . counsel-M-x)
+     ([remap find-file]                  . counsel-find-file)
+     ([remap find-library]               . counsel-find-library)
+     ([remap imenu]                      . counsel-imenu)
+     ([remap info-lookup-symbol]         . counsel-info-lookup-symbol)
+     ([remap load-theme]                 . counsel-load-theme)
+     ([remap locate]                     . counsel-locate)
+     ([remap org-set-tags-command]       . counsel-org-tag)
+     ([remap projectile-compile-project] . nasy/ivy/project-compile)
+     ([remap recentf-open-files]         . counsel-recentf)
+     ([remap set-variable]               . counsel-set-variable)
+     ([remap swiper]                     . counsel-grep-or-swiper)
+     ([remap unicode-chars-list-chars]   . counsel-unicode-char)
+     ([remap yank-pop]                   . counsel-yank-pop))
+    (:counsel-find-file-map
+     ("<left>"  . counsel-up-directory)
+     ("<right>" . counsel-down-directory))
     :config
     ;; (set-popup-rule! "^\\*ivy-occur" :size 0.35 :ttl 0 :quit nil)
 
     ;; HACK Fix an issue where `counsel-projectile-find-file-action' would try to
     ;;      open a candidate in an occur buffer relative to the wrong buffer,
     ;;      causing it to fail to find the file we want.
-    (defadvice! nasy/ivy--run-from-ivy-directory-a (orig-fn &rest args)
-      :around #'counsel-projectile-find-file-action
-      (let ((default-directory (ivy-state-directory ivy-last)))
-        (apply orig-fn args)))
+    ;; (defadvice! nasy/ivy--run-from-ivy-directory-a (orig-fn &rest args)
+    ;;   :around #'counsel-projectile-find-file-action
+    ;;   (let ((default-directory (ivy-state-directory ivy-last)))
+    ;;     (apply orig-fn args)))
 
     ;; Record in jumplist when opening files via counsel-{ag,rg,pt,git-grep}
-    (add-hook 'counsel-grep-post-action-hook #'better-jumper-set-jump)
+    ;; (add-hook 'counsel-grep-post-action-hook #'better-jumper-set-jump)
     (ivy-add-actions
      'counsel-rg ; also applies to `counsel-rg'
      '(("O" nasy/ivy-git-grep-other-window-action "open in other window")))
@@ -525,7 +454,7 @@ Some of them borrowed from doom-emacs
     ;; Make `counsel-compile' projectile-aware (if you prefer it over
     ;; `nasy/ivy/compile' and `nasy/ivy/project-compile')
     (add-to-list 'counsel-compile-root-functions #'projectile-project-root)
-    (after! savehist
+    (after-x 'savehist
       ;; Persist `counsel-compile' history
       (add-to-list 'savehist-additional-variables 'counsel-compile-history))
 
@@ -560,17 +489,22 @@ Some of them borrowed from doom-emacs
     ;; custom ddg themes (if one is set).
     (setf (nth 1 (alist-get 'ddg counsel-search-engines-alist))
           "https://duckduckgo.com/?q=")
-
     ;; REVIEW Move this somewhere else and perhaps generalize this so both
     ;;        ivy/helm users can enjoy it.
-    (defadvice! nasy/ivy--counsel-file-jump-use-fd-rg-a (args)
+    (defun nasy/ivy--counsel-file-jump-use-fd-rg-a(args)
       "Change `counsel-file-jump' to use fd or ripgrep, if they are available."
-      :override #'counsel--find-return-list
       (cl-destructuring-bind (find-program . args)
-          (cond ((executable-find nasy/projectile-fd-binary)
-                 (cons nasy/projectile-fd-binary (list "-t" "f" "-E" ".git")))
+          (cond ((when-let (fd (executable-find (or doom-projectile-fd-binary "fd")))
+                   (append (list fd
+                                 "--color=never" "-E" ".git"
+                                 "--type" "file" "--type" "symlink" "--follow")
+                           (if IS-WINDOWS '("--path-separator=/")))))
                 ((executable-find "rg")
-                 (cons "rg" (list "--files" "--hidden" "--no-messages")))
+                 (append (list "rg" "--files" "--follow" "--color=never" "--hidden" "--no-messages")
+                         (cl-loop for dir in projectile-globally-ignored-directories
+                                  collect "--glob"
+                                  collect (concat "!" dir))
+                         (if IS-WINDOWS (list "--path-separator" "/"))))
                 ((cons find-program args)))
         (unless (listp args)
           (user-error "`counsel-file-jump-args' is a list now, please customize accordingly."))
@@ -578,28 +512,26 @@ Some of them borrowed from doom-emacs
          (cons find-program args)
          (lambda ()
            (goto-char (point-min))
-           (let ((offset (if (member find-program (list "rg" nasy/projectile-fd-binary)) 0 2))
-                 files)
+           (let (files)
              (while (< (point) (point-max))
-               (push (buffer-substring
-                      (+ offset (line-beginning-position)) (line-end-position)) files)
+               (push (buffer-substring (line-beginning-position) (line-end-position))
+                     files)
                (forward-line 1))
-             (nreverse files)))))))
+             (nreverse files))))))
+    :advice (:override counsel--find-return-list nasy/ivy--counsel-file-jump-use-fd-rg-a))
 #+end_src
 
 ** counsel-projectile
 
 #+begin_src elisp
-  (use-package counsel-projectile
-    :defer t
-    :init
-    (general-define-key
-      [remap projectile-find-file]        #'nasy/ivy/projectile-find-file
-      [remap projectile-find-dir]         #'counsel-projectile-find-dir
-      [remap projectile-switch-to-buffer] #'counsel-projectile-switch-to-buffer
-      [remap projectile-grep]             #'counsel-projectile-grep
-      [remap projectile-ag]               #'counsel-projectile-ag
-      [remap projectile-switch-project]   #'counsel-projectile-switch-project)
+  (leaf counsel-projectile
+    :bind
+    (([remap projectile-find-file]        . nasy/ivy/projectile-find-file)
+     ([remap projectile-find-dir]         . counsel-projectile-find-dir)
+     ([remap projectile-switch-to-buffer] . counsel-projectile-switch-to-buffer)
+     ([remap projectile-grep]             . counsel-projectile-grep)
+     ([remap projectile-ag]               . counsel-projectile-ag)
+     ([remap projectile-switch-project]   . counsel-projectile-switch-project))
     :config
     ;; A more sensible `counsel-projectile-find-file' that reverts to
     ;; `counsel-find-file' if invoked from $HOME, `counsel-file-jump' if invoked
@@ -608,32 +540,41 @@ Some of them borrowed from doom-emacs
     (setf (alist-get 'projectile-find-file counsel-projectile-key-bindings)
           #'nasy/ivy/projectile-find-file)
 
-    ;; no highlighting visited files; slows down the filtering
-    (ivy-set-display-transformer #'counsel-projectile-find-file nil)
-
-    ;;
-    (setq counsel-projectile-sort-files t))
+    (after-x 'prescient
+      (gsetq counsel-projectile-sort-files t)))
 #+end_src
 
 ** ivy-prescient
 
 #+begin_src elisp
-  (use-package ivy-prescient
-    :defer t
-    :ghook 'after-init-hook)
+  (leaf ivy-prescient
+    :hook ivy-mode-hook
+    :mode-hook (prescient-persist-mode 1)
+    :custom (ivy-prescient-retain-classic-highlighting . t)
+    :config
+    (defun nasy/ivy-prescient-non-fuzzy (str)
+      (let ((prescient-filter-method '(literal regexp)))
+        (ivy-prescient-re-builder str))))
+
 #+end_src
 
 ** icons and rich
 
 #+begin_src elisp
-  (use-package all-the-icons-ivy-rich
-    :defer t
+  (leaf all-the-icons-ivy-rich
+    :custom
+    (all-the-icons-ivy-rich-icon-size . 0.7)
     :init
-    (gsetq all-the-icons-ivy-rich-icon-size 0.7)
     (all-the-icons-ivy-rich-mode 1)
     (advice-add #'counsel-M-x :before #'all-the-icons-ivy-rich-reload))
 
-  (use-package ivy-rich
-    :defer t
+  (leaf ivy-rich
     :init (ivy-rich-mode 1))
+#+end_src
+
+* Footer                                                                      :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-editor-ivy)
+  ;;; nasy-editor-ivy.el ends here
 #+end_src

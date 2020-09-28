@@ -1,8 +1,25 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-core-session.el")
+
+* Header                                                                        :noexport:
+
+#+begin_src elisp
+  ;;; nasy-core-session.el --- Nasy's Emacs Configuration core-session file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration core file.
+
+  ;;; Code:
+#+end_src
+
 * Packages
 
 #+begin_src elisp
-  (straight-use-package 'session)
-  (straight-use-package 'super-save)
+  (nasy/s-u-p session)
 #+end_src
 
 * Autoloads
@@ -194,25 +211,4 @@
                      tags-file-name
                      tags-table-list
                      kill-ring))))
-#+end_src
-
-* Auto Save (Super Save)
-
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; Auto Save
-  ;; I use super save to auto save files.
-#+end_src
-
-I use super save to auto save files.
-
-#+begin_src elisp
-  (use-package super-save
-    :ghook 'after-init-hook
-    :gfhook '(lambda () (remove-hook #'mouse-leave-buffer-hook #'super-save-command))
-    :init (gsetq super-save-auto-save-when-idle nil
-                 super-save-remote-files        nil
-                 super-save-hook-triggers       nil
-                 super-save-triggers
-                 '(ibuffer other-window windmove-up windmove-down windmove-left windmove-right next-buffer previous-buffer)))
 #+end_src

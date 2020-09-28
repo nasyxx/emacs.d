@@ -1,7 +1,19 @@
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; Org Mode
-  ;;----------------------------------------------------------------------------
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-org.el")
+
+* Header                                                 :noexport:
+
+#+begin_src elisp
+  ;;; nasy-ui.el --- Nasy's Emacs Configuration org file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs org.
+
+  ;;; Code:
 #+end_src
 
 * Packages
@@ -9,72 +21,601 @@
 I use ~org~ with ~org-plus-contrib~
 
 #+begin_src elisp
-  (straight-use-package 'org-plus-contrib)
+  (nasy/s-u-p
+    org-plus-contrib
 
-  (straight-use-package 'org-cliplink)
-  (straight-use-package 'org-pdfview)
-  (straight-use-package 'org-superstar)
-  (straight-use-package 'toc-org)
-  (straight-use-package 'org-wc)
+    org-cliplink
+    org-pdfview
+    org-superstar
+    org-wc
+    toc-org)
 #+end_src
 
 * Autoloads
 
 #+begin_src elisp
-;;
+  ;; Exclude DONE state tasks from refile targets
+  ;;;###autoload
+  (defun verify-refile-target ()
+    "Exclude todo keywords with a done state from refile targets."
+    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+  (setq org-refile-target-verify-function 'verify-refile-target)
+
+  ;;;###autoload
+  (defun org-refile-anywhere (&optional goto default-buffer rfloc msg)
+    "A version of `org-refile' which allows refiling to any subtree."
+    (interactive "P")
+    (let ((org-refile-target-verify-function))
+      (org-refile goto default-buffer rfloc msg)))
+
+  ;;;###autoload
+  (defun org-agenda-refile-anywhere (&optional goto rfloc no-update)
+    "A version of `org-agenda-refile' which allows refiling to any subtree."
+    (interactive "P")
+    (let ((org-refile-target-verify-function))
+      (org-agenda-refile goto rfloc no-update)))
+
+  ;;;###autoload
+  (defun nasy/org-html-paragraph-advice (orig paragraph contents &rest args)
+    "Join consecutive Chinese lines into a single long line without
+    unwanted space when exporting org-mode to html."
+    (let* ((fix-regexp "[[:multibyte:]]")
+           (fixed-contents
+            (replace-regexp-in-string
+             (concat
+              "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents)))
+      (apply orig paragraph fixed-contents args)))
+
+  ;;;###autoload
+  (defun nasy/org-fix-saveplace ()
+    "Fix a problem with saveplace.el putting you back in a folded position"
+    (when (outline-invisible-p)
+      (save-excursion
+        (outline-previous-visible-heading 1)
+        (org-show-subtree))))
+
+  ;;;###autoload
+  (defun org-agenda-log-mode-colorize-block ()
+    "Set different line spacing based on clock time duration."
+    (save-excursion
+      (let* ((colors (cl-case (alist-get 'background-mode (frame-parameters))
+                       ('light
+                        (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))
+                       ('dark
+                        (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))))
+             pos
+             duration)
+        (nconc colors colors)
+        (goto-char (point-min))
+        (while (setq pos (next-single-property-change (point) 'duration))
+          (goto-char pos)
+          (when (and (not (equal pos (point-at-eol)))
+                    (setq duration (org-get-at-bol 'duration)))
+            ;; larger duration bar height
+            (let ((line-height (if (< duration 15) 1.0 (+ 0.5 (/ duration 30))))
+                  (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
+              (overlay-put ov 'face `(:background ,(car colors) :foreground "black"))
+              (setq colors (cdr colors))
+              (overlay-put ov 'line-height line-height)
+              (overlay-put ov 'line-spacing (1- line-height))))))))
+
+  ;;;###autoload
+  (defun show-org-clock-in-header-line ()
+    "Show the clocked-in task in header line"
+    (setq-default header-line-format '((" " org-mode-line-string ""))))
+
+  ;;;###autoload
+  (defun hide-org-clock-from-header-line ()
+    "Hide the clocked-in task from header line"
+    (setq-default header-line-format nil))
 #+end_src
 
-* Config
+* Configs
 
 ** Basic Configs
 
-#+include: "basic.org"
+#+begin_src elisp
+  (leaf org
+    :bind (:org-src-mode-map
+           ("C-c _" . org-edit-src-exit))
+    :hook ((org-mode-hook . auto-fill-mode)
+           (org-mode-hook . nasy/org-fix-saveplace)
+           (org-mode-hook . org-prettify-source-block-mode))
+    :advice
+    (:after
+     org-refile
+     (lambda (&rest _) (org-save-all-org-buffers)))
+    (:around
+     org-html-paragraph
+     nasy/org-html-paragraph-advice))
+#+end_src
+
+#+begin_src elisp
+  (leaf org
+    :custom
+    ((org-archive-location  . "%s_archive::* Archive")
+     (org-archive-mark-done . nil)
+
+     (org-catch-invisible-edits . 'smart)
+
+     (org-default-notes-file . "~/notes/default.org")
+
+     (org-edit-timestamp-down-means-later . t)
+
+     (org-ellipsis . " ﹅")
+
+     `(org-emphasis-regexp-components ;; markup chinesee without space
+       . ,(list (concat " \t('\"{"            "[:nonascii:]")
+                (concat "- \t.,:!?;'\")}\\["  "[:nonascii:]")
+                " \t\r\n,\"'"
+                "."
+                1))
+
+     (org-export-backends                           . '(ascii html latex md))
+     (org-export-coding-system                      . 'utf-8)
+     (org-export-kill-product-buffer-when-displayed . t)
+     (org-export-with-broken-links                  . 'mark)
+     (org-export-with-sub-superscripts              . '{})
+     (org-use-sub-superscripts                      . '{})
+
+     (org-fast-tag-selection-single-key . 'expert)
+
+     ;; org appearance
+     ((org-allow-promoting-top-level-subtree
+       org-cycle-level-faces
+       org-fontify-done-headline
+       org-fontify-emphasized-text
+       org-fontify-todo-headline
+       org-fontify-whole-block-delimiter-line
+       org-fontify-whole-heading-line
+       org-hide-emphasis-markers)
+      . t)
+     (org-hide-leading-stars . nil)
+
+     (org-highlight-latex-and-related   . '(native latex script entities))
+
+     (org-html-checkbox-type       . 'uncode)
+     (org-html-doctype             . "html5")
+     (org-html-html5-fancy         . t)
+     (org-html-htmlize-output-type . 'inline-css)
+     (org-html-klipsify-src        . t)
+     (org-html-mathjax-options
+      . '((path          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML")
+          (scale         "100")
+          (align         "center")
+          (font          "Neo-Euler")
+          (linebreaks    "false")
+          (autonumber    "AMS")
+          (indent        "0em")
+          (multlinewidth "85%")
+          (tagindent     ".8em")
+          (tagside       "right")))
+     (org-html-with-latex      . 'mathjax)
+     (org-html-validation-link .  nil)
+
+     (org-indent-mode-turns-on-hiding-stars . nil)
+
+     (org-pretty-entities . t)
+
+     ;; org time
+     (org-display-custom-times         . t)
+     (org-time-stamp-custom-formats    . '("<%a, %b %d, %Y>" . "<%a, %b %d, %Y at %H:%M>"))
+     (org-export-date-timestamp-format . "%b %d, %Y")
+
+     ;; org latex
+     (org-latex-compiler . "lualatex")
+     (org-latex-default-packages-alist
+      . '(("AUTO" "inputenc"  t   ("pdflatex"))
+          ("T1"   "fontenc"   t   ("pdflatex"))
+          (""     "graphicx"  t   nil)
+          (""     "grffile"   t   nil)
+          (""     "longtable" t   nil)
+          (""     "booktabs"  t   nil)
+          (""     "wrapfig"   nil nil)
+          (""     "rotating"  nil nil)
+          ("normalem" "ulem"  t   nil)
+          (""     "amsmath"   t   nil)
+          (""     "textcomp"  t   nil)
+          (""     "amssymb"   t   nil)
+          (""     "capt-of"   nil nil)
+          ("colorlinks,unicode,linkcolor=blue,anchorcolor=blue,citecolor=green,filecolor=black,urlcolor=blue"
+           "hyperref" t nil)
+          (""            "luatexja-fontspec" t nil)
+          (""            "listings"          t nil)
+          (""            "algorithm"         t nil)
+          (""            "algpseudocode"     t nil)
+          ("cache=false" "minted"            t nil)))
+     (org-latex-default-table-environment . "longtable")
+     (org-latex-listings                  . 'minted)
+     (org-latex-listings-langs
+      . '((emacs-lisp   "Lisp")
+          (lisp         "Lisp")
+          (clojure      "Lisp")
+          (c            "C")
+          (C            "C")
+          (cc           "C++")
+          (fortran      "fortran")
+          (perl         "Perl")
+          (cperl        "Perl")
+          (Python       "Python")
+          (python       "Python")
+          (ruby         "Ruby")
+          (html         "HTML")
+          (xml          "XML")
+          (tex          "TeX")
+          (latex        "[LaTeX]TeX")
+          (sh           "bash")
+          (shell-script "bash")
+          (gnuplot      "Gnuplot")
+          (ocaml        "Caml")
+          (caml         "Caml")
+          (sql          "SQL")
+          (sqlite       "sql")
+          (makefile     "make")
+          (make         "make")
+          (R            "r")))
+     (org-latex-pdf-process
+      . '("lualatex -shell-escape -interaction nonstopmode %f"
+          "lualatex -shell-escape -interaction nonstopmode %f"))
+     (org-latex-tables-booktabs . t)
+
+     (org-level-color-stars-only . nil)
+     (org-list-indent-offset     . 2)
+     (org-log-done               . t)
+
+     (org-outline-path-complete-in-steps . nil)
+
+     (org-refile-allow-creating-parent-nodes . 'confirm)
+     ;; (org-refile-targets                     . '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
+     (org-refile-use-cache                   . nil)
+     (org-refile-use-outline-path            . t)
+
+     (org-startup-indented  . t)
+     (org-startup-folded    . 'content)
+     (org-startup-truncated . nil)
+
+     (org-src-lang-modes . '(("C"         . c)
+                             ("C++"       . c++)
+                             ("asymptote" . asy)
+                             ("bash"      . sh)
+                             ("beamer"    . latex)
+                             ("calc"      . fundamental)
+                             ("makefile"  . fundamental)
+                             ("make"      . fundamental)
+                             ("cpp"       . c++)
+                             ("ditaa"     . artist)
+                             ("dot"       . fundamental)
+                             ("elisp"     . emacs-lisp)
+                             ("ocaml"     . tuareg)
+                             ("screen"    . shell-script)
+                             ("shell"     . sh)
+                             ("sqlite"    . sql)))
+
+     (org-support-shift-select . t)
+
+     (org-tags-column . -67)
+
+     ;; to-do settings
+     (org-todo-keywords . '((sequence
+                             "TODO(t)"
+                             "WIP(w/!)"
+                             "WAIT(W@/!)"
+                             "HOLD(h)"
+                             "|"
+                             "CANCELLED(c@/!)"
+                             "DONE(d!/!)")))
+     (org-todo-repeat-to-state . "NEXT")
+     (org-todo-keyword-faces   . '(("NEXT" :inherit warning)
+                                   ("WAIT" :inherit font-lock-string-face)))
+
+     (org-babel-python-command . "python"))
+    :defer-config
+    (nasy/add-company-backend 'org-mode 'company-tabnine)
+    ;; --------
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     `((ditaa      . t)
+       (dot        . t)
+       (elvish     . t)
+       (emacs-lisp . t)
+       (gnuplot    . t)
+       (haskell    . nil)
+       (latex      . t)
+       (ledger     . t)
+       (ocaml      . nil)
+       (octave     . t)
+       (plantuml   . t)
+       (python     . t)
+       (R          . t)
+       (restclient . t)
+       (ruby       . t)
+       (screen     . nil)
+       (,(if (locate-library "ob-sh") 'sh 'shell) . t)
+       (sql        . nil)
+       (sqlite     . t)))
+    ;; --------
+    (gsetq luamagick
+           '(luamagick
+             :programs ("lualatex" "convert")
+             :description "pdf > png"
+             :message "you need to install lualatex and imagemagick."
+             :use-xcolor t
+             :image-input-type "pdf"
+             :image-output-type "png"
+             :image-size-adjust (1.0 . 1.0)
+             :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+             :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+    (add-to-list 'org-preview-latex-process-alist luamagick)
+
+    (gsetq luasvg
+           '(luasvg
+             :programs ("lualatex" "dvisvgm")
+             :description "dvi > svg"
+             :message "you need to install lualatex and dvisvgm."
+             :use-xcolor t
+             :image-input-type "dvi"
+             :image-output-type "svg"
+             :image-size-adjust (1.7 . 1.5)
+             :latex-compiler ("lualatex -interaction nonstopmode -output-format dvi -output-directory %o %f")
+             :image-converter ("dvisvgm %f -n -b min -c %S -o %O")))
+    (add-to-list 'org-preview-latex-process-alist luasvg)
+    (gsetq org-preview-latex-default-process 'luamagick)
+
+    (require 'org-tempo nil t)
+    (after-x 'ox
+      (let ((oxs '(ox-rst
+                   ox-pandoc)))
+        (dolist (language oxs)
+          (straight-use-package language)
+          (require language nil t)))))
+#+end_src
 
 ** Org Agenda
 
-#+include: "agenda.org"
+#+begin_src elisp
+  (leaf org-agenda
+    :hook ((org-agenda-finalize-hook . org-agenda-log-mode-colorize-block))
+    :after org
+    :custom
+    (org-agenda-clockreport-parameter-plist . '(:link t :maxlevel 3))
+    (org-agenda-compact-blocks   . t)
+    (org-agenda-include-diary    . nil)
+    (org-agenda-span             . 'week)
+    (org-agenda-start-on-weekday . nil)
+    (org-agenda-start-day        . "-1d")
+    (org-agenda-sticky           . nil)
+    (org-agenda-window-setup     . 'current-window)
+
+    (org-agenda-sorting-strategy
+     . '((agenda habit-down time-up user-defined-up effort-up category-keep)
+         (todo category-up effort-up)
+         (tags category-up effort-up)
+         (search category-up)))
+
+    (org-agenda-time-grid
+     . '((daily today weekly require-timed remove-match)
+         (0 600 900 1200 1300 1600 1800 2000 2200 2400 2600)
+         "......"
+         "-----------------------------------------------------"))
+    (org-agenda-prefix-format
+     . '((agenda . " %i %+15c\t%?-15t% s")
+         (todo   . " %i %+15c\t")
+         (tags   . " %i %+15c\t")
+         (search . " %i %+15c\t")))
+    :init
+    (after-x 'all-the-icons
+      (gsetq
+       org-agenda-category-icon-alist
+       `(("Tasks"        ,(list (all-the-icons-faicon  "tasks"            :height 0.8 :v-adjust 0)) nil nil :ascent center)
+         ("Calendar"     ,(list (all-the-icons-octicon "calendar"         :height 0.8 :v-adjust 0)) nil nil :ascent center)
+         ("Appointments" ,(list (all-the-icons-faicon  "calendar-check-o" :height 0.8 :v-adjust 0)) nil nil :ascent center)))))
+#+end_src
 
 ** Org Capture
 
-#+include: "capture.org"
+#+begin_src elisp
+  (leaf org-capture
+    :defvar org-capture-templates
+    :defer-config
+    (add-to-list 'org-capture-templates '("t" "Tasks"))
+
+    (add-to-list 'org-capture-templates
+                 '("tr" "Book Reading Task" entry
+                   (file+olp "~/notes/task.org" "Reading" "Book")
+                   "* TODO %^{book name}\n%u\n%a\n" :clock-in t :clock-resume t))
+
+    (add-to-list 'org-capture-templates
+                 '("tw" "Work Task" entry
+                   (file+headline "~/notes/task.org" "Work")
+                   "* TODO %^{task name}\n%u\n%a\n" :clock-in t :clock-resume t))
+
+    (add-to-list 'org-capture-templates
+                 '("T" "Thoughts" entry
+                   (file "~/notes/thoughts.org")
+                   "* %t - %^{heading}\n\n%?"))
+
+    (add-to-list 'org-capture-templates
+                 '("j" "Journal" entry
+                   (file "~/notes/journal.org")
+                   "* %U - %^{heading}\n  %?"))
+
+    (add-to-list 'org-capture-templates
+                 '("i" "Inbox" entry
+                   (file "~/notes/inbox.org")
+                   "* %U - %^{heading} %^g\n %?\n"))
+
+    (add-to-list 'org-capture-templates
+                 '("n" "Notes" entry
+                   (file "~/notes/notes.org")
+                   "* %^{heading} %t %^g\n  %?\n")))
+#+end_src
 
 ** Org clock
 
-#+include: "clock.org"
-
-** Org Extra Jar -- ob-ditaa & ob-plantuml
-
-#+include: "extra-jar.org"
-
+#+begin_src elisp
+  (leaf org-clock
+    :custom
+    ((org-clock-persist
+      org-clock-in-resume
+      ;; Save clock data and notes in the LOGBOOK drawer
+      org-clock-into-drawer
+      ;; Save state changes in the LOGBOOK drawer
+      org-log-into-drawer
+      ;; Removes clocked tasks with 0:00 duration
+      org-clock-out-remove-zero-time-clocks) . t)
+    ;; Show clock sums as hours and minutes, not "n days" etc.
+    (org-time-clocksum-format
+     . '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+    :hook ((org-clock-in-hook . show-org-clock-in-header-line)
+           ((org-clock-out-hook . org-clock-cancel) . hide-org-clock-from-header))
+    :bind (:org-clock-mode-line-map
+           ([header-line mouse-2] . org-clock-goto)
+           ([header-line mouse-1] . org-clock-menu))
+    :config
+    (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
+      (add-hook 'org-clock-in-hook
+                (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                                    (concat "tell application \"org-clock-statusbar\" to clock in \""
+                                            org-clock-current-task "\""))))
+      (add-hook 'org-clock-out-hook
+                (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                                    "tell application \"org-clock-statusbar\" to clock out")))))
+#+end_src
 
 ** Org Pomodoro
 
 #+begin_src elisp
-  (use-package org-pomodoro
-    :defer t
-    :init (gsetq org-pomodoro-keep-killed-pomodoro-time t)
-    :bind (:map org-agenda-mode-map
-                ("P" . org-pomodoro)))
+  (leaf org-pomodoro
+    :custom (org-pomodoro-keep-killed-pomodoro-time . t)
+    :bind (:org-agenda-mode-map
+           ("P" . org-pomodoro)))
+#+end_src
+
+** Org Prettify Source Block
+
+#+begin_src elisp
+  (defgroup org-prettify-source-block nil
+    "Prettify org-mode source block markers."
+    :group 'org-mode
+    :prefix "org-prettify-source-block"
+    :version "0.1")
+
+  (defvar-local opsb-org-at-src-begin -1
+    "Variable that holds whether last position was a ")
+
+  (defvar opsb-ob-header-symbol ?☰
+    "Symbol used for babel headers")
+
+  (defvar opsb-block-alist `(("#+begin_src" . ?λ) ;; ╦ ➤ 🖝 ➟ ➤ ✎ ✎
+                             ("#+end_src"   . ?⌞) ;; ╩ □
+                             ("#+header:" . ,opsb-ob-header-symbol)
+                             ("#+begin_comment" . ?✎)
+                             ("#+end_comment" . ?⌞)
+                             ("#+begin_notes" . ?➤)
+                             ("#+end_notes" . ?⌞)
+                             ("#+begin_quote" . ?»)
+                             ("#+end_quote" . ?⌞)))
+
+  (defun opsb-org-prettify-src--update ()
+    (let ((case-fold-search t)
+          (re "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*")
+          found)
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward re nil t)
+          (goto-char (match-end 0))
+          (let ((args (org-trim
+                       (buffer-substring-no-properties (point)
+                                                       (line-end-position)))))
+            (when (org-string-nw-p args)
+              (let ((new-cell (cons args opsb-ob-header-symbol)))
+                (cl-pushnew new-cell prettify-symbols-alist :test #'equal)
+                (cl-pushnew new-cell found :test #'equal)))))
+
+        (setq prettify-symbols-alist
+              (cl-set-difference prettify-symbols-alist
+                                 (cl-set-difference
+                                  (cl-remove-if-not
+                                   (lambda (elm)
+                                     (eq (cdr elm) opsb-ob-header-symbol))
+                                   prettify-symbols-alist)
+                                  found :test #'equal)))
+
+        ;; Clean up old font-lock-keywords.
+        (font-lock-remove-keywords nil prettify-symbols--keywords)
+        (setq prettify-symbols--keywords (prettify-symbols--make-keywords))
+        (font-lock-add-keywords nil prettify-symbols--keywords)
+        (while (re-search-forward re nil t)
+          (font-lock-flush (line-beginning-position) (line-end-position))))))
+
+  (defun opsb-org-prettify-src ()
+    "Hide src options via `prettify-symbols-mode'.
+      `prettify-symbols-mode' is used because it has
+      uncollapsing. It may not be efficient."
+    (let* ((case-fold-search t)
+           (at-src-block
+            (save-excursion
+              (beginning-of-line)
+              (looking-at "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*"))))
+      ;; Test if we moved out of a block.
+      (when (or (and opsb-org-at-src-begin
+                     (not at-src-block))
+                ;; File was just opened.
+                (eq opsb-org-at-src-begin -1))
+        (opsb-org-prettify-src--update))
+      (setq opsb-org-at-src-begin at-src-block)))
+
+  (defsubst opsb-append-upcase (the-list)
+      "Duplicate THE-LIST with upcased cars."
+    (cl-reduce 'append
+               (mapcar (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+                       the-list)))
+
+  (defun opsb-append-org-prettify-symbols ()
+    (setq prettify-symbols-alist
+            (cl-union prettify-symbols-alist
+                      (opsb-append-upcase opsb-block-alist))))
+
+  (defun opsb-delete-org-prettify-symbols ()
+    (setq prettify-symbols-alist
+          (cl-set-difference prettify-symbols-alist
+                             (opsb-append-upcase opsb-block-alist))))
+
+  (define-minor-mode org-prettify-source-block-mode
+    "Toggle prettification of org source blocks."
+    :lighter ""
+    (if org-prettify-source-block-mode
+        (progn
+          (turn-on-prettify-symbols-mode)
+          (add-hook 'post-command-hook 'opsb-org-prettify-src t t)
+          (opsb-append-org-prettify-symbols))
+      (remove-hook 'post-command-hook 'opsb-org-prettify-src t)
+      (opsb-delete-org-prettify-symbols)))
 #+end_src
 
 ** Org superstar
 
 #+begin_src elisp
-  (use-package org-superstar
-    :defer t
-    :ghook 'org-mode-hook
-    :init
-    (gsetq
-     org-superstar-special-todo-items t
-     org-superstar-headline-bullets-list
-     '("♥"
-       "✿"
-       "❀"
-       "☢"
-       "✸"
-       "◉")
-     org-superstar-item-bullet-alist
-     '((?* . ?☯)
-       (?+ . ?✚)
-       (?- . ?▶))))
+  (leaf org-superstar
+    :hook org-mode-hook
+    :custom
+    ((org-superstar-special-todo-items . t)
+     (org-superstar-headline-bullets-list
+      . '("♥"
+          "✿"
+          "❀"
+          "☢"
+          "✸"
+          "◉"))
+     (org-superstar-item-bullet-alist
+      . '((?* . ?☯)
+          (?+ . ?✚)
+          (?- . ?▶)))))
+#+end_src
+
+* Footer                                                 :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-org)
+  ;;; nasy-org.el ends here
 #+end_src

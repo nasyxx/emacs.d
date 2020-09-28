@@ -1,146 +1,166 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-editor-dired.el")
+
+* Header                                                                        :noexport:
+
+#+begin_src elisp :exports none
+  ;;; nasy-editor-dired.el  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Dired Mode.
+
+  ;;; Code:
+#+end_src
+
 * Dired
 
+DiredMode is the mode of a Dired buffer.  It shows a directory (folder) listing
+that you can use to perform various operations on files and subdirectories in
+the directory. The operations you can perform are numerous, from creating
+subdirectories to byte-compiling files, searching files, and of course visiting
+(editing) files.
+
+https://www.emacswiki.org/emacs/DiredMode
+
 #+begin_src elisp
-  (use-package dired
-    :init
-    (let ((gls (executable-find "gls")))
-      (when gls (setq insert-directory-program gls)))
-    (setq dired-recursive-deletes 'top)
-    :bind (:map dired-mode-map
-                ([mouse-2] . dired-find-file             )
-                ("C-c C-p" . wdired-change-to-wdired-mode)))
+  (leaf dired
+    :doc "DiredMode is the mode of a Dired buffer."
+    :url "https://www.emacswiki.org/emacs/DiredMode"
+    :tag "files"
+    :bind
+    (:dired-mode-map
+     ([mouse-2] . dired-find-file)
+     ("C-c C-p" . wdired-change-to-wdired-mode))
+    :custom
+    `(insert-directory-program . ,(or (executable-find "gls")
+                                     (executable-find "ls")))
+    (dired-recursive-deletes  . 'top))
 #+end_src
 
-* Diredfl
+* Dired Hacks
+
+Collection of useful dired additions
+
+https://github.com/Fuco1/dired-hacks
 
 #+begin_src elisp
-  (straight-use-package 'diredfl)
-  (use-package diredfl
-    :after dired
-    :hook ((after-init . diredfl-global-mode)))
+  (leaf dired-hacks
+    :doc "Collection of useful dired additions"
+    :url "https://github.com/Fuco1/dired-hacks"
+    :tag "files")
 #+end_src
 
-* Uniquify
+** Dired Filter
 
 #+begin_src elisp
-  (use-package uniquify
-    :init  ;; nicer naming of buffers for files with identical names
-    (gsetq uniquify-buffer-name-style   'reverse
-           uniquify-separator           " • "
-           uniquify-after-kill-buffer-p t
-           uniquify-ignore-buffers-re   "^\\*"))
+  (leaf dired-filter
+    :tag "files"
+    :bind
+    (:dired-mode-map
+     ("/" . dired-filter-map))
+    (:dired-filter-map
+     ("p" . dired-filter-pop-all)
+     ("/" . dired-filter-mark-map))
+    :hook (dired-mode-hook
+           (dired-mode-hook . dired-filter-group-mode))
+    :custom
+    (dired-filter-revert . 'never)
+    (dired-filter-group-saved-groups
+     . '(("default"
+          ("Git"
+           (directory . ".git")
+           (file . ".gitignore"))
+          ("Directory"
+           (directory))
+          ("PDF"
+           (extension . "pdf"))
+          ("LaTeX"
+           (extension "tex" "bib"))
+          ("Source"
+           (extension "c" "cpp" "hs" "rb" "py" "r" "cs" "el" "lisp" "html" "js" "css"))
+          ("Doc"
+           (extension "md" "rst" "txt"))
+          ("Org"
+           (extension . "org"))
+          ("Archives"
+           (extension "zip" "rar" "gz" "bz2" "tar"))
+          ("Images"
+           (extension "jpg" "JPG" "webp" "png" "PNG" "jpeg" "JPEG" "bmp" "BMP" "TIFF" "tiff" "gif" "GIF"))))))
 #+end_src
 
-* Diff-hl (only for dired)
+** Dired Rainbow
 
 #+begin_src elisp
-  (straight-use-package 'diff-hl)
-  (use-package diff-hl
-    :after dired
-    :hook ((dired-mode . diff-hl-dired-mode)
-           (magit-post-refresh . diff-hl-magit-post-refresh)))
-#+end_src
-
-* Dired Hacks Utils
-
-#+begin_src elisp
-  (straight-use-package 'dired-hacks-utils)
-#+end_src
-
-* Dired Filter
-
-#+begin_src elisp
-  (straight-use-package 'dired-filter)
-  (use-package dired-filter
-    :after    dired
-    :bind (:map dired-mode-map
-                ("/" . dired-filter-map))
-    :hook ((dired-mode . dired-filter-mode)
-           (dired-mode . dired-filter-group-mode))
-    :init (gsetq dired-filter-revert 'never
-                 dired-filter-group-saved-groups
-                 '(("default"
-                    ("Git"
-                     (directory . ".git")
-                     (file . ".gitignore"))
-                    ("Directory"
-                     (directory))
-                    ("PDF"
-                     (extension . "pdf"))
-                    ("LaTeX"
-                     (extension "tex" "bib"))
-                    ("Source"
-                     (extension "c" "cpp" "hs" "rb" "py" "r" "cs" "el" "lisp" "html" "js" "css"))
-                    ("Doc"
-                     (extension "md" "rst" "txt"))
-                    ("Org"
-                     (extension . "org"))
-                    ("Archives"
-                     (extension "zip" "rar" "gz" "bz2" "tar"))
-                    ("Images"
-                     (extension "jpg" "JPG" "webp" "png" "PNG" "jpeg" "JPEG" "bmp" "BMP" "TIFF" "tiff" "gif" "GIF"))))))
-#+end_src
-
-* Dired avfs
-
-#+begin_src elisp
-  (when (executable-find "avfsd")
-    (straight-use-package 'dired-avfs))
-#+end_src
-
-* Dired Rainbow
-
-#+begin_src elisp
-  (straight-use-package 'dired-rainbow)
-  (use-package dired-rainbow
-    :after dired
-    :config
+  (leaf dired-rainbow
+    :tag "files"
+    :commands dired
+    :defer-config
+    (dired-rainbow-define html "#eb5286"
+                          ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
+    (dired-rainbow-define xml "#f2d024"
+                          ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
+    (dired-rainbow-define document "#9561e2"
+                          ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
+    (dired-rainbow-define markdown "#ffed4a"
+                          ("org" "etx" "info" "markdown" "md" "mkd" "nfo" "pod" "rst" "tex" "textfile" "txt"))
+    (dired-rainbow-define database "#6574cd"
+                          ("xlsx" "xls" "csv" "accdb" "db" "mdb" "sqlite" "nc"))
+    (dired-rainbow-define media "#de751f"
+                          ("mp3" "mp4" "MP3" "MP4" "avi" "mpeg" "mpg" "flv" "ogg" "mov" "mid" "midi" "wav" "aiff" "flac"))
+    (dired-rainbow-define image "#f66d9b"
+                          ("tiff" "tif" "cdr" "gif" "ico" "jpeg" "jpg" "png" "psd" "eps" "svg"))
+    (dired-rainbow-define log "#c17d11"
+                          ("log"))
+    (dired-rainbow-define shell "#f6993f"
+                          ("awk" "bash" "bat" "sed" "sh" "zsh" "vim"))
+    (dired-rainbow-define interpreted "#38c172"
+                          ("py" "ipynb" "rb" "pl" "t" "msql" "mysql" "pgsql" "sql" "r" "clj" "cljs" "scala" "js"))
+    (dired-rainbow-define compiled "#4dc0b5"
+                          ("asm" "cl" "lisp" "el" "c" "h" "c++" "h++" "hpp" "hxx" "m" "cc" "cs" "cp" "cpp" "go" "f" "for" "ftn" "f90" "f95" "f03" "f08" "s" "rs" "hi" "hs" "pyc" ".java"))
+    (dired-rainbow-define executable "#8cc4ff"
+                          ("exe" "msi"))
+    (dired-rainbow-define compressed "#51d88a"
+                          ("7z" "zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
+    (dired-rainbow-define packaged "#faad63"
+                          ("deb" "rpm" "apk" "jad" "jar" "cab" "pak" "pk3" "vdf" "vpk" "bsp"))
+    (dired-rainbow-define encrypted "#ffed4a"
+                          ("gpg" "pgp" "asc" "bfe" "enc" "signature" "sig" "p12" "pem"))
+    (dired-rainbow-define fonts "#6cb2eb"
+                          ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
+    (dired-rainbow-define partition "#e3342f"
+                          ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
+    (dired-rainbow-define vc "#0074d9"
+                          ("git" "gitignore" "gitattributes" "gitmodules"))
     (dired-rainbow-define-chmod directory "#6cb2eb" "d.*")
-    (dired-rainbow-define html        "#eb5286" ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
-    (dired-rainbow-define xml         "#f2d024" ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
-    (dired-rainbow-define document    "#9561e2" ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
-    (dired-rainbow-define markdown    "#ffed4a" ("org" "etx" "info" "markdown" "md" "mkd" "nfo" "pod" "rst" "tex" "textfile" "txt"))
-    (dired-rainbow-define database    "#6574cd" ("xlsx" "xls" "csv" "accdb" "db" "mdb" "sqlite" "nc"))
-    (dired-rainbow-define media       "#de751f" ("mp3" "mp4" "MP3" "MP4" "avi" "mpeg" "mpg" "flv" "ogg" "mov" "mid" "midi" "wav" "aiff" "flac"))
-    (dired-rainbow-define image       "#f66d9b" ("tiff" "tif" "cdr" "gif" "ico" "jpeg" "jpg" "png" "psd" "eps" "svg"))
-    (dired-rainbow-define log         "#c17d11" ("log"))
-    (dired-rainbow-define shell       "#f6993f" ("awk" "bash" "bat" "sed" "sh" "zsh" "vim"))
-    (dired-rainbow-define interpreted "#38c172" ("py" "ipynb" "rb" "pl" "t" "msql" "mysql" "pgsql" "sql" "r" "clj" "cljs" "scala" "js"))
-    (dired-rainbow-define compiled    "#4dc0b5" ("asm" "cl" "lisp" "el" "c" "h" "c++" "h++" "hpp" "hxx" "m" "cc" "cs" "cp" "cpp" "go" "f" "for" "ftn" "f90" "f95" "f03" "f08" "s" "rs" "hi" "hs" "pyc" ".java"))
-    (dired-rainbow-define executable  "#8cc4ff" ("exe" "msi"))
-    (dired-rainbow-define compressed  "#51d88a" ("7z" "zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
-    (dired-rainbow-define packaged    "#faad63" ("deb" "rpm" "apk" "jad" "jar" "cab" "pak" "pk3" "vdf" "vpk" "bsp"))
-    (dired-rainbow-define encrypted   "#ffed4a" ("gpg" "pgp" "asc" "bfe" "enc" "signature" "sig" "p12" "pem"))
-    (dired-rainbow-define fonts       "#6cb2eb" ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
-    (dired-rainbow-define partition   "#e3342f" ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
-    (dired-rainbow-define vc          "#0074d9" ("git" "gitignore" "gitattributes" "gitmodules"))
     (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))
 #+end_src
 
-* Dired Subtree/ranger
+** Dired Narrow
 
 #+begin_src elisp
-  (straight-use-package 'dired-subtree)
-
-  (straight-use-package 'dired-ranger)
+  (leaf dired-narrow
+    :tag "files"
+    :bind ((:dired-narrow-map
+            ("<down>"  . dired-narrow-next-file)
+            ("<up>"    . dired-narrow-previous-file)
+            ("<right>" . dired-narrow-enter-directory))))
 #+end_src
 
-* Dired Narrow
+** Dired Collapse
 
 #+begin_src elisp
-  (straight-use-package 'dired-narrow)
-  (use-package dired-narrow
-    :after    dired
-    :bind (:map dired-narrow-map
-                ("<down>"  . dired-narrow-next-file)
-                ("<up>"    . dired-narrow-previous-file)
-                ("<right>" . dired-narrow-enter-directory)))
+  (leaf dired-collapse
+    :tag "files"
+    :hook dired-mode-hook)
 #+end_src
 
-* Dired Collapse
+* Footer                                                                        :noexport:
 
-#+begin_src elisp
-  (straight-use-package 'dired-collapse)
-  (use-package dired-collapse
-    :ghook 'dired-mode-hook)
+#+begin_src elisp :exports none
+  (provide 'nasy-editor-dired)
+  ;;; nasy-editor-dired.el ends here
 #+end_src

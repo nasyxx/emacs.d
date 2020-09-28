@@ -1,3 +1,23 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-core-text.el")
+
+* Header                                                                        :noexport:
+
+#+begin_src elisp
+  ;;; nasy-core-text.el  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Core Text file.
+
+  ;;; Code:
+#+end_src
+
+* Functions
+
 #+begin_src elisp
   ;;;###autoload
   (defun nasy/delete-backward-word (arg)
@@ -107,5 +127,11 @@
       (delete-horizontal-space t)
       (newline nil t)
       (indent-according-to-mode)))
+#+end_src
 
+* Footer                                                                        :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-core-text)
+  ;;; nasy-core-text.el ends here
 #+end_src

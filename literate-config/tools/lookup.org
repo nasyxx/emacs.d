@@ -13,7 +13,7 @@
 
 * Autoloads
 
-#+begin_src elisp :tangle
+#+begin_src elisp
   ;;;###autodef
   (defun set-lookup-handlers! (modes &rest plist)
     "Define jump handlers for major or minor MODES.

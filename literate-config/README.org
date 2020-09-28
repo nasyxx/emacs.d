@@ -5,7 +5,7 @@
 This includes some necessary headers.
 
 #+begin_src elisp
-  ;;; init.el --- Nasy's emacs.d init file.            -*- lexical-binding: t; -*-
+  ;;; init.el --- Nasy's Emacs Configuration file.            -*- lexical-binding: t; -*-
   ;; Copyright (C) 2018  Nasy
 
   ;; Author: Nasy <nasyxx+emacs@gmail.com>
@@ -37,53 +37,74 @@ lexical scoping.
   (setq-default lexical-binding t)
 #+end_src
 
-* Load Path
-
-Literate config will generate emacslisp files to ~config~ folder.  Thus, we will
-add it to the load path.
-
-#+begin_src elisp
-  (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
-#+end_src
-
 * Bootstrap
 
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
+In this section, it will include default settings, ~load-path~ and packages
+manager.  At the same time, it will initialize the benchmark and garbage
+collection.
+
+#+begin_src elisp
+  ;;------------------------------------------------------------------------------
   ;; Bootstrap
-  ;; In this section, the configuration needs to occur early in emacs startup.
-  ;;----------------------------------------------------------------------------
-
+  (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
   (require 'nasy-bootstrap)
-
-  (add-to-list 'load-path (expand-file-name "config/bootstrap" user-emacs-directory))
 #+end_src
 
-#+include: "literate-config/bootstrap/README.org"
+#+include: "bootstrap/README.org"
+
+* Core
+
+#+begin_src elisp
+  (nasy/local-repo core)
+  (require 'nasy-core)
+#+end_src
+
+#+include: "core/README.org"
 
 * Editor
 
-#+include: "literate-config/editor/README.org"
+#+begin_src elisp
+  (nasy/local-repo editor)
+  (require 'nasy-editor)
+#+end_src
 
-* Convenience
-
-#+include: "literate-config/convenience/README.org"
+#+include: "editor/README.org"
 
 * Tools
 
-#+include: "literate-config/tools/README.org"
+#+begin_src elisp
+  (nasy/local-repo tools)
+  (require 'nasy-tools)
+#+end_src
+
+#+include: "tools/README.org"
 
 * Languages
 
-#+include: "literate-config/lang/README.org"
+#+begin_src elisp
+  (nasy/local-repo langs)
+  (require 'nasy-langs)
+#+end_src
+
+#+include: "langs/README.org"
 
 * Org Mode
 
-#+include: "literate-config/org/README.org"
+#+begin_src elisp
+  (nasy/local-repo org)
+  (require 'nasy-org)
+#+end_src
+
+#+include: "org/README.org"
 
 * UI
 
-#+include: "literate-config/ui/README.org"
+#+begin_src elisp
+  (nasy/local-repo ui)
+  (require 'nasy-ui)
+#+end_src
+
+#+include: "ui/README.org"
 
 * Epilogue
 

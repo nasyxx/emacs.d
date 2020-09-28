@@ -1,0 +1,76 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-core.el")
+
+* Header                                                                        :noexport:
+
+#+begin_src elisp
+  ;;; nasy-core.el --- Nasy's Emacs Configuration core file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Core.
+
+  ;;; Code:
+#+end_src
+
+* Core Packages
+
+#+begin_src elisp
+  (nasy/s-u-p async default-text-scale diminish general session transient)
+#+end_src
+
+* Core Libs
+
+Core Libs include useful functions, macros and alias.
+
+#+include: "core-libs.org"
+
+* Core Buffer
+
+#+include: "core-buffer.org"
+
+* Core Text
+
+#+include: "core-text.org"
+
+* core others
+
+#+include: "core-others.org"
+
+* Define Nasy Custom
+
+#+begin_src elisp
+  (require 'nasy-core-custom)
+#+end_src
+
+#+include: "core-custom.org"
+
+* Key Definition and Bindings
+
+#+begin_src elisp
+  (require 'nasy-core-keybindings)
+#+end_src
+
+#+include: "core-keybindings.org"
+
+* Mixed
+
+#+begin_src elisp
+  (require 'nasy-core-mixed)
+#+end_src
+
+#+include: "mixed.org"
+
+* Window
+
+#+include: "window.org"
+
+* Footer                                                                      :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-core)
+  ;;; nasy-core.el ends here
+#+end_src

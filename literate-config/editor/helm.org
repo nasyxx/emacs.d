@@ -1,3 +1,110 @@
+* Helm(leaf)
+
+https://github.com/emacs-helm/helm
+
+*** helm
+
+# #+begin_src elisp
+  (defun nasy/helm ()
+    (interactive)
+    (let ((helm-ff-transformer-show-only-basename nil)
+          helm-source-list)
+      (unless helm-source-buffers-list
+        (setq helm-source-buffers-list
+              (helm-make-source "Buffers" 'helm-source-buffers)))
+      (cond (
+             ;; Just add helm-source-projectile-* in list when current place in project.
+             (projectile-project-p)
+             (setq helm-source-list
+                   '(
+                     ;; helm-source-awesome-tab-group
+                     helm-source-projectile-buffers-list
+                     helm-source-buffers-list
+                     helm-source-recentf
+                     helm-source-projectile-files-list)))
+
+            (t
+             (setq helm-source-list
+                   '(
+                     ;; helm-source-awesome-tab-group
+                     helm-source-buffers-list
+                     helm-source-recentf))))
+      (helm-other-buffer helm-source-list "*helm search*")))
+
+  (leaf helm-mode
+    :commands nasy/helm
+    :hook after-init-hook
+    :bind
+    ([remap execute-extended-command]    . helm-M-x)
+    ([remap noop-show-kill-ring]         . helm-show-kill-ring)
+    ([remap find-library]                . helm-locate-library)
+    ([remap bookmark-jump]               . helm-bookmarks)
+    ([remap find-file]                   . helm-find-files)
+    ([remap locate]                      . helm-locate)
+    ([remap imenu]                       . helm-semantic-or-imenu)
+    ([remap noop-show-kill-ring]         . helm-show-kill-ring)
+    ([remap persp-switch-to-buffer]      . +helm/workspace-mini)
+    ([remap switch-to-buffer]            . helm-buffers-list)
+    ([remap projectile-find-file]        . +helm/projectile-find-file)
+    ([remap projectile-recentf]          . helm-projectile-recentf)
+    ([remap projectile-switch-project]   . helm-projectile-switch-project)
+    ([remap projectile-switch-to-buffer] . helm-projectile-switch-to-buffer)
+    ([remap recentf-open-files]          . helm-recentf)
+    ([remap yank-pop]                    . helm-show-kill-ring)
+    ("M-b"       . nasy/helm)
+    ("C-o"       . helm-occur)
+    ("C-x C-f"   . helm-find-files)
+    ("C-x c x"   . helm-register)
+    ("C-x c g"   . helm-google-suggest)
+    ("C-x c M-:" . helm-eval-expression-with-eldoc)
+    (:helm-map
+     ("<tab>" . helm-execute-persistent-action) ; rebind tab to run persistent action
+     ("C-i"   . helm-execute-persistent-action) ; make TAB works in terminal
+     ("C-z"   . helm-select-action)) ; list actions using C-z
+    (:shell-mode-map
+     ("C-c C-l" . helm-comint-input-ring))
+    (:minibuffer-local-map
+     ("C-c C-l" . helm-minibuffer-history)))
+
+  (leaf helm
+    :hook ((helm-mode-hook . helm-autoresize-mode))
+    :custom
+    ((helm-M-x-fuzzy-match
+      helm-buffers-fuzzy-matching
+      helm-recentf-fuzzy-match
+      helm-imenu-fuzzy-match
+      helm-locate-fuzzy-match
+      helm-apropos-fuzzy-match
+      helm-lisp-fuzzy-completion
+      helm-allow-mouse
+      helm-follow-mode-persistent
+      helm-ff-lynx-style-map
+      helm-bookmark-show-location
+      helm-split-window-in-side-p
+      helm-ff-search-library-in-sexp
+      helm-ff-file-name-history-use-recentf
+      helm-echo-input-in-header-line)  . t)
+    (helm-move-to-line-cycle-in-source . nil)
+    (helm-scroll-amount                . 8)
+    (helm-source-names-using-follow    . '("Buffers" "kill-buffer" "Occur"))
+    :init
+    (when (executable-find "curl")
+      (gsetq helm-google-suggest-use-curl-p t))
+    :defer-config
+    (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages))
+
+  (defvar helm-generic-files-map (make-sparse-keymap))
+
+  (after-x 'helm-locate
+    (when (and *is-a-mac*
+               (null helm-locate-command)
+               (executable-find "mdfind"))
+      (gsetq helm-locate-command "mdfind -name %s"))
+    (set-keymap-parent helm-generic-files-map helm-map))
+#+end_src
+
+
+
 * Helm
 
 #+begin_src elisp
@@ -140,8 +247,7 @@
 
 #+begin_src elisp
   (straight-use-package 'helm-projectile)
-  (use-package helm-projectile
-    :defer t
+  (leaf helm-projectile
     :commands (helm-projectile-find-file
                helm-projectile-recentf
                helm-projectile-switch-project
@@ -150,7 +256,7 @@
     :init
     (gsetq projectile-completion-system 'helm)
     (defvar helm-projectile-find-file-map (make-sparse-keymap))
-    (after! helm
+    (after-x 'helm
       (require 'helm-for-files)
       (helm-projectile-on)
       (set-keymap-parent helm-projectile-find-file-map helm-map)))

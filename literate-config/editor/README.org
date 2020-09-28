@@ -1,24 +1,94 @@
-Here is the editor config, including some features and functions.
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-editor.el")
+
+Here is the editor's configuration, including keywords: comm, data, diff, docs,
+emacs, extensions, faces, files, help, hypermedia, indentation, killing, libs,
+lists, location, marking, region, navigation, performance, vc, and window.
+
+* Header                                                                        :noexport:
 
 #+begin_src elisp
-  ;;----------------------------------------------------------------------------
-  ;; Editor
-  ;;----------------------------------------------------------------------------
+  ;;; nasy-core.el --- Nasy's Emacs Configuration editor file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Editor.
+
+  ;;; Code:
 #+end_src
 
 * Packages
 
 Packages list
 
-+ anzu
-+ avy
-+ diminish
++ alert
++ ansi-color
++ auto-compress
++ cheat-sh
++ dash
++ dired
+  - dired-hack
++ easy-kill
++ eldoc
+  - eldoc-overlay (optional)
+  - eldoc-box (optional)
++ expand-region
 + explain-pause-mode
-+ flx
++ fill-column
+  - Unfill
+  - visual-fill-column
++ highlight
+  - color-identifiers-mode
+  - hl-line (builtin)
+  - highlight-indent-guides
+  - rainbow-mode
++ helm
++ helpful
++ htmlize
++ indent-tools
++ ivy/swiper/counsel
+  - all-the-icons-ivy-rich
+  - counsel-projectile
+  - ivy-prescient (optional)
+  - ivy-rich
+  - ivy-xref
++ list-unicode-display
++ mmm-mode
++ multiple-cursors
++ page-break-lines
++ paren
+  - smartparens
+  - rainbow-delimiters
++ point-history
++ pretty-mode
 + prescient
 + quick-peek
++ switch-window
++ symbol-overlay
++ treemacs
+  - treemacs-icons-dired
+  - treemacs-magit
+  - treemacs-projectile
 + tree-sitter
++ version-control
+  - abridge-diff
+  - forge
+  - gist
+  - git-blamed
+  - git-gutter
+  - git-messager
+  - git-modes
+  - git-timemachine
+  - magit
+  - magit-org-todos
+  - magit-todos
 + which-key
++ whitespace-cleanup-mode
++ yasnippet
+  - yasnippet-snippets
 
 #+begin_src elisp
   (straight-register-package
@@ -26,156 +96,228 @@ Packages list
                  :repo "ubolonton/emacs-tree-sitter"
                  :files ("lisp/*.el" "langs/*.el" "langs/queries")))
 
-  (nasy/s-u-p anzu avy diminish
-              explain-pause-mode
-              flx
-              prescient
-              quick-peek
-              tree-sitter
-              which-key)
+  (straight-register-package
+   '(point-history :type git
+                   :host github
+                   :repo "blue0513/point-history"))
 
-  (when *eldoc-use*
-    (nasy/s-u-p *eldoc-use*))
+  (nasy/s-u-p
+    alert
+    cheat-sh
+    dash
+    diff-hl
+    dired-hacks
+    easy-kill
+    ,*eldoc-use*
+    explain-pause-mode
+    expand-region
+    ;; fill
+    unfill
+    visual-fill-column
+    ;; highlight
+    color-identifiers-mode
+    ;; hl-line  builtin
+    highlight-indent-guides
+    rainbow-mode
+    ;; helm
+    ;; helm
+
+    helpful
+    htmlize
+    indent-tools
+    ;; ivy
+    all-the-icons-ivy-rich
+    counsel
+    counsel-projectile
+    ivy
+    ivy-rich
+    ivy-xref
+    (:when *ivy-prescient* prescient ivy-prescient)
+
+    list-unicode-display
+    mmm-mode
+    multiple-cursors
+    page-break-lines
+    ;; paren
+    smartparens
+    rainbow-delimiters
+
+    point-history
+    prescient
+    pretty-mode
+    quick-peek
+    symbol-overlay
+    switch-window
+    ;; treemacs
+    treemacs
+    treemacs-icons-dired
+    treemacs-magit
+    treemacs-projectile
+
+    tree-sitter
+    ;;version-control
+    abridge-diff
+    forge
+    gist
+    git-blamed
+    git-gutter
+    git-messenger
+    git-modes
+    git-timemachine
+    magit
+    magit-org-todos
+    magit-todos
+
+    which-key
+    whitespace-cleanup-mode
+    yasnippet
+    yasnippet-snippets)
 #+end_src
+
+* Updates
+
+** <2020-08-04 Tue>
+
+Removed better jump
 
 * Configs
 
+# #+begin_src elisp
+#   (explain-pause-mode 1)
+# #+end_src
+
+** alert
+
+A Growl-like alerts notifier for Emacs
+
+https://github.com/jwiegley/alert
+
 #+begin_src elisp
-  (explain-pause-mode 1)
+  (leaf alert
+    :doc "A Growl-like alerts notifier for Emacs."
+    :url "https://github.com/jwiegley/alert"
+    :tag "notification" "emacs" "message"
+    :custom
+    (alert-default-style . 'osx-notifier))
 #+end_src
 
-** Anzu
+** ansi-color
+
+ansi-color.el translates ANSI SGR (Select Graphic Rendition) escape sequences
+like "Esc[30m" into EmacsOverlays, TextProperties, or XEmacsExtents with face
+colours, bold, etc.
+
+https://www.emacswiki.org/emacs/AnsiColor
 
 #+begin_src elisp
-  (use-package anzu
-    :defer    t
-    :hook ((after-init . global-anzu-mode))
-    :bind ([remap query-replace] . anzu-query-replace-regexp))
+  (leaf ansi-color
+    :doc "ansi-color.el translates ANSI SGR (Select Graphic Rendition) escape sequences
+  with face colours, bold, etc."
+    :url "https://www.emacswiki.org/emacs/AnsiColor"
+    :tag "comm" "processes" "terminals" "services"
+    :commands colourise-compilation-buffer
+    :hook ((compilation-filter-hook . colourise-compilation-buffer))
+    :config
+    (eval-and-compile
+      (defun colourise-compilation-buffer ()
+        (when (eq major-mode 'compilation-mode)
+          (ansi-cOLOR-APPLY-on-region compilation-filter-start
+                                      (point-max))))))
 #+end_src
 
-** Auto Insert
-
-#+include: "auto-insert.org"
-
-** Avy
+** auto-compress
 
 #+begin_src elisp
-  (use-package avy
-    :defer t
-    :init
-    (general-define-key
-     "C-:"     #'avy-goto-char
-     "C-'"     #'avy-goto-char-2
-     "C-`"     #'avy-goto-char-2
-     "M-g e"   #'avy-goto-word-0
-     "M-g w"   #'avy-goto-word-1
-     "C-~"     #'avy-goto-word-1
-     "C-c C-j" #'avy-resume)
-    (when *dvorak*
-      (gsetq avy-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s))))
-#+end_src
-
-** Beginend
-
-#+begin_src elisp
-  (straight-use-package 'beginend)
-  (use-package beginend
-    :hook ((after-init . beginend-global-mode)))
-#+end_src
-
-** Better Jumper
-
-A configurable jump list implementation for Emacs that can be used to easily
-jump back to previous locations.
-
-https://github.com/gilbertw1/better-jumper
-
-#+begin_src elisp
-  (straight-use-package 'better-jumper)
-  (use-package better-jumper
-    :defer t
-    :hook (((org-mode org-src-mode prog-mode) . turn-on-better-jumper-mode)
-           (better-jumper-post-jump           . recenter))
-    :init
-    (general-define-key
-     [remap xref-pop-marker-stack] #'better-jumper-jump-backward))
-#+end_src
-
-** Carbon Now sh
-
-Emacs to carbon.now.sh integration.
-
-https://github.com/veelenga/carbon-now-sh.el
-
-Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>@@
-
-#+begin_src elisp
-  ;; Emacs to carbon.now.sh integration
-  ;; https://github.com/veelenga/carbon-now-sh.el
-  ;; (carbon-now-sh)
-  (straight-use-package 'carbon-now-sh)
+  (leaf jka-cmpr
+    :tag "builtin"
+    :hook (after-init-hook . auto-compression-mode))
 #+end_src
 
 ** Cheat Sh
 
+Simple Emacs interface for cheat.sh.
+
+https://github.com/davep/cheat-sh.el
+
 #+begin_src elisp
-  (straight-use-package 'cheat-sh)
+  (leaf cheat-sh
+    :doc "Simple Emacs interface for cheat.sh"
+    :url "https://github.com/davep/cheat-sh.el"
+    :tag "docs" "help")
 #+end_src
-
-** Company
-
-#+include: "company.org"
 
 ** Dash
 
-#+begin_src elisp
-  (straight-use-package 'dash)
-#+end_src
+A modern list library for Emacs.
 
-** Dash Functional
+https://github.com/magnars/dash.el
 
 #+begin_src elisp
-  (straight-use-package 'dash-functional)
+  (leaf dash
+    :doc "A modern list library for Emacs."
+    :url "https://github.com/magnars/dash.el"
+    :tag "lists"
+    :defer-config
+    (dash-enable-font-lock))
 #+end_src
 
 ** Dired
+
+#+begin_src elisp
+  (leaf nasy-editor-dired
+    :require t)
+#+end_src
 
 #+include: "dired.org"
 
 ** Easy Kill
 
-#+begin_src elisp
-  (straight-use-package 'easy-kill)
-  (use-package easy-kill
-    :bind (([remap kill-ring-save] . easy-kill)
-           ([remap mark-sexp]      . easy-mark)))
-#+end_src
+Provide commands easy-kill and easy-mark to let users kill or mark things easily.
+
+https://github.com/leoliu/easy-kill
 
 #+begin_src elisp
-  (straight-use-package 'thingopt)
+  (leaf easy-kill
+    :doc "Kill & Mark Things Easily in Emacs."
+    :url "https://github.com/leoliu/easy-kill"
+    :tag "killing" "convenience"
+    :bind (([remap kill-ring-save]
+            . easy-kill)
+           ([remap mark-sexp]
+            . easy-mark)))
 #+end_src
 
 ** Eldoc
 
-*** eldoc overlay
-
-#+begin_src elisp
-  (use-package eldoc-overlay
-    :if (eq *eldoc-use* 'eldoc-overlay)
-    :defer t
-    :ghook 'eldoc-mode-hook)
-#+end_src
-
 *** eldoc box
 
-Disabled by default due to it causes lots of cpu.
+This package displays ElDoc documentations in a childframe.
+
+https://github.com/casouri/eldoc-box
 
 #+begin_src elisp
-  (use-package eldoc-box
-    :if (eq *eldoc-use* 'eldoc-box)
-    :defer t
-    :hook ((eldoc-mode . eldoc-box-hover-mode)
-           (eldoc-mode . eldoc-box-hover-at-point-mode)))
+  (leaf eldoc-box
+    :doc "This package displays ElDoc documentations in a childframe."
+    :url "https://github.com/casouri/eldoc-box"
+    :tag "extensions"
+    :when (eq *eldoc-use* 'eldoc-box)
+    :hook ((eldoc-mode-hook . eldoc-box-hover-mode)
+           (eldoc-mode-hook . eldoc-box-hover-at-point-mode)))
+#+end_src
+
+*** eldoc overlay
+
+Display eldoc doc with contextual documentation overlay for easy to look.
+
+https://github.com/stardiviner/eldoc-overlay
+
+#+begin_src elisp
+  (leaf eldoc-overlay
+    :doc "Display eldoc doc with contextual documentation overlay for easy to look."
+    :url "https://github.com/stardiviner/eldoc-overlay"
+    :tag "extensions"
+    :when (eq *eldoc-use* 'eldoc-overlay)
+    :hook eldoc-mode-hook)
 #+end_src
 
 ** Expand Region
@@ -185,47 +327,79 @@ Emacs extension to increase selected region by semantic units.
 https://github.com/magnars/expand-region.el
 
 #+begin_src elisp
-  (straight-use-package 'expand-region)
-  (general-define-key
-   "C-=" #'er/expand-region)
+  (leaf expand-region
+    :doc "Emacs extension to increase selected region by semantic units."
+    :url "https://github.com/magnars/expand-region.el"
+    :tag "marking region"
+    :bind
+    ("C-=" . er/expand-region))
+#+end_src
+
+** explain-pause-mode
+
+top, but for Emacs.
+
+https://github.com/lastquestion/explain-pause-mode
+
+#+begin_src elisp
+  (leaf explain-pause-mode
+    :doc "top, but for Emacs."
+    :url "https://github.com/lastquestion/explain-pause-mode"
+    :tag "performance" "speed" "config"
+    :hook after-init-hook)
+#+end_src
+
+** Files                                           :builtin:files:
+
+#+begin_src elisp
+  (leaf files
+    :tag "builtin" "files"
+    :custom (find-file-visit-truename . t))
 #+end_src
 
 ** Fill Column
 
+#+begin_src elisp
+  (leaf fill
+    :doc "Filling text."
+    :tag "emacs")
+#+end_src
+
 *** Unfill
 
+Functions providing the inverse of Emacs' fill-paragraph and fill-region
+
+https://github.com/purcell/unfill
+
 #+begin_src elisp
-  (straight-use-package 'unfill)
-  (use-package unfill
+  (leaf unfill
+    :doc "Functions providing the inverse of Emacs' fill-paragraph and fill-region"
+    :url "https://github.com/purcell/unfill"
+    :tag "convenience"
     :bind (("M-q" . unfill-toggle)))
 #+end_src
 
 *** Visual-fill-column
 
+Emacs mode for wrapping visual-line-mode buffers at fill-column.
+
+https://github.com/joostkremers/visual-fill-column
+
 #+begin_src elisp
-  (straight-use-package 'visual-fill-column)
-  (use-package visual-fill-column
-    :preface
-    (defun maybe-adjust-visual-fill-column ()
-      "Readjust visual fill column when the global font size is modified.
-  This is helpful for writeroom-mode, in particular."
+  (leaf visual-fill-column
+    :doc "Emacs mode for wrapping visual-line-mode buffers at fill-column."
+    :url "https://github.com/joostkremers/visual-fill-column"
+    :tag "convenience"
+    :commands maybe-adjust-visual-fill-column
+    :hook (visual-line-mode-hook
+           (visual-fill-column-mode-hook . maybe-adjust-visual-fill-column))
+    :config
+    (defun maybe-adjust-visual-fill-column nil
+      "Readjust visual fill column when the global font size is modified.\nThis is helpful for writeroom-mode, in particular."
       (if visual-fill-column-mode
           (add-hook 'after-setting-font-hook 'visual-fill-column--adjust-window nil t)
-        (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t)))
-    :hook ((visual-line-mode        . visual-fill-column-mode        )
-           (visual-fill-column-mode . maybe-adjust-visual-fill-column)))
+        (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t))))
 #+end_src
-
-** Find File in Project
-
-#+begin_src elisp
-  (straight-use-package 'find-file-in-project)
-  (gsetq ffip-use-rust-fd t)
-#+end_src
-
-** Flycheck
-
-#+include: "flycheck.org"
 
 ** Fuz.el
 
@@ -233,273 +407,675 @@ Fast and precise fuzzy scoring/matching utils for Emacs, powered by rust
 
 https://github.com/rustify-emacs/fuz.el
 
-#+begin_src elisp
-  ;; (straight-use-package 'fuz)
-  (use-package fuz
-    :disabled t
-    :defer t
-    :init
-    (defun load-fuz ()
-      "Load fuz.el."
-      (require 'fuz)
-      (unless (require 'fuz-core nil t)
-        (fuz-build-and-load-dymod)))
-    :hook ((after-init . load-fuz)))
-#+end_src
-
-** Grab Mac Link
-
-#+begin_src elisp
-  (straight-use-package 'grab-mac-link)
-#+end_src
-
-** Grep
-
-#+begin_src elisp
-  (gsetq-default grep-highlight-matches t
-                 grep-scroll-output t)
-
-  (when *is-a-mac*
-    (gsetq-default locate-command "mdfind"))
-#+end_src
+# #+begin_src elisp
+#   ;; (straight-use-package 'fuz)
+#   (use-package fuz
+#     :disabled t
+#     :defer t
+#     :init
+#     (defun load-fuz ()
+#       "Load fuz.el."
+#       (require 'fuz)
+#       (unless (require 'fuz-core nil t)
+#         (fuz-build-and-load-dymod)))
+#     :hook ((after-init . load-fuz)))
+# #+end_src
 
 ** Highlight
 
-#+include: "highlight.org"
+*** Color Identifiers Mode
+
+Emacs minor mode to highlight each source code identifier uniquely based on its
+name.
+
+https://github.com/ankurdave/color-identifiers-mode
+
+#+begin_src elisp
+  (leaf color-identifiers-mode
+    :doc "Emacs minor mode to highlight each source code identifier uniquely based
+  on its name."
+    :url "https://github.com/ankurdave/color-identifiers-mode"
+    :tag "faces" "languages"
+    :hook prog-mode-hook)
+#+end_src
+
+*** hl-line
+
+Highlight the current line of characters.
+
+https://www.emacswiki.org/emacs/HighlightCurrentLine
+
+#+begin_src elisp
+  (leaf hl-line
+    :doc "Highlight the current line of characters."
+    :url "https://www.emacswiki.org/emacs/HighlightCurrentLine"
+    :tag "faces" "frames" "emulations"
+    :hook ((after-init-hook . global-hl-line-mode)))
+#+end_src
+
+*** Highlight Indent Guides
+
+Emacs minor mode to highlight indentation.
+
+https://github.com/DarthFennec/highlight-indent-guides
+
+#+begin_src elisp
+  (leaf highlight-indent-guides
+    :doc "Emacs minor mode to highlight indentation."
+    :url "https://github.com/DarthFennec/highlight-indent-guides"
+    :tag "faces"
+    :when *highlight-indent-guides*
+    :hook (prog-mode-hook-hook text-mode-hook-hook org-mode-hook-hook)
+    :config
+    (highlight-indent-guides-responsive . nil)
+    (highlight-indent-guides-delay      . 0.5))
+#+end_src
+
+*** Rainbow-Mode
+
+This minor mode sets background color to strings that match color names,
+e.g. #0000ff is displayed in white with a blue background.
+
+#+begin_src elisp
+  (leaf rainbow-mode
+    :doc "Colorize color names in buffers."
+    :url "https://elpa.gnu.org/packages/rainbow-mode.html"
+    :tag "faces"
+    :hook (after-init-hook
+           text-mode-hook
+           org-mode-hook
+           css-mode-hook
+           html-mode-hook
+           prog-mode-hook)
+    :defer-config
+    (when (fboundp 'diminish)
+      (diminish 'rainbow-mode)))
+#+end_src
 
 ** Helpful
+
+A better Emacs *help* buffer.
 
 [[https://github.com/Wilfred/helpful]]
 
 #+begin_src elisp
-  (straight-use-package 'helpful)
-  (use-package helpful
-    :bind (("C-c C-d" . helpful-at-point))
-    :init (general-define-key
-           :prefix "C-h"
-           "f" 'helpful-callable
-           "v" 'helpful-variable
-           "k" 'helpful-key
-           "F" 'helpful-function
-           "C" 'helpful-command))
+  (leaf helpful
+    :doc "A better Emacs *help* buffer."
+    :url "https://github.com/Wilfred/helpful"
+    :tag "help" "lisp"
+    :bind (("C-c C-d" . helpful-at-point)))
+           ;; Use ivy instead
+           ;; ([remap describe-function]   . helpful-callable)
+           ;; ([remap describe-variable]   . helpful-variable)
+           ;; ([remap describe-bindings]   . helpful-key)))
 #+end_src
-
-** Helm
-
-https://github.com/emacs-helm/helm
-
-# #+include: "helm.org"
 
 ** Htmlize
 
-#+begin_src elisp
-  (straight-use-package 'htmlize)
-  (use-package htmlize
-    :defer t
-    :init (gsetq htmlize-pre-style t))
-#+end_src
+Convert buffer text and decorations to HTML.
 
-** Hydra
-
-#+include: "hydra.org"
-
-** iBuffer
-
-#+include: "ibuffer.org"
-
-** imenu list
+https://github.com/hniksic/emacs-htmlize
 
 #+begin_src elisp
-  (straight-use-package 'imenu-list)
-  (use-package imenu-list
-    :bind (("C-." . imenu-list-smart-toggle))
-    :init (setq imenu-list-auto-resize t))
+  (leaf htmlize
+    :doc "Convert buffer text and decorations to HTML."
+    :url "https://github.com/hniksic/emacs-htmlize"
+    :tag "hypermedia" "extensions"
+    :custom (htmlize-pre-style . t))
 #+end_src
 
 ** indent-tools
 
+Emacs mode to indent, navigate around and act on indentation units: perfect for
+yaml, python and the like.
+
+https://gitlab.com/emacs-stuff/indent-tools
+
 #+begin_src elisp
-  (straight-use-package 'indent-tools)
-  (use-package indent-tools
+  (leaf indent-tools
+    :doc "Emacs mode to indent, navigate around and act on indentation units:
+  perfect for yaml, python and the like."
+    :url "https://gitlab.com/emacs-stuff/indent-tools"
+    :tag "indentation" "navigation"
     :bind (("C-c TAB" . indent-tools-hydra/body)))
-#+end_src
-
-** iSearch
-
-I only use ~rg~ to search, so I disabled the key-map of isearch.
-
-#+begin_src elisp
-  (use-package isearch
-    :preface
-    ;; Search back/forth for the symbol at point
-    ;; See http://www.emacswiki.org/emacs/SearchAtPoint
-    (defun isearch-yank-symbol ()
-      "*Put symbol at current point into search string."
-      (interactive)
-      (let ((sym (thing-at-point 'symbol)))
-        (if sym
-            (progn
-              (setq isearch-regexp    t
-                    isearch-string    (regexp-quote sym)
-                    isearch-message   (mapconcat 'isearch-text-char-description isearch-string "")
-                    isearch-yank-flag t))
-          (ding)))
-      (isearch-search-and-update))
-
-    ;; http://www.emacswiki.org/emacs/ZapToISearch
-    (defun isearch-exit-other-end (rbeg rend)
-      "Exit isearch, but at the other end of the search string.
-  This is useful when followed by an immediate kill."
-      (interactive "r")
-      (isearch-exit)
-      (goto-char isearch-other-end))
-
-    :init
-    (general-define-key
-     :keymaps 'isearch-mode-map
-     [remap isearch-delete-char] #'isearch-del-char
-     "C-w"                       #'isearch-yank-symbol
-     [(control return)]              #'isearch-exit-other-end
-     "C-o"                       #'isearch-occur))
 #+end_src
 
 ** Ivy, Counsel and Swiper
 
-Now enabled.
-
-#+include: "ivy.org"
-
-** Large File
-
 #+begin_src elisp
-  (straight-use-package 'vlf)
-  (use-package vlf
-    :init
-    (defun ffap-vlf ()
-      "Find file at point with VLF."
-      (interactive)
-      (let ((file (ffap-file-at-point)))
-        (unless (file-exists-p file)
-          (error "File does not exist: %s" file))
-        (vlf file))))
+  (require 'nasy-editor-ivy)
 #+end_src
 
-** Link Hint
+#+include: "editor-ivy.org"
+
+** List Unicode Display                              :convenience:
+
+Provides a command which searches for unicode characters by name, and displays a
+list of matching characters with their names in a buffer.
+
+https://github.com/purcell/list-unicode-display
 
 #+begin_src elisp
-  (straight-use-package 'link-hint)
-  (use-package link-hint
-    :bind (("C-c l o" . link-hint-open-link)
-           ("C-c l c" . link-hint-copy-link))
+  (leaf list-unicode-display
+    :doc "Search for and list unicode characters in Emacs.
+
+  `list-unicode-display'"
+    :url "https://github.com/purcell/list-unicode-display"
+    :tag "convenience")
+#+end_src
+
+** mmm-mode                    :convenience:faces:languages:tools:
+
+MMM Mode is a minor mode for Emacs that allows Multiple Major Modes to coexist
+in one buffer.
+
+https://github.com/purcell/mmm-mode
+
+#+begin_src elisp
+  (leaf mmm-auto
+    :doc "MMM Mode is a minor mode for Emacs that allows Multiple Major Modes
+  to coexist in one buffer."
+    :url "https://github.com/purcell/mmm-mode"
+    :tag "convenience" "faces" "languages" "tools"
+    :custom
+    (mmm-global-mode
+     . 'buffers-with-submode-classes)
+    (mmm-submode-decoration-level
+     . 2))
+#+end_src
+
+** Multiple Cursors                                                            :cursors:editing:
+
+Multiple cursors for Emacs.
+
+https://github.com/magnars/multiple-cursors.el
+
+#+begin_src elisp
+  (leaf multiple-cursors
+    :doc "Multiple cursors for Emacs."
+    :url "https://github.com/magnars/multiple-cursors.el"
+    :tag "editing" "cursors"
+    :bind
+    (("C-<"     . mc/mark-previous-like-this)
+     ("C->"     . mc/mark-next-like-this)
+     ("C-+"     . mc/mark-next-like-this)
+     ("C-c C-<" . mc/mark-all-like-this)
+
+     ("C-c m r" . set=rectangular-region-anchor)
+     ("C-c m c" . mc/edit-lines)
+     ("C-c m e" . mc/edit-ends-of-lines)
+     ("C-c m a" . mc/edit-beginnings-of-lines)))
+#+end_src
+
+** Paper Break Lines                                                           :convenience:faces:
+
+This Emacs library provides a global mode which displays ugly form feed
+characters as tidy horizontal rules.
+
+https://github.com/purcell/page-break-lines
+
+#+begin_src elisp
+  (leaf page-break-lines
+    :doc "Emacs: display ugly ^L page breaks as tidy horizontal lines"
+    :url "https://github.com/purcell/page-break-lines"
+    :tag "convenience" "faces"
+    :hook ((after-init-hook . global-page-break-lines-mode))
+    :defer-config
+    (when (fboundp 'diminish)
+      (diminish 'page-break-lines-mode)))
+#+end_src
+
+** Parens                                                                      :faces:languages:
+
+#+begin_src elisp
+  (leaf paren
+    :hook (after-init-hook . show-paren-mode))
+#+end_src
+
+*** Rainbow Delimiters                                                        :convenience:faces:lisp:tools:
+
+rainbow-delimiters is a "rainbow parentheses"-like mode which highlights
+delimiters such as parentheses, brackets or braces according to their
+depth. Each successive level is highlighted in a different color. This makes it
+easy to spot matching delimiters, orient yourself in the code, and tell which
+statements are at a given depth.
+
+https://github.com/Fanael/rainbow-delimiters
+
+#+begin_src elisp
+  (leaf rainbow-delimiters
+    :doc "Emacs rainbow delimiters mode"
+    :url "https://github.com/Fanael/rainbow-delimiters"
+    :tag "convenience" "faces" "lisp" "tools"
+    :hook prog-mode-hook org-src-mode-hook)
+#+end_src
+
+*** Smartparens                                                               :abbrev:convenience:editing:
+
+Minor mode for Emacs that deals with parens pairs and tries to be smart about
+it.
+
+https://github.com/Fuco1/smartparens
+
+#+begin_src elisp
+  (leaf smartparens-config
+    :doc "Minor mode for Emacs that deals with parens pairs and tries to be smart about it."
+    :url "https://github.com/Fuco1/smartparens"
+    :tag "abbrev" "convenience" "editing"
+    :hook (after-init-hook . smartparens-global-mode)
+    :custom (sp-hybrid-kill-entire-symbol . nil))
+#+end_src
+
+** PDF Tools                                                                   :files:multimedia:
+
+PDF Tools is, among other things, a replacement of DocView for PDF files.
+
+https://github.com/politza/pdf-tools
+
+#+begin_src elisp
+  (leaf pdf-tools
+    :doc "Emacs support library for PDF files."
+    :url "https://github.com/politza/pdf-tools"
+    :tag "files" "multimedia"
+    :bind (:pdf-view-mode-map
+           ("\\" . hydra-pdftools/body)
+           ("<s-spc>" .  pdf-view-scroll-down-or-next-page)
+           ("g"  . pdf-view-first-page)
+           ("G"  . pdf-view-last-page)
+           ("l"  . image-forward-hscroll)
+           ("h"  . image-backward-hscroll)
+           ("j"  . pdf-view-next-page)
+           ("k"  . pdf-view-previous-page)
+           ("e"  . pdf-view-goto-page)
+           ("u"  . pdf-view-revert-buffer)
+           ("al" . pdf-annot-list-annotations)
+           ("ad" . pdf-annot-delete)
+           ("aa" . pdf-annot-attachment-dired)
+           ("am" . pdf-annot-add-markup-annotation)
+           ("at" . pdf-annot-add-text-annotation)
+           ("y"  . pdf-view-kill-ring-save)
+           ("i"  . pdf-misc-display-metadata)
+           ("s"  . pdf-occur)
+           ("b"  . pdf-view-set-slice-from-bounding-box)
+           ("r"  . pdf-view-reset-slice))
+    :custom (pdf-view-display-size . 'fit-width))
+#+end_src
+
+** Pretty Font
+
+#+begin_src elisp
+  (leaf pretty-font
+    :when (fboundp 'mac-auto-operator-composition-mode)
+    :preface
+    ;; https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
+    ;; This works when using emacs --daemon + emacsclient
+    (add-hook 'after-make-frame-functions (lambda (frame) (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
+    ;; This works when using emacs without server/client
+    (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
+    ;; I haven't found one statement that makes both of the above situations work, so I use both for now
     :config
-    (general-define-key
-     :prefix "C-c l")
-    "o" 'link-hint-open-link
-    "c" 'link-hint-copy-link)
+    (defun pretty-fonts-set-fontsets (CODE-FONT-ALIST)
+      "Utility to associate many unicode points with specified `CODE-FONT-ALIST'."
+      (--each CODE-FONT-ALIST
+        (-let (((font . codes) it))
+          (--each codes
+            (set-fontset-font nil `(,it . ,it) font)
+            (set-fontset-font t `(,it . ,it) font)))))
+
+    (defun pretty-fonts--add-kwds (FONT-LOCK-ALIST)
+      "Exploits `font-lock-add-keywords'(`FONT-LOCK-ALIST') to apply regex-unicode replacements."
+      (font-lock-add-keywords
+       nil (--map (-let (((rgx uni-point) it))
+                   `(,rgx (0 (progn
+                               (compose-region
+                                (match-beginning 1) (match-end 1)
+                                ,(concat "\t" (list uni-point)))
+                               nil))))
+                 FONT-LOCK-ALIST)))
+
+    (defmacro pretty-fonts-set-kwds (FONT-LOCK-HOOKS-ALIST)
+      "Set regex-unicode replacements to many modes(`FONT-LOCK-HOOKS-ALIST')."
+      `(--each ,FONT-LOCK-HOOKS-ALIST
+         (-let (((font-locks . mode-hooks) it))
+           (--each mode-hooks
+             (add-hook it (-partial 'pretty-fonts--add-kwds
+                                    (symbol-value font-locks)))))))
+
+    (defconst pretty-fonts-fira-font
+      '(;; OPERATORS
+        ;; Pipes
+        ("\\(<|\\)" #Xe14d) ("\\(<>\\)" #Xe15b) ("\\(<|>\\)" #Xe14e) ("\\(|>\\)" #Xe135)
+
+        ;; Brackets
+        ("\\(<\\*\\)" #Xe14b) ("\\(<\\*>\\)" #Xe14c) ("\\(\\*>\\)" #Xe104)
+        ("\\(<\\$\\)" #Xe14f) ("\\(<\\$>\\)" #Xe150) ("\\(\\$>\\)" #Xe137)
+        ("\\(<\\+\\)" #Xe155) ("\\(<\\+>\\)" #Xe156) ("\\(\\+>\\)" #Xe13a)
+
+        ;; Equality
+        ("\\(!=\\)" #Xe10e) ("\\(!==\\)"         #Xe10f) ("\\(=/=\\)" #Xe143)
+        ("\\(/=\\)" #Xe12c) ("\\(/==\\)"         #Xe12d)
+        ("\\(===\\)" #Xe13d) ("[^!/]\\(==\\)[^>]" #Xe13c)
+
+        ;; Equality Special
+        ("\\(||=\\)"  #Xe133) ("[^|]\\(|=\\)" #Xe134)
+        ("\\(~=\\)"   #Xe166)
+        ("\\(\\^=\\)" #Xe136)
+        ("\\(=:=\\)"  #Xe13b)
+
+        ;; Comparisons
+        ("\\(<=\\)" #Xe141) ("\\(>=\\)" #Xe145)
+        ("\\(</\\)" #Xe162) ("\\(</>\\)" #Xe163)
+
+        ;; Shifts
+        ("[^-=]\\(>>\\)" #Xe147) ("\\(>>>\\)" #Xe14a)
+        ("[^-=]\\(<<\\)" #Xe15c) ("\\(<<<\\)" #Xe15f)
+
+        ;; Dots
+        ("\\(\\.-\\)"    #Xe122) ("\\(\\.=\\)" #Xe123)
+        ("\\(\\.\\.<\\)" #Xe125)
+
+        ;; Hashes
+        ("\\(#{\\)"  #Xe119) ("\\(#(\\)"   #Xe11e) ("\\(#_\\)"   #Xe120)
+        ("\\(#_(\\)" #Xe121) ("\\(#\\?\\)" #Xe11f) ("\\(#\\[\\)" #Xe11a)
+
+        ;; REPEATED CHARACTERS
+        ;; 2-Repeats
+        ("\\(||\\)" #Xe132)
+        ("\\(!!\\)" #Xe10d)
+        ("\\(%%\\)" #Xe16a)
+        ("\\(&&\\)" #Xe131)
+
+        ;; 2+3-Repeats
+        ("\\(##\\)"       #Xe11b) ("\\(###\\)"          #Xe11c) ("\\(####\\)" #Xe11d)
+        ("\\(--\\)"       #Xe111) ("\\(---\\)"          #Xe112)
+        ("\\({-\\)"       #Xe108) ("\\(-}\\)"           #Xe110)
+        ("\\(\\\\\\\\\\)" #Xe106) ("\\(\\\\\\\\\\\\\\)" #Xe107)
+        ("\\(\\.\\.\\)"   #Xe124) ("\\(\\.\\.\\.\\)"    #Xe126)
+        ("\\(\\+\\+\\)"   #Xe138) ("\\(\\+\\+\\+\\)"    #Xe139)
+        ("\\(//\\)"       #Xe12f) ("\\(///\\)"          #Xe130)
+        ("\\(::\\)"       #Xe10a) ("\\(:::\\)"          #Xe10b)
+
+        ;; ARROWS
+        ;; Direct
+        ("[^-]\\(->\\)" #Xe114) ("[^=]\\(=>\\)" #Xe13f)
+        ("\\(<-\\)"     #Xe152)
+        ("\\(-->\\)"    #Xe113) ("\\(->>\\)"    #Xe115)
+        ("\\(==>\\)"    #Xe13e) ("\\(=>>\\)"    #Xe140)
+        ("\\(<--\\)"    #Xe153) ("\\(<<-\\)"    #Xe15d)
+        ("\\(<==\\)"    #Xe158) ("\\(<<=\\)"    #Xe15e)
+        ("\\(<->\\)"    #Xe154) ("\\(<=>\\)"    #Xe159)
+
+        ;; Branches
+        ("\\(-<\\)"  #Xe116) ("\\(-<<\\)" #Xe117)
+        ("\\(>-\\)"  #Xe144) ("\\(>>-\\)" #Xe148)
+        ("\\(=<<\\)" #Xe142) ("\\(>>=\\)" #Xe149)
+        ("\\(>=>\\)" #Xe146) ("\\(<=<\\)" #Xe15a)
+
+        ;; Squiggly
+        ("\\(<~\\)" #Xe160) ("\\(<~~\\)" #Xe161)
+        ("\\(~>\\)" #Xe167) ("\\(~~>\\)" #Xe169)
+        ("\\(-~\\)" #Xe118) ("\\(~-\\)"  #Xe165)
+
+        ;; MISC
+        ("\\(www\\)"                   #Xe100)
+        ("\\(<!--\\)"                  #Xe151)
+        ("\\(~@\\)"                    #Xe164)
+        ("[^<]\\(~~\\)"                #Xe168)
+        ("\\(\\?=\\)"                  #Xe127)
+        ("[^=]\\(:=\\)"                #Xe10c)
+        ("\\(/>\\)"                    #Xe12e)
+        ("[^\\+<>]\\(\\+\\)[^\\+<>]"   #Xe16d)
+        ("[^:=]\\(:\\)[^:=]"           #Xe16c)
+        ("\\(<=\\)"                    #Xe157))
+      "Fira font ligatures and their regexes.")
+
+    (mac-auto-operator-composition-mode)
+    (after-x 'dash
+      (pretty-fonts-set-kwds
+       '((pretty-fonts-fira-font prog-mode-hook org-mode-hook)))))
 #+end_src
 
-** List Unicode Display
+** Pretty Mode
 
 #+begin_src elisp
-  (straight-use-package 'list-unicode-display)
-#+end_src
+  (leaf pretty-mode
+    :commands (turn-on-pretty-mode global-prettify-symbols-mode)
+    :hook (((prog-mode-hook
+             org-mode-hook)
+            . prettify-symbols-mode)
+           (prog-mode-hook
+            . (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                          '(;; Data Type             P N
+                            ("Float"  . #x211d)  ;; ℝxxxx
+                            ("float"  . #x211d)  ;; ℝxxx
+                            ("Int"    . #x2124)  ;; ℤxxx
+                            ("int"    . #x2124)  ;; 𝕫xxx
+                            ;; ("String" . #x1d57e)  ;; 𝕊 𝕾
+                            ;; ("string" . #x1d598)  ;; 𝕤 𝖘
+                            ;; ("str"    . #x1d598)  ;; 𝕤 𝖘
+                            ("String" . (#x1d54a (Br . Bl) #x2006))  ;; 𝕊 xxxxxx
+                            ("string" . (#x1d564 (Br . Bl) #x2006))  ;; 𝕤 xxxxxx
+                            ("str"    . (#x1d564 (Br . Bl) #x2006))  ;; 𝕤 xxxx
+                            ("Char"   . #x2102)   ;; ℂx
+                            ("char"   . (#x1d554 (Br . Bl) #x2006))  ;; 𝕔 x
 
-** mmm-mode
+                            ("False"  . #x1d53d)  ;; 𝕱 𝔽
+                            ("True"   . #x1d54b)  ;; 𝕿 𝕋
 
-#+begin_src elisp
-  (straight-use-package 'mmm-mode)
-  (use-package mmm-auto
-    :init (gsetq
-           mmm-global-mode
-           'buffers-with-submode-classes
-           mmm-submode-decoration-level 2))
-#+end_src
+                            ("Any"    . #x2203)  ;; ∃
+                            ("any"    . #x2203)  ;; ∃
+                            ("any_"   . #x2203)  ;; ∃
+                            ("And"    . (#x2000 (Br . Bl) #x22c0 (Br . Bl) #x2005))  ;; ⋀
+                            ("and"    . (#x2000 (Br . Bl) #x22cf (Br . Bl) #x2005))  ;; ⋏
+                            ("Or"     . #x22c1)  ;; ⋁
+                            ("or"     . #x22cE)  ;; ⋎
+                            ("not"    . #x00ac)  ;; ¬
+                            ("not_"   . #x00ac)  ;; ¬
 
-** Multiple Cursors
+                            ("All"    . #x2200)  ;; ∀
+                            ("all"    . #x2200)  ;; ∀
+                            ("all_"   . #x2200)  ;; ∀
+                            ("for"    . #x2200)  ;; ∀
+                            ("forall" . #x2200)  ;; ∀
+                            ("forM"   . #x2200)  ;; ∀
 
-#+begin_src elisp
-  (straight-use-package 'multiple-cursors)
-  (use-package multiple-cursors
-    :bind (("C-<"     . mc/mark-previous-like-this)
-           ("C->"     . mc/mark-next-like-this)
-           ("C-+"     . mc/mark-next-like-this)
-           ("C-c C-<" . mc/mark-all-like-this))
+                            ("pi"     . #x03c0)  ;; π
+
+                            ("sum"    . #x2211)  ;; ∑
+                            ("Sum"    . #x2211)  ;; ∑
+                            ("Product" . #x220F) ;; ∏
+                            ("product" . #x220F) ;; ∏
+
+                            ("None"   . #x2205)  ;; ∅
+                            ("none"   . #x2205)  ;; ∅
+
+                            ("in"     . #x2286)  ;; ⊆
+                            ("`elem`" . #x2286)  ;; ⊆
+                            ("not in"    . #x2288)  ;; ⊈
+                            ("`notElem`" . #x2288)  ;; ⊈
+
+                            ("return" . (#x21d2 (Br . Bl) #x2006 (Br . Bl) #x2004))  ;; ⇒  x
+                            ("yield"  . (#x21d4 (Br . Bl) #x2004))  ;; ⇔ x
+                            ("pure"   . (#x21f0 (Br . Bl)))))))          ;; ⇰ x
+
+           ((prog-mode-hook
+             emacs-lisp-mode-hook
+             org-mode-hook)
+            . (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                          '(;; Global
+                            ;; Pipes
+                            ("<|"  . (?\s (Br . Bl) #Xe14d))
+                            ("<>"  . (?\s (Br . Bl) #Xe15b))
+                            ("<|>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14e))
+                            ("|>"  . (?\s (Br . Bl) #Xe135))
+
+                            ;; Brackets
+                            ("<*"  . (?\s (Br . Bl) #Xe14b))
+                            ("<*>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14c))
+                            ("*>"  . (?\s (Br . Bl) #Xe104))
+                            ("<$"  . (?\s (Br . Bl) #Xe14f))
+                            ("<$>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe150))
+                            ("$>"  . (?\s (Br . Bl) #Xe137))
+                            ("<+"  . (?\s (Br . Bl) #Xe155))
+                            ("<+>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe156))
+                            ("+>"  . (?\s (Br . Bl) #Xe13a))
+                            ("[]"  . (#x2005 (Br . Bl) #x1d731 (Br . Bl) #x2005))
+
+                            ;; Equality
+                            ("=/="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe143))
+                            ("/="   . (?\s (Br . Bl) #Xe12c))
+                            ("/=="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe12d))
+                            ("/==>" . (?\s (Br . Bl) ?\s (Br . Bl) ?\s (Br . Bl) #Xe13c))
+                            ("!==>" . (?\s (Br . Bl) ?\s (Br . Bl) ?\s (Br . Bl) #Xe13c))
+                            ;; Special
+                            ("||="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe133))
+                            ("|="   . (?\s (Br . Bl) #Xe134))
+                            ("~="   . (?\s (Br . Bl) #Xe166))
+                            ("^="   . (?\s (Br . Bl) #Xe136))
+                            ("=:="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe13b))
+
+                            ;; Comparisons
+                            ("</"   . (?\s (Br . Bl) #Xe162))
+                            ("</>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe163))
+
+                            ;; Shifts
+                            ("=>>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe147))
+                            ("->>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe147))
+                            (">>>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14a))
+                            (">>>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14a))
+                            ("=<<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15c))
+                            ("-<<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15c))
+                            ("<<<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15f))
+
+                            ;; Dots
+                            (".-"   . (?\s (Br . Bl) #Xe122))
+                            (".="   . (?\s (Br . Bl) #Xe123))
+                            ("..<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe125))
+
+                            ;; Hashes
+                            ("#{"   . (?\s (Br . Bl) #Xe119))
+                            ("#("   . (?\s (Br . Bl) #Xe11e))
+                            ("#_"   . (?\s (Br . Bl) #Xe120))
+                            ("#_("  . (?\s (Br . Bl) #Xe121))
+                            ("#?"   . (?\s (Br . Bl) #Xe11f))
+                            ("#["   . (?\s (Br . Bl) #Xe11a))
+
+                            ;; REPEATED CHARACTERS
+                            ;; 2-Repeats
+                            ("!!"   . (?\s (Br . Bl) #Xe10d))
+                            ("%%"   . (?\s (Br . Bl) #Xe16a))
+
+                            ;; 2+3-Repeats
+                            ("##"   . (?\s (Br . Bl) #Xe11b))
+                            ("###"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe11c))
+                            ("####" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe11d))
+                            ("---"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe112))
+                            ("{-"   . (?\s (Br . Bl) #Xe108))
+                            ("-}"   . (?\s (Br . Bl) #Xe110))
+                            ("\\\\" . (?\s (Br . Bl) #Xe106))
+                            ("\\\\\\" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe107))
+                            (".."   . (?\s (Br . Bl) #Xe124))
+                            ("..."  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe126))
+                            ("+++"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe139))
+                            ("//"   . (?\s (Br . Bl) #Xe12f))
+                            ("///"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe130))
+                            ("::"   . (?\s (Br . Bl) #Xe10a))  ;; 
+                            (":::"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe10b))
+
+                            ;; Arrows
+                            ;; Direct
+                            ;; ("->"  . (?\s (Br . Bl) #Xe114))  ;; 
+                            ;; ("=>"  . (?\s (Br . Bl) #Xe13f))
+                            ("->>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe115))
+                            ("=>>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe140))
+                            ("<<-" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15d))
+                            ("<<=" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15e))
+                            ("<->" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe154))
+                            ("<=>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe159))
+                            ;; Branches
+                            ("-<"  . (?\s (Br . Bl) #Xe116))
+                            ("-<<" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe117))
+                            (">-"  . (?\s (Br . Bl) #Xe144))
+                            (">>-" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe148))
+                            ("=<<" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe142))
+                            (">=>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe146))
+                            (">>=" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe149))
+                            ("<=<" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15a))
+                            ;; Squiggly
+                            ("<~"  . (?\s (Br . Bl) #Xe160))
+                            ("<~~" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe161))
+                            ("~>"  . (?\s (Br . Bl) #Xe167))
+                            ("~~>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe169))
+                            ("-~"  . (?\s (Br . Bl) #Xe118))
+                            ("~-"  . (?\s (Br . Bl) #Xe165))
+
+                            ;; MISC
+                            ("www" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe100))
+                            ("~@"  . (?\s (Br . Bl) #Xe164))
+                            ("~~"  . (?\s (Br . Bl) #Xe168))
+                            ("?="  . (?\s (Br . Bl) #Xe127))
+                            (":="  . (?\s (Br . Bl) #Xe10c))
+                            ("/>"  . (?\s (Br . Bl) #Xe12e))
+                            ("+"   . #Xe16d)
+                            ("(:"  . (?\s (Br . Bl) #Xe16c))))))
+
+
+           (python-mode-hook
+            . (lambda ()
+               (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                     '(;; Syntax
+                       ;;("def"    . (#x1d521 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
+                       ("def"    . #x1D487)  ;; 𝒇 1 111
+                       ("List"   . #x1d543)  ;; 𝕃 𝕷
+                       ("list"   . (#x1d55d (Br . Bl) #x2006 (Br . Bl) #x2005))  ;; 𝕝   𝖑
+                       ("Dict"   . #x1d53B)  ;; 𝔻 𝕯
+                       ("dict"   . #x1d555)  ;; 𝕕 𝖉
+                       ("Set"    . #x1d61a)  ;; 𝔖 𝘚
+                       ("set"    . #x1d634)  ;; 𝔰 𝘴
+                       ("Tuple"  . #x1d61b)  ;; 𝕋 𝕿 𝘛
+                       ("tuple"  . #x1d635)  ;; 𝕥 𝖙 𝘵
+
+                       ("Union"  . #x22c3)  ;; ⋃
+                       ("union"  . #x22c3)))))  ;; ⋃
+
+           (haskell-mode-hook
+            . (lambda ()
+               (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                     '(;; Syntax
+                       ("pure" . (#x21f0 (Br . Bl) #x2006))))))) ;; ⇰  x
+                                         ;; (" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; ∘
+
     :config
-    ;; From active region to multiple cursors:
-    (general-define-key
-     :preface "C-c m"
-     "r" 'set=rectangular-region-anchor
-     "c" 'mc/edit-lines
-     "e" 'mc/edit-ends-of-lines
-     "a" 'mc/edit-beginnings-of-lines))
+    (pretty-activate-groups
+     '(:sub-and-superscripts :greek :arithmetic))
+
+    (pretty-deactivate-groups
+     '(:equality :ordering :ordering-double :ordering-triple
+                 :arrows :arrows-twoheaded :punctuation
+                 :logic :sets :arithmetic-double :arithmetic-triple)))
 #+end_src
 
-** Paper Break Lines
+** Projectile                                                                  :convenience:project:
+
+Projectile is a project interaction library for Emacs. Its goal is to provide a
+nice set of features operating on a project level without introducing external
+dependencies (when feasible). For instance - finding project files has a
+portable implementation written in pure Emacs Lisp without the use of GNU find
+(but for performance sake an indexing mechanism backed by external commands
+exists as well).
+
+https://github.com/bbatsov/projectile
 
 #+begin_src elisp
-  (straight-use-package 'page-break-lines)
-  (use-package page-break-lines
-    :hook ((after-init . global-page-break-lines-mode))
-    :diminish page-break-lines-mode)
-#+end_src
-
-** Parens
-
-#+include: "parens.org"
-
-** PDF Tools
-
-#+begin_src elisp
-  (straight-use-package 'pdf-tools)
-  (use-package pdf-tools
-    :defer t
-    :config
-    (gsetq-default pdf-view-display-size 'fit-width)
-    (bind-keys :map pdf-view-mode-map
-               ("\\" . hydra-pdftools/body)
-               ("<s-spc>" .  pdf-view-scroll-down-or-next-page)
-               ("g"  . pdf-view-first-page)
-               ("G"  . pdf-view-last-page)
-               ("l"  . image-forward-hscroll)
-               ("h"  . image-backward-hscroll)
-               ("j"  . pdf-view-next-page)
-               ("k"  . pdf-view-previous-page)
-               ("e"  . pdf-view-goto-page)
-               ("u"  . pdf-view-revert-buffer)
-               ("al" . pdf-annot-list-annotations)
-               ("ad" . pdf-annot-delete)
-               ("aa" . pdf-annot-attachment-dired)
-               ("am" . pdf-annot-add-markup-annotation)
-               ("at" . pdf-annot-add-text-annotation)
-               ("y"  . pdf-view-kill-ring-save)
-               ("i"  . pdf-misc-display-metadata)
-               ("s"  . pdf-occur)
-               ("b"  . pdf-view-set-slice-from-bounding-box)
-               ("r"  . pdf-view-reset-slice)))
-#+end_src
-
-** Pretty
-
-#+include: "pretty.org"
-
-** Projectile
-
-#+begin_src elisp
-  (straight-use-package 'projectile)
-  (use-package projectile
-    :defer t
-    :diminish
-    :commands (projectile-project-root
-               projectile-project-name
-               projectile-project-p
-               projectile-locate-dominating-file)
-    :bind-keymap ("C-c C-p" . projectile-command-map)
-    :ghook '(after-find-file dired-before-readin-hook minibuffer-setup-hook after-init-hook)
-    :init
-    (gsetq projectile-indexing-method      'hybrid
-           projectile-require-project-root 'prompt)
-    (general-define-key
-     [remap find-tag] #'projectile-find-tag)
+  (leaf projectile
+    :doc "Projectile is a project interaction library for Emacs."
+    :url "https://github.com/bbatsov/projectile"
+    :tag "project" "convenience"
+    :bind ([remap find-tag] . projectile-find-tag)
+    :hook after-init-hook
+    :custom
+    (projectile-indexing-method      . 'hybrid)
+    (projectile-require-project-root . 'prompt)
     :config
     (gsetq projectile-project-root-files-top-down-recurring
            (append '("compile_commands.json"
@@ -507,44 +1083,68 @@ Now enabled.
                    projectile-project-root-files-top-down-recurring)))
 #+end_src
 
-** Prescient
+** Prescient                                                                   :extensions:
 
 ☄️ Simple but effective sorting and filtering for Emacs.
 
 https://github.com/raxod502/prescient.el
 
 #+begin_src elisp
-  (use-package prescient
-    :defer t
-    :hook ((after-init . prescient-persist-mode)))
+  (leaf prescient
+    :doc "☄️ Simple but effective sorting and filtering for Emacs."
+    :url "https://github.com/raxod502/prescient.el"
+    :tag "extensions"
+    :hook ((after-init-hook . prescient-persist-mode)))
 #+end_src
 
-** Quick Peek
+** Quick Peek                                                                  :convenience:docs:help:tools:
 
 An inline pop-up library for Emacs Lisp.
 
 https://github.com/cpitclaudel/quick-peek
 
 #+begin_src elisp
-  (use-package quick-peek
-    :defer t
-    :config
-    (set-face-attribute 'quick-peek-border-face nil
-                        :background "#75b79e"
-                        :height 0.1)
-    (set-face-attribute 'quick-peek-padding-face nil
-                        :height 0.1))
+  (leaf quick-peek
+    :doc "An inline pop-up library for Emacs Lisp."
+    :url "https://github.com/cpitclaudel/quick-peek"
+    :tag "convenience" "docs" "help" "tools"
+    :custom-face
+    (quick-peek-border-face  . '((t (:background "#75b79e" :height 0.1))))
+    (quick-peek-padding-face . '((t (:height 0.1)))))
 #+end_src
 
-** Recentf
+** Recentf                                                              :files:
+
+Recentf is a minor mode that builds a list of recently opened files.
+
+https://www.emacswiki.org/emacs/RecentFiles
 
 #+begin_src elisp
-  (use-package recentf
-    :init (gsetq
-           recentf-save-file       "~/.emacs.d/var/recentf"
-           recentf-max-saved-items 100
-           recentf-exclude         '("/tmp/" "/ssh:"))
+  (leaf recentf
+    :doc "Recentf is a minor mode that builds a list of recently opened files."
+    :url "https://www.emacswiki.org/emacs/RecentFiles"
+    :tag "files"
+    :hook after-init-hook
+    :custom
+    (recentf-filename-handlers
+     . '(;; Text properties inflate the size of recentf's files, and there is
+         ;; no purpose in persisting them, so we strip them out.
+         substring-no-properties
+         ;; Resolve symlinks of local files. Otherwise we get duplicate
+         ;; entries opening symlinks.
+         nasy--recent-file-truename
+         ;; Replace $HOME with ~, which is more portable, and reduces how much
+         ;; horizontal space the recentf listing uses to list recent files.
+         abbreviate-file-name))
+    (recentf-max-saved-items . 100)
+    (recentf-exclude         . '("/tmp/" "/ssh:"))
     :config
+    (defun nasy--recent-file-truename (file)
+      (if (or (file-remote-p file nil t)
+              (not (file-remote-p file)))
+          (file-truename file)
+        file))
+
     (add-to-list 'recentf-exclude no-littering-var-directory)
     (add-to-list 'recentf-exclude no-littering-etc-directory))
 #+end_src
@@ -567,19 +1167,115 @@ Not work now.
 #      "C-s" 'snails))
 # #+end_src
 
-** Subword
+** Subword                                                                     :builtin:
 
 #+begin_src elisp
-  (use-package subword
-    :defer t
-    :diminish (subword-mode))
+  (leaf subword
+    :tag "builtin"
+    :hook prog-mode-hook)
 #+end_src
 
-** Symbol Overlay
+** Switch-Window
+
+Offer a *visual* way to choose a window to switch to.
+
+https://github.com/dimitri/switch-window
 
 #+begin_src elisp
-  (straight-use-package 'symbol-overlay)
-  (use-package symbol-overlay
+  (leaf switch-window
+    :doc "Offer a *visual* way to choose a window to switch to."
+    :url "https://github.com/dimitri/switch-window"
+    :bind
+    ("C-x o" . switch-window)
+    ("C-x 1" . toggle-delete-other-windows)
+    ("C-x 2" . split-window-v)
+    ("C-x 3" . split-window-h)
+    ("C-x |" . split-window-horizontally-instead)
+    ("C-x _" . split-window-vertically-instead)
+    ("C-x x" . nasy/split-window)
+    ("M-o"   . transient-dwim--switch-window)
+    :custom
+    (switch-window-shortcut-style . 'alphabet)
+    (switch-window-timeout        . nil)
+    :transient
+    (transient-dwim--switch-window
+     ()
+     "Transient-dwim for `switch-window'."
+     [["Switch Window"
+       ("o" "Switch Window" switch-window)]])
+    :config
+    ;; When splitting window, show (other-buffer) in the new window
+    (defun split-window-func-with-other-buffer (split-function)
+      "Split window with `SPLIT-FUNCTION'."
+      (lambda (&optional arg)
+        "Split this window and switch to the new window unless ARG is provided."
+        (interactive "P")
+        (funcall split-function)
+        (let ((target-window (next-window)))
+          (set-window-buffer target-window (other-buffer))
+          (unless arg
+            (select-window target-window)))))
+
+    (defun split-window-v ()
+      (split-window-func-with-other-buffer 'split-window-vertically))
+
+    (defun split-window-h ()
+      (split-window-func-with-other-buffer 'split-window-horizontally))
+
+    (defun toggle-delete-other-windows ()
+      "Delete other windows in frame if any, or restore previous window config."
+      (interactive)
+      (if (and winner-mode
+               (equal (selected-window) (next-window)))
+          (winner-undo)
+        (delete-other-windows)))
+
+    (defun split-window-horizontally-instead ()
+      "Kill any other windows and re-split such that the current window is on the top half of the frame."
+      (interactive)
+      (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+        (delete-other-windows)
+        (split-window-horizontally)
+        (when other-buffer
+          (set-window-buffer (next-window) other-buffer))))
+
+    (defun split-window-vertically-instead ()
+      "Kill any other windows and re-split such that the current window is on the left half of the frame."
+      (interactive)
+      (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+        (delete-other-windows)
+        (split-window-vertically)
+        (when other-buffer
+          (set-window-buffer (next-window) other-buffer))))
+
+    ;; Borrowed from http://postmomentum.ch/blog/201304/blog-on-emacs
+    (defun nasy/split-window()
+      "Split the window to see the most recent buffer in the other window.
+    Call a second time to restore the original window configuration."
+      (interactive)
+      (if (eq last-command 'nasy-split-window)
+          (progn
+            (jump-to-register :nasy-split-window)
+            (setq this-command 'nasy-unsplit-window))
+        (window-configuration-to-register :nasy/split-window)
+        (switch-to-buffer-other-window nil))))
+#+end_src
+
+** Symbol Overlay                                                              :faces:matching:
+
+Highlight symbols with overlays while providing a keymap for various operations
+about highlighted symbols. It was originally inspired by the package
+highlight-symbol. The fundamental difference is that in symbol-overlay every
+symbol is highlighted by the Emacs built-in function overlay-put rather than the
+font-lock mechanism used in highlight-symbol.
+
+https://github.com/wolray/symbol-overlay
+
+#+begin_src elisp
+  (leaf symbol-overlay
+    :doc "Highlight symbols with keymap-enabled overlays."
+    :url "https://github.com/wolray/symbol-overlay"
+    :tag "faces" "matching"
     :bind (("M-i"  . symbol-overlay-put)
            ("M-n"  . symbol-overlay-switch-forward)
            ("M-p"  . symbol-overlay-switch-backward)
@@ -587,11 +1283,87 @@ Not work now.
            ("<f7>" . symbol-overlay-mode)))
 #+end_src
 
-** Treemacs
+** Treemacs                                                                    :convenience:files:
 
-#+include: "treemacs.org"
+Treemacs is a file and project explorer similar to NeoTree or vim’s NerdTree, but largely inspired by the Project Explorer in Eclipse. It shows the file system outlines of your projects in a simple tree layout allowing quick navigation and exploration, while also possessing basic file management utilities.
 
-** Tree Sitter
+https://github.com/Alexander-Miller/treemacs
+
+#+begin_src elisp
+  (leaf treemacs
+    :doc "A tree layout file explorer for Emacs"
+    :url "https://github.com/Alexander-Miller/treemacs"
+    :tag "convenience" "files"
+    :init
+    (after-x 'winum
+      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    :defer-config
+    (gsetq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
+           treemacs-deferred-git-apply-delay      0.5
+           treemacs-directory-name-transformer    #'identity
+           treemacs-display-in-side-window        t
+           treemacs-eldoc-display                 t
+           treemacs-file-event-delay              5000
+           treemacs-file-extension-regex          treemacs-last-period-regex-value
+           treemacs-file-follow-delay             0.2
+           treemacs-file-name-transformer         #'identity
+           treemacs-follow-after-init             t
+           treemacs-git-command-pipe              ""
+           treemacs-goto-tag-strategy             'refetch-index
+           treemacs-indentation                   2
+           treemacs-indentation-string            " "
+           treemacs-is-never-other-window         nil
+           treemacs-max-git-entries               5000
+           treemacs-missing-project-action        'ask
+           treemacs-move-forward-on-expand        t
+           treemacs-no-png-images                 nil
+           treemacs-no-delete-other-windows       t
+           treemacs-project-follow-cleanup        nil
+           treemacs-persist-file                  (no-littering-expand-var-file-name "treemacs-persist")
+           treemacs-position                      'left
+           treemacs-recenter-distance             0.1
+           treemacs-recenter-after-file-follow    nil
+           treemacs-recenter-after-tag-follow     nil
+           treemacs-recenter-after-project-jump   'always
+           treemacs-recenter-after-project-expand 'on-distance
+           treemacs-show-cursor                   nil
+           treemacs-show-hidden-files             t
+           treemacs-silent-filewatch              nil
+           treemacs-silent-refresh                nil
+           treemacs-sorting                       'alphabetic-desc
+           treemacs-space-between-root-nodes      t
+           treemacs-tag-follow-cleanup            t
+           treemacs-tag-follow-delay              1.5
+           treemacs-user-mode-line-format         nil
+           treemacs-user-header-line-format       nil
+           treemacs-width                         35)
+
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    ;; (treemacs-resize-icons 44)
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode t)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple))))
+
+
+  (leaf treemacs-icons-dired
+    :after treemacs dired
+    :config (treemacs-icons-dired-mode))
+
+  (leaf treemacs-magit
+    :after treemacs magit)
+
+  (leaf treemacs-projectile
+    :after treemacs projectile)
+#+end_src
+
+** Tree Sitter                                                                 :languages:parsers:tools:
 
 ~emacs-tree-sitter~ is an Emacs binding for tree-sitter, an incremental parsing
 system.
@@ -600,92 +1372,397 @@ https://ubolonton.github.io/emacs-tree-sitter/
 
 
 #+begin_src elisp
-  (use-package tree-sitter
-    :defer t
-    :ghook '(agda-mode-hook
-             shell-mode-hook
-             c-mode-hook
-             c++-mode-hook
-             css-mode-hook
-             haskell-mode-hook
-             html-mode-hook
-             js-mode-hook
-             js2-mode-hook
-             son-mode-hook
-             python-mode-hook
-             ruby-mode-hook
-             rust-mode-hook
-             typescript-mode-hook)
+  (leaf tree-sitter
+    :doc "emacs-tree-sitter is an Emacs binding for tree-sitter, an incremental parsing
+  system."
+    :url "https://github.com/ubolonton/emacs-tree-sitter"
+    :tag "languagues" "parsers" "tools"
+    :hook (agda-mode-hook
+           shell-mode-hook
+           c-mode-hook
+           c++-mode-hook
+           css-mode-hook
+           haskell-mode-hook
+           html-mode-hook
+           js-mode-hook
+           js2-mode-hook
+           son-mode-hook
+           python-mode-hook
+           ruby-mode-hook
+           rust-mode-hook
+           typescript-mode-hook)
     :config
     (require 'tree-sitter-langs)
     (add-to-list 'tree-sitter-major-mode-language-alist '(mhtml-mode . html)))
 
-  (use-package tree-sitter-hl
-    :defer t
-    :ghook 'tree-sitter-after-on-hook)
+  (leaf tree-sitter-hl
+    :hook tree-sitter-after-on-hook)
 #+end_src
 
-** Undo/Redo
+** Undo/Redo                                                                   :editing:
+
+#+begin_src elisp
+  (leaf undo/redo
+    :doc "Undo/redo for emacs"
+    :tag "editing")
+#+end_src
 
 *** Point History
 
+Show the history of points you visited before.
+
+https://github.com/blue0513/point-history
+
 #+begin_src elisp
-  (straight-use-package '(point-history :type git :host github :repo "blue0513/point-history"))
-  (use-package point-history
-    :ghook 'after-init-hook
+  (leaf point-history
+    :doc "Show the history of points you visited before."
+    :url "https://github.com/blue0513/point-history"
+    :tag "editing"
+    :hook after-init-hook
     :bind (("C-c C-/" . point-history-show))
-    :init (gsetq point-history-ignore-buffer "^ \\*Minibuf\\|^ \\*point-history-show*"))
+    :custom (point-history-ignore-buffer . "^ \\*Minibuf\\|^ \\*point-history-show*"))
 #+end_src
 
-*** Undo Propose
+*** Undo Propose                                                              :convenience:files:undo:redo:history:
+
+Navigate the emacs undo history by staging undo's in a temporary buffer.
+
+https://github.com/jackkamm/undo-propose-el
 
 #+begin_src elisp
-  (straight-use-package 'undo-propose)
-  (use-package undo-propose
-    :defer
-    :config (undo-propose-wrap redo))
+  (leaf undo-propose
+    :doc "Navigate the emacs undo history by staging undo's in a temporary buffer."
+    :url "https://github.com/jackkamm/undo-propose-el"
+    :tag "convenience" "files" "undo" "redo" "history"
+    :bind (("C-c u" . undo-propose))
+    :config
+    (undo-propose-wrap undo)
+    (undo-propose-wrap redo))
 #+end_src
 
-** Version Control
-
-#+include: "version-control.org"
-
-** Which Function
+** Uniquify                                                     :builtin:files:
 
 #+begin_src elisp
-  (use-package which-func
-    :defer t
-    :ghook 'after-init-hook)
+  (leaf uniquify
+    :tag "builtin" "files"
+    :custom
+    (uniquify-buffer-name-style   . 'reverse)
+    (uniquify-separator           . " • ")
+    (uniquify-after-kill-buffer-p . t)
+    (uniquify-ignore-buffers-re   . "^\\*"))
 #+end_src
 
-** Which Key
+** Version Control                                               :git:tools:vc:
 
 #+begin_src elisp
-  (use-package which-key
-    :init (gsetq which-key-allow-imprecise-window-fit nil)
-    :ghook 'after-init-hook)
+  (leaf version-control
+    :tag "git" "tools" "vc")
 #+end_src
 
-** Whitespace
+*** abridge-diff                                           :diffs:magit:tools:
 
-#+include: "whitespace.org"
+A simple Emacs package for abridging refined diff hunks (for example in
+magit). Why abridge a diff hunk? Most diffs are line based. If you are working
+on files with very long lines, for example LaTeX files, or text files with full
+paragraphs per line (often using visual-line-mode), line-based diffs can be very
+challenging to read, even with "hunk refining" enabled (highlighting the words
+which changed).
+
+https://github.com/jdtsmith/abridge-diff
+
+#+begin_src elisp
+  (leaf abridge-diff
+    :doc "Emacs package for refining diff hunks with very long lines (as in LaTeX files)."
+    :url "https://github.com/jdtsmith/abridge-diff"
+    :tag "diffs" "magit" "tools"
+    :after magit
+    :init (abridge-diff-mode 1))
+#+end_src
+
+*** Diff-hl (only for dired)
+
+Emacs package for highlighting uncommitted changes
+
+https://github.com/dgutov/diff-hl
+
+#+begin_src elisp
+  (leaf diff-hl
+    :doc "Emacs package for highlighting uncommitted changes"
+    :url "https://github.com/dgutov/diff-hl"
+    :tag "vc" "diff"
+    :hook ((dired-mode-hook         . diff-hl-dired-mode)
+           (magit-pre-refresh-hook  . diff-hl-magit-pre-refresh)
+           (magit-post-refresh-hook . diff-hl-magit-post-refresh)))
+#+end_src
+
+*** Forge                                                                     :git:tools:vc:
+
+Work with Git forges from the comfort of Magit.
+
+https://github.com/magit/forge
+
+#+begin_src elisp
+  (leaf forge
+    :doc "Work with Git forges from the comfort of Magit."
+    :url "https://github.com/magit/forge"
+    :tag "git" "tools" "vc")
+#+end_src
+
+*** Git Gutter
+
+#+begin_src elisp
+  (leaf git-gutter
+    :hook (after-init . global-git-gutter-mode)
+    :custom ((git-gutter:visual-line    . t)
+             (git-gutter:disabled-modes . '(asm-mode image-mode))
+             (git-gutter:modified-sign  . "❚")
+             (git-gutter:added-sign     . "✚")
+             (git-gutter:deleted-sign   . "✘"))
+    :bind (("C-x v =" . git-gutter:popup-hunk)
+           ("C-x p"   . git-gutter:previous-hunk)
+           ("C-x n"   . git-gutter:next-hunk)))
+#+end_src
+
+*** Git Messenger                                                             :convenience:vc:
+
+git-messenger.el provides function that popup commit message at current line.
+
+https://github.com/emacsorphanage/git-messenger
+
+#+begin_src elisp
+  (leaf git-messenger
+    :doc "git-messenger.el provides function that popup commit message at current line."
+    :url "https://github.com/emacsorphanage/git-messenger"
+    :tag "convenience" "vc"
+    :custom (git-messenger:show-detail . t)
+    :bind (:vc-prefix-map
+           ("p" . git-messenger:popup-message)))
+#+end_src
+
+*** Magit                                                                     :git:tools:vc:
+
+Magit is an interface to the version control system Git, implemented as an Emacs
+package. Magit aspires to be a complete Git porcelain. While we cannot (yet)
+claim that Magit wraps and improves upon each and every Git command, it is
+complete enough to allow even experienced Git users to perform almost all of
+their daily version control tasks directly from within Emacs. While many fine
+Git clients exist, only Magit and Git itself deserve to be called porcelains.
+
+https://github.com/magit/magit
+
+#+begin_src elisp
+  (leaf magit
+    :doc "It's Magit! A Git porcelain inside Emacs."
+    :url "https://github.com/magit/magit"
+    :tag "git" "tools" "vc"
+    :commands magit-status
+    :hook ((magit-popup-mode-hook . no-trailing-whitespace)
+           (git-commit-mode . goto-address-mode))
+    :custom ((magit-diff-refine-hunk . t)
+             (vc-handled-backends    . nil))
+    :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
+           ("C-x g"      . magit-status)
+           ("C-x M-g"    . magit-dispatch-popup)
+           (:magit-status-mode-map
+            ("C-M-<up>"  . magit-section-up))
+           (:vc-prefix-map
+            ("f"         . vc-git-grep)))
+    :config
+    (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
+#+end_src
+
+*** Magit Org Todos                                                           :magit:orgmode:tools:
+
+Get `todo.org` into your magit status.
+
+https://github.com/danielma/magit-org-todos.el
+
+#+begin_src elisp
+  (leaf magit-org-todos
+    :doc "Get `todo.org` into your magit status"
+    :url "https://github.com/danielma/magit-org-todos.el"
+    :tag "magit" "orgmode" "tools"
+    :after magit
+    :require t
+    :config (magit-org-todos-autoinsert))
+#+end_src
+
+*** Magit Todos                                                               :magit:vc:
+
+Show source files' TODOs (and FIXMEs, etc) in Magit status buffer.
+
+https://github.com/alphapapa/magit-todos
+
+#+begin_src elisp
+  (leaf magit-todos
+    :doc "Show source files' TODOs (and FIXMEs, etc) in Magit status buffer."
+    :url "https://github.com/alphapapa/magit-todos"
+    :tag "magit" "vc"
+    :custom (magit-todos-exclude-globs . '("*.map")))
+#+end_src
+
+** View Large File
+
+Emacs minor mode that allows viewing, editing, searching and comparing large
+files in batches, trading memory for processor time.
+
+https://github.com/m00natic/vlfi
+
+#+begin_src elisp
+  (leaf vlf
+    :doc "View Large Files in Emacs"
+    :url "https://github.com/m00natic/vlfi"
+    :tag "files" "large files" "utilities"
+    :commands ffap-vlf
+    :init
+    (defun ffap-vlf ()
+      "Find file at point with VLF."
+      (interactive)
+      (let ((file (ffap-file-at-point)))
+        (unless (file-exists-p file)
+          (error "File does not exist: %s" file))
+        (vlf file))))
+#+end_src
+
+** Which Function                                                              :builtin:
+
+#+begin_src elisp
+  (leaf which-func
+    :tag "builtin"
+    :hook after-init-hook)
+#+end_src
+
+** Which Key                                                                   :help:
+
+Emacs package that displays available keybindings in popup.
+
+https://github.com/justbur/emacs-which-key
+
+#+begin_src elisp
+  (leaf which-key
+    :doc "Emacs package that displays available keybindings in popup."
+    :url "https://github.com/justbur/emacs-which-key"
+    :tag "help"
+    :custom (which-key-allow-imprecise-window-fit . nil)
+    :hook 'after-init-hook)
+#+end_src
+
+** Whitespace                                                                  :convenience:data:wp:
+
+Visualize blanks (TAB, (HARD) SPACE and NEWLINE).
+
+https://www.emacswiki.org/emacs/WhiteSpace
+
+In Emacs, intelligently call whitespace-cleanup on save.
+
+https://github.com/purcell/whitespace-cleanup-mode
+
+#+begin_src elisp
+  (leaf whitespace
+    :tag "data" "wp"
+    :init
+    (defun no-trailing-whitespace ()
+      "Turn off display of trailing whitespace in this buffer."
+      (setq show-trailing-whitespace nil))
+    :hook
+    ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
+    ((artist-mode-hook
+      picture-mode-hook
+      special-mode-hook
+      Info-mode-hook
+      eww-mode-hook
+      term-mode-hook
+      vterm-mode-hook
+      comint-mode-hook
+      compilation-mode-hook
+      twittering-mode-hook
+      minibuffer-setup-hook
+      fundamental-mode) . no-trailing-whitespace))
+
+
+  (leaf whitespace-cleanup-mode
+    :doc "In Emacs, intelligently call whitespace-cleanup on save."
+    :url "https://github.com/purcell/whitespace-cleanup-mode"
+    :tag "convonience"
+    :custom
+    (whitespace-cleanup-mode-only-if-initially-clean . nil)
+    (whitespace-style
+     . '(face tabs spaces trailing space-before-tab
+              newline indentation empty space-after-tab
+              space-mark tab-mark newline-mark))
+    :hook ((after-init-hook . global-whitespace-cleanup-mode))
+    :bind (("<remap> <just-one-space>" . cycle-spacing)))
+#+end_src
+
 
 ** Writeroom Mode
 
-#+include: "writeroom.org"
+#+begin_src elisp
+  (leaf writeroom-mode
+    :preface
+    (define-minor-mode prose-mode
+      "Set up a buffer for prose editing.
+  This enables or modifies a number of settings so that the
+  experience of editing prose is a little more like that of a
+  typical word processor."
+      nil " Prose" nil
+      (if prose-mode
+          (progn
+            (when (fboundp 'writeroom-mode)
+              (writeroom-mode 1))
+            (setq truncate-lines nil)
+            (setq word-wrap t)
+            (setq cursor-type 'bar)
+            (when (eq major-mode 'org)
+              (kill-local-variable 'buffer-face-mode-face))
+            (buffer-face-mode 1)
+            ;;(delete-selection-mode 1)
+            (set (make-local-variable 'blink-cursor-interval) 0.6)
+            (set (make-local-variable 'show-trailing-whitespace) nil)
+            (set (make-local-variable 'line-spacing) 0.2)
+            (set (make-local-variable 'electric-pair-mode) nil)
+            (ignore-errors (flyspell-mode 1))
+            (visual-line-mode 1))
+        (kill-local-variable 'truncate-lines)
+        (kill-local-variable 'word-wrap)
+        (kill-local-variable 'cursor-type)
+        (kill-local-variable 'show-trailing-whitespace)
+        (kill-local-variable 'line-spacing)
+        (kill-local-variable 'electric-pair-mode)
+        (buffer-face-mode -1)
+        ;; (delete-selection-mode -1)
+        (flyspell-mode -1)
+        (visual-line-mode -1)
+        (when (fboundp 'writeroom-mode)
+          (writeroom-mode 0)))))
+#+end_src
 
-** Yasnipeet
+** Yasnipeet                               :convenience:emulation:
+
+YASnippet is a template system for Emacs. It allows you to type an abbreviation
+and automatically expand it into function templates. Bundled language templates
+include: C, C++, C#, Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more. The
+snippet syntax is inspired from TextMate's syntax, you can even import most
+TextMate templates to YASnippet. Watch a demo on YouTube.
+
+https://github.com/joaotavora/yasnippet
 
 #+begin_src elisp
-  (straight-use-package 'yasnippet)
-  (straight-use-package 'yasnippet-snippets)
-
-  (use-package yasnippet
-    :defer t
+  (leaf yasnippet
+    :doc "A template system for Emacs"
+    :url "https://github.com/joaotavora/yasnippet"
+    :tag "convenience" "enmulation"
     :commands (yas-minor-mode)
-    :hook (((prog-mode text-mode) . yas-minor-mode))
+    :hook (((prog-mode-hook text-mode-hook) . yas-minor-mode))
     :config
     (add-to-list 'yas-snippet-dirs
                  (concat user-emacs-directory "extra/snippets"))
     (yas-reload-all))
+#+end_src
+
+* Footer                                                 :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-editor)
+  ;;; nasy-editor.el ends here
 #+end_src

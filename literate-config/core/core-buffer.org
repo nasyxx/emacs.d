@@ -1,4 +1,24 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-core-buffer.el")
+
 Buffers Define and Autoloads.
+
+* Header                                                                        :noexport:
+
+#+begin_src elisp
+  ;;; nasy-core-buffer.el  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Core Buffer.
+
+  ;;; Code:
+#+end_src
+
+* Functions
 
 #+begin_src elisp
   ;;;###autoload
@@ -358,4 +378,11 @@ Buffers Define and Autoloads.
          interactive "Killed %d project buffers"
          (- (length buffer-list)
             (length (cl-remove-if-not #'buffer-live-p buffer-list)))))))
+#+end_src
+
+* Footer                                                                      :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-core-buffer)
+  ;;; nasy-core-buffer.el ends here
 #+end_src

@@ -1,9 +1,7 @@
 #+begin_src elisp
-  (straight-use-package 'treemacs)
-  (use-package treemacs
-    :defer t
+  (leaf treemacs
     :init
-    (after! winum
+    (after-x winum
       (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
     :config
     (gsetq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
@@ -59,17 +57,14 @@
       (`(t . _)
        (treemacs-git-mode 'simple))))
 
-  (straight-use-package 'treemacs-projectile)
-  (straight-use-package 'treemacs-icons-dired)
-  (straight-use-package 'treemacs-magit)
 
-  (use-package treemacs-projectile
-    :after treemacs projectile)
-
-  (use-package treemacs-icons-dired
+  (leaf treemacs-icons-dired
     :after treemacs dired
     :config (treemacs-icons-dired-mode))
 
-  (use-package treemacs-magit
+  (leaf treemacs-magit
     :after treemacs magit)
+
+  (leaf treemacs-projectile
+    :after treemacs projectile)
 #+end_src

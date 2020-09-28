@@ -1,0 +1,384 @@
+* Autoloads
+:PROPERTIES:
+:header-args:elisp: :tangle (concat temporary-file-directory "nasy-tools-company-function.el")
+:END:
+
+#+begin_src elisp :exports none
+  ;;; nasy-tools-company-function.el  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Company Mode.
+
+  ;;; Code:
+#+end_src
+
+#+begin_src elisp
+  (require 'company)
+  ;; Borrow from doom emacs.
+
+  ;;;###autoload
+  (defvar nasy/company-backend-alist
+    '((text-mode company-dabbrev company-yasnippet company-ispell company-files)
+      (prog-mode company-capf company-yasnippet company-files)
+      (conf-mode company-capf company-dabbrev-code company-yasnippet company-files))
+    "An alist matching modes to company backends. The backends for any mode is
+  built from this.")
+
+
+  ;;;###autoload
+  (defun nasy/add-company-backend (modes &rest backends)
+    "Prepends BACKENDS (in order) to `company-backends' in MODES.
+
+  MODES should be one symbol or a list of them, representing major or minor modes.
+  This will overwrite backends for MODES on consecutive uses.
+
+  If the car of BACKENDS is nil, unset the backends for MODES.
+  Examples:
+   (nasy/add-company-backend 'js2-mode
+     'company-tide 'company-yasnippet)
+   (nasy/add-company-backend 'sh-mode
+     '(company-shell :with company-yasnippet))
+   (nasy/add-company-backend '(c-mode c++-mode)
+     '(:separate company-irony-c-headers company-irony))
+   (nasy/add-company-backend 'sh-mode nil)  ; unsets backends for sh-mode"
+
+    (declare (indent defun))
+    (dolist (mode (nasy-enlist modes))
+      (if (null (car backends))
+          (setq nasy/company-backend-alist
+                (delq (assq mode nasy/company-backend-alist)
+                      nasy/company-backend-alist))
+        (setf (alist-get mode nasy/company-backend-alist)
+              backends))))
+
+
+  ;;;###autoload
+  (defun nasy/company-backends ()
+    (let (backends)
+      (let ((mode major-mode)
+            (modes (list major-mode)))
+        (while (setq mode (get mode 'derived-mode-parent))
+          (push mode modes))
+        (dolist (mode modes)
+          (dolist (backend (append (cdr (assq mode nasy/company-backend-alist))
+                                   (default-value 'company-backends)))
+            (push backend backends)))
+        (delete-dups
+         (append (cl-loop for (mode . backends) in nasy/company-backend-alist
+                          if (or (eq major-mode mode)  ; major modes
+                                (and (boundp mode)
+                                   (symbol-value mode))) ; minor modes
+                          append backends)
+                 (nreverse backends))))))
+
+
+  ;;;###autoload
+  (defun nasy/company-init-backends-h ()
+    "Set `company-backends' for the current buffer."
+    (or (memq major-mode '(fundamental-mode special-mode))
+       buffer-read-only
+       (nasy/temp-buffer-p (or (buffer-base-buffer) (current-buffer)))
+       (setq-local company-backends (nasy/company-backends))))
+
+
+  (put 'nasy/company-init-backends-h 'permanent-local-hook t)
+
+
+  ;;;###autoload
+  (defun nasy/company-complete ()
+    "Bring up the completion popup. If only one result, complete it."
+    (interactive)
+    (require 'company)
+    (when (ignore-errors
+            (/= (point)
+                (cdr (bounds-of-thing-at-point 'symbol))))
+      (save-excursion (insert " ")))
+    (when (and (company-manual-begin)
+               (= company-candidates-length 1))
+      (company-complete-common)))
+
+
+  ;;;###autoload
+  (defun nasy/company-has-completion-p ()
+    "Return non-nil if a completion candidate exists at point."
+    (and (company-manual-begin)
+         (= company-candidates-length 1)))
+
+
+  ;;;###autoload
+  (defun nasy/company-toggle-auto-completion ()
+    "Toggle as-you-type code completion."
+    (interactive)
+    (require 'company)
+    (setq company-idle-delay (unless company-idle-delay 0.2))
+    (message "Auto completion %s"
+             (if company-idle-delay "enabled" "disabled")))
+
+
+  ;;;###autoload
+  (defun nasy/company-complete ()
+    "Bring up the completion popup. If only one result, complete it."
+    (interactive)
+    (require 'company)
+    (when (ignore-errors
+            (/= (point)
+                (cdr (bounds-of-thing-at-point 'symbol))))
+      (save-excursion (insert " ")))
+    (when (and (company-manual-begin)
+               (= company-candidates-length 1))
+      (company-complete-common)))
+
+
+  ;;;###autoload
+  (defun nasy/company-dabbrev ()
+    "Invokes `company-dabbrev-code' in prog-mode buffers and `company-dabbrev'
+      everywhere else."
+    (interactive)
+    (call-interactively
+     (if (derived-mode-p 'prog-mode)
+         #'company-dabbrev-code
+       #'company-dabbrev)))
+
+
+  ;;;###autoload
+  (defun nasy/company-whole-lines (command &optional arg &rest ignored)
+    "`company-mode' completion backend that completes whole-lines, akin to vim's
+      C-x C-l."
+    (interactive (list 'interactive))
+    (require 'company)
+    (pcase command
+      (`interactive (company-begin-backend 'nasy/company-whole-lines))
+      (`prefix      (company-grab-line "^[\t\s]*\\(.+\\)" 1))
+      (`candidates
+       (all-completions
+        arg
+        (delete-dups
+         (split-string
+          (replace-regexp-in-string
+           "^[\t\s]+" ""
+           (concat (buffer-substring-no-properties (point-min) (line-beginning-position))
+                   (buffer-substring-no-properties (line-end-position) (point-max))))
+          "\\(\r\n\\|[\n\r]\\)" t))))))
+
+
+  ;;;###autoload
+  (defun nasy/company-dict-or-keywords ()
+    "`company-mode' completion combining `company-dict' and `company-keywords'."
+    (interactive)
+    (require 'company-dict)
+    (require 'company-keywords)
+    (let ((company-backends '((company-keywords company-dict))))
+      (call-interactively #'company-complete)))
+
+
+  ;;;###autoload
+  (defun nasy/company-dabbrev-code-previous ()
+    "TODO"
+    (interactive)
+    (require 'company-dabbrev)
+    (let ((company-selection-wrap-around t))
+      (call-interactively #'nasy/company-dabbrev)
+      (company-select-previous-or-abort)))
+#+end_src
+
+#+begin_src elisp :exports none
+  (provide 'nasy-tools-company-function)
+  ;;; nasy-tools-company-function.el ends here
+#+end_src
+
+* Configs
+:PROPERTIES:
+:header-args:elisp: :tangle (concat temporary-file-directory "nasy-tools-company.el")
+:END:
+
+#+begin_src elisp :exports none
+  ;;; nasy-tools-company.el  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Company Mode.
+
+  ;;; Code:
+#+end_src
+
+** Company Mode
+
+#+begin_src elisp
+  (leaf company
+    :hook prog-mode-hook
+    :bind
+    ("M-/"     . company-files)
+    ("M-C-/"   . nasy/company-complete)
+    ("C-<tab>" . nasy/company-complete)
+    (:company-mode-map
+     ("M-/" . nasy/company-complete))
+    (:company-active-map
+     ("M-/" . company-other-backend)
+     ("C-n" . company-select-next)
+     ("C-p" . company-select-previous))
+    :custom ((company-tooltip-limit       . 10)
+             (company-dabbrev-downcase    . nil)
+             (company-dabbrev-ignore-case . t)
+             (company-global-modes
+              . '(not erc-mode message-mode help-mode gud-mode eshell-mode))
+             `(company-frontends
+               . ,(if *c-box*
+                      '(company-box-frontend)
+                    '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)))
+             (company-dabbrev-other-buffers     . 'all)
+             (company-tooltip-align-annotations . t)
+             (company-minimum-prefix-length     . 2)
+             (company-idle-delay                . .2)
+             (company-tooltip-idle-delay        . .2)
+             (company-require-match             . 'never))
+    :config
+    (add-hook 'after-change-major-mode-hook #'nasy/company-init-backends-h 'append)
+    :defer-config
+    (add-to-list 'completion-styles 'initials t)
+    (setq company-backends '(company-capf))
+    (defvar nasy/prev-whitespace-mode nil)
+    (make-variable-buffer-local 'nasy/prev-whitespace-mode)
+    (defvar nasy/show-trailing-whitespace nil)
+    (make-variable-buffer-local 'nasy/show-trailing-whitespace)
+    (defun pre-popup-draw ()
+      "Turn off whitespace mode before showing company complete tooltip"
+      (if whitespace-mode
+          (progn
+            (gsetq my-prev-whitespace-mode t)
+            (whitespace-mode -1)))
+      (gsetq nasy/show-trailing-whitespace show-trailing-whitespace)
+      (gsetq show-trailing-whitespace nil))
+    (defun post-popup-draw ()
+      "Restore previous whitespace mode after showing company tooltip"
+      (if nasy/prev-whitespace-mode
+          (progn
+            (whitespace-mode 1)
+            (gsetq nasy/prev-whitespace-mode nil)))
+      (gsetq show-trailing-whitespace nasy/show-trailing-whitespace))
+    :advice
+    (:before company-pseudo-tooltip-unhide pre-popup-draw)
+    (:after  company-pseudo-tooltip-hide   post-popup-draw))
+#+end_src
+
+** Company Prescient
+
+#+begin_src elisp
+  (leaf company-prescient
+    :hook company-mode-hook)
+#+end_src
+
+** Company Quickhelp
+
+#+begin_src elisp
+  (leaf company-quickhelp
+    :when (not *c-box*)
+    :bind
+    (:company-active-map
+     ("C-c h" . company-quickhelp-manual-begin))
+    :hook company-mode-hook
+    :custom
+    (pos-tip-use-relative-coordinates . t))
+#+end_src
+
+** Company Tabnine
+
+#+begin_src elisp
+  (leaf company-tabnine
+    :custom
+    `(company-tabnine-log-file-path
+      . ,(concat company-tabnine-binaries-folder "/log")))
+#+end_src
+
+** Company Flx
+
+#+begin_src elisp
+  (leaf company-flx
+    :hook company-mode-hook)
+#+end_src
+
+** Company Box
+
+#+begin_src elisp
+  (leaf company-box
+    :when *c-box*
+    :hook company-mode-hook
+    :custom
+    (company-box-show-single-candidate . t)
+    (company-box-max-candidates        . 25)
+    (company-box-icons-alist           . 'company-box-icons-all-the-icons)
+    :config
+    (gsetq
+     company-box-icons-functions
+     (cons #'nasy/company-box-icons--elisp-fn
+           (delq 'company-box-icons--elisp
+                 company-box-icons-functions)))
+
+    (defun nasy/company-box-icons--elisp-fn (candidate)
+      (when (derived-mode-p 'emacs-lisp-mode)
+        (let ((sym (intern candidate)))
+          (cond ((fboundp  sym) 'ElispFunction)
+                ((boundp   sym) 'ElispVariable)
+                ((featurep sym) 'ElispFeature)
+                ((facep    sym) 'ElispFace)))))
+
+    (after-x 'all-the-icons
+      (gsetq
+       company-box-icons-all-the-icons
+       (let ((all-the-icons-scale-factor 0.8))
+         `((Unknown       . ,(all-the-icons-material "find_in_page"             :face 'all-the-icons-purple))
+           (Text          . ,(all-the-icons-material "text_fields"              :face 'all-the-icons-green))
+           (Method        . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
+           (Function      . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
+           (Constructor   . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
+           (Field         . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
+           (Variable      . ,(all-the-icons-material "adjust"                   :face 'all-the-icons-blue))
+           (Class         . ,(all-the-icons-material "class"                    :face 'all-the-icons-cyan))
+           (Interface     . ,(all-the-icons-material "settings_input_component" :face 'all-the-icons-cyan))
+           (Module        . ,(all-the-icons-material "view_module"              :face 'all-the-icons-cyan))
+           (Property      . ,(all-the-icons-material "settings"                 :face 'all-the-icons-lorange))
+           (Unit          . ,(all-the-icons-material "straighten"               :face 'all-the-icons-red))
+           (Value         . ,(all-the-icons-material "filter_1"                 :face 'all-the-icons-red))
+           (Enum          . ,(all-the-icons-material "plus_one"                 :face 'all-the-icons-lorange))
+           (Keyword       . ,(all-the-icons-material "filter_center_focus"      :face 'all-the-icons-lgreen))
+           (Snippet       . ,(all-the-icons-material "short_text"               :face 'all-the-icons-lblue))
+           (Color         . ,(all-the-icons-material "color_lens"               :face 'all-the-icons-green))
+           (File          . ,(all-the-icons-material "insert_drive_file"        :face 'all-the-icons-green))
+           (Reference     . ,(all-the-icons-material "collections_bookmark"     :face 'all-the-icons-silver))
+           (Folder        . ,(all-the-icons-material "folder"                   :face 'all-the-icons-green))
+           (EnumMember    . ,(all-the-icons-material "people"                   :face 'all-the-icons-lorange))
+           (Constant      . ,(all-the-icons-material "pause_circle_filled"      :face 'all-the-icons-blue))
+           (Struct        . ,(all-the-icons-material "streetview"               :face 'all-the-icons-blue))
+           (Event         . ,(all-the-icons-material "event"                    :face 'all-the-icons-yellow))
+           (Operator      . ,(all-the-icons-material "control_point"            :face 'all-the-icons-red))
+           (TypeParameter . ,(all-the-icons-material "class"                    :face 'all-the-icons-red))
+           (Template      . ,(all-the-icons-material "short_text"               :face 'all-the-icons-green))
+           (ElispFunction . ,(all-the-icons-material "functions"                :face 'all-the-icons-red))
+           (ElispVariable . ,(all-the-icons-material "check_circle"             :face 'all-the-icons-blue))
+           (ElispFeature  . ,(all-the-icons-material "stars"                    :face 'all-the-icons-orange))
+           (ElispFace     . ,(all-the-icons-material "format_paint"             :face 'all-the-icons-pink))))))
+
+    (defun nasy/company-remove-scrollbar-a (orig-fn &rest args)
+     "This disables the company-box scrollbar, because:
+    https://github.com/sebastiencs/company-box/issues/44"
+     (cl-letf (((symbol-function #'display-buffer-in-side-window)
+                (symbol-function #'ignore)))
+       (apply orig-fn args)))
+
+    :advice (:around
+             company-box--update-scrollbar
+             nasy/company-remove-scrollbar-a))
+#+end_src
+
+#+begin_src elisp :exports none
+  (provide 'nasy-tools-company)
+  ;;; nasy-tools-company.el ends here
+#+end_src

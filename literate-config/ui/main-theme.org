@@ -1,3 +1,7 @@
+* Nasy Theme
+
+#+include: nasy-theme.org
+
 * Doom-themes
 
 #+begin_src elisp

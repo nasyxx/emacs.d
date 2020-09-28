@@ -1,7 +1,420 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-tools.el")
+
+Here is the tools, including buffer, convenience, hyperlink, mac, matching,
+project, and tools.
+
+* Header                                                                        :noexport:
+
+#+begin_src elisp
+  ;;; nasy-tools.el --- Nasy's Emacs Configuration editor file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Tools.
+
+  ;;; Code:
+#+end_src
+
 * Packages
+
+Packages list
+
++ all-the-icons
++ anzu
++ avy
++ beginend
++ carbon-now-sh
++ Company
+  - company-box
+  - company-dict
+  - company-fix
+  - company-math
+  - company-prescient
+  - company-restclient
+  - company-tabnine
++ emojify (when emacs-version less than 27)
++ fill-column
+  - Unfill
+  - visual-fill-column
++ find-file-in-project
++ grab-mac-link (when is a mac)
++ ibuffer
+  - ibuffer-vc
+  - all-the-icons-ibuffer
++ imenu-list
++ isearch
+
++ restclient
+  - ob-restclient
+  - restclient
++ thingopt
+
+#+begin_src elisp
+  (nasy/s-u-p
+    all-the-icons
+    anzu
+    avy
+    beginend
+    carbon-now-sh
+
+    ;; company
+    company
+    (:when *c-box* company-box)
+    company-dict
+    company-flx
+    company-math
+    company-prescient
+    company-quickhelp
+    company-restclient
+    company-tabnine
+
+    (:when (version< emacs-version "27") emojify)
+
+    ;; fill column
+    unfill
+    visual-fill-column
+
+    find-file-in-project
+    (:when *is-a-mac* grab-mac-link)
+    ;; flycheck
+    flycheck
+    flycheck-package
+    (:when *flycheck-inline* flycheck-inline quick-peek)
+    ;; ibuffer
+    ibuffer-vc
+    all-the-icons-ibuffer
+
+    ob-restclient
+    restclient
+    thingopt)
+#+end_src
 
 * Configs
 
-** Lookup
+** Anzu
 
-#+include: "lookup.org"
+anzu.el is an Emacs port of anzu.vim. anzu.el provides a minor mode which
+displays current match and total matches information in the mode-line in various
+search modes.
+
+https://github.com/emacsorphanage/anzu
+
+#+begin_src elisp
+  (leaf anzu
+    :doc "anzu.el is an Emacs port of anzu.vim."
+    :url "https://github.com/emacsorphanage/anzu"
+    :hook ((after-init-hook . global-anzu-mode))
+    :bind (([remap query-replace]        . anzu-query-replace)
+           ([remap query-replace-regexp] . anzu-query-replace-regexp)))
+#+end_src
+
+** Auto Insert
+
+#+include: "auto-insert.org"
+
+** Avy
+
+Jump to things in Emacs tree-style.
+
+https://github.com/abo-abo/avy
+
+#+begin_src elisp
+  (leaf avy
+    :doc "Jump to things in Emacs tree-style."
+    :url "https://github.com/abo-abo/avy"
+    :init
+    (when *dvorak*
+      (gsetq avy-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)))
+    :bind
+    ("C-:"     . avy-goto-char)
+    ("C-'"     . avy-goto-char-2)
+    ("C-`"     . avy-goto-char-2)
+    ("M-g e"   . avy-goto-word-0)
+    ("M-g w"   . avy-goto-word-1)
+    ("C-~"     . avy-goto-word-1)
+    ("C-c C-j" . avy-resume))
+#+end_src
+
+** Beginend
+
+Emacs package to redefine M-< and M-> for some modes
+
+https://github.com/DamienCassou/beginend
+
+#+begin_src elisp
+  (leaf beginend
+    :doc "Emacs package to redefine M-< and M-> for some modes"
+    :url "https://github.com/DamienCassou/beginend"
+    :hook ((after-init-hook . beginend-global-mode)))
+#+end_src
+
+** Carbon Now sh
+
+Emacs to carbon.now.sh integration.
+
+https://github.com/veelenga/carbon-now-sh.el
+
+Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>@@
+
+** Company
+
+Modular in-buffer completion framework for Emacs.
+
+https://github.com/company-mode/company-mode
+
+#+begin_src elisp :exports none
+  (require 'nasy-tools-company)
+#+end_src
+
+#+include: "company.org"
+
+** Emojify and all-the-icons
+
+#+begin_src elisp
+  (leaf emojify
+    :commands emojify-mode
+    :when (version< emacs-version "27")
+    :hook ((after-init-hook . global-emojify-mode))
+    :custom (emojify-emoji-styles  . '(unicode github))
+            (emojify-display-style . 'unicode))
+
+  (leaf all-the-icons
+    :custom (inhibit-compacting-font-caches . t))
+#+end_src
+
+** Fill Column
+
+#+begin_src elisp
+  (leaf fill
+    :doc "Filling text."
+    :tag "emacs")
+#+end_src
+
+*** Unfill
+
+Functions providing the inverse of Emacs' fill-paragraph and fill-region
+
+https://github.com/purcell/unfill
+
+#+begin_src elisp
+  (leaf unfill
+    :doc "Functions providing the inverse of Emacs' fill-paragraph and fill-region"
+    :url "https://github.com/purcell/unfill"
+    :tag "convenience"
+    :bind (("M-q" . unfill-toggle)))
+#+end_src
+
+*** Visual-fill-column
+
+Emacs mode for wrapping visual-line-mode buffers at fill-column.
+
+https://github.com/joostkremers/visual-fill-column
+
+#+begin_src elisp
+  (leaf visual-fill-column
+    :doc "Emacs mode for wrapping visual-line-mode buffers at fill-column."
+    :url "https://github.com/joostkremers/visual-fill-column"
+    :tag "convenience"
+    :commands maybe-adjust-visual-fill-column
+    :hook (visual-line-mode-hook
+           (visual-fill-column-mode-hook . maybe-adjust-visual-fill-column))
+    :config
+    (defun maybe-adjust-visual-fill-column nil
+      "Readjust visual fill column when the global font size is modified.\nThis is helpful for writeroom-mode, in particular."
+      (if visual-fill-column-mode
+          (add-hook 'after-setting-font-hook 'visual-fill-column--adjust-window nil t)
+        (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t))))
+#+end_src
+
+** Find File in Project
+
+Find file/directory and review Diff/Patch/Commit quickly everywhere.
+
+https://github.com/technomancy/find-file-in-project
+
+#+begin_src elisp
+  (leaf find-file-in-project
+    :doc "Find file/directory and review Diff/Patch/Commit quickly everywhere."
+    :url "https://github.com/technomancy/find-file-in-project"
+    :tag "project" "convenience"
+    :custom (ffip-use-rust-fd . t))
+#+end_src
+
+** Flycheck
+
+*** Autoloads
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun save-buffer-maybe-show-errors ()
+    "Save buffer and show errors if any."
+    (interactive)
+    (save-buffer)
+    (when (not flycheck-current-errors)
+      (flycheck-list-errors)))
+
+  ;;;###autoload
+  (defun nasy/flycheck-inline-init ()
+    "Flycheck-inline-mode init function"
+    (gsetq flycheck-inline-display-function
+           (lambda (msg pos)
+             (let* ((ov (quick-peek-overlay-ensure-at pos))
+                    (contents (quick-peek-overlay-contents ov)))
+               (setf (quick-peek-overlay-contents ov)
+                     (concat contents (when contents "\n") msg))
+               (quick-peek-update ov)))
+           flycheck-inline-clear-function #'quick-peek-hide))
+#+end_src
+
+*** configs
+
+Flycheck
+
+#+begin_src elisp
+  (leaf flycheck
+    ;; :bind (("C-x C-s" . save-buffer-maybe-show-errors))
+    :hook prog-mode-hook
+    :custom
+    (flycheck-display-errors-function
+     . #'flycheck-display-error-messages-unless-error-list)
+    (flycheck-check-syntax-automatically . '(save idle-change mode-enabled))
+    (flycheck-display-errors-delay       . 0.25)
+    :bind
+    (:flycheck-error-list-mode-map
+     ("C-n" . flycheck-error-list-next-error)
+     ("C-p" . flycheck-error-list-previous-error)
+     ("RET" . flycheck-error-list-goto-error)
+     ([return]  . flycheck-error-list-goto-error))
+    :config
+    (defalias 'show-error-at-point-soon
+      'flycheck-show-error-at-point)
+    (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space))
+#+end_src
+
+Flycheck checker for elisp package metadata.
+
+https://github.com/purcell/flycheck-package
+
+#+begin_src elisp
+  (leaf flycheck-package
+    :doc "Flycheck checker for elisp package metadata."
+    :url "https://github.com/purcell/flycheck-package"
+    :tag "lisp"
+    :after flycheck
+    :config
+    (flycheck-package-setup))
+#+end_src
+
+Flycheck inline
+
+#+begin_src elisp
+  (leaf flycheck-inline
+    :hook flycheck-mode-hook
+    :mode-hook (nasy/flycheck-inline-init))
+#+end_src
+
+
+** Grab Mac Link
+
+Grab link from Mac Apps and insert it into Emacs.
+
+https://github.com/xuchunyang/grab-mac-link.el
+
+#+begin_src elisp
+  (leaf grab-mac-link
+    :doc "Grab link from Mac Apps."
+    :url "https://github.com/xuchunyang/grab-mac-link.el"
+    :when *is-a-mac*)
+#+end_src
+
+** Grep
+
+#+begin_src elisp
+  (leaf grep
+    :tag "builtin"
+    :custom
+    ((grep-highlight-matches grep-scroll-output) . t))
+#+end_src
+
+** iBuffer
+
+#+include: "ibuffer.org"
+
+#+begin_src elisp
+  (leaf nasy-editor-ibuffer
+    :require t)
+#+end_src
+
+** imenu list
+
+Emacs plugin to show the current buffer's imenu entries in a seperate buffer.
+
+https://github.com/bmag/imenu-list
+
+#+begin_src elisp
+  (leaf imenu-list
+    :doc "Emacs plugin to show the current buffer's imenu entries in a seperate buffer"
+    :url "https://github.com/bmag/imenu-list"
+    :tag "tools" "convenience"
+    :bind (("C-." . imenu-list-smart-toggle))
+    :custom (imenu-list-auto-resize . t))
+#+end_src
+
+** isearch
+
+Isearch, that is, incremental search, is the standard way to search in vanilla
+Emacs.
+
+https://www.emacswiki.org/emacs/IncrementalSearch
+
+#+begin_src elisp
+  (leaf isearch
+    :doc "Isearch, that is, incremental search, is the standard way to search in
+  vanilla Emacs."
+    :url "https://www.emacswiki.org/emacs/IncrementalSearch"
+    :tag "matching"
+    :bind (:isearch-mode-map
+           ([remap isearch-delete-char]
+            . isearch-del-char)
+           ("C-w"
+            . isearch-yank-symbol)
+           ([(control return)]
+            . isearch-exit-other-end)
+           ("C-o"
+            . isearch-occur))
+
+    :defer-config
+    ;; Search back/forth for the symbol at point
+    ;; See http://www.emacswiki.org/emacs/SearchAtPoint
+    (defun isearch-yank-symbol ()
+      "*Put symbol at current point into search string."
+      (interactive)
+      (let ((sym (thing-at-point 'symbol)))
+        (if sym
+            (progn
+              (setq isearch-regexp    t
+                    isearch-string    (regexp-quote sym)
+                    isearch-message   (mapconcat 'isearch-text-char-description isearch-string "")
+                    isearch-yank-flag t))
+          (ding)))
+      (isearch-search-and-update))
+
+    ;; http://www.emacswiki.org/emacs/ZapToISearch
+    (defun isearch-exit-other-end (rbeg rend)
+      "Exit isearch, but at the other end of the search string.
+  This is useful when followed by an immediate kill."
+      (interactive "r")
+      (isearch-exit)
+      (goto-char isearch-other-end)))
+#+end_src
+
+* Footer                                                                      :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-tools)
+  ;;; nasy-tools.el ends here
+#+end_src

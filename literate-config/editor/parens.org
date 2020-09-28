@@ -3,21 +3,3 @@ I use ~smartparens~, with ~rainbow-delimiters~.  For lisp, see ~lang/lisp~, I us
 #+begin_src elisp
   (add-hook 'after-init-hook 'show-paren-mode)
 #+end_src
-
-* Smartparens
-
-#+begin_src elisp
-  (straight-use-package 'smartparens)
-  (use-package smartparens-config
-    :hook ((after-init . smartparens-global-mode))
-    :init (gsetq sp-hybrid-kill-entire-symbol nil))
-#+end_src
-
-* Rainbow Delimiters
-
-#+begin_src elisp
-  (straight-use-package 'rainbow-delimiters)
-  (use-package rainbow-delimiters
-    :defer t
-    :ghook '(prog-mode-hook org-src-mode-hook))
-#+end_src

@@ -1,0 +1,111 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-core-libs.el")
+
+* Header                                                                        :noexport:
+
+#+begin_src elisp
+  ;;; nasy-core-libs.el  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Configuration Core Libs.
+
+  ;;; Code:
+#+end_src
+
+* Functions
+
+** Normal
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun nasy-unquote (exp)
+    "Return EXP unquoted."
+    (declare (pure t) (side-effect-free t))
+    (while (memq (car-safe exp) '(quote function))
+      (setq exp (cadr exp)))
+    exp)
+
+  ;;;###autoload
+  (defun nasy-enlist (exp)
+   "Return EXP wrapped in a list, or as-is if already a list."
+   (declare (pure t) (side-effect-free t))
+   (if (listp exp) exp (list exp)))
+#+end_src
+
+** Reload the init-file
+
+#+begin_src elisp
+  (defun radian-reload-init ()
+    "Reload init.el."
+    (interactive)
+    (straight-transaction
+      (straight-mark-transaction-as-init)
+      (message "Reloading init.el...")
+      (load user-init-file nil 'nomessage)
+      (message "Reloading init.el... done.")))
+
+  (defun radian-eval-buffer ()
+    "Evaluate the current buffer as Elisp code."
+    (interactive)
+    (message "Evaluating %s..." (buffer-name))
+    (straight-transaction
+      (if (null buffer-file-name)
+          (eval-buffer)
+        (when (string= buffer-file-name user-init-file)
+          (straight-mark-transaction-as-init))
+        (load-file buffer-file-name)))
+    (message "Evaluating %s... done." (buffer-name)))
+#+end_src
+
+** Insert Date
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun nasy/insert-current-date ()
+    "Insert current date."
+    (interactive)
+    (insert (shell-command-to-string "echo -n $(date +'%b %d, %Y')")))
+
+  ;;;###autoload
+  (defun nasy/insert-current-filename ()
+    "Insert current buffer filename."
+    (interactive)
+    (insert (file-relative-name buffer-file-name)))
+#+end_src
+
+** Posframe Helper
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun posframe-poshandler-frame-top-center (info)
+    (cons (/ (- (plist-get info :parent-frame-width)
+                (plist-get info :posframe-width))
+             2)
+          (round (* 0.02 (x-display-pixel-height)))))
+#+end_src
+
+* Macros & Alias
+
+Useful Macros and Alias.
+
+#+begin_src elisp
+  ;;;###autoload
+  (if (fboundp 'with-eval-after-load)
+      (defalias 'after-x 'with-eval-after-load)
+    (defmacro after-x (feature &rest body)
+      "Eval BODY afetr FEATURE have loaded."
+      (declare (indent defun))
+      `(eval-after-load ,feature
+         '(progn ,@body))))
+#+end_src
+
+* Footer                                                                        :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-core-libs)
+  ;;; nasy-core-libs.el ends here
+#+end_src

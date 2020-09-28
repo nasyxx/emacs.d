@@ -9,6 +9,7 @@
   (nasy/s-u-p cl-lib-highlight
               elisp-def
               highlight-quoted
+              ipretty
               macrostep
               parinfer-rust-mode)
 #+end_src
@@ -38,6 +39,26 @@
   (use-package highlight-quoted
     :defer t
     :hook ((emacs-lisp-mode . highlight-quoted-mode)))
+#+end_src
+
+** ipretty                                                                     :buffer:emacslisp:pprint:
+
+Interactive Emacs Lisp pretty-printing.
+
+~ipretty.el~ provides interactive functions to pretty-print the result of an
+expression and a global mode ~ipretty-mode~ that advices ~eval-print-last-sexp~ to
+pretty print.
+
+https://framagit.org/steckerhalter/ipretty
+
+#+begin_src elisp
+  (leaf ipretty
+    :doc "Interactive Emacs Lisp pretty-printing"
+    :url "https://framagit.org/steckerhalter/ipretty"
+    :tag "buffer" "emacslisp" "pprint"
+    :bind (("C-h C-j" . ipretty-last-sexp)
+           ("C-h C-k" . ipretty-last-sexp-other-buffer)))
+    :hook after-init-hook
 #+end_src
 
 ** lisp-mode

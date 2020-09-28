@@ -6,6 +6,7 @@
     (straight-use-package package))
 #+end_src
 
+
 * Git Modes
 
 #+begin_src elisp
@@ -15,7 +16,6 @@
 * Magit
 
 #+begin_src elisp
-  (straight-use-package 'magit)
   (use-package magit
     :defer t
     :commands magit-status
@@ -33,20 +33,10 @@
     (gsetq vc-handled-backends nil)
     (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
-  (straight-use-package 'magit-todos)
   (use-package magit-todos
     :defer t
     :init
     (gsetq magit-todos-exclude-globs '("*.map")))
-#+end_src
-
-* Magit Org Todos
-
-#+begin_src elisp
-  (straight-use-package 'magit-org-todos)
-  (use-package magit-org-todos
-    :defer t
-    :config (magit-org-todos-autoinsert))
 #+end_src
 
 * Forge
@@ -62,15 +52,6 @@
   (gsetq transient-default-level 5)
 #+end_src
 
-* Git Messenger
-
-#+begin_src elisp
-  (straight-use-package 'git-messenger)
-  (use-package git-messenger
-    :init (gsetq git-messenger:show-detail t)
-    :bind (:map vc-prefix-map
-           ("p" . git-messenger:popup-message)))
-#+end_src
 
 * Git Gutter
 

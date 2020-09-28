@@ -1,48 +1,272 @@
-#+begin_src elisp :exports none
-  ;;----------------------------------------------------------------------------
-  ;; UI
-  ;;----------------------------------------------------------------------------
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-ui.el")
+
+* Header                                                              :noexport:
+
+#+begin_src elisp
+  ;;; nasy-ui.el --- Nasy's Emacs Configuration editor file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration UI.
+
+  ;;; Code:
 #+end_src
 
-* Dashboard
+* Package
 
-#+include: "dashboard.org"
+  #+begin_src elisp
+    (nasy/s-u-p dashboard doom-themes)
+  #+end_src
 
-* Font
+* Configs
 
-#+include: "font.org"
+** Dashboard
 
-* Main Theme
+#+begin_src elisp
+  (leaf dashboard
+    :commands dashboard-setup-startup-hook
+    :bind
+    ("<f5>" . nasy/dashboard-refresh)
+    (:dashboard-mode-map
+     ("g"              . nasy/dashboard-refresh)
+     ("<down-mouse-1>" . nil)
+     ("<mouse-1>"      . widget-button-click)
+     ("<mouse-2>"      . widget-button-click)
+     ("<up>"           . widget-backward)
+     ("<down>"         . (lambda () (interactive) (widget-forward 1))))
+    :hook ((dashboard-mode-hook . (lambda () (gsetq-local tab-width 1)))
+           (after-init-hook     . dashboard-setup-startup-hook))
+    :custom
+    (dashboard-org-agenda-categories . '("Calendar" "Tasks" "Appointments"))
+    `(dashboard-startup-banner       . ,(concat user-emacs-directory "ue.png"))
+    (dashboard-items . '((recents   . 10)
+                         (bookmarks . 5)
+                         ;; (registers . 5)
+                         ;; (agenda    . 5)
+                         (projects  . 10)))
+    ((dashboard-center-content
+      dashboard-show-shortcuts
+      dashboard-set-heading-icons
+      dashboard-set-file-icons
+      dashboard-set-init-info
+      show-week-agenda-p
+      dashboard-set-navigator) . t)
+    :init
+    (after-x 'all-the-icons
+      (setq dashboard-navigator-buttons
+            `(;; line1
+              ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+                "Source"
+                "Source Page"
+                (lambda (&rest _) (browse-url "https://github.com/nasyxx/emacs.d/")))
+               (,(all-the-icons-octicon "gear" :height 1.1 :v-adjust 0.0)
+                "Config"
+                "Config File"
+                (lambda (&rest _) (let ((upath (expand-file-name "custom/user-config.el" user-emacs-directory)))
+                                   (epath (expand-file-name "custom/user-config-example.el" user-emacs-directory)))
+                               (when (and (file-exists-p epath)
+                                         (not (file-exists-p upath)))
+                                 (copy-file epath upath))
+                               (find-file upath)))
+               (,(all-the-icons-octicon "book" :height 1.1 :v-adjust 0.0)
+                "Document"
+                "Document Page"
+                (lambda (&rest _) (browse-url "https://emacs.nasy.moe/")))))))
+    (defun nasy/dashboard-refresh ()
+      "Refresh dashboard buffer."
+      (interactive)
+      (unless (get-buffer dashboard-buffer-name)
+        (generate-new-buffer "*dashboard*"))
+      (dashboard-refresh-buffer))
+
+    (defun nasy/fw2 (&rest _)
+      "Forward 2 chars."
+      (interactive "p")
+      (forward-char 2))
+    :advice
+    (:after dashboard-next-line     nasy/fw2)
+    (:after widget-forward          nasy/fw2)
+    (:after dashboard-previous-line nasy/fw2)
+    (:after widget-backward         nasy/fw2))
+#+end_src
+
+** Font
+
+#+begin_src elisp
+  (defun nasy/set--font (frame)
+    "Nasy set font for `FRAME'."
+    (when (display-graphic-p)
+      (set-face-attribute
+       'default nil
+       :font (font-spec :name   *font*
+                        :weight *font-weight*
+                        :size   *font-size*))
+
+      (dolist (charset '(kana han cjk-misc bopomofo))
+        (set-fontset-font (frame-parameter nil 'font)
+                          charset
+                          (font-spec :name   *font-cjk*
+                                     :weight *font-weight-cjk*
+                                     :size   *font-size-cjk*)
+                          frame
+                          'prepend))
+
+      (if *is-a-mac*
+           ;; For NS/Cocoa
+          (set-fontset-font t
+                             'symbol
+                             (font-spec :family "Apple Color Emoji")
+                             frame
+                             'append)
+         ;; For Linux
+        (set-fontset-font t
+                          'symbol
+                          (font-spec :family "Symbola")
+                          frame
+                          'prepend))
+
+      (set-face-attribute 'mode-line nil
+                          :font (font-spec :name   "spot mono"
+                                           :weight 'normal
+                                           :size   15)
+                          :background "#2d334a")
+
+      (set-face-attribute 'mode-line-inactive nil
+                          :font (font-spec :name   "spot mono"
+                                           :weight 'normal
+                                           :size   15))
+      (set-face-attribute 'tab-line nil
+                          :font (font-spec :name   "spot mono"
+                                           :weight 'normal
+                                           :size   12))))
+
+  (defun nasy/set-font (&rest _)
+    "Nasy set font."
+    (interactive)
+    (nasy/set--font nil))
+
+
+  (add-hook #'after-init-hook #'nasy/set-font)
+  (add-hook #'after-make-frame-functions   #'nasy/set-font)
+  (add-hook #'server-after-make-frame-hook #'nasy/set-font)
+#+end_src
+
+** Main Theme
 
 I use doom-themes.
 
-#+include: "main-theme.org"
+#+begin_src elisp
+  (leaf doom-themes
+    :custom ((doom-dracula-brighter-comments
+              doom-dracula-colorful-headers
+              doom-dracula-comment-bg) . t)
+    :config
+    (after-x 'treemacs
+      (doom-themes-treemacs-config)
+      (gsetq doom-themes-treemacs-theme "doom-colors"))
+    (doom-themes-visual-bell-config)
+    (after-x 'org-mode
+      (doom-themes-org-config)))
+#+end_src
 
-* Mode Line
+#+begin_src elisp
+  (defun nasy/load-theme ()
+    "Nasy load theme function"
+    (load-theme *theme* t))
+
+  ;; (add-hook #'after-init-hook #'nasy/load-theme)
+#+end_src
+
+** Mode Line
 
 #+begin_src elisp
   (straight-use-package 'nyan-mode)
-  (use-package nyan-mode
-    :init (gsetq nyan-animate-nyancat t
-                 nyan-bar-length 16
-                 nyan-wavy-trail t)
-    :hook ((after-init . nyan-mode)))
+  (leaf nyan-mode
+    :custom (nyan-animate-nyancat . t)
+            (nyan-bar-length      . 16)
+            (nyan-wavy-trail      . t)
+    :hook after-init-hook)
 #+end_src
 
 #+begin_src elisp
   (straight-use-package 'minions)
-  (use-package minions
-    :hook ((after-init . minions-mode))
-    :init (gsetq minions-mode-line-lighter "✬"))
+  (leaf minions
+    :hook after-init-hook
+    :custom (minions-mode-line-lighter . "✬"))
 #+end_src
 
 # #+include: "spaceline.org"
 
-#+include: "doom-modeline.org"
+#+begin_src elisp
+  (straight-use-package 'doom-modeline)
+  (leaf doom-modeline
+    :hook after-init-hook
+    :defun doom-modeline-def-segment
+    :custom
+    ((doom-modeline-height                      . 25)
+     (doom-modeline-bar-width                   . 3)
+     (doom-modeline-window-width-limit          . fill-column)
+     (doom-modeline-project-detection           . 'project)  ;; changed
+     (doom-modeline-buffer-file-name-style      . 'auto)
+     ((doom-modeline-icon                       ;; changed
+       doom-modeline-major-mode-icon
+       doom-modeline-major-mode-color-icon
+       doom-modeline-buffer-state-icon
+       doom-modeline-buffer-modification-icon
+       doom-modeline-unicode-fallback           ;; changed
+       doom-modeline-minor-modes                ;; changed
+       doom-modeline-enable-word-count)         ;; changed
+      . t)
+     (doom-modeline-continuous-word-count-modes . '(markdown-mode gfm-mode org-mode text-mode))
+     (doom-modeline-buffer-encoding             . nil)  ;; changed
+     (doom-modeline-indent-info                 . nil)
+     (doom-modeline-checker-simple-format       . nil)  ;; changed
+     (doom-modeline-number-limit                . 99)
+     (doom-modeline-vcs-max-length              . 12)
+     (doom-modeline-persp-name                  . nil)  ;; changed
+     (doom-modeline-display-default-persp-name  . nil)
+     (doom-modeline-lsp                         . t)
+     (doom-modeline-github                      . t)
+     `(doom-modeline-github-interval            . ,(* 30 60))
+     (doom-modeline-modal-icon                  . t)
 
-* Tab Line
+     ((doom-modeline-env-version
+       doom-modeline-env-enable-python
+       doom-modeline-env-enable-ruby
+       doom-modeline-env-enable-perl
+       doom-modeline-env-enable-go
+       doom-modeline-env-enable-elixir
+       doom-modeline-env-enable-rust)
+      . t)
+
+     (doom-modeline-env-python-executable . "python")
+     (doom-modeline-env-ruby-executable   . "ruby")
+     (doom-modeline-env-perl-executable   . "perl")
+     (doom-modeline-env-go-executable     . "go")
+     (doom-modeline-env-elixir-executable . "iex")
+     (doom-modeline-env-rust-executable   . "rustc")
+
+     (doom-modeline-env-load-string . "...")
+
+     (doom-modeline-mu4e        . t)
+     (doom-modeline-irc         . t)
+     (doom-modeline-irc-stylize . 'identity)))
+#+end_src
+
+** Tab Line
 
 #+begin_src elisp
   (add-hook #'after-init-hook #'global-tab-line-mode)
   (gsetq tab-line-close-tab-function #'kill-buffer)
+#+end_src
+
+* Footer                                                              :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-ui)
+  ;;; nasy-ui.el ends here
 #+end_src

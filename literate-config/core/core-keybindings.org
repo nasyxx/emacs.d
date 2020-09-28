@@ -1,0 +1,235 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-core-keybindings.el")
+
+* Header                                                                        :noexport:
+
+#+begin_src elisp
+  ;;; nasy-core-keybindings.el  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Core Keybindings.
+
+  ;;; Code:
+#+end_src
+
+* General
+
+More convenient key definitions in emacs.
+
+https://github.com/noctuid/general.el
+
+#+begin_src elisp
+  (leaf general
+    :doc "More convenient key definitions in emacs."
+    :url "https://github.com/noctuid/general.el"
+    :commands gsetq gsetq-local gsetq-default
+    :init
+    (defalias 'gsetq #'general-setq)
+    (defalias 'gsetq-local #'general-setq-local)
+    (defalias 'gsetq-default #'general-setq-default))
+#+end_src
+
+* Transient
+
+Transient commands.
+
+https://github.com/magit/transient
+
+#+begin_src elisp
+  (leaf transient
+    :doc "Transient commands."
+    :url "https://github.com/magit/transient."
+    :commands transient-define-prefix
+    :custom (transient-default-level . 5))
+#+end_src
+
+* define nasy-map
+
+#+begin_src elisp
+  (defvar nasy-map
+    (let ((map (make-sparse-keymap)))
+      map)
+    "Nasy Keymaps.")
+
+  (eval-and-compile
+    (general-create-definer nasy-def
+      :prefix "C-c"
+      :prefix-map 'nasy-map))
+
+
+  (defmacro n/map (key name desc &rest rest)
+    "Nasy keymap define macro."
+    (let ((n/name (format "nasy/%s" name)))
+      (let ((keymap (intern (concat n/name "-map")))
+            (def    (intern (concat n/name "-def"))))
+       `(progn
+          (defvar ,keymap (make-sparse-keymap) ,desc)
+          (nasy-def ,key '(:keymap ,keymap :wk ,n/name))
+          (general-create-definer ,def
+            :keymaps ',keymap)
+          (,def ,@rest)))))
+#+end_src
+
+* Key Bindings
+
+** global map
+
+#+begin_src elisp
+  (general-define-key
+   "C-."  #'imenu
+
+   ;;; newlines
+   [remap newline]  #'newline-and-indent
+   "C-j"            #'default/newline
+
+   ;; search
+   "C-s"    (cond
+             ((eq *ivy-or-helm* 'ivy)
+              #'swiper-isearch)
+             ((eq *ivy-or-helm* 'helm)
+              #'swiper-helm)
+             (t #'isearch-forward))
+   "C-S-s"  (cond
+             ((eq *ivy-or-helm* 'ivy)
+              #'swiper-isearch-thing-at-point))
+   "C-r"    (cond
+             ((eq *ivy-or-helm* 'ivy)
+              #'ivy-resume)
+             ((eq *ivy-or-helm* 'helm)
+              #'helm-resume)
+             (t #'isearch-backward))
+
+   ;;; buffers
+   "C-x b"    #'switch-to-buffer
+   "C-x 4 b"  #'switch-to-buffer-other-window
+   "C-x C-b"  #'ibuffer-list-buffers
+   "C-x K"    #'nasy/kill-this-buffer-in-all-windows)
+#+end_src
+
+** macOS Special Key Bindings
+
+#+begin_src elisp
+  (leaf mac-keybind
+    :tag "virtual"
+    :when *is-a-mac*
+    :custom
+    (mac-option-modifier        . 'meta)
+    (mac-command-modifier       . 'hyper)
+    (mac-right-command-modifier . 'super)
+    (mac-function-modifier      . 'super)
+    :bind
+    ("C-z" . stop-minimizing-window)
+
+     ;; cursor Movement
+    ("H-<up>"   . beginning-of-buffer)
+    ("H-<down>" . end-of-buffer)
+    ("H-l"      . goto-line)
+
+     ;; text Operations
+    ("H-a" . mark-whole-buffer)
+    ("H-v" . yank)
+    ("H-c" . kill-ring-save)
+    ("H-s" . save-buffer)
+    ("H-z" . undo)
+    ("H-w" . delete-window)
+    ("H-<backspace>" . n/kill-line-0)
+    :init
+    ;; unset
+    (defun n/kill-line-0 ()
+      (interactive)
+      (kill-line 0))
+    (global-unset-key (kbd "<magnify-down>"))
+    (global-unset-key (kbd "<magnify-up>")))
+#+end_src
+
+** Mouse Key Bindings
+
+#+begin_src elisp
+  (general-define-key
+   "<mouse-4>" (lambda () (scroll-down 1))
+   "<mouse-5>" (lambda () (scroll-up 1)))
+#+end_src
+
+** code map
+
+#+begin_src elisp
+  (n/map
+   "c" "code" "Nasy code keymap"
+   "c" #'compile
+   "C" #'recompile
+   "k" #'nasy/lookup/documentation
+
+   "x" #'flycheck-list-errors
+
+   "a" #'lsp-excute-code-action
+   "f" #'nasy/lsp-format-region-or-buffer
+   "i" #'lsp-organize-imports
+   "r" #'lsp-rename
+   "j" (cond
+        ((eq *ivy-or-helm* 'ivy)
+         #'lsp-ivy-workspace-symbol)
+        ((eq *ivy-or-helm* 'helm)
+         #'helm-ivy-workspace-symbol))
+   "J" (cond
+        ((eq *ivy-or-helm* 'ivy)
+         #'lsp-ivy-global-workspace-symbol)
+        ((eq *ivy-or-helm* 'helm)
+         #'helm-ivy-global-workspace-symbol)))
+#+end_src
+
+** Company
+
+#+begin_src elisp
+  (general-define-key
+   "C-;"  #'nasy/company-complete)
+
+  (general-define-key
+   :keymaps 'company-active-map
+   "C-o"        #'company-search-kill-others
+   "C-n"        #'company-select-next
+   "C-p"        #'company-select-previous
+   "C-h"        #'company-quickhelp-manual-begin
+   "C-S-h"      #'company-show-doc-buffer
+   "C-s"        #'company-search-candidates
+   "M-s"        #'company-filter-candidates
+   [C-tab]      #'nasy/company-complete
+   [tab]        #'company-complete-common-or-cycle
+   [backtab]    #'company-select-previous
+   [C-return]   #'counsel-company)
+
+  (general-define-key
+   :keymaps 'company-search-map
+   "C-n"        #'company-search-repeat-forward
+   "C-p"        #'company-search-repeat-backward
+   "C-s"        (lambda () (company-search-abort) (company-filter-candidates)))
+#+end_src
+
+** file map
+
+#+begin_src elisp
+  (n/map
+   "f" "file" "Nasy file keymap")
+#+end_src
+
+** Treemacs
+
+#+begin_src elisp
+  (n/map
+   "t" "n-treemacs" "Nasy treemacs keymap"
+   "1" #'treemacs-delete-other-windows
+   "t" #'treemacs
+   "B" #'treemacs-bookmark
+   "f" #'treemacs-find-file
+   "T" #'treemacs-find-tag)
+#+end_src
+
+* Footer                                                                      :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-core-keybindings)
+  ;;; nasy-core-keybindings.el ends here
+#+end_src
