@@ -4,7 +4,7 @@ Here is the editor's configuration, including keywords: comm, data, diff, docs,
 emacs, extensions, faces, files, help, hypermedia, indentation, killing, libs,
 lists, location, marking, region, navigation, performance, vc, and window.
 
-* Header                                                                        :noexport:
+* Header                                                 :noexport:
 
 #+begin_src elisp
   ;;; nasy-core.el --- Nasy's Emacs Configuration editor file.  -*- lexical-binding: t; -*-
@@ -584,7 +584,7 @@ https://github.com/purcell/mmm-mode
      . 2))
 #+end_src
 
-** Multiple Cursors                                                            :cursors:editing:
+** Multiple Cursors                              :cursors:editing:
 
 Multiple cursors for Emacs.
 
@@ -607,7 +607,7 @@ https://github.com/magnars/multiple-cursors.el
      ("C-c m a" . mc/edit-beginnings-of-lines)))
 #+end_src
 
-** Paper Break Lines                                                           :convenience:faces:
+** Paper Break Lines                           :convenience:faces:
 
 This Emacs library provides a global mode which displays ugly form feed
 characters as tidy horizontal rules.
@@ -625,14 +625,14 @@ https://github.com/purcell/page-break-lines
       (diminish 'page-break-lines-mode)))
 #+end_src
 
-** Parens                                                                      :faces:languages:
+** Parens                                        :faces:languages:
 
 #+begin_src elisp
   (leaf paren
     :hook (after-init-hook . show-paren-mode))
 #+end_src
 
-*** Rainbow Delimiters                                                        :convenience:faces:lisp:tools:
+*** Rainbow Delimiters             :convenience:faces:lisp:tools:
 
 rainbow-delimiters is a "rainbow parentheses"-like mode which highlights
 delimiters such as parentheses, brackets or braces according to their
@@ -650,7 +650,7 @@ https://github.com/Fanael/rainbow-delimiters
     :hook prog-mode-hook org-src-mode-hook)
 #+end_src
 
-*** Smartparens                                                               :abbrev:convenience:editing:
+*** Smartparens                      :abbrev:convenience:editing:
 
 Minor mode for Emacs that deals with parens pairs and tries to be smart about
 it.
@@ -666,7 +666,7 @@ https://github.com/Fuco1/smartparens
     :custom (sp-hybrid-kill-entire-symbol . nil))
 #+end_src
 
-** PDF Tools                                                                   :files:multimedia:
+** PDF Tools                                    :files:multimedia:
 
 PDF Tools is, among other things, a replacement of DocView for PDF files.
 
@@ -1055,7 +1055,7 @@ https://github.com/politza/pdf-tools
                  :logic :sets :arithmetic-double :arithmetic-triple)))
 #+end_src
 
-** Projectile                                                                  :convenience:project:
+** Projectile                                :convenience:project:
 
 Projectile is a project interaction library for Emacs. Its goal is to provide a
 nice set of features operating on a project level without introducing external
@@ -1083,7 +1083,7 @@ https://github.com/bbatsov/projectile
                    projectile-project-root-files-top-down-recurring)))
 #+end_src
 
-** Prescient                                                                   :extensions:
+** Prescient                                          :extensions:
 
 ☄️ Simple but effective sorting and filtering for Emacs.
 
@@ -1097,7 +1097,7 @@ https://github.com/raxod502/prescient.el
     :hook ((after-init-hook . prescient-persist-mode)))
 #+end_src
 
-** Quick Peek                                                                  :convenience:docs:help:tools:
+** Quick Peek                        :convenience:docs:help:tools:
 
 An inline pop-up library for Emacs Lisp.
 
@@ -1113,7 +1113,7 @@ https://github.com/cpitclaudel/quick-peek
     (quick-peek-padding-face . '((t (:height 0.1)))))
 #+end_src
 
-** Recentf                                                              :files:
+** Recentf                                                 :files:
 
 Recentf is a minor mode that builds a list of recently opened files.
 
@@ -1167,7 +1167,7 @@ Not work now.
 #      "C-s" 'snails))
 # #+end_src
 
-** Subword                                                                     :builtin:
+** Subword                                               :builtin:
 
 #+begin_src elisp
   (leaf subword
@@ -1261,7 +1261,7 @@ https://github.com/dimitri/switch-window
         (switch-to-buffer-other-window nil))))
 #+end_src
 
-** Symbol Overlay                                                              :faces:matching:
+** Symbol Overlay                                 :faces:matching:
 
 Highlight symbols with overlays while providing a keymap for various operations
 about highlighted symbols. It was originally inspired by the package
@@ -1283,7 +1283,7 @@ https://github.com/wolray/symbol-overlay
            ("<f7>" . symbol-overlay-mode)))
 #+end_src
 
-** Treemacs                                                                    :convenience:files:
+** Treemacs                                    :convenience:files:
 
 Treemacs is a file and project explorer similar to NeoTree or vim’s NerdTree, but largely inspired by the Project Explorer in Eclipse. It shows the file system outlines of your projects in a simple tree layout allowing quick navigation and exploration, while also possessing basic file management utilities.
 
@@ -1363,7 +1363,7 @@ https://github.com/Alexander-Miller/treemacs
     :after treemacs projectile)
 #+end_src
 
-** Tree Sitter                                                                 :languages:parsers:tools:
+** Tree Sitter                           :languages:parsers:tools:
 
 ~emacs-tree-sitter~ is an Emacs binding for tree-sitter, an incremental parsing
 system.
@@ -1399,7 +1399,7 @@ https://ubolonton.github.io/emacs-tree-sitter/
     :hook tree-sitter-after-on-hook)
 #+end_src
 
-** Undo/Redo                                                                   :editing:
+** Undo/Redo                                             :editing:
 
 #+begin_src elisp
   (leaf undo/redo
@@ -1423,7 +1423,7 @@ https://github.com/blue0513/point-history
     :custom (point-history-ignore-buffer . "^ \\*Minibuf\\|^ \\*point-history-show*"))
 #+end_src
 
-*** Undo Propose                                                              :convenience:files:undo:redo:history:
+*** Undo Propose            :convenience:files:undo:redo:history:
 
 Navigate the emacs undo history by staging undo's in a temporary buffer.
 
@@ -1440,7 +1440,7 @@ https://github.com/jackkamm/undo-propose-el
     (undo-propose-wrap redo))
 #+end_src
 
-** Uniquify                                                     :builtin:files:
+** Uniquify                                        :builtin:files:
 
 #+begin_src elisp
   (leaf uniquify
@@ -1452,14 +1452,14 @@ https://github.com/jackkamm/undo-propose-el
     (uniquify-ignore-buffers-re   . "^\\*"))
 #+end_src
 
-** Version Control                                               :git:tools:vc:
+** Version Control                                  :git:tools:vc:
 
 #+begin_src elisp
   (leaf version-control
     :tag "git" "tools" "vc")
 #+end_src
 
-*** abridge-diff                                           :diffs:magit:tools:
+*** abridge-diff                              :diffs:magit:tools:
 
 A simple Emacs package for abridging refined diff hunks (for example in
 magit). Why abridge a diff hunk? Most diffs are line based. If you are working
@@ -1495,7 +1495,7 @@ https://github.com/dgutov/diff-hl
            (magit-post-refresh-hook . diff-hl-magit-post-refresh)))
 #+end_src
 
-*** Forge                                                                     :git:tools:vc:
+*** Forge                                          :git:tools:vc:
 
 Work with Git forges from the comfort of Magit.
 
@@ -1523,7 +1523,7 @@ https://github.com/magit/forge
            ("C-x n"   . git-gutter:next-hunk)))
 #+end_src
 
-*** Git Messenger                                                             :convenience:vc:
+*** Git Messenger                                :convenience:vc:
 
 git-messenger.el provides function that popup commit message at current line.
 
@@ -1539,7 +1539,7 @@ https://github.com/emacsorphanage/git-messenger
            ("p" . git-messenger:popup-message)))
 #+end_src
 
-*** Magit                                                                     :git:tools:vc:
+*** Magit                                          :git:tools:vc:
 
 Magit is an interface to the version control system Git, implemented as an Emacs
 package. Magit aspires to be a complete Git porcelain. While we cannot (yet)
@@ -1571,7 +1571,7 @@ https://github.com/magit/magit
     (when *is-a-mac* (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 #+end_src
 
-*** Magit Org Todos                                                           :magit:orgmode:tools:
+*** Magit Org Todos                         :magit:orgmode:tools:
 
 Get `todo.org` into your magit status.
 
@@ -1587,7 +1587,7 @@ https://github.com/danielma/magit-org-todos.el
     :config (magit-org-todos-autoinsert))
 #+end_src
 
-*** Magit Todos                                                               :magit:vc:
+*** Magit Todos                                        :magit:vc:
 
 Show source files' TODOs (and FIXMEs, etc) in Magit status buffer.
 
@@ -1624,7 +1624,7 @@ https://github.com/m00natic/vlfi
         (vlf file))))
 #+end_src
 
-** Which Function                                                              :builtin:
+** Which Function                                        :builtin:
 
 #+begin_src elisp
   (leaf which-func
@@ -1632,7 +1632,7 @@ https://github.com/m00natic/vlfi
     :hook after-init-hook)
 #+end_src
 
-** Which Key                                                                   :help:
+** Which Key                                                :help:
 
 Emacs package that displays available keybindings in popup.
 
@@ -1647,7 +1647,7 @@ https://github.com/justbur/emacs-which-key
     :hook 'after-init-hook)
 #+end_src
 
-** Whitespace                                                                  :convenience:data:wp:
+** Whitespace                                :convenience:data:wp:
 
 Visualize blanks (TAB, (HARD) SPACE and NEWLINE).
 
