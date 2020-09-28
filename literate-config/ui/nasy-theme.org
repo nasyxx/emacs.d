@@ -56,6 +56,8 @@ Nasy's Theme
   (deftheme nasy)
 
   (let* ((class '((class color) (min-colors 89)))
+         (n-品红      "#F00056")
+         (n-火红      "#FF2D51")
          (n-丁香      "#CCA4E3")
          (n-墨        "#50616D")
          (n-墨灰      "#758A99")
@@ -104,7 +106,7 @@ Nasy's Theme
      ;; border
      `(button       ((,class (:box (:line-width 1) :underline t :weight bold))))
      `(cursor       ((,class (:background ,n/黛霜 :foreground ,n/霜黛))))
-     `(error        ((,class (:background ,n-red :foreground ,n-素 :weight bold))))
+     `(error        ((,class (:background ,n-品红 :foreground ,n-素 :weight bold))))
      `(escape-glyph ((,class (:foreground ,n-茶))))
      `(fringe       ((,class (:background ,n/霜黛 :foreground ,n/黛霜))))
      `(header-line  ((,class (:background ,n/霜黛
@@ -114,10 +116,10 @@ Nasy's Theme
      `(highlight    ((,class (:background ,n/墨缟
                                           :distant-foreground ,n/霜黛))))
      `(link         ((,class (:foreground ,n-靛青  :underline t))))
-     `(link-visited ((,class (:foreground ,n-red-l :underline t))))
+     `(link-visited ((,class (:foreground ,n-青莲 :underline t))))
      `(secondary-selection
        ((,class (:background ,n-鱼肚))))
-     `(success      ((,class (:background ,n-green :foreground ,n-黛 :weight bold))))
+     `(success      ((,class (:background ,n-松绿 :foreground ,n-黛 :weight bold))))
      `(variable-pitch
        ((,class (:font ,(font-spec :name "Rec Mono Nasy"
                                    :weight 'normal
