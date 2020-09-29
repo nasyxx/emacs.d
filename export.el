@@ -25,20 +25,14 @@
 
 (require 'ox-publish)
 
+(defvar nasy/publish-base)
+
 (setq org-publish-timestamp-directory
       (expand-file-name "var/org/timestamps/" user-emacs-directory)
       nasy/publish-base "~/.emacs.d/config")
 
 (setq org-publish-project-alist
-      `(("pre-bootstrap"
-         :base-directory "~/.emacs.d/literate-config/bootstrap/"
-         :base-extension "org"
-         :recursive nil
-         :exclude ".*"
-         :include ("README.org")
-         :publishing-directory ,(expand-file-name "bootstrap" nasy/publish-base)
-         :publishing-function org-org-publish-to-org)
-        ("init"
+      `(("init"
          :base-directory "~/.emacs.d/literate-config/"
          :base-extension "org"
          :recursive nil
@@ -58,6 +52,7 @@
          :base-directory "~/.emacs.d/literate-config/core/"
          :base-extension "org"
          :recursive nil
+         ;; :exclude "README.org"
          ;; :exclude "keydef"
          ;; :include ("README.org")
          :publishing-directory ,(expand-file-name "core" nasy/publish-base)
@@ -66,7 +61,7 @@
          :base-directory "~/.emacs.d/literate-config/editor/"
          :base-extension "org"
          :recursive nil
-         ;; :exclude ".*"
+         ;; :exclude "README.org"
          ;; :include ("README.org")
          :publishing-directory ,(expand-file-name "editor" nasy/publish-base)
          :publishing-function org-babel-tangle-publish)
@@ -74,7 +69,7 @@
          :base-directory "~/.emacs.d/literate-config/tools/"
          :base-extension "org"
          :recursive nil
-         ;; :exclude ".*"
+         ;; :exclude "README.org"
          ;; :include ("README.org")
          :publishing-directory ,(expand-file-name "tools" nasy/publish-base)
          :publishing-function org-babel-tangle-publish)
@@ -82,7 +77,7 @@
          :base-directory "~/.emacs.d/literate-config/langs/"
          :base-extension "org"
          :recursive nil
-         ;; :exclude ".*"
+         ;; :exclude "README.org"
          ;; :include ("README.org")
          :publishing-directory ,(expand-file-name "langs" nasy/publish-base)
          :publishing-function org-babel-tangle-publish)
@@ -90,7 +85,7 @@
          :base-directory "~/.emacs.d/literate-config/org/"
          :base-extension "org"
          :recursive nil
-         ;; :exclude ".*"
+         ;; :exclude "README.org"
          ;; :include ("README.org")
          :publishing-directory ,(expand-file-name "org" nasy/publish-base)
          :publishing-function org-babel-tangle-publish)
@@ -98,7 +93,7 @@
          :base-directory "~/.emacs.d/literate-config/ui/"
          :base-extension "org"
          :recursive nil
-         ;; :exclude ".*"
+         ;; :exclude "README.org"
          ;; :include ("README.org")
          :publishing-directory ,(expand-file-name "ui" nasy/publish-base)
          :publishing-function org-babel-tangle-publish)
