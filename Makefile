@@ -3,6 +3,10 @@ EMACS ?= emacs
 all: help
 .PHONY: all
 
+## Generate all
+generate: init.el bootstrap core editor tools langs ui org
+.PHONY: generate
+
 
 ## Generate init.el from literate-config/README.org
 init.el: literate-config/README.org
@@ -10,54 +14,78 @@ init.el: literate-config/README.org
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "init")'
 
 
-## Generate config/nasy-bootstrap.el from literate-config/bootstrap
-config/nasy-bootstrap.el: $(wildcard literate-config/bootstrap/*.org)
-	@echo "Generate config/nasy-bootstrap.el from literate-config/bootstrap/README.org"
+## Generate bootstrap from literate-config/bootstrap/README.org
+config/nasy-bootstrap.el: literate-config/bootstrap/README.org
+	@echo "Generate bootstrap from literate-config/bootstrap/README.org"
+	@rm -rf config/core var/org/timestamps/bootstrap.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "bootstrap")'
 
+## Generate bootstrap from literate-config/bootstrap/README.org
+bootstrap: config/nasy-bootstrap.el
 
-## Generate config/core from literate-config/core
-config/core/nasy-core.el: $(wildcard literate-config/core/*.org)
-	@echo "Generate config/core from literate-config/core"
+
+## Generate core from literate-config/core
+config/core: $(wildcard literate-config/core/*.org)
+	@echo "Generate core from literate-config/core"
+	@rm -rf config/core var/org/timestamps/core.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "core")'
 
+## Generate core from literate-config/core
+core: config/core
 
-## Generate config/editor from literate-config/editor
-config/editor/nasy-editor.el: $(wildcard literate-config/editor/*.org)
-	@echo "Generate config/editor from literate-config/editor"
+
+## Generate editor from literate-config/editor
+config/editor: $(wildcard literate-config/editor/*.org)
+	@echo "Generate editor from literate-config/editor"
+	@rm -rf config/editor var/org/timestamps/editor.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "editor")'
 
+## Generate editor from literate-config/editor
+editor: config/editor
 
-## Generate config/tools from literate-config/tools
-config/tools/nasy-tools.el: $(wildcard literate-config/tools/*.org)
-	@echo "Generate config/tools from literate-config/tools"
+
+## Generate tools from literate-config/tools
+config/tools: $(wildcard literate-config/tools/*.org)
+	@echo "Generate tools from literate-config/tools"
+	@rm -rf config/tools var/org/timestamps/tools.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "tools")'
 
+## Generate tools from literate-config/tools
+tools: config/tools
 
-## Generate config/langs from literate-config/langs
-config/langs/nasy-langs.el: $(wildcard literate-config/langs/*.org)
-	@echo "Generate config/langs from literate-config/langs"
+
+## Generate langs from literate-config/langs
+config/langs: $(wildcard literate-config/langs/*.org)
+	@echo "Generate langs from literate-config/langs"
+	@rm -rf config/langs var/org/timestamps/langs.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "langs")'
 
+## Generate langs from literate-config/langs
+langs: config/langs
 
-## Generate config/ui from literate-config/org
-config/org/nasy-org.el: $(wildcard literate-config/org/*.org)
-	@echo "Generate config/org from literate-config/org"
+
+## Generate org from literate-config/org
+config/org: $(wildcard literate-config/org/*.org)
+	@echo "Generate org from literate-config/org"
+	@rm -rf config/org var/org/timestamps/org.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "org")'
 
+## Generate org from literate-config/org
+org: config/org
 
-## Generate config/ui from literate-config/ui
-config/ui/nasy-ui.el: $(wildcard literate-config/ui/*.org)
-	@echo "Generate config/ui from literate-config/ui"
+
+## Generate ui from literate-config/ui
+config/ui: $(wildcard literate-config/ui/*.org)
+	@echo "Generate ui from literate-config/ui"
+	@rm -rf config/ui var/org/timestamps/ui.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "ui")'
 
+## Generate ui
+ui: config/ui
+.PHONY: bootstrap core editor tools langs ui org
 
-## Generate all
-generate: init.el config/nasy-bootstrap.el config/core/nasy-core.el config/editor/nasy-editor.el config/tools/nasy-tools.el config/langs/nasy-langs.el config/ui/nasy-ui.el config/org/nasy-org.el
-.PHONY: generate
 
-
-## Old Generate init.el from README.org
+# Old Generate init.el from README.org
 old-generate:
 	@echo "Generate init.el from README.org and literate-config.org."
 	@mkdir -p custom && \
@@ -69,33 +97,34 @@ old-generate:
 	@echo "If you want to customize, you can simply change/create custom/user-config.el"
 .PHONY: old-generate
 
-## Clean build (straight/)
+
+## clean build (var/org/timestamps/ & config/)
 clean-build:
+	rm -rf var/org/timestamps
+	rm -rf config
+
+
+## Clean straight (straight/)
+clean-straight:
 	rm -rf straight
 .PHONY: clean-build
 
-## Clean etc (etc/)
-clean-etc:
-	rm -rf etc
-.PHONY: clean-etc
 
-## Clean var (var/)
-clean-var:
-	rm -rf var
-.PHONY: clean-var
-
-## clean all build etc python var
-clean-all: clean-build clean-etc clean-python clean-var
+## clean all build straight
+clean-all: clean clean-build clean-straight
 .PHONY: clean-all
 
+
 ## Update config
-update: clean-build
+update: clean-all
 	git pull && make generate
 .PHONY: update
+
 
 # Update docs
 docs:
 	org2html README.org && git checkout gh-pages && mv README.html index.html && git commit -am "Update docs." && git push && git checkout master
+
 
 # COLORS
 GREEN  := $(shell tput -Txterm setaf 2)
