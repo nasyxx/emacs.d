@@ -94,6 +94,22 @@
     (:after widget-backward         nasy/fw2))
 #+end_src
 
+** doom Theme
+
+#+begin_src elisp
+  (leaf doom-themes
+    :custom ((doom-dracula-brighter-comments
+              doom-dracula-colorful-headers
+              doom-dracula-comment-bg) . t)
+    :config
+    (after-x 'treemacs
+      (doom-themes-treemacs-config)
+      (gsetq doom-themes-treemacs-theme "doom-colors"))
+    (doom-themes-visual-bell-config)
+    (after-x 'org-mode
+      (doom-themes-org-config)))
+#+end_src
+
 ** Font
 
 #+begin_src elisp
@@ -132,8 +148,7 @@
       (set-face-attribute 'mode-line nil
                           :font (font-spec :name   "spot mono"
                                            :weight 'normal
-                                           :size   15)
-                          :background "#2d334a")
+                                           :size   15))
 
       (set-face-attribute 'mode-line-inactive nil
                           :font (font-spec :name   "spot mono"
@@ -157,28 +172,13 @@
 
 ** Main Theme
 
-I use doom-themes.
-
-#+begin_src elisp
-  (leaf doom-themes
-    :custom ((doom-dracula-brighter-comments
-              doom-dracula-colorful-headers
-              doom-dracula-comment-bg) . t)
-    :config
-    (after-x 'treemacs
-      (doom-themes-treemacs-config)
-      (gsetq doom-themes-treemacs-theme "doom-colors"))
-    (doom-themes-visual-bell-config)
-    (after-x 'org-mode
-      (doom-themes-org-config)))
-#+end_src
-
 #+begin_src elisp
   (defun nasy/load-theme ()
     "Nasy load theme function"
-    (load-theme *theme* t))
+    (when *theme*
+      (load-theme *theme* t)))
 
-  ;; (add-hook #'after-init-hook #'nasy/load-theme)
+  (add-hook #'after-init-hook #'nasy/load-theme)
 #+end_src
 
 ** Mode Line
@@ -255,6 +255,12 @@ I use doom-themes.
      (doom-modeline-mu4e        . t)
      (doom-modeline-irc         . t)
      (doom-modeline-irc-stylize . 'identity)))
+#+end_src
+
+** Nasy Theme
+
+#+begin_src elisp
+  (leaf nasy-theme)
 #+end_src
 
 ** Tab Line
