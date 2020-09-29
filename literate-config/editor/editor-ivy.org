@@ -1,6 +1,6 @@
 #+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-editor-ivy.el")
 
-* Header                                                                        :noexport:
+* Header                                                 :noexport:
 
 #+begin_src elisp
   ;;; nasy-editor-ivy.el --- Nasy's Emacs Configuration editor ivy file.  -*- lexical-binding: t; -*-
@@ -562,17 +562,30 @@ Some of them borrowed from doom-emacs
 
 #+begin_src elisp
   (leaf all-the-icons-ivy-rich
+    :defvar nasy/all-the-icons-ivy-rich-reload-p
     :custom
     (all-the-icons-ivy-rich-icon-size . 0.7)
     :init
     (all-the-icons-ivy-rich-mode 1)
-    (advice-add #'counsel-M-x :before #'all-the-icons-ivy-rich-reload))
+    (setq nasy/all-the-icons-ivy-rich-reload-p nil)
+    (defun nasy/ivy-rich-reload ()
+      (if (and all-the-icons-ivy-rich-mode
+              nasy/all-the-icons-ivy-rich-reload-p)
+          (advice-remove #'counsel-M-x #'nasy/ivy-rich-reload)
+        (all-the-icons-ivy-rich-reload)
+        (setq nasy/all-the-icons-ivy-rich-reload-p t)))
+    (defun nasy/all-the-icons-ivy-rich-align-icons ()
+      "Set tab size to 1, to insert tabs as delimiters."
+      (setq-local tab-width 2))
+    :advice
+    (:before counsel-M-x nasy/ivy-rich-reload)
+    (:override all-the-icons-ivy-rich-align-icons nasy/all-the-icons-ivy-rich-align-icons))
 
   (leaf ivy-rich
     :init (ivy-rich-mode 1))
 #+end_src
 
-* Footer                                                                      :noexport:
+* Footer                                                 :noexport:
 
 #+begin_src elisp
   (provide 'nasy-editor-ivy)
