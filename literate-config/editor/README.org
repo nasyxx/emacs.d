@@ -345,8 +345,7 @@ https://github.com/lastquestion/explain-pause-mode
   (leaf explain-pause-mode
     :doc "top, but for Emacs."
     :url "https://github.com/lastquestion/explain-pause-mode"
-    :tag "performance" "speed" "config"
-    :hook after-init-hook)
+    :tag "performance" "speed" "config")
 #+end_src
 
 ** Files                                           :builtin:files:
