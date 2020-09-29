@@ -90,10 +90,12 @@ Nasy's Theme
          (n/素墨灰    (l?d n-素 n-墨灰))
          (n/缟墨      (l?d n-缟 n-墨))
          (n/缟漆      (l?d n-缟 n-漆))
+         (n/缟黛      (l?d n-缟 n-黛))
          (n/霜黛      (l?d n-霜 n-黛))
          (n/青莲丁香  (l?d n-青莲 n-丁香))
          (n/青莲牙    (l?d n-青莲 n-牙))
          (n/靛青湖蓝  (l?d n-靛青 n-湖蓝))
+         (n/黛缟      (l?d n-黛 n-缟))
          (n/黛霜      (l?d n-黛 n-霜)))
     (custom-theme-set-faces
      'nasy
@@ -119,17 +121,50 @@ Nasy's Theme
      `(link-visited ((,class (:foreground ,n-青莲 :underline t))))
      `(secondary-selection
        ((,class (:background ,n-鱼肚))))
-     `(success      ((,class (:background ,n-松绿 :foreground ,n-黛 :weight bold))))
+     `(success      ((,class (:background ,n-松绿 :foreground ,n-松花 :weight bold))))
      `(variable-pitch
        ((,class (:font ,(font-spec :name "Rec Mono Nasy"
                                    :weight 'normal
                                    :slant 'normal)))))
      `(warning      ((,class (:background ,n-鸭黄 :foreground ,n-黛 :weight bold))))
 
-
      ;; company
-     `(company-tooltip           ((,class (:background ,n/霜黛 :foreground ,n/黛霜))))
-     `(company-tooltip-selection ((,class (:background ,n/黛霜 :foreground ,n/霜黛))))
+     `(company-box-scrollbar
+       ((,class (:background ,n/黛缟
+                             :box (:line-width 2 :style released-button)
+                             :extend t
+                             :foreground ,n/缟黛))))
+     `(company-box-selection
+       ((,class (:inherit company-box-scrollbar))))
+     `(company-echo-common
+       ((,class (:background ,n-茶 :foreground ,n-缟))))
+     `(company-preview-common
+       ((,class (:background ,n-荼 :foreground ,n-墨 :slant italic :weight bold))))
+     `(company-scrollbar-bg
+       ((,class (:background ,n-牙))))
+     `(company-scrollbar-fg
+       ((,class (:background ,n-茶 :foreground ,n-缟))))
+     `(company-tooltip
+       ((,class (:background ,n/霜黛 :foreground ,n/黛霜))))
+     `(company-tooltip-common
+       ((,class (:background ,n-素 :foreground ,n-松绿 :weight bold))))
+     `(company-tooltip-common-selection
+       ((,class (:background ,n/黛缟 :foreground ,n-松花 :inherit company-tooltip-common))))
+     `(company-tooltip-selection
+       ((,class (:background ,n/黛缟
+                             :box (:style released-button)
+                             :extend t
+                             :foreground ,n/缟黛))))
+
+     ;; counsel & ivy
+     `(ivy-current-match
+       ((,class (:background ,n/黛缟
+                             :extend t
+                             :foreground ,n/缟墨
+                             :weight bold))))
+     `(ivy-separator-
+       ((,class (:background ,n/霜黛
+                             :foreground ,n-火红))))
 
      ;; custom faces
      `(custom-button
@@ -201,7 +236,34 @@ Nasy's Theme
      `(hl-line ((,class (:distant-foreground ,n/墨缟 :extend t :underline t :weight bold))))
 
      ;; mode line
-     `(mode-line ((,class (:background ,n/霜黛))))
+     `(doom-modeline-buffer-minor-mode
+       ((,class (:inherit mode-line))))
+     `(doom-modeline-buffer-modified
+       ((,class (:foreground ,n-火红
+                             :inherit mode-line
+                             :weight bold))))
+     `(doom-modeline-info
+       ((,class (:foreground ,n-靛青
+                             :inherit mode-line
+                             :weight bold))))
+     `(doom-modeline-lsp-error
+       ((,class (:inherit doom-modeline-urgent))))
+     `(doom-modeline-lsp-running
+       ((,class (:inherit doom-modeline-warning))))
+     `(doom-modeline-lsp-warning
+       ((,class (:inherit doom-modeline-warning))))
+     `(doom-modeline-urgent
+       ((,class (:foreground ,n-品红
+                             :inherit mode-line
+                             :weight bold))))
+     `(doom-modeline-warning
+       ((,class (:foreground ,n-松花
+                             :inherit mode-line
+                             :weight bold))))
+     `(mode-line
+       ((,class (:background ,n-荼
+                             :box (:style released-button)
+                             :foreground ,n-墨))))
 
      ;; org mode
      `(org-block
