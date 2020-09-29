@@ -108,11 +108,11 @@ Nasy's Theme
      ;; border
      `(button       ((,class (:box (:line-width 1) :underline t :weight bold))))
      `(cursor       ((,class (:background ,n/黛霜 :foreground ,n/霜黛))))
-     `(error        ((,class (:background ,n-品红 :foreground ,n-素 :weight bold))))
+     `(error        ((,class (:background ,n-素 :foreground ,n-品红 :weight bold))))
      `(escape-glyph ((,class (:foreground ,n-茶))))
      `(fringe       ((,class (:background ,n/霜黛 :foreground ,n/黛霜))))
-     `(header-line  ((,class (:background ,n/霜黛
-                                          :box (:line-width -1 :style released-button)
+     `(header-line  ((,class (:background ,n-荼
+                                          :box (:line-width 2 :style released-button)
                                           :extend t
                                           :foreground ,n/靛青湖蓝))))
      `(highlight    ((,class (:background ,n/墨缟
@@ -121,12 +121,12 @@ Nasy's Theme
      `(link-visited ((,class (:foreground ,n-青莲 :underline t))))
      `(secondary-selection
        ((,class (:background ,n-鱼肚))))
-     `(success      ((,class (:background ,n-松绿 :foreground ,n-松花 :weight bold))))
+     `(success      ((,class (:background ,n-松花 :foreground ,n-松绿 :weight bold))))
      `(variable-pitch
        ((,class (:font ,(font-spec :name "Rec Mono Nasy"
                                    :weight 'normal
                                    :slant 'normal)))))
-     `(warning      ((,class (:background ,n-鸭黄 :foreground ,n-黛 :weight bold))))
+     `(warning      ((,class (:background ,n-牙 :foreground ,n-鸭黄 :weight bold))))
 
      ;; company
      `(company-box-scrollbar
@@ -157,14 +157,32 @@ Nasy's Theme
                              :foreground ,n/缟黛))))
 
      ;; counsel & ivy
+     `(all-the-icons-ivy-rich-icon-face
+       ((t (:box (:line-width 2 :style released-button)
+                 :inherit default))))
      `(ivy-current-match
        ((,class (:background ,n/黛缟
                              :extend t
                              :foreground ,n/缟墨
                              :weight bold))))
-     `(ivy-separator-
-       ((,class (:background ,n/霜黛
-                             :foreground ,n-火红))))
+     `(ivy-highlight-face
+       ((,class (:inherit counsel-active-mode))))
+     `(ivy-minibuffer-match-face-1
+       ((,class (:background ,n-松花
+                             :foreground ,n-墨
+                             :weight bold))))
+     `(ivy-minibuffer-match-face-2
+       ((,class (:background ,n-丁香
+                             :foreground ,n-墨
+                             :weight bold))))
+     `(ivy-minibuffer-match-face-3
+       ((,class (:background ,n-鹅黄
+                             :foreground ,n-墨
+                             :weight bold))))
+     `(ivy-minibuffer-match-face-4
+       ((,class (:background ,n-品红
+                             :foreground ,n-墨
+                             :weight bold))))
 
      ;; custom faces
      `(custom-button
