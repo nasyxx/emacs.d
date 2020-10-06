@@ -111,7 +111,7 @@ clean-straight:
 
 
 ## clean all build straight
-clean-all: clean clean-build clean-straight
+clean-all: clean-build clean-straight
 .PHONY: clean-all
 
 
