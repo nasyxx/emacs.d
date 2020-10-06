@@ -172,15 +172,15 @@ Nasy's Theme
                              :foreground ,n-墨
                              :weight bold))))
      `(ivy-minibuffer-match-face-2
-       ((,class (:background ,n-丁香
-                             :foreground ,n-墨
-                             :weight bold))))
-     `(ivy-minibuffer-match-face-3
        ((,class (:background ,n-鹅黄
                              :foreground ,n-墨
                              :weight bold))))
+     `(ivy-minibuffer-match-face-3
+       ((,class (:background ,n-丁香
+                             :foreground ,n-墨
+                             :weight bold))))
      `(ivy-minibuffer-match-face-4
-       ((,class (:background ,n-品红
+       ((,class (:background ,n-火红
                              :foreground ,n-墨
                              :weight bold))))
 
