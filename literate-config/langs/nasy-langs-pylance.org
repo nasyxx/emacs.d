@@ -1,0 +1,72 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-langs-pylance.el")
+
+* Header                                                ::noexport:
+
+#+begin_src elisp
+  ;;; nasy-bootstrap.el --- Nasy's emacs.d init pylance file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's emacs.d init pylance file.
+
+  ;;; Code:
+#+end_src
+
+* Pylance
+
+#+begin_src elisp
+  (require 'lsp-mode)
+
+  (defvar lsp-pylance-executable (executable-find "pylance")
+    "Pylance executable.
+
+      #!/bin/bash
+      set -euo pipefail
+
+      node $HOME/.vscode/extensions/ms-python.vscode-pylance-2020.7.1/server/server.bundle.js --stdio")
+
+  (defvar lsp-pylance-type-checking "basic"
+    "Used to specify the level of type checking analysis performed;
+
+      ,,* Default: off
+
+      ,,* Available values:
+      - off: No type checking analysis is conducted; unresolved imports/variables diagnostics are produced
+      - basic: Non-type checking-related rules (all rules in off) + basic type checking rules
+      - strict: All type checking rules at the highest severity of error (includes all rules in off and basic categories")
+
+  (lsp-register-custom-settings
+   `(("python.analysis.typeCheckingMode"       lsp-pylance-type-checking
+      "python.analysis.diagnosticMode"         "openFilesOnly"
+      "python.analysis.stubPath"               "./typings"
+      "python.analysis.autoSearchPaths"        t
+      "python.analysis.extraPaths"             []
+      "python.analysis.useLibraryCodeForTypes" t
+      "python.analysis.autoImportCompletions"  t
+      "python.analysis.completeFunctionParens" t)))
+
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection (lambda () lsp-pylance-executable)
+                                          (lambda () (f-exists? lsp-pylance-executable)))
+    :major-modes '(python-mode)
+    :server-id 'pylance
+    :priority 3
+    :initialized-fn (lambda (workspace)
+                      (with-lsp-workspace workspace
+                        (lsp--set-configuration (lsp-configuration-section "python"))))
+    :notification-handlers (lsp-ht ("pylance/beginProgress"  'ignore)
+                                   ("pylance/reportProgress" 'ignore)
+                                   ("pylance/endProgress"    'ignore))))
+#+end_src
+
+* Footer                                                 :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-langs-pylance)
+  ;;; nasy-langs-pylance.el ends here
+#+end_src

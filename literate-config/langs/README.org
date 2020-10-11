@@ -37,6 +37,12 @@
     macrostep
     parinfer-rust-mode
 
+    ;; lsp-mode
+    dap-mode
+    lsp-mode
+    lsp-treemacs
+    lsp-ui
+
     company-restclient
     elvish-mode
     fish-completion
@@ -79,9 +85,88 @@
     :hook ((javascript-mode-hook . lsp-deferred)))
 #+end_src
 
-** Language Server Protocol & Debug Adapter Protocol
+** Language Server Protocol & Debug Adapter Protocol   :languages:
 
-#+include: "lsp-dap.org"
+Emacs client/library for the Language Server Protocol
+
+*** lsp-mode                                          :languages:
+
+#+begin_src elisp
+  (leaf lsp-mode
+    :doc "Language Server Protocol Support for Emacs."
+    :url "https://github.com/emacs-lsp/lsp-mode"
+    :tag "languages"
+    :hook
+    (kill-emacs-hook . (lambda () (setq lsp-restart 'ignore)))
+    :mode-hook
+    (nasy/lsp-init)
+    (lsp-diagnostics-mode 1)
+    :init
+    (defun nasy/lsp-init ()
+      "Nasy lsp mode init."
+      (flycheck-inline-mode -1)
+      (when lsp-enable-symbol-highlighting
+        (add-hook #'lsp-on-idle-hook #'lsp--document-highlight nil t)
+        (lsp--info "Symbol highlighting enabled in current buffer.")))
+    :custom
+    ((lsp-log-io
+      lsp-print-performance
+      lsp-report-if-no-buffer) . *debug*)
+    ((lsp-log-max
+      lsp-inhibit-message
+      lsp-enable-snippet
+      lsp-eldoc-enable-hover
+      lsp-eldoc-render-all
+      lsp-enable-imenu
+      lsp-enable-xref
+      lsp-enable-links
+      lsp-enable-indentation
+      lsp-enable-on-type-formatting
+      lsp-enable-semantic-highlighting
+      lsp-enable-symbol-highlighting
+      lsp-signature-auto-activate
+      lsp-enable-text-document-color
+      lsp-enable-folding
+      lsp-prefer-capf) . t)
+    ((lsp-keep-workspace-alive
+      lsp-auto-guess-root
+      lsp-auto-configure
+      lsp-enable-completion-at-point
+      lsp-enable-file-watchers))
+    (lsp-restart . 'interactive)
+    (lsp-diagnostics-package . :auto))
+#+end_src
+
+*** lsp-ui                                      :languages:tools:
+
+#+begin_src elisp
+  (leaf lsp-ui
+    :doc "UI integrations for lsp-mode."
+    :url "https://github.com/emacs-lsp/lsp-ui"
+    :tag "languages" "tools"
+    :hook lsp-mode-hook
+    :mode-hook (lsp-ui-sideline-mode 1)
+    :custom
+    (lsp-ui-doc-enable . t)
+    ((lsp-ui-doc-include-signature
+      lsp-ui-sideline-show-hover
+      lsp-ui-sideline-ignore-duplicate) . t)
+    :defer-config
+    (require 'lsp-ui-peek))
+#+end_src
+
+*** lsp-treemacs                                      :languages:
+
+#+begin_src elisp
+  (leaf lsp-treemacs
+    :doc "lsp-mode ❤ treemacs."
+    :url "https://github.com/emacs-lsp/lsp-treemacs"
+    :tag "languages"
+    :custom
+    (lsp-metals-treeview-show-when-views-received . t)
+    :defer-config
+    (lsp-treemacs-sync-mode t))
+#+end_src
 
 ** Lisp
 
@@ -179,7 +264,113 @@
 
 ** Python
 
-#+include: "python.org"
+*** Autoloads
+
+#+begin_src elisp
+  ;;;###autoload
+  (defcustom nasy*python-buffer "vterm"
+    "Nasy Python Buffer"
+    :group 'python-mode
+    :type 'string)
+
+  ;;;###autoload
+  (defun nasy/python-send-buffer ()
+    "Send current buffer to the running python process."
+    (interactive)
+    (let ((proc (get-buffer-process nasy*python-buffer)))
+      (unless proc
+        (error "No process found"))
+      (save-buffer)
+      (comint-simple-send proc
+                          (concat "%run " (format "%s" (buffer-file-name))))
+      (pop-to-buffer nasy*python-buffer)))
+
+  ;;;###autoload
+  (defun nasy/python-send-region (begin end)
+    "Evaluate the code in region from BEGIN to END in the python repl.
+  if the region is unset, the current line will be used."
+    (interactive "r")
+    (unless (use-region-p)
+      (setq begin (line-beginning-position)
+            end (line-end-position)))
+    (let* ((text (buffer-substring-no-properties begin end))
+           (proc (get-buffer-process nasy*python-buffer)))
+      (unless proc
+        (error "No process found"))
+      (comint-simple-send proc text)
+      (display-buffer nasy*python-buffer)))
+
+  ;;;###autoload
+  (defun nasy/python-send-defun (&optional arg)
+    "Send the current defun to inferior Python process.
+  When ARG is non-nil do not include decorators."
+    (interactive (list current-prefix-arg t))
+    (nasy:python-send-region
+     (progn
+       (end-of-line 1)
+       (while (and (or (python-nav-beginning-of-defun)
+                       (beginning-of-line 1))
+                   (> (current-indentation) 0)))
+       (when (not arg)
+         (while (and (forward-line -1)
+                     (looking-at (python-rx decorator))))
+         (forward-line 1))
+       (point-marker)
+       (progn
+         (or (python-nav-end-of-defun)
+             (end-of-line 1))
+         (point-marker)))))
+
+  ;;;###autoload
+  (defun nasy/python-switch-to-shell ()
+    "Switch to inferior Python process buffer."
+    (interactive "p")
+    (let ((proc (get-buffer-process nasy:python-buffer)))
+      (unless proc
+        (error "No process found"))
+      (pop-to-buffer nasy*python-buffer)))
+#+end_src
+
+*** config
+
+#+begin_src elisp
+  (general-define-key
+   :prefix "C-c"
+   :keymaps 'python-mode-map
+   "C-b" 'nasy/python-send-buffer
+   "C-r" 'nasy/python-send-region
+   "C-c" 'nasy/python-send-defun
+   "C-z" 'nasy/python-switch-to-shell)
+  (general-define-key
+   :keymaps 'python-mode-map
+   "<S-return>" 'nasy/python-send-region)
+
+
+  (defun python-flycheck-setup ()
+    "Add python checker for lsp-ui."
+    (after-x 'lsp-ui
+      (flycheck-add-next-checker 'lsp              'python-flake8))
+      ;; flake8 already have python-mypy and python-pylint as the next checker
+      ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
+    (flycheck-disable-checker 'python-pylint)
+    (flycheck-remove-next-checker 'python-flake8 'python-pylint))
+#+end_src
+
+*** pylance
+
+#+begin_src elisp
+  (leaf nasy-langs-pylance
+    :preface
+    (defun start-lsp-pylance ()
+      "Start lsp-pylance."
+      (require 'nasy-langs-pylance)
+      (python-flycheck-setup)
+      ;; (gsetq elpy-modules (remove 'elpy-module-autodoc elpy-modules))
+      ;; (gsetq elpy-modules (remove 'elpy-module-eldoc   elpy-modules))
+      (lsp-deferred))
+    :hook
+    (python-mode-hook . start-lsp-pylance))
+#+end_src
 
 ** restclient.el
 

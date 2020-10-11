@@ -98,16 +98,6 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
   (general-define-key
    :keymaps 'python-mode-map
    "<S-return>" 'nasy/python-send-region)
-
-
-  (defun python-flycheck-setup ()
-    "Add python checker for lsp-ui."
-    (after-x 'lsp-ui
-      (flycheck-add-next-checker 'lsp              'python-flake8))
-      ;; flake8 already have python-mypy and python-pylint as the next checker
-      ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
-    (flycheck-disable-checker 'python-pylint)
-    (flycheck-remove-next-checker 'python-flake8 'python-pylint))
 #+end_src
 
 ** elpy
