@@ -1282,6 +1282,14 @@ https://github.com/wolray/symbol-overlay
            ("<f7>" . symbol-overlay-mode)))
 #+end_src
 
+** Tempo                                                 :builtin:
+
+#+begin_src elisp
+  (leaf tempo
+    :tag "builtin"
+    :commands tempo-define-template)
+#+end_src
+
 ** Treemacs                                    :convenience:files:
 
 Treemacs is a file and project explorer similar to NeoTree or vim’s NerdTree, but largely inspired by the Project Explorer in Eclipse. It shows the file system outlines of your projects in a simple tree layout allowing quick navigation and exploration, while also possessing basic file management utilities.

@@ -354,6 +354,42 @@ Emacs client/library for the Language Server Protocol
       ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
     (flycheck-disable-checker 'python-pylint)
     (flycheck-remove-next-checker 'python-flake8 'python-pylint))
+
+  (leaf python
+    :mode-hook
+    (tempo-define-template "py-header"
+                         '("#!/usr/bin/env python" n>
+                           "# -*- coding: utf-8 -*-" n n>
+                           "r\"\"\"" n>
+                           "心之憂矣於我歸處 Python ♡ Nasy" n n>
+                           "    |             *         *" n>
+                           "    |                  .                ." n>
+                           "    |           .                          舒而脫脫兮" n>
+                           "    |     *                      ," n>
+                           "    |                   .                  無感我帨兮" n>
+                           "    |" n>
+                           "    |                               *      無使尨也吠" n>
+                           "    |          |\\___/|" n>
+                           "    |          )    -(             .              ·" n>
+                           "    |         =\\ -   /=" n>
+                           "    |           )===(       *" n>
+                           "    |          /   - \\" n>
+                           "    |          |-    |" n>
+                           "    |         /   -   \\     0.|.0" n>
+                           "    |  NASY___\\__( (__/_____(\\=/)__+1s____________" n>
+                           "    |  ______|____) )______|______|______|______|_" n>
+                           "    |  ___|______( (____|______|______|______|____" n>
+                           "    |  ______|____\\_|______|______|______|______|_" n>
+                           "    |  ___|______|______|______|______|______|____" n>
+                           "    |  ______|______|______|______|______|______|_" n>
+                           "    |  ___|______|______|______|______|______|____" n n>
+                           "author   : Nasy https://nasy.moe" n>
+                           "date     : " (format-time-string "%b %e, %Y") n>
+                           "email    : Nasy <nasyxx+python@gmail.com>" n>
+                           "filename : " (file-name-nondirectory (buffer-file-name)) n>
+                           "project  : " (file-name-nondirectory (directory-file-name (or projectile-project-root default-directory))) n>
+                           "license  : GPL-3.0+" n n> p n>
+                           "\"\"\"" n>)))
 #+end_src
 
 *** pylance
