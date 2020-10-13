@@ -313,10 +313,10 @@ Flycheck inline
 
 #+begin_src elisp
   (leaf flycheck-inline
+    :disabled t
     :hook flycheck-mode-hook
     :mode-hook (nasy/flycheck-inline-init))
 #+end_src
-
 
 ** Grab Mac Link
 
