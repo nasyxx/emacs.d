@@ -100,7 +100,7 @@ Emacs client/library for the Language Server Protocol
     (kill-emacs-hook . (lambda () (setq lsp-restart 'ignore)))
     :mode-hook
     (nasy/lsp-init)
-    (lsp-diagnostics-mode 1)
+    (lsp-diagnostics--enable)
     :init
     (defun nasy/lsp-init ()
       "Nasy lsp mode init."
@@ -129,12 +129,11 @@ Emacs client/library for the Language Server Protocol
       lsp-enable-folding
       lsp-prefer-capf) . t)
     ((lsp-keep-workspace-alive
-      lsp-auto-guess-root
       lsp-auto-configure
+      lsp-auto-guess-root
       lsp-enable-completion-at-point
       lsp-enable-file-watchers))
-    (lsp-restart . 'interactive)
-    (lsp-diagnostics-package . :auto))
+    (lsp-restart . 'interactive))
 #+end_src
 
 *** lsp-ui                                      :languages:tools:
@@ -145,7 +144,8 @@ Emacs client/library for the Language Server Protocol
     :url "https://github.com/emacs-lsp/lsp-ui"
     :tag "languages" "tools"
     :hook lsp-mode-hook
-    :mode-hook (lsp-ui-sideline-mode 1)
+    :mode-hook
+    (lsp-ui-sideline-mode 1)
     :custom
     (lsp-ui-doc-enable . t)
     ((lsp-ui-doc-include-signature
@@ -400,10 +400,10 @@ Emacs client/library for the Language Server Protocol
     (defun start-lsp-pylance ()
       "Start lsp-pylance."
       (require 'nasy-langs-pylance)
-      (python-flycheck-setup)
+      (lsp)
       ;; (gsetq elpy-modules (remove 'elpy-module-autodoc elpy-modules))
       ;; (gsetq elpy-modules (remove 'elpy-module-eldoc   elpy-modules))
-      (lsp-deferred))
+      (python-flycheck-setup))
     :hook
     (python-mode-hook . start-lsp-pylance))
 #+end_src
