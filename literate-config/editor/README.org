@@ -94,7 +94,7 @@ Packages list
   (straight-register-package
    '(tree-sitter :host github
                  :repo "ubolonton/emacs-tree-sitter"
-                 :files ("lisp/*.el" "langs/*.el" "langs/queries")))
+                 :files ("*")))
 
   (straight-register-package
    '(point-history :type git
