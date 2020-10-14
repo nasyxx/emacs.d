@@ -362,7 +362,7 @@ Emacs client/library for the Language Server Protocol
                          '("#!/usr/bin/env python" n>
                            "# -*- coding: utf-8 -*-" n n>
                            "r\"\"\"" n>
-                           "心之憂矣於我歸處 Python ♡ Nasy" n n>
+                           "心之憂矣於我歸處 Python ♡ Nasy." n n>
                            "    |             *         *" n>
                            "    |                  .                ." n>
                            "    |           .                          舒而脫脫兮" n>
