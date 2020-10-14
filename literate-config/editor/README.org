@@ -91,10 +91,21 @@ Packages list
   - yasnippet-snippets
 
 #+begin_src elisp
+  ;; Core APIs.
+  (straight-register-package
+   '(tsc :host github
+         :repo "ubolonton/emacs-tree-sitter"
+         :files ("core/*.el")))
+  ;; Base framework, syntax highlighting.
   (straight-register-package
    '(tree-sitter :host github
                  :repo "ubolonton/emacs-tree-sitter"
-                 :files ("*")))
+                 :files ("lisp/*.el")))
+  ;; Language bundle.
+  (straight-register-package
+   '(tree-sitter-langs :host github
+                       :repo "ubolonton/emacs-tree-sitter"
+                       :files ("langs/*.el" "langs/queries")))
 
   (straight-register-package
    '(point-history :type git
@@ -153,8 +164,10 @@ Packages list
     treemacs-icons-dired
     treemacs-magit
     treemacs-projectile
-
+    ;; tree-sitter
+    tsc
     tree-sitter
+    tree-sitter-langs
     ;;version-control
     abridge-diff
     forge
@@ -1377,7 +1390,6 @@ system.
 
 https://ubolonton.github.io/emacs-tree-sitter/
 
-
 #+begin_src elisp
   (leaf tree-sitter
     :doc "emacs-tree-sitter is an Emacs binding for tree-sitter, an incremental parsing
@@ -1697,7 +1709,6 @@ https://github.com/purcell/whitespace-cleanup-mode
     :hook ((after-init-hook . global-whitespace-cleanup-mode))
     :bind (("<remap> <just-one-space>" . cycle-spacing)))
 #+end_src
-
 
 ** Writeroom Mode
 
