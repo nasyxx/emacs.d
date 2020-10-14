@@ -104,10 +104,11 @@ Emacs client/library for the Language Server Protocol
     :init
     (defun nasy/lsp-init ()
       "Nasy lsp mode init."
-      (flycheck-inline-mode -1)
       (when lsp-enable-symbol-highlighting
         (add-hook #'lsp-on-idle-hook #'lsp--document-highlight nil t)
         (lsp--info "Symbol highlighting enabled in current buffer.")))
+    :advice
+    (:after lsp-diagnostics--enable (lambda () (flycheck-inline-mode -1)))
     :custom
     ((lsp-log-io
       lsp-print-performance
