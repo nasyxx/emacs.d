@@ -115,8 +115,8 @@ Emacs client/library for the Language Server Protocol
     ((lsp-log-max
       lsp-inhibit-message
       lsp-enable-snippet
-      lsp-eldoc-enable-hover
       lsp-eldoc-render-all
+      lsp-eldoc-enable-hover
       lsp-enable-imenu
       lsp-enable-xref
       lsp-enable-links
@@ -147,10 +147,11 @@ Emacs client/library for the Language Server Protocol
     :mode-hook
     (lsp-ui-sideline-mode 1)
     :custom
-    (lsp-ui-doc-enable . t)
+    (lsp-ui-doc-enable . nil)
     ((lsp-ui-doc-include-signature
       lsp-ui-sideline-show-hover
       lsp-ui-sideline-ignore-duplicate) . t)
+    (lsp-ui-doc-position . 'at-point)
     :defer-config
     (require 'lsp-ui-peek))
 #+end_src
