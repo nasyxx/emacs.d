@@ -31,9 +31,19 @@ Nasy's Theme
     :type 'symbol)
 
   (defcustom nasy-theme-org-scale t
-    "Nasy theme use scale up org or not?"
+    "Nasy theme uses scale up org or not?"
     :group 'nasy-theme
     :type 'boolean)
+
+  (defcustom nasy-theme-fixed-pitch-font "OperatorMonoSSmLig Nerd Font"
+    "Nasy them fixed pitch font."
+    :group 'nasy-theme
+    :type 'string)
+
+  (defcustom nasy-theme-variable-pitch-font "Rec Mono Nasy"
+    "Nasy them variable patch font."
+    :group 'nasy-theme
+    :type 'string)
 
   (defun nasy-theme-light?dark (light dark)
     "Determin using the light or the dark color of nasy-theme."
@@ -123,7 +133,11 @@ Nasy's Theme
        ((,class (:background ,n-鱼肚))))
      `(success      ((,class (:background ,n-鱼肚 :foreground ,n-靛青 :weight bold))))
      `(variable-pitch
-       ((,class (:font ,(font-spec :name "Rec Mono Nasy"
+       ((,class (:font ,(font-spec :name nasy-theme-variable-pitch-font
+                                   :weight 'normal
+                                   :slant 'normal)))))
+     `(fixed-pitch
+       ((,class (:font ,(font-spec :name nasy-theme-fixed-pitch-font
                                    :weight 'normal
                                    :slant 'normal)))))
      `(warning      ((,class (:background ,n-鱼肚 :foreground ,n-茶 :weight bold))))
