@@ -713,19 +713,20 @@ https://github.com/politza/pdf-tools
     :custom (pdf-view-display-size . 'fit-width))
 #+end_src
 
-** Pretty Font
+** Pretty Mode
 
 #+begin_src elisp
-  (leaf pretty-font
-    :when (fboundp 'mac-auto-operator-composition-mode)
+  (leaf pretty-mode
     :preface
     ;; https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
     ;; This works when using emacs --daemon + emacsclient
-    (add-hook 'after-make-frame-functions (lambda (frame) (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
     ;; This works when using emacs without server/client
     (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
     ;; I haven't found one statement that makes both of the above situations work, so I use both for now
-    :config
+    :defer-config
     (defun pretty-fonts-set-fontsets (CODE-FONT-ALIST)
       "Utility to associate many unicode points with specified `CODE-FONT-ALIST'."
       (--each CODE-FONT-ALIST
@@ -841,20 +842,20 @@ https://github.com/politza/pdf-tools
         ("\\(<=\\)"                    #Xe157))
       "Fira font ligatures and their regexes.")
 
-    (mac-auto-operator-composition-mode)
+    (when (fboundp 'mac-auto-operator-composition-mode)
+      (mac-auto-operator-composition-mode))
     (after-x 'dash
       (pretty-fonts-set-kwds
        '((pretty-fonts-fira-font prog-mode-hook org-mode-hook)))))
 #+end_src
 
-** Pretty Mode
+** Prog Mode
 
 #+begin_src elisp
-  (leaf pretty-mode
-    :commands (turn-on-pretty-mode global-prettify-symbols-mode)
-    :hook (((prog-mode-hook
-             org-mode-hook)
-            . prettify-symbols-mode)
+  (leaf prog-mode
+    :hook ((((prog-mode-hook
+              python-mode-hook)
+             . (lambda () (prettify-symbols-mode 1))))
            (prog-mode-hook
             . (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
                           '(;; Data Type             P N
@@ -996,8 +997,8 @@ https://github.com/politza/pdf-tools
 
                             ;; Arrows
                             ;; Direct
-                            ;; ("->"  . (?\s (Br . Bl) #Xe114))  ;; 
-                            ;; ("=>"  . (?\s (Br . Bl) #Xe13f))
+                            ("->"  . (?\s (Br . Bl) #Xe114))  ;; 
+                            ("=>"  . (?\s (Br . Bl) #Xe13f))
                             ("->>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe115))
                             ("=>>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe140))
                             ("<<-" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15d))
@@ -1037,7 +1038,7 @@ https://github.com/politza/pdf-tools
                (mapc (lambda (pair) (push pair prettify-symbols-alist))
                      '(;; Syntax
                        ;;("def"    . (#x1d521 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
-                       ("def"    . #x1D487)  ;; 𝒇 1 111
+                       ("def"    . (#x1d487 (Br . Bl) #x2006))  ;; 𝒇 1 111
                        ("List"   . #x1d543)  ;; 𝕃 𝕷
                        ("list"   . (#x1d55d (Br . Bl) #x2006 (Br . Bl) #x2005))  ;; 𝕝   𝖑
                        ("Dict"   . #x1d53B)  ;; 𝔻 𝕯
@@ -1055,16 +1056,8 @@ https://github.com/politza/pdf-tools
                (mapc (lambda (pair) (push pair prettify-symbols-alist))
                      '(;; Syntax
                        ("pure" . (#x21f0 (Br . Bl) #x2006))))))) ;; ⇰  x
-                                         ;; (" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; ∘
-
-    :config
-    (pretty-activate-groups
-     '(:sub-and-superscripts :greek :arithmetic))
-
-    (pretty-deactivate-groups
-     '(:equality :ordering :ordering-double :ordering-triple
-                 :arrows :arrows-twoheaded :punctuation
-                 :logic :sets :arithmetic-double :arithmetic-triple)))
+                       ;; (" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; ∘
+    :init)
 #+end_src
 
 ** Projectile                                :convenience:project:
