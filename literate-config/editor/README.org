@@ -1164,7 +1164,7 @@ https://www.emacswiki.org/emacs/RecentFiles
          ;; horizontal space the recentf listing uses to list recent files.
          abbreviate-file-name))
     (recentf-max-saved-items . 100)
-    (recentf-exclude         . '("/tmp/" "/ssh:"))
+    (recentf-exclude         . '("/tmp/" "/ssh:" "/nix/store" "~/.nix/store"))
     :config
     (defun nasy--recent-file-truename (file)
       (if (or (file-remote-p file nil t)

@@ -43,6 +43,14 @@
     lsp-treemacs
     lsp-ui
 
+    ;; nix
+    nix-mode
+    nix-update
+    nix-buffer
+    nixpkgs-fmt
+    nixos-options
+    company-nixos-options
+
     company-restclient
     elvish-mode
     fish-completion
