@@ -301,8 +301,8 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
 #+begin_src elisp
   (setq hscroll-margin                  7
         scroll-margin                   7
-        hscroll-step                    7
-        scroll-step                     7
+        hscroll-step                    0
+        scroll-step                     0
         scroll-conservatively           100000
         scroll-preserve-screen-position 'always
         mac-mouse-wheel-smooth-scroll    nil)

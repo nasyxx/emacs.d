@@ -149,9 +149,9 @@ https://github.com/magit/transient
 ** Mouse Key Bindings
 
 #+begin_src elisp
-  (general-define-key
-   "<mouse-4>" (lambda () (scroll-down 1))
-   "<mouse-5>" (lambda () (scroll-up 1)))
+  ;; (general-define-key
+  ;;  "<mouse-4>" (lambda () (scroll-down 1))
+  ;;  "<mouse-5>" (lambda () (scroll-up 1)))
 #+end_src
 
 ** code map
