@@ -51,6 +51,8 @@
     nixos-options
     company-nixos-options
 
+    elpy
+
     company-restclient
     elvish-mode
     fish-completion
@@ -402,6 +404,33 @@ Emacs client/library for the Language Server Protocol
                            "\"\"\"" n>)))
 #+end_src
 
+*** elpy
+
+#+begin_src elisp
+  (leaf elpy
+    :if (or (eq *py-module* 'elpy)
+           (eq *py-module* 'pylance))
+    :init
+    (add-to-list 'exec-path "/Users/Nasy/Library/Python/3.8/bin")
+    (when (eq *py-module* 'elpy)
+     (add-to-list 'elpy-modules 'elpy-module-autodoc)
+     (add-to-list 'elpy-modules 'elpy-module-eldoc))
+    :custom
+    (elpy-rpc-virtualenv-path . 'current)
+    (elpy-modules             . '(elpy-module-company
+                                  elpy-module-folding
+                                  elpy-module-yasnippet))
+    :config
+    (when (eq *py-module* 'elpy)
+      (nasy/add-company-backend 'python-mode '(elpy-company-backend
+                                               company-files
+                                               :with company-tabnine company-yasnippet)))
+    :advice
+    (:before python-mode elpy-enable)
+    (:after elpy-module-folding (lambda (&rest _)
+                                 (define-key elpy-mode-map (kbd "<mouse-1>") nil))))
+#+end_src
+
 *** pylance
 
 #+begin_src elisp
@@ -411,9 +440,16 @@ Emacs client/library for the Language Server Protocol
       "Start lsp-pylance."
       (require 'nasy-langs-pylance)
       (lsp)
-      ;; (gsetq elpy-modules (remove 'elpy-module-autodoc elpy-modules))
-      ;; (gsetq elpy-modules (remove 'elpy-module-eldoc   elpy-modules))
+      (gsetq elpy-modules (remove 'elpy-module-autodoc elpy-modules))
+      (gsetq elpy-modules (remove 'elpy-module-eldoc   elpy-modules))
       (python-flycheck-setup))
+    :config
+    (when (eq *py-module* 'pylance)
+      (nasy/add-company-backend 'python-mode
+        '(company-capf
+          elpy-company-backend
+          company-files
+          :with company-tabnine company-yasnippet)))
     :hook
     (python-mode-hook . start-lsp-pylance))
 #+end_src
