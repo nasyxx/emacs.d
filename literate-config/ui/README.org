@@ -30,9 +30,9 @@
   (leaf dashboard
     :commands dashboard-setup-startup-hook
     :bind
-    ("<f5>" . nasy/dashboard-refresh)
+    ("<f5>" . dashboard-refresh-buffer)
     (:dashboard-mode-map
-     ("g"              . nasy/dashboard-refresh)
+     ("g"              . dashboard-refresh-buffer)
      ("<down-mouse-1>" . nil)
      ("<mouse-1>"      . widget-button-click)
      ("<mouse-2>"      . widget-button-click)
@@ -76,12 +76,6 @@
                 "Document"
                 "Document Page"
                 (lambda (&rest _) (browse-url "https://emacs.nasy.moe/")))))))
-    (defun nasy/dashboard-refresh ()
-      "Refresh dashboard buffer."
-      (interactive)
-      (unless (get-buffer dashboard-buffer-name)
-        (generate-new-buffer "*dashboard*"))
-      (dashboard-refresh-buffer))
 
     (defun nasy/fw2 (&rest _)
       "Forward 2 chars."
