@@ -53,6 +53,7 @@ Packages list
 + ivy/swiper/counsel
   - all-the-icons-ivy-rich
   - counsel-projectile
+  - ivy-posframe
   - ivy-prescient (optional)
   - ivy-rich
   - ivy-xref
@@ -145,6 +146,7 @@ Packages list
     ivy
     ivy-rich
     ivy-xref
+    (:when *ivy-posframe* ivy-posframe)
     (:when *ivy-prescient* prescient ivy-prescient)
 
     list-unicode-display

@@ -544,6 +544,16 @@ Some of them borrowed from doom-emacs
       (gsetq counsel-projectile-sort-files t)))
 #+end_src
 
+** ivy-posframe
+
+#+begin_src elisp
+  (leaf ivy-posframe
+    :disabled (not *ivy-posframe*)
+    :hook (ivy-mode-hook)
+    :mode-hook
+    (setq ivy-auto-shrink-minibuffer-alist nil))
+#+end_src
+
 ** ivy-prescient
 
 #+begin_src elisp
