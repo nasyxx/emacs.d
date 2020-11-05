@@ -92,22 +92,6 @@ Packages list
   - yasnippet-snippets
 
 #+begin_src elisp
-  ;; Core APIs.
-  (straight-register-package
-   '(tsc :host github
-         :repo "ubolonton/emacs-tree-sitter"
-         :files ("core/*.el")))
-  ;; Base framework, syntax highlighting.
-  (straight-register-package
-   '(tree-sitter :host github
-                 :repo "ubolonton/emacs-tree-sitter"
-                 :files ("lisp/*.el")))
-  ;; Language bundle.
-  (straight-register-package
-   '(tree-sitter-langs :host github
-                       :repo "ubolonton/emacs-tree-sitter"
-                       :files ("langs/*.el" "langs/queries")))
-
   (straight-register-package
    '(point-history :type git
                    :host github
@@ -1430,8 +1414,9 @@ https://ubolonton.github.io/emacs-tree-sitter/
     (require 'tree-sitter-langs)
     (add-to-list 'tree-sitter-major-mode-language-alist '(mhtml-mode . html)))
 
+
   (leaf tree-sitter-hl
-    :hook tree-sitter-after-on-hook)
+    :hook (css-mode-hook python-mode-hook))
 #+end_src
 
 ** Undo/Redo                                             :editing:
