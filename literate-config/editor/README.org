@@ -64,7 +64,6 @@ Packages list
 + paren
   - smartparens
   - rainbow-delimiters
-+ point-history
 + pretty-mode
 + prescient
 + quick-peek
@@ -1451,6 +1450,7 @@ https://github.com/blue0513/point-history
 
 #+begin_src elisp
   (leaf point-history
+    :disabled t
     :doc "Show the history of points you visited before."
     :url "https://github.com/blue0513/point-history"
     :tag "editing"
