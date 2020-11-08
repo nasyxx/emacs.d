@@ -42,7 +42,7 @@
            (after-init-hook     . dashboard-setup-startup-hook))
     :custom
     (dashboard-org-agenda-categories . '("Calendar" "Tasks" "Appointments"))
-    `(dashboard-startup-banner       . ,(concat user-emacs-directory "ue.png"))
+    `(dashboard-startup-banner       . ,(concat user-emacs-directory "mega.png"))
     (dashboard-items . '((recents   . 10)
                          (bookmarks . 5)
                          ;; (registers . 5)
