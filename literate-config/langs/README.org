@@ -274,6 +274,24 @@ Emacs client/library for the Language Server Protocol
            "\\.md\\'"))
 #+end_src
 
+** Nix
+
+#+begin_src elisp
+  (leaf nix
+    :disabled t
+    :init
+    (defun start-nix-lsp ()
+      (after-x 'lsp-mode
+        (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+        (lsp-register-client
+         (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+                          :major-modes '(nix-mode)
+                          :server-id 'nix)))
+      (lsp))
+    :hook (nix-mode-hook . start-nix-lsp))
+#+end_src
+
+
 ** Python
 
 *** Autoloads
