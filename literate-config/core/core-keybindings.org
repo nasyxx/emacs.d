@@ -79,6 +79,16 @@ https://github.com/magit/transient
 ** global map
 
 #+begin_src elisp
+  (leaf nasy-keybindings
+    :bind
+    ;;; navigate
+    (("H-f" . forward-word)
+     ("H-b" . backward-word)
+     ("H-n" . next-line)
+     ("H-p" . previous-line)))
+#+end_src
+
+#+begin_src elisp
   (general-define-key
    "C-."  #'imenu
 

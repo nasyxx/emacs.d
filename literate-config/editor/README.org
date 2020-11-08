@@ -331,10 +331,10 @@ https://gitlab.com/ideasman42/emacs-spatial-navigate
     :doc "Spatial navigation in Emacs."
     :url "https://gitlab.com/ideasman42/emacs-spatial-navigate"
     :tag "editing"
-    :bind (("<M-up>"    . spatial-navigate-backward-vertical-bar)
-           ("<M-down>"  . spatial-navigate-forward-vertical-bar)
-           ("<M-left>"  . spatial-navigate-backward-horizontal-bar)
-           ("<M-right>" . spatial-navigate-forward-horizontal-bar)))
+    :bind (("<C-p>" . spatial-navigate-backward-vertical-bar)
+           ("<C-n>" . spatial-navigate-forward-vertical-bar)
+           ("<M-b>" . spatial-navigate-backward-horizontal-bar)
+           ("<M-f>" . spatial-navigate-forward-horizontal-bar)))
 #+end_src
 
 ** Expand Region
@@ -680,9 +680,7 @@ https://github.com/Fuco1/smartparens
     :tag "abbrev" "convenience" "editing"
     :hook (after-init-hook . smartparens-global-mode)
     :custom
-    ((sp-hybrid-kill-entire-symbol . nil)
-     (sp-override-key-bindings . '(("<M-up>"   . nil)
-                                   ("<M-down>" . nil)))))
+    ((sp-hybrid-kill-entire-symbol . nil)))
 #+end_src
 
 ** PDF Tools                                    :files:multimedia:

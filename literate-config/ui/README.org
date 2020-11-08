@@ -34,6 +34,10 @@
     (:dashboard-mode-map
      ("g"              . dashboard-refresh-buffer)
      ("<down-mouse-1>" . nil)
+     ("H-p"            . dashboard-previous-line)
+     ("H-n"            . dashboard-next-line)
+     ("H-b"            . widget-backward)
+     ("H-f"            . widget-forward)
      ("<mouse-1>"      . widget-button-click)
      ("<mouse-2>"      . widget-button-click)
      ("<up>"           . widget-backward)
@@ -84,7 +88,6 @@
     :advice
     (:after dashboard-next-line     nasy/fw2)
     (:after widget-forward          nasy/fw2)
-    (:after dashboard-previous-line nasy/fw2)
     (:after widget-backward         nasy/fw2))
 #+end_src
 
