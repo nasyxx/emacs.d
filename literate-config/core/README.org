@@ -62,7 +62,7 @@ Core Libs include useful functions, macros and alias.
   (require 'nasy-core-mixed)
 #+end_src
 
-#+include: "mixed.org"
+#+include: "core-mixed.org"
 
 * Window
 
