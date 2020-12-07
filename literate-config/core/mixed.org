@@ -91,7 +91,7 @@
                  '(ns-transparent-titlebar . t))
 
     (add-to-list 'default-frame-alist
-                 '(ns-appearance . dark))
+                 '(ns-appearance . light))
 
     (add-to-list 'default-frame-alist
                  '(alpha . (80 . 75)))
