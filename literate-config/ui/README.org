@@ -263,7 +263,7 @@
 ** Tab Line
 
 #+begin_src elisp
-  (add-hook #'after-init-hook #'global-tab-line-mode)
+  ;; (add-hook #'after-init-hook #'global-tab-line-mode)
   (gsetq tab-line-close-tab-function #'kill-buffer)
 #+end_src
 
