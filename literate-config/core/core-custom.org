@@ -308,13 +308,6 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
         mac-mouse-wheel-smooth-scroll    nil)
 #+end_src
 
-** Shell
-
-#+begin_src elisp
-  (setq-default
-   shell-file-name "/bin/zsh")
-#+end_src
-
 ** Start
 
 #+begin_src elisp
