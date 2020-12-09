@@ -47,11 +47,11 @@ Packages list
   - all-the-icons-ibuffer
 + imenu-list
 + isearch
-
 + restclient
   - ob-restclient
   - restclient
 + thingopt
++ vterm
 
 #+begin_src elisp
   (nasy/s-u-p
@@ -90,7 +90,9 @@ Packages list
 
     ob-restclient
     restclient
-    thingopt)
+    thingopt
+    vterm
+    vterm-toggle)
 #+end_src
 
 * Configs
@@ -408,6 +410,29 @@ https://www.emacswiki.org/emacs/IncrementalSearch
       (interactive "r")
       (isearch-exit)
       (goto-char isearch-other-end)))
+#+end_src
+
+** vterm                                               :terminals:
+
+Emacs libvterm integration
+
+https://github.com/akermu/emacs-libvterm
+
+*** vterm-toggle                                      :terminals:
+
+Toggles between the vterm buffer and whatever buffer you are editing.
+
+https://github.com/jixiuf/vterm-toggle
+
+#+begin_src elisp
+  (leaf vterm-toggle
+    :doc "Toggles between the vterm buffer and whatever buffer you are editing."
+    :url "https://github.com/jixiuf/vterm-toggle"
+    :tag "terminals"
+    :bind (("C-<f2>" . vterm-toggle)
+           (:vterm-mode-map
+            ("s-n" . vterm-toggle-forward)
+            ("s-p" . vterm-toggle-backward))))
 #+end_src
 
 * Footer                                                                      :noexport:
