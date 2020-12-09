@@ -432,7 +432,15 @@ https://github.com/jixiuf/vterm-toggle
     :bind (("C-<f2>" . vterm-toggle)
            (:vterm-mode-map
             ("s-n" . vterm-toggle-forward)
-            ("s-p" . vterm-toggle-backward))))
+            ("s-p" . vterm-toggle-backward)))
+    :custom (vterm-toggle-fullscreen-p . nil)
+    :init (add-to-list 'display-buffer-alist
+                    '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                      (display-buffer-reuse-window display-buffer-in-side-window)
+                      (side . bottom)
+                      (dedicated . t) ;dedicated is supported in emacs27
+                      (reusable-frames . visible)
+                      (window-height . 0.3))))
 #+end_src
 
 * Footer                                                                      :noexport:
