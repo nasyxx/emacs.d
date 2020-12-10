@@ -121,6 +121,9 @@ I use ~org~ with ~org-plus-contrib~
     :hook ((org-mode-hook . auto-fill-mode)
            (org-mode-hook . nasy/org-fix-saveplace)
            (org-mode-hook . org-prettify-source-block-mode))
+    :config (nasy/add-company-backend 'org-mode '(company-tabnine
+                                                  company-files
+                                                  :with company-yasnippet))
     :advice
     (:after
      org-refile

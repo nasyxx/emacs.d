@@ -214,7 +214,7 @@
 
 #+begin_src elisp
   (leaf company
-    :hook prog-mode-hook
+    :hook (prog-mode-hook org-mode-hook)
     :bind
     ("M-/"     . company-files)
     ("M-C-/"   . nasy/company-complete)
