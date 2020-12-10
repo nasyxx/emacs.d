@@ -88,8 +88,6 @@ Packages list
   - magit-todos
 + which-key
 + whitespace-cleanup-mode
-+ yasnippet
-  - yasnippet-snippets
 
 #+begin_src elisp
   (straight-register-package
@@ -169,9 +167,7 @@ Packages list
     magit-todos
 
     which-key
-    whitespace-cleanup-mode
-    yasnippet
-    yasnippet-snippets)
+    whitespace-cleanup-mode)
 #+end_src
 
 * Updates
@@ -1750,29 +1746,6 @@ https://github.com/purcell/whitespace-cleanup-mode
         (visual-line-mode -1)
         (when (fboundp 'writeroom-mode)
           (writeroom-mode 0)))))
-#+end_src
-
-** Yasnipeet                               :convenience:emulation:
-
-YASnippet is a template system for Emacs. It allows you to type an abbreviation
-and automatically expand it into function templates. Bundled language templates
-include: C, C++, C#, Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more. The
-snippet syntax is inspired from TextMate's syntax, you can even import most
-TextMate templates to YASnippet. Watch a demo on YouTube.
-
-https://github.com/joaotavora/yasnippet
-
-#+begin_src elisp
-  (leaf yasnippet
-    :doc "A template system for Emacs"
-    :url "https://github.com/joaotavora/yasnippet"
-    :tag "convenience" "enmulation"
-    :commands (yas-minor-mode)
-    :hook (((prog-mode-hook text-mode-hook) . yas-minor-mode))
-    :config
-    (add-to-list 'yas-snippet-dirs
-                 (concat user-emacs-directory "extra/snippets"))
-    (yas-reload-all))
 #+end_src
 
 * Footer                                                 :noexport:

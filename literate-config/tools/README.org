@@ -53,6 +53,10 @@ Packages list
 + thingopt
 + vterm
 
++ yasnippet
+  - license-snippets
+  - yasnippet-snippets
+
 #+begin_src elisp
   (nasy/s-u-p
     all-the-icons
@@ -92,7 +96,11 @@ Packages list
     restclient
     thingopt
     vterm
-    vterm-toggle)
+    vterm-toggle
+
+    yasnippet
+    license-snippets
+    yasnippet-snippets)
 #+end_src
 
 * Configs
@@ -490,6 +498,35 @@ https://github.com/jixiuf/vterm-toggle
                       (dedicated . t) ;dedicated is supported in emacs27
                       (reusable-frames . visible)
                       (window-height . 0.3))))
+#+end_src
+
+** Yasnipeet                               :convenience:emulation:
+
+YASnippet is a template system for Emacs. It allows you to type an abbreviation
+and automatically expand it into function templates. Bundled language templates
+include: C, C++, C#, Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more. The
+snippet syntax is inspired from TextMate's syntax, you can even import most
+TextMate templates to YASnippet. Watch a demo on YouTube.
+
+https://github.com/joaotavora/yasnippet
+
+https://github.com/sei40kr/license-snippets
+
+https://github.com/AndreaCrotti/yasnippet-snippets
+
+#+begin_src elisp
+  (leaf yasnippet
+    :doc "A template system for Emacs"
+    :url "https://github.com/joaotavora/yasnippet"
+    :tag "convenience" "enmulation"
+    :commands (yas-minor-mode
+               yas-reload-all)
+    :hook (((prog-mode-hook text-mode-hook) . yas-minor-mode))
+    :config
+    (license-snippets-init)
+    (yas-reload-all)
+    (add-to-list 'yas-snippet-dirs
+                 (concat user-emacs-directory "extra/snippets")))
 #+end_src
 
 * Footer                                                                      :noexport:
