@@ -260,6 +260,27 @@
   (leaf nasy-theme)
 #+end_src
 
+** Tool Bar
+
+#+begin_src elisp
+  (leaf tool-bar
+    :tag "builtin"
+    :bind
+    (:tool-bar-map
+     ([copy]            . nil)
+     ([cut]             . nil)
+     ([dired]           . nil)
+     ([isearch-forward] . nil)
+     ([new-file]        . nil)
+     ([open-file]       . nil)
+     ([paste]           . nil)
+     ([save-buffer]     . nil)
+     ([undo]            . nil)
+     ([yank]            . nil)))
+     ;; ([dashboard-refresh-buffer]
+     ;;  . `(menu-item))))
+#+end_src
+
 ** Tab Line
 
 #+begin_src elisp
