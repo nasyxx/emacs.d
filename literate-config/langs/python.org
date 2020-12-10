@@ -237,6 +237,8 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
       (defvar lsp-pylance-executable (executable-find "pylance")
         "Pylance executable.
 
+      code --install-extension ms-python.vscode-pylance
+
       #!/bin/bash
       set -euo pipefail
 
@@ -253,8 +255,15 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
       - strict: All type checking rules at the highest severity of error (includes all rules in off and basic categories")
 
       (lsp-register-custom-settings
-       `(("python.analysis.typeCheckingMode"       lsp-pylance-type-checking
-          "python.analysis.useLibraryCodeForTypes" nil)))
+       `(("pylance.insidersChannel"                "daily"
+          "python.analysis.typeCheckingMode"       lsp-pylance-type-checking
+          "python.analysis.diagnosticMode"         "openFilesOnly"
+          "python.analysis.stubPath"               "./typings"
+          "python.analysis.autoSearchPaths"        t
+          "python.analysis.extraPaths"             []
+          "python.analysis.useLibraryCodeForTypes" t
+          "python.analysis.autoImportCompletions"  t
+          "python.analysis.completeFunctionParens" t)))
 
       (lsp-register-client
        (make-lsp-client
@@ -268,14 +277,14 @@ Include python-mode, black, py-isort, python-docstring and sphinx-doc.
                             (lsp--set-configuration (lsp-configuration-section "python"))))
         :notification-handlers (lsp-ht ("pylance/beginProgress"  'ignore)
                                        ("pylance/reportProgress" 'ignore)
-                                       ("pylance/endProgress"    'ignore))))
+                                       ("pylance/endProgress"    'ignore)))))
 
-      (set-lookup-handlers! 'python-mode :async t
-        :documentation #'lsp-describe-thing-at-point
-        :definition #'lsp-find-definition
-        :implementations #'lsp-find-implementation
-        :type-definition #'lsp-find-type-definition
-        :references #'lsp-find-references))
+      ;; (set-lookup-handlers! 'python-mode :async t
+      ;;   :documentation #'lsp-describe-thing-at-point
+      ;;   :definition #'lsp-find-definition
+      ;;   :implementations #'lsp-find-implementation
+      ;;   :type-definition #'lsp-find-type-definition
+      ;;   :references #'lsp-find-references))
 
     (defun start-lsp-pylance ()
       "Start lsp-pylance."
