@@ -235,6 +235,10 @@ Nasy's Theme
                              :slant normal
                              :weight bold))))
 
+     ;; dashboard
+     `(widget-button
+       ((,class (:weight unspecified))))
+
      ;; display-fill-column-indicator-mode
      `(fill-column-indicator ((,class (:background ,n-湖蓝 :foreground ,n-靛青))))
 
