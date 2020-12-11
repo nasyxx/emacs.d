@@ -1538,22 +1538,6 @@ https://github.com/magit/forge
            ("C-x n"   . git-gutter:next-hunk)))
 #+end_src
 
-*** Git Messenger                                :convenience:vc:
-
-git-messenger.el provides function that popup commit message at current line.
-
-https://github.com/emacsorphanage/git-messenger
-
-#+begin_src elisp
-  (leaf git-messenger
-    :doc "git-messenger.el provides function that popup commit message at current line."
-    :url "https://github.com/emacsorphanage/git-messenger"
-    :tag "convenience" "vc"
-    :custom (git-messenger:show-detail . t)
-    :bind (:vc-prefix-map
-           ("p" . git-messenger:popup-message)))
-#+end_src
-
 *** Magit                                          :git:tools:vc:
 
 Magit is an interface to the version control system Git, implemented as an Emacs
@@ -1577,6 +1561,7 @@ https://github.com/magit/magit
     :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
            ("C-x g"      . magit-status)
            ("C-x M-g"    . magit-dispatch)
+           ("C-c M-g"    . magit-file-dispatch)
            (:magit-status-mode-map
             ("C-M-<up>"  . magit-section-up))
            (:vc-prefix-map
