@@ -44,7 +44,9 @@ https://github.com/magit/transient
     :doc "Transient commands."
     :url "https://github.com/magit/transient."
     :commands transient-define-prefix
-    :custom (transient-default-level . 5))
+    :custom
+    (transient-default-level . 5)
+    (transient-display-buffer-action . '(display-buffer-below-selected)))
 #+end_src
 
 * define nasy-map
