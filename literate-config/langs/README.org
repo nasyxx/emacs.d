@@ -267,17 +267,18 @@ Emacs client/library for the Language Server Protocol
 
 #+begin_src elisp
   (leaf lsp-haskell
-    :init
+    :preface
     (defun start-lsp-haskell ()
       (require 'lsp)
       (require 'lsp-haskell)
-      (lsp-deferred))
+      (lsp))
+    :init
     (nasy/add-company-backend 'haskell-mode '(company-capf
                                               company-lsp
                                               company-files
                                               :with company-tabnine company-yasnippet))
-    :mode-hook
-    (start-lsp-haskell))
+    :hook
+    (haskell-mode-hook . start-lsp-haskell))
 #+end_src
 
 ** HTML
