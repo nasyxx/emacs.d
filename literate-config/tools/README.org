@@ -58,6 +58,9 @@ Packages list
   - yasnippet-snippets
 
 #+begin_src elisp
+  (eval-when-compile
+    (setq vterm-always-compile-module t))
+
   (nasy/s-u-p
     all-the-icons
     anzu
