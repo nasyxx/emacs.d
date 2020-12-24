@@ -3,7 +3,7 @@
 * Header                                                 :noexport:
 
 #+begin_src elisp
-  ;;; nasy-ui-theme.el --- Nasy's Emacs Configuration theme file.  -*- lexical-binding: t; -*-
+  ;;; nasy-modeline.el --- Nasy's Emacs Configuration theme file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2020  Nasy
 
