@@ -99,17 +99,11 @@ https://github.com/magit/transient
    "C-j"            #'default/newline
 
    ;; search
-   "C-s"    #'consult-line
-   "C-S-s"  #'consult-line-symbol-at-point
-   ;; "C-S-s"  (cond
-   ;;           ((eq *ivy-or-helm* 'ivy)
-   ;;            #'swiper-isearch-thing-at-point))
-   ;; "C-r"    (cond
-   ;;           ((eq *ivy-or-helm* 'ivy)
-   ;;            #'ivy-resume)
-   ;;           ((eq *ivy-or-helm* 'helm)
-   ;;            #'helm-resume)
-   ;;           (t #'isearch-backward))
+   ;; "C-s"    #'consult-line
+   ;; "C-S-s"  #'consult-line-symbol-at-point
+   "C-s"    #'swiper-isearch
+   "C-S-s"  #'swiper-isearch-thing-at-point
+   "C-r"    #'ivy-resume
 
    ;;; buffers
    "C-x b"    #'switch-to-buffer

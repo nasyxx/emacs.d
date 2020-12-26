@@ -50,13 +50,13 @@ Packages list
 + helpful
 + htmlize
 + indent-tools
-# + ivy/swiper/counsel
-#   - all-the-icons-ivy-rich
-#   - counsel-projectile
-#   - ivy-posframe
-#   - ivy-prescient (optional)
-#   - ivy-rich
-#   - ivy-xref
++ ivy/swiper/counsel
+  - all-the-icons-ivy-rich
+  - counsel-projectile
+  - ivy-posframe
+  - ivy-prescient (optional)
+  - ivy-rich
+  - ivy-xref
 + list-unicode-display
 + mmm-mode
 + multiple-cursors
@@ -67,13 +67,13 @@ Packages list
 + pretty-mode
 + prescient
 + quick-peek
-+ selectrum
-  - selectrum-prescient
-  - embark
-  - consult
-  - consult-selectrum
-  - consult-flycheck
-  - marginalia
+# + selectrum
+#   - selectrum-prescient
+#   - embark
+#   - consult
+#   - consult-selectrum
+#   - consult-flycheck
+#   - marginalia
 + switch-window
 + symbol-overlay
 + treemacs
@@ -99,8 +99,8 @@ Packages list
 #+begin_src elisp
   (straight-register-package
    '(point-history :type git
-                   :host github
-                   :repo "blue0513/point-history"))
+		   :host github
+		   :repo "blue0513/point-history"))
 
   (nasy/s-u-p
     alert
@@ -128,14 +128,14 @@ Packages list
     htmlize
     indent-tools
     ;; ivy
-    ;; all-the-icons-ivy-rich
-    ;; counsel
-    ;; counsel-projectile
-    ;; ivy
-    ;; ivy-rich
-    ;; ivy-xref
-    ;; (:when *ivy-posframe* ivy-posframe)
-    ;; (:when *ivy-prescient* prescient ivy-prescient)
+    all-the-icons-ivy-rich
+    counsel
+    counsel-projectile
+    ivy
+    ivy-rich
+    ivy-xref
+    (:when *ivy-posframe* ivy-posframe)
+    (:when *ivy-prescient* prescient ivy-prescient)
 
     list-unicode-display
     mmm-mode
@@ -150,13 +150,13 @@ Packages list
     pretty-mode
     quick-peek
     ;; selectrum
-    selectrum
-    selectrum-prescient
-    embark
-    consult
-    consult-selectrum
-    consult-flycheck
-    marginalia
+    ;; selectrum
+    ;; selectrum-prescient
+    ;; embark
+    ;; consult
+    ;; consult-selectrum
+    ;; consult-flycheck
+    ;; marginalia
 
     symbol-overlay
     switch-window
@@ -571,7 +571,7 @@ https://gitlab.com/emacs-stuff/indent-tools
 ** Ivy, Counsel and Swiper
 
 #+begin_src elisp
-  ;; (require 'nasy-editor-ivy)
+  (require 'nasy-editor-ivy)
 #+end_src
 
 #+include: "editor-ivy.org"
@@ -1174,10 +1174,10 @@ https://www.emacswiki.org/emacs/RecentFiles
 ** Selectrum & Related Packages                       :extensions:
 
 #+begin_src elisp
-  (require 'nasy-editor-selectrum)
+  ;; (require 'nasy-editor-selectrum)
 #+end_src
 
-#+include: "editor-selectrum.org"
+##+include: "editor-selectrum.org"
 
 ** Snails
 
