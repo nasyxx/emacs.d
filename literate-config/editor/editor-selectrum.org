@@ -1,0 +1,202 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-editor-selectrum.el")
+
+* Header                                                 :noexport:
+
+#+begin_src elisp
+  ;;; nasy-editor-selectrum.el --- Nasy's Emacs Configuration editor selectrum file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Editor Selectrum.
+
+  ;;; Code:
+#+end_src
+
+* Functions
+
+#+begin_src elisp
+  (defvar nasy/active-region--on nil)
+
+  (defun nasy/on--active-region ()
+    (nasy/active-region--mode 1))
+
+  (defun nasy/off--active-region ()
+    (nasy/active-region--mode -1))
+
+  (defvar nasy/active-region-map (make-sparse-keymap))
+
+  (define-minor-mode nasy/active-region--mode
+    "Actized region or not."
+    :keymap nasy/active-region-map)
+
+  (define-minor-mode nasy/active-region-mode
+    "Actived region or not."
+    :lighter "n/ar"
+    (if nasy/active-region-mode
+        (progn
+          (nasy/off--active-region)
+          (add-hook 'activate-mark-hook   #'nasy/on--active-region)
+          (add-hook 'deactivate-mark-hook #'nasy/off--active-region))
+      (remove-hook 'activate-mark-hook   #'nasy/on--active-region)
+      (remove-hook 'deactivate-mark-hook #'nasy/off--active-region)
+      (nasy/off--active-region)))
+
+
+  (defun refresh-selectrum ()
+    (setq selectrum--previous-input-string nil))
+#+end_src
+
+* Configs
+
+** Selectrum                                          :extensions:
+
+Better solution for incremental narrowing in Emacs.
+
+https://github.com/raxod502/selectrum
+
+#+begin_src elisp
+  (leaf selectrum
+    :doc "Better solution for incremental narrowing in Emacs."
+    :url "https://github.com/raxod502/selectrum"
+    :tag "extensions"
+    :hook after-init-hook
+    :mode-hook (nasy/active-region-mode 1))
+#+end_src
+
+** Selectrum Prescient                                :extensions:
+
+Simple but effective sorting and filtering for Emacs.
+
+https://github.com/raxod502/prescient.el
+
+#+begin_src elisp
+  (leaf selectrum-prescient
+    :doc "Simple but effective sorting and filtering for Emacs."
+    :url "https://github.com/raxod502/prescient.el"
+    :tag "extensions"
+    :hook selectrum-mode-hook
+    :mode-hook (prescient-persist-mode +1))
+#+end_src
+
+** Consult                                            :extensions:
+
+consult.el - Consulting completing-read.
+
+https://github.com/minad/consult
+
+Include consult, consult-selectrum & consult-flycheck.
+
+*** consult
+
+#+begin_src elisp
+  (leaf consult
+    :doc "consult.el - Consulting completing-read"
+    :url "https://github.com/minad/consult"
+    :tag "extensions"
+    :after selectrum
+    :custom (consult-narrow-key . "<")
+    :bind
+    (([remap switch-to-buffer]              . consult-buffer)
+     ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
+     ([remap switch-to-buffer-other-frame]  . consult-buffer-other-frame))
+
+    (([remap apropos]            . consult-apropos)
+     ([remap bookmark-jump]      . consult-bookmark)
+     ([remap goto-line]          . consult-goto-line)
+     ([remap imenu]              . consult-imenu)
+     ([remap multi-occur]        . consult-multi-occur)
+     ([remap recentf-open-files] . consult-recent-file)
+     ([remap yank-pop]           . consult-yank-pop))
+
+    (("C-s"   . consult-line)
+     ("C-S-s" . consult-line-symbol-at-point))
+    :config (consult-preview-mode +1))
+#+end_src
+
+*** consult-selectrum
+
+#+begin_src elisp
+  (leaf consult-selectrum
+    :doc "consult.el - Consulting completing-read"
+    :url "https://github.com/minad/consult"
+    :tag "extensions"
+    :after consult
+    :require t)
+#+end_src
+
+*** consult-flycheck
+
+#+begin_src elisp
+  (leaf consult-flycheck
+    :doc "consult.el - Consulting completing-read"
+    :url "https://github.com/minad/consult"
+    :tag "extensions"
+    :after consult
+    :bind (:flycheck-command-map
+           ("!" . consult-flycheck)))
+#+end_src
+
+** embark                                            :convenience:
+
+Emacs Mini-Buffer Actions Rooted in Keymaps.
+
+https://github.com/oantolin/embark/
+
+#+begin_src elisp
+  (leaf embark
+    :doc "Emacs Mini-Buffer Actions Rooted in Keymaps."
+    :url "https://github.com/oantolin/embark"
+    :tag "convenience"
+    :after selectrum
+    :require t
+    :custom
+    ((embark-action-indicator
+      . (lambda (map)
+          (which-key--show-keymap "Embark" map nil nil 'no-paging)
+          #'which-key--hide-popup-ignore-command))
+     (embark-become-indicator
+      . embark-action-indicator))
+    :bind
+    ;; (:embark-file-map
+    ;;  ("s" . sudo-edit))
+    (:selectrum-minibuffer-map
+     ("M-o" . embark-act))
+    (:nasy/active-region-map
+     ("M-o" . embark-act))
+    :hook
+    (embark-pre-action-hook . completion--flush-all-sorted-completions)
+    (embark-pre-action-hook . refresh-selectrum))
+#+end_src
+
+** marginalia                                         :extensions:
+
+marginalia.el - Marginalia in the minibuffer
+
+https://github.com/minad/marginalia
+
+#+begin_src elisp
+  (leaf marginalia
+    :doc "marginalia.el - Marginalia in the minibuffer."
+    :url "https://github.com/minad/marginalia"
+    :tag "extensions"
+    :after selectrum
+    :hook selectrum-mode-hook
+    :custom (marginalia-annotators . '(marginalia-annotators-heavy
+                                       marginalia-annotators-light
+                                       nil))
+    :advice (:after marginalia-cycle
+                    (lambda ()
+                      (when (bound-and-true-p selectrum-mode)
+                        (selectrum-exhibit)))))
+#+end_src
+
+* Footer                                                 :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-editor-selectrum)
+  ;;; nasy-editor-selectrum.el ends here
+#+end_src

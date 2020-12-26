@@ -50,13 +50,13 @@ Packages list
 + helpful
 + htmlize
 + indent-tools
-+ ivy/swiper/counsel
-  - all-the-icons-ivy-rich
-  - counsel-projectile
-  - ivy-posframe
-  - ivy-prescient (optional)
-  - ivy-rich
-  - ivy-xref
+# + ivy/swiper/counsel
+#   - all-the-icons-ivy-rich
+#   - counsel-projectile
+#   - ivy-posframe
+#   - ivy-prescient (optional)
+#   - ivy-rich
+#   - ivy-xref
 + list-unicode-display
 + mmm-mode
 + multiple-cursors
@@ -67,6 +67,13 @@ Packages list
 + pretty-mode
 + prescient
 + quick-peek
++ selectrum
+  - selectrum-prescient
+  - embark
+  - consult
+  - consult-selectrum
+  - consult-flycheck
+  - marginalia
 + switch-window
 + symbol-overlay
 + treemacs
@@ -121,14 +128,14 @@ Packages list
     htmlize
     indent-tools
     ;; ivy
-    all-the-icons-ivy-rich
-    counsel
-    counsel-projectile
-    ivy
-    ivy-rich
-    ivy-xref
-    (:when *ivy-posframe* ivy-posframe)
-    (:when *ivy-prescient* prescient ivy-prescient)
+    ;; all-the-icons-ivy-rich
+    ;; counsel
+    ;; counsel-projectile
+    ;; ivy
+    ;; ivy-rich
+    ;; ivy-xref
+    ;; (:when *ivy-posframe* ivy-posframe)
+    ;; (:when *ivy-prescient* prescient ivy-prescient)
 
     list-unicode-display
     mmm-mode
@@ -142,6 +149,15 @@ Packages list
     prescient
     pretty-mode
     quick-peek
+    ;; selectrum
+    selectrum
+    selectrum-prescient
+    embark
+    consult
+    consult-selectrum
+    consult-flycheck
+    marginalia
+
     symbol-overlay
     switch-window
     ;; treemacs
@@ -555,7 +571,7 @@ https://gitlab.com/emacs-stuff/indent-tools
 ** Ivy, Counsel and Swiper
 
 #+begin_src elisp
-  (require 'nasy-editor-ivy)
+  ;; (require 'nasy-editor-ivy)
 #+end_src
 
 #+include: "editor-ivy.org"
@@ -863,13 +879,13 @@ https://github.com/politza/pdf-tools
                             ("Float"  . #x211d)  ;; ℝxxxx
                             ("float"  . #x211d)  ;; ℝxxx
                             ("Int"    . #x2124)  ;; ℤxxx
-                            ("int"    . #x2124)  ;; 𝕫xxx
+                            ("int"    . #x2124)  ;; ℤxxx
                             ;; ("String" . #x1d57e)  ;; 𝕊 𝕾
                             ;; ("string" . #x1d598)  ;; 𝕤 𝖘
                             ;; ("str"    . #x1d598)  ;; 𝕤 𝖘
                             ("String" . (#x1d54a (Br . Bl) #x2006))  ;; 𝕊 xxxxxx
-                            ("string" . (#x1d564 (Br . Bl) #x2006))  ;; 𝕤 xxxxxx
-                            ("str"    . (#x1d564 (Br . Bl) #x2006))  ;; 𝕤 xxxx
+                            ("string" . (#x1d54a (Br . Bl) #x2006))  ;; 𝕤 xxxxxx x1d564
+                            ("str"    . (#x1d54a (Br . Bl) #x2006))  ;; 𝕤 xxxx
                             ("Char"   . #x2102)   ;; ℂx
                             ("char"   . (#x1d554 (Br . Bl) #x2006))  ;; 𝕔 x
 
@@ -1154,6 +1170,14 @@ https://www.emacswiki.org/emacs/RecentFiles
     (add-to-list 'recentf-exclude no-littering-var-directory)
     (add-to-list 'recentf-exclude no-littering-etc-directory))
 #+end_src
+
+** Selectrum & Related Packages                       :extensions:
+
+#+begin_src elisp
+  (require 'nasy-editor-selectrum)
+#+end_src
+
+#+include: "editor-selectrum.org"
 
 ** Snails
 

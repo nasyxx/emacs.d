@@ -1,0 +1,274 @@
+* Header                                                 :noexport:
+
+#+begin_src elisp
+  ;;; nasy-modeline.el --- Nasy's Emacs Configuration modeline file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs UI theme.
+
+  ;;; Code:
+#+end_src
+
+Nasy modeline.
+
+* Definition
+
+#+begin_src elisp
+  (defgroup nasy/modeline nil
+    "Nasy modeline group."
+    :group 'nasy)
+
+  (defcustom nasy/modeline-bar-width-x 1
+    "The nasy/modeline bar width."
+    :type 'float
+    :group 'nasy/modeline)
+
+  (defcustom nasy/modeline-left-bar-width-x 0.5
+    "The nasy/modeline left bar width."
+    :type 'float
+    :group 'nasy/modeline)
+
+  (defcustom nasy/modeline-right-bar-width-x 0.5
+    "The nasy/modeline right bar width."
+    :type 'float
+    :group 'nasy/modeline)
+
+  (defcustom nasy/modeline-space-width-x 1
+    "The nasy/modeline space width."
+    :type 'float
+    :group 'nasy/modeline)
+
+  (defcustom nasy/modeline-height-x 1
+    "The nasy/modeline height."
+    :type 'float
+    :group 'nasy/modeline)
+
+  (defcustom nasy/modeline-enable-count-word t
+    "If non-nil, it will be possible to add a word count to the modeline buffer-misc segment."
+    :type 'boolean
+    :group 'nasy/modeline)
+
+  (defcustom nasy/modeline-enable-count-word-modes
+    '(markdown-mode gfm-mode org-mode)
+    "Major modes in which to display word count continuously.
+
+  It respects `nasy/modeline-enable-count-word'."
+    :type '(repeat (symbol :tag "Major-Mode"))
+    :group 'nasy/modeline)
+
+  (defface nasy/modeline-base
+    '((t :inherit mode-line))
+    "Nasy modeline base face."
+    :group 'nasy/modeline)
+
+  (defface nasy/modeline-bar
+    `((t
+       :inherit nasy/modeline-base
+       :background "#EEDEB0"))
+    "Nasy modeline bar face."
+    :group 'nasy/modeline)
+
+  (defface nasy/modeline-time
+    `((t
+       :inherit nasy/modeline-base
+       :foreground "#50616D"))
+    "Nasy modeline time face."
+    :group 'nasy/modeline)
+
+  (defface nasy/modeline-status-r
+    `((t
+       :inherit nasy/modeline-base
+       :foreground "#F2ECDE"
+       :background "#50616D"))
+    "Nasy modeline status read only face."
+    :group 'nasy/modeline)
+
+  (defface nasy/modeline-status-m
+    `((t
+       :inherit nasy/modeline-base
+       :foreground "#F00056"
+       :background "#BCE672"
+       :underline (:style wave :color "#F00056")))
+    "Nasy modeline status modified face."
+    :group 'nasy/modeline)
+
+  (defface nasy/modeline-status-n
+    `((t
+       :inherit nasy/modeline-base
+       :foreground "#F00056"
+       :background "#B35C44"))
+    "Nasy modeline status not found face."
+    :group 'nasy/modeline)
+
+  (defface nasy/modeline-status-e
+    `((t
+       :inherit nasy/modeline-base
+       :foreground "#F2ECDE"
+       :background "#057748"))
+    "Nasy modeline status editable face."
+    :group 'nasy/modeline)
+
+
+  (defun nasy/modeline-align-right (text)
+    "Return TEXT with padding on the left.
+  The padding pushes TEXT to the right edge of the mode-line."
+    (declare (indent 0))
+    (let* ((font (face-attribute 'mode-line :font))
+           (glyph-list (font-get-glyphs font 0 (length text) text))
+           (len (cl-reduce (lambda (len glyph)
+                             (+ len (aref glyph 4)))
+                           glyph-list
+                           :initial-value 0))
+           (padding (propertize
+                     "a" 'display
+                     `(space :align-to (- (+ right
+                                             right-margin
+                                             (- 2
+                                                nasy/modeline-left-bar-width-x
+                                                nasy/modeline-right-bar-width-x
+                                                0))
+                                          (,len))))))
+      (concat padding text)))
+
+
+  (defmacro nasy/modeline-def (name &rest body)
+    "Nasy modeline defines NAME function with BODY."
+    (declare (indent 1))
+    (let ((fname (intern (format "nasy/modeline--%s" name))))
+      `(progn
+         (defun ,fname nil ,@body))))
+
+
+  (defmacro nasy/modeline-defv (name &rest body)
+    "Nasy modeline defines NAME variable with BODY."
+    (declare (indent 1))
+    (let ((vname (intern (format "nasy/modeline--%s" name))))
+      `(progn
+         (defvar ,vname ,@body))))
+
+
+  (nasy/modeline-defv bar
+    (propertize " "
+                'face 'nasy/modeline-bar
+                'display '(space
+                           :width nasy/modeline-bar-width-x
+                           :height nasy/modeline-height-x)))
+
+  (nasy/modeline-defv left-bar
+    (propertize " "
+                'face 'nasy/modeline-bar
+                'display '(space
+                           :width nasy/modeline-left-bar-width-x
+                           :height nasy/modeline-height-x)))
+
+  (nasy/modeline-defv right-bar
+    (propertize " "
+                'face 'nasy/modeline-bar
+                'display '(space
+                           :width nasy/modeline-right-bar-width-x
+                           :height nasy/modeline-height-x)))
+
+  (nasy/modeline-defv space
+    (propertize " " 'display '(space :width nasy/modeline-space-width-x)))
+
+  (nasy/modeline-def time
+    (propertize (format-time-string "%H:%M")
+                'face 'nasy/modeline-time))
+
+  (nasy/modeline-def reo
+    (let ((ro-text (concat nasy/modeline--left-bar "RO" nasy/modeline--right-bar))
+          (rw-text (concat nasy/modeline--left-bar "RW" nasy/modeline--right-bar))
+          (m-text  (concat nasy/modeline--left-bar "RM" nasy/modeline--right-bar))
+          (nf-text (concat nasy/modeline--left-bar "🚫" nasy/modeline--right-bar)))
+      (cond (buffer-read-only
+             (propertize ro-text 'face 'nasy/modeline-status-r))
+            ((and buffer-file-name (not (file-exists-p buffer-file-name)))
+             (if (buffer-modified-p)
+                 (propertize nf-text 'face 'nasy/modeline-status-m)
+               (propertize nf-text 'face 'nasy/modeline-status-n)))
+            ((and buffer-file-name (buffer-modified-p))
+             (propertize m-text 'face 'nasy/modeline-status-m))
+            (t
+             (propertize rw-text 'face 'nasy/modeline-status-e)))))
+
+  (nasy/modeline-def buffer-size
+    (propertize (concat nasy/modeline--left-bar
+                        (format-mode-line "%I")
+                        nasy/modeline--right-bar)
+                'face 'nasy/modeline-bar))
+
+  (nasy/modeline-defv major-mode-icon
+    (let ((icon (all-the-icons-icon-for-buffer)))
+      (propertize (concat " " icon " ")
+                  'display '(raise -0.17))))
+
+  (nasy/modeline-def buffer-name
+    (concat " "
+            (propertize (format-mode-line "%b")
+                        'face '(:weight bold :underline t)
+                        'mouse-face 'mode-line-highlight)
+            " "))
+
+  (nasy/modeline-def buffer-misc
+    (let* ((p  (if (member (format-mode-line "%p") '("Top" "Bot" "All"))
+                   (format-mode-line "%p")
+                 "Mid"))
+           (lc (format "%s %6s"p (format-mode-line "%l:%c")))
+           (nyan (if (and (featurep 'nyan-mode)
+                         nyan-mode)
+                     (concat " " (nyan-create)
+                                 " of")
+                   ""))
+           (ws (if (and nasy/modeline-enable-count-word
+                       (member major-mode nasy/modeline-enable-count-word-modes))
+                   (format " %dW" (count-words (point-min) (point-max))))))
+      (propertize (concat lc nyan ws)
+                  'mouse-face 'mode-line-highlight)))
+
+  (nasy/modeline-def base-left
+    (let ((bar (propertize nasy/modeline--bar
+                           'face '(:background "#EEDEB0")
+                           'display '(space :width 1))))
+      (concat bar)))
+
+  (nasy/modeline-def base-right
+    (concat (nasy/modeline--time)
+            nasy/modeline--space
+            nasy/modeline--bar))
+
+  (nasy/modeline-def left
+    (concat
+     (nasy/modeline--base-left)
+     (nasy/modeline--reo)
+     (nasy/modeline--buffer-size)
+     ;; (nasy/modeline--major-mode-icon)
+     (nasy/modeline--buffer-name)
+     (nasy/modeline--buffer-misc)))
+
+  (nasy/modeline-def right
+    (concat (nasy/modeline--base-right)))
+
+  (setq-default nasy/modeline-right-bar-width-x 0.5)
+
+  (setq-default header-line-format
+                `((:eval (nasy/modeline--left))
+                  (:eval (nasy/modeline-align-right
+                           (nasy/modeline--right)))))
+
+  (setq mode-line-format
+                `((:eval (nasy/modeline--left))
+                  (:eval (nasy/modeline-align-right
+                           (nasy/modeline--right)))))
+#+end_src
+
+* Footer                                                 :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-modeline)
+  ;;; nasy-modeline.el ends here
+#+end_src
