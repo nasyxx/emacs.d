@@ -263,7 +263,7 @@ I use ~org~ with ~org-plus-contrib~
      (org-latex-tables-booktabs . t)
 
      (org-level-color-stars-only . nil)
-     (org-list-indent-offset     . 2)
+     (org-list-indent-offset     . 0)
      (org-log-done               . t)
 
      (org-outline-path-complete-in-steps . nil)
