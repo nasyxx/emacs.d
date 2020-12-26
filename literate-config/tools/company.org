@@ -237,7 +237,7 @@
              (company-dabbrev-other-buffers     . 'all)
              (company-tooltip-align-annotations . t)
              (company-minimum-prefix-length     . 2)
-             (company-idle-delay                . .2)
+             (company-idle-delay                . 1)
              (company-tooltip-idle-delay        . .2)
              (company-require-match             . 'never))
     :config
