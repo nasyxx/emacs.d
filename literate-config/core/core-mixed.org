@@ -88,7 +88,7 @@
 #+begin_src elisp
   (when *is-a-mac*
     (add-to-list 'default-frame-alist
-                 '(ns-transparent-titlebar . t))
+                 '(ns-transparent-titlebar . nil))
 
     (add-to-list 'default-frame-alist
                  '(ns-appearance . light))
