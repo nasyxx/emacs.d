@@ -155,11 +155,12 @@ to optimize startup times.
 https://github.com/dholm/benchmark-init-el
 
 #+begin_src elisp
-  (straight-use-package 'benchmark-init)
+  (straight-use-package
+   '(benchmark-init :type git :host github :repo "nasyxx/benchmark-init-el"))
   (leaf benchmark-init
     :doc "This is a simple benchmark of calls to Emacs require and load functions."
     :url "https://github.com/dholm/benchmark-init-el"
-    :hook ((after-init . benchmark-init/deactivate))
+    :hook ((after-init-hook . benchmark-init/deactivate))
     :init (benchmark-init/activate))
 #+end_src
 
@@ -200,7 +201,7 @@ When using straight.el, the org version is needed to custom set.
   (straight-use-package 'org-plus-contrib)
 #+end_src
 
-* Footer                                                                        :noexport:
+* Footer                                                 :noexport:
 
 #+begin_src elisp :exports none
   (provide 'nasy-bootstrap)
