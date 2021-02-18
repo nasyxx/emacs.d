@@ -29,7 +29,7 @@ https://www.emacswiki.org/emacs/IbufferMode
   operate on buffers much in the same manner as Dired."
     :url "https://www.emacswiki.org/emacs/IbufferMode"
     :tag "buffer" "convenience"
-    :bind (("C-x C-b" . ibuffer))
+    ;; :bind (("C-x C-b" . ibuffer))
     :hook ((ibuffer-mode-hook . ibuffer-switch-to-normal))
     :custom
     (ibuffer-saved-filter-groups
