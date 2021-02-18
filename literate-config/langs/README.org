@@ -58,6 +58,7 @@
 
     ;; python
     elpy
+    lsp-pyright
 
     company-restclient
     elvish-mode
@@ -505,20 +506,20 @@ Emacs client/library for the Language Server Protocol
                          '("#!/usr/bin/env python" n>
                            "# -*- coding: utf-8 -*-" n n>
                            "r\"\"\"" n>
-                           "心之憂矣於我歸處 Python ♡ Nasy." n n>
+                           "Python ♡ Nasy." n n>
                            "    |             *         *" n>
                            "    |                  .                ." n>
-                           "    |           .                          舒而脫脫兮" n>
+                           "    |           .                              登" n>
                            "    |     *                      ," n>
-                           "    |                   .                  無感我帨兮" n>
+                           "    |                   .                      至" n>
                            "    |" n>
-                           "    |                               *      無使尨也吠" n>
+                           "    |                               *          思" n>
                            "    |          |\\___/|" n>
-                           "    |          )    -(             .              ·" n>
+                           "    |          )    -(             .           聖 ·" n>
                            "    |         =\\ -   /=" n>
-                           "    |           )===(       *" n>
+                           "    |           )===(       *                  " n>
                            "    |          /   - \\" n>
-                           "    |          |-    |" n>
+                           "    |          |-    |                         " n>
                            "    |         /   -   \\     0.|.0" n>
                            "    |  NASY___\\__( (__/_____(\\=/)__+1s____________" n>
                            "    |  ______|____) )______|______|______|______|_" n>
@@ -540,13 +541,12 @@ Emacs client/library for the Language Server Protocol
 
 #+begin_src elisp
   (leaf elpy
-    :if (or (eq *py-module* 'elpy)
-           (eq *py-module* 'pylance))
+    :if (eq *py-module* 'elpy)
     :init
-    (add-to-list 'exec-path "/Users/Nasy/Library/Python/3.8/bin")
+    ;; (add-to-list 'exec-path "/Users/Nasy/Library/Python/3.8/bin")
     (when (eq *py-module* 'elpy)
-     (add-to-list 'elpy-modules 'elpy-module-autodoc)
-     (add-to-list 'elpy-modules 'elpy-module-eldoc))
+      (add-to-list 'elpy-modules 'elpy-module-autodoc)
+      (add-to-list 'elpy-modules 'elpy-module-eldoc))
     :custom
     (elpy-rpc-virtualenv-path . 'current)
     (elpy-modules             . '(elpy-module-company
@@ -560,30 +560,30 @@ Emacs client/library for the Language Server Protocol
     :advice
     (:before python-mode elpy-enable)
     (:after elpy-module-folding (lambda (&rest _)
-                                 (define-key elpy-mode-map (kbd "<mouse-1>") nil))))
+                                  (define-key elpy-mode-map (kbd "<mouse-1>") nil))))
 #+end_src
 
-*** pylance
+*** lsp-pyright
 
 #+begin_src elisp
-  (leaf nasy-langs-pylance
+  (leaf lsp-pyright
+    :if (eq *py-module* 'pyright)
     :preface
-    (defun start-lsp-pylance ()
-      "Start lsp-pylance."
-      (require 'nasy-langs-pylance)
+    (defun start-lsp-pyright ()
+      "Start lsp pyright."
+      (require 'lsp-pyright)
       (lsp)
       (gsetq elpy-modules (remove 'elpy-module-autodoc elpy-modules))
       (gsetq elpy-modules (remove 'elpy-module-eldoc   elpy-modules))
       (python-flycheck-setup))
+    :hook (python-mode-hook . start-lsp-pyright)
     :config
-    (when (eq *py-module* 'pylance)
+    (when (eq *py-module* 'pyright)
       (nasy/add-company-backend 'python-mode
         '(company-capf
           elpy-company-backend
           company-files
-          :with company-tabnine company-yasnippet)))
-    :hook
-    (python-mode-hook . start-lsp-pylance))
+          :with company-tabnine company-yasnippet))))
 #+end_src
 
 ** restclient.el
