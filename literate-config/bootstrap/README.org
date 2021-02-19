@@ -171,17 +171,17 @@ Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
 https://gitlab.com/koral/gcmh
 
 #+begin_src elisp
-  ;; (straight-use-package 'gcmh)
-  ;; (leaf gcmh
-  ;;   :doc "Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection."
-  ;;   :url "https://gitlab.com/koral/gcmh"
-  ;;   :custom
-  ;;   (gcmh-verbose             . t)
-  ;;   (gcmh-lows-cons-threshold . #x800000)
-  ;;   (gcmh-high-cons-threshold . most-positive-fixnum)
-  ;;   (gcmh-idle-delay          . 3600)
-  ;;   :config
-  ;;   (gcmh-mode))
+  (straight-use-package 'gcmh)
+  (leaf gcmh
+    :doc "Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection."
+    :url "https://gitlab.com/koral/gcmh"
+    :custom
+    (gcmh-verbose             . t)
+    (gcmh-lows-cons-threshold . #x800000)
+    (gcmh-high-cons-threshold . most-positive-fixnum)
+    (gcmh-idle-delay          . 3600)
+    :config
+    (gcmh-mode))
 #+end_src
 
 * No Littering
