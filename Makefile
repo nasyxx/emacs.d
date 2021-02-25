@@ -17,7 +17,7 @@ init.el: literate-config/README.org
 ## Generate bootstrap from literate-config/bootstrap/README.org
 config/nasy-bootstrap.el: literate-config/bootstrap/README.org
 	@echo "Generate bootstrap from literate-config/bootstrap/README.org"
-	@rm -rf config/core var/org/timestamps/bootstrap.cache
+	@rm -rf config/nasy-bootstrap.el var/org/timestamps/bootstrap.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "bootstrap")'
 
 ## Generate bootstrap from literate-config/bootstrap/README.org
