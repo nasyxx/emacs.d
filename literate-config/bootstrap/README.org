@@ -146,7 +146,19 @@ Also, there is a custom directory.
   (require 'user-config nil t)
 #+end_src
 
-* Benchmark-init
+* Benchmark
+
+** Benchmark-timer
+
+#+begin_src elisp
+  (defmacro nasy/timer (&rest body)
+    "Measure and return the time it takes evaluating BODY."
+    `(let ((time (current-time)))
+       ,@body
+       (float-time (time-since time))))
+#+end_src
+
+** Benchmark-init
 
 This is a simple benchmark of calls to Emacs require and load functions. It can
 be used to keep track of where time is being spent during Emacs startup in order
@@ -171,17 +183,44 @@ Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
 https://gitlab.com/koral/gcmh
 
 #+begin_src elisp
-  (straight-use-package 'gcmh)
+  ;; (straight-use-package 'gcmh)
   (leaf gcmh
+    :disabled t
     :doc "Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection."
     :url "https://gitlab.com/koral/gcmh"
+    :hook (after-init-hook . gcmh-mode)
+    :mode-hook
+    (gsetq gc-cons-threshold #x800000)
     :custom
-    (gcmh-verbose             . t)
-    (gcmh-lows-cons-threshold . #x800000)
-    (gcmh-high-cons-threshold . most-positive-fixnum)
-    (gcmh-idle-delay          . 3600)
+    (garbage-collection-messages . t)
+    (gcmh-verbose                . t)
+    (gcmh-lows-cons-threshold    . #x800000)
+    (gcmh-high-cons-threshold    . most-positive-fixnum)
+    (gcmh-idle-delay             . 3600))
+#+end_src
+
+#+begin_src elisp
+  (leaf emacs
+    :preface
+    (defun nasy/upper-gc ()
+      (setq gc-cons-threshold #x10000000))
+    (defun nasy/lower-gc ()
+      (run-at-time 1 nil (lambda () (setq gc-cons-threshold #x4000000))))
+    (defun nasy/gc ()
+      (message "Garbage Collector has run for %.06fsec"
+               (nasy/timer (garbage-collect))))
+    :hook
+    (minibuffer-setup-hook . nasy/upper-gc)
+    (minibuffer-exit-hook  . nasy/lower-gc)
+    :advice
+    (:after after-focus-change-function (lambda ()
+                                          (unless (frame-focus-state)
+                                            (nasy/gc))))
+    :custom
+    (garbage-collection-messages . nil)
     :config
-    (gcmh-mode))
+    (run-with-idle-timer 360 t
+                         #'nasy/gc))
 #+end_src
 
 * No Littering
