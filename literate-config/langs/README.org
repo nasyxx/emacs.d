@@ -315,10 +315,11 @@ Emacs client/library for the Language Server Protocol
       (require 'lsp-haskell)
       (lsp))
     :init
-    (nasy/add-company-backend 'haskell-mode '(company-capf
-                                              company-lsp
-                                              company-files
-                                              :with company-tabnine company-yasnippet))
+    (after-x 'company
+      (nasy/add-company-backend 'haskell-mode '(company-capf
+                                                company-lsp
+                                                company-files
+                                                :with company-tabnine company-yasnippet)))
     :hook
     (haskell-mode-hook . start-lsp-haskell))
 #+end_src
@@ -535,7 +536,8 @@ Emacs client/library for the Language Server Protocol
   (defun python-flycheck-setup ()
     "Add python checker for lsp-ui."
     (after-x 'lsp-ui
-      (flycheck-add-next-checker 'lsp              'python-flake8))
+      (flycheck-add-next-checker 'lsp              'python-flake8)
+      (flycheck-inline-mode -1))
       ;; flake8 already have python-mypy and python-pylint as the next checker
       ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
     (flycheck-disable-checker 'python-pylint)
@@ -582,7 +584,6 @@ Emacs client/library for the Language Server Protocol
 
 #+begin_src elisp
   (leaf elpy
-    :if (eq *py-module* 'elpy)
     :init
     ;; (add-to-list 'exec-path "/Users/Nasy/Library/Python/3.8/bin")
     (when (eq *py-module* 'elpy)
@@ -595,9 +596,10 @@ Emacs client/library for the Language Server Protocol
                                   elpy-module-yasnippet))
     :config
     (when (eq *py-module* 'elpy)
-      (nasy/add-company-backend 'python-mode '(elpy-company-backend
-                                               company-files
-                                               :with company-tabnine company-yasnippet)))
+      (after-x 'company
+        (nasy/add-company-backend 'python-mode '(elpy-company-backend
+                                                 company-files
+                                                 :with company-tabnine company-yasnippet))))
     :advice
     (:before python-mode elpy-enable)
     (:after elpy-module-folding (lambda (&rest _)
@@ -609,6 +611,7 @@ Emacs client/library for the Language Server Protocol
 #+begin_src elisp
   (leaf lsp-pyright
     :if (eq *py-module* 'pyright)
+    :after elpy
     :preface
     (defun start-lsp-pyright ()
       "Start lsp pyright."
@@ -620,11 +623,12 @@ Emacs client/library for the Language Server Protocol
     :hook (python-mode-hook . start-lsp-pyright)
     :config
     (when (eq *py-module* 'pyright)
-      (nasy/add-company-backend 'python-mode
-        '(company-capf
-          elpy-company-backend
-          company-files
-          :with company-tabnine company-yasnippet))))
+      (after-x 'company
+        (nasy/add-company-backend 'python-mode
+          '(company-capf
+            elpy-company-backend
+            company-files
+            :with company-tabnine company-yasnippet)))))
 #+end_src
 
 ** restclient.el
@@ -636,9 +640,10 @@ https://github.com/pashky/restclient.el
 #+begin_src elisp
   (leaf restclient
     :init
-    (nasy/add-company-backend
-      'restclient-mode
-      '(company-restclient company-files)))
+    (after-x 'company
+      (nasy/add-company-backend
+        'restclient-mode
+        '(company-restclient company-files))))
 #+end_src
 
 ** Rust
