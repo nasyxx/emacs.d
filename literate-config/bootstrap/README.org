@@ -190,8 +190,6 @@ https://gitlab.com/koral/gcmh
     :doc "Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection."
     :url "https://gitlab.com/koral/gcmh"
     :hook (after-init-hook . gcmh-mode)
-    :mode-hook
-    (gsetq gc-cons-threshold #x800000)
     :custom
     (garbage-collection-messages . t)
     (gcmh-verbose                . t)
@@ -202,11 +200,12 @@ https://gitlab.com/koral/gcmh
 
 #+begin_src elisp
   (leaf emacs
+    :disabled nil
     :preface
     (defun nasy/upper-gc ()
-      (setq gc-cons-threshold #x10000000))
+      (setq gc-cons-threshold #x1000000))
     (defun nasy/lower-gc ()
-      (run-at-time 1 nil (lambda () (setq gc-cons-threshold #x4000000))))
+      (run-at-time 1 nil (lambda () (setq gc-cons-threshold #x800000))))
     (defun nasy/gc ()
       (message "Garbage Collector has run for %.06fsec"
                (nasy/timer (garbage-collect))))
