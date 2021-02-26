@@ -107,12 +107,17 @@ clean-build:
 ## Clean straight (straight/)
 clean-straight:
 	rm -rf straight
-.PHONY: clean-build
 
 
 ## clean all build straight
 clean-all: clean-build clean-straight
-.PHONY: clean-all
+.PHONY: clean-all clean-straight clean-build
+
+
+## Rebuild
+rebuild: clean-all
+	make generate -j
+.PHONY: rebuild
 
 
 ## Update config
