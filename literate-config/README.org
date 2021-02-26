@@ -73,7 +73,7 @@ collection.
 * Tools
 
 #+begin_src elisp
-  (nasy/local-repo tools)
+  (nasy/local-repo tools :build (:not compile))
   (require 'nasy-tools)
 #+end_src
 

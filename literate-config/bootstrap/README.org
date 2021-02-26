@@ -127,12 +127,13 @@ Literate config will generate emacslisp files to ~config~ folder.  However, we u
 straight.el to handle them, we do not need to add them to ~load-path~ manually.
 
 #+begin_src elisp
-  (defmacro nasy/local-repo (repo)
+  (defmacro nasy/local-repo (repo &rest body)
     "Nasy load local REPO."
     (let ((n-repo (format "nasy-%s" (symbol-name repo))))
       `(progn
          (straight-use-package
           '(,(intern n-repo)
+            ,@body
             :local-repo ,(expand-file-name
                           (format "config/%s" (symbol-name repo))
                           user-emacs-directory))))))
@@ -213,7 +214,7 @@ https://gitlab.com/koral/gcmh
     (minibuffer-setup-hook . nasy/upper-gc)
     (minibuffer-exit-hook  . nasy/lower-gc)
     :advice
-    (:after after-focus-change-function (lambda ()
+    (:after after-focus-change-function (lambda (&rest _)
                                           (unless (frame-focus-state)
                                             (nasy/gc))))
     :custom
