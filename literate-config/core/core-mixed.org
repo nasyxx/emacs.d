@@ -131,7 +131,6 @@
         (view-mode 1))))
   (advice-add 'shell-command-on-region :after 'nasy/shell-command-in-view-mode)
 
-
   (straight-use-package 'exec-path-from-shell)
   (leaf exec-path-from-shell
     :init
@@ -174,12 +173,13 @@
 
     (advice-add 'projectile-find-file :around 'call-with-quick-shell-command)
     :custom
-    (shell-command-switch . "-ic")
-    ((exec-path-from-shell-arguments
-      exec-path-from-shell-check-startup-files) . nil)
+    (exec-path-from-shell-warn-duration-millis . 20)
+    (shell-command-switch . "-dc")
+    (exec-path-from-shell-arguments . '("-d" "-f"))
+    ;; ((exec-path-from-shell-arguments
+    ;;   exec-path-from-shell-check-startup-files) . nil)
     :config
-    (exec-path-from-shell-initialize)
-    (add-to-list 'exec-path "~/.pyenv/shims/"))
+    (exec-path-from-shell-initialize))
 #+end_src
 
 * Text Scale

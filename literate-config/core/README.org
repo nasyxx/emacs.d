@@ -56,7 +56,7 @@ Core Libs include useful functions, macros and alias.
 
 #+include: "core-keybindings.org"
 
-* Mixed
+* Core Mixed
 
 #+begin_src elisp
   (require 'nasy-core-mixed)
