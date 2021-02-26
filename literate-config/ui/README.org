@@ -48,7 +48,7 @@
     (dashboard-org-agenda-categories . '("Calendar" "Tasks" "Appointments"))
     `(dashboard-startup-banner       . ,(expand-file-name "mega.png" user-emacs-directory))
     (dashboard-items . '((recents   . 10)
-                         (bookmarks . 5)
+                         (bookmarks . 10)
                          ;; (registers . 5)
                          ;; (agenda    . 5)
                          (projects  . 10)))
