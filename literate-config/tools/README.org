@@ -229,9 +229,9 @@ https://github.com/company-mode/company-mode
 https://github.com/jwiegley/emacs-async
 
 #+begin_src elisp
-    (leaf dired-async
-      :commands dired-async-mode
-      :hook dired-mode-hook)
+  (leaf dired-async
+    :commands dired-async-mode
+    :hook dired-mode-hook)
 #+end_src
 
 ** Emojify and all-the-icons
@@ -402,12 +402,12 @@ https://github.com/xuchunyang/grab-mac-link.el
 
 ** iBuffer
 
-#+include: "ibuffer.org"
-
 #+begin_src elisp
-  (leaf nasy-editor-ibuffer
+  (leaf nasy-tools-ibuffer
     :require t)
 #+end_src
+
+#+include: "ibuffer.org"
 
 ** imenu list
 

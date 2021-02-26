@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-editor-ibuffer.el")
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-tools-ibuffer.el")
 
 * Header                                                                        :noexport:
 
@@ -31,6 +31,10 @@ https://www.emacswiki.org/emacs/IbufferMode
     :tag "buffer" "convenience"
     ;; :bind (("C-x C-b" . ibuffer))
     :hook ((ibuffer-mode-hook . ibuffer-switch-to-normal))
+    :init
+    (defun ibuffer-switch-to-normal ()
+      "ibuffer swith to normal filter groups."
+      (ibuffer-switch-to-saved-filter-groups "Normal"))
     :custom
     (ibuffer-saved-filter-groups
      . '(("Normal"
@@ -102,10 +106,7 @@ https://www.emacswiki.org/emacs/IbufferMode
                    " "
                    (vc-status 12 12 :left)
                    " "
-                   vc-relative-file)))
-    (defun ibuffer-switch-to-normal ()
-      "ibuffer swith to normal filter groups."
-      (ibuffer-switch-to-saved-filter-groups "Normal")))
+                   vc-relative-file))))
 #+end_src
 
 * ibuffer vc
@@ -138,6 +139,6 @@ https://github.com/seagle0128/all-the-icons-ibuffer
 * Footer                                                                        :noexport:
 
 #+begin_src elisp :exports none
-  (provide 'nasy-editor-ibuffer)
-  ;;; nasy-editor-ibuffer.el ends here
+  (provide 'nasy-tools-ibuffer)
+  ;;; nasy-tools-ibuffer.el ends here
 #+end_src
