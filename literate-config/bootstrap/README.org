@@ -194,23 +194,23 @@ Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
 https://gitlab.com/koral/gcmh
 
 #+begin_src elisp
-  ;; (straight-use-package 'gcmh)
+  (straight-use-package 'gcmh)
   (leaf gcmh
-    :disabled t
+    :disabled nil
     :doc "Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection."
     :url "https://gitlab.com/koral/gcmh"
     :hook (after-init-hook . gcmh-mode)
     :custom
     (garbage-collection-messages . t)
     (gcmh-verbose                . t)
-    (gcmh-lows-cons-threshold    . #x800000)
-    (gcmh-high-cons-threshold    . most-positive-fixnum)
-    (gcmh-idle-delay             . 3600))
+    (gcmh-lows-cons-threshold    . #x4000000)  ;; 64MB
+    (gcmh-high-cons-threshold    . #x10200000)  ;; 256MB
+    (gcmh-idle-delay             . 360))
 #+end_src
 
 #+begin_src elisp
   (leaf emacs
-    :disabled nil
+    :disabled t
     :preface
     (defun nasy/upper-gc ()
       (setq gc-cons-threshold #x1000000))
@@ -219,9 +219,9 @@ https://gitlab.com/koral/gcmh
     (defun nasy/gc ()
       (message "Garbage Collector has run for %.06fsec"
                (nasy/timer (garbage-collect))))
-    :hook
-    (minibuffer-setup-hook . nasy/upper-gc)
-    (minibuffer-exit-hook  . nasy/lower-gc)
+    ;; :hook
+    ;; (minibuffer-setup-hook . nasy/upper-gc)
+    ;; (minibuffer-exit-hook  . nasy/lower-gc)
     :advice
     (:after after-focus-change-function (lambda (&rest _)
                                           (unless (frame-focus-state)
