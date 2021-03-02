@@ -314,6 +314,7 @@ Emacs client/library for the Language Server Protocol
       (require 'lsp)
       (require 'lsp-haskell)
       (lsp))
+    :custom (lsp-haskell-formatting-provider . "brittany")
     :init
     (after-x 'company
       (nasy/add-company-backend 'haskell-mode '(company-capf
