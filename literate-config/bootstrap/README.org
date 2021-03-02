@@ -137,6 +137,16 @@ straight.el to handle them, we do not need to add them to ~load-path~ manually.
             :local-repo ,(expand-file-name
                           (format "config/%s" (symbol-name repo))
                           user-emacs-directory))))))
+
+  (defmacro nasy/extra-repo (repo &rest body)
+    "Nasy extra local site-lisp REPO."
+    `(progn
+       (straight-use-package
+        '(,repo
+          ,@body
+          :local-repo ,(expand-file-name
+                        (format "extra/site-lisp/%s" (symbol-name repo))
+                        user-emacs-directory)))))
 #+end_src
 
 Also, there is a custom directory.
