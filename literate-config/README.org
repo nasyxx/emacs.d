@@ -110,10 +110,6 @@ collection.
 
 #+begin_src elisp
   (nasy/extra-repo casouri)
-  (leaf vundo
-    :commands vundo
-    :bind (:vundo--mode-map
-           ("C-g" . kill-buffer-and-window)))
 #+end_src
 
 * Epilogue

@@ -39,6 +39,31 @@ TYPE is the type of buffer you want."
     (setq buf (get-buffer-create "*vundo-test*"))
     (pop-to-buffer buf)))
 
+;;; Customization
+
+(defgroup vundo
+  '((vundo-node custom-face)
+    (vundo-stem custom-face)
+    (vundo-highlight custom-face)
+    (vundo-translation-alist custom-variable))
+  "Visual undo tree."
+  :group 'undo)
+
+(defface vundo-node '((t . (:inherit 'default)))
+  "Face for nodes in the undo tree.")
+
+(defface vundo-stem '((t . (:inherit 'default)))
+  "Face for stems between nodes in the undo tree.")
+
+(defface vundo-highlight '((t . (:inherit 'default)))
+  "Face for the highlighted node in the undo tree.")
+
+(defcustom vundo-translation-alist nil
+  "An alist mapping text to their translations.
+E.g., mapping ○ to o, ● to *. Key and value must be character,
+not string."
+  :type 'alist)
+
 ;;; Undo list to mod list
 
 (cl-defstruct vundo-m
@@ -230,6 +255,19 @@ If a line is not COL columns long, skip that line."
     (let ((indent-tabs-mode nil))
       (indent-to-column col))))
 
+(defun vundo--translate (text)
+  "Translate each character in TEXT and return it.
+If the character has a mapping in `vundo-translation-alist',
+translate to the value."
+  (seq-mapcat (lambda (c)
+                (char-to-string
+                 (alist-get c vundo-translation-alist c)))
+              text 'string))
+
+(defun vundo--put-face (beg end face)
+  "Add FACE to the text between (+ (point) BEG) and (+ (point) END)."
+  (put-text-property (+ (point) beg) (+ (point) end) 'face face))
+
 (defun vundo--draw-tree (mod-list)
   "Draw the tree in MOD-LIST in current buffer."
   (let* ((root (nth 0 mod-list))
@@ -240,7 +278,7 @@ If a line is not COL columns long, skip that line."
       (let* ((node (pop node-queue))
              (children (vundo-m-children node))
              (parent (vundo-m-parent node))
-             ;; NODE is the last child of PARENT.
+             ;; Is NODE the last child of PARENT?
              (node-last-child-p
               (if parent
                   (eq node (car (last (vundo-m-children parent)))))))
@@ -248,7 +286,8 @@ If a line is not COL columns long, skip that line."
         (if parent (goto-char (vundo-m-point parent)))
         (let ((col (max 0 (1- (current-column)))))
           (if (null parent)
-              (insert "○")
+              (progn (insert (vundo--translate "○"))
+                     (vundo--put-face -1 0 'vundo-node))
             (let ((planned-point (point)))
               ;; If a node is blocking, try next line.
               ;; Example: P--*  Here we want to add
@@ -257,20 +296,23 @@ If a line is not COL columns long, skip that line."
               (while (not (looking-at (rx (or "    " eol))))
                 (vundo--next-line-at-column col)
                 (if (looking-at "$")
-                    (insert "│")
+                    (insert (vundo--translate "│"))
                   (delete-char 1)
-                  (insert "│")))
+                  (insert (vundo--translate "│")))
+                (vundo--put-face -1 0 'vundo-stem))
               ;; Make room for inserting the new node.
               (unless (looking-at "$")
                 (delete-char 3))
               ;; Insert the new node.
               (if (eq (point) planned-point)
-                  (insert "──○")
+                  (insert (vundo--translate "──○"))
                 ;; Delete the previously inserted |.
                 (delete-char -1)
                 (if node-last-child-p
-                    (insert "└──○")
-                  (insert "├──○"))))))
+                    (insert (vundo--translate "└──○"))
+                  (insert (vundo--translate "├──○"))))
+              (vundo--put-face -4 -1 'vundo-stem)
+              (vundo--put-face -1 0 'vundo-node))))
         ;; Store point so we can later come back to this node.
         (setf (vundo-m-point node) (point))
         ;; Associate the text node in buffer with the node object.
@@ -303,6 +345,7 @@ WINDOW is the window that was/is displaying the vundo buffer."
     (define-key map (kbd "p") #'vundo-previous)
     (define-key map (kbd "<up>") #'vundo-previous)
     (define-key map (kbd "q") #'kill-buffer-and-window)
+    (define-key map (kbd "C-g") #'kill-buffer-and-window)
     (define-key map (kbd "i") #'vundo--inspect)
     (define-key map (kbd "d") #'vundo--debug)
     map)
@@ -410,13 +453,17 @@ If INCREMENTAL non-nil, reuse some date."
   (car (vundo--eqv-list-of (car (last mod-list)))))
 
 (defun vundo--toggle-highlight (arg node)
-  "Toggle highlight of NODE in a vundo buffer.
+  "Toggle highlight of NODE.
 Highlight if ARG >= 0, de-highlight if ARG < 0."
   (goto-char (vundo-m-point node))
   (if (>= arg 0)
-      (put-text-property (1- (point)) (point) 'display "●")
-    (put-text-property (1- (point)) (point) 'display nil)))
+      (add-text-properties (1- (point)) (point)
+                           (list 'display (vundo--translate "●")
+                                 'face 'vundo-highlight))
+    (add-text-properties (1- (point)) (point)
+                         (list 'display nil 'face 'vundo-node))))
 
+;;;###autoload
 (defun vundo ()
   "Display visual undo for current buffer."
   (interactive)
