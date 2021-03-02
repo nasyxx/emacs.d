@@ -318,7 +318,6 @@ Emacs client/library for the Language Server Protocol
     :init
     (after-x 'company
       (nasy/add-company-backend 'haskell-mode '(company-capf
-                                                company-lsp
                                                 company-files
                                                 :with company-tabnine company-yasnippet)))
     :hook
