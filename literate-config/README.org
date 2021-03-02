@@ -110,6 +110,9 @@ collection.
 
 #+begin_src elisp
   (nasy/extra-repo casouri)
+  (leaf vundo
+    :bind
+    ("s-/" . vundo))
 #+end_src
 
 * Epilogue
