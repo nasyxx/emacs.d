@@ -180,7 +180,8 @@ Modular in-buffer completion framework for Emacs.
 https://github.com/company-mode/company-mode
 
 #+begin_src elisp :exports none
-  (require 'nasy-tools-company)
+  (leaf nasy-tools-company
+    :require t)
 #+end_src
 
 #+include: "company.org"
