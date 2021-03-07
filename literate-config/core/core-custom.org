@@ -209,7 +209,14 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
    :group 'nasy
    :type 'symbol)
 
-  (defcustom *font-cjk* "Xingkai SC"
+  (defcustom *font-cjk* "I.Ngaan"
+   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect.
+
+  'I.Ngaan' font from `http://founder.acgvlyric.org/iu/doku.php/造字:開源字型_i.顏體'."
+   :group 'nasy
+   :type 'string)
+
+  (defcustom *font-cjk-2* "Xingkai SC"
    "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
    :group 'nasy
    :type 'string)

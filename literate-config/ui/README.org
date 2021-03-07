@@ -29,6 +29,15 @@
 #+begin_src elisp
   (leaf dashboard
     :commands dashboard-setup-startup-hook
+    :preface
+    (defun nasy/wfw1 (&rest _)
+      "Widget forward 1."
+      (interactive)
+      (widget-forward 1))
+    (defun nasy/fw2 (&rest _)
+      "Forward 2 chars."
+      (interactive "p")
+      (forward-char 2))
     :bind
     ("<f5>" . dashboard-refresh-buffer)
     (:dashboard-mode-map
@@ -41,7 +50,7 @@
      ("<mouse-1>"      . widget-button-click)
      ("<mouse-2>"      . widget-button-click)
      ("<up>"           . widget-backward)
-     ("<down>"         . (lambda () (interactive) (widget-forward 1))))
+     ("<down>"         . nasy/wfw1))
     :hook ((dashboard-mode-hook . (lambda () (gsetq-local tab-width 1)))
            (after-init-hook     . dashboard-setup-startup-hook))
     :custom
@@ -70,21 +79,16 @@
                (,(all-the-icons-octicon "gear" :height 1.1 :v-adjust 0.0)
                 "Config"
                 "Config File"
-                (lambda (&rest _) (let ((upath (expand-file-name "custom/user-config.el" user-emacs-directory)))
-                                   (epath (expand-file-name "custom/user-config-example.el" user-emacs-directory)))
-                               (when (and (file-exists-p epath)
-                                         (not (file-exists-p upath)))
-                                 (copy-file epath upath))
-                               (find-file upath)))
+                (lambda (&rest _) (let ((upath (expand-file-name "custom/user-config.el" user-emacs-directory))))
+                               (epath (expand-file-name "custom/user-config-example.el" user-emacs-directory))
+                  (when (and (file-exists-p epath)
+                            (not (file-exists-p upath)))
+                    (copy-file epath upath))
+                  (find-file upath)))
                (,(all-the-icons-octicon "book" :height 1.1 :v-adjust 0.0)
                 "Document"
                 "Document Page"
                 (lambda (&rest _) (browse-url "https://emacs.nasy.moe/")))))))
-
-    (defun nasy/fw2 (&rest _)
-      "Forward 2 chars."
-      (interactive "p")
-      (forward-char 2))
     :advice
     (:after dashboard-next-line     nasy/fw2)
     (:after widget-forward          nasy/fw2)
@@ -120,13 +124,21 @@
                         :size   *font-size*))
 
       (dolist (charset '(kana han cjk-misc bopomofo))
-        (set-fontset-font (frame-parameter nil 'font)
-                          charset
-                          (font-spec :name   *font-cjk*
-                                     :weight *font-weight-cjk*
-                                     :size   *font-size-cjk*)
-                          frame
-                          'prepend))
+        (progn
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :name   *font-cjk-2*
+                                       :weight *font-weight-cjk*
+                                       :size   *font-size-cjk*)
+                            frame
+                            'prepend)
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :name   *font-cjk*
+                                       :weight *font-weight-cjk*
+                                       :size   *font-size-cjk*)
+                            frame
+                            'prepend)))
 
       (if *is-a-mac*
            ;; For NS/Cocoa
