@@ -27,7 +27,7 @@ bootstrap: config/nasy-bootstrap.el
 ## Generate core from literate-config/core
 config/core: $(wildcard literate-config/core/*.org)
 	@echo "Generate core from literate-config/core"
-	@rm -rf config/core var/org/timestamps/core.cache
+	@rm -rf config/core straight/build/nasy-core var/org/timestamps/core.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "core")'
 
 ## Generate core from literate-config/core
@@ -37,7 +37,7 @@ core: config/core
 ## Generate editor from literate-config/editor
 config/editor: $(wildcard literate-config/editor/*.org)
 	@echo "Generate editor from literate-config/editor"
-	@rm -rf config/editor var/org/timestamps/editor.cache
+	@rm -rf config/editor straight/build/nasy-editor var/org/timestamps/editor.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "editor")'
 
 ## Generate editor from literate-config/editor
@@ -47,7 +47,7 @@ editor: config/editor
 ## Generate tools from literate-config/tools
 config/tools: $(wildcard literate-config/tools/*.org)
 	@echo "Generate tools from literate-config/tools"
-	@rm -rf config/tools var/org/timestamps/tools.cache
+	@rm -rf config/tools straight/build/nasy-tools var/org/timestamps/tools.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "tools")'
 
 ## Generate tools from literate-config/tools
@@ -57,7 +57,7 @@ tools: config/tools
 ## Generate langs from literate-config/langs
 config/langs: $(wildcard literate-config/langs/*.org)
 	@echo "Generate langs from literate-config/langs"
-	@rm -rf config/langs var/org/timestamps/langs.cache
+	@rm -rf config/langs straight/build/nasy-langs var/org/timestamps/langs.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "langs")'
 
 ## Generate langs from literate-config/langs
@@ -67,7 +67,7 @@ langs: config/langs
 ## Generate org from literate-config/org
 config/org: $(wildcard literate-config/org/*.org)
 	@echo "Generate org from literate-config/org"
-	@rm -rf config/org var/org/timestamps/org.cache
+	@rm -rf config/org straight/build/nasy-org var/org/timestamps/org.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "org")'
 
 ## Generate org from literate-config/org
@@ -77,7 +77,7 @@ org: config/org
 ## Generate ui from literate-config/ui
 config/ui: $(wildcard literate-config/ui/*.org)
 	@echo "Generate ui from literate-config/ui"
-	@rm -rf config/ui var/org/timestamps/ui.cache
+	@rm -rf config/ui straight/build/nasy-ui var/org/timestamps/ui.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "ui")'
 
 ## Generate ui
