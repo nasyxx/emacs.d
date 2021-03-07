@@ -45,7 +45,7 @@ At the same time, I use [[https://github.com/conao3/leaf.el][leaf.el]] to manage
         straight-repository-branch              "master"
         straight-vc-git-default-clone-depth     1
         straight-enable-use-package-integration nil
-        straight-check-for-modifications        '(find-at-startup find-when-checking)
+        straight-check-for-modifications        '(find-when-checking)
         straight-fix-flycheck                   t)
 
   (defvar bootstrap-version)
