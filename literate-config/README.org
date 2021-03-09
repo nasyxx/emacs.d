@@ -12,7 +12,7 @@ This includes some necessary headers.
 
   ;;; Commentary:
 
-  ;; Nasy's emacs.d init file.  For macOS and Emacs 26, Emacs 27.
+  ;; Nasy's emacs.d init file.  For macOS and Emacs 28.
 #+end_src
 
 #+begin_src elisp :exports none
@@ -21,8 +21,7 @@ This includes some necessary headers.
   ;; This is a file generated from a literate programing source file located at
   ;; README.org
   ;;
-  ;; You should make any changes there and regenerate it from Emacs org-mode
-  ;; using C-c C-v t
+  ;; You should make any changes there and regenerate using make generate.
   ;;----------------------------------------------------------------------------
 
   ;;; Code:

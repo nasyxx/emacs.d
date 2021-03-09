@@ -1,0 +1,43 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "early-init.el")
+
+* File Header                                            :noexport:
+
+#+begin_src elisp
+  ;;; early-init.el -*- lexical-binding: t; -*-
+#+end_src
+
+* Configs
+
+#+begin_src elisp
+  (defvar d-file-name-handler-alist file-name-handler-alist)
+
+  (setq
+   file-name-handler-alist nil
+   gc-cons-threshold most-positive-fixnum
+   gc-cons-percentage 1
+   package-enable-at-startup nil)
+
+
+  (defun nasy/restore-default ()
+    "Restore gc setting to default."
+    (setq file-name-handler-alist d-file-name-handler-alist
+          gc-cons-percentage 0.7
+          gc-cons-threshold #x4000000))
+  (add-hook 'emacs-startup-hook #'nasy/restore-default)
+
+
+  ;; Patch
+
+  (define-advice define-obsolete-function-alias (:filter-args (ll) fix-obsolete)
+    (let ((obsolete-name (pop ll))
+          (current-name (pop ll))
+          (when (if ll (pop ll) "1"))
+          (docstring (if ll (pop ll) nil)))
+      (list obsolete-name current-name when docstring)))
+#+end_src
+
+* Footer                                                 :noexport:
+
+#+begin_src elisp
+  ;;; init.el ends here
+#+end_src

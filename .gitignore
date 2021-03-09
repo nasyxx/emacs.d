@@ -6,6 +6,7 @@ straight
 var/
 etc/
 
+early-init.el
 init.html
 init.el
 

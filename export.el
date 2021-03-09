@@ -32,7 +32,15 @@
       nasy/publish-base "~/.emacs.d/config")
 
 (setq org-publish-project-alist
-      `(("init"
+      `(("early-init"
+         :base-directory "~/.emacs.d/literate-config/"
+         :base-extension "org"
+         :recursive nil
+         :exclude ".*"
+         :include ("early-init.org")
+         :publishing-directory ,(expand-file-name "../" nasy/publish-base)
+         :publishing-function org-babel-tangle-publish)
+        ("init"
          :base-directory "~/.emacs.d/literate-config/"
          :base-extension "org"
          :recursive nil
@@ -98,7 +106,7 @@
          :publishing-directory ,(expand-file-name "ui" nasy/publish-base)
          :publishing-function org-babel-tangle-publish)
         ("all"
-         :components ("init" "bootstrap" "core" "editor" "tools" "langs" "org" "ui"))))
+         :components ("early-init" "init" "bootstrap" "core" "editor" "tools" "langs" "org" "ui"))))
 
 (provide 'export)
 ;;; export.el ends here
