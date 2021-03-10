@@ -226,8 +226,18 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
    :group 'nasy
    :type 'float)
 
-  (defcustom *font-weight-cjk* 'light
+  (defcustom *font-weight-cjk* 'normal
    "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'symbol)
+
+  (defcustom *font-weight-cjk-2* 'black
+   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'symbol)
+
+  (defcustom *font-modeline* "Recursive Mono Casual Static"
+   "The modenline font.  After change it, run `M-x nasy/set-font' to see the effect."
    :group 'nasy
    :type 'symbol)
 

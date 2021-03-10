@@ -116,7 +116,9 @@
 #+begin_src elisp
   (defun nasy/check-font (font)
     "Check if FONT avaliable."
-    (if (find-font (font-spec :name font :weight *font-weight* :size *font-size*))
+    (if (find-font (font-spec :family font
+                              :weight *font-weight*
+                              :size   *font-size*))
         t
       (message (format "`%s' font not find" font))))
 
@@ -126,7 +128,7 @@
       (when (nasy/check-font *font*)
         (set-face-attribute
             'default nil
-            :font (font-spec :name   *font*
+            :font (font-spec :family *font*
                              :weight *font-weight*
                              :size   *font-size*)))
 
@@ -135,46 +137,49 @@
           (when (nasy/check-font *font-cjk-2*)
             (set-fontset-font (frame-parameter nil 'font)
                               charset
-                              (font-spec :name   *font-cjk-2*
-                                         :weight *font-weight-cjk*
+                              (font-spec :family *font-cjk-2*
+                                         :weight *font-weight-cjk-2*
                                          :size   *font-size-cjk*)
                               frame
                               'prepend))
           (when (nasy/check-font *font-cjk*)
             (set-fontset-font (frame-parameter nil 'font)
                               charset
-                              (font-spec :name   *font-cjk*
+                              (font-spec :family *font-cjk*
                                          :weight *font-weight-cjk*
                                          :size   *font-size-cjk*)
                               frame
                               'prepend))))
 
-      (if *is-a-mac*
-           ;; For NS/Cocoa
-          (set-fontset-font t
-                             'symbol
-                             (font-spec :family "Apple Color Emoji")
-                             frame
-                             'append)
-         ;; For Linux
+      (when (and *is-a-mac*
+                (nasy/check-font "Apple Color Emoji"))
+        ;; For NS/Cocoa
+        (set-fontset-font t
+                           'symbol
+                           (font-spec :family "Apple Color Emoji")
+                           frame
+                           'append))
+
+      (when (nasy/check-font "Symbola")
+        ;; For Linux
         (set-fontset-font t
                           'symbol
                           (font-spec :family "Symbola")
                           frame
                           'prepend))
 
-      (when (nasy/check-font "spot mono")
+      (when (nasy/check-font *font-modeline*)
         (set-face-attribute 'mode-line nil
-                            :font (font-spec :name   "spot mono"
+                            :font (font-spec :family *font-modeline*
                                              :weight 'normal
                                              :size   15))
 
         (set-face-attribute 'mode-line-inactive nil
-                            :font (font-spec :name   "spot mono"
+                            :font (font-spec :family *font-modeline*
                                              :weight 'normal
                                              :size   15))
         (set-face-attribute 'tab-line nil
-                            :font (font-spec :name   "spot mono"
+                            :font (font-spec :family *font-modeline*
                                              :weight 'normal
                                              :size   12)))))
 
