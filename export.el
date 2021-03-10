@@ -46,7 +46,7 @@
          :recursive nil
          :exclude ".*"
          :include ("README.org")
-         :publishing-directory ,(expand-file-name "../" user-emacs-directory)
+         :publishing-directory ,(expand-file-name "../custom" nasy/publish-base)
          :publishing-function org-babel-tangle-publish)
         ("init"
          :base-directory "~/.emacs.d/literate-config/"

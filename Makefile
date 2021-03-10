@@ -14,16 +14,16 @@ early-init.el: literate-config/early-init.org
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "early-init")'
 
 
-## Generate user-config-example.el from README.org
-custom/user-config-example.el: README.org
-	@echo "Generate user-config-example.el from README.org"
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "custom")'
-
-
 ## Generate init.el from literate-config/README.org
 init.el: literate-config/README.org
 	@echo "Generate init.el from literate-config/README.org"
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "init")'
+
+
+## Generate user-config-example.el from README.org
+custom/user-config-example.el: README.org
+	@echo "Generate user-config-example.el from README.org"
+	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "custom")'
 
 
 ## Generate bootstrap from literate-config/bootstrap/README.org

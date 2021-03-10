@@ -96,7 +96,7 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
  </span> @@ which looks like this (when you ~make~ or ~make generate~, below will
  generate to @@html: <span> @@ ~custom/user-config-example.el~ @@html: </span> @@):
 
-#+BEGIN_SRC elisp :tangle (concat (file-name-directory (buffer-file-name)) "custom/user-config-example.el")
+#+BEGIN_SRC elisp :tangle (concat temporary-file-directory "user-config-example.el")
   (setq-default
    ;;calendar-latitude        24.8801
    ;;calendar-longitude       102.8329

@@ -132,7 +132,7 @@
 
       (dolist (charset '(kana han cjk-misc bopomofo))
         (progn
-          (when (nasy/check-font *font-cjk2*)
+          (when (nasy/check-font *font-cjk-2*)
             (set-fontset-font (frame-parameter nil 'font)
                               charset
                               (font-spec :name   *font-cjk-2*
