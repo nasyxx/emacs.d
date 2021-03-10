@@ -296,10 +296,13 @@ Nasy's Theme
        ((,class (:foreground ,n-松花
                              :inherit mode-line
                              :weight bold))))
-     `(mode-line
-       ((,class (:background ,n-荼
-                             :box (:style released-button)
-                             :foreground ,n-墨))))
+     `(mode-line          ((,class (:background ,n-荼))))
+     `(mode-line-inactive ((,class (:background ,n-素))))
+   
+     ;; tab bar mode
+     `(tab-bar                ((t (:inherit mode-line))))
+     `(tab-bar-tab            ((t (:inherit mode-line))))
+     `(tab-bar-tab-inactive   ((t (:inherit mode-line-inactive))))
 
      ;; org mode
      `(org-block
