@@ -114,31 +114,40 @@
 ** Font
 
 #+begin_src elisp
+  (defun nasy/check-font (font)
+    "Check if FONT avaliable."
+    (if (find-font (font-spec :name font :weight *font-weight* :size *font-size*))
+        t
+      (message (format "`%s' font not find" font))))
+
   (defun nasy/set--font (frame)
     "Nasy set font for `FRAME'."
     (when (display-graphic-p)
-      (set-face-attribute
-       'default nil
-       :font (font-spec :name   *font*
-                        :weight *font-weight*
-                        :size   *font-size*))
+      (when (nasy/check-font *font*)
+        (set-face-attribute
+            'default nil
+            :font (font-spec :name   *font*
+                             :weight *font-weight*
+                             :size   *font-size*)))
 
       (dolist (charset '(kana han cjk-misc bopomofo))
         (progn
-          (set-fontset-font (frame-parameter nil 'font)
-                            charset
-                            (font-spec :name   *font-cjk-2*
-                                       :weight *font-weight-cjk*
-                                       :size   *font-size-cjk*)
-                            frame
-                            'prepend)
-          (set-fontset-font (frame-parameter nil 'font)
-                            charset
-                            (font-spec :name   *font-cjk*
-                                       :weight *font-weight-cjk*
-                                       :size   *font-size-cjk*)
-                            frame
-                            'prepend)))
+          (when (nasy/check-font *font-cjk2*)
+            (set-fontset-font (frame-parameter nil 'font)
+                              charset
+                              (font-spec :name   *font-cjk-2*
+                                         :weight *font-weight-cjk*
+                                         :size   *font-size-cjk*)
+                              frame
+                              'prepend))
+          (when (nasy/check-font *font-cjk*)
+            (set-fontset-font (frame-parameter nil 'font)
+                              charset
+                              (font-spec :name   *font-cjk*
+                                         :weight *font-weight-cjk*
+                                         :size   *font-size-cjk*)
+                              frame
+                              'prepend))))
 
       (if *is-a-mac*
            ;; For NS/Cocoa
@@ -154,19 +163,20 @@
                           frame
                           'prepend))
 
-      (set-face-attribute 'mode-line nil
-                          :font (font-spec :name   "spot mono"
-                                           :weight 'normal
-                                           :size   15))
+      (when (nasy/check-font "spot mono")
+        (set-face-attribute 'mode-line nil
+                            :font (font-spec :name   "spot mono"
+                                             :weight 'normal
+                                             :size   15))
 
-      (set-face-attribute 'mode-line-inactive nil
-                          :font (font-spec :name   "spot mono"
-                                           :weight 'normal
-                                           :size   15))
-      (set-face-attribute 'tab-line nil
-                          :font (font-spec :name   "spot mono"
-                                           :weight 'normal
-                                           :size   12))))
+        (set-face-attribute 'mode-line-inactive nil
+                            :font (font-spec :name   "spot mono"
+                                             :weight 'normal
+                                             :size   15))
+        (set-face-attribute 'tab-line nil
+                            :font (font-spec :name   "spot mono"
+                                             :weight 'normal
+                                             :size   12)))))
 
   (defun nasy/set-font (&rest _)
     "Nasy set font."
