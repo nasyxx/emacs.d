@@ -4,14 +4,20 @@ all: help
 .PHONY: all
 
 ## Generate all
-generate: early-init.el init.el bootstrap core editor tools langs ui org
+generate: early-init.el custom/user-config-example.el init.el bootstrap core editor tools langs ui org
 .PHONY: generate
 
 
-## Generate init.el from literate-config/README.org
+## Generate early-init.el from literate-config/early-init.org
 early-init.el: literate-config/early-init.org
 	@echo "Generate early-init.el from literate-config/early-init.org"
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "early-init")'
+
+
+## Generate user-config-example.el from README.org
+custom/user-config-example.el: README.org
+	@echo "Generate user-config-example.el from README.org"
+	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "custom")'
 
 
 ## Generate init.el from literate-config/README.org

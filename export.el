@@ -40,6 +40,14 @@
          :include ("early-init.org")
          :publishing-directory ,(expand-file-name "../" nasy/publish-base)
          :publishing-function org-babel-tangle-publish)
+        ("custom"
+         :base-directory "~/.emacs.d/"
+         :base-extension "org"
+         :recursive nil
+         :exclude ".*"
+         :include ("README.org")
+         :publishing-directory ,(expand-file-name "../" user-emacs-directory)
+         :publishing-function org-babel-tangle-publish)
         ("init"
          :base-directory "~/.emacs.d/literate-config/"
          :base-extension "org"
@@ -106,7 +114,16 @@
          :publishing-directory ,(expand-file-name "ui" nasy/publish-base)
          :publishing-function org-babel-tangle-publish)
         ("all"
-         :components ("early-init" "init" "bootstrap" "core" "editor" "tools" "langs" "org" "ui"))))
+         :components ("early-init"
+                      "custom"
+                      "init"
+                      "bootstrap"
+                      "core"
+                      "editor"
+                      "tools"
+                      "langs"
+                      "org"
+                      "ui"))))
 
 (provide 'export)
 ;;; export.el ends here
