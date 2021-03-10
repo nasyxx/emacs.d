@@ -40,7 +40,7 @@ Nasy's Theme
     :group 'nasy-theme
     :type 'string)
 
-  (defcustom nasy-theme-variable-pitch-font "Rec Mono Nasy"
+  (defcustom nasy-theme-variable-pitch-font "Recursive Mono Casual Static"
     "Nasy them variable patch font."
     :group 'nasy-theme
     :type 'string)
@@ -298,7 +298,7 @@ Nasy's Theme
                              :weight bold))))
      `(mode-line          ((,class (:background ,n-荼))))
      `(mode-line-inactive ((,class (:background ,n-素))))
-   
+
      ;; tab bar mode
      `(tab-bar                ((t (:inherit mode-line))))
      `(tab-bar-tab            ((t (:inherit mode-line))))
