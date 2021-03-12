@@ -433,7 +433,8 @@ Some of them borrowed from doom-emacs
      ([remap yank-pop]                   . counsel-yank-pop))
     (:counsel-find-file-map
      ("<left>"  . counsel-up-directory)
-     ("<right>" . counsel-down-directory))
+     ("<right>" . counsel-down-directory)
+     ("/"       . counsel-down-directory))
     :config
     ;; (set-popup-rule! "^\\*ivy-occur" :size 0.35 :ttl 0 :quit nil)
 
