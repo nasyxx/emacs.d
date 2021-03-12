@@ -93,14 +93,15 @@ Packages list
   - magit
   - magit-org-todos
   - magit-todos
++ wgrep
 + which-key
 + whitespace-cleanup-mode
 
 #+begin_src elisp
   (straight-register-package
    '(point-history :type git
-		   :host github
-		   :repo "blue0513/point-history"))
+                   :host github
+                   :repo "blue0513/point-history"))
 
   (nasy/s-u-p
     alert
@@ -182,6 +183,7 @@ Packages list
     magit-org-todos
     magit-todos
 
+    wgrep
     which-key
     whitespace-cleanup-mode)
 #+end_src
