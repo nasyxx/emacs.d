@@ -99,13 +99,14 @@
 
 #+begin_src elisp
   (leaf doom-themes
-    :custom ((doom-dracula-brighter-comments
-              doom-dracula-colorful-headers
-              doom-dracula-comment-bg) . t)
+    :custom
+    ((doom-dracula-brighter-comments
+      doom-dracula-colorful-headers
+      doom-dracula-comment-bg) . t)
+    (doom-themes-treemacs-theme . "doom-atom")
     :config
     (after-x 'treemacs
-      (doom-themes-treemacs-config)
-      (gsetq doom-themes-treemacs-theme "doom-colors"))
+      (doom-themes-treemacs-config))
     (doom-themes-visual-bell-config)
     (after-x 'org-mode
       (doom-themes-org-config)))

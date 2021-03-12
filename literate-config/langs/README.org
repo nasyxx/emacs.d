@@ -42,6 +42,7 @@
     lsp-mode
     lsp-treemacs
     lsp-ui
+    lsp-grammarly
 
     ;; haskell
     haskell-mode
@@ -92,41 +93,60 @@ Emacs client/library for the Language Server Protocol
     (kill-emacs-hook . (lambda () (setq lsp-restart 'ignore)))
     :mode-hook
     (nasy/lsp-init)
-    (lsp-diagnostics--enable)
     :init
     (defun nasy/lsp-init ()
-      "Nasy lsp mode init."
-      (when lsp-enable-symbol-highlighting
-        (add-hook #'lsp-on-idle-hook #'lsp--document-highlight nil t)
-        (lsp--info "Symbol highlighting enabled in current buffer.")))
+      "Nasy lsp mode init.")
+
+
     :advice
     (:after lsp-diagnostics--enable (lambda () (flycheck-inline-mode -1)))
     :custom
     ((lsp-log-io
       lsp-print-performance
       lsp-report-if-no-buffer) . *debug*)
-    ((lsp-log-max
+
+    ((lsp-enable-snippet
+      lsp-auto-configure
       lsp-inhibit-message
-      lsp-enable-snippet
       lsp-eldoc-render-all
-      lsp-eldoc-enable-hover
-      lsp-enable-imenu
       lsp-enable-xref
-      lsp-enable-links
       lsp-enable-indentation
       lsp-enable-on-type-formatting
-      lsp-enable-semantic-highlighting
-      lsp-enable-symbol-highlighting
-      lsp-signature-auto-activate
+      lsp-before-save-edits
+      lsp-imenu-show-container-name
+      lsp-semantic-tokens-enable
+      lsp-enable-imenu
+      lsp-signature-render-documentation
       lsp-enable-text-document-color
-      lsp-enable-folding
-      lsp-prefer-capf) . t)
+      lsp-headerline-breadcrumb-enable
+      lsp-eldoc-enable-hover
+
+      lsp-enable-links
+      lsp-enable-symbol-highlighting
+      lsp-enable-folding) . t)
+
     ((lsp-keep-workspace-alive
-      lsp-auto-configure
       lsp-auto-guess-root
+      lsp-document-sync-method
+      lsp-auto-execute-action
       lsp-enable-completion-at-point
-      lsp-enable-file-watchers))
-    (lsp-restart . 'interactive))
+      lsp-enable-file-watchers
+      lsp-server-trace
+
+      lsp-modeline-diagnostics-enable) . nil)
+
+    (lsp-restart . 'interactive)
+
+    (lsp-diagnostics-provider . :auto)
+
+    (lsp-imenu-container-name-separator . "/")
+    (lsp-imenu-sort-methods             . '(kind position name))
+
+    (lsp-response-timeout . 10)
+
+    (lsp-signature-auto-activate . '(:on-trigger-char :after-completion))
+
+    lsp-completion-enable . nil)
 #+end_src
 
 *** lsp-ui                                      :languages:tools:
@@ -136,15 +156,18 @@ Emacs client/library for the Language Server Protocol
     :doc "UI integrations for lsp-mode."
     :url "https://github.com/emacs-lsp/lsp-ui"
     :tag "languages" "tools"
-    :hook lsp-mode-hook
     :mode-hook
     (lsp-ui-sideline-mode 1)
     :custom
     (lsp-ui-doc-enable . nil)
     ((lsp-ui-doc-include-signature
       lsp-ui-sideline-show-hover
+      lsp-ui-sideline-show-symbol
+      lsp-ui-sideline-show-diagnostics
+      lsp-ui-sideline-show-code-actions
       lsp-ui-sideline-ignore-duplicate) . t)
-    (lsp-ui-doc-position . 'at-point)
+    (lsp-ui-doc-position         . 'at-point)
+    (lsp-ui-sideline-update-mode . 'point)
     :defer-config
     (require 'lsp-ui-peek))
 #+end_src
@@ -157,7 +180,9 @@ Emacs client/library for the Language Server Protocol
     :url "https://github.com/emacs-lsp/lsp-treemacs"
     :tag "languages"
     :custom
-    (lsp-metals-treeview-show-when-views-received . t)
+    (lsp-metals-treeview-show-when-views-received
+     . t)
+    (lsp-treemacs-theme . "doom-atom")
     :defer-config
     (lsp-treemacs-sync-mode t))
 #+end_src
@@ -306,7 +331,7 @@ Emacs client/library for the Language Server Protocol
       (push 'haskell-mode page-break-lines-modes)))
 #+end_src
 
-*** lsp-mode
+*** lsp-haskell
 
 #+begin_src elisp
   (leaf lsp-haskell
@@ -535,12 +560,9 @@ Emacs client/library for the Language Server Protocol
 
 
   (defun python-flycheck-setup ()
-    "Add python checker for lsp-ui."
-    (after-x 'lsp-ui
-      (flycheck-add-next-checker 'lsp              'python-flake8)
-      (flycheck-inline-mode -1))
-      ;; flake8 already have python-mypy and python-pylint as the next checker
-      ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
+    "Setup python checker."
+    ;; flake8 already have python-mypy and python-pylint as the next checker
+    ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
     (flycheck-disable-checker 'python-pylint)
     (flycheck-remove-next-checker 'python-flake8 'python-pylint))
 
@@ -614,6 +636,15 @@ Emacs client/library for the Language Server Protocol
     :if (eq *py-module* 'pyright)
     :after elpy
     :preface
+    (defun python-setup-lsp-flycheck ()
+      "Setup python lsp flycheck."
+      (if lsp-diagnostics-mode
+          (progn
+            (flycheck-add-next-checker 'lsp 'python-flake8)
+            (flycheck-inline-mode -1))
+        (progn
+          (flycheck-remove-next-checker 'lsp 'python-flake8)
+          (flycheck-inline-mode 1))))
     (defun start-lsp-pyright ()
       "Start lsp pyright."
       (require 'lsp-pyright)
@@ -621,7 +652,9 @@ Emacs client/library for the Language Server Protocol
       (gsetq elpy-modules (remove 'elpy-module-autodoc elpy-modules))
       (gsetq elpy-modules (remove 'elpy-module-eldoc   elpy-modules))
       (python-flycheck-setup))
-    :hook (python-mode-hook . start-lsp-pyright)
+    :hook
+    (python-mode-hook          . start-lsp-pyright)
+    (lsp-diagnostics-mode-hook . python-setup-lsp-flycheck)
     :config
     (when (eq *py-module* 'pyright)
       (after-x 'company
@@ -709,6 +742,23 @@ Include rust-mode, rls and Cargo.
       :after rust-mode
       :hook ((toml-mode . cargo-minor-mode)
              (rust-mode . cargo-minor-mode))))
+#+end_src
+
+** Text (lsp-grammarly)
+
+#+begin_src elisp
+  (leaf lsp-grammarly
+    :disabled t
+    :init (defun start-lsp-grammarly ()
+            (interactive)
+            (require 'lsp-grammarly)
+            (lsp))
+    :custom
+    `(lsp-grammarly-server-path
+      . ,(or (executable-find "grammarly-ls")
+            (executable-find "unofficial-grammarly-language-server-2")))
+    (lsp-grammarly-user-words . '("Nasy"))
+    :hook (text-mode-hook . start-lsp-grammarly))
 #+end_src
 
 ** Yaml
