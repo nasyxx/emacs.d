@@ -156,8 +156,19 @@ Emacs client/library for the Language Server Protocol
     :doc "UI integrations for lsp-mode."
     :url "https://github.com/emacs-lsp/lsp-ui"
     :tag "languages" "tools"
+    :hook (prog-mode-hook text-mode-hook)
     :mode-hook
     (lsp-ui-sideline-mode 1)
+    (flycheck-inline-mode -1)
+    :preface
+    (defun nasy/toggle-lsp-ui-imenu ()
+      "Nasy toggle lsp ui imenu."
+      (interactive)
+      (if (get-buffer "*lsp-ui-imenu*")
+          (kill-buffer "*lsp-ui-imenu*")
+        (lsp-ui-imenu)))
+    :bind
+    ([remap imenu] . nasy/toggle-lsp-ui-imenu)
     :custom
     (lsp-ui-doc-enable . nil)
     ((lsp-ui-doc-include-signature

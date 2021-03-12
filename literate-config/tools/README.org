@@ -95,6 +95,7 @@ Packages list
     ibuffer-vc
     all-the-icons-ibuffer
 
+    ;; imenu-list
     ob-restclient
     restclient
     thingopt
@@ -418,10 +419,19 @@ https://github.com/bmag/imenu-list
 
 #+begin_src elisp
   (leaf imenu-list
+    :disabled t
     :doc "Emacs plugin to show the current buffer's imenu entries in a seperate buffer"
     :url "https://github.com/bmag/imenu-list"
     :tag "tools" "convenience"
-    :bind (("C-." . imenu-list-smart-toggle))
+    :preface
+    (defun nasy/imenu-toggle ()
+      "Nasy's imenu smart toggle."
+      (interactive)
+      (cond ((and (featurep 'lsp-ui-imenu)
+                 lsp-ui-mode)
+             (lsp-ui-imenu))
+            (t (imenu-list-smart-toggle))))
+    :bind (("C-." . nasy/imenu-toggle))
     :custom (imenu-list-auto-resize . t))
 #+end_src
 
