@@ -48,6 +48,10 @@ not sure if it would work well well on Linux or Windows.
 
 [[file:./screenshot3.png]]
 
+[[file:./screenshot4.png]]
+
+[[file:./screenshot5.png]]
+
 * Dependencies
 
 - Emacs
