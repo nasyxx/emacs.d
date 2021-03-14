@@ -126,13 +126,15 @@
   (defun nasy/set--font (frame)
     "Nasy set font for `FRAME'."
     (when (display-graphic-p)
+
+      ;; default
       (when (nasy/check-font *font*)
         (set-face-attribute
             'default nil
             :font (font-spec :family *font*
                              :weight *font-weight*
                              :size   *font-size*)))
-
+      ;; 中文
       (dolist (charset '(kana han cjk-misc bopomofo))
         (progn
           (when (nasy/check-font *font-cjk-2*)
@@ -143,6 +145,7 @@
                                          :size   *font-size-cjk*)
                               frame
                               'prepend))
+
           (when (nasy/check-font *font-cjk*)
             (set-fontset-font (frame-parameter nil 'font)
                               charset
@@ -152,14 +155,22 @@
                               frame
                               'prepend))))
 
+      (when (nasy/check-font *font*)
+        (set-fontset-font t
+                          'symbol
+                          (font-spec :family *font*)
+                          frame
+                          'prepend))
+
       (when (and *is-a-mac*
                 (nasy/check-font "Apple Color Emoji"))
         ;; For NS/Cocoa
         (set-fontset-font t
-                           'symbol
-                           (font-spec :family "Apple Color Emoji")
-                           frame
-                           'append))
+                          'symbol
+                          (font-spec :family "Apple Color Emoji")
+                          frame
+                          'append))
+
 
       (when (nasy/check-font "Symbola")
         ;; For Linux
@@ -167,22 +178,23 @@
                           'symbol
                           (font-spec :family "Symbola")
                           frame
-                          'prepend))
+                          'append)))
 
       (when (nasy/check-font *font-modeline*)
         (set-face-attribute 'mode-line nil
                             :font (font-spec :family *font-modeline*
                                              :weight 'normal
-                                             :size   15))
+                                             :size   14))
 
         (set-face-attribute 'mode-line-inactive nil
                             :font (font-spec :family *font-modeline*
                                              :weight 'normal
-                                             :size   15))
+                                             :size   14))
         (set-face-attribute 'tab-line nil
                             :font (font-spec :family *font-modeline*
                                              :weight 'normal
                                              :size   12)))))
+
 
   (defun nasy/set-font (&rest _)
     "Nasy set font."
