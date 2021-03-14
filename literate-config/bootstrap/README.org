@@ -206,7 +206,7 @@ https://gitlab.com/koral/gcmh
     (garbage-collection-messages . t)
     (gcmh-verbose                . t)
     (gcmh-lows-cons-threshold    . #x4000000)  ;; 64MB
-    (gcmh-high-cons-threshold    . #x10200000)  ;; 256MB
+    (gcmh-high-cons-threshold    . #x10000000) ;; 256MB
     (gcmh-idle-delay             . 360))
 #+end_src
 
