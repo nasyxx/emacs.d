@@ -178,7 +178,7 @@
                           'symbol
                           (font-spec :family "Symbola")
                           frame
-                          'append)))
+                          'append))
 
       (when (nasy/check-font *font-modeline*)
         (set-face-attribute 'mode-line nil
