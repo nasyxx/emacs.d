@@ -4,26 +4,38 @@ all: help
 .PHONY: all
 
 ## Generate all
-generate: early-init.el custom/user-config-example.el init.el bootstrap core editor tools langs ui org
+generate: early-init user-config init bootstrap core editor tools langs ui org
 .PHONY: generate
 
 
 ## Generate early-init.el from literate-config/early-init.org
-early-init.el: literate-config/early-init.org
+./early-init.el: literate-config/early-init.org
 	@echo "Generate early-init.el from literate-config/early-init.org"
+	@rm -rf var/org/timestamps/early-init.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "early-init")'
+
+## Generate early-init.el from literate-config/early-init.org
+early-init: ./early-init.el
 
 
 ## Generate init.el from literate-config/README.org
-init.el: literate-config/README.org
+./init.el: literate-config/README.org
 	@echo "Generate init.el from literate-config/README.org"
+	@rm -rf var/org/timestamps/init.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "init")'
+
+## Generate init.el from literate-config/README.org
+init: ./init.el
 
 
 ## Generate user-config-example.el from README.org
 custom/user-config-example.el: README.org
 	@echo "Generate user-config-example.el from README.org"
+	@rm -rf var/org/timestamps/user-config-example.cache
 	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "custom")'
+
+## Generate user-config-example.el from README.org
+user-config: custom/user-config-example.el
 
 
 ## Generate bootstrap from literate-config/bootstrap/README.org
@@ -95,19 +107,6 @@ config/ui: $(wildcard literate-config/ui/*.org)
 ## Generate ui
 ui: config/ui
 .PHONY: bootstrap core editor tools langs ui org
-
-
-# Old Generate init.el from README.org
-old-generate:
-	@echo "Generate init.el from README.org and literate-config.org."
-	@mkdir -p custom && \
-		$(EMACS) -Q --batch --find-file "README.org" -f "org-babel-tangle"
-	@$(EMACS) -Q --batch --find-file "literate-config.org" -f "org-org-export-to-org" && \
-		$(EMACS) -Q --batch --find-file "literate-config.org.org" -f "org-babel-tangle" && \
-		rm -rf "literate-config.org.org" "literate-config.org.org~"
-	@$(EMACS) -Q --batch --find-file "extra/README.org" -f "org-babel-tangle"
-	@echo "If you want to customize, you can simply change/create custom/user-config.el"
-.PHONY: old-generate
 
 
 ## clean build (var/org/timestamps/ & config/)
