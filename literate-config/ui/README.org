@@ -103,7 +103,7 @@
     ((doom-dracula-brighter-comments
       doom-dracula-colorful-headers
       doom-dracula-comment-bg) . t)
-    (doom-themes-treemacs-theme . "doom-atom")
+    (doom-themes-treemacs-theme . "doom-colors")
     :config
     (after-x 'treemacs
       (doom-themes-treemacs-config))

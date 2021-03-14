@@ -193,7 +193,7 @@ Emacs client/library for the Language Server Protocol
     :custom
     (lsp-metals-treeview-show-when-views-received
      . t)
-    (lsp-treemacs-theme . "doom-atom")
+    (lsp-treemacs-theme . "doom-colors")
     :defer-config
     (lsp-treemacs-sync-mode t))
 #+end_src
