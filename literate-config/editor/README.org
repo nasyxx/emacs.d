@@ -190,9 +190,13 @@ Packages list
 
 * Updates
 
+** <2021-03-12 Fri>
+
+New Version with my theme and lots of improvements.
+
 ** <2020-08-04 Tue>
 
-Removed better jump
+Removed better jump.
 
 * Configs
 
@@ -1095,11 +1099,17 @@ https://github.com/bbatsov/projectile
     :doc "Projectile is a project interaction library for Emacs."
     :url "https://github.com/bbatsov/projectile"
     :tag "project" "convenience"
+    :preface
+    (defun nasy/p-igonre-p (truename)
+      "Determine whether ignore the `TRUENAME' file or not."
+      (or (string-match-p "nix/store" truename)
+         nil))
     :bind ([remap find-tag] . projectile-find-tag)
     :hook after-init-hook
     :custom
-    (projectile-indexing-method      . 'hybrid)
-    (projectile-require-project-root . 'prompt)
+    (projectile-indexing-method          . 'hybrid)
+    (projectile-require-project-root     . 'prompt)
+    (projectile-ignored-project-function . 'nasy/p-ignore-p)
     :config
     (gsetq projectile-project-root-files-top-down-recurring
            (append '("compile_commands.json"
