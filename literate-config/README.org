@@ -110,9 +110,21 @@ collection.
 #+begin_src elisp
   (nasy/extra-repo casouri)
   (leaf vundo
+    :custom-face
+    `(vundo-default   . '((t (:font ,(font-spec
+                                      :family "PT Mono"
+                                      :size 22)))))
+    `(vundo-highlight . '((t (:foreground "#057748"
+                                          :inherit 'vundo-default))))
+    `(vundo-node      . '((t (:foreground "#50616D"
+                                          :inherit 'vundo-default))))
+    `(vundo-stem      . '((t (:foreground "#50616D"
+                                          :inherit 'vundo-default))))
     :bind
     ("s-/" . vundo))
 #+end_src
+
+#+include: "../extra/site-lisp/casouri/vundo.el"
 
 * Epilogue
 
