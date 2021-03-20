@@ -110,6 +110,8 @@ collection.
 #+begin_src elisp
   (nasy/extra-repo casouri)
   (leaf vundo
+    :custom
+    (vundo--window-max-height . 5)
     :custom-face
     `(vundo-default   . '((t (:font ,(font-spec
                                       :family "PT Mono"
