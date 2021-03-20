@@ -93,6 +93,7 @@ Packages list
   - magit
   - magit-org-todos
   - magit-todos
++ vundo
 + wgrep
 + which-key
 + whitespace-cleanup-mode
@@ -102,6 +103,11 @@ Packages list
    '(point-history :type git
                    :host github
                    :repo "blue0513/point-history"))
+
+  (straight-register-package
+   '(vundo :type git
+           :host github
+           :repo "casouri/vundo"))
 
   (nasy/s-u-p
     alert
@@ -183,6 +189,7 @@ Packages list
     magit-org-todos
     magit-todos
 
+    vundo
     wgrep
     which-key
     whitespace-cleanup-mode)
@@ -1665,6 +1672,27 @@ https://github.com/m00natic/vlfi
         (unless (file-exists-p file)
           (error "File does not exist: %s" file))
         (vlf file))))
+#+end_src
+
+** vundo
+
+#+begin_src elisp
+  (leaf vundo
+    :custom
+    (vundo-side               . 'top)
+    (vundo--window-max-height . 5)
+    :custom-face
+    `(vundo-default   . '((t (:font ,(font-spec
+                                      :family "PT Mono"
+                                      :size 22)))))
+    `(vundo-highlight . '((t (:foreground "#057748"
+                                          :inherit 'vundo-default))))
+    `(vundo-node      . '((t (:foreground "#50616D"
+                                          :inherit 'vundo-default))))
+    `(vundo-stem      . '((t (:foreground "#50616D"
+                                          :inherit 'vundo-default))))
+    :bind
+    ("s-/" . vundo))
 #+end_src
 
 ** Which Function                                        :builtin:
