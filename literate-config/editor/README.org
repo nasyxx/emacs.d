@@ -1228,13 +1228,13 @@ https://github.com/dimitri/switch-window
     :doc "Offer a *visual* way to choose a window to switch to."
     :url "https://github.com/dimitri/switch-window"
     :bind
-    ("C-x o" . switch-window)
-    ("C-x 1" . toggle-delete-other-windows)
-    ("C-x 2" . split-window-v)
-    ("C-x 3" . split-window-h)
+    ("C-c o" . switch-window)
+    ("C-c 1" . toggle-delete-other-windows)
+    ("C-c 2" . split-window-v)
+    ("C-c 3" . split-window-h)
     ("C-x |" . split-window-horizontally-instead)
     ("C-x _" . split-window-vertically-instead)
-    ("C-x x" . nasy/split-window)
+    ("C-c x" . nasy/split-window)
     ("M-o"   . transient-dwim--switch-window)
     :custom
     (switch-window-shortcut-style . 'alphabet)
@@ -1244,7 +1244,12 @@ https://github.com/dimitri/switch-window
      ()
      "Transient-dwim for `switch-window'."
      [["Switch Window"
-       ("o" "Switch Window" switch-window)]])
+       ("o" "Switch Window"             switch-window)
+       ("1" "Delete other window"       toggle-delete-other-windows)
+       ("r" "Split window right"        split-window-right)
+       ("b" "Split window below"        split-window-below)
+       ("|" "Split window horizontally" split-window-horizontally-instead)
+       ("_" "Split window vertically"   split-window-vertically-instead)]])
     :config
     ;; When splitting window, show (other-buffer) in the new window
     (defun split-window-func-with-other-buffer (split-function)
@@ -1258,11 +1263,16 @@ https://github.com/dimitri/switch-window
           (unless arg
             (select-window target-window)))))
 
-    (defun split-window-v ()
+    (defun split-window--v ()
       (split-window-func-with-other-buffer 'split-window-vertically))
 
-    (defun split-window-h ()
+    (defun split-window--h ()
+      ""
+      (interactive)
       (split-window-func-with-other-buffer 'split-window-horizontally))
+
+    (setq split-window-v (split-window--v)
+          split-window-h (split-window--h))
 
     (defun toggle-delete-other-windows ()
       "Delete other windows in frame if any, or restore previous window config."

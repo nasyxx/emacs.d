@@ -64,10 +64,6 @@ Core Libs include useful functions, macros and alias.
 
 #+include: "core-mixed.org"
 
-* Window
-
-#+include: "window.org"
-
 * Footer                                                                      :noexport:
 
 #+begin_src elisp

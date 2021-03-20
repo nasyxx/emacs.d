@@ -14,13 +14,13 @@ https://github.com/dimitri/switch-window
     :doc "Offer a *visual* way to choose a window to switch to."
     :url "https://github.com/dimitri/switch-window"
     :bind
-    ("C-x o" . switch-window)
-    ("C-x 1" . toggle-delete-other-windows)
-    ("C-x 2" . split-window-v)
-    ("C-x 3" . split-window-h)
-    ("C-x |" . split-window-horizontally-instead)
-    ("C-x _" . split-window-vertically-instead)
-    ("C-x x" . nasy/split-window)
+    ("C-c o" . switch-window)
+    ("C-c 1" . toggle-delete-other-windows)
+    ("C-c 2" . split-window-v)
+    ("C-c 3" . split-window-h)
+    ("C-c |" . split-window-horizontally-instead)
+    ("C-c _" . split-window-vertically-instead)
+    ("C-c x" . nasy/split-window)
     ("M-o"   . transient-dwim--switch-window)
     :custom
     (switch-window-shortcut-style . 'alphabet)
