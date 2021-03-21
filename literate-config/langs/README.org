@@ -28,6 +28,11 @@
                         :host github
                         :repo "justinbarclay/parinfer-rust-mode"))
 
+  (straight-register-package
+   '(keytar :type git
+            :host github
+            :repo "emacs-grammarly/keytar"))
+
   (nasy/s-u-p
     ;; lisps
     cl-lib-highlight
@@ -42,7 +47,7 @@
     lsp-mode
     lsp-treemacs
     lsp-ui
-    lsp-grammarly
+    ;; lsp-grammarly
 
     ;; haskell
     haskell-mode
