@@ -1674,12 +1674,21 @@ https://github.com/m00natic/vlfi
         (vlf file))))
 #+end_src
 
-** vundo
+** vundo                                               :undo:redo:
+
+Visual undo tree.
+
+https://archive.casouri.cat/note/2021/visual-undo-tree/index.html
+
+https://github.com/casouri/vundo
 
 #+begin_src elisp
   (leaf vundo
+    :doc "Visual undo tree."
+    :url "https://github.com/casouri/vundo"
+    :tag "undo" "redo"
     :custom
-    (vundo-side               . 'top)
+    (vundo-window-side        . 'top)
     (vundo--window-max-height . 5)
     :custom-face
     `(vundo-default   . '((t (:font ,(font-spec
