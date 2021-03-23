@@ -35,6 +35,7 @@ Packages list
 + eldoc
   - eldoc-overlay (optional)
   - eldoc-box (optional)
++ Emacs Rime
 + Emacs Spatial Navigate
 + expand-region
 + explain-pause-mode
@@ -165,6 +166,7 @@ Packages list
     ;; consult-flycheck
     ;; marginalia
 
+    rime
     symbol-overlay
     switch-window
     ;; treemacs
@@ -343,6 +345,46 @@ https://github.com/stardiviner/eldoc-overlay
     :tag "extensions"
     :when (eq *eldoc-use* 'eldoc-overlay)
     :hook eldoc-mode-hook)
+#+end_src
+
+** Emacs Rime                            :convenience:inputmethod:
+
+RIME ㄓ in Emacs
+
+https://github.com/DogLooksGood/emacs-rime
+
+#+begin_src elisp
+  (leaf rime
+    :doc "RIME ㄓ in Emacs"
+    :url "https://github.com/DogLooksGood/emacs-rime"
+    :tag "convenience" "input-method"
+    :bind
+    (:rime-mode-map
+     ("C-`"   . rime-send-keybinding)
+     ("C-S-`" . rime-send-keybinding)
+     ("C-,"   . rime-send-keybinding))
+    :custom
+    `(rime-librime-root   . ,(expand-file-name "~/.nix-profile"))
+    `(rime-user-data-dir  . ,(expand-file-name "~/.config/rime"))
+    (default-input-method . "rime")
+    (rime-cursor          . "˰")
+    (rime-show-candidate  . 'posframe)
+    (rime-posframe-style  . 'vertical)
+    (rime-show-preedit    . t)
+    (rime-translate-keybindings
+     . '("C-f"
+         "C-b"
+         "C-n"
+         "C-p"
+         "C-g"
+         "C-`"
+         "<left>"
+         "<right>"
+         "<up>"
+         "<down>"
+         "<prior>"
+         "<next>"
+         "<delete>")))
 #+end_src
 
 ** Emacs Spatial Navigate                                :editing:
