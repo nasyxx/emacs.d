@@ -169,7 +169,7 @@
                           'symbol
                           (font-spec :family "Apple Color Emoji")
                           frame
-                          'append))
+                          'prepend))
 
 
       (when (nasy/check-font "Symbola")
