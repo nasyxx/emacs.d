@@ -124,9 +124,6 @@
 * Shell
 
 #+begin_src elisp
-  (leaf noflet
-    :commands noflet)
-
   (defun nasy/shell-command-in-view-mode (start end command &optional output-buffer replace &rest other-args)
     "Put \"*Shell Command Output*\" buffers into view-mode."
     (unless (or output-buffer replace)
@@ -134,6 +131,7 @@
         (view-mode 1))))
   (advice-add 'shell-command-on-region :after 'nasy/shell-command-in-view-mode)
 
+  (straight-use-package 'exec-path-from-shell)
   (leaf exec-path-from-shell
     :init
     ;; Non-Forking Shell Command To String
@@ -198,3 +196,16 @@
   (provide 'nasy-core-mixed)
   ;;; nasy-core-mixed.el ends here
 #+end_src
+
+
+  (straight-use-package 'shell)
+
+  (straight-use-package 'cmd-to-echo)
+
+  (straight-use-package 'command-log-mode)
+
+  (straight-use-package 'noflet)
+
+  (use-package noflet
+    :commands (noflet)
+    :defer t)
