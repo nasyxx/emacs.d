@@ -193,7 +193,10 @@
         (set-face-attribute 'tab-line nil
                             :font (font-spec :family *font-modeline*
                                              :weight 'normal
-                                             :size   12)))))
+                                             :size   12)))
+
+      (after-x 'doom-modeline
+        (doom-modeline--set-char-widths doom-modeline-rhs-icons-alist))))
 
 
   (defun nasy/set-font (&rest _)
