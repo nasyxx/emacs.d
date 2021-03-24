@@ -363,6 +363,8 @@ https://github.com/DogLooksGood/emacs-rime
      ("C-`"   . rime-send-keybinding)
      ("C-S-`" . rime-send-keybinding)
      ("C-,"   . rime-send-keybinding))
+    (:rime-active-mode-map
+     ("C-;"   . rime-send-keybinding))
     :custom
     `(rime-librime-root   . ,(expand-file-name "~/.nix-profile"))
     `(rime-user-data-dir  . ,(expand-file-name "~/.config/rime"))
@@ -378,6 +380,7 @@ https://github.com/DogLooksGood/emacs-rime
          "C-p"
          "C-g"
          "C-`"
+         "C-;"
          "<left>"
          "<right>"
          "<up>"
