@@ -31,7 +31,7 @@ Nasy's Theme
     :type 'symbol)
 
   (defcustom nasy-theme-org-scale t
-    "Nasy theme uses scale up org or not?"
+    "Nasy theme uses scale up in `org-mode' or not."
     :group 'nasy-theme
     :type 'boolean)
 
@@ -52,19 +52,20 @@ Nasy's Theme
     :group 'nasy-theme
     :type 'string)
 
-  (defun nasy-theme-light?dark (light dark)
-    "Determin using the light or the dark color of nasy-theme."
+  (defun nasy-theme--light?dark (light dark)
+    "Determine using the LIGHT or the DARK color of nasy-theme."
     (if (eq nasy-theme-light/dark 'light)
         light
       dark))
-  (defalias 'l?d #'nasy-theme-light?dark)
+  (defalias '--l?d #'nasy-theme--light?dark)
 
-  (defun nasy-theme-scale?not (scale)
-    "Determin using org-mode scale or not."
+  (defun nasy-theme--scale? (scale)
+    "Determine using `org-mode' SCALE or not."
     (if nasy-theme-org-scale
         scale
       1))
-  (defalias 's?n #'nasy-theme-scale?not)
+  (defalias '--s? #'nasy-theme--scale?)
+
   (defun nasy-theme--check-underline-list (sym)
     "Check if SYM in `nasy-theme-underlines-list' or not."
     (when (memq sym nasy-theme-underlines-list)
@@ -99,26 +100,26 @@ Nasy's Theme
          (n-鸭黄      "#FAFF72")
          (n-鹅黄      "#FFF143")
          (n-黛        "#4A4266")
-         (n/丁香青莲  (l?d n-青莲 n-青莲))
-         (n/墨墨灰    (l?d n-墨 n-墨灰))
-         (n/墨灰墨    (l?d n-墨灰 n-墨))
-         (n/墨灰素    (l?d n-墨灰 n-素))
-         (n/墨缟      (l?d n-墨 n-缟))
-         (n/湖蓝靛青  (l?d n-湖蓝 n-靛青))
-         (n/漆缟      (l?d n-漆 n-缟))
-         (n/牙墨      (l?d n-牙 n-墨))
-         (n/牙黛      (l?d n-牙 n-黛))
-         (n/素墨      (l?d n-素 n-墨))
-         (n/素墨灰    (l?d n-素 n-墨灰))
-         (n/缟墨      (l?d n-缟 n-墨))
-         (n/缟漆      (l?d n-缟 n-漆))
-         (n/缟黛      (l?d n-缟 n-黛))
-         (n/霜黛      (l?d n-霜 n-黛))
-         (n/青莲丁香  (l?d n-青莲 n-丁香))
-         (n/青莲牙    (l?d n-青莲 n-牙))
-         (n/靛青湖蓝  (l?d n-靛青 n-湖蓝))
-         (n/黛缟      (l?d n-黛 n-缟))
-         (n/黛霜      (l?d n-黛 n-霜)))
+         (n/丁香青莲  (--l?d n-青莲 n-青莲))
+         (n/墨墨灰    (--l?d n-墨 n-墨灰))
+         (n/墨灰墨    (--l?d n-墨灰 n-墨))
+         (n/墨灰素    (--l?d n-墨灰 n-素))
+         (n/墨缟      (--l?d n-墨 n-缟))
+         (n/湖蓝靛青  (--l?d n-湖蓝 n-靛青))
+         (n/漆缟      (--l?d n-漆 n-缟))
+         (n/牙墨      (--l?d n-牙 n-墨))
+         (n/牙黛      (--l?d n-牙 n-黛))
+         (n/素墨      (--l?d n-素 n-墨))
+         (n/素墨灰    (--l?d n-素 n-墨灰))
+         (n/缟墨      (--l?d n-缟 n-墨))
+         (n/缟漆      (--l?d n-缟 n-漆))
+         (n/缟黛      (--l?d n-缟 n-黛))
+         (n/霜黛      (--l?d n-霜 n-黛))
+         (n/青莲丁香  (--l?d n-青莲 n-丁香))
+         (n/青莲牙    (--l?d n-青莲 n-牙))
+         (n/靛青湖蓝  (--l?d n-靛青 n-湖蓝))
+         (n/黛缟      (--l?d n-黛 n-缟))
+         (n/黛霜      (--l?d n-黛 n-霜)))
     (custom-theme-set-faces
      'nasy
      ;;; essential styles
@@ -332,19 +333,19 @@ Nasy's Theme
        ((,class (:background ,n/素墨
                              :extend t
                              :foreground ,n/墨缟
-                             :height ,(s?n 1.4)
+                             :height ,(--s? 1.4)
                              :weight bold))))
      `(org-document-info
        ((,class (:background ,n/素墨
                              :extend t
                              :foreground ,n/墨缟
-                             :height ,(s?n 1.2)
+                             :height ,(--s? 1.2)
                              :slant italic))))
      `(org-document-info-keyword
        ((,class (:background ,n/素墨
                              :extend t
                              :foreground ,n/墨缟
-                             :height ,(s?n 1.2)
+                             :height ,(--s? 1.2)
                              :slant italic))))
      `(org-done
        ((,class (:box (:line-width 2 :style released-button)
@@ -355,49 +356,49 @@ Nasy's Theme
        ((,class (:background ,n/素墨
                              :extend t
                              :foreground ,n-靛青
-                             :height ,(s?n 1.4)
+                             :height ,(--s? 1.4)
                              :underline t
                              :weight bold))))
      `(org-level-2
        ((,class (:background ,n/素墨
                              :extend t
                              :foreground ,n-茶
-                             :height ,(s?n 1.2)
+                             :height ,(--s? 1.2)
                              :weight bold))))
      `(org-level-3
        ((,class (:background ,n/素墨
                              :extend t
                              :foreground ,n-松绿
-                             :height ,(s?n 1.1)
+                             :height ,(--s? 1.1)
                              :weight bold))))
      `(org-level-4
        ((,class (:background ,n/素墨
                              :extend t
                              :foreground ,n/青莲丁香
-                             :height ,(s?n 1.1)
+                             :height ,(--s? 1.1)
                              :weight bold))))
      `(org-level-5
        ((,class (:extend t
                          :foreground ,n-靛青
-                         :height ,(s?n 1.1)
+                         :height ,(--s? 1.1)
                          :slant italic
                          :weight normal))))
      `(org-level-6
        ((,class (:extend t
                          :foreground ,n-茶
-                         :height ,(s?n 1.1)
+                         :height ,(--s? 1.1)
                          :slant italic
                          :weight normal))))
      `(org-level-7
        ((,class (:extend t
                          :foreground ,n-松绿
-                         :height ,(s?n 1.1)
+                         :height ,(--s? 1.1)
                          :slant italic
                          :weight normal))))
      `(org-level-8
        ((,class (:extend t
                          :foreground ,n/青莲丁香
-                         :height ,(s?n 1.1)
+                         :height ,(--s? 1.1)
                          :slant italic
                          :weight normal))))
      `(org-meta-line
