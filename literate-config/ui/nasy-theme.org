@@ -423,6 +423,10 @@ Nasy's Theme
                              :slant normal
                              :weight bold))))
 
+     ;;; page break lines
+     `(page-break-lines
+       ((,class (:inherit font-lock-comment-face :slant normal :underline nil))))
+
      ;;; tree sitter
      `(tree-sitter-hl-face:operator
        ((,class (:inherit font-lock-negation-char-face))))))

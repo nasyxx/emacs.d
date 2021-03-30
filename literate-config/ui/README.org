@@ -115,6 +115,9 @@
 ** Font
 
 #+begin_src elisp
+  (defvar nasy/font-change-hook nil
+    "Hooks to run after font changed.")
+
   (defun nasy/check-font (font)
     "Check if FONT avaliable."
     (if (find-font (font-spec :family font
@@ -123,10 +126,45 @@
         t
       (message (format "`%s' font not find" font))))
 
+  (defun nasy/set-default-font (charset &optional size frame)
+    "Set CHARSET fontset to default *font* with SIZE on FRAME."
+    (when (and (display-graphic-p)
+              (nasy/check-font *font*))
+      (let ((size (or size *font-size*)))
+        (set-fontset-font t
+                          charset
+                          (font-spec :family *font*
+                                     :weight *font-weight*
+                                     :size   size)
+                          frame
+                          'prepend))))
+
+  (defun nasy/set-hanamin (charset &optional size frame)
+    "Set CHARSET fontset to HanaMin with SIZE on FRAME.
+
+  Font for char like 𨉚."
+    (when (display-graphic-p)
+      (let ((size (or size *font-size-cjk*)))
+        (when (nasy/check-font "HanaMinB")
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :family "HanaMinB"
+                                       :weight 'normal
+                                       :size   size)
+                            frame
+                            'prepend))
+        (when (nasy/check-font "HanaMinA")
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :family "HanaMinA"
+                                       :weight 'normal
+                                       :size   size)
+                            frame
+                            'prepend)))))
+
   (defun nasy/set--font (frame)
     "Nasy set font for `FRAME'."
     (when (display-graphic-p)
-
       ;; default
       (when (nasy/check-font *font*)
         (set-face-attribute
@@ -137,6 +175,7 @@
       ;; 中文
       (dolist (charset '(kana han cjk-misc bopomofo))
         (progn
+          (nasy/set-hanamin charset)
           (when (nasy/check-font *font-cjk-2*)
             (set-fontset-font (frame-parameter nil 'font)
                               charset
@@ -155,28 +194,21 @@
                               frame
                               'prepend))))
 
-      (when (nasy/check-font *font*)
-        (set-fontset-font t
-                          'symbol
-                          (font-spec :family *font*)
-                          frame
-                          'prepend))
 
       (when (and *is-a-mac*
                 (nasy/check-font "Apple Color Emoji"))
         ;; For NS/Cocoa
-        (set-fontset-font t
+        (set-fontset-font (frame-parameter nil 'font)
                           'symbol
                           (font-spec :family "Apple Color Emoji")
                           frame
                           'prepend))
 
-
-      (when (nasy/check-font "Symbola")
-        ;; For Linux
-        (set-fontset-font t
+      (when (nasy/check-font *font-symbol*)
+        (set-fontset-font (frame-parameter nil 'font)
                           'symbol
-                          (font-spec :family "Symbola")
+                          (font-spec :family *font-symbol*
+                                     :size *font-size-symbol*)
                           frame
                           'append))
 
@@ -196,8 +228,8 @@
                                              :size   12)))
 
       (after-x 'doom-modeline
-        (doom-modeline--set-char-widths doom-modeline-rhs-icons-alist))))
-
+        (doom-modeline--set-char-widths doom-modeline-rhs-icons-alist)))
+    (run-hooks 'nasy/font-change-hook))
 
   (defun nasy/set-font (&rest _)
     "Nasy set font."

@@ -693,7 +693,7 @@ https://github.com/magnars/multiple-cursors.el
      ("C-c m a" . mc/edit-beginnings-of-lines)))
 #+end_src
 
-** Paper Break Lines                           :convenience:faces:
+** Page Break Lines                            :convenience:faces:
 
 This Emacs library provides a global mode which displays ugly form feed
 characters as tidy horizontal rules.
@@ -705,7 +705,12 @@ https://github.com/purcell/page-break-lines
     :doc "Emacs: display ugly ^L page breaks as tidy horizontal lines"
     :url "https://github.com/purcell/page-break-lines"
     :tag "convenience" "faces"
-    :hook ((after-init-hook . global-page-break-lines-mode))
+    :hook
+    (after-init-hook . global-page-break-lines-mode)
+    (nasy/font-change-hook
+     . (lambda () (nasy/set-hanamin ?✧ 9 nil)))
+    :custom
+    (page-break-lines-char . ?✧)
     :defer-config
     (when (fboundp 'diminish)
       (diminish 'page-break-lines-mode)))
@@ -797,9 +802,15 @@ https://github.com/politza/pdf-tools
     ;; This works when using emacs --daemon + emacsclient
     (add-hook 'after-make-frame-functions
               (lambda (frame)
-                (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
+                (when (display-graphic-p)
+                  (set-fontset-font t
+                                    '(#Xe100 . #Xe16f)
+                                    "Fira Code Symbol"))))
     ;; This works when using emacs without server/client
-    (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
+    (when (display-graphic-p)
+      (set-fontset-font t
+                        '(#Xe100 . #Xe16f)
+                        "Fira Code Symbol"))
     ;; I haven't found one statement that makes both of the above situations work, so I use both for now
     :defer-config
     (defun pretty-fonts-set-fontsets (CODE-FONT-ALIST)
@@ -956,7 +967,7 @@ https://github.com/politza/pdf-tools
                             ("And"    . (#x2000 (Br . Bl) #x22c0 (Br . Bl) #x2005))  ;; ⋀
                             ("and"    . (#x2000 (Br . Bl) #x22cf (Br . Bl) #x2005))  ;; ⋏
                             ("Or"     . #x22c1)  ;; ⋁
-                            ("or"     . #x22cE)  ;; ⋎
+                            ("or"     . (#x22cE (Br . Bl) #x2005))  ;; ⋎
                             ("not"    . #x00ac)  ;; ¬
                             ("not_"   . #x00ac)  ;; ¬
 

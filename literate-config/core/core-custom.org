@@ -209,6 +209,16 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
    :group 'nasy
    :type 'symbol)
 
+  (defcustom *font-symbol* "Symbola"
+     "The symbol font.  After change it, run `M-x nasy/set-font' to see the effect."
+     :group 'nasy
+     :type 'string)
+
+  (defcustom *font-size-symbol* 15.0
+   "The symbol font.  After change it, run `M-x nasy/set-font' to see the effect."
+   :group 'nasy
+   :type 'float)
+
   (defcustom *font-cjk* "I.Ngaan"
    "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect.
 
