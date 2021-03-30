@@ -127,7 +127,7 @@ Packages list
     ;; highlight
     color-identifiers-mode
     ;; hl-line  builtin
-    highlight-indent-guides
+    (:when *highlight-indent-guides* highlight-indent-guides)
     rainbow-mode
     ;; helm
     ;; helm
@@ -551,10 +551,9 @@ https://github.com/DarthFennec/highlight-indent-guides
     :url "https://github.com/DarthFennec/highlight-indent-guides"
     :tag "faces"
     :when *highlight-indent-guides*
-    :hook (prog-mode-hook-hook text-mode-hook-hook org-mode-hook-hook)
-    :config
-    (highlight-indent-guides-responsive . nil)
-    (highlight-indent-guides-delay      . 0.5))
+    :hook (prog-mode-hook text-mode-hook org-mode-hook)
+    :custom
+    (highlight-indent-guides-delay . 0.5))
 #+end_src
 
 *** Rainbow-Mode
