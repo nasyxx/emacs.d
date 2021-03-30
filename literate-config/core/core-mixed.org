@@ -86,22 +86,22 @@
 * macOS Frame
 
 #+begin_src elisp
-  (when *is-a-mac*
-    (add-to-list 'default-frame-alist
-                 '(ns-transparent-titlebar . nil))
-
-    (add-to-list 'default-frame-alist
-                 '(ns-appearance . light))
-
-    (add-to-list 'default-frame-alist
-                 '(alpha . (80 . 75)))
-
+  (leaf mac-frame
+    :when *is-a-mac*
+    :config
     (defun stop-minimizing-window ()
       "Stop minimizing window under macOS."
       (interactive)
       (unless (and *is-a-mac*
-                   window-system)
-        (suspend-frame))))
+                  window-system)
+        (suspend-frame)))
+    :custom
+    (default-frame-alist
+      . '((ns-transparent-titlebar . t)
+          (ns-appearance           . light)
+          (alpha                   . (80 . 75))
+          (vertical-scroll-bars    . nil)
+          (internal-border-width   . 24))))
 #+end_src
 
 * Minibuffer
