@@ -35,6 +35,13 @@ Nasy's Theme
     :group 'nasy-theme
     :type 'boolean)
 
+  (defcustom nasy-theme-underlines-list '(comment)
+    "Nasy theme uses underline on list.
+
+  Should be one or more in `comment', `hl-line'."
+    :group 'nasy-theme
+    :type '(list symbol))
+
   (defcustom nasy-theme-fixed-pitch-font "OperatorMonoSSmLig Nerd Font"
     "Nasy them fixed pitch font."
     :group 'nasy-theme
@@ -58,6 +65,11 @@ Nasy's Theme
         scale
       1))
   (defalias 's?n #'nasy-theme-scale?not)
+  (defun nasy-theme--check-underline-list (sym)
+    "Check if SYM in `nasy-theme-underlines-list' or not."
+    (when (memq sym nasy-theme-underlines-list)
+      t))
+  (defalias '--u? #'nasy-theme--check-underline-list)
 #+end_src
 
 * Theme
@@ -248,7 +260,9 @@ Nasy's Theme
      `(font-lock-comment-delimiter-face
        ((,class (:inherit font-lock-comment-face :weight bold))))
      `(font-lock-comment-face
-       ((,class (:foreground ,n/墨灰素 :slant italic :underline t))))
+       ((,class (:foreground ,n/墨灰素
+                             :slant italic
+                             :underline ,(--u? 'comment)))))
      `(font-lock-constant-face
        ((,class (:inherit font-lock-variable-name-face :weight bold))))
      `(font-lock-doc-face
