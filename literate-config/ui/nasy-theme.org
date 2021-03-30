@@ -79,27 +79,35 @@ Nasy's Theme
   (deftheme nasy)
 
   (let* ((class '((class color) (min-colors 89)))
-         (n-品红      "#F00056")
-         (n-火红      "#FF2D51")
-         (n-丁香      "#CCA4E3")
-         (n-墨        "#50616D")
-         (n-墨灰      "#758A99")
-         (n-松绿      "#057748")
-         (n-松花      "#BCE672")
-         (n-湖蓝      "#30DFF3")
-         (n-漆        "#161823")
-         (n-牙        "#EEDEB0")
-         (n-素        "#E0F0E9")
-         (n-缟        "#F2ECDE")
-         (n-茶        "#B35C44")
-         (n-荼        "#F3F9F1")
-         (n-霜        "#E9F1F6")
-         (n-青莲      "#801DAE")
-         (n-靛青      "#177CB0")
-         (n-鱼肚      "#FCEFE8")
-         (n-鸭黄      "#FAFF72")
-         (n-鹅黄      "#FFF143")
-         (n-黛        "#4A4266")
+         (n-丁香   "#CCA4E3")
+         (n-品红   "#F00056")
+         (n-墨     "#50616D")
+         (n-墨灰   "#758A99")
+         (n-富春紡 "#FEF4B4")
+         (n-春緑   "#E3EFD1")
+         (n-松绿   "#057748")
+         (n-松花   "#BCE672")
+         (n-水黄   "#DDEEC4")
+         (n-湖蓝   "#30DFF3")
+         (n-漆     "#161823")
+         (n-火红   "#FF2D51")
+         (n-牙     "#EEDEB0")
+         (n-米灰   "#D3CBAF")
+         (n-紙棕   "#D2B38C")
+         (n-素     "#E0F0E9")
+         (n-缟     "#F2ECDE")
+         (n-胡粉   "#FFFAE8")
+         (n-芽灰   "#E3DBBF")
+         (n-茶     "#B35C44")
+         (n-荼     "#F3F9F1")
+         (n-蝋白   "#FEF8DE")
+         (n-霜     "#E9F1F6")
+         (n-青莲   "#801DAE")
+         (n-靛青   "#177CB0")
+         (n-鱼肚   "#FCEFE8")
+         (n-鸭黄   "#FAFF72")
+         (n-鹅黄   "#FFF143")
+         (n-黛     "#4A4266")
          (n/丁香青莲  (--l?d n-青莲 n-青莲))
          (n/墨墨灰    (--l?d n-墨 n-墨灰))
          (n/墨灰墨    (--l?d n-墨灰 n-墨))
@@ -127,35 +135,35 @@ Nasy's Theme
 
      ;;; Basic
      `(bold ((,class (:weight bold))))
-     ;; bold-italic
-     ;; border
-     `(button       ((,class (:box (:line-width 1) :underline t :weight bold))))
-     `(cursor       ((,class (:background ,n/黛霜 :foreground ,n/霜黛))))
-     `(error        ((,class (:background ,n-鱼肚 :foreground ,n-品红 :weight bold))))
-     `(escape-glyph ((,class (:foreground ,n-茶))))
-     `(fringe       ((,class (:background ,n/霜黛 :foreground ,n/黛霜))))
-     `(header-line  ((,class (:background ,n-荼
-                                          :box (:line-width 2 :style released-button)
-                                          :extend t
-                                          :foreground ,n/靛青湖蓝))))
+     `(button          ((,class (:box (:line-width 1) :underline t :weight bold))))
+     `(cursor          ((,class (:background ,n/黛霜 :foreground ,n/霜黛))))
+     `(error           ((,class (:background ,n-鱼肚 :foreground ,n-品红 :weight bold))))
+     `(escape-glyph    ((,class (:foreground ,n-茶))))
+     `(fixed-pitch
+       ((,class (:font ,(font-spec :name nasy-theme-fixed-pitch-font
+                                   :weight 'normal
+                                   :slant 'normal)))))
+     `(fringe          ((,class (:background ,n/缟漆 :foreground ,n/墨缟))))
+     `(header-line     ((,class (:background ,n-荼
+                                             :box (:line-width 2 :style released-button)
+                                             :extend t
+                                             :foreground ,n/靛青湖蓝))))
      `(highlight    ((,class (:background ,n/墨缟
                                           :distant-foreground ,n/霜黛))))
-     `(link         ((,class (:foreground ,n-靛青  :underline t))))
+     `(internal-border ((,class (:background ,n/缟漆))))
+     `(link         ((,class (:foreground ,n-靛青 :underline t))))
      `(link-visited ((,class (:foreground ,n-青莲 :underline t))))
+     `(region       ((,class (:background ,n/牙墨 :distant-foreground ,n/墨缟 :extend t))))
      `(secondary-selection
-       ((,class (:background ,n-鱼肚))))
+       ((,class (:background ,n-富春紡))))
      `(success      ((,class (:background ,n-鱼肚 :foreground ,n-靛青 :weight bold))))
      `(variable-pitch
        ((,class (:font ,(font-spec :name nasy-theme-variable-pitch-font
                                    :weight 'normal
                                    :slant 'normal)))))
-     `(fixed-pitch
-       ((,class (:font ,(font-spec :name nasy-theme-fixed-pitch-font
-                                   :weight 'normal
-                                   :slant 'normal)))))
      `(warning      ((,class (:background ,n-鱼肚 :foreground ,n-茶 :weight bold))))
 
-     ;; company
+     ;;; company
      `(company-box-scrollbar
        ((,class (:background ,n/黛缟
                              :box (:line-width 2 :style released-button)
@@ -183,7 +191,7 @@ Nasy's Theme
                              :extend t
                              :foreground ,n/缟黛))))
 
-     ;; counsel & ivy
+     ;;; counsel & ivy
      `(all-the-icons-ivy-rich-icon-face
        ((t (:box (:line-width 2 :style released-button)
                  :inherit default))))
@@ -211,7 +219,7 @@ Nasy's Theme
                              :foreground ,n-墨
                              :weight bold))))
 
-     ;; custom faces
+     ;;; customize faces
      `(custom-button
        ((,class (:box (:line-width 2 :style released-button)
                       :foreground ,n/霜黛
@@ -248,14 +256,14 @@ Nasy's Theme
                              :slant normal
                              :weight bold))))
 
-     ;; dashboard
+     ;;; dashboard
      `(widget-button
        ((,class (:weight unspecified))))
 
-     ;; display-fill-column-indicator-mode
+     ;;; display-fill-column-indicator-mode
      `(fill-column-indicator ((,class (:background ,n-湖蓝 :foreground ,n-靛青))))
 
-     ;; font-lock faces
+     ;;; font-lock faces
      `(font-lock-builtin-face
        ((,class (:background ,n/霜黛 :foreground ,n-松绿 :slant italic))))
      `(font-lock-comment-delimiter-face
@@ -283,10 +291,14 @@ Nasy's Theme
      `(font-lock-warning-face
        ((,class (:background ,n-鸭黄 :foreground ,n-墨 :weight bold))))
 
-     ;; highlight line (hl-line)
-     `(hl-line ((,class (:distant-foreground ,n/墨缟 :extend t :underline t :weight bold))))
+     ;;; highlight line (hl-line)
+     `(hl-line ((,class (:background ,n-芽灰
+                                     :distant-foreground ,n-缟
+                                     :extend t
+                                     :underline ,(--u? 'hl-line)
+                                     :weight bold))))
 
-     ;; mode line
+     ;;; mode line
      `(doom-modeline-buffer-minor-mode
        ((,class (:inherit mode-line))))
      `(doom-modeline-buffer-modified
@@ -311,19 +323,19 @@ Nasy's Theme
        ((,class (:foreground ,n-松花
                              :inherit mode-line
                              :weight bold))))
-     `(mode-line          ((,class (:background ,n-荼))))
+     `(mode-line          ((,class (:background ,n-胡粉))))
      `(mode-line-inactive ((,class (:background ,n-素))))
 
-     ;; tab bar mode
+     ;;; tab bar mode
      `(tab-bar                ((t (:inherit mode-line))))
      `(tab-bar-tab            ((t (:inherit mode-line))))
      `(tab-bar-tab-inactive   ((t (:inherit mode-line-inactive))))
 
-     ;; org mode
+     ;;; org mode
      `(org-block
-       ((,class (:background ,n-荼 :foreground ,n/墨缟 :extend t))))
+       ((,class (:background ,n-蝋白 :foreground ,n/墨缟 :extend t))))
      `(org-block-begin-line
-       ((,class (:background ,n/素墨
+       ((,class (:background ,n-富春紡
                              :box (:line-width 1 :style released-button)
                              :extend t
                              :foreground ,n/墨缟
@@ -411,7 +423,7 @@ Nasy's Theme
                              :slant normal
                              :weight bold))))
 
-     ;; tree sitter
+     ;;; tree sitter
      `(tree-sitter-hl-face:operator
        ((,class (:inherit font-lock-negation-char-face))))))
 
