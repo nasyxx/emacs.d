@@ -291,7 +291,13 @@ Nasy's Theme
      `(font-lock-warning-face
        ((,class (:background ,n-鸭黄 :foreground ,n-墨 :weight bold))))
 
-     ;;; highlight line (hl-line)
+     ;;; highlight
+     ;; highlight-indents-guide
+     `(highlight-indent-guides-even-face
+       ((,class (:background ,n-水黄))))
+     `(highlight-indent-guides-odd-face
+       ((,class (:background ,n-春緑))))
+     ;; hl-line
      `(hl-line ((,class (:background ,n-芽灰
                                      :distant-foreground ,n-缟
                                      :extend t
