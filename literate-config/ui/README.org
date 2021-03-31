@@ -79,12 +79,13 @@
                (,(all-the-icons-octicon "gear" :height 1.1 :v-adjust 0.0)
                 "Config"
                 "Config File"
-                (lambda (&rest _) (let ((upath (expand-file-name "custom/user-config.el" user-emacs-directory))))
-                               (epath (expand-file-name "custom/user-config-example.el" user-emacs-directory))
-                  (when (and (file-exists-p epath)
-                            (not (file-exists-p upath)))
-                    (copy-file epath upath))
-                  (find-file upath)))
+                (lambda (&rest _)
+                  (let ((upath (expand-file-name "custom/user-config.el" user-emacs-directory))
+                        (epath (expand-file-name "custom/user-config-example.el" user-emacs-directory)))
+                    (when (and (file-exists-p epath)
+                              (not (file-exists-p upath)))
+                      (copy-file epath upath))
+                    (find-file upath))))
                (,(all-the-icons-octicon "book" :height 1.1 :v-adjust 0.0)
                 "Document"
                 "Document Page"
