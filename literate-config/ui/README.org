@@ -162,6 +162,21 @@
                             frame
                             'prepend)))))
 
+  (defun nasy/set-symbol (charset &optional size weight frame)
+      "Set CHARSET fontset to HanaMin with SIZE with WEIGHT on FRAME.
+
+    Font for char like ∷."
+      (when (display-graphic-p)
+        (let ((size (or size *font-size-symbol*)))
+          (when (nasy/check-font *font-symbol*)
+            (set-fontset-font (frame-parameter nil 'font)
+                              charset
+                              (font-spec :family *font-symbol*
+                                         :weight weight
+                                         :size   size)
+                              frame
+                              'prepend)))))
+
   (defun nasy/set--font (frame)
     "Nasy set font for `FRAME'."
     (when (display-graphic-p)

@@ -127,6 +127,14 @@
       (delete-horizontal-space t)
       (newline nil t)
       (indent-according-to-mode)))
+
+  ;;;###autoload
+  (defun nasy/change-char-width (char width)
+    "Change CHAR width to WIDTH."
+    (let ((table (make-char-table nil)))
+      (set-char-table-parent table char-width-table)
+      (set-char-table-range table char width)
+      (setq char-width-table table)))
 #+end_src
 
 * Footer                                                                        :noexport:
