@@ -805,14 +805,30 @@ https://github.com/politza/pdf-tools
     (add-hook 'after-make-frame-functions
               (lambda (frame)
                 (when (display-graphic-p)
-                  (set-fontset-font t
+                  (set-fontset-font (frame-parameter nil 'font)
                                     '(#Xe100 . #Xe16f)
                                     "Fira Code Symbol"))))
     ;; This works when using emacs without server/client
     (when (display-graphic-p)
-      (set-fontset-font t
+      (set-fontset-font (frame-parameter nil 'font)
                         '(#Xe100 . #Xe16f)
                         "Fira Code Symbol"))
+    (defun nasy/adjust-fira-code-symbol (charset &optional size)
+      (let ((size (or size 14)))
+        (set-fontset-font (frame-parameter nil 'font)
+                          charset
+                          (font-spec :family "Fira Code Symbol"
+                                     :weight 'normal
+                                     :size   size))))
+    :hook
+    (nasy/font-change-hook
+     . (lambda ()
+         (progn
+           (when (display-graphic-p)
+             (set-fontset-font (frame-parameter nil 'font)
+                               '(#Xe100 . #Xe16f)
+                               "Fira Code Symbol")
+             (nasy/adjust-fira-code-symbol #Xe126 15)))))
     ;; I haven't found one statement that makes both of the above situations work, so I use both for now
     :defer-config
     (defun pretty-fonts-set-fontsets (CODE-FONT-ALIST)
@@ -962,9 +978,9 @@ https://github.com/politza/pdf-tools
       (nasy/set-symbol ?⋃ 11 'bold))
     :hook
     (nasy/font-change-hook . nasy/adjust-font)
-    ((((prog-mode-hook
-        python-mode-hook)
-       . (lambda () (prettify-symbols-mode 1))))
+    (((prog-mode-hook
+       python-mode-hook)
+      . (lambda () (prettify-symbols-mode 1)))
      (prog-mode-hook
       . (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
                     '(;; Data Type             P N
@@ -1097,7 +1113,7 @@ https://github.com/politza/pdf-tools
                       ("\\\\" . (?\s (Br . Bl) #Xe106))
                       ("\\\\\\" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe107))
                       (".."   . (?\s (Br . Bl) #Xe124))
-                      ("..."  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe126))
+                      ("..."  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe126 (Br . Bl) #x200b))
                       ("+++"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe139))
                       ("//"   . (?\s (Br . Bl) #Xe12f))
                       ("///"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe130))
