@@ -153,7 +153,7 @@ Nasy's Theme
      `(internal-border ((,class (:background ,n/缟漆))))
      `(link         ((,class (:foreground ,n-靛青 :underline t))))
      `(link-visited ((,class (:foreground ,n-青莲 :underline t))))
-     `(region       ((,class (:background ,n/牙墨 :distant-foreground ,n/墨缟 :extend t))))
+     `(region       ((,class (:background ,n-松花 :distant-foreground ,n/墨缟 :extend t))))
      `(secondary-selection
        ((,class (:background ,n-富春紡))))
      `(success      ((,class (:background ,n-鱼肚 :foreground ,n-靛青 :weight bold))))
