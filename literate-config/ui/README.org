@@ -142,7 +142,7 @@
 
   (defun nasy/set-hanamin (charset &optional size frame)
     "Set CHARSET fontset to HanaMin with SIZE on FRAME.
-
+  https://github.com/cjkvi/HanaMinAFDKO/releases
   Font for char like 𨉚."
     (when (display-graphic-p)
       (let ((size (or size *font-size-cjk*)))
