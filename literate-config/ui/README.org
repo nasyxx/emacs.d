@@ -161,7 +161,19 @@
                                        :weight 'normal
                                        :size   size)
                             frame
-                            'prepend)))))
+                            'prepend))
+        (cl-loop for sfx in (reverse '("A" "B" "C" "Ex A1" "Ex A2" "Ex B" "Ex C" "I"))
+                 for hfont = (concat "Hanazono Mincho " sfx)
+                 do
+                 (progn
+                   (when (nasy/check-font hfont)
+                     (set-fontset-font (frame-parameter nil 'font)
+                                       charset
+                                       (font-spec :family hfont
+                                                  :weight 'normal
+                                                  :size   size)
+                                       frame
+                                       'prepend)))))))
 
   (defun nasy/set-symbol (charset &optional size weight frame)
       "Set CHARSET fontset to HanaMin with SIZE with WEIGHT on FRAME.
