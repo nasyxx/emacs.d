@@ -122,20 +122,20 @@
   (defun nasy/check-font (font)
     "Check if FONT avaliable."
     (if (find-font (font-spec :family font
-                              :weight *font-weight*
-                              :size   *font-size*))
+                              :weight *font-main-weight*
+                              :size   *font-main-size*))
         t
       (message (format "`%s' font not find" font))))
 
   (defun nasy/set-default-font (charset &optional size frame)
-    "Set CHARSET fontset to default *font* with SIZE on FRAME."
+    "Set CHARSET fontset to default *font-main* with SIZE on FRAME."
     (when (and (display-graphic-p)
-              (nasy/check-font *font*))
-      (let ((size (or size *font-size*)))
+              (nasy/check-font *font-main-family*))
+      (let ((size (or size *font-main-size*)))
         (set-fontset-font t
                           charset
-                          (font-spec :family *font*
-                                     :weight *font-weight*
+                          (font-spec :family *font-main-family*
+                                     :weight *font-main-weight*
                                      :size   size)
                           frame
                           'prepend))))
@@ -145,7 +145,7 @@
   https://github.com/cjkvi/HanaMinAFDKO/releases
   Font for char like 𨉚."
     (when (display-graphic-p)
-      (let ((size (or size *font-size-cjk*)))
+      (let ((size (or size *font-cjk-size*)))
         (when (nasy/check-font "HanaMinB")
           (set-fontset-font (frame-parameter nil 'font)
                             charset
@@ -180,11 +180,11 @@
 
     Font for char like ∷."
       (when (display-graphic-p)
-        (let ((size (or size *font-size-symbol*)))
-          (when (nasy/check-font *font-symbol*)
+        (let ((size (or size *font-symbol-size*)))
+          (when (nasy/check-font *font-symbol-family*)
             (set-fontset-font (frame-parameter nil 'font)
                               charset
-                              (font-spec :family *font-symbol*
+                              (font-spec :family *font-symbol-family*
                                          :weight weight
                                          :size   size)
                               frame
@@ -194,31 +194,31 @@
     "Nasy set font for `FRAME'."
     (when (display-graphic-p)
       ;; default
-      (when (nasy/check-font *font*)
+      (when (nasy/check-font *font-main-family*)
         (set-face-attribute
             'default nil
-            :font (font-spec :family *font*
-                             :weight *font-weight*
-                             :size   *font-size*)))
+            :font (font-spec :family *font-main-family*
+                             :weight *font-main-weight*
+                             :size   *font-main-size*)))
       ;; 中文
       (dolist (charset '(kana han cjk-misc bopomofo))
         (progn
           (nasy/set-hanamin charset)
-          (when (nasy/check-font *font-cjk-2*)
+          (when (nasy/check-font *font-cjk-2-family*)
             (set-fontset-font (frame-parameter nil 'font)
                               charset
-                              (font-spec :family *font-cjk-2*
-                                         :weight *font-weight-cjk-2*
-                                         :size   *font-size-cjk*)
+                              (font-spec :family *font-cjk-2-family*
+                                         :weight *font-cjk-2-weight*
+                                         :size   *font-cjk-2-size*)
                               frame
                               'prepend))
 
-          (when (nasy/check-font *font-cjk*)
+          (when (nasy/check-font *font-cjk-family*)
             (set-fontset-font (frame-parameter nil 'font)
                               charset
-                              (font-spec :family *font-cjk*
-                                         :weight *font-weight-cjk*
-                                         :size   *font-size-cjk*)
+                              (font-spec :family *font-cjk-family*
+                                         :weight *font-cjk-weight*
+                                         :size   *font-cjk-size*)
                               frame
                               'prepend))))
 
@@ -232,28 +232,35 @@
                           frame
                           'prepend))
 
-      (when (nasy/check-font *font-symbol*)
+      (when (nasy/check-font *font-symbol-family*)
         (set-fontset-font (frame-parameter nil 'font)
                           'symbol
-                          (font-spec :family *font-symbol*
-                                     :size *font-size-symbol*)
+                          (font-spec :family *font-symbol-family*
+                                     :weight *font-symbol-weight*
+                                     :size   *font-symbol-size*)
                           frame
                           'append))
 
-      (when (nasy/check-font *font-modeline*)
+      (when (nasy/check-font *font-mode-line-family*)
         (set-face-attribute 'mode-line nil
-                            :font (font-spec :family *font-modeline*
-                                             :weight 'normal
-                                             :size   14))
+                            :font (font-spec :family *font-mode-line-family*
+                                             :weight *font-mode-line-weight*
+                                             :size   *font-mode-line-size*))
 
         (set-face-attribute 'mode-line-inactive nil
-                            :font (font-spec :family *font-modeline*
-                                             :weight 'normal
-                                             :size   14))
+                            :font (font-spec :family *font-mode-line-family*
+                                             :weight *font-mode-line-weight*
+                                             :size   *font-mode-line-size*)))
+      (when (nasy/check-font *font-tab-line-family*)
         (set-face-attribute 'tab-line nil
-                            :font (font-spec :family *font-modeline*
-                                             :weight 'normal
-                                             :size   12)))
+                            :font (font-spec :family *font-tab-line-family*
+                                             :weight *font-tab-line-weight*
+                                             :size   *font-tab-line-size*)))
+      (when (nasy/check-font *font-header-line-family*)
+        (set-face-attribute 'header-line nil
+                            :font (font-spec :family *font-header-line-family*
+                                             :weight *font-header-line-weight*
+                                             :size   *font-header-line-size*)))
 
       (after-x 'doom-modeline
         (doom-modeline--set-char-widths doom-modeline-rhs-icons-alist)))

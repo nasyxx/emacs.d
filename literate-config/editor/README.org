@@ -706,7 +706,7 @@ https://github.com/purcell/page-break-lines
     :tag "convenience" "faces"
     :hook
     (after-init-hook . global-page-break-lines-mode)
-    (nasy/font-change-hook;;;;;;;;;;;;;;;;;
+    (nasy/font-change-hook
      . (lambda ()
          (progn
            (nasy/change-char-width page-break-lines-char 2)

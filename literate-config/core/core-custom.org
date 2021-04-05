@@ -40,6 +40,10 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
     "Nasy Emacs Custom Configurations."
     :group 'emacs)
 
+  (defgroup nasy-font nil
+    "Nasy Emacs Custom Font Configurations."
+    :group 'nasy)
+
   (defcustom lisp-modes-hooks '(common-lisp-mode-hook
                                 emacs-lisp-mode-hook
                                 lisp-mode-hook
@@ -194,63 +198,6 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
     :group 'nasy
     :type 'string)
 
-  (defcustom *font* "OperatorMonoSSmLig Nerd Font"
-   "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
-   :group 'nasy
-   :type 'string)
-
-  (defcustom *font-size* 12.0
-   "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
-   :group 'nasy
-   :type 'float)
-
-  (defcustom *font-weight* 'normal
-   "The main font.  After change it, run `M-x nasy/set-font' to see the effect."
-   :group 'nasy
-   :type 'symbol)
-
-  (defcustom *font-symbol* "Symbola"
-     "The symbol font.  After change it, run `M-x nasy/set-font' to see the effect."
-     :group 'nasy
-     :type 'string)
-
-  (defcustom *font-size-symbol* 15.0
-   "The symbol font.  After change it, run `M-x nasy/set-font' to see the effect."
-   :group 'nasy
-   :type 'float)
-
-  (defcustom *font-cjk* "I.Ngaan"
-   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect.
-
-  'I.Ngaan' font from `http://founder.acgvlyric.org/iu/doku.php/造字:開源字型_i.顏體'."
-   :group 'nasy
-   :type 'string)
-
-  (defcustom *font-cjk-2* "Xingkai SC"
-   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
-   :group 'nasy
-   :type 'string)
-
-  (defcustom *font-size-cjk* 16.0
-   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
-   :group 'nasy
-   :type 'float)
-
-  (defcustom *font-weight-cjk* 'normal
-   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
-   :group 'nasy
-   :type 'symbol)
-
-  (defcustom *font-weight-cjk-2* 'black
-   "The cjk font.  After change it, run `M-x nasy/set-font' to see the effect."
-   :group 'nasy
-   :type 'symbol)
-
-  (defcustom *font-modeline* "Recursive Mono Casual Static"
-   "The modenline font.  After change it, run `M-x nasy/set-font' to see the effect."
-   :group 'nasy
-   :type 'symbol)
-
   (defcustom *lookup/offline* t
     "Install and prefer offline dictionary/thesaurus."
     :group 'nasy
@@ -260,6 +207,77 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
     (or (cl-find-if #'executable-find '("fdfind" "fd"))
         "fd")
     "name of `fd-find' executable binary")
+
+  (defmacro nasy/-font (cname ftype suffix type)
+    "Gen font custom named CNAME FTYPE with SUFFIX and TYPE."
+    `(let ((doc   (concat "The " cname " font " ftype ".
+  After change it, run `M-x nasy/set-font' to see the effect."))
+           (name  (intern (concat "*font" (eval suffix) "*"))))
+       `(defcustom ,name nil ,doc :group 'nasy-font :type ',type)))
+
+
+  (dolist (cname '("main" "symbol" "cjk" "mode-line" "tab-line" "header-line"))
+    (dolist (ftype '("family" "weight" "size"))
+      (let ((type (cond ((string= "family" ftype)
+                         'string)
+                        ((string= "weight" ftype)
+                         'symbol)
+                        ((string= "size" ftype)
+                         'float)
+                        (t (error "Wrong Font Type"))))
+            (suffix (concat "-" cname "-" ftype)))
+        (nasy/-font cname ftype suffix type)
+        (when (string= "cjk" cname)
+          (dolist (sfxn '(2 3 4 5))
+            (let* ((cname (format "%s-%d" cname sfxn))
+                   (suffix (format "-%s-%s" cname ftype)))
+              (nasy/-font cname ftype suffix type)))))))
+
+  (leaf nasy-font
+    :doc "一些默訒値"
+    :custom
+    ((*font-main-family*   . "OperatorMonoSSmLig Nerd Font")
+     (*font-symbol-family* . "Symbola")
+     (*font-cjk-family*    . "STFLGQKJF")
+     (*font-cjk-2-family*  . "FZLiuGongQuanKaiShuJF")
+     ;; I.Ngaan' font from `http://founder.acgvlyric.org/iu/doku.php/造字:開源字型_i.顏體'.
+     (*font-cjk-3-family*  . "I.Ngaan")
+     (*font-cjk-4-family*  . "Kaiti SC")
+     (*font-cjk-5-family*  . "Kaiti TC")
+     ((*font-mode-line-family*
+       ,*font-header-line-family*
+       ,*font-tab-line-family*)
+      . "Recursive Mono Casual Static"))
+
+    (((*font-main-size*
+       ,*font-mode-line-size*)
+      . 14)
+     (*font-symbol-size* . 17)
+     ((*font-cjk-size*
+       ,*font-cjk-2-size*
+       ,*font-cjk-3-size*
+       ,*font-cjk-4-size*
+       ,*font-cjk-5-size*)
+      . 18)
+     ((*font-tab-line-size*
+       ,*font-header-line-size*)
+      . 12))
+
+
+    ((*font-main-weight*
+      ,*font-symbol-weight*
+      ,*font-cjk-weight*
+      ,*font-cjk-2-weight*
+      ,*font-cjk-3-weight*
+      ;; *font-cjk-4-weight*
+      ;; *font-cjk-5-weight*
+      ,*font-mode-line-weight*
+      ,*font-tab-line-weight*
+      ,*font-header-line-weight*)
+     . 'normal)
+
+    ((*font-cjk-4-weight
+      ,*font-cjk-5-weight) . 'black))
 #+end_src
 
 * Default Settings
