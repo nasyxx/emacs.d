@@ -82,12 +82,20 @@ https://github.com/magit/transient
 
 #+begin_src elisp
   (leaf nasy-keybindings
+    :preface
+    (defun nasy/-insert-backslash ()
+      (interactive)
+      (insert-char ?\\))
     :bind
     ;;; navigate
     (("H-f" . forward-word)
      ("H-b" . backward-word)
      ("H-n" . next-line)
-     ("H-p" . previous-line)))
+     ("H-p" . previous-line))
+
+    ;;; 修正 JIS 楗盤配列
+    (("C-M-¥" . toggle-input-method)
+     ("M-¥"   . nasy/-insert-backslash)))
 #+end_src
 
 #+begin_src elisp
