@@ -52,7 +52,7 @@ Packages list
   - restclient
 + thingopt
 + vterm
-
++ wakatime-mode
 + yasnippet
   - license-snippets
   - yasnippet-snippets
@@ -101,6 +101,7 @@ Packages list
     thingopt
     vterm
     vterm-toggle
+    wakatime-mode
 
     yasnippet
     license-snippets
@@ -512,6 +513,13 @@ https://github.com/jixiuf/vterm-toggle
                       (dedicated . t) ;dedicated is supported in emacs27
                       (reusable-frames . visible)
                       (window-height . 0.3))))
+#+end_src
+
+** Wakatime-mode
+
+#+begin_src elisp
+  (leaf wakatime-mode
+    :hook (after-init-hook . global-wakatime-mode))
 #+end_src
 
 ** Yasnipeet                               :convenience:emulation:
