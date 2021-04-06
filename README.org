@@ -115,8 +115,8 @@ To add your own customization, use @@html: <kbd>M-x</kbd> <kbd>customize</kbd> @
    ,*risky-var*              nil
    ,*dvorak*                 nil
    ,*dvorak-trans*           nil
-   ,*font-cjk*               "Kaiti SC"
-   ,*font-weight-cjk*        'normal)
+   ,*font-cjk-family*        "Kaiti SC"
+   ,*font-cjk-weight*        'normal)
   (provide 'user-config-example)
 #+END_SRC
 

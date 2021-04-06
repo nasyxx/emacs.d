@@ -204,23 +204,21 @@
       (dolist (charset '(kana han cjk-misc bopomofo))
         (progn
           (nasy/set-hanamin charset)
-          (when (nasy/check-font *font-cjk-2-family*)
-            (set-fontset-font (frame-parameter nil 'font)
-                              charset
-                              (font-spec :family *font-cjk-2-family*
-                                         :weight *font-cjk-2-weight*
-                                         :size   *font-cjk-2-size*)
-                              frame
-                              'prepend))
-
-          (when (nasy/check-font *font-cjk-family*)
-            (set-fontset-font (frame-parameter nil 'font)
-                              charset
-                              (font-spec :family *font-cjk-family*
-                                         :weight *font-cjk-weight*
-                                         :size   *font-cjk-size*)
-                              frame
-                              'prepend))))
+          (cl-loop for fn in (reverse '("" "-2" "-3" "-4" "-5"))
+                   for fpf = (format "*font-cjk%s" fn)
+                   for ff  = (eval (intern (concat fpf "-family*")))
+                   for fw  = (eval (intern (concat fpf "-weight*")))
+                   for fs  = (eval (intern (concat fpf "-size*")))
+                   do
+                   (progn
+                     (when (nasy/check-font ff)
+                       (set-fontset-font (frame-parameter nil 'font)
+                                         charset
+                                         (font-spec :family ff
+                                                    :weight *font-cjk-weight*
+                                                    :size   *font-cjk-size*)
+                                         frame
+                                         'prepend))))))
 
 
       (when (and *is-a-mac*

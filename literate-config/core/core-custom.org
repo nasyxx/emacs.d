@@ -206,35 +206,39 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
   (defvar nasy/projectile-fd-binary
     (or (cl-find-if #'executable-find '("fdfind" "fd"))
         "fd")
-    "name of `fd-find' executable binary")
+    "Name of `fd-find' executable binary.")
 
-  (defmacro nasy/-font (cname ftype suffix type)
-    "Gen font custom named CNAME FTYPE with SUFFIX and TYPE."
-    `(let ((doc   (concat "The " cname " font " ftype ".
+
+  (defun nasy/-font-doc (cname ftype)
+    "Generate font custome variable doc with CNAME and FTYPE."
+    (concat "The " cname " font " ftype ".
   After change it, run `M-x nasy/set-font' to see the effect."))
-           (name  (intern (concat "*font" (eval suffix) "*"))))
-       `(defcustom ,name nil ,doc :group 'nasy-font :type ',type)))
-
 
   (dolist (cname '("main" "symbol" "cjk" "mode-line" "tab-line" "header-line"))
-    (dolist (ftype '("family" "weight" "size"))
-      (let ((type (cond ((string= "family" ftype)
-                         'string)
-                        ((string= "weight" ftype)
-                         'symbol)
-                        ((string= "size" ftype)
-                         'float)
-                        (t (error "Wrong Font Type"))))
-            (suffix (concat "-" cname "-" ftype)))
-        (nasy/-font cname ftype suffix type)
-        (when (string= "cjk" cname)
-          (dolist (sfxn '(2 3 4 5))
-            (let* ((cname (format "%s-%d" cname sfxn))
-                   (suffix (format "-%s-%s" cname ftype)))
-              (nasy/-font cname ftype suffix type)))))))
+    (cl-loop for ftype in '("family" "weight" "size")
+             for type = (cond ((string= "family" ftype) 'string)
+                            ((string= "weight" ftype) 'symbol)
+                            ((string= "size" ftype)   'float)
+                            (t (error "Wrong Font Type")))
+             for doc  = (nasy/-font-doc cname ftype)
+             for name = (intern (format "*font-%s-%s*" cname ftype))
+             do
+             (progn
+               (custom-declare-variable name nil doc :group 'nasy-font :type type)
+               (when (string= "cjk" cname)
+                 (cl-loop for sfxn in '(2 3 4 5)
+                          for cname_ = (format "%s-%d" cname sfxn)
+                          for name_  = (intern (format "*font-%s-%s*" cname_ ftype))
+                          for doc_   = (nasy/-font-doc cname_ ftype)
+                          do
+                          (progn
+                            (custom-declare-variable name_ nil doc_
+                                                     :group 'nasy-font
+                                                     :type type)))))))
+
 
   (leaf nasy-font
-    :doc "一些默訒値"
+    :doc "一些默訒値。"
     :custom
     ((*font-main-family*   . "OperatorMonoSSmLig Nerd Font")
      (*font-symbol-family* . "Symbola")
@@ -276,8 +280,8 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
       ,*font-header-line-weight*)
      . 'normal)
 
-    ((*font-cjk-4-weight
-      ,*font-cjk-5-weight) . 'black))
+    ((*font-cjk-4-weight*
+      ,*font-cjk-5-weight*) . 'black))
 #+end_src
 
 * Default Settings
