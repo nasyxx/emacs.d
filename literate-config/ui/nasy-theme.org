@@ -100,7 +100,7 @@ Nasy's Theme
          (n-芽灰   "#E3DBBF")
          (n-茶     "#B35C44")
          (n-荼     "#F3F9F1")
-         (n-蝋白   "#FEF8DE")
+         (n-蠟白   "#FEF8DE")
          (n-霜     "#E9F1F6")
          (n-青莲   "#801DAE")
          (n-靛青   "#177CB0")
@@ -339,7 +339,7 @@ Nasy's Theme
 
      ;;; org mode
      `(org-block
-       ((,class (:background ,n-蝋白 :foreground ,n/墨缟 :extend t))))
+       ((,class (:background ,n-蠟白 :foreground ,n/墨缟 :extend t))))
      `(org-block-begin-line
        ((,class (:background ,n-富春紡
                              :box (:line-width 1 :style released-button)
