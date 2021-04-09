@@ -105,6 +105,15 @@ collection.
 
 #+include: "ui/README.org"
 
+* App
+
+#+begin_src elisp
+  (nasy/local-repo app)
+  (require 'nasy-app)
+#+end_src
+
+#+include: "app/README.org"
+
 * Extra
 
 Use ~(nasy/extra-repo xxx)~

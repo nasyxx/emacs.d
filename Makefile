@@ -4,7 +4,7 @@ all: help
 .PHONY: all
 
 ## Generate all
-generate: early-init user-config init bootstrap core editor tools langs ui org
+generate: early-init user-config init bootstrap core editor tools langs ui org app
 .PHONY: generate
 
 
@@ -106,7 +106,17 @@ config/ui: $(wildcard literate-config/ui/*.org)
 
 ## Generate ui
 ui: config/ui
-.PHONY: bootstrap core editor tools langs ui org
+
+## Generate ui from literate-config/app
+config/app: $(wildcard literate-config/app/*.org)
+	@echo "Generate app from literate-config/app"
+	@rm -rf config/app straight/build/nasy-app var/org/timestamps/app.cache
+	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "app")'
+
+## Generate app
+app: config/app
+
+.PHONY: bootstrap core editor tools langs ui org app
 
 
 ## clean build (var/org/timestamps/ & config/)

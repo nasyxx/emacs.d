@@ -113,6 +113,14 @@
          ;; :include ("README.org")
          :publishing-directory ,(expand-file-name "ui" nasy/publish-base)
          :publishing-function org-babel-tangle-publish)
+        ("app"
+         :base-directory "~/.emacs.d/literate-config/app/"
+         :base-extension "org"
+         :recursive nil
+         ;; :exclude "README.org"
+         ;; :include ("README.org")
+         :publishing-directory ,(expand-file-name "app" nasy/publish-base)
+         :publishing-function org-babel-tangle-publish)
         ("all"
          :components ("early-init"
                       "custom"
@@ -123,7 +131,8 @@
                       "tools"
                       "langs"
                       "org"
-                      "ui"))))
+                      "ui"
+                      "app"))))
 
 (provide 'export)
 ;;; export.el ends here

@@ -1,0 +1,93 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "nasy-app.el")
+
+* Header                                                              :noexport:
+
+#+begin_src elisp
+  ;;; nasy-app.el --- Nasy's Emacs Configuration applications.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2020  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; Nasy's Emacs Configuration Applications.
+
+  ;;; Code:
+#+end_src
+
+* Package
+
++ rime
++ telega
+
+#+begin_src elisp
+  (nasy/s-u-p rime telega)
+#+end_src
+
+* Configs
+
+** Emacs Rime                            :convenience:inputmethod:
+
+RIME ㄓ in Emacs
+
+https://github.com/DogLooksGood/emacs-rime
+
+#+begin_src elisp
+  (leaf rime
+    :doc "RIME ㄓ in Emacs"
+    :url "https://github.com/DogLooksGood/emacs-rime"
+    :tag "convenience" "input-method"
+    :bind
+    (:rime-mode-map
+     ("C-`"   . rime-send-keybinding)
+     ("C-S-`" . rime-send-keybinding)
+     ("C-,"   . rime-send-keybinding))
+    (:rime-active-mode-map
+     ("C-;"   . rime-send-keybinding)
+     ("C-SPC" . rime-send-keybinding))
+    :custom
+    `(rime-librime-root    . ,(expand-file-name "~/.nix-profile"))
+    `(rime-user-data-dir   . ,(expand-file-name "~/.config/rime"))
+    (rime-candidate-labels .'("〡" "〢" "〣" "〤" "〥" "〦" "〧" "〨" "〩"))
+    (default-input-method  . "rime")
+    (rime-cursor           . "˰")
+    (rime-show-candidate   . 'posframe)
+    (rime-posframe-style   . 'vertical)
+    (rime-show-preedit     . t)
+    (rime-translate-keybindings
+     . '("C-f"
+         "C-b"
+         "C-n"
+         "C-p"
+         "C-g"
+         "C-`"
+         "C-;"
+         "C-SPC"
+         "<left>"
+         "<right>"
+         "<up>"
+         "<down>"
+         "<prior>"
+         "<next>"
+         "<delete>")))
+#+end_src
+
+** telega
+
+#+begin_src elisp
+  (leaf telega
+    :custom
+    `(telega-directory . ,(expand-file-name "~/.config/telega"))
+    `(telega-server-libs-prefix . ,(expand-file-name "~/.nix-profile"))
+
+    (telega-use-images        . t))
+    ;; (telega-emoji-font-family . "Apple Color Emoji"))
+#+end_src
+
+* Footer                                                              :noexport:
+
+#+begin_src elisp
+  (provide 'nasy-app)
+  ;;; nasy-app.el ends here
+#+end_src
