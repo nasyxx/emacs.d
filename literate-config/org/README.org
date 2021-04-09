@@ -24,6 +24,7 @@ I use ~org~ with ~org-plus-contrib~
   (nasy/s-u-p
     org-plus-contrib
 
+    org-appear
     org-cliplink
     org-pdfview
     org-roam
@@ -373,6 +374,26 @@ I use ~org~ with ~org-plus-contrib~
         (dolist (language oxs)
           (straight-use-package language)
           (require language nil t)))))
+#+end_src
+
+** org appear                                       :convenience:
+
+Toggle visibility of hidden Org mode element parts upon entering and leaving an
+element
+
+https://github.com/awth13/org-appear
+
+#+begin_src elisp
+  (leaf org-appear
+    :doc "Make invisible parts of Org elements appear visible."
+    :url "https://github.com/awth13/org-appear"
+    :tag "convenience"
+    :hook (org-mode-hook)
+    :custom
+    ((org-appear-autoemphasis
+      org-appear-autosubmarkers
+      org-appear-autoentities
+      org-appear-autolinks) . t))
 #+end_src
 
 ** Org Agenda
