@@ -215,10 +215,11 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
   After change it, run `M-x nasy/set-font' to see the effect."))
 
   (dolist (cname '("main" "symbol" "cjk" "mode-line" "tab-line" "header-line"))
-    (cl-loop for ftype in '("family" "weight" "size")
+    (cl-loop for ftype in '("family" "weight" "size" "scale")
              for type = (cond ((string= "family" ftype) 'string)
                             ((string= "weight" ftype) 'symbol)
                             ((string= "size" ftype)   'float)
+                            ((string= "scale" ftype)  'float)
                             (t (error "Wrong Font Type")))
              for doc  = (nasy/-font-doc cname ftype)
              for name = (intern (format "*font-%s-%s*" cname ftype))
@@ -262,11 +263,17 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
        ,*font-cjk-3-size*
        ,*font-cjk-4-size*
        ,*font-cjk-5-size*)
-      . 18)
+      . nil)
      ((*font-tab-line-size*
        ,*font-header-line-size*)
       . 12))
 
+    ((*font-cjk-scale*
+       ,*font-cjk-2-scale*
+       ,*font-cjk-3-scale*
+       ,*font-cjk-4-scale*
+       ,*font-cjk-5-scale*)
+     . 1.3)
 
     ((*font-main-weight*
       ,*font-symbol-weight*

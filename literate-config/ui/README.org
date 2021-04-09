@@ -162,6 +162,10 @@
                                        :size   size)
                             frame
                             'prepend))
+        (setf (alist-get ".*HanaMinA.*" face-font-rescale-alist *font-cjk-scale* nil 'string=)
+              ,*font-cjk-scale*)
+        (setf (alist-get ".*HanaMinB.*" face-font-rescale-alist *font-cjk-scale* nil 'string=)
+              ,*font-cjk-scale*)
         (cl-loop for sfx in (reverse '("A" "B" "C" "Ex A1" "Ex A2" "Ex B" "Ex C" "I"))
                  for hfont = (concat "Hanazono Mincho " sfx)
                  do
@@ -173,7 +177,14 @@
                                                   :weight 'normal
                                                   :size   size)
                                        frame
-                                       'prepend)))))))
+                                       'prepend))
+
+                  (setf (alist-get (format ".*%s.*" hfont)
+                                   face-font-rescale-alist
+                                   ,*font-cjk-scale*
+                                   nil
+                                   'string=)
+                        ,*font-cjk-scale*))))))
 
   (defun nasy/set-symbol (charset &optional size weight frame)
       "Set CHARSET fontset to HanaMin with SIZE with WEIGHT on FRAME.
@@ -209,17 +220,19 @@
                    for ff  = (eval (intern (concat fpf "-family*")))
                    for fw  = (eval (intern (concat fpf "-weight*")))
                    for fs  = (eval (intern (concat fpf "-size*")))
+                   for fss = (eval (intern (concat fpf "-scale*")))
                    do
                    (progn
                      (when (nasy/check-font ff)
                        (set-fontset-font (frame-parameter nil 'font)
                                          charset
                                          (font-spec :family ff
-                                                    :weight *font-cjk-weight*
-                                                    :size   *font-cjk-size*)
+                                                    :weight fw
+                                                    :size   fs)
                                          frame
-                                         'prepend))))))
-
+                                         'prepend))
+                     (let ((ffn (concat ".*" ff ".*")))
+                       (setf (alist-get ffn face-font-rescale-alist fss nil 'string=) fss))))))
 
       (when (and *is-a-mac*
                 (nasy/check-font "Apple Color Emoji"))
