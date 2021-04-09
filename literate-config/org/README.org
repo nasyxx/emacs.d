@@ -26,6 +26,8 @@ I use ~org~ with ~org-plus-contrib~
 
     org-cliplink
     org-pdfview
+    org-roam
+    company-org-roam
     org-superstar
     org-wc
     toc-org)
@@ -594,6 +596,36 @@ I use ~org~ with ~org-plus-contrib~
           (opsb-append-org-prettify-symbols))
       (remove-hook 'post-command-hook 'opsb-org-prettify-src t)
       (opsb-delete-org-prettify-symbols)))
+#+end_src
+
+** org roam                                    :convenience:roam:
+
+Org-roam is a plain-text knowledge management system. It brings some of Roam's
+more powerful features into the org-mode ecosystem.
+
+Rudimentary Roam replica with org-mode.
+
+https://www.orgroam.com/
+
+https://github.com/org-roam/org-roam
+
+
+#+begin_src elisp
+  (leaf org-roam
+    :doc "Rudimentary Roam replica with org-mode."
+    :url "https://github.com/org-roam/org-roam"
+    :tag "convenience" "roam"
+    :hook (org-mode-hook)
+    :custom
+    `(org-roam-directory . ,(expand-file-name "~/.config/orgmode"))
+    :bind
+    (:org-roam-mode-map
+     (("C-c n l" . org-roam)
+      ("C-c n f" . org-roam-find-file)
+      ("C-c n g" . org-roam-graph)))
+    (:org-mode-map
+     (("C-c n i" . org-roam-insert))
+     (("C-c n I" . org-roam-insert-immediate))))
 #+end_src
 
 ** Org superstar

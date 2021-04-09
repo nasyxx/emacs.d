@@ -422,6 +422,10 @@ Nasy's Theme
      `(org-meta-line
        ((,class (:inherit font-lock-comment-face
                           :underline nil))))
+     `(org-roam-link
+       ((,class (:inherit org-link
+                          :overline  t
+                          :underline t))))
      `(org-tag
        ((,class (:background ,n/牙黛
                              :box t
