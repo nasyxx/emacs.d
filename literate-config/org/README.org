@@ -532,15 +532,15 @@ https://github.com/awth13/org-appear
   (defvar opsb-ob-header-symbol ?☰
     "Symbol used for babel headers")
 
-  (defvar opsb-block-alist `(("#+begin_src" . ?λ) ;; ╦ ➤ 🖝 ➟ ➤ ✎ ✎
-                             ("#+end_src"   . ?⌞) ;; ╩ □
-                             ("#+header:" . ,opsb-ob-header-symbol)
+  (defvar opsb-block-alist `(("#+begin_src"     . ?λ) ;; ╦ ➤ 🖝 ➟ ➤ ✎ ✎
+                             ("#+end_src"       . ?⌞) ;; ╩ □
+                             ("#+header:"       . ,opsb-ob-header-symbol)
                              ("#+begin_comment" . ?✎)
-                             ("#+end_comment" . ?⌞)
-                             ("#+begin_notes" . ?➤)
-                             ("#+end_notes" . ?⌞)
-                             ("#+begin_quote" . ?»)
-                             ("#+end_quote" . ?⌞)))
+                             ("#+end_comment"   . ?⌞)
+                             ("#+begin_notes"   . ?➤)
+                             ("#+end_notes"     . ?⌞)
+                             ("#+begin_quote"   . ?»)
+                             ("#+end_quote"     . ?⌞)))
 
   (defun opsb-org-prettify-src--update ()
     (let ((case-fold-search t)
@@ -653,20 +653,42 @@ https://github.com/org-roam/org-roam
 
 #+begin_src elisp
   (leaf org-superstar
-    :hook org-mode-hook
+    :hook
+    (org-mode-hook)
+    (nasy/font-change-hook
+     . (lambda ()
+         (progn
+           (nasy/set-symbol ?☯ 21 nil)
+           (nasy/set-symbol ?✿ 18 nil)
+           (nasy/set-symbol ?❀ 16 nil)
+           (nasy/set-symbol ?✫ 15 nil)
+           (nasy/set-symbol ?✸ 16 nil)
+           (nasy/set-symbol ?◉ 16 nil)
+           (nasy/set-symbol ?✼ 12 nil)
+           (nasy/set-symbol ?✚ 12 nil)
+           (nasy/set-symbol ?⁍ 13 nil)
+           (nasy/change-char-width ?☯ 2)
+           (nasy/change-char-width ?✿ 2)
+           (nasy/change-char-width ?❀ 2)
+           (nasy/change-char-width ?✫ 2)
+           (nasy/change-char-width ?✸ 2)
+           (nasy/change-char-width ?◉ 2)
+           (nasy/change-char-width ?✼ 1)
+           (nasy/change-char-width ?✚ 1)
+           (nasy/change-char-width ?⁍ 1))))
     :custom
     ((org-superstar-special-todo-items . t)
      (org-superstar-headline-bullets-list
-      . '("♥"
+      . '("☯"
           "✿"
           "❀"
-          "☢"
+          "✫"
           "✸"
           "◉"))
      (org-superstar-item-bullet-alist
-      . '((?* . ?☯)
+      . '((?* . ?✼)
           (?+ . ?✚)
-          (?- . ?▶)))))
+          (?- . ?⁍)))))
 #+end_src
 
 * Footer                                                 :noexport:
