@@ -16,20 +16,6 @@
   ;;; Code:
 #+end_src
 
-* Core Packages
-
-#+begin_src elisp
-  (nasy/s-u-p
-    async
-    default-text-scale
-    diminish
-    exec-path-from-shell
-    general
-    noflet
-    session
-    transient)
-#+end_src
-
 * Core Libs
 
 Core Libs include useful functions, macros and alias.

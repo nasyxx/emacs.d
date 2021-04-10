@@ -16,24 +16,6 @@
   ;;; Code:
 #+end_src
 
-* Packages
-
-I use ~org~ with ~org-plus-contrib~
-
-#+begin_src elisp
-  (nasy/s-u-p
-    org-plus-contrib
-
-    org-appear
-    org-cliplink
-    org-pdfview
-    org-roam
-    company-org-roam
-    org-superstar
-    org-wc
-    toc-org)
-#+end_src
-
 * Autoloads
 
 #+begin_src elisp

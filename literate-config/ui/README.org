@@ -16,12 +16,6 @@
   ;;; Code:
 #+end_src
 
-* Package
-
-  #+begin_src elisp
-    (nasy/s-u-p dashboard doom-themes)
-  #+end_src
-
 * Configs
 
 ** Dashboard

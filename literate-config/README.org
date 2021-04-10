@@ -34,6 +34,7 @@ lexical scoping.
 
 #+begin_src elisp
   (setq-default lexical-binding t)
+  (setq nasy---times (current-time))
 #+end_src
 
 * Bootstrap
@@ -54,6 +55,8 @@ collection.
 * Core
 
 #+begin_src elisp
+  (nasy/s-u-p nasy-core-p)
+
   (nasy/local-repo core)
   (require 'nasy-core)
 #+end_src
@@ -63,6 +66,8 @@ collection.
 * Editor
 
 #+begin_src elisp
+  (nasy/s-u-p nasy-editor-p)
+
   (nasy/local-repo editor)
   (require 'nasy-editor)
 #+end_src
@@ -72,6 +77,8 @@ collection.
 * Tools
 
 #+begin_src elisp
+  (nasy/s-u-p nasy-tools-p)
+
   (nasy/local-repo tools :build (:not compile))
   (require 'nasy-tools)
 #+end_src
@@ -81,6 +88,8 @@ collection.
 * Languages
 
 #+begin_src elisp
+  (nasy/s-u-p nasy-langs-p)
+
   (nasy/local-repo langs)
   (require 'nasy-langs)
 #+end_src
@@ -90,6 +99,8 @@ collection.
 * Org Mode
 
 #+begin_src elisp
+  (nasy/s-u-p nasy-org-p)
+
   (nasy/local-repo org)
   (require 'nasy-org)
 #+end_src
@@ -99,6 +110,8 @@ collection.
 * UI
 
 #+begin_src elisp
+  (nasy/s-u-p nasy-ui-p)
+
   (nasy/local-repo ui)
   (require 'nasy-ui)
 #+end_src
@@ -108,6 +121,8 @@ collection.
 * App
 
 #+begin_src elisp
+  (nasy/s-u-p nasy-app-p)
+
   (nasy/local-repo app)
   (require 'nasy-app)
 #+end_src

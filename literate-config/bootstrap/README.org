@@ -62,68 +62,35 @@ At the same time, I use [[https://github.com/conao3/leaf.el][leaf.el]] to manage
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
 
-  (defmacro nasy/s-u-p (&rest packages)
-    "Straight use multiple PACKAGES.
-
-  Usage:
-
-      \(nasy/s-u-p nil t 'avy avx *eldoc-use* (avy :type git)
-                   (:when nil ax3) (:when t 'axx ax2) (:when t axy 'axy2))
-
-  to
-
-      \(progn
-         (straight-use-package 'avy)
-         (straight-use-package 'avx)
-         (if *eldoc-use*
-             (progn
-               (straight-use-package *eldoc-use*)))
-         (straight-use-package
-          '(avy :type git))
-         nil
-         (progn
-           (straight-use-package 'axx)
-           (straight-use-package 'ax2))
-         (progn
-           (straight-use-package 'axy)
-           (straight-use-package 'axy2)))"
-    (declare (indent defun))
-    `(progn
-       ,@(cl-loop for package in packages
-                  when (and package
-                           (not (eq package t)))
-                  collect
-                  (cond ((and (symbolp package)
-                             (or (not (boundp package))
-                                (fboundp package)))
-                         `(straight-use-package ',package))
-                        ((symbolp package)
-                         `(when ,package
-                            (straight-use-package ,package)))
-                        ((consp package)
-                         (let ((fst (car package))
-                               (rst (cdr package)))
-                           (cond ((eq :when fst)
-                                  `(when ,(car rst)
-                                     (nasy/s-u-p ,@(cdr rst))))
-                                 ((eq 'quote fst)
-                                  `(straight-use-package ,package))
-                                 (t `(straight-use-package ',package)))))
-                        (t nil)))))
-
-
-  (nasy/s-u-p leaf leaf-keywords)
+  (straight-use-package 'leaf)
+  (straight-use-package 'leaf-keywords)
   (leaf-keywords-init)
 
-  ;; Feature `straight-x' from package `straight' provides
-  ;; experimental/unstable extensions to straight.el which are not yet
-  ;; ready for official inclusion.
-  (leaf straight-x
-    ;; Add an autoload for this extremely useful command.
-    :commands (straight-x-fetch-all))
+  (defun nasy/-s-u-p (package)
+    "Handle special PACKAGE var."
+    (if (boundp package)
+        (when (eval package)
+          (straight-use-package (eval package)))
+      (straight-use-package package)))
+
+  (defun nasy/s-u-p (&rest packages-sets)
+    "Straight use multiple PACKAGES-SETS."
+    (cl-loop for packages-set in packages-sets
+             when (not (null packages-set))
+             do
+             (cl-loop for package in packages-set
+                      do
+                      (cond ((symbolp package)
+                             (nasy/-s-u-p package))
+                            ((listp package)
+                             (dolist (p package)
+                               (nasy/-s-u-p p)))
+                            (t (error "???"))))))
 #+end_src
 
-* Load Path
+* Load Packages
+
+** Load Path
 
 Literate config will generate emacslisp files to ~config~ folder.  However, we use
 straight.el to handle them, we do not need to add them to ~load-path~ manually.
@@ -151,12 +118,302 @@ straight.el to handle them, we do not need to add them to ~load-path~ manually.
                         user-emacs-directory)))))
 #+end_src
 
+** Load Custom
+
 Also, there is a custom directory.
 
 #+begin_src elisp
   (add-to-list 'load-path (expand-file-name "custom" user-emacs-directory))
   (require 'user-config-example)
   (require 'user-config nil t)
+#+end_src
+
+** Packages
+
+*** Bootstrap
+
+When using straight.el, the org version is needed to custom set.
+
+#+begin_src elisp
+  (defvar nasy-bootstrap-p
+    '(benchmark-init
+      gcmh
+      no-littering
+      org-plus-contrib)
+    "Bootstrap packages.")
+#+end_src
+
+*** Core
+
+#+begin_src elisp
+  (defvar nasy-core-p
+    '(async
+      default-text-scale
+      diminish
+      exec-path-from-shell
+      general
+      noflet
+      session
+      transient)
+    "Cores packages.")
+#+end_src
+
+*** Editor
+
+#+begin_src elisp
+  (defvar nasy-editor-p
+    `(alert
+      cheat-sh
+      dash
+      diff-hl
+      dired-hacks
+      easy-kill
+      ,*eldoc-use*
+      spatial-navigate
+      explain-pause-mode
+      expand-region
+      ;; fill
+      unfill
+      visual-fill-column
+      ;; highlight
+      color-identifiers-mode
+      ;; hl-line  builtin
+      ,(when *highlight-indent-guides* 'highlight-indent-guides)
+      rainbow-mode
+      ;; helm
+      ;; helm
+
+      helpful
+      htmlize
+      indent-tools
+      ;; ivy
+      all-the-icons-ivy-rich
+      counsel
+      counsel-projectile
+      ivy
+      ivy-rich
+      ivy-xref
+      ,(when *ivy-posframe* 'ivy-posframe)
+      ,(when *ivy-prescient* '(prescient ivy-prescient))
+
+      list-unicode-display
+      mmm-mode
+      multiple-cursors
+      page-break-lines
+      ;; paren
+      smartparens
+      rainbow-delimiters
+
+      point-history
+      prescient
+      pretty-mode
+      quick-peek
+      ;; selectrum
+      ;; selectrum
+      ;; selectrum-prescient
+      ;; embark
+      ;; consult
+      ;; consult-selectrum
+      ;; consult-flycheck
+      ;; marginalia
+
+      symbol-overlay
+      switch-window
+      ;; treemacs
+      treemacs
+      treemacs-icons-dired
+      treemacs-magit
+      treemacs-projectile
+      ;; tree-sitter
+      tsc
+      tree-sitter
+      tree-sitter-langs
+      ;;version-control
+      abridge-diff
+      forge
+      gist
+      git-blamed
+      git-gutter
+      git-messenger
+      git-modes
+      git-timemachine
+      magit
+      magit-org-todos
+      magit-todos
+
+      vundo
+      wgrep
+      which-key
+      whitespace-cleanup-mode)
+    "Editor packages.")
+#+end_src
+
+*** Tools
+
+#+begin_src elisp
+  (defvar nasy-tools-p
+    `(all-the-icons
+      anzu
+      avy
+      beginend
+      carbon-now-sh
+
+      ;; company
+      company
+      ,(when *c-box* 'company-box)
+      company-dict
+      company-flx
+      company-math
+      company-prescient
+      company-quickhelp
+      company-restclient
+      company-tabnine
+
+      ,(when (version< emacs-version "27") 'emojify)
+      ,(when (version< emacs-version "27") 'emojify)
+
+      ;; fill column
+      unfill
+      visual-fill-column
+
+      find-file-in-project
+      ,(when *is-a-mac* 'grab-mac-link)
+      ;; flycheck
+      flycheck
+      flycheck-package
+      ,(when *flycheck-inline* '(flycheck-inline quick-peek))
+      ;; ibuffer
+      ibuffer-vc
+      all-the-icons-ibuffer
+
+      ;; imenu-list
+      ob-restclient
+      restclient
+      thingopt
+      vterm
+      vterm-toggle
+      wakatime-mode
+
+      yasnippet
+      license-snippets
+      yasnippet-snippets)
+    "Tool packages.")
+#+end_src
+
+*** Languages
+
+#+begin_src elisp
+  (defvar nasy-langs-p
+    `(;; lisps
+      cl-lib-highlight
+      elisp-def
+      highlight-quoted
+      ipretty
+      macrostep
+      parinfer-rust-mode
+
+      ;; lsp-mode
+      dap-mode
+      lsp-mode
+      lsp-treemacs
+      lsp-ui
+      ;; lsp-grammarly
+
+      ;; haskell
+      haskell-mode
+      haskell-snippets
+      lsp-haskell
+
+      ;; nix
+      nix-mode
+      nix-update
+      nix-buffer
+      nixpkgs-fmt
+      nixos-options
+      company-nixos-options
+
+      ;; python
+      elpy
+      lsp-pyright
+
+      company-restclient
+      elvish-mode
+      fish-completion
+      fish-mode
+      markdown-mode
+      ob-elvish
+      ob-restclient
+      pandoc-mode
+      reformatter
+      restclient
+      toml-mode
+      yaml-mode
+      ,(when *rust* '(cargo rust-mode)))
+    "Languages packages.")
+#+end_src
+
+*** Org Mode
+
+#+begin_src elisp
+  (defvar nasy-org-p
+    '(org-plus-contrib
+
+      org-appear
+      org-cliplink
+      org-pdfview
+      org-roam
+      company-org-roam
+      org-superstar
+      org-wc
+      toc-org))
+#+end_src
+
+*** UI
+
+#+begin_src elisp
+  (defvar nasy-ui-p
+    '(dashboard
+      doom-themes)
+    "UI packages.")
+
+#+end_src
+
+*** App
+
+#+begin_src elisp
+  (defvar nasy-app-p
+    '(rime telega)
+    "App packages.")
+#+end_src
+
+*** Extra
+
+#+begin_src elisp
+  (straight-register-package
+   '(point-history :type git
+                   :host github
+                   :repo "blue0513/point-history"))
+
+  (straight-register-package
+   '(vundo :type git
+           :host github
+           :repo "casouri/vundo"))
+
+  (straight-register-package
+   '(parinfer-rust-mode :type git
+                        :host github
+                        :repo "justinbarclay/parinfer-rust-mode"))
+
+  (straight-register-package
+   '(keytar :type git
+            :host github
+            :repo "emacs-grammarly/keytar"))
+#+end_src
+
+** Load Bootstrap Packages
+
+#+begin_src elisp
+  (nasy/s-u-p nasy-bootstrap-p)
 #+end_src
 
 * Benchmark
@@ -180,8 +437,7 @@ to optimize startup times.
 https://github.com/dholm/benchmark-init-el
 
 #+begin_src elisp
-  (straight-use-package
-   '(benchmark-init :type git :host github :repo "nasyxx/benchmark-init-el"))
+   ;; '(benchmark-init :type git :host github :repo "nasyxx/benchmark-init-el"))
   (leaf benchmark-init
     :doc "This is a simple benchmark of calls to Emacs require and load functions."
     :url "https://github.com/dholm/benchmark-init-el"
@@ -196,7 +452,6 @@ Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
 https://gitlab.com/koral/gcmh
 
 #+begin_src elisp
-  (straight-use-package 'gcmh)
   (leaf gcmh
     :disabled nil
     :doc "Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection."
@@ -240,16 +495,7 @@ https://gitlab.com/koral/gcmh
 https://github.com/emacscollective/no-littering
 
 #+begin_src elisp
-  (straight-use-package 'no-littering)
   (require 'no-littering)
-#+end_src
-
-* Load Org
-
-When using straight.el, the org version is needed to custom set.
-
-#+begin_src elisp
-  (straight-use-package 'org-plus-contrib)
 #+end_src
 
 * Footer                                                 :noexport:

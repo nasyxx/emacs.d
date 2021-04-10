@@ -16,15 +16,6 @@
   ;;; Code:
 #+end_src
 
-* Package
-
-+ rime
-+ telega
-
-#+begin_src elisp
-  (nasy/s-u-p rime telega)
-#+end_src
-
 * Configs
 
 ** Emacs Rime                            :convenience:inputmethod:
