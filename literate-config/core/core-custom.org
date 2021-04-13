@@ -288,7 +288,7 @@ You can custom it in @@html: <span>@@ ~custom/user-config.el~ @@html: </span>@@
      . 'normal)
 
     ((*font-cjk-4-weight*
-      ,*font-cjk-5-weight*) . 'black))
+      ,*font-cjk-5-weight*) . 'bold))
 #+end_src
 
 * Default Settings

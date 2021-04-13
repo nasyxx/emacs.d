@@ -382,8 +382,10 @@ https://github.com/awth13/org-appear
 
 #+begin_src elisp
   (leaf org-agenda
-    :hook ((org-agenda-finalize-hook . org-agenda-log-mode-colorize-block))
     :after org
+    :hook ((org-agenda-finalize-hook . org-agenda-log-mode-colorize-block))
+    :bind (:org-mode-map
+           ("C-," . nil))
     :custom
     (org-agenda-clockreport-parameter-plist . '(:link t :maxlevel 3))
     (org-agenda-compact-blocks   . t)

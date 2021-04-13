@@ -1113,6 +1113,7 @@ https://github.com/dimitri/switch-window
     ("C-c 3" . split-window-h)
     ("C-x |" . split-window-horizontally-instead)
     ("C-x _" . split-window-vertically-instead)
+    ("C-x o" . other-window)
     ("C-c x" . nasy/split-window)
     ("M-o"   . switch-window)
     :custom
@@ -1123,7 +1124,8 @@ https://github.com/dimitri/switch-window
      ()
      "Transient-dwim for `switch-window'."
      [["Switch Window"
-       ("o" "Switch Window"             switch-window)
+       ("o" "Other window"              other-window)
+       ("s" "Switch mindow"             switch-window)
        ("1" "Delete other window"       toggle-delete-other-windows)
        ("r" "Split window right"        split-window-right)
        ("b" "Split window below"        split-window-below)

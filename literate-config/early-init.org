@@ -11,6 +11,9 @@
 #+begin_src elisp
   (defvar d-file-name-handler-alist file-name-handler-alist)
 
+  (defvar nasy-pdump nil
+    "Nasy use pdump or not.")
+
   (setq
    file-name-handler-alist nil
    gc-cons-threshold most-positive-fixnum
@@ -39,5 +42,5 @@
 * Footer                                                 :noexport:
 
 #+begin_src elisp
-  ;;; init.el ends here
+  ;;; early-init.el ends here
 #+end_src
