@@ -281,7 +281,7 @@
 
      (org-support-shift-select . t)
 
-     (org-tags-column . -67)
+     (org-tags-column . -76)
 
      ;; to-do settings
      (org-todo-keywords . '((sequence
