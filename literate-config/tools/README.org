@@ -395,37 +395,6 @@ https://www.emacswiki.org/emacs/IncrementalSearch
       (goto-char isearch-other-end)))
 #+end_src
 
-** vterm                                               :terminals:
-
-Emacs libvterm integration
-
-https://github.com/akermu/emacs-libvterm
-
-*** vterm-toggle                                      :terminals:
-
-Toggles between the vterm buffer and whatever buffer you are editing.
-
-https://github.com/jixiuf/vterm-toggle
-
-#+begin_src elisp
-  (leaf vterm-toggle
-    :doc "Toggles between the vterm buffer and whatever buffer you are editing."
-    :url "https://github.com/jixiuf/vterm-toggle"
-    :tag "terminals"
-    :bind (("C-<f2>" . vterm-toggle)
-           (:vterm-mode-map
-            ("s-n" . vterm-toggle-forward)
-            ("s-p" . vterm-toggle-backward)))
-    :custom (vterm-toggle-fullscreen-p . nil)
-    :init (add-to-list 'display-buffer-alist
-                    '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
-                      (display-buffer-reuse-window display-buffer-in-side-window)
-                      (side . bottom)
-                      (dedicated . t) ;dedicated is supported in emacs27
-                      (reusable-frames . visible)
-                      (window-height . 0.3))))
-#+end_src
-
 ** Wakatime-mode
 
 #+begin_src elisp

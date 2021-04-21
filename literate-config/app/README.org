@@ -64,6 +64,24 @@ https://github.com/DogLooksGood/emacs-rime
          "<delete>")))
 #+end_src
 
+** mu4e
+
+#+begin_src elisp
+  (leaf mu4e
+    :init
+    (let ((straight-current-profile 'pinned))
+      (straight-use-package
+       '(mu4e
+         :pre-build (("./autogen.sh") ("make" "-j"))
+         :files (:defaults "mu4e/*.el")))
+      (add-to-list 'straight-x-pinned-packages
+                   '("mu4e" . "76734e9d0e16f95c1e95817dafad266c8de68fd5")))
+    :custom
+    (mu4e-attachment-dir . "~/Downloads/mails")
+    (mu4e-mu-home        . "~/.config/mu")
+    `(mu4e-mu-binary . ,(expand-file-name "mu/mu" (straight--repos-dir "mu"))))
+#+end_src
+
 ** telega
 
 #+begin_src elisp
@@ -74,6 +92,37 @@ https://github.com/DogLooksGood/emacs-rime
 
     (telega-use-images        . t))
     ;; (telega-emoji-font-family . "Apple Color Emoji"))
+#+end_src
+
+** vterm                                               :terminals:
+
+Emacs libvterm integration
+
+https://github.com/akermu/emacs-libvterm
+
+*** vterm-toggle                                      :terminals:
+
+Toggles between the vterm buffer and whatever buffer you are editing.
+
+https://github.com/jixiuf/vterm-toggle
+
+#+begin_src elisp
+  (leaf vterm-toggle
+    :doc "Toggles between the vterm buffer and whatever buffer you are editing."
+    :url "https://github.com/jixiuf/vterm-toggle"
+    :tag "terminals"
+    :bind (("C-<f2>" . vterm-toggle)
+           (:vterm-mode-map
+            ("s-n" . vterm-toggle-forward)
+            ("s-p" . vterm-toggle-backward)))
+    :custom (vterm-toggle-fullscreen-p . nil)
+    :init (add-to-list 'display-buffer-alist
+                    '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                      (display-buffer-reuse-window display-buffer-in-side-window)
+                      (side . bottom)
+                      (dedicated . t) ;dedicated is supported in emacs27
+                      (reusable-frames . visible)
+                      (window-height . 0.3))))
 #+end_src
 
 * Footer                                                              :noexport:
