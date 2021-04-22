@@ -299,7 +299,7 @@ Nasy's Theme
        ((,class (:background ,n-春緑))))
      ;; hl-line
      `(hl-line ((,class (:background ,n-芽灰
-                                     :distant-foreground ,n-缟
+                                     :distant-foreground ,n-墨
                                      :extend t
                                      :underline ,(--u? 'hl-line)
                                      :weight bold))))
