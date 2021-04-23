@@ -426,6 +426,13 @@ https://github.com/purcell/list-unicode-display
     :tag "convenience")
 #+end_src
 
+** mixed-pitch
+
+#+begin_src elisp
+  (leaf mixed-pitch
+    :hook (org-mode-hook))
+#+end_src
+
 ** mmm-mode                    :convenience:faces:languages:tools:
 
 MMM Mode is a minor mode for Emacs that allows Multiple Major Modes to coexist

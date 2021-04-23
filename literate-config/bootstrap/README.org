@@ -197,6 +197,7 @@ When using straight.el, the org version is needed to custom set.
       ,(when *ivy-prescient* '(prescient ivy-prescient))
 
       list-unicode-display
+      mixed-pitch
       mmm-mode
       multiple-cursors
       page-break-lines
