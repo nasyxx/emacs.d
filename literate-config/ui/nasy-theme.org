@@ -42,15 +42,30 @@ Nasy's Theme
     :group 'nasy-theme
     :type '(list symbol))
 
-  (defcustom nasy-theme-fixed-pitch-font "OperatorMonoSSmLig Nerd Font"
-    "Nasy them fixed pitch font."
+  (defcustom nasy-theme-fixed-pitch-font "Recursive Mono Casual Static"
+    "Nasy theme fixed pitch font."
     :group 'nasy-theme
     :type 'string)
 
-  (defcustom nasy-theme-variable-pitch-font "Recursive Mono Casual Static"
-    "Nasy them variable patch font."
+  (defcustom nasy-theme-variable-pitch-font "Cardo"
+    "Nasy theme variable patch font."
     :group 'nasy-theme
     :type 'string)
+
+  (defcustom nasy-theme-fixed-pitch-font-scale 1.0
+    "Nasy theme fixed pitch font scale."
+    :group 'nasy-theme
+    :type 'float)
+
+  (defcustom nasy-theme-variable-pitch-font-scale 1.3
+    "Nasy theme variable pitch font scale."
+    :group 'nasy-theme
+    :type 'float)
+
+  (defcustom nasy-theme-rescale-f/v-pitch-font t
+    "Nasy theme rescale f/v-pitch-font or not."
+    :group 'nasy-theme
+    :type 'boolean)
 
   (defun nasy-theme--light?dark (light dark)
     "Determine using the LIGHT or the DARK color of nasy-theme."
@@ -71,6 +86,22 @@ Nasy's Theme
     (when (memq sym nasy-theme-underlines-list)
       t))
   (defalias '--u? #'nasy-theme--check-underline-list)
+
+  (defun nasy-theme--rescale-font ()
+    "Nasy theme rescale font."
+    (when nasy-theme-rescale-f/v-pitch-font
+      (setf (alist-get
+             nasy-theme-fixed-pitch-font
+             face-font-rescale-alist
+             nasy-theme-fixed-pitch-font-scale nil 'string=)
+            nasy-theme-fixed-pitch-font-scale)
+      (setf (alist-get
+             nasy-theme-variable-pitch-font
+             face-font-rescale-alist
+             nasy-theme-variable-pitch-font-scale nil 'string=)
+            nasy-theme-variable-pitch-font-scale)))
+
+  (nasy-theme--rescale-font)
 #+end_src
 
 * Theme
@@ -141,9 +172,7 @@ Nasy's Theme
      `(error           ((,class (:background ,n-鱼肚 :foreground ,n-品红 :weight bold))))
      `(escape-glyph    ((,class (:foreground ,n-茶))))
      `(fixed-pitch
-       ((,class (:font ,(font-spec :name nasy-theme-fixed-pitch-font
-                                   :weight 'normal
-                                   :slant 'normal)))))
+       ((,class (:family ,nasy-theme-fixed-pitch-font))))
      `(fringe          ((,class (:background ,n/缟漆 :foreground ,n/墨缟))))
      `(header-line     ((,class (:background ,n-荼
                                              :box (:line-width 2 :style released-button)
@@ -159,9 +188,7 @@ Nasy's Theme
        ((,class (:background ,n-富春紡))))
      `(success      ((,class (:background ,n-鱼肚 :foreground ,n-靛青 :weight bold))))
      `(variable-pitch
-       ((,class (:font ,(font-spec :name nasy-theme-variable-pitch-font
-                                   :weight 'normal
-                                   :slant 'normal)))))
+       ((,class (:family ,nasy-theme-variable-pitch-font))))
      `(warning      ((,class (:background ,n-鱼肚 :foreground ,n-茶 :weight bold))))
 
      ;;; company
