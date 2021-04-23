@@ -444,7 +444,17 @@ https://github.com/purcell/list-unicode-display
 
 #+begin_src elisp
   (leaf mixed-pitch
-    :hook (org-mode-hook))
+    :hook (org-mode-hook)
+    :mode-hook
+    (progn
+      (unless (boundp 'nasy--hl-line-bold)
+        (setq nasy--hl-line-bold (face-attribute 'hl-line :weight)))
+      (if mixed-pitch-mode
+          (set-face-attribute 'hl-line nil :weight 'unspecified)
+        (set-face-attribute 'hl-line nil :weight nasy--hl-line-bold)))
+    :config
+    (setq mixed-pitch-fixed-pitch-faces
+          (append mixed-pitch-fixed-pitch-faces org-level-faces)))
 #+end_src
 
 ** mmm-mode                    :convenience:faces:languages:tools:
