@@ -126,6 +126,7 @@ Nasy's Theme
          (n-牙     "#EEDEB0")
          (n-米灰   "#D3CBAF")
          (n-紙棕   "#D2B38C")
+         (n-珈琲椶 "#705438")
          (n-素     "#E0F0E9")
          (n-缟     "#F2ECDE")
          (n-胡粉   "#FFFAE8")
@@ -293,7 +294,7 @@ Nasy's Theme
 
      ;;; font-lock faces
      `(font-lock-builtin-face
-       ((,class (:background ,n/霜黛 :foreground ,n-松绿 :slant italic))))
+       ((,class (:background ,n-春緑 :foreground ,n-珈琲椶 :slant italic))))
      `(font-lock-comment-delimiter-face
        ((,class (:inherit font-lock-comment-face :weight bold))))
      `(font-lock-comment-face
@@ -303,13 +304,13 @@ Nasy's Theme
      `(font-lock-constant-face
        ((,class (:inherit font-lock-variable-name-face :weight bold))))
      `(font-lock-doc-face
-       ((,class (:background ,n/素墨 :foreground ,n/靛青湖蓝 :extend t))))
+       ((,class (:background ,n-水黄 :foreground ,n/靛青湖蓝 :extend t))))
      `(font-lock-function-name-face
        ((,class (:foreground ,n-松绿 :underline t))))
      `(font-lock-keyword-face
        ((,class (:foreground ,n/墨缟 :weight bold))))
      `(font-lock-negation-char-face
-       ((,class (:background ,n/牙黛 :foreground ,n/青莲牙))))
+       ((,class (:foreground ,n-珈琲椶))))
      `(font-lock-string-face
        ((,class (:foreground ,n/靛青湖蓝))))
      `(font-lock-type-face
@@ -388,10 +389,10 @@ Nasy's Theme
                              :weight bold
                              :slant italic))))
      `(org-document-title
-       ((,class (:background ,n/素墨
-                             :extend t
+       ((,class (:background ,n-富春紡
+                             :extend nil
                              :foreground ,n/墨缟
-                             :height ,(--s? 1.4)
+                             :height ,(--s? 1.7)
                              :weight bold))))
      `(org-document-info
        ((,class (:background ,n/素墨
@@ -411,26 +412,26 @@ Nasy's Theme
      `(org-headline-done
        ((,class (:underline (:color ,n-松花)))))
      `(org-level-1
-       ((,class (:background ,n/素墨
+       ((,class (:background ,n-蠟白
                              :extend t
                              :foreground ,n-靛青
                              :height ,(--s? 1.4)
                              :underline t
                              :weight bold))))
      `(org-level-2
-       ((,class (:background ,n/素墨
+       ((,class (:background ,n-蠟白
                              :extend t
                              :foreground ,n-茶
                              :height ,(--s? 1.2)
                              :weight bold))))
      `(org-level-3
-       ((,class (:background ,n/素墨
+       ((,class (:background ,n-蠟白
                              :extend t
                              :foreground ,n-松绿
                              :height ,(--s? 1.1)
                              :weight bold))))
      `(org-level-4
-       ((,class (:background ,n/素墨
+       ((,class (:background ,n-蠟白
                              :extend t
                              :foreground ,n/青莲丁香
                              :height ,(--s? 1.1)
@@ -471,6 +472,7 @@ Nasy's Theme
                              :box t
                              :foreground ,n/墨缟
                              :slant normal
+                             :underline nil
                              :weight bold))))
 
      ;;; page break lines
@@ -478,8 +480,12 @@ Nasy's Theme
        ((,class (:inherit font-lock-comment-face :slant normal :underline nil))))
 
      ;;; tree sitter
+     `(tree-sitter-hl-face:constructor
+       ((,class (:inherit tree-sitter-hl-face:type :bold nil))))
+     `(tree-sitter-hl-face:property
+       ((,class (:inherit font-lock-constant-face :bold nil))))
      `(tree-sitter-hl-face:operator
-       ((,class (:inherit font-lock-negation-char-face))))))
+       ((,class (:background ,n-蠟白 :bold t :inherit font-lock-negation-char-face))))))
 
   ;;;###autoload
   (and load-file-name
