@@ -361,23 +361,6 @@ Nasy's Theme
      `(mode-line          ((,class (:background ,n-胡粉))))
      `(mode-line-inactive ((,class (:background ,n-素))))
 
-     ;;; tab bar mode
-     `(tab-bar                ((t (:inherit mode-line))))
-     `(tab-bar-tab            ((t (:inherit mode-line))))
-     `(tab-bar-tab-inactive   ((t (:inherit mode-line-inactive))))
-
-     ;;; term
-     `(term-color-black   ((,class (:background ,n-墨     :foreground ,n-墨))))
-     `(term-color-blue    ((,class (:background ,n-靛青   :foreground ,n-靛青))))
-     `(term-color-cyan    ((,class (:background ,n-湖蓝   :foreground ,n-湖蓝))))
-     `(term-color-green   ((,class (:background ,n-松绿   :foreground ,n-松绿))))
-     `(term-color-magenta ((,class (:background ,n-長萅蕐 :foreground ,n-長萅蕐))))
-     `(term-color-red     ((,class (:background ,n-火红   :foreground ,n-火红))))
-     `(term-color-white   ((,class (:background ,n-缟     :foreground ,n-缟))))
-     `(term-color-yellow  ((,class (:background ,n-紙棕   :foreground ,n-紙棕))))
-     `(vterm-color-inverse-video
-       ((,class (:background ,n-墨))))
-
      ;;; org mode
      `(org-block
        ((,class (:background ,n-蠟白 :foreground ,n/墨缟 :extend t))))
@@ -478,6 +461,23 @@ Nasy's Theme
      ;;; page break lines
      `(page-break-lines
        ((,class (:inherit font-lock-comment-face :slant normal :underline nil))))
+
+     ;;; tab bar mode
+     `(tab-bar                ((t (:inherit mode-line))))
+     `(tab-bar-tab            ((t (:inherit mode-line))))
+     `(tab-bar-tab-inactive   ((t (:inherit mode-line-inactive))))
+
+     ;;; term
+     `(term-color-black   ((,class (:background ,n-墨     :foreground ,n-墨))))
+     `(term-color-blue    ((,class (:background ,n-靛青   :foreground ,n-靛青))))
+     `(term-color-cyan    ((,class (:background ,n-湖蓝   :foreground ,n-湖蓝))))
+     `(term-color-green   ((,class (:background ,n-松绿   :foreground ,n-松绿))))
+     `(term-color-magenta ((,class (:background ,n-長萅蕐 :foreground ,n-長萅蕐))))
+     `(term-color-red     ((,class (:background ,n-火红   :foreground ,n-火红))))
+     `(term-color-white   ((,class (:background ,n-缟     :foreground ,n-缟))))
+     `(term-color-yellow  ((,class (:background ,n-紙棕   :foreground ,n-紙棕))))
+     `(vterm-color-inverse-video
+       ((,class (:background ,n-墨))))
 
      ;;; tree sitter
      `(tree-sitter-hl-face:constructor
