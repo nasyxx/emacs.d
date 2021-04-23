@@ -159,6 +159,7 @@ Emacs client/library for the Language Server Protocol
     (interactive-haskell-mode)
     (gsetq-local tab-width 4)
     (nasy/tempo-haskell)
+    (stack-exec-path-mode 1)
     :bind
     (:haskell-mode-map
      ("C-x a a" . align)
