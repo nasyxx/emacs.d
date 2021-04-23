@@ -222,7 +222,7 @@ Emacs client/library for the Language Server Protocol
 
     (define-minor-mode stack-exec-path-mode
       "If this is a stack project, set `exec-path' to the path \"stack exec\" would use."
-      nil
+      :init-value nil
       :lighter ""
       :global nil
       (if stack-exec-path-mode
