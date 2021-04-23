@@ -343,6 +343,20 @@ e.g. #0000ff is displayed in white with a blue background.
     :doc "Colorize color names in buffers."
     :url "https://elpa.gnu.org/packages/rainbow-mode.html"
     :tag "faces"
+    :init
+    (defun nasy/rainbow-colorize-match (color &optional match)
+      "Return a matched string propertized with a face whose
+  background is COLOR. The foreground is computed using
+  `rainbow-color-luminance', and is either white or black."
+      (let ((match (or match 0)))
+        (put-text-property
+         (match-beginning match) (match-end match)
+         'face `((:foreground ,(if (> 0.5 (rainbow-x-color-luminance color))
+                                   "white" "black"))
+                 (:background ,color)
+                 (:family ,*font-main-family*)))))
+    :advice
+    (:override rainbow-colorize-match nasy/rainbow-colorize-match)
     :hook (after-init-hook
            text-mode-hook
            org-mode-hook
