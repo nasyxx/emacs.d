@@ -812,9 +812,9 @@ https://github.com/politza/pdf-tools
                       ("any"    . #x2203)  ;; ∃
                       ("any_"   . #x2203)  ;; ∃
                       ("And"    . (#x2000 (Br . Bl) #x22c0 (Br . Bl) #x2005))  ;; ⋀
-                      ("and"    . (#x2000 (Br . Bl) #x22cf (Br . Bl) #x2005))  ;; ⋏
+                      ("and"    . (#x2004 (Br . Bl) #x22cf (Br . Bl) #x2004 (Br . Bl) #x2009))  ;; ⋏  
                       ("Or"     . #x22c1)  ;; ⋁
-                      ("or"     . (#x22cE (Br . Bl) #x2005))  ;; ⋎
+                      ("or"     . (#x2006 (Br . Bl) #x22cE (Br . Bl) #x2009))  ;; ⋎
                       ("not"    . #x00ac)  ;; ¬
                       ("not_"   . #x00ac)  ;; ¬
 
