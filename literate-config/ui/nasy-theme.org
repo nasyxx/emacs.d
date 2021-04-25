@@ -115,7 +115,6 @@ Nasy's Theme
          (n-墨     "#50616D")
          (n-墨灰   "#758A99")
          (n-富春紡 "#FEF4B4")
-         (n-長萅蕐 "#FF47D1")
          (n-春緑   "#E3EFD1")
          (n-松绿   "#057748")
          (n-松花   "#BCE672")
@@ -124,16 +123,18 @@ Nasy's Theme
          (n-漆     "#161823")
          (n-火红   "#FF2D51")
          (n-牙     "#EEDEB0")
+         (n-珈琲椶 "#705438")
          (n-米灰   "#D3CBAF")
          (n-紙棕   "#D2B38C")
-         (n-珈琲椶 "#705438")
          (n-素     "#E0F0E9")
+         (n-紫扇貝 "#923A60")
          (n-缟     "#F2ECDE")
          (n-胡粉   "#FFFAE8")
          (n-芽灰   "#E3DBBF")
          (n-茶     "#B35C44")
          (n-荼     "#F3F9F1")
          (n-蠟白   "#FEF8DE")
+         (n-長萅蕐  "#FF47D1")
          (n-霜     "#E9F1F6")
          (n-青莲   "#801DAE")
          (n-靛青   "#177CB0")
@@ -371,6 +372,9 @@ Nasy's Theme
                              :foreground ,n/墨缟
                              :weight bold
                              :slant italic))))
+     `(org-code ((,class (:background ,n-米灰
+                                      :foreground ,n-墨
+                                      :inheit fixed-pitch))))
      `(org-document-title
        ((,class (:background ,n-富春紡
                              :extend nil
@@ -404,7 +408,7 @@ Nasy's Theme
      `(org-level-2
        ((,class (:background ,n-蠟白
                              :extend t
-                             :foreground ,n-茶
+                             :foreground ,n-紫扇貝
                              :height ,(--s? 1.2)
                              :weight bold))))
      `(org-level-3
@@ -443,6 +447,7 @@ Nasy's Theme
                          :height ,(--s? 1.1)
                          :slant italic
                          :weight normal))))
+     `(org-list-dt ((,class (:height ,(--s? 1.1) :weight bold))))
      `(org-meta-line
        ((,class (:inherit font-lock-comment-face
                           :underline nil))))
@@ -450,6 +455,8 @@ Nasy's Theme
        ((,class (:inherit org-link
                           :overline  t
                           :underline t))))
+     `(org-superstar-header-bullet ((,class (:background ,n-富春紡))))
+     `(org-superstar-item ((,class (:foreground ,n-靛青))))
      `(org-tag
        ((,class (:background ,n/牙黛
                              :box t
@@ -457,6 +464,9 @@ Nasy's Theme
                              :slant normal
                              :underline nil
                              :weight bold))))
+     `(org-verbatim ((,class (:background ,n-春緑
+                                          :foreground ,n-墨
+                                          :inheit fixed-pitch))))
 
      ;;; page break lines
      `(page-break-lines
