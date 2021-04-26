@@ -320,7 +320,7 @@
     :defun doom-modeline-def-segment
     :custom
     ((doom-modeline-height                      . 25)
-     (doom-modeline-bar-width                   . 3)
+     (doom-modeline-bar-width                   . 5)
      (doom-modeline-window-width-limit          . fill-column)
      (doom-modeline-project-detection           . 'project)  ;; changed
      (doom-modeline-buffer-file-name-style      . 'auto)
