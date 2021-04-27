@@ -32,9 +32,52 @@
       "Forward 2 chars."
       (interactive "p")
       (forward-char 2))
+    (defun nasy/-recentf (&rest _)
+      (interactive)
+      (counsel-recentf))
+    (defun nasy/-bookmarks (&rest _)
+      (interactive)
+      (bookmark-jump))
+    (defun nasy/-projects (&rest _)
+      (interactive)
+      (counsel-projectile-switch-project))
+    (defun nasy/-dashboard-items (list-size)
+      (insert "\n")
+      (insert "🌓 ")
+      (widget-create 'item
+                     :tag "Recent Files (r)"
+                     :action #'nasy/-recentf
+                     :mouse-face 'highlight
+                     :button-face 'dashboard-heading
+                     :button-prefix ""
+                     :button-suffix ""
+                     :format "%[%t%]")
+      (insert "\n\n")
+      (insert "📚")
+      (insert " ")
+      (widget-create 'item
+                     :tag "Bookmarks (r)"
+                     :action #'nasy/-bookmarks
+                     :mouse-face 'highlight
+                     :button-face 'dashboard-heading
+                     :button-prefix ""
+                     :button-suffix ""
+                     :format "%[%t%]")
+      (insert "\n\n")
+      (insert "🚀 ")
+      (widget-create 'item
+                     :tag "Projects (p)"
+                     :action #'nasy/-projects
+                     :mouse-face 'highlight
+                     :button-face 'dashboard-heading
+                     :button-prefix ""
+                     :button-suffix ""
+                     :format "%[%t%]")
+      (insert "\n"))
     :bind
     ("<f5>" . dashboard-refresh-buffer)
     (:dashboard-mode-map
+     ("r"              . counsel-recentf)
      ("g"              . dashboard-refresh-buffer)
      ("<down-mouse-1>" . nil)
      ("H-p"            . dashboard-previous-line)
@@ -49,12 +92,13 @@
            (after-init-hook     . dashboard-setup-startup-hook))
     :custom
     (dashboard-org-agenda-categories . '("Calendar" "Tasks" "Appointments"))
-    `(dashboard-startup-banner       . ,(expand-file-name "mega.png" user-emacs-directory))
-    (dashboard-items . '((recents   . 10)
-                         (bookmarks . 10)
+    `(dashboard-startup-banner       . ,(expand-file-name "n_icon.png" user-emacs-directory))
+    (dashboard-items . '((n-items . t)))
+                         ;; (bookmarks . t)))
                          ;; (registers . 5)
                          ;; (agenda    . 5)
-                         (projects  . 10)))
+                         ;; (projects  . 7)))
+    (dashboard-item-generators . '((n-items   . nasy/-dashboard-items)))
     ((dashboard-center-content
       dashboard-show-shortcuts
       dashboard-set-heading-icons
@@ -62,6 +106,7 @@
       dashboard-set-init-info
       show-week-agenda-p
       dashboard-set-navigator) . t)
+    :config
     :init
     (after-x 'all-the-icons
       (setq dashboard-navigator-buttons
@@ -83,11 +128,11 @@
                (,(all-the-icons-octicon "book" :height 1.1 :v-adjust 0.0)
                 "Document"
                 "Document Page"
-                (lambda (&rest _) (browse-url "https://emacs.nasy.moe/")))))))
-    :advice
-    (:after dashboard-next-line     nasy/fw2)
-    (:after widget-forward          nasy/fw2)
-    (:after widget-backward         nasy/fw2))
+                (lambda (&rest _) (browse-url "https://emacs.nasy.moe/"))))))))
+    ;; :advice)
+    ;; (:after dashboard-next-line     nasy/fw2)
+    ;; (:after widget-forward          nasy/fw2)
+    ;; (:after widget-backward         nasy/fw2))
 #+end_src
 
 ** doom Theme
