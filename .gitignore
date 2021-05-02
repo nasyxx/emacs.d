@@ -5,6 +5,7 @@ custom
 straight
 var/
 etc/
+eln-cache
 
 early-init.el
 init.html
