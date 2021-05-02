@@ -417,7 +417,7 @@ Some of them borrowed from doom-emacs
      ([remap describe-face]              . counsel-faces)
      ([remap describe-function]          . counsel-describe-function)
      ([remap describe-variable]          . counsel-describe-variable)
-     ([remap execute-extended-command]   . counsel-M-x)
+     ;; ([remap execute-extended-command]   . counsel-M-x)
      ([remap find-file]                  . counsel-find-file)
      ([remap find-library]               . counsel-find-library)
      ([remap imenu]                      . counsel-imenu)
@@ -561,7 +561,9 @@ Some of them borrowed from doom-emacs
   (leaf ivy-prescient
     :hook ivy-mode-hook
     :mode-hook (prescient-persist-mode 1)
-    :custom (ivy-prescient-retain-classic-highlighting . t)
+    :custom
+    (ivy-prescient-retain-classic-highlighting . t)
+    (ivy-prescient-sort-commands . '(:not swiper swiper-isearch ivy-switch-buffer counsel-recentf))
     :config
     (defun nasy/ivy-prescient-non-fuzzy (str)
       (let ((prescient-filter-method '(literal regexp)))
