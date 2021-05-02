@@ -243,8 +243,9 @@
           (make         "make")
           (R            "r")))
      (org-latex-pdf-process
-      . '("lualatex -shell-escape -interaction nonstopmode %f"
-          "lualatex -shell-escape -interaction nonstopmode %f"))
+      . '("%latex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "%latex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "%latex -shell-escape -interaction nonstopmode -output-directory %o %f"))
      (org-latex-tables-booktabs . t)
 
      (org-level-color-stars-only . nil)
@@ -296,7 +297,11 @@
      (org-todo-keyword-faces   . '(("NEXT" :inherit warning)
                                    ("WAIT" :inherit font-lock-string-face)))
 
-     (org-babel-python-command . "python"))
+     (org-babel-python-command . "python")
+
+
+     (org-babel-latex-preamble . (lambda (_)
+                                  "\\documentclass[preview]{standalone}\n")))
     :defer-config
     (nasy/add-company-backend 'org-mode 'company-tabnine)
     ;; --------
@@ -335,6 +340,19 @@
              :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
     (add-to-list 'org-preview-latex-process-alist luamagick)
 
+    (gsetq luamsvg
+         '(luamsvg
+           :programs ("lualatex" "convert")
+           :description "pdf > svg"
+           :message "you need to install lualatex and imagemagick."
+           :use-xcolor t
+           :image-input-type "pdf"
+           :image-output-type "svg"
+           :image-size-adjust (1.0 . 1.0)
+           :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+           :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+    (add-to-list 'org-preview-latex-process-alist luamsvg)
+
     (gsetq luasvg
            '(luasvg
              :programs ("lualatex" "dvisvgm")
@@ -344,9 +362,10 @@
              :image-input-type "dvi"
              :image-output-type "svg"
              :image-size-adjust (1.7 . 1.5)
-             :latex-compiler ("lualatex -interaction nonstopmode -output-format dvi -output-directory %o %f")
-             :image-converter ("dvisvgm %f -n -b min -c %S -o %O")))
+             :latex-compiler ("lualatex -interaction nonstopmode -output-directory -output-format dvi %o %f")
+             :image-converter ("dvisvgm %f -n -b min -o %O")))
     (add-to-list 'org-preview-latex-process-alist luasvg)
+
     (gsetq org-preview-latex-default-process 'luamagick)
 
     (require 'org-tempo nil t)
