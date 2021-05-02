@@ -37,7 +37,7 @@
       (counsel-recentf))
     (defun nasy/-bookmarks (&rest _)
       (interactive)
-      (bookmark-jump))
+      (call-interactively #'bookmark-jump))
     (defun nasy/-projects (&rest _)
       (interactive)
       (counsel-projectile-switch-project))
@@ -56,7 +56,7 @@
       (insert "📚")
       (insert " ")
       (widget-create 'item
-                     :tag "Bookmarks (r)"
+                     :tag "Bookmarks (b)"
                      :action #'nasy/-bookmarks
                      :mouse-face 'highlight
                      :button-face 'dashboard-heading
@@ -77,7 +77,9 @@
     :bind
     ("<f5>" . dashboard-refresh-buffer)
     (:dashboard-mode-map
-     ("r"              . counsel-recentf)
+     ("r"              . nasy/-recentf)
+     ("b"              . nasy/-bookmarks)
+     ("p"              . nasy/-projects)
      ("g"              . dashboard-refresh-buffer)
      ("<down-mouse-1>" . nil)
      ("H-p"            . dashboard-previous-line)
