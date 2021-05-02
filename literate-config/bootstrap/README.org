@@ -439,11 +439,12 @@ https://github.com/dholm/benchmark-init-el
 
 #+begin_src elisp
    ;; '(benchmark-init :type git :host github :repo "nasyxx/benchmark-init-el"))
-  (leaf benchmark-init
-    :doc "This is a simple benchmark of calls to Emacs require and load functions."
-    :url "https://github.com/dholm/benchmark-init-el"
-    :hook ((after-init-hook . benchmark-init/deactivate))
-    :init (benchmark-init/activate))
+  (cl-letf (((symbol-function 'define-obsolete-function-alias) #'defalias))
+    (leaf benchmark-init
+	  :doc "This is a simple benchmark of calls to Emacs require and load functions."
+	  :url "https://github.com/dholm/benchmark-init-el"
+	  :hook ((after-init-hook . benchmark-init/deactivate))
+	  :init (benchmark-init/activate)))
 #+end_src
 
 * Garbage Collection

@@ -27,16 +27,6 @@
           gc-cons-percentage 0.7
           gc-cons-threshold #x4000000))
   (add-hook 'emacs-startup-hook #'nasy/restore-default)
-
-
-  ;; Patch
-
-  (define-advice define-obsolete-function-alias (:filter-args (ll) fix-obsolete)
-    (let ((obsolete-name (pop ll))
-          (current-name (pop ll))
-          (when (if ll (pop ll) "1"))
-          (docstring (if ll (pop ll) nil)))
-      (list obsolete-name current-name when docstring)))
 #+end_src
 
 * Footer                                                 :noexport:
