@@ -350,10 +350,14 @@ Emacs client/library for the Language Server Protocol
  #+begin_src elisp
    (leaf parinfer-rust-mode
      :custom
+     (parinfer-rust-auto-download . nil)
      `(parinfer-rust-library
        . ,(no-littering-expand-var-file-name "parinfer-rust/parinfer-rust-darwin.so"))
-     (parinfer-rust-auto-download . t)
-     :hook `(,lisp-modes-hooks))
+     :hook `(,lisp-modes-hooks)
+     :config
+     ;; https://github.com/justinbarclay/parinfer-rust-mode/issues/53
+     (add-to-list 'parinfer-rust-treat-command-as
+                  '(quoted-insert . "paren")))
  #+end_src
 
 ** Markdown
