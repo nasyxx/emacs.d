@@ -45,25 +45,25 @@ Emacs client/library for the Language Server Protocol
       lsp-print-performance
       lsp-report-if-no-buffer) . *debug*)
 
-    ((lsp-enable-snippet
-      lsp-auto-configure
-      lsp-inhibit-message
-      lsp-eldoc-render-all
-      lsp-enable-xref
-      lsp-enable-indentation
-      lsp-enable-on-type-formatting
+    ((lsp-auto-configure
       lsp-before-save-edits
-      lsp-imenu-show-container-name
-      lsp-semantic-tokens-enable
-      lsp-enable-imenu
-      lsp-signature-render-documentation
-      lsp-enable-text-document-color
-      lsp-headerline-breadcrumb-enable
+      lsp-completion-enable
       lsp-eldoc-enable-hover
-
+      lsp-eldoc-render-all
+      lsp-enable-folding
+      lsp-enable-imenu
+      lsp-enable-indentation
       lsp-enable-links
+      lsp-enable-on-type-formatting
+      lsp-enable-snippet
       lsp-enable-symbol-highlighting
-      lsp-enable-folding) . t)
+      lsp-enable-text-document-color
+      lsp-enable-xref
+      lsp-headerline-breadcrumb-enable
+      lsp-imenu-show-container-name
+      lsp-inhibit-message
+      lsp-semantic-tokens-enable
+      lsp-signature-render-documentation) . t)
 
     ((lsp-keep-workspace-alive
       lsp-auto-guess-root
@@ -84,9 +84,7 @@ Emacs client/library for the Language Server Protocol
 
     (lsp-response-timeout . 10)
 
-    (lsp-signature-auto-activate . '(:on-trigger-char :after-completion))
-
-    lsp-completion-enable . nil)
+    (lsp-signature-auto-activate . '(:on-trigger-char :after-completion)))
 #+end_src
 
 *** lsp-ui                                      :languages:tools:
@@ -515,7 +513,7 @@ Emacs client/library for the Language Server Protocol
   (leaf lsp-pyright
     :if (eq *py-module* 'pyright)
     :after elpy
-    :preface
+    :init
     (defun python-setup-lsp-flycheck ()
       "Setup python lsp flycheck."
       (if lsp-diagnostics-mode
@@ -528,7 +526,18 @@ Emacs client/library for the Language Server Protocol
     (defun start-lsp-pyright ()
       "Start lsp pyright."
       (require 'lsp-pyright)
-      (lsp)
+      (when (zerop (shell-command "pdm info"))
+        (setq-local
+         lsp-pyright-python-executable-cmd
+         (string-trim (shell-command-to-string
+                       "pdm info --python")))
+        (setq-local
+         lsp-pyright-extra-paths
+         (vector
+          (concat (string-trim (shell-command-to-string
+                                "pdm info --package"))
+                  "/lib"))))
+      (lsp-deferred)
       (gsetq elpy-modules (remove 'elpy-module-autodoc elpy-modules))
       (gsetq elpy-modules (remove 'elpy-module-eldoc   elpy-modules))
       (python-flycheck-setup))
