@@ -1,0 +1,3 @@
+[submodule "nasy-site-lisp"]
+	path = extra/site-lisp/nasy
+	url = https://github.com/nasyxx/emacs-site-lisp.git
