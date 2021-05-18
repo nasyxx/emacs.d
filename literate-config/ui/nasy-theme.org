@@ -366,7 +366,7 @@ Nasy's Theme
      `(org-block
        ((,class (:background ,n-蠟白 :foreground ,n/墨缟 :extend t))))
      `(org-block-begin-line
-       ((,class (:background ,n-米灰
+       ((,class (:background ,n-水黄
                              :box (:line-width 1 :style released-button)
                              :extend t
                              :foreground ,n/墨缟
