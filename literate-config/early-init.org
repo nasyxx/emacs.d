@@ -18,7 +18,9 @@
    file-name-handler-alist nil
    gc-cons-threshold most-positive-fixnum
    gc-cons-percentage 1
-   package-enable-at-startup nil)
+   package-enable-at-startup nil
+   comp-async-report-warnings-errors t
+   native-comp-async-jobs-number 16)
 
 
   (defun nasy/restore-default ()

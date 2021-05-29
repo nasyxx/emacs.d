@@ -343,7 +343,15 @@ e.g. #0000ff is displayed in white with a blue background.
     :doc "Colorize color names in buffers."
     :url "https://elpa.gnu.org/packages/rainbow-mode.html"
     :tag "faces"
-    :init
+    :commands nasy/rainbow-colorize-match
+    :advice (:override rainbow-colorize-match nasy/rainbow-colorize-match)
+    :hook (after-init-hook
+           text-mode-hook
+           org-mode-hook
+           css-mode-hook
+           html-mode-hook
+           prog-mode-hook)
+    :defer-config
     (defun nasy/rainbow-colorize-match (color &optional match)
       "Return a matched string propertized with a face whose
   background is COLOR. The foreground is computed using
@@ -355,15 +363,6 @@ e.g. #0000ff is displayed in white with a blue background.
                                    "white" "black"))
                  (:background ,color)
                  (:family ,*font-main-family*)))))
-    :advice
-    (:override rainbow-colorize-match nasy/rainbow-colorize-match)
-    :hook (after-init-hook
-           text-mode-hook
-           org-mode-hook
-           css-mode-hook
-           html-mode-hook
-           prog-mode-hook)
-    :defer-config
     (when (fboundp 'diminish)
       (diminish 'rainbow-mode)))
 #+end_src
@@ -1485,7 +1484,7 @@ https://github.com/magit/forge
 
 #+begin_src elisp
   (leaf git-gutter
-    :hook (after-init . global-git-gutter-mode)
+    :hook (after-init-hook . global-git-gutter-mode)
     :custom ((git-gutter:visual-line    . t)
              (git-gutter:disabled-modes . '(asm-mode image-mode))
              (git-gutter:modified-sign  . "❚")

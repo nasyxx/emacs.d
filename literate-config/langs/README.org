@@ -315,8 +315,8 @@ Emacs client/library for the Language Server Protocol
      :url "https://framagit.org/steckerhalter/ipretty"
      :tag "buffer" "emacslisp" "pprint"
      :bind (("C-h C-j" . ipretty-last-sexp)
-            ("C-h C-k" . ipretty-last-sexp-other-buffer)))
-     :hook after-init-hook
+            ("C-h C-k" . ipretty-last-sexp-other-buffer))
+     :hook emacs-lisp-mode-hook)
  #+end_src
 
 *** lisp-mode

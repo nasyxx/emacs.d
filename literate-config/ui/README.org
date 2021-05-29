@@ -326,7 +326,7 @@
 
   (add-hook #'after-init-hook #'nasy/set-font)
   (add-hook #'after-make-frame-functions   #'nasy/set-font)
-  (add-hook #'server-after-make-frame-hook #'nasy/set-font)
+  ;; (add-hook #'server-after-make-frame-hook #'nasy/set-font)
 #+end_src
 
 ** Main Theme
