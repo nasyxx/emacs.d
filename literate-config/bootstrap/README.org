@@ -136,10 +136,9 @@ When using straight.el, the org version is needed to custom set.
 
 #+begin_src elisp
   (defvar nasy-bootstrap-p
-    '(benchmark-init
-      gcmh
+    '(gcmh
       no-littering
-      org-plus-contrib)
+      org)
     "Bootstrap packages.")
 #+end_src
 
@@ -357,8 +356,8 @@ When using straight.el, the org version is needed to custom set.
 
 #+begin_src elisp
   (defvar nasy-org-p
-    '(org-plus-contrib
-
+    '(org
+      org-contrib
       org-appear
       org-cliplink
       org-pdfview
@@ -438,13 +437,14 @@ to optimize startup times.
 https://github.com/dholm/benchmark-init-el
 
 #+begin_src elisp
-   ;; '(benchmark-init :type git :host github :repo "nasyxx/benchmark-init-el"))
-  (cl-letf (((symbol-function 'define-obsolete-function-alias) #'defalias))
-    (leaf benchmark-init
-	  :doc "This is a simple benchmark of calls to Emacs require and load functions."
-	  :url "https://github.com/dholm/benchmark-init-el"
-	  :hook ((after-init-hook . benchmark-init/deactivate))
-	  :init (benchmark-init/activate)))
+  (leaf benchmark-init
+    :doc "This is a simple benchmark of calls to Emacs require and load functions."
+    :url "https://github.com/dholm/benchmark-init-el"
+    :hook ((after-init-hook . benchmark-init/deactivate))
+    :init
+    (straight-use-package
+     '(benchmark-init :type git :host github :repo "nasyxx/benchmark-init-el"))
+    (benchmark-init/activate))
 #+end_src
 
 * Garbage Collection

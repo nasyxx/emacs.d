@@ -19,6 +19,15 @@ Emacs.app
 extra/nasy-context.tex
 
 config/
+
+
+桃夭/
+芄蘭/*
+!芄蘭/芄蘭之例.el
+萚兮/旹/*
+!萚兮/旹/.留
+
+
 # Created by https://www.gitignore.io/api/emacs,macOS
 # Edit at https://www.gitignore.io/?templates=emacs,macOS
 
