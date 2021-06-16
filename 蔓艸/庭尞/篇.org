@@ -72,6 +72,11 @@ https://github.com/ema2159/centaur-tabs
       (centaur-tabs-mode 1))
     (centaur-tabs-local-mode 1))
 
+  (defun nasy/-disable-centaur-tabs-local-mode ()
+    (unless centaur-tabs-mode
+      (centaur-tabs-mode 1))
+    (centaur-tabs-local-mode -1))
+
 
   (defun nasy/-centaur-tabs-buffer-groups ()
     "Nasy's centaur tabs groups."
@@ -127,6 +132,8 @@ https://github.com/ema2159/centaur-tabs
     (centaur-tabs-bar-height . 30)
     ((centaur-tabs-set-close-button
       centaur-tabs-enable-ido-completion) . nil)
+    :hook (nasy-magit-first-key-hook
+           . nasy/-disable-centaur-tabs-local-mode)
     :mode-hook
     ;; (centaur-tabs-headline-match)
 

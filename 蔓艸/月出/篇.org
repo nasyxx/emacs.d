@@ -437,12 +437,21 @@ Git clients exist, only Magit and Git itself deserve to be called porcelains.
 https://github.com/magit/magit
 
 #+begin_src elisp
+  (defvar nasy-magit-first-key-hook nil)
+  (defvar nasy--magit-first-key-hook nil)
+
+
+  (defun nasy/load-magit ()
+    (setq nasy--magit-first-key-hook nasy-magit-first-key-hook)
+    (nasy/run-hook-once-on 'nasy--magit-first-key-hook 'pre-command-hook))
+
   (n/leaf magit
     :doc "It's Magit! A Git porcelain inside Emacs."
     :url "https://github.com/magit/magit"
     :tag "git" "tools" "vc"
     :commands magit-status
     :hook ((magit-popup-mode-hook . no-trailing-whitespace))
+    :mode-hook (nasy/load-magit)
     :custom ((magit-diff-refine-hunk . t)
              (vc-handled-backends    . nil))
     :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
