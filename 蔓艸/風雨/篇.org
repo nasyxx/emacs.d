@@ -1028,6 +1028,16 @@
          interactive "Killed %d project buffers"
          (- (length buffer-list)
             (length (cl-remove-if-not #'buffer-live-p buffer-list)))))))
+
+
+  ;;;###autoload
+  (defun nasy/kill-buffers-no-company-box ()
+    "Kill all buffers except company box buffers."
+    (interactive)
+    (nasy/kill-all-buffers
+     (cl-loop for buffer in (nasy/buffer-list)
+            when (not (string-match-p "company-box" (buffer-name buffer)))
+            collect buffer)))
 #+end_src
 
 ** 布局相關
