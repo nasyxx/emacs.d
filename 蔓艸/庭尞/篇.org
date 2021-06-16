@@ -1,0 +1,813 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "庭尞.el") :lexical t
+#+title: 庭尞
+
+#+begin_verse
+  小雅・彤弓之什・庭尞
+
+  夜如何其、夜未央、庭尞之光
+  君子至止、鸞聲將將
+
+  夜如何其、夜未艾、庭尞皙皙
+  君子至止、鸞聲噦噦
+
+  夜如何其、夜郷晨、庭尞有煇
+  君子至止、言觀其旂
+#+end_verse
+
+容皃也
+
+UI
+
+* 題                                                           :noexport:
+
+#+begin_src elisp :exports none
+  ;;; 庭尞.el --- Nasy's emacs.d UI file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2021  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; 容皃也
+
+  ;;; Code:
+
+  (cl-eval-when (compile)
+    (setq nasy--require t)
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
+    (require '擊鼓)
+    (require '風雨)
+    (require '風雨旹用)
+    (sup 'consult)
+    (sup 'dash)
+    (sup 'projectile)
+    (setq nasy--require nil))
+#+end_src
+
+* 章
+
+** Centaur Tab
+
+This projects aims to become an aesthetic, functional and efficient
+tabs plugin for Emacs with a lot of customization options.
+
+https://github.com/ema2159/centaur-tabs
+
+#+begin_src elisp
+  (n/leaf centaur-tabs
+    :leaf-autoload nil
+    :leaf-defun nil
+    :custom
+    (centaur-tabs-style . "wave")
+    :hook
+    (nasy-first-key-hook   . (lambda () (require 'tab-line) (centaur-tabs-mode)))
+    (nasy/font-change-hook . (lambda () (nasy/set-symbol ?⏺ 14)))
+    :init (sup 'centaur-tabs))
+
+
+  (defun nasy/-enable-centaur-tabs-local-mode ()
+    (unless centaur-tabs-mode
+      (centaur-tabs-mode 1))
+    (centaur-tabs-local-mode 1))
+
+
+  (defun nasy/-centaur-tabs-buffer-groups ()
+    "Nasy's centaur tabs groups."
+    (list
+     (cond
+      ;; org, markdown & text
+      ((or (memq major-mode '(org-mode org-agenda-mode org-agenda-clockreport-mode
+                                       org-agenda-log-mode org-beamer-mode
+                                       org-bullets-mode org-cdlatex-mode
+                                       org-indent-mode org-src-mode diary-mode
+                                       text-mode markdown-mode))
+           (string-prefix-p "*Org Src" (buffer-name)))
+       "書寫")
+
+      ;; VC
+      ((memq major-mode '(magit-blame-mode magit-blob-mode magit-diff-mode
+                                           magit-file-mode magit-log-mode
+                                           magit-process-mode magit-status-mode))
+       "Magit")
+
+      ;; Shell
+      ((memq major-mode '(eshell-mode shell-mode vterm-mode))
+       "Shell")
+
+      ;; Info & Help
+      ((memq major-mode '(help-mode info-mode helpful-mode))
+       "注")
+
+      ;; programming
+      ((derived-mode-p 'prog-mode)
+       "編程")
+
+      ;; Web Page
+      ((or (memq major-mode '(eww-mode xwidget-webkit-mode))
+           (string-prefix-p "*xwidget webkit" (buffer-name)))
+       "網頁")
+
+      ;; Emacs
+      ((string-prefix-p "*" (buffer-name))
+       "虛")
+
+      ;; 雜
+      (t (centaur-tabs-get-group-name (current-buffer))))))
+
+
+  (n/leaf centaur-tabs
+    :leaf-autoload nil
+    :leaf-defun nil
+    :after centaur-tabs
+    :custom
+    (centaur-tabs-set-modified-marker . t)
+    (centaur-tabs-height     . 28)
+    (centaur-tabs-bar-height . 30)
+    ((centaur-tabs-set-close-button
+      centaur-tabs-enable-ido-completion) . nil)
+    :mode-hook
+    ;; (centaur-tabs-headline-match)
+
+    (customize-set-variable 'centaur-tabs-set-icons t
+                            "Customized by Nasy in `centaur-tabs' block")
+    (customize-set-variable 'centaur-tabs-show-navigation-buttons t
+                            "Customized by Nasy in `centaur-tabs' block")
+    (setq centaur-tabs-active-bar
+          (centaur-tabs--make-xpm 'centaur-tabs-active-bar-face
+           4
+           centaur-tabs-bar-height))
+    :advice (:override centaur-tabs-buffer-groups nasy/-centaur-tabs-buffer-groups))
+#+end_src
+
+** Dashboard
+
+#+begin_src elisp
+  (n/leaf-nv dashboard
+    :commands (dashboard-refresh-buffer
+               dashboard-setup-startup-hook)
+    :init (sup 'dashboard))
+
+  (n/leaf-nv dashboard
+    :leaf-autoload nil
+    :init
+    (defun nasy/-dashboard-items (_)
+      (insert "\n")
+      (widget-create 'item
+                     :tag "Recent Files (r)"
+                     :action #'consult-recent-file
+                     :mouse-face 'highlight
+                     :button-face 'dashboard-heading
+                     :button-prefix "🌓 "
+                     :button-suffix ""
+                     :format "%[%t%]"
+                     :help-echo "open recent files")
+      (insert "\n\n")
+      (widget-create 'item
+                     :tag "Bookmarks (b)"
+                     :action #'consult-bookmark
+                     :mouse-face 'highlight
+                     :button-face 'dashboard-heading
+                     :button-prefix "📚 "
+                     :button-suffix ""
+                     :format "%[%t%]"
+                     :help-echo "open bookmarks")
+      (insert "\n\n")
+      (widget-create 'item
+                     :tag "Projects (p)"
+                     :action #'projectile-switch-project
+                     :mouse-face 'highlight
+                     :button-face 'dashboard-heading
+                     :button-prefix "🚀 "
+                     :button-suffix ""
+                     :format "%[%t%]"
+                     :help-echo "open projects")
+      (insert "\n"))
+
+    :defer-config
+    (defun nasy/wfw1 (&rest _)
+      "Widget forward 1."
+      (interactive)
+      (widget-forward 1))
+    (defun nasy/fw2 (&rest _)
+      "Forward 2 chars."
+      (interactive "p")
+      (forward-char 2)))
+
+  (n/leaf-nv dashboard
+    :leaf-autoload nil
+    :bind
+    ("<f5>" . dashboard-refresh-buffer)
+    (:dashboard-mode-map
+     ("r"              . consult-recent-file)
+     ("b"              . consult-bookmark)
+     ("p"              . projectile-switch-project)
+     ("g"              . dashboard-refresh-buffer)
+     ("<down-mouse-1>" . nil)
+     ("H-p"            . dashboard-previous-line)
+     ("H-n"            . dashboard-next-line)
+     ("H-b"            . widget-backward)
+     ("H-f"            . widget-forward)
+     ("<mouse-1>"      . widget-button-click)
+     ("<mouse-2>"      . widget-button-click)
+     ("<up>"           . widget-backward)
+     ("<down>"         . nasy/wfw1))
+    :hook
+    ((dashboard-mode-hook . (lambda () (setq-local tab-width 1)))
+     (after-init-hook     . dashboard-setup-startup-hook)
+     (after-init-hook     . dashboard-refresh-buffer))
+    :custom
+    `(dashboard-startup-banner        . ,(locate-user-emacs-file "n_icon.png"))
+    (dashboard-items . '((n-items . t)))
+                         ;; (bookmarks . t)))
+                         ;; (registers . 5)
+                         ;; (agenda    . 5)
+                         ;; (projects  . 7)))
+    (dashboard-item-generators . '((n-items . nasy/-dashboard-items)))
+    ((dashboard-center-content
+      dashboard-set-heading-icons
+      dashboard-set-init-info
+      dashboard-set-navigator) . t)
+    :advice (:before dashboard-refresh-buffer nasy/-set-dashboard-init-info)
+    :init
+    (defun nasy/-set-dashboard-init-info (&rest _)
+      (setq dashboard-init-info
+            (let ((package-count 0) (time (emacs-init-time)))
+              (setq package-count (+ (hash-table-size straight--profile-cache) package-count))
+              (if (zerop package-count)
+                  (format "Emacs started in %s" time)
+                (format "%d packages loaded in %s" package-count time)))))
+
+    (after-x 'all-the-icons
+      (setq dashboard-navigator-buttons
+            `(;; line1
+              ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+                "Source"
+                "Source Page"
+                (lambda (&rest _) (browse-url "https://github.com/nasyxx/emacs.d/")))
+               (,(all-the-icons-octicon "gear" :height 1.1 :v-adjust 0.0)
+                "Config"
+                "Config File"
+                (lambda (&rest _)
+                  (let ((upath (locate-user-emacs-file "芄蘭/芄蘭.el"))
+                        (epath (locate-user-emacs-file "芄蘭/芄蘭之例.el")))
+                    (when (and (file-exists-p epath)
+                              (not (file-exists-p upath)))
+                      (copy-file epath upath))
+                    (find-file upath))))
+               (,(all-the-icons-octicon "book" :height 1.1 :v-adjust 0.0)
+                "Document"
+                "Document Page"
+                (lambda (&rest _) (browse-url "https://emacs.nasy.moe/")))))))
+    :config
+    (defun nasy/dashboard-refresh ()
+      "Refresh dashboard buffer."
+      (interactive)
+      (unless (get-buffer dashboard-buffer-name)
+        (generate-new-buffer "*dashboard*"))
+      (dashboard-refresh-buffer)))
+#+end_src
+
+** doom Theme
+
+#+begin_src elisp
+  (n/leaf-nv doom-themes
+    :after all-the-icons
+    :custom
+    ((doom-dracula-brighter-comments
+      doom-dracula-colorful-headers
+      doom-dracula-comment-bg) . t)
+    (doom-themes-treemacs-theme . "doom-colors")
+    :init (sup 'doom-themes)
+    :config
+    (after-x 'treemacs
+      (doom-themes-treemacs-config))
+    (doom-themes-visual-bell-config)
+    (after-x 'org-mode
+      (doom-themes-org-config)))
+#+end_src
+
+** Pretty Mode                                                  :pretty:
+
+#+begin_src elisp
+  ;; https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
+  (defun nasy/adjust-fira-code-symbol (charset &optional size)
+    (let ((size (or size 14)))
+      (set-fontset-font (frame-parameter nil 'font)
+                        charset
+                        (font-spec :family "Fira Code Symbol"
+                                   :weight 'normal
+                                   :size   size))))
+  ;; I haven't found one statement that makes both of the above situations work, so I use both for now
+  (defun pretty-fonts-set-fontsets (CODE-FONT-ALIST)
+    "Utility to associate many unicode points with specified `CODE-FONT-ALIST'."
+    (--each CODE-FONT-ALIST
+      (-let (((font . codes) it))
+        (--each codes
+          (set-fontset-font nil `(,it . ,it) font)
+          (set-fontset-font t `(,it . ,it) font)))))
+
+  (defun pretty-fonts--add-kwds (FONT-LOCK-ALIST)
+    "Exploits `font-lock-add-keywords'(`FONT-LOCK-ALIST') to apply regex-unicode replacements."
+    (font-lock-add-keywords
+     nil (--map (-let (((rgx uni-point) it))
+                 `(,rgx (0 (progn
+                             (compose-region
+                              (match-beginning 1) (match-end 1)
+                              ,(concat "\t" (list uni-point)))
+                             nil))))
+               FONT-LOCK-ALIST)))
+
+  (defmacro pretty-fonts-set-kwds (FONT-LOCK-HOOKS-ALIST)
+    "Set regex-unicode replacements to many modes(`FONT-LOCK-HOOKS-ALIST')."
+    `(--each ,FONT-LOCK-HOOKS-ALIST
+       (-let (((font-locks . mode-hooks) it))
+         (--each mode-hooks
+           (add-hook it (-partial 'pretty-fonts--add-kwds
+                                  (symbol-value font-locks)))))))
+
+  (defconst pretty-fonts-fira-font
+    '(;; OPERATORS
+      ;; Pipes
+      ("\\(<|\\)" #Xe14d) ("\\(<>\\)" #Xe15b) ("\\(<|>\\)" #Xe14e) ("\\(|>\\)" #Xe135)
+
+      ;; Brackets
+      ("\\(<\\*\\)" #Xe14b) ("\\(<\\*>\\)" #Xe14c) ("\\(\\*>\\)" #Xe104)
+      ("\\(<\\$\\)" #Xe14f) ("\\(<\\$>\\)" #Xe150) ("\\(\\$>\\)" #Xe137)
+      ("\\(<\\+\\)" #Xe155) ("\\(<\\+>\\)" #Xe156) ("\\(\\+>\\)" #Xe13a)
+
+      ;; Equality
+      ("\\(!=\\)" #Xe10e) ("\\(!==\\)"         #Xe10f) ("\\(=/=\\)" #Xe143)
+      ("\\(/=\\)" #Xe12c) ("\\(/==\\)"         #Xe12d)
+      ("\\(===\\)" #Xe13d) ("[^!/]\\(==\\)[^>]" #Xe13c)
+
+      ;; Equality Special
+      ("\\(||=\\)"  #Xe133) ("[^|]\\(|=\\)" #Xe134)
+      ("\\(~=\\)"   #Xe166)
+      ("\\(\\^=\\)" #Xe136)
+      ("\\(=:=\\)"  #Xe13b)
+
+      ;; Comparisons
+      ("\\(<=\\)" #Xe141) ("\\(>=\\)" #Xe145)
+      ("\\(</\\)" #Xe162) ("\\(</>\\)" #Xe163)
+
+      ;; Shifts
+      ("[^-=]\\(>>\\)" #Xe147) ("\\(>>>\\)" #Xe14a)
+      ("[^-=]\\(<<\\)" #Xe15c) ("\\(<<<\\)" #Xe15f)
+
+      ;; Dots
+      ("\\(\\.-\\)"    #Xe122) ("\\(\\.=\\)" #Xe123)
+      ("\\(\\.\\.<\\)" #Xe125)
+
+      ;; Hashes
+      ("\\(#{\\)"  #Xe119) ("\\(#(\\)"   #Xe11e) ("\\(#_\\)"   #Xe120)
+      ("\\(#_(\\)" #Xe121) ("\\(#\\?\\)" #Xe11f) ("\\(#\\[\\)" #Xe11a)
+
+      ;; REPEATED CHARACTERS
+      ;; 2-Repeats
+      ("\\(||\\)" #Xe132)
+      ("\\(!!\\)" #Xe10d)
+      ("\\(%%\\)" #Xe16a)
+      ("\\(&&\\)" #Xe131)
+
+      ;; 2+3-Repeats
+      ("\\(##\\)"       #Xe11b) ("\\(###\\)"          #Xe11c) ("\\(####\\)" #Xe11d)
+      ("\\(--\\)"       #Xe111) ("\\(---\\)"          #Xe112)
+      ("\\({-\\)"       #Xe108) ("\\(-}\\)"           #Xe110)
+      ("\\(\\\\\\\\\\)" #Xe106) ("\\(\\\\\\\\\\\\\\)" #Xe107)
+      ("\\(\\.\\.\\)"   #Xe124) ("\\(\\.\\.\\.\\)"    #Xe126)
+      ("\\(\\+\\+\\)"   #Xe138) ("\\(\\+\\+\\+\\)"    #Xe139)
+      ("\\(//\\)"       #Xe12f) ("\\(///\\)"          #Xe130)
+      ("\\(::\\)"       #Xe10a) ("\\(:::\\)"          #Xe10b)
+
+      ;; ARROWS
+      ;; Direct
+      ("[^-]\\(->\\)" #Xe114) ("[^=]\\(=>\\)" #Xe13f)
+      ("\\(<-\\)"     #Xe152)
+      ("\\(-->\\)"    #Xe113) ("\\(->>\\)"    #Xe115)
+      ("\\(==>\\)"    #Xe13e) ("\\(=>>\\)"    #Xe140)
+      ("\\(<--\\)"    #Xe153) ("\\(<<-\\)"    #Xe15d)
+      ("\\(<==\\)"    #Xe158) ("\\(<<=\\)"    #Xe15e)
+      ("\\(<->\\)"    #Xe154) ("\\(<=>\\)"    #Xe159)
+
+      ;; Branches
+      ("\\(-<\\)"  #Xe116) ("\\(-<<\\)" #Xe117)
+      ("\\(>-\\)"  #Xe144) ("\\(>>-\\)" #Xe148)
+      ("\\(=<<\\)" #Xe142) ("\\(>>=\\)" #Xe149)
+      ("\\(>=>\\)" #Xe146) ("\\(<=<\\)" #Xe15a)
+
+      ;; Squiggly
+      ("\\(<~\\)" #Xe160) ("\\(<~~\\)" #Xe161)
+      ("\\(~>\\)" #Xe167) ("\\(~~>\\)" #Xe169)
+      ("\\(-~\\)" #Xe118) ("\\(~-\\)"  #Xe165)
+
+      ;; MISC
+      ("\\(www\\)"                   #Xe100)
+      ("\\(<!--\\)"                  #Xe151)
+      ("\\(~@\\)"                    #Xe164)
+      ("[^<]\\(~~\\)"                #Xe168)
+      ("\\(\\?=\\)"                  #Xe127)
+      ("[^=]\\(:=\\)"                #Xe10c)
+      ("\\(/>\\)"                    #Xe12e)
+      ("[^\\+<>]\\(\\+\\)[^\\+<>]"   #Xe16d)
+      ("[^:=]\\(:\\)[^:=]"           #Xe16c)
+      ("\\(<=\\)"                    #Xe157))
+    "Fira font ligatures and their regexes.")
+
+  (n/leaf pretty-mode
+    :hook
+    (nasy/font-change-hook
+     . (lambda ()
+         (progn
+           (when (display-graphic-p)
+             (set-fontset-font (frame-parameter nil 'font)
+                               '(#Xe100 . #Xe16f)
+                               "Fira Code Symbol")
+             (nasy/adjust-fira-code-symbol #Xe126 15)))))
+    :init (sup 'pretty-mode)
+    :defer-config
+    (when (fboundp 'mac-auto-operator-composition-mode)
+      (mac-auto-operator-composition-mode))
+    (after-x 'dash
+      (pretty-fonts-set-kwds
+       '((pretty-fonts-fira-font prog-mode-hook org-mode-hook)))))
+#+end_src
+
+#+begin_src elisp
+  (n/leaf pretty-mode
+    :hook
+    (nasy/font-change-hook
+     . (lambda ()
+         (progn
+           (nasy/set-symbol ?ℂ 13 'bold)
+           (nasy/set-symbol ?𝕔 16)
+           (nasy/set-symbol ?𝔻 13 'bold)
+           (nasy/set-symbol ?𝕕 14)
+           (nasy/set-symbol ?𝕃 13 'bold)
+           (nasy/set-symbol ?𝕝 14) ;; with   (1/4 space)
+           (nasy/set-symbol ?ℝ 12 'bold)
+           (nasy/set-symbol ?𝕣 18)
+           (nasy/set-symbol ?𝕋 14 'bold)
+           (nasy/set-symbol ?𝕥 19)
+           (nasy/set-symbol ?ℤ 13 'bold)
+           (nasy/set-symbol ?𝕫 16)
+           (nasy/set-symbol ?∑ 11 'bold)
+           (nasy/set-symbol ?∏ 11 'bold)
+           (nasy/set-symbol ?∅ 11 'bold)
+           (nasy/set-symbol ?⋃ 11 'bold))))
+    (prog-mode-hook
+     . (lambda () (prettify-symbols-mode 1)))
+    (prog-mode-hook
+     . (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                   '(;; Data Type             P N
+                     ("Float"  . #x211d)  ;; ℝxxxx
+                     ("float"  . #x211d)  ;; ℝxxx
+                     ("Int"    . #x2124)  ;; ℤxxx
+                     ("int"    . #x2124)  ;; ℤxxx
+                     ;; ("String" . #x1d57e)  ;; 𝕊 𝕾
+                     ;; ("string" . #x1d598)  ;; 𝕤 𝖘
+                     ;; ("str"    . #x1d598)  ;; 𝕤 𝖘
+                     ("String" . (#x1d54a (Br . Bl) #x2006))  ;; 𝕊 xxxxxx
+                     ("string" . (#x1d54a (Br . Bl) #x2006))  ;; 𝕤 xxxxxx x1d564
+                     ("str"    . (#x1d54a (Br . Bl) #x2006))  ;; 𝕤 xxxx
+                     ("Char"   . #x2102)   ;; ℂx
+                     ("char"   . #x1d554)  ;; 𝕔x
+
+                     ("False"  . #x1d53d)  ;; 𝔽 𝕱
+                     ("True"   . #x1d54b)  ;; 𝕋 𝕿
+
+                     ("Any"    . #x2203)  ;; ∃
+                     ("any"    . #x2203)  ;; ∃
+                     ("any_"   . #x2203)  ;; ∃
+                     ("And"    . (#x2000 (Br . Bl) #x22c0 (Br . Bl) #x2005))  ;; ⋀
+                     ("and"    . (#x2004 (Br . Bl) #x22cf (Br . Bl) #x2004 (Br . Bl) #x2009))  ;; ⋏
+                     ("Or"     . #x22c1)  ;; ⋁
+                     ("or"     . (#x2006 (Br . Bl) #x22cE (Br . Bl) #x2009))  ;; ⋎
+                     ("not"    . #x00ac)  ;; ¬
+                     ("not_"   . #x00ac)  ;; ¬
+
+                     ("All"    . #x2200)  ;; ∀
+                     ("all"    . #x2200)  ;; ∀
+                     ("all_"   . #x2200)  ;; ∀
+                     ("for"    . #x2200)  ;; ∀
+                     ("forall" . #x2200)  ;; ∀
+                     ("forM"   . #x2200)  ;; ∀
+
+                     ("pi"     . #x03c0)  ;; π
+
+                     ("sum"    . #x2211)  ;; ∑
+                     ("Sum"    . #x2211)  ;; ∑
+                     ("Product" . #x220F) ;; ∏
+                     ("product" . #x220F) ;; ∏
+
+                     ("None"   . #x2205)  ;; ∅
+                     ("none"   . #x2205)  ;; ∅
+
+                     ("in"     . #x2286)  ;; ⊆
+                     ("`elem`" . #x2286)  ;; ⊆
+                     ("not in"    . #x2288)  ;; ⊈
+                     ("`notElem`" . #x2288)  ;; ⊈
+
+                     ("return" . (#x21d2 (Br . Bl) #x2006 (Br . Bl) #x2004))  ;; ⇒  x
+                     ("yield"  . (#x21d4 (Br . Bl) #x2004))  ;; ⇔ x
+                     ("pure"   . (#x21f0 (Br . Bl)))))))          ;; ⇰ x
+
+    ((prog-mode-hook
+      emacs-lisp-mode-hook
+      org-mode-hook)
+     . (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                   '(;; Global
+                     ;; Pipes
+                     ("<|"  . (?\s (Br . Bl) #Xe14d))
+                     ("<>"  . (?\s (Br . Bl) #Xe15b))
+                     ("<|>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14e))
+                     ("|>"  . (?\s (Br . Bl) #Xe135))
+
+                     ;; Brackets
+                     ("<*"  . (?\s (Br . Bl) #Xe14b))
+                     ("<*>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14c))
+                     ("*>"  . (?\s (Br . Bl) #Xe104))
+                     ("<$"  . (?\s (Br . Bl) #Xe14f))
+                     ("<$>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe150))
+                     ("$>"  . (?\s (Br . Bl) #Xe137))
+                     ("<+"  . (?\s (Br . Bl) #Xe155))
+                     ("<+>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe156))
+                     ("+>"  . (?\s (Br . Bl) #Xe13a))
+                     ("[]"  . (#x2005 (Br . Bl) #x1d731 (Br . Bl) #x2005))
+
+                     ;; Equality
+                     ("=/="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe143))
+                     ("/="   . (?\s (Br . Bl) #Xe12c))
+                     ("/=="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe12d))
+                     ("/==>" . (?\s (Br . Bl) ?\s (Br . Bl) ?\s (Br . Bl) #Xe13c))
+                     ("!==>" . (?\s (Br . Bl) ?\s (Br . Bl) ?\s (Br . Bl) #Xe13c))
+                     ;; Special
+                     ("||="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe133))
+                     ("|="   . (?\s (Br . Bl) #Xe134))
+                     ("~="   . (?\s (Br . Bl) #Xe166))
+                     ("^="   . (?\s (Br . Bl) #Xe136))
+                     ("=:="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe13b))
+
+                     ;; Comparisons
+                     ("</"   . (?\s (Br . Bl) #Xe162))
+                     ("</>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe163))
+
+                     ;; Shifts
+                     ("=>>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe147))
+                     ("->>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe147))
+                     (">>>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14a))
+                     (">>>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14a))
+                     ("=<<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15c))
+                     ("-<<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15c))
+                     ("<<<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15f))
+
+                     ;; Dots
+                     (".-"   . (?\s (Br . Bl) #Xe122))
+                     (".="   . (?\s (Br . Bl) #Xe123))
+                     ("..<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe125))
+
+                     ;; Hashes
+                     ("#{"   . (?\s (Br . Bl) #Xe119))
+                     ("#("   . (?\s (Br . Bl) #Xe11e))
+                     ("#_"   . (?\s (Br . Bl) #Xe120))
+                     ("#_("  . (?\s (Br . Bl) #Xe121))
+                     ("#?"   . (?\s (Br . Bl) #Xe11f))
+                     ("#["   . (?\s (Br . Bl) #Xe11a))
+
+                     ;; REPEATED CHARACTERS
+                     ;; 2-Repeats
+                     ("!!"   . (?\s (Br . Bl) #Xe10d))
+                     ("%%"   . (?\s (Br . Bl) #Xe16a))
+
+                     ;; 2+3-Repeats
+                     ("##"   . (?\s (Br . Bl) #Xe11b))
+                     ("###"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe11c))
+                     ("####" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe11d))
+                     ("---"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe112))
+                     ("{-"   . (?\s (Br . Bl) #Xe108))
+                     ("-}"   . (?\s (Br . Bl) #Xe110))
+                     ("\\\\" . (?\s (Br . Bl) #Xe106))
+                     ("\\\\\\" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe107))
+                     (".."   . (?\s (Br . Bl) #Xe124))
+                     ("..."  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe126 (Br . Bl) #x200b))
+                     ("+++"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe139))
+                     ("//"   . (?\s (Br . Bl) #Xe12f))
+                     ("///"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe130))
+                     ("::"   . (?\s (Br . Bl) #Xe10a))  ;; 
+                     (":::"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe10b))
+
+                     ;; Arrows
+                     ;; Direct
+                     ("->"  . (?\s (Br . Bl) #Xe114))  ;; 
+                     ("=>"  . (?\s (Br . Bl) #Xe13f))
+                     ("->>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe115))
+                     ("=>>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe140))
+                     ("<<-" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15d))
+                     ("<<=" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15e))
+                     ("<->" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe154))
+                     ("<=>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe159))
+                     ;; Branches
+                     ("-<"  . (?\s (Br . Bl) #Xe116))
+                     ("-<<" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe117))
+                     (">-"  . (?\s (Br . Bl) #Xe144))
+                     (">>-" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe148))
+                     ("=<<" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe142))
+                     (">=>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe146))
+                     (">>=" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe149))
+                     ("<=<" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15a))
+                     ;; Squiggly
+                     ("<~"  . (?\s (Br . Bl) #Xe160))
+                     ("<~~" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe161))
+                     ("~>"  . (?\s (Br . Bl) #Xe167))
+                     ("~~>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe169))
+                     ("-~"  . (?\s (Br . Bl) #Xe118))
+                     ("~-"  . (?\s (Br . Bl) #Xe165))
+
+                     ;; MISC
+                     ("www" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe100))
+                     ("~@"  . (?\s (Br . Bl) #Xe164))
+                     ("~~"  . (?\s (Br . Bl) #Xe168))
+                     ("?="  . (?\s (Br . Bl) #Xe127))
+                     (":="  . (?\s (Br . Bl) #Xe10c))
+                     ("/>"  . (?\s (Br . Bl) #Xe12e))))))
+
+    (python-mode-hook
+     . (lambda ()
+        (mapc (lambda (pair) (push pair prettify-symbols-alist))
+              '(;; Syntax
+                ;;("def"    . (#x1d521 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
+                ("def"    . (#x1d487 (Br . Bl) #x2006))  ;; 𝒇 1 111
+                ("List"   . #x1d543)  ;; 𝕃 𝕷
+                ("list"   . (?𝕝 (Br . Bl) #x2006))  ;; 𝕝   𝖑
+                ("Dict"   . #x1d53B)  ;; 𝔻 𝕯
+                ("dict"   . #x1d555)  ;; 𝕕 𝖉
+                ("Set"    . #x1d61a)  ;; 𝔖 𝘚
+                ("set"    . #x1d634)  ;; 𝔰 𝘴
+                ("Tuple"  . #x1d61b)  ;; 𝕋 𝕿 𝘛
+                ("tuple"  . #x1d635)  ;; 𝕥 𝖙 𝘵
+
+                ("Union"  . #x22c3)  ;; ⋃
+                ("union"  . #x22c3)))))  ;; ⋃
+
+    (haskell-mode-hook
+     . (lambda ()
+        (mapc (lambda (pair) (push pair prettify-symbols-alist))
+              '(;; Syntax
+                ("pure" . (#x21f0 (Br . Bl) #x2006)))))) ;; ⇰  x
+                       ;; (" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; ∘
+    :init)
+#+end_src
+
+** Mode Line
+
+#+begin_src elisp
+  (n/leaf nyan-mode
+    :custom (nyan-animate-nyancat . t)
+            (nyan-bar-length      . 16)
+            (nyan-wavy-trail      . t)
+    :hook after-init-hook
+    :init (sup 'nyan-mode))
+#+end_src
+
+#+begin_src elisp
+  (n/leaf minions
+    :custom (minions-mode-line-lighter . "✬")
+    :hook after-init-hook
+    :init (sup 'minions))
+#+end_src
+
+#+begin_src elisp
+  (n/leaf doom-modeline
+    :hook emacs-startup-hook
+    :init (sup 'doom-modeline))
+
+  (n/leaf doom-modeline
+    :after doom-modeline
+    :defun doom-modeline-def-modeline doom-modeline-def-segment
+    :custom
+    (inhibit-compacting-font-caches . t)
+    ((doom-modeline-bar-width                   . 5)
+     (doom-modeline-window-width-limit          . fill-column)
+     (doom-modeline-project-detection           . 'project)  ;; changed
+     ((doom-modeline-icon             ;; changed
+       doom-modeline-unicode-fallback ;; changed
+       doom-modeline-minor-modes)      ;; changed
+       ;; doom-modeline-hud)             ;; changed
+      . t)
+     (doom-modeline-continuous-word-count-modes . '(markdown-mode gfm-mode org-mode text-mode))
+     (doom-modeline-buffer-encoding             . nil)  ;; changed
+     (doom-modeline-checker-simple-format       . nil)  ;; changed
+     (doom-modeline-persp-name                  . nil))  ;; changed
+    :defer-config)
+   ;;  (doom-modeline-def-modeline 'main
+   ;;    '(bar matches buffer-info "  " hud buffer-position word-count selection-info)
+   ;;    '(misc-info battery grip github debug repl lsp minor-modes input-method major-mode process vcs checker))
+
+   ;;  (doom-modeline-def-modeline 'minimal
+   ;;   '(bar matches buffer-info-simple "  " hud)
+   ;;   '(media-info major-mode))
+
+   ;;  (doom-modeline-def-modeline 'special
+   ;;   '(bar window-number modals matches buffer-info "  " hud buffer-position word-count parrot selection-info)
+   ;;   '(objed-state misc-info battery irc-buffers debug minor-modes input-method indent-info buffer-encoding major-mode process))
+
+   ;; (doom-modeline-def-modeline 'project
+   ;;   '(bar window-number buffer-default-directory "  " hud)
+   ;;   '(misc-info battery irc mu4e gnus github debug minor-modes input-method major-mode process))
+
+   ;; (doom-modeline-def-modeline 'dashboard
+   ;;   '(bar window-number buffer-default-directory-simple)
+   ;;   '(misc-info battery irc mu4e gnus github debug minor-modes input-method major-mode process))
+
+   ;; (doom-modeline-def-modeline 'vcs
+   ;;   '(bar window-number modals matches buffer-info "  " hud buffer-position parrot selection-info)
+   ;;   '(misc-info battery irc mu4e gnus github debug minor-modes buffer-encoding major-mode process))
+
+   ;; (doom-modeline-def-modeline 'package
+   ;;   '(bar window-number package)
+   ;;   '(misc-info major-mode process))
+
+   ;; (doom-modeline-def-modeline 'info
+   ;;   '(bar window-number buffer-info "  " hud info-nodes buffer-position parrot selection-info)
+   ;;   '(misc-info buffer-encoding major-mode))
+
+   ;; (doom-modeline-def-modeline 'media
+   ;;   '(bar window-number buffer-size buffer-info "  " hud)
+   ;;   '(misc-info media-info major-mode process vcs))
+
+   ;; (doom-modeline-def-modeline 'message
+   ;;   '(bar window-number modals matches buffer-info-simple buffer-position word-count parrot selection-info)
+   ;;   '(objed-state misc-info battery debug minor-modes input-method indent-info buffer-encoding major-mode))
+
+   ;; (doom-modeline-def-modeline 'pdf
+   ;;   '(bar window-number matches buffer-info "  " hud pdf-pages)
+   ;;   '(misc-info major-mode process vcs))
+
+   ;; (doom-modeline-def-modeline 'org-src
+   ;;   '(bar window-number modals matches buffer-info-simple "  " hud buffer-position word-count parrot selection-info)
+   ;;   '(objed-state misc-info debug lsp minor-modes input-method indent-info buffer-encoding major-mode process checker))
+
+   ;; (doom-modeline-def-modeline 'timemachine
+   ;;   '(bar window-number matches git-timemachine "  " hud buffer-position word-count parrot selection-info)
+   ;;   '(misc-info minor-modes indent-info buffer-encoding major-mode)))
+#+end_src
+
+** Nasy Theme
+
+#+begin_src elisp
+  (n/leaf-nv nasy-theme
+    :init
+    (sup `(nasy-theme :local-repo ,(locate-user-emacs-file "木瓜/nasy/nasy-theme"))))
+#+end_src
+
+** Main Theme
+
+#+begin_src elisp
+  (defun nasy/load-theme ()
+    "Nasy load theme function"
+    (when *theme*
+      (load-theme *theme* t)))
+
+  (add-hook 'after-init-hook #'nasy/load-theme)
+#+end_src
+
+** Tool Bar
+
+#+begin_src elisp
+  (leaf tool-bar
+    :tag "builtin"
+    :bind
+    (:tool-bar-map
+     ([copy]            . nil)
+     ([cut]             . nil)
+     ([dired]           . nil)
+     ([isearch-forward] . nil)
+     ([new-file]        . nil)
+     ([open-file]       . nil)
+     ([paste]           . nil)
+     ([save-buffer]     . nil)
+     ([undo]            . nil)
+     ([yank]            . nil))
+     ;; ([dashboard-refresh-buffer]
+     ;;  . `(menu-item))))
+    :init (tool-bar-mode -1))
+#+end_src
+
+** Tab Line
+
+#+begin_src elisp
+  ;; (add-hook 'after-init-hook #'global-tab-line-mode)
+  ;; (setq tab-line-close-tab-function #'kill-buffer)
+#+end_src
+
+* 結                                                           :noexport:
+
+#+begin_src elisp :exports none
+  (provide '庭尞)
+  ;;; 庭尞.el ends here
+#+end_src
+
+# Local Variables:
+# org-src-fontify-natively: nil
+# End:

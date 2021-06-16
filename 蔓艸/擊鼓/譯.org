@@ -1,0 +1,61 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "修.el") :lexical t
+
+譯 el 至 elc 與 eln
+
+#+begin_src elisp
+  ;;; 修.el ---  -*- lexical-binding: t; -*-
+
+  ;;; Commentary:
+  ;; 譯 el 至 elc 與 eln
+
+  ;;; Code:
+
+  (load (locate-user-emacs-file "early-init.el"))
+
+  (setq load-prefer-newer t
+        nasy--require t
+        native-comp-deferred-compilation nil)
+
+  (message "\n\n---------------- Load el of 桃夭 ----------------\n\n")
+
+  (load (locate-user-emacs-file "init.el"))
+
+  (message "\n\n---------------- Run hooks ----------------\n\n")
+
+  (run-hooks
+   'after-init-hook
+   'emacs-startup-hook
+   'nasy/config-before-hook
+   'nasy/config-after-hook
+   'nasy-first-key-hook
+   'org-mode-hook
+   'org-first-key-hook
+   'prog-mode-hook
+   'pre-command-hook)
+
+  (message "\n\n---------------- Wait straight.el ----------------\n\n")
+
+  (when (fboundp 'native-compile)
+    (while (or comp-files-queue
+               (> (comp-async-runnings) 0))
+      (sleep-for 1)))
+
+  (unless (and (boundp 'nasy-first-p)
+               nasy-first-p)
+
+    (message "\n\n---------------- Build elc of 桃夭 ----------------\n\n")
+    (byte-recompile-directory (locate-user-emacs-file "桃夭/") 0)
+
+    (when (fboundp 'native-compile)
+      (message "\n\n---------------- Build eln of 桃夭 ----------------")
+      (native-compile-async (locate-user-emacs-file "桃夭/") t)
+
+      (setq native-comp-async-query-on-exit t)
+
+      (while (or comp-files-queue
+                 (> (comp-async-runnings) 0))
+        (sleep-for 1))))
+
+  (provide '譯)
+  ;;; 譯.el ends here
+#+end_src

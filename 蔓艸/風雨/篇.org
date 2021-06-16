@@ -1,0 +1,1266 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "風雨.el") :lexical t
+#+title: 風雨
+
+#+begin_verse
+  風雨淒淒、雞鳴喈喈
+  既見君子、云胡不夷
+
+  風雨瀟瀟、雞鳴膠膠
+  既見君子、云胡不瘳
+
+  風雨如晦、雞鳴不已
+  既見君子、云胡不喜
+#+end_verse
+
+函數與宏定製其文宜其用之
+
+* 題                                                           :noexport:
+
+#+begin_src elisp :exports none
+  ;;; 風雨.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2021  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; 函數與宏 定製其文 宜其用之
+
+  ;;; Code:
+
+  (cl-eval-when (compile)
+    (setq nasy--require t)
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓/擊鼓.el"))
+    (require '擊鼓)
+    (sup 'doom-modeline)
+    (setq nasy--require nil))
+#+end_src
+
+* 恆用之
+
+** 元
+
+#+begin_src elisp
+  (defvar nasy/config-before-hook nil
+    "Hook to run config functions before load custom.el.")
+
+  (defvar nasy/config-after-hook nil
+    "Hook to run config functions after load custom.el.")
+
+  (add-hook 'nasy/config-after-hook
+            #'(lambda () (message "Hi~ Hope you have fun with this config.")))
+
+  (defvar nasy--defer-loads nil
+    "Nasy defer load packages.")
+
+  (defvar nasy--defer-load-hook nil
+    "Nasy defer load hook.")
+#+end_src
+
+** 函數
+
+#+begin_src elisp
+  (defun nasy/change-char-width (char width)
+    "Change CHAR width to WIDTH."
+    (let ((table (make-char-table nil)))
+      (set-char-table-parent table char-width-table)
+      (set-char-table-range table char width)
+      (setq char-width-table table)))
+
+
+  ;;;###autoload
+  (defun nasy/enlist (exp)
+   "Return EXP wrapped in a list, or as-is if already a list."
+   (declare (pure t) (side-effect-free t))
+   (if (listp exp) exp (list exp)))
+
+
+  (defun nasy/run-hook-once-on (hook on-hook)
+    "Run HOOK on ON-HOOK once."
+    (let ((fn (intern (format "nasy-once-hook--%s-on-%s" hook on-hook))))
+      (fset
+       fn
+       (lambda (&rest _)
+         (run-hooks hook)
+         (set hook nil)))
+      (add-hook on-hook fn)))
+
+  (defun nasy/defer-load ()
+    (nasy/sup nasy--defer-loads)
+    (run-hooks 'nasy--defer-load-hook))
+
+  (add-hook 'nasy-first-key-hook #'nasy/defer-load -1)
+#+end_src
+
+** 宏
+
+#+begin_src elisp
+  (cl-eval-when (compile eval load)
+    (if (fboundp 'with-eval-after-load)
+        (defalias 'after-x 'with-eval-after-load)
+      (defmacro after-x (feature &rest body)
+        "Eval BODY afetr FEATURE have loaded."
+        (declare (indent defun))
+        `(eval-after-load ,feature
+           '(progn ,@body)))))
+#+end_src
+
+** Font
+
+#+begin_src elisp
+  (defvar nasy/font-change-hook nil
+    "Hooks to run after font changed.")
+
+  (defvar nasy--cus-font nil)
+  (defvar nasy--set-font nil)
+
+
+  (cl-eval-when (compile eval load)
+    (defun nasy/-font-doc (cname ftype)
+      "Generate font custome variable doc with CNAME and FTYPE."
+      (concat "The " cname " font " ftype ".
+    After change it, run `M-x nasy/set-font' to see the effect."))
+
+
+    (defun nasy/-cus-font ()
+      "Defcustom some fonts."
+      (setq nasy--cus-font t)
+      (dolist (cname '("main" "symbol" "cjk" "mode-line" "tab-line" "header-line"))
+        (cl-loop for ftype in '("family" "weight" "size" "scale")
+                 for type = (cond ((string= "family" ftype) 'string)
+                                ((string= "weight" ftype) 'symbol)
+                                ((string= "size" ftype)   'float)
+                                ((string= "scale" ftype)  'float)
+                                (t (error "Wrong Font Type")))
+                 for doc  = (nasy/-font-doc cname ftype)
+                 for name = (intern (format "*font-%s-%s*" cname ftype))
+                 do
+                 (progn
+                   (custom-declare-variable name nil doc :group 'nasy-font :type type)
+                   (when (string= "cjk" cname)
+                     (cl-loop for sfxn in '(2 3 4 5)
+                              for cname_ = (format "%s-%d" cname sfxn)
+                              for name_  = (intern (format "*font-%s-%s*" cname_ ftype))
+                              for doc_   = (nasy/-font-doc cname_ ftype)
+                              do
+                              (progn
+                                (custom-declare-variable name_ nil doc_
+                                                         :group 'nasy-font
+                                                         :type type)))))))))
+
+
+  (cl-eval-when (compile)
+    (nasy/-cus-font))
+
+
+  (defun nasy/check-font (font)
+    "Check if FONT avaliable."
+    (if (find-font (font-spec :family font
+                              :weight *font-main-weight*
+                              :size   *font-main-size*))
+        t
+      (message (format "`%s' font not find" font))))
+
+  (defun nasy/set-default-font (charset &optional size frame)
+    "Set CHARSET fontset to default *font-main* with SIZE on FRAME."
+    (when (and (display-graphic-p)
+              (nasy/check-font *font-main-family*))
+      (let ((size (or size *font-main-size*)))
+        (set-fontset-font t
+                          charset
+                          (font-spec :family *font-main-family*
+                                     :weight *font-main-weight*
+                                     :size   size)
+                          frame
+                          'prepend))))
+
+  (defun nasy/set-hanamin (charset &optional size frame)
+    "Set CHARSET fontset to HanaMin with SIZE on FRAME.
+  https://github.com/cjkvi/HanaMinAFDKO/releases
+  Font for char like 𨉚."
+    (when (display-graphic-p)
+      (let ((size (or size *font-cjk-size*)))
+        (when (nasy/check-font "HanaMinB")
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :family "HanaMinB"
+                                       :weight 'normal
+                                       :size   size)
+                            frame
+                            'prepend))
+        (when (nasy/check-font "HanaMinA")
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :family "HanaMinA"
+                                       :weight 'normal
+                                       :size   size)
+                            frame
+                            'prepend))
+        (setf (alist-get ".*HanaMinA.*" face-font-rescale-alist *font-cjk-scale* nil 'string=)
+              ,*font-cjk-scale*)
+        (setf (alist-get ".*HanaMinB.*" face-font-rescale-alist *font-cjk-scale* nil 'string=)
+              ,*font-cjk-scale*)
+        (cl-loop for sfx in (reverse '("A" "B" "C" "Ex A1" "Ex A2" "Ex B" "Ex C" "I"))
+                 for hfont = (concat "Hanazono Mincho " sfx)
+                 do
+                 (progn
+                   (when (nasy/check-font hfont)
+                     (set-fontset-font (frame-parameter nil 'font)
+                                       charset
+                                       (font-spec :family hfont
+                                                  :weight 'normal
+                                                  :size   size)
+                                       frame
+                                       'prepend))
+
+                  (setf (alist-get (format ".*%s.*" hfont)
+                                   face-font-rescale-alist
+                                   ,*font-cjk-scale*
+                                   nil
+                                   'string=)
+                        ,*font-cjk-scale*))))))
+
+  (defun nasy/set-symbol (charset &optional size weight frame)
+      "Set CHARSET fontset to HanaMin with SIZE with WEIGHT on FRAME.
+
+    Font for char like ∷."
+      (when (display-graphic-p)
+        (let ((size (or size *font-symbol-size*)))
+          (when (nasy/check-font *font-symbol-family*)
+            (set-fontset-font (frame-parameter nil 'font)
+                              charset
+                              (font-spec :family *font-symbol-family*
+                                         :weight weight
+                                         :size   size)
+                              frame
+                              'prepend)))))
+
+  (defun nasy/-set--font (frame)
+    "Nasy set font for `FRAME'."
+    (unless nasy--cus-font
+      (nasy/-cus-font))
+    (unless nasy--set-font
+      (nasy/-set-font))
+    (when (display-graphic-p)
+      ;; default
+      (when (nasy/check-font *font-main-family*)
+        (set-face-attribute
+            'default nil
+            :font (font-spec :family *font-main-family*
+                             :weight *font-main-weight*
+                             :size   *font-main-size*)))
+      ;; 中文
+      (dolist (charset '(kana han cjk-misc bopomofo))
+        (progn
+          (nasy/set-hanamin charset)
+          (cl-loop for fn in (reverse '("" "-2" "-3" "-4" "-5"))
+                   for fpf = (format "*font-cjk%s" fn)
+                   for ff  = (eval (intern (concat fpf "-family*")))
+                   for fw  = (eval (intern (concat fpf "-weight*")))
+                   for fs  = (eval (intern (concat fpf "-size*")))
+                   for fss = (eval (intern (concat fpf "-scale*")))
+                   do
+                   (progn
+                     (when (nasy/check-font ff)
+                       (set-fontset-font (frame-parameter nil 'font)
+                                         charset
+                                         (font-spec :family ff
+                                                    :weight fw
+                                                    :size   fs)
+                                         frame
+                                         'prepend))
+                     (let ((ffn (concat ".*" ff ".*")))
+                       (setf (alist-get ffn face-font-rescale-alist fss nil 'string=) fss))))))
+
+      (when (and *is-a-mac*
+                (nasy/check-font "Apple Color Emoji"))
+        ;; For NS/Cocoa
+        (set-fontset-font (frame-parameter nil 'font)
+                          'symbol
+                          (font-spec :family "Apple Color Emoji")
+                          frame
+                          'prepend))
+
+      (when (nasy/check-font *font-symbol-family*)
+        (set-fontset-font (frame-parameter nil 'font)
+                          'symbol
+                          (font-spec :family *font-symbol-family*
+                                     :weight *font-symbol-weight*
+                                     :size   *font-symbol-size*)
+                          frame
+                          'append))
+
+      (when (nasy/check-font *font-mode-line-family*)
+        (set-face-attribute 'mode-line nil
+                            :font (font-spec :family *font-mode-line-family*
+                                             :weight *font-mode-line-weight*
+                                             :size   *font-mode-line-size*))
+
+        (set-face-attribute 'mode-line-inactive nil
+                            :font (font-spec :family *font-mode-line-family*
+                                             :weight *font-mode-line-weight*
+                                             :size   *font-mode-line-size*)))
+      (when (nasy/check-font *font-tab-line-family*)
+        (set-face-attribute 'tab-line nil
+                            :font (font-spec :family *font-tab-line-family*
+                                             :weight *font-tab-line-weight*
+                                             :size   *font-tab-line-size*)))
+      (when (nasy/check-font *font-header-line-family*)
+        (set-face-attribute 'header-line nil
+                            :font (font-spec :family *font-header-line-family*
+                                             :weight *font-header-line-weight*
+                                             :size   *font-header-line-size*)))
+
+      (after-x 'doom-modeline
+        (doom-modeline--set-char-widths doom-modeline-rhs-icons-alist)))
+    (run-hooks 'nasy/font-change-hook))
+
+
+  (defun nasy/-set-font (&rest _)
+    "Font."
+    (setq nasy--set-font t)
+    (leaf nasy-font
+      :doc "一些默訒値。"
+      :custom
+      (*font-main-family*   . "OperatorMonoSSmLig Nerd Font")
+      (*font-symbol-family* . "Symbola")
+      (*font-cjk-family*    . "STFLGQKJF")
+      (*font-cjk-2-family*  . "FZLiuGongQuanKaiShuJF")
+      ;; I.Ngaan' font from `http://founder.acgvlyric.org/iu/doku.php/造字:開源字型_i.顏體'.
+      (*font-cjk-3-family*  . "I.Ngaan")
+      (*font-cjk-4-family*  . "Kaiti SC")
+      (*font-cjk-5-family*  . "Kaiti TC")
+
+      ((*font-mode-line-family*
+        ,*font-header-line-family*
+        ,*font-tab-line-family*)
+       . "Recursive Mono Casual Static")
+
+      ((*font-main-size*
+        ,*font-mode-line-size*)
+       . 14)
+      (*font-tab-line-size* . 13)
+      (*font-symbol-size* . 17)
+      ((*font-cjk-size*
+        ,*font-cjk-2-size*
+        ,*font-cjk-3-size*
+        ,*font-cjk-4-size*
+        ,*font-cjk-5-size*)
+       . nil)
+      (*font-header-line-size* . 12)
+
+      ((*font-cjk-scale*
+        ,*font-cjk-2-scale*
+        ,*font-cjk-3-scale*
+        ,*font-cjk-4-scale*
+        ,*font-cjk-5-scale*)
+       . 1.3)
+
+      ((*font-main-weight*
+        ,*font-symbol-weight*
+        ,*font-cjk-weight*
+        ,*font-cjk-2-weight*
+        ,*font-cjk-3-weight*
+        ;; *font-cjk-4-weight*
+        ;; *font-cjk-5-weight*
+        ,*font-mode-line-weight*
+        ,*font-tab-line-weight*
+        ,*font-header-line-weight*)
+       . 'normal)
+
+      ((*font-cjk-4-weight*
+        ,*font-cjk-5-weight*) . 'bold))
+
+    (require '芄蘭 nil t))
+
+
+  (defun nasy/set-font (&rest _)
+    "Nasy set font."
+    (interactive)
+    (message "setting font...")
+    (nasy/-set--font nil)
+    (message "setting font...done"))
+
+  (add-hook 'emacs-startup-hook #'nasy/-set-font 98)
+  (add-hook 'emacs-startup-hook #'nasy/-cus-font 97)
+  ;; (add-hook 'after-init-hook #'nasy/set-font)
+  (add-hook 'emacs-startup-hook #'nasy/set-font 99)
+  ;; (add-hook 'nasy-first-key-hook #'nasy/set-font)
+  ;; (add-hook 'after-make-frame-functions #'nasy/set-font)
+#+end_src
+
+** 定製
+
+*** 餘
+
+#+begin_src elisp
+  (defgroup nasy nil
+    "Nasy Emacs Custom Configurations."
+    :group 'emacs)
+
+  (defgroup nasy-font nil
+    "Nasy Emacs Custom Font Configurations."
+    :group 'nasy)
+
+  (defcustom lisp-modes-hooks '(common-lisp-mode-hook
+                                emacs-lisp-mode-hook
+                                lisp-mode-hook
+                                lisp-interaction-mode-hook
+                                racket-mode-hook
+                                scheme-mode-hook)
+    "List of lisp-related modes hooks."
+    :type '(repeat symbol)
+    :group 'nasy)
+
+  (defcustom *theme* 'nasy-theme
+    "The Theme."
+    :group 'nasy
+    :type 'symbol)
+
+  (defun nasy/-cus-emacs ()
+    "Nasy customize emacs misc variable."
+    (customize-set-variable 'custom-raised-buttons nil "Customized by Nasy.")
+    (customize-set-variable 'make-backup-files     nil "Customized by Nasy.")
+    (customize-set-variable 'mouse-yank-at-point   t "Customized by Nasy.")
+    (customize-set-variable 'resize-mini-windows   t "Customized by Nasy.")
+    (customize-set-variable 'tab-always-indent     'complete "Customized by Nasy.")
+    (customize-set-variable 'use-dialog-box        nil "Customized by Nasy.")
+    (customize-set-variable 'use-file-dialog       nil "Customized by Nasy.")
+
+    (customize-set-variable 'enable-recursive-minibuffers t "Customized by Nasy.")
+
+    (customize-set-variable 'ediff-split-window-function
+                            'split-window-horizontally "Customized by Nasy.")
+    (customize-set-variable 'ediff-window-setup-function
+                            'ediff-setup-windows-plain "Customized by Nasy.")
+
+    (setq-default indent-tabs-mode nil)
+
+    (fset 'yes-or-no-p 'y-or-n-p)
+
+    (column-number-mode 1)
+    (delete-selection-mode t)
+    (display-battery-mode 1)
+    (global-auto-revert-mode t)
+    (minibuffer-depth-indicate-mode 1))
+
+  (add-hook 'nasy-first-key-hook #'nasy/-cus-emacs)
+#+end_src
+
+*** 匩
+
+#+begin_src elisp
+  (defun nasy/-insert-backslash ()
+    (interactive)
+    (insert-char ?\\))
+
+  (defun n/kill-line-0 ()
+    (interactive)
+    (kill-line 0))
+
+  (defun nasy/-cus-mac ()
+    (leaf mac
+      :leaf-autoload nil
+      :leaf-defun nil
+      :when *is-a-mac*
+      :bind
+      ("C-z"   . stop-minimizing-window)
+      ("M-¥"   . nasy/-insert-backslash)
+      ("A-¥"   . nasy/-insert-backslash)
+      ("A-C-¥" . toggle-input-method)
+
+      ;; cursor Movement
+      ("H-<up>"   . beginning-of-buffer)
+      ("H-<down>" . end-of-buffer)
+      ("H-l"      . goto-line)
+
+      ;; text Operations
+      ("H-a" . mark-whole-buffer)
+      ("H-v" . yank)
+      ("H-c" . kill-ring-save)
+      ("H-s" . save-buffer)
+      ("H-z" . undo)
+      ("H-w" . delete-window)
+      ("H-<backspace>" . n/kill-line-0)
+
+      ;; Tab
+      ("H-t" . dashboard-refresh-buffer)
+
+      :custom
+      (mac-function-modifier      . 'super)
+      (mac-option-modifier        . 'meta)
+      (mac-command-modifier       . 'hyper)
+      (mac-right-command-modifier . 'super)
+      (mac-right-option-modifier  . 'alt)
+      (default-frame-alist
+        . '((ns-transparent-titlebar . t)
+            (ns-appearance           . light)
+            (alpha                   . (80 . 75))
+            (vertical-scroll-bars    . nil)
+            (border-width            . 5)
+            (internal-border-width   . 24)))
+
+      :init
+      ;; unset
+      (global-unset-key (kbd "<magnify-down>"))
+      (global-unset-key (kbd "<magnify-up>"))))
+
+  (add-hook 'emacs-startup-hook #'nasy/-cus-mac)
+#+end_src
+
+* 旹用之
+:PROPERTIES:
+:header-args:elisp: :tangle (concat temporary-file-directory "風雨旹用.el") :lexical t
+:END:
+
+主勭使用。
+
+#+begin_src elisp
+  ;;; 風雨旹用.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
+  (cl-eval-when (compile)
+    (setq nasy--require t)
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
+    (require '擊鼓)
+    (require '風雨)
+
+    (sup 'projectile)
+    (sup 'smartparens)
+
+    (require 'winner)
+    (require 'xref)
+    (setq nasy--require nil))
+
+
+  (cl-eval-when (compile eval load)
+    (require '風雨))
+#+end_src
+
+** 元
+
+#+begin_src elisp
+  (defvar nasy-file-sym-t '((".config/nasy-emacs" . ".emacs.d")))
+#+end_src
+
+** 函數
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun nasy/file-sym-t (file)
+    "Trans true file name to symlink file name."
+    (cl-loop for (from . to) in nasy-file-sym-t
+             do
+             (setq file (string-replace from to file))
+             return file))
+
+
+  ;;;###autoload
+  (defun nasy/file-truename (file)
+    "Get the true name of FILE."
+    (if (or (file-remote-p file nil t)
+            (not (file-remote-p file)))
+        (file-truename file)
+      file))
+
+
+  ;;;###autoload
+  (defun nasy/p-ignore-p (truename)
+    "Determine whether ignore the `TRUENAME' file or not."
+    (or (string-match-p "nix/store" truename)
+        nil))
+
+
+  ;;;###autoload
+  (defun nasy/unquote (exp)
+    "Return EXP unquoted."
+    (declare (pure t) (side-effect-free t))
+    (while (memq (car-safe exp) '(quote function))
+      (setq exp (cadr exp)))
+    exp)
+
+
+  ;;;###autoload
+  (defun posframe-poshandler-frame-top-center (info)
+    "Make posframe INFO top center."
+    (cons (/ (- (plist-get info :parent-frame-width)
+                (plist-get info :posframe-width))
+             2)
+          (round (* 0.02 (x-display-pixel-height)))))
+
+
+  ;;;###autoload
+  (defun stop-minimizing-window ()
+    "Stop minimizing window under macOS."
+    (interactive)
+    (unless (and *is-a-mac*
+                 window-system)
+      (suspend-frame)))
+#+end_src
+
+** 重新加載 ~user-init-file~ 文件
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun nasy/reload-init ()
+    "Reload init.el."
+    (interactive)
+    (message "Reloading init.el...")
+    (load user-init-file nil 'nomessage)
+    (message "Reloading init.el... done."))
+
+
+  ;;;###autoload
+  (defun nasy/eval-buffer-or-region (&optional start end)
+    "Evaluate the current region, or the whole buffer if no region is active.
+  In Lisp code, START and END denote the region to be evaluated;
+  they default to `point-min' and `point-max' respectively.
+  If evaluating a buffer visiting this file, then delegate instead
+  to `nasy/reload-init'."
+    (interactive)
+    (if (and buffer-file-name
+             (member (file-truename buffer-file-name)
+                     (list
+                      (when (bound-and-true-p early-init-file)
+                        (file-truename early-init-file))
+                      (file-truename user-init-file)))
+             (not (region-active-p)))
+        (nasy/reload-init)
+      (let ((name nil))
+        (if (region-active-p)
+            (progn
+              (setq start (region-beginning))
+              (setq end (region-end))
+              (setq name "region"))
+          (setq start (point-min))
+          (setq end (point-max))
+          (setq name (buffer-name)))
+        (let ((load-file-name (buffer-file-name)))
+          (message "Evaluating %s..." name)
+          (eval-region start end)
+          (message "Evaluating %s...done" name)))))
+#+end_src
+
+** 臿入旹間
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun nasy/insert-current-date ()
+    "Insert current date."
+    (interactive)
+    (insert (shell-command-to-string "echo -n $(date +'%b %d, %Y')")))
+
+  ;;;###autoload
+  (defun nasy/insert-current-filename ()
+    "Insert current buffer filename."
+    (interactive)
+    (insert (file-relative-name buffer-file-name)))
+#+end_src
+
+** buffer 相關
+
+#+begin_src elisp
+  ;;;###autoload
+  (defvar nasy/real-buffer-functions
+    '(nasy/dired-buffer-p)
+    "A list of predicate functions run to determine if a buffer is real, unlike
+  `nasy/unreal-buffer-functions'. They are passed one argument: the buffer to be
+  tested.
+  Should any of its function returns non-nil, the rest of the functions are
+  ignored and the buffer is considered real.
+  See `nasy/real-buffer-p' for more information.")
+
+  ;;;###autoload
+  (defvar nasy/unreal-buffer-functions
+    '(minibufferp nasy/special-buffer-p nasy/non-file-visiting-buffer-p)
+    "A list of predicate functions run to determine if a buffer is *not* real,
+  unlike `nasy/real-buffer-functions'. They are passed one argument: the buffer to
+  be tested.
+  Should any of these functions return non-nil, the rest of the functions are
+  ignored and the buffer is considered unreal.
+  See `nasy/real-buffer-p' for more information.")
+
+  ;;;###autoload
+  (defvar-local nasy/real-buffer-p nil
+    "If non-nil, this buffer should be considered real no matter what. See
+  `nasy/real-buffer-p' for more information.")
+
+  ;;;###autoload
+  (defvar nasy/fallback-buffer-name "*scratch*"
+    "The name of the buffer to fall back to if no other buffers exist (will create
+  it if it doesn't exist).")
+
+
+  ;;
+  ;; Functions
+
+  ;;;###autoload
+  (defun nasy/buffer-frame-predicate (buf)
+    "To be used as the default frame buffer-predicate parameter. Returns nil if
+  BUF should be skipped over by functions like `next-buffer' and `other-buffer'."
+    (or (nasy/real-buffer-p buf)
+        (eq buf (nasy/fallback-buffer))))
+
+  ;;;###autoload
+  (defun nasy/fallback-buffer ()
+    "Returns the fallback buffer, creating it if necessary. By default this is the
+  scratch buffer. See `nasy/fallback-buffer-name' to change this."
+    (let (buffer-list-update-hook)
+      (get-buffer-create nasy/fallback-buffer-name)))
+
+  ;;;###autoload
+  (defalias 'nasy/buffer-list #'buffer-list)
+
+
+  ;;;###autoload
+  (defun nasy/project-root (&optional dir)
+    "Return the project root of DIR (defaults to `default-directory').
+  Returns nil if not in a project."
+    (let ((projectile-project-root
+           (unless dir (bound-and-true-p projectile-project-root)))
+          projectile-require-project-root)
+      (projectile-project-root dir)))
+
+
+  ;;;###autoload
+  (defun nasy/project-buffer-list (&optional project)
+    "Return a list of buffers belonging to the specified PROJECT.
+  If PROJECT is nil, default to the current project.
+  If no project is active, return all buffers."
+    (let ((buffers (nasy/buffer-list)))
+      (if-let* ((project-root
+                 (if project (expand-file-name project)
+                   (nasy/project-root))))
+          (cl-loop for buf in buffers
+                   if (projectile-project-buffer-p buf project-root)
+                   collect buf)
+        buffers)))
+
+  ;;;###autoload
+  (defun nasy/open-projects ()
+    "Return a list of projects with open buffers."
+    (cl-loop with projects = (make-hash-table :test 'equal :size 8)
+             for buffer in (nasy/buffer-list)
+             if (buffer-live-p buffer)
+             if (nasy/real-buffer-p buffer)
+             if (with-current-buffer buffer (nasy/project-root))
+             do (puthash (abbreviate-file-name it) t projects)
+             finally return (hash-table-keys projects)))
+
+  ;;;###autoload
+  (defun nasy/dired-buffer-p (buf)
+    "Returns non-nil if BUF is a dired buffer."
+    (with-current-buffer buf (derived-mode-p 'dired-mode)))
+
+  ;;;###autoload
+  (defun nasy/special-buffer-p (buf)
+    "Returns non-nil if BUF's name starts and ends with an *."
+    (equal (substring (buffer-name buf) 0 1) "*"))
+
+  ;;;###autoload
+  (defun nasy/temp-buffer-p (buf)
+    "Returns non-nil if BUF is temporary."
+    (equal (substring (buffer-name buf) 0 1) " "))
+
+  ;;;###autoload
+  (defun nasy/visible-buffer-p (buf)
+    "Return non-nil if BUF is visible."
+    (get-buffer-window buf))
+
+  ;;;###autoload
+  (defun nasy/buried-buffer-p (buf)
+    "Return non-nil if BUF is not visible."
+    (not (nasy/visible-buffer-p buf)))
+
+  ;;;###autoload
+  (defun nasy/non-file-visiting-buffer-p (buf)
+    "Returns non-nil if BUF does not have a value for `buffer-file-name'."
+    (not (buffer-file-name buf)))
+
+  ;;;###autoload
+  (defun nasy/real-buffer-list (&optional buffer-list)
+    "Return a list of buffers that satify `nasy/real-buffer-p'."
+    (cl-remove-if-not #'nasy/real-buffer-p (or buffer-list (nasy/buffer-list))))
+
+  ;;;###autoload
+  (defun nasy/real-buffer-p (buffer-or-name)
+    "Returns t if BUFFER-OR-NAME is a 'real' buffer.
+  A real buffer is a useful buffer; a first class citizen in Doom. Real ones
+  should get special treatment, because we will be spending most of our time in
+  them. Unreal ones should be low-profile and easy to cast aside, so we can focus
+  on real ones.
+  The exact criteria for a real buffer is:
+    1. A non-nil value for the buffer-local value of the `nasy/real-buffer-p'
+       variable OR
+    2. Any function in `nasy/real-buffer-functions' returns non-nil OR
+    3. None of the functions in `nasy/unreal-buffer-functions' must return
+       non-nil.
+  If BUFFER-OR-NAME is omitted or nil, the current buffer is tested."
+    (or (bufferp buffer-or-name)
+        (stringp buffer-or-name)
+        (signal 'wrong-type-argument (list '(bufferp stringp) buffer-or-name)))
+    (when-let (buf (get-buffer buffer-or-name))
+      (and (buffer-live-p buf)
+           (not (nasy/temp-buffer-p buf))
+           (or (buffer-local-value 'nasy/real-buffer-p buf)
+               (run-hook-with-args-until-success 'nasy/real-buffer-functions buf)
+               (not (run-hook-with-args-until-success 'nasy/unreal-buffer-functions buf))))))
+
+  ;;;###autoload
+  (defun nasy/unreal-buffer-p (buffer-or-name)
+    "Return t if BUFFER-OR-NAME is an 'unreal' buffer.
+  See `nasy/real-buffer-p' for details on what that means."
+    (not (nasy/real-buffer-p buffer-or-name)))
+
+  ;;;###autoload
+  (defun nasy/buffers-in-mode (modes &optional buffer-list derived-p)
+    "Return a list of buffers whose `major-mode' is `eq' to MODE(S).
+  If DERIVED-P, test with `derived-mode-p', otherwise use `eq'."
+    (let ((modes (nasy/enlist modes)))
+      (cl-remove-if-not (if derived-p
+                            (lambda (buf)
+                              (with-current-buffer buf
+                                (apply #'derived-mode-p modes)))
+                          (lambda (buf)
+                            (memq (buffer-local-value 'major-mode buf) modes)))
+                        (or buffer-list (nasy/buffer-list)))))
+
+  ;;;###autoload
+  (defun nasy/visible-windows (&optional window-list)
+    "Return a list of the visible, non-popup (dedicated) windows."
+    (cl-loop for window in (or window-list (window-list))
+             when (or (window-parameter window 'visible)
+                      (not (window-dedicated-p window)))
+             collect window))
+
+  ;;;###autoload
+  (defun nasy/visible-buffers (&optional buffer-list)
+    "Return a list of visible buffers (i.e. not buried)."
+    (if buffer-list
+        (cl-remove-if-not #'get-buffer-window buffer-list)
+      (delete-dups (mapcar #'window-buffer (window-list)))))
+
+  ;;;###autoload
+  (defun nasy/buried-buffers (&optional buffer-list)
+    "Get a list of buffers that are buried."
+    (cl-remove-if #'get-buffer-window (or buffer-list (nasy/buffer-list))))
+
+  ;;;###autoload
+  (defun nasy/matching-buffers (pattern &optional buffer-list)
+    "Get a list of all buffers that match the regex PATTERN."
+    (cl-loop for buf in (or buffer-list (nasy/buffer-list))
+             when (string-match-p pattern (buffer-name buf))
+             collect buf))
+
+  ;;;###autoload
+  (defun nasy/set-buffer-real (buffer flag)
+    "Forcibly mark BUFFER as FLAG (non-nil = real)."
+    (with-current-buffer buffer
+      (setq nasy/real-buffer-p flag)))
+
+  ;;;###autoload
+  (defun nasy/kill-buffer-and-windows (buffer)
+    "Kill the buffer and delete all the windows it's displayed in."
+    (dolist (window (get-buffer-window-list buffer))
+      (unless (one-window-p t)
+        (delete-window window)))
+    (kill-buffer buffer))
+
+  ;;;###autoload
+  (defun nasy/fixup-windows (windows)
+    "Ensure that each of WINDOWS is showing a real buffer or the fallback buffer."
+    (dolist (window windows)
+      (with-selected-window window
+        (when (nasy/unreal-buffer-p (window-buffer))
+          (previous-buffer)
+          (when (nasy/unreal-buffer-p (window-buffer))
+            (switch-to-buffer (nasy/fallback-buffer)))))))
+
+  ;;;###autoload
+  (defun nasy/kill-buffer-fixup-windows (buffer)
+    "Kill the BUFFER and ensure all the windows it was displayed in have switched
+  to a real buffer or the fallback buffer."
+    (let ((windows (get-buffer-window-list buffer)))
+      (kill-buffer buffer)
+      (nasy/fixup-windows (cl-remove-if-not #'window-live-p windows))))
+
+  ;;;###autoload
+  (defun nasy/kill-buffers-fixup-windows (buffers)
+    "Kill the BUFFERS and ensure all the windows they were displayed in have
+  switched to a real buffer or the fallback buffer."
+    (let ((seen-windows (make-hash-table :test 'eq :size 8)))
+      (dolist (buffer buffers)
+        (let ((windows (get-buffer-window-list buffer)))
+          (kill-buffer buffer)
+          (dolist (window (cl-remove-if-not #'window-live-p windows))
+            (puthash window t seen-windows))))
+      (nasy/fixup-windows (hash-table-keys seen-windows))))
+
+  ;;;###autoload
+  (defun nasy/-kill-matching-buffers (pattern &optional buffer-list)
+    "Kill all buffers (in current workspace OR in BUFFER-LIST) that match the
+  regex PATTERN. Returns the number of killed buffers."
+    (let ((buffers (nasy/matching-buffers pattern buffer-list)))
+      (dolist (buf buffers (length buffers))
+        (kill-buffer buf))))
+
+
+  ;;
+  ;; Hooks
+
+  ;;;###autoload
+  (defun nasy/mark-buffer-as-real-h ()
+    "Hook function that marks the current buffer as real."
+    (nasy/set-buffer-real (current-buffer) t))
+
+
+  ;;
+  ;; Interactive commands
+
+  ;;;###autoload
+  (defun nasy/kill-this-buffer-in-all-windows (buffer &optional dont-save)
+    "Kill BUFFER globally and ensure all windows previously showing this buffer
+  have switched to a real buffer or the fallback buffer.
+  If DONT-SAVE, don't prompt to save modified buffers (discarding their changes)."
+    (interactive
+     (list (current-buffer) current-prefix-arg))
+    (cl-assert (bufferp buffer) t)
+    (when (and (buffer-modified-p buffer) dont-save)
+      (with-current-buffer buffer
+        (set-buffer-modified-p nil)))
+    (nasy/kill-buffer-fixup-windows buffer))
+
+
+  (defun nasy/message-or-count (interactive message count)
+    (if interactive
+        (message message count)
+      count))
+
+  ;;;###autoload
+  (defun nasy/kill-all-buffers (&optional buffer-list interactive)
+    "Kill all buffers and closes their windows.
+  If the prefix arg is passed, doesn't close windows and only kill buffers that
+  belong to the current project."
+    (interactive
+     (list (if current-prefix-arg
+               (nasy/project-buffer-list)
+             (nasy/buffer-list))
+           t))
+    (if (null buffer-list)
+        (message "No buffers to kill")
+      (save-some-buffers)
+      (delete-other-windows)
+      (when (memq (current-buffer) buffer-list)
+        (switch-to-buffer (nasy/fallback-buffer)))
+      (mapc #'kill-buffer buffer-list)
+      (nasy/message-or-count
+       interactive "Killed %d buffers"
+       (- (length buffer-list)
+          (length (cl-remove-if-not #'buffer-live-p buffer-list))))))
+
+  ;;;###autoload
+  (defun nasy/kill-other-buffers (&optional buffer-list interactive)
+    "Kill all other buffers (besides the current one).
+  If the prefix arg is passed, kill only buffers that belong to the current
+  project."
+    (interactive
+     (list (delq (current-buffer)
+                 (if current-prefix-arg
+                     (nasy/project-buffer-list)
+                   (nasy/buffer-list)))
+           t))
+    (mapc #'nasy/kill-buffer-and-windows buffer-list)
+    (nasy/message-or-count
+     interactive "Killed %d other buffers"
+     (- (length buffer-list)
+        (length (cl-remove-if-not #'buffer-live-p buffer-list)))))
+
+  ;;;###autoload
+  (defun nasy/kill-matching-buffers (pattern &optional buffer-list interactive)
+    "Kill buffers that match PATTERN in BUFFER-LIST.
+  If the prefix arg is passed, only kill matching buffers in the current project."
+    (interactive
+     (list (read-regexp "Buffer pattern: ")
+           (if current-prefix-arg
+               (nasy/project-buffer-list)
+             (nasy/buffer-list))
+           t))
+    (nasy/-kill-matching-buffers pattern buffer-list)
+    (when interactive
+      (message "Killed %d buffer(s)"
+               (- (length buffer-list)
+                  (length (cl-remove-if-not #'buffer-live-p buffer-list))))))
+
+  ;;;###autoload
+  (defun nasy/kill-buried-buffers (&optional buffer-list interactive)
+    "Kill buffers that are buried.
+  If PROJECT-P (universal argument), only kill buried buffers belonging to the
+  current project."
+    (interactive
+     (list (nasy/buried-buffers
+            (if current-prefix-arg (nasy/project-buffer-list)))
+           t))
+    (mapc #'kill-buffer buffer-list)
+    (nasy/message-or-count
+     interactive "Killed %d buried buffers"
+     (- (length buffer-list)
+        (length (cl-remove-if-not #'buffer-live-p buffer-list)))))
+
+  ;;;###autoload
+  (defun nasy/kill-project-buffers (project &optional interactive)
+    "Kill buffers for the specified PROJECT."
+    (interactive
+     (list (if-let (open-projects (nasy/open-projects))
+               (completing-read
+                "Kill buffers for project: " open-projects
+                nil t nil nil
+                (if-let* ((project-root (nasy/project-root))
+                          (project-root (abbreviate-file-name project-root))
+                          ((member project-root open-projects)))
+                    project-root))
+             (message "No projects are open!")
+             nil)
+           t))
+    (when project
+      (let ((buffer-list (nasy/project-buffer-list project)))
+        (nasy/kill-buffers-fixup-windows buffer-list)
+        (nasy/message-or-count
+         interactive "Killed %d project buffers"
+         (- (length buffer-list)
+            (length (cl-remove-if-not #'buffer-live-p buffer-list)))))))
+#+end_src
+
+** 布局相關
+
+#+begin_src elisp
+  ;; When splitting window, show (other-buffer) in the new window
+  (defun split-window-func-with-other-buffer (split-function)
+    "Split window with `SPLIT-FUNCTION'."
+    (lambda (&optional arg)
+      "Split this window and switch to the new window unless ARG is provided."
+      (interactive "P")
+      (funcall split-function)
+      (let ((target-window (next-window)))
+        (set-window-buffer target-window (other-buffer))
+        (unless arg
+          (select-window target-window)))))
+
+  (defun split-window--v ()
+    "Split window vertically."
+    (interactive)
+    (split-window-func-with-other-buffer 'split-window-vertically))
+
+  (defun split-window--h ()
+    "Split window horizontcally."
+    (interactive)
+    (split-window-func-with-other-buffer 'split-window-horizontally))
+
+  (defun toggle-delete-other-windows ()
+    "Delete other windows in frame if any, or restore previous window config."
+    (interactive)
+    (if (and winner-mode
+             (equal (selected-window) (next-window)))
+        (winner-undo)
+      (delete-other-windows)))
+
+  (defun split-window-horizontally-instead ()
+    "Kill any other windows and re-split such that the current window is on the top half of the frame."
+    (interactive)
+    (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+      (delete-other-windows)
+      (split-window-horizontally)
+      (when other-buffer
+        (set-window-buffer (next-window) other-buffer))))
+
+  (defun split-window-vertically-instead ()
+    "Kill any other windows and re-split such that the current window is on the left half of the frame."
+    (interactive)
+    (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+      (delete-other-windows)
+      (split-window-vertically)
+      (when other-buffer
+        (set-window-buffer (next-window) other-buffer))))
+
+    ;; Borrowed from http://postmomentum.ch/blog/201304/blog-on-emacs
+  (defun nasy/split-window()
+    "Split the window to see the most recent buffer in the other window.
+    Call a second time to restore the original window configuration."
+    (interactive)
+    (if (eq last-command 'nasy-split-window)
+        (progn
+          (jump-to-register :nasy-split-window)
+          (setq this-command 'nasy-unsplit-window))
+      (window-configuration-to-register :nasy/split-window)
+      (switch-to-buffer-other-window nil)))
+#+end_src
+
+** 文字處理
+
+#+begin_src elisp
+  ;;;###autoload
+  (defun nasy/delete-backward-word (arg)
+    "Like `backward-kill-word', but doesn't affect the kill-ring."
+    (interactive "p")
+    (let (kill-ring)
+      (backward-kill-word arg)))
+
+  ;;;###autoload
+  (defun nasy/region-active-p ()
+    "Return non-nil if selection is active."
+    (declare (side-effect-free t))
+    (use-region-p))
+
+  ;;;###autoload
+  (defun nasy/region-beginning ()
+    "Return beginning position of selection."
+    (declare (side-effect-free t))
+    (region-beginning))
+
+  ;;;###autoload
+  (defun nasy/region-end ()
+    "Return end position of selection."
+    (declare (side-effect-free t))
+    (region-end))
+
+  ;;;###autoload
+  (defun nasy/thing-at-point-or-region (&optional thing prompt)
+    "Grab the current selection, THING at point, or xref identifier at point.
+  Returns THING if it is a string. Otherwise, if nothing is found at point and
+  PROMPT is non-nil, prompt for a string (if PROMPT is a string it'll be used as
+  the prompting string). Returns nil if all else fails.
+  NOTE: Don't use THING for grabbing symbol-at-point. The xref fallback is smarter
+  in some cases."
+    (declare (side-effect-free t))
+    (cond ((stringp thing)
+           thing)
+          ((nasy/region-active-p)
+           (buffer-substring-no-properties
+            (nasy/region-beginning)
+            (nasy/region-end)))
+          (thing
+           (thing-at-point thing t))
+          ((require 'xref nil t)
+           ;; A little smarter than using `symbol-at-point', though in most cases,
+           ;; xref ends up using `symbol-at-point' anyway.
+           (xref-backend-identifier-at-point (xref-find-backend)))
+          (prompt
+           (read-string (if (stringp prompt) prompt "")))))
+
+  ;;;###autoload
+  (defalias 'default/newline #'newline)
+
+  ;;;###autoload
+  (defun default/newline-above ()
+    "Insert an indented new line before the current one."
+    (interactive)
+    (beginning-of-line)
+    (save-excursion (newline))
+    (indent-according-to-mode))
+
+  ;;;###autoload
+  (defun default/newline-below ()
+    "Insert an indented new line after the current one."
+    (interactive)
+    (end-of-line)
+    (newline-and-indent))
+
+  ;;;###autoload
+  (defun default/yank-pop ()
+    "Interactively select what text to insert from the kill ring."
+    (interactive)
+    (call-interactively
+     (cond ((fboundp 'counsel-yank-pop)    #'counsel-yank-pop)
+           ((fboundp 'helm-show-kill-ring) #'helm-show-kill-ring)
+           ((error "No kill-ring search backend available. Enable ivy or helm!")))))
+
+  ;;;###autoload
+  (defun default/yank-buffer-filename ()
+    "Copy the current buffer's path to the kill ring."
+    (interactive)
+    (if-let* ((filename (or buffer-file-name (bound-and-true-p list-buffers-directory))))
+        (message (kill-new (abbreviate-file-name filename)))
+      (error "Couldn't find filename in current buffer")))
+
+  ;;;###autoload
+  (defun default/insert-file-path (arg)
+    "Insert the file name (absolute path if prefix ARG).
+  If `buffer-file-name' isn't set, uses `default-directory'."
+    (interactive "P")
+    (let ((path (or buffer-file-name default-directory)))
+      (insert
+       (if arg
+           (abbreviate-file-name path)
+         (file-name-nondirectory path)))))
+
+  ;;;###autoload
+  (defun default/newline-indent-and-continue-comments-a ()
+    "A replacement for `newline-and-indent'.
+  Continues comments if executed from a commented line, with special support for
+  languages with weak native comment continuation support (like C-family
+  languages)."
+    (interactive)
+    (if (and (sp-point-in-comment)
+             comment-line-break-function)
+        (funcall comment-line-break-function nil)
+      (delete-horizontal-space t)
+      (newline nil t)
+      (indent-according-to-mode)))
+#+end_src
+
+** 挈壺                                                      :benchmark:
+
+#+begin_src elisp
+  (defmacro nasy/timer (&rest body)
+    "Measure and return the time it takes evaluating BODY."
+    `(let ((time (current-time)))
+       ,@body
+       (float-time (time-since time))))
+#+end_src
+
+** Modes
+
+#+begin_src elisp
+  (defvar nasy/active-region--on nil)
+
+  (defun nasy/on--active-region ()
+    (nasy/active-region--mode 1))
+
+  (defun nasy/off--active-region ()
+    (nasy/active-region--mode -1))
+
+  (defvar nasy/active-region-map (make-sparse-keymap))
+
+
+  ;;;###autoload
+  (define-minor-mode nasy/active-region--mode
+    "Actized region or not."
+    :keymap nasy/active-region-map)
+
+
+  ;;;###autoload
+  (define-minor-mode nasy/active-region-mode
+    "Actived region or not."
+    :lighter "n/ar"
+    (if nasy/active-region-mode
+        (progn
+          (nasy/off--active-region)
+          (add-hook 'activate-mark-hook   #'nasy/on--active-region)
+          (add-hook 'deactivate-mark-hook #'nasy/off--active-region))
+      (remove-hook 'activate-mark-hook   #'nasy/on--active-region)
+      (remove-hook 'deactivate-mark-hook #'nasy/off--active-region)
+      (nasy/off--active-region)))
+#+end_src
+
+** 末
+
+#+begin_src elisp
+  (provide '風雨旹用)
+  ;;; 風雨旹用.el ends here
+#+end_src
+
+* 結                                                           :noexport:
+
+#+begin_src elisp :exports none
+  (provide '風雨)
+  ;;; 風雨.el ends here
+#+end_src

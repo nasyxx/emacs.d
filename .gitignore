@@ -13,6 +13,7 @@ init.el
 
 README.html
 index.html
+n-comp.el
 
 Emacs.app
 
@@ -111,3 +112,4 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/emacs,macOS
+

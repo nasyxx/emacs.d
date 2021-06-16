@@ -1,0 +1,109 @@
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "小曐.el") :lexical t
+#+title: 小曐
+
+#+begin_verse
+  國風・召南・小曐
+
+  嘒彼小曐、三五在東
+  肅肅宵征、夙夜在公、寔命不同
+
+  嘒彼小曐、維曑與昴
+  肅肅宵征、袌衾與裯、寔命不猶
+#+end_verse
+
+庫也沾于自載入之篇
+
+Library.
+
+* 題                                                           :noexport:
+
+#+begin_src elisp :exports none
+  ;;; 小曐.el --- Nasy's emacs.d library file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2021  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; 庫也最後載入沾于自載入之篇
+
+  ;;; Code:
+
+  (cl-eval-when (compile) ;;eval-when-compile
+    (setq nasy--require t)
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
+    (require '擊鼓)
+    (require '風雨)
+    (require '風雨旹用)
+    (setq nasy--require nil))
+#+end_src
+
+* 章
+
+** all-the-icons
+
+#+begin_src elisp
+  (leaf all-the-icons
+    :hook (nasy--defer-load-hook . (lambda () (require 'all-the-icons)))
+    :init (add-to-list 'nasy--defer-loads 'all-the-icons))
+#+end_src
+
+** Dash                                                          :lists:
+
+A modern list library for Emacs.
+
+https://github.com/magnars/dash.el
+
+#+begin_src elisp
+  (leaf dash
+    :doc "A modern list library for Emacs."
+    :url "https://github.com/magnars/dash.el"
+    :tag "lists"
+    :leaf-autoload nil
+    :commands global-dash-fontify-mode
+    :hook (nasy--defer-load-hook . (lambda () (require 'dash)))
+    :init (add-to-list 'nasy--defer-loads 'dash)
+    :defer-config (global-dash-fontify-mode 1))
+#+end_src
+
+** Reformatter                                       :convenience:tools:
+
+This library lets elisp authors easily define an idiomatic command to reformat
+the current buffer using a command-line program, together with an optional minor
+mode which can apply this command automatically on save.
+
+https://github.com/purcell/emacs-reformatter
+
+#+begin_src elisp
+  (leaf reformatter
+    :doc "Define commands which run reformatters on the current Emacs buffer."
+    :url "https://github.com/purcell/emacs-reformatter"
+    :tag "convenience" "tools"
+    :hook (nasy--defer-load-hook . (lambda () (require 'reformatter)))
+    :init (add-to-list 'nasy--defer-loads 'reformatter))
+#+end_src
+
+** 餘                                                             :misc:
+
+#+begin_src elisp
+  (defvar nasy-misc-packages
+    '(gist git-blamed git-messenger git-modes git-timemachine wgrep
+           company-dict company-math flycheck-package ibuffer-vc all-the-icons-ibuffer
+           nix-buffer nix-update nixpkgs-fmt thingopt dap-mode haskell-snippets))
+
+  (cl-loop for package in nasy-misc-packages
+           do
+           (progn
+             (add-to-list 'nasy--defer-loads package)
+             (when nasy--require
+               (add-hook 'nasy--defer-load-hook #'(lambda () (require package))))))
+#+end_src
+
+* 結                                                           :noexport:
+
+#+begin_src elisp :exports none
+  (provide '小曐)
+  ;;; 小曐.el ends here
+#+end_src

@@ -1,155 +1,108 @@
-EMACS ?= emacs
+EE ?= emacs -Q --batch --eval "(require 'ob-tangle)"
+# EL ?= emacs -Q --batch -l "init.el" --eval "(setq load-prefer-newer t load-suffixes '(\".el\") nasy--require t)" --eval "(progn (run-hooks 'after-init-hook 'emacs-startup-hook 'nasy-first-key-hook 'pre-command-hook 'prog-mode-hook 'org-mode-hook 'nasy-org-first-key-hook))"
+
+EL ?= emacs -Q
+
+DS = 小曐 庭尞 擊鼓 日月 月出 緑衣 風雨 麐之趾
+
 
 all: help
-.PHONY: all
-
-## Generate all
-generate: early-init user-config init bootstrap core editor tools langs ui org app
-.PHONY: generate
 
 
-## Generate early-init.el from literate-config/early-init.org
-./early-init.el: literate-config/early-init.org
-	@echo "Generate early-init.el from literate-config/early-init.org"
-	@rm -rf var/org/timestamps/early-init.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "early-init")'
+define tangle_template
+ifeq ($(1),擊鼓)
+$(1): 桃夭/擊鼓/擊鼓.el
+else
+$(1): $(subst 篇,$(1),$(patsubst 蔓艸/%.org,桃夭/%.el,$(wildcard 蔓艸/$(1)/*.org)))
+endif
 
-## Generate early-init.el from literate-config/early-init.org
-early-init: ./early-init.el
+clean-$(1):
+	rm -rf 桃夭/$(1)
+.PHONY: clean-$(1)
 
-
-## Generate init.el from literate-config/README.org
-./init.el: literate-config/README.org
-	@echo "Generate init.el from literate-config/README.org"
-	@rm -rf var/org/timestamps/init.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "init")'
-
-## Generate init.el from literate-config/README.org
-init: ./init.el
+桃夭/$(1)/$(1).el: 蔓艸/$(1)/篇.org
+	$(EE) --eval '(org-babel-tangle-publish t "$$<" "$$(@D)")'
 
 
-## Generate user-config-example.el from README.org
-custom/user-config-example.el: README.org
-	@echo "Generate user-config-example.el from README.org"
-	@rm -rf var/org/timestamps/user-config-example.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "custom")'
+桃夭/$(1)/%.el: 蔓艸/$(1)/%.org
+	$(EE) --eval '(org-babel-tangle-publish t "$$<" "$$(@D)")'
+endef
 
-## Generate user-config-example.el from README.org
-user-config: custom/user-config-example.el
+%.elc: %.el
+	$(EL) --eval '(byte-compile-file "$*.el")'
 
-
-## Generate bootstrap from literate-config/bootstrap/README.org
-config/nasy-bootstrap.el: literate-config/bootstrap/README.org
-	@echo "Generate bootstrap from literate-config/bootstrap/README.org"
-	@rm -rf config/nasy-bootstrap.el var/org/timestamps/bootstrap.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "bootstrap")'
-
-## Generate bootstrap from literate-config/bootstrap/README.org
-bootstrap: config/nasy-bootstrap.el
+early-init.el: 蔓艸/擊鼓/初.org
+	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
 
 
-## Generate core from literate-config/core
-config/core: $(wildcard literate-config/core/*.org)
-	@echo "Generate core from literate-config/core"
-	@rm -rf config/core straight/build/nasy-core var/org/timestamps/core.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "core")'
-
-## Generate core from literate-config/core
-core: config/core
+init.el: 蔓艸/篇.org early-init.el
+	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
 
 
-## Generate editor from literate-config/editor
-config/editor: $(wildcard literate-config/editor/*.org)
-	@echo "Generate editor from literate-config/editor"
-	@rm -rf config/editor straight/build/nasy-editor var/org/timestamps/editor.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "editor")'
-
-## Generate editor from literate-config/editor
-editor: config/editor
+芄蘭/芄蘭之例.el: 蔓艸/擊鼓/芄蘭之例.org
+	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)")'
 
 
-## Generate tools from literate-config/tools
-config/tools: $(wildcard literate-config/tools/*.org)
-	@echo "Generate tools from literate-config/tools"
-	@rm -rf config/tools straight/build/nasy-tools var/org/timestamps/tools.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "tools")'
-
-## Generate tools from literate-config/tools
-tools: config/tools
+芄蘭/芄蘭.el:
+	[ -f 芄蘭/芄蘭.el ] || \
+	echo "(require '芄蘭之例 nil t)\n\n(provide '芄蘭)" > 芄蘭/芄蘭.el
 
 
-## Generate langs from literate-config/langs
-config/langs: $(wildcard literate-config/langs/*.org)
-	@echo "Generate langs from literate-config/langs"
-	@rm -rf config/langs straight/build/nasy-langs var/org/timestamps/langs.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "langs")'
-
-## Generate langs from literate-config/langs
-langs: config/langs
+$(foreach dir,$(DS),$(eval $(call tangle_template,$(dir))))
 
 
-## Generate org from literate-config/org
-config/org: $(wildcard literate-config/org/*.org)
-	@echo "Generate org from literate-config/org"
-	@rm -rf config/org straight/build/nasy-org var/org/timestamps/org.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "org")'
-
-## Generate org from literate-config/org
-org: config/org
+## Generate elisp files
+generate: $(DS) early-init.el init.el 芄蘭/芄蘭.el 芄蘭/芄蘭之例.el
 
 
-## Generate ui from literate-config/ui
-config/ui: $(wildcard literate-config/ui/*.org)
-	@echo "Generate ui from literate-config/ui"
-	@rm -rf config/ui straight/build/nasy-ui var/org/timestamps/ui.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "ui")'
-
-## Generate ui
-ui: config/ui
-
-## Generate ui from literate-config/app
-config/app: $(wildcard literate-config/app/*.org)
-	@echo "Generate app from literate-config/app"
-	@rm -rf config/app straight/build/nasy-app var/org/timestamps/app.cache
-	@$(EMACS) -Q --batch -l export.el --eval '(org-publish "app")'
-
-## Generate app
-app: config/app
-
-.PHONY: bootstrap core editor tools langs ui org app
+芄蘭/build-time: $(wildcard 桃夭/*/*.el)
+	$(EL) --batch --eval '(setq nasy-first-p t)' -l n-comp.el
+	$(EL) --script n-comp.el
+	@date > 芄蘭/build-time
 
 
-## clean build (var/org/timestamps/ & config/)
-clean-build:
-	rm -rf var/org/timestamps
-	rm -rf config
+
+## Build elc
+build: 芄蘭/build-time
 
 
-## Clean straight (straight/)
+## Generate Config
+config: generate
+	make build
+
+
+## Clean Config
+clean:
+	rm -rf 桃夭 芄蘭/芄蘭之例.el init.el early-init.el 芄蘭/build-time
+
+
+## Clean Elc
+clean-elc:
+	rm -rf 桃夭/*/*.elc
+
+
+## Clean straight
 clean-straight:
 	rm -rf straight
 
 
-## clean all build straight
-clean-all: clean-build clean-straight
-.PHONY: clean-all clean-straight clean-build
+## Clean all (clean and clean straight)
+clean-all: clean clean-straight
 
 
-## Rebuild
-rebuild: clean-all
-	make generate -j
-.PHONY: rebuild
+## Re-Generate Config
+regenerate: clean
+	make generate
 
 
-## Update config
-update: clean-all
-	git pull && make generate
-.PHONY: update
+## Re-Build Config
+rebuild: clean
+	make config -j
 
 
-# Update docs
-docs:
-	org2html README.org && git checkout gh-pages && mv README.html index.html && git commit -am "Update docs." && git push && git checkout master
+## Re-Build Config and Straight
+rebuild-all: clean-all
+	make rebuild
 
 
 # COLORS
@@ -176,4 +129,6 @@ help:
 		} \
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
-.PHONY: help
+
+
+.PHONY: help all $(DS) generate build config clean clean-elc rebuild
