@@ -474,6 +474,26 @@ https://github.com/magit/forge
     :init (sup 'forge))
 #+end_src
 
+*** Magit Delta                                          :git:tools:vc:
+
+https://github.com/dandavison/magit-delta
+
+#+begin_src elisp
+  (n/leaf magit-delta
+    :doc "Use delta (dandavison/delta) when viewing diffs in Magit."
+    :url "https://github.com/dandavison/magit-delta"
+    :tag "git" "tools" "vc"
+    :when (executable-find "delta")
+    :after magit
+    :custom (magit-delta-delta-args
+             . '("--max-line-distance"
+                 "0.6" "--24-bit-color"
+                 "always" "--color-only"
+                 "--syntax-theme='Solarized (light)'"))
+    :hook (magit-mode-hook . magit-delta-mode)
+    :init (sup 'magit-delta))
+#+end_src
+
 *** Magit Org Todos                               :magit:orgmode:tools:
 
 Get `todo.org` into your magit status.
