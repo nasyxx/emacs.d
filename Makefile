@@ -31,6 +31,11 @@ endef
 %.elc: %.el
 	$(EL) --eval '(byte-compile-file "$*.el")'
 
+
+譯.el: 蔓艸/擊鼓/譯.org
+	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+
+
 early-init.el: 蔓艸/擊鼓/初.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
 
@@ -52,12 +57,12 @@ $(foreach dir,$(DS),$(eval $(call tangle_template,$(dir))))
 
 
 ## Generate elisp files
-generate: $(DS) early-init.el init.el 芄蘭/芄蘭.el 芄蘭/芄蘭之例.el
+generate: $(DS) early-init.el init.el 譯.el 芄蘭/芄蘭.el 芄蘭/芄蘭之例.el
 
 
 芄蘭/build-time: $(wildcard 桃夭/*/*.el)
-	$(EL) --batch --eval '(setq nasy-first-p t)' -l n-comp.el
-	$(EL) --script n-comp.el
+	$(EL) --batch --eval '(setq nasy-first-p t)' -l 譯.el
+	$(EL) --script 譯.el
 	@date > 芄蘭/build-time
 
 

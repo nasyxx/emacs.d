@@ -10,10 +10,11 @@ eln-cache
 early-init.el
 init.html
 init.el
+譯.el
 
 README.html
 index.html
-n-comp.el
+
 
 Emacs.app
 

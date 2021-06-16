@@ -1,9 +1,9 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "修.el") :lexical t
+#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "譯.el") :lexical t
 
 譯 el 至 elc 與 eln
 
 #+begin_src elisp
-  ;;; 修.el ---  -*- lexical-binding: t; -*-
+  ;;; 譯.el ---  -*- lexical-binding: t; -*-
 
   ;;; Commentary:
   ;; 譯 el 至 elc 與 eln
@@ -19,6 +19,16 @@
   (message "\n\n---------------- Load el of 桃夭 ----------------\n\n")
 
   (load (locate-user-emacs-file "init.el"))
+
+  (sup 'winum)
+
+  (let ((packages '(all-the-icons company dash doom-modeline lisp-mode
+                                  lsp-ui ob org ox page-break-lines
+                                  savehist smartparens-config tab-line
+                                  treemacs winum xref yasnippet)))
+    (cl-loop for package in packages
+             do (require package)))
+
 
   (message "\n\n---------------- Run hooks ----------------\n\n")
 
