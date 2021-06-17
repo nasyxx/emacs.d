@@ -156,51 +156,59 @@ https://github.com/ema2159/centaur-tabs
                dashboard-setup-startup-hook)
     :init (sup 'dashboard))
 
-  (n/leaf-nv dashboard
-    :leaf-autoload nil
-    :init
-    (defun nasy/-dashboard-items (_)
-      (insert "\n")
-      (widget-create 'item
-                     :tag "Recent Files (r)"
-                     :action #'consult-recent-file
-                     :mouse-face 'highlight
-                     :button-face 'dashboard-heading
-                     :button-prefix "🌓 "
-                     :button-suffix ""
-                     :format "%[%t%]"
-                     :help-echo "open recent files")
-      (insert "\n\n")
-      (widget-create 'item
-                     :tag "Bookmarks (b)"
-                     :action #'consult-bookmark
-                     :mouse-face 'highlight
-                     :button-face 'dashboard-heading
-                     :button-prefix "📚 "
-                     :button-suffix ""
-                     :format "%[%t%]"
-                     :help-echo "open bookmarks")
-      (insert "\n\n")
-      (widget-create 'item
-                     :tag "Projects (p)"
-                     :action #'projectile-switch-project
-                     :mouse-face 'highlight
-                     :button-face 'dashboard-heading
-                     :button-prefix "🚀 "
-                     :button-suffix ""
-                     :format "%[%t%]"
-                     :help-echo "open projects")
-      (insert "\n"))
 
-    :defer-config
-    (defun nasy/wfw1 (&rest _)
-      "Widget forward 1."
+
+  (defun nasy/-set-dashboard-init-info (&rest _)
+    (setq dashboard-init-info
+          (let ((package-count 0) (time (emacs-init-time)))
+            (setq package-count (+ (hash-table-size straight--profile-cache) package-count))
+            (if (zerop package-count)
+                (format "Emacs started in %s" time)
+              (format "%d packages loaded in %s" package-count time)))))
+
+
+  (defun nasy/-dashboard-items (_)
+    (insert "\n")
+    (widget-create 'item
+                   :tag "Recent Files (r)"
+                   :action #'consult-recent-file
+                   :mouse-face 'highlight
+                   :button-face 'dashboard-heading
+                   :button-prefix "🌓 "
+                   :button-suffix ""
+                   :format "%[%t%]"
+                   :help-echo "open recent files")
+    (insert "\n\n")
+    (widget-create 'item
+                   :tag "Bookmarks (b)"
+                   :action #'consult-bookmark
+                   :mouse-face 'highlight
+                   :button-face 'dashboard-heading
+                   :button-prefix "📚 "
+                   :button-suffix ""
+                   :format "%[%t%]"
+                   :help-echo "open bookmarks")
+    (insert "\n\n")
+    (widget-create 'item
+                   :tag "Projects (p)"
+                   :action #'projectile-switch-project
+                   :mouse-face 'highlight
+                   :button-face 'dashboard-heading
+                   :button-prefix "🚀 "
+                   :button-suffix ""
+                   :format "%[%t%]"
+                   :help-echo "open projects")
+    (insert "\n"))
+
+
+  (after-x 'dashboard
+    (defun nasy/dashboard-refresh ()
+      "Refresh dashboard buffer."
       (interactive)
-      (widget-forward 1))
-    (defun nasy/fw2 (&rest _)
-      "Forward 2 chars."
-      (interactive "p")
-      (forward-char 2)))
+      (unless (get-buffer dashboard-buffer-name)
+        (generate-new-buffer "*dashboard*"))
+      (dashboard-refresh-buffer)))
+
 
   (n/leaf-nv dashboard
     :leaf-autoload nil
@@ -237,15 +245,7 @@ https://github.com/ema2159/centaur-tabs
       dashboard-set-init-info
       dashboard-set-navigator) . t)
     :advice (:before dashboard-refresh-buffer nasy/-set-dashboard-init-info)
-    :init
-    (defun nasy/-set-dashboard-init-info (&rest _)
-      (setq dashboard-init-info
-            (let ((package-count 0) (time (emacs-init-time)))
-              (setq package-count (+ (hash-table-size straight--profile-cache) package-count))
-              (if (zerop package-count)
-                  (format "Emacs started in %s" time)
-                (format "%d packages loaded in %s" package-count time)))))
-
+    :config
     (after-x 'all-the-icons
       (setq dashboard-navigator-buttons
             `(;; line1
@@ -266,14 +266,7 @@ https://github.com/ema2159/centaur-tabs
                (,(all-the-icons-octicon "book" :height 1.1 :v-adjust 0.0)
                 "Document"
                 "Document Page"
-                (lambda (&rest _) (browse-url "https://emacs.nasy.moe/")))))))
-    :config
-    (defun nasy/dashboard-refresh ()
-      "Refresh dashboard buffer."
-      (interactive)
-      (unless (get-buffer dashboard-buffer-name)
-        (generate-new-buffer "*dashboard*"))
-      (dashboard-refresh-buffer)))
+                (lambda (&rest _) (browse-url "https://emacs.nasy.moe/"))))))))
 #+end_src
 
 ** doom Theme

@@ -596,6 +596,20 @@
     (unless (and *is-a-mac*
                  window-system)
       (suspend-frame)))
+
+
+  ;;;###autoload
+  (defun nasy/wfw1 (&rest _)
+    "Widget forward 1."
+    (interactive)
+    (widget-forward 1))
+
+
+  ;;;###autoload
+  (defun nasy/fw2 (&rest _)
+    "Forward 2 chars."
+    (interactive "p")
+    (forward-char 2))
 #+end_src
 
 ** 重新加載 ~user-init-file~ 文件
