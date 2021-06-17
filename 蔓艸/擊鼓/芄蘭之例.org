@@ -9,12 +9,6 @@
     ;; (initial-buffer-choice     . #'(lambda () (get-buffer "*dashboard*")))
     ;; (diary-file                . ~/dairy/emacs-dairy)
     (*debug*                   . nil)
-    (*highlight-indent-guides* . nil)
-    (*ivy-posframe*            . t)
-    (*ivy-prescient*           . t)
-    (*c-box*                   . nil)
-    (*flycheck-inline*         . t)
-    (*rust*                    . nil)
     (*theme*                   . 'nasy))
 
   (leaf disabled-packages
