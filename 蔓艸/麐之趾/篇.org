@@ -493,7 +493,7 @@ Emacs client/library for the Language Server Protocol
     :custom
     (;; org-agnda
      (org-agenda-compact-blocks   . t)
-     (org-agenda-files            . "~/.emacs.d/萚兮/standard-agenda.org")
+     (org-agenda-files            . `(,(locate-user-emacs-file "萚兮/standard-agenda.org")))
      (org-agenda-start-on-weekday . nil)
      (org-agenda-prefix-format
       . '((agenda . " %i %+15c\t%?-15t% s")

@@ -1037,7 +1037,7 @@ https://www.emacswiki.org/emacs/RecentFiles
            (locate-user-emacs-file *nasy-etc*))
          ,(abbreviate-file-name
            (locate-user-emacs-file *nasy-var*))
-         "/tmp/" "/ssh:" "/nix/store" "~/.nix/store" "~/.emacs.d/straight")))
+         "/tmp/" "/ssh:" "/nix/store" "~/.nix/store" ,(locate-user-emacs-file "straight"))))
 #+end_src
 
 ** Savehist                                                    :history:
