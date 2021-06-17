@@ -110,6 +110,17 @@ rebuild-all: clean-all
 	make rebuild
 
 
+
+## Update
+update: clean
+	git pull --rebase
+	make generate -j
+
+## Update all
+update-all: update clean-straight
+	make config -j
+
+
 # COLORS
 GREEN  := $(shell tput -Txterm setaf 2)
 YELLOW := $(shell tput -Txterm setaf 3)
