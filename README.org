@@ -1,0 +1,62 @@
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:{} arch:headline
+#+options: author:t broken-links:mark c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+options: timestamp:t title:t toc:t todo:t |:t
+#+title: Nasy Emacs 配置
+#+date: <2021-06-16 Wed>
+#+author: Nasy
+#+email: nasyxx@gmail.com
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 28.0.50 (Org mode 9.4.6)
+
+* 新配置文件尙在加工中
+
+此處留些許文字以方便諸君使用
+
+* 安裝 Install
+
+克隆到 ~.emacs.d~
+
+#+begin_src sh
+  git clone https://github.com/nasyxx/emacs.d ~/nasy-emacs
+  ln -s ~/nasy-emacs ~/.emacs.d
+#+end_src
+
+** 生成 el 文件 Generate el files
+
+#+begin_src sh
+  make generate -j
+#+end_src
+
+** 生成 elc 與 eln 文件 Generate elc & eln files (可選 optional)
+
+#+begin_src sh
+  make config -j
+#+end_src
+
+* 更新 Update
+
+簡而言之兩步
+
+** 更新倉庫 Update repo
+
+#+begin_src sh
+  make update
+#+end_src
+
+** 更新 Update straight (可選 optional)
+
+同旹更新 elc 與 eln
+
+#+begin_src sh
+  make update-all
+#+end_src
+
+* 自定義
+
+自定義文件全位于~芄蘭~有~芄蘭.el~與~custom.el~
+
+雖有 ~custom.el~ 但未在配置中加載苟欲用之加載于 ~芄蘭/芄蘭.el~
