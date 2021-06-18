@@ -55,7 +55,7 @@
 #+begin_src emacs-lisp
   (eval-and-compile
     (unless (boundp '*nasy*)
-      (load (locate-user-emacs-file"early-init.el") nil t)))
+      (load (locate-user-emacs-file"early-init.el") nil 'nomessage)))
 #+end_src
 
 #+include: ./初.org
@@ -301,7 +301,9 @@ https://gitlab.com/koral/gcmh
 
   (defun nasy/-start-gcmh (&rest _)
     "Start GCMH."
-    (when (not noninteractive)
+    (when (and (not noninteractive)
+               (not (and (boundp '*no-gcmh*)
+                       ,*no-gcmh*)))
       (gcmh-mode 1)))
 
   (n/leaf-nv gcmh

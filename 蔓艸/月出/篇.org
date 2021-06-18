@@ -553,11 +553,12 @@ https://gitlab.com/jabranham/mixed-pitch
     :hook (org-mode-hook)
     :mode-hook
     (progn
-      (unless (boundp 'nasy--hl-line-bold)
-        (setq nasy--hl-line-bold (face-attribute 'hl-line :weight)))
-      (if mixed-pitch-mode
-          (set-face-attribute 'hl-line nil :weight 'unspecified)
-        (set-face-attribute 'hl-line nil :weight nasy--hl-line-bold)))
+      (after-x 'hl-line
+        (unless (boundp 'nasy--hl-line-bold)
+          (setq nasy--hl-line-bold (face-attribute 'hl-line :weight)))
+        (if mixed-pitch-mode
+            (set-face-attribute 'hl-line nil :weight 'unspecified)
+          (set-face-attribute 'hl-line nil :weight nasy--hl-line-bold))))
     :init (sup 'mixed-pitch)
     (eval-when-compile
       (defvar nasy--hl-line-bold nil))

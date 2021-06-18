@@ -1,7 +1,7 @@
 #+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "init.el") :lexical t
 #+title: Emacs 配置
 
-#+begin_quote
+#+begin_verse
   國風・鄭風・蔓艸
 
   埜有蔓艸、霝露漙兮
@@ -11,7 +11,7 @@
   埜有蔓艸、霝路瀼瀼
   有美一人、婉如淸揚
   邂逅相遇、與子偕臧
-#+end_quote
+#+end_verse
 
 * 題                                                           :noexport:
 
