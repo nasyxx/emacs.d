@@ -664,6 +664,15 @@ https://github.com/ema2159/centaur-tabs
 ** Mode Line
 
 #+begin_src emacs-lisp
+  (defun nasy/-start-display-time ()
+    "Nasy start display time mode."
+    (customize-set-variable 'display-time-24hr-format          t "Customized by Nasy.")
+    (customize-set-variable 'display-time-day-and-date         t "Customized by Nasy.")
+    (customize-set-variable 'display-time-load-average         nil "Customized by Nasy.")
+    (customize-set-variable 'display-time-default-load-average nil "Customized by Nasy.")
+    (display-time-mode 1))
+
+  (add-hook 'nasy-first-key-hook #'nasy/-start-display-time)
 #+end_src
 
 #+begin_src emacs-lisp
