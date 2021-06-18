@@ -15,6 +15,7 @@ init.el
 README.html
 index.html
 
+*.org.org
 
 Emacs.app
 
