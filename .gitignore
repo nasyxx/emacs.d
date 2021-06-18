@@ -34,6 +34,18 @@ nix-buffer
 README.html
 recentf
 
+木瓜/
+桃夭/
+舊書/
+芄蘭/
+萚兮/
+.DS_Store
+extra/
+snippets/
+custom/
+eln-cache
+
+
 # Created by https://www.gitignore.io/api/emacs
 # Edit at https://www.gitignore.io/?templates=emacs
 
