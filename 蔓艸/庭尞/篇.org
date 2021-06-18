@@ -80,46 +80,48 @@ https://github.com/ema2159/centaur-tabs
 
   (defun nasy/-centaur-tabs-buffer-groups ()
     "Nasy's centaur tabs groups."
-    (list
-     (cond
-      ;; org, markdown & text
-      ((or (memq major-mode '(org-mode org-agenda-mode org-agenda-clockreport-mode
-                                       org-agenda-log-mode org-beamer-mode
-                                       org-bullets-mode org-cdlatex-mode
-                                       org-indent-mode org-src-mode diary-mode
-                                       text-mode markdown-mode))
-           (string-prefix-p "*Org Src" (buffer-name)))
-       "書寫")
+    (let ((bn (buffer-name)))
+      (list
+       (cond
+        ;; org, markdown & text
+        ((or (memq major-mode '(org-mode org-agenda-mode org-agenda-clockreport-mode
+                                         org-agenda-log-mode org-beamer-mode
+                                         org-bullets-mode org-cdlatex-mode
+                                         org-indent-mode org-src-mode diary-mode
+                                         text-mode markdown-mode))
+             (string-prefix-p "*Org Src" bn)
+             (string-prefix-p "*Org Export" bn))
+         "書寫")
 
-      ;; VC
-      ((memq major-mode '(magit-blame-mode magit-blob-mode magit-diff-mode
-                                           magit-file-mode magit-log-mode
-                                           magit-process-mode magit-status-mode))
-       "Magit")
+        ;; VC
+        ((memq major-mode '(magit-blame-mode magit-blob-mode magit-diff-mode
+                                             magit-file-mode magit-log-mode
+                                             magit-process-mode magit-status-mode))
+         "Magit")
 
-      ;; Shell
-      ((memq major-mode '(eshell-mode shell-mode vterm-mode))
-       "Shell")
+        ;; Shell
+        ((memq major-mode '(eshell-mode shell-mode vterm-mode))
+         "Shell")
 
-      ;; Info & Help
-      ((memq major-mode '(help-mode info-mode helpful-mode))
-       "注")
+        ;; Info & Help
+        ((memq major-mode '(help-mode info-mode helpful-mode))
+         "注")
 
-      ;; programming
-      ((derived-mode-p 'prog-mode)
-       "編程")
+        ;; programming
+        ((derived-mode-p 'prog-mode)
+         "編程")
 
-      ;; Web Page
-      ((or (memq major-mode '(eww-mode xwidget-webkit-mode))
-           (string-prefix-p "*xwidget webkit" (buffer-name)))
-       "網頁")
+        ;; Web Page
+        ((or (memq major-mode '(eww-mode xwidget-webkit-mode))
+             (string-prefix-p "*xwidget webkit" bn))
+         "網頁")
 
-      ;; Emacs
-      ((string-prefix-p "*" (buffer-name))
-       "虛")
+        ;; Emacs
+        ((string-prefix-p "*" bn)
+         "虛")
 
-      ;; 雜
-      (t (centaur-tabs-get-group-name (current-buffer))))))
+        ;; 雜
+        (t (centaur-tabs-get-group-name (current-buffer)))))))
 
 
   (n/leaf centaur-tabs
