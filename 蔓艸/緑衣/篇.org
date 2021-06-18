@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "緑衣.el") :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "緑衣.el") :lexical t
 #+title: 緑衣
 
 #+begin_verse
@@ -25,7 +25,7 @@ You cannot disable anything here.
 
 * 題                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   ;;; 緑衣.el --- Nasy's emacs.d permanent file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2021  Nasy
@@ -68,7 +68,7 @@ search modes.
 
 https://github.com/emacsorphanage/anzu
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv anzu
     :doc "anzu.el is an Emacs port of anzu.vim."
     :url "https://github.com/emacsorphanage/anzu"
@@ -87,7 +87,7 @@ Jump to things in Emacs tree-style.
 
 https://github.com/abo-abo/avy
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv avy
     :doc "Jump to things in Emacs tree-style."
     :url "https://github.com/abo-abo/avy"
@@ -113,7 +113,7 @@ Emacs package to redefine M-< and M-> for some modes
 
 https://github.com/DamienCassou/beginend
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv beginend
     :doc "Emacs package to redefine M-< and M-> for some modes"
     :url "https://github.com/DamienCassou/beginend"
@@ -128,10 +128,10 @@ https://github.com/DamienCassou/beginend
 
 *** Autoloads
 :PROPERTIES:
-:header-args:elisp: :tangle (concat temporary-file-directory "nasy-company.el") :lexical t
+:header-args:emacs-lisp: :tangle (concat temporary-file-directory "nasy-company.el") :lexical t
 :END:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;; nasy-company.el --- Nasy's emacs.d company functions file.  -*- lexical-binding: t; -*-
 
   ;;; Commentary:
@@ -367,7 +367,7 @@ https://github.com/DamienCassou/beginend
 
 *** company
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf nasy-company
     :load-path* "桃夭/緑衣"
     :commands
@@ -446,7 +446,7 @@ https://github.com/DamienCassou/beginend
 
 *** Company Quickhelp
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf company-quickhelp
     :leaf-autoload nil
     :leaf-defun nil
@@ -462,7 +462,7 @@ https://github.com/DamienCassou/beginend
 
 *** Company Tabnine
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv company-tabnine
     :leaf-autoload nil
     :leaf-defun nil
@@ -476,7 +476,7 @@ https://github.com/DamienCassou/beginend
 
 *** Company Flx
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv company-flx
     :leaf-autoload nil
     :leaf-defun nil
@@ -487,7 +487,7 @@ https://github.com/DamienCassou/beginend
 
 *** Company Box
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv company-box
     :leaf-autoload nil
     :leaf-defun nil
@@ -549,7 +549,7 @@ https://github.com/DamienCassou/beginend
 
 ** Compile                                                     :builtin:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv compile
     :tag "builtin"
     :leaf-autoload nil
@@ -587,7 +587,7 @@ Include consult, consult-selectrum & consult-flycheck.
 
 *** consult
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nr consult
     :doc "consult.el - Consulting completing-read"
     :url "https://github.com/minad/consult"
@@ -627,7 +627,7 @@ Include consult, consult-selectrum & consult-flycheck.
 
 *** consult-selectrum
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nr consult-selectrum
     :doc "consult.el - Consulting completing-read"
     :url "https://github.com/minad/consult"
@@ -638,7 +638,7 @@ Include consult, consult-selectrum & consult-flycheck.
 
 *** consult-flycheck
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv consult-flycheck
     :doc "consult.el - Consulting completing-read"
     :url "https://github.com/minad/consult"
@@ -661,7 +661,7 @@ subdirectories to byte-compiling files, searching files, and of course visiting
 
 https://www.emacswiki.org/emacs/DiredMode
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv dired
     :doc "DiredMode is the mode of a Dired buffer."
     :url "https://www.emacswiki.org/emacs/DiredMode"
@@ -684,7 +684,7 @@ Provide commands easy-kill and easy-mark to let users kill or mark things easily
 
 https://github.com/leoliu/easy-kill
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv easy-kill
     :doc "Kill & Mark Things Easily in Emacs."
     :url "https://github.com/leoliu/easy-kill"
@@ -702,7 +702,7 @@ Spatial navigation in Emacs.
 
 https://gitlab.com/ideasman42/emacs-spatial-navigate
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv spatial-navigate
     :doc "Spatial navigation in Emacs."
     :url "https://gitlab.com/ideasman42/emacs-spatial-navigate"
@@ -726,7 +726,7 @@ Emacs Mini-Buffer Actions Rooted in Keymaps.
 
 https://github.com/oantolin/embark/
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defun refresh-selectrum ()
     (setq selectrum--previous-input-string nil))
 
@@ -795,7 +795,7 @@ Modern on-the-fly syntax checking extension for GNU Emacs.
 
 https://github.com/flycheck/flycheck
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv flycheck
     :doc "On the fly syntax checking for GNU Emacs."
     :url "https://github.com/flycheck/flycheck"
@@ -821,7 +821,7 @@ https://github.com/flycheck/flycheck
 
 ** Grep                                                        :builtin:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv grep
     :tag "builtin"
     :custom
@@ -834,7 +834,7 @@ A better Emacs *help* buffer.
 
 https://github.com/Wilfred/helpful
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv helpful
     :doc "A better Emacs *help* buffer."
     :url "https://github.com/Wilfred/helpful"
@@ -852,7 +852,7 @@ marginalia.el - Marginalia in the minibuffer
 
 https://github.com/minad/marginalia
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf marginalia
     :doc "marginalia.el - Marginalia in the minibuffer."
     :url "https://github.com/minad/marginalia"
@@ -880,7 +880,7 @@ literal matches are enabled.
 
 https://github.com/oantolin/orderless
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv orderless
     :doc "Emacs completion style that matches multiple regexps in any order."
     :url "https://github.com/oantolin/orderless"
@@ -941,7 +941,7 @@ characters as tidy horizontal rules.
 
 https://github.com/purcell/page-break-lines
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv page-break-lines
     :doc "Emacs: display ugly ^L page breaks as tidy horizontal lines"
     :url "https://github.com/purcell/page-break-lines"
@@ -960,7 +960,7 @@ https://github.com/purcell/page-break-lines
 
 ** Parens                               :faces:languages:parens:builtin:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv paren
     :tag "builtin"
     :hook (nasy-first-key-hook . show-paren-mode))
@@ -977,7 +977,7 @@ exists as well).
 
 https://github.com/bbatsov/projectile
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv projectile
     :doc "Projectile is a project interaction library for Emacs."
     :url "https://github.com/bbatsov/projectile"
@@ -1002,7 +1002,7 @@ Recentf is a minor mode that builds a list of recently opened files.
 
 https://www.emacswiki.org/emacs/RecentFiles
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defvar nasy--recentf-cleaned nil)
 
   (n/leaf-nv recentf
@@ -1042,14 +1042,14 @@ https://www.emacswiki.org/emacs/RecentFiles
 
 ** Savehist                                                    :history:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv savehist
     :hook emacs-startup-hook
     :custom
     (kill-ring-max              . 300)
     (history-length             . 3000)
     (history-delete-duplicates  . t)
-    (savehist-autosave-interval . 60)
+    (savehist-autosave-interval . 3600)
     `(savehist-file
       . ,(concat *nasy-var* "savehist.el"))
     (savehist-additional-variables
@@ -1066,7 +1066,7 @@ Better solution for incremental narrowing in Emacs.
 
 https://github.com/raxod502/selectrum
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv selectrum
     :doc "Better solution for incremental narrowing in Emacs."
     :url "https://github.com/raxod502/selectrum"
@@ -1083,7 +1083,7 @@ https://github.com/raxod502/selectrum
 
 ** Sessions                                                    :history:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv session
     :hook
     (emacs-startup-hook . session-initialize)
@@ -1122,7 +1122,7 @@ https://github.com/raxod502/selectrum
 
 ** Subword                                                     :builtin:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv subword
     :tag "builtin"
     :hook prog-mode-hook)
@@ -1134,7 +1134,7 @@ Offer a *visual* way to choose a window to switch to.
 
 https://github.com/dimitri/switch-window
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv switch-window
     :doc "Offer a *visual* way to choose a window to switch to."
     :url "https://github.com/dimitri/switch-window"
@@ -1173,7 +1173,7 @@ https://github.com/dimitri/switch-window
 
 ** Tempo                                                       :builtin:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv tempo
     :tag "builtin"
     :commands tempo-define-template)
@@ -1192,7 +1192,7 @@ https://magit.vc/manual/transient
 
 https://github.com/magit/transient
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf transient
     :doc "Transient commands."
     :url "https://github.com/magit/transient"
@@ -1211,7 +1211,7 @@ Functions providing the inverse of Emacs' fill-paragraph and fill-region
 
 https://github.com/purcell/unfill
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv unfill
     :doc "Functions providing the inverse of Emacs' fill-paragraph and fill-region"
     :url "https://github.com/purcell/unfill"
@@ -1222,7 +1222,7 @@ https://github.com/purcell/unfill
 
 ** Uniquify                                              :builtin:files:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv uniquify
     :tag "builtin" "files"
     :custom
@@ -1239,7 +1239,7 @@ files in batches, trading memory for processor time.
 
 https://github.com/m00natic/vlfi
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv vlf
     :doc "View Large Files in Emacs"
     :url "https://github.com/m00natic/vlfi"
@@ -1258,7 +1258,7 @@ https://github.com/m00natic/vlfi
 
 ** Which Function                                              :builtin:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv which-func
     :tag "builtin"
     :hook (nasy-first-key-hook . which-function-mode))
@@ -1274,7 +1274,7 @@ In Emacs, intelligently call whitespace-cleanup on save.
 
 https://github.com/purcell/whitespace-cleanup-mode
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv whitespace
     :tag "data" "wp"
     :init
@@ -1314,7 +1314,7 @@ https://github.com/purcell/whitespace-cleanup-mode
 
 * 結                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   (provide '緑衣)
   ;;; 緑衣.el ends here
 #+end_src

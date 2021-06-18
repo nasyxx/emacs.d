@@ -1,8 +1,8 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "譯.el") :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "譯.el") :lexical t
 
 譯 el 至 elc 與 eln
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;; 譯.el ---  -*- lexical-binding: t; -*-
 
   ;;; Commentary:

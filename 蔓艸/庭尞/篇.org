@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "庭尞.el") :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "庭尞.el") :lexical t
 #+title: 庭尞
 
 #+begin_verse
@@ -20,7 +20,7 @@ UI
 
 * 題                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   ;;; 庭尞.el --- Nasy's emacs.d UI file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2021  Nasy
@@ -55,7 +55,7 @@ tabs plugin for Emacs with a lot of customization options.
 
 https://github.com/ema2159/centaur-tabs
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf centaur-tabs
     :leaf-autoload nil
     :leaf-defun nil
@@ -150,7 +150,7 @@ https://github.com/ema2159/centaur-tabs
 
 ** Dashboard
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv dashboard
     :commands (dashboard-refresh-buffer
                dashboard-setup-startup-hook)
@@ -271,7 +271,7 @@ https://github.com/ema2159/centaur-tabs
 
 ** doom Theme
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv doom-themes
     :after all-the-icons
     :custom
@@ -290,7 +290,7 @@ https://github.com/ema2159/centaur-tabs
 
 ** Pretty Mode                                                  :pretty:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;; https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
   (defun nasy/adjust-fira-code-symbol (charset &optional size)
     (let ((size (or size 14)))
@@ -434,7 +434,7 @@ https://github.com/ema2159/centaur-tabs
        '((pretty-fonts-fira-font prog-mode-hook org-mode-hook)))))
 #+end_src
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf pretty-mode
     :hook
     (nasy/font-change-hook
@@ -661,7 +661,10 @@ https://github.com/ema2159/centaur-tabs
 
 ** Mode Line
 
-#+begin_src elisp
+#+begin_src emacs-lisp
+#+end_src
+
+#+begin_src emacs-lisp
   (n/leaf nyan-mode
     :custom (nyan-animate-nyancat . t)
             (nyan-bar-length      . 16)
@@ -670,14 +673,14 @@ https://github.com/ema2159/centaur-tabs
     :init (sup 'nyan-mode))
 #+end_src
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf minions
     :custom (minions-mode-line-lighter . "✬")
     :hook after-init-hook
     :init (sup 'minions))
 #+end_src
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf doom-modeline
     :hook emacs-startup-hook
     :init (sup 'doom-modeline))
@@ -755,7 +758,7 @@ https://github.com/ema2159/centaur-tabs
 
 ** Nasy Theme
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv nasy-theme
     :init
     (sup `(nasy-theme :local-repo ,(locate-user-emacs-file "木瓜/nasy/nasy-theme"))))
@@ -763,7 +766,7 @@ https://github.com/ema2159/centaur-tabs
 
 ** Main Theme
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defun nasy/load-theme ()
     "Nasy load theme function"
     (when *theme*
@@ -774,7 +777,7 @@ https://github.com/ema2159/centaur-tabs
 
 ** Tool Bar
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf tool-bar
     :tag "builtin"
     :bind
@@ -796,14 +799,14 @@ https://github.com/ema2159/centaur-tabs
 
 ** Tab Line
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;; (add-hook 'after-init-hook #'global-tab-line-mode)
   ;; (setq tab-line-close-tab-function #'kill-buffer)
 #+end_src
 
 * 結                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   (provide '庭尞)
   ;;; 庭尞.el ends here
 #+end_src

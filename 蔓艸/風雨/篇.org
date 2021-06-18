@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "風雨.el") :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "風雨.el") :lexical t
 #+title: 風雨
 
 #+begin_verse
@@ -16,7 +16,7 @@
 
 * 題                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   ;;; 風雨.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2021  Nasy
@@ -41,7 +41,7 @@
 
 ** 元
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defvar nasy/config-before-hook nil
     "Hook to run config functions before load custom.el.")
 
@@ -60,7 +60,7 @@
 
 ** 函數
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defun nasy/change-char-width (char width)
     "Change CHAR width to WIDTH."
     (let ((table (make-char-table nil)))
@@ -95,7 +95,7 @@
 
 ** 宏
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (cl-eval-when (compile eval load)
     (if (fboundp 'with-eval-after-load)
         (defalias 'after-x 'with-eval-after-load)
@@ -108,7 +108,7 @@
 
 ** Font
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defvar nasy/font-change-hook nil
     "Hooks to run after font changed.")
 
@@ -388,13 +388,16 @@
   (add-hook 'emacs-startup-hook #'nasy/set-font 99)
   ;; (add-hook 'nasy-first-key-hook #'nasy/set-font)
   ;; (add-hook 'after-make-frame-functions #'nasy/set-font)
+
+  (when noninteractive
+    (nasy/set-font))
 #+end_src
 
 ** 定製
 
 *** 餘
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defgroup nasy nil
     "Nasy Emacs Custom Configurations."
     :group 'emacs)
@@ -450,7 +453,7 @@
 
 *** 匩
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defun nasy/-insert-backslash ()
     (interactive)
     (insert-char ?\\))
@@ -511,12 +514,12 @@
 
 * 旹用之
 :PROPERTIES:
-:header-args:elisp: :tangle (concat temporary-file-directory "風雨旹用.el") :lexical t
+:header-args:emacs-lisp: :tangle (concat temporary-file-directory "風雨旹用.el") :lexical t
 :END:
 
 主勭使用。
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;; 風雨旹用.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
   (cl-eval-when (compile)
     (setq nasy--require t)
@@ -539,13 +542,13 @@
 
 ** 元
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defvar nasy-file-sym-t '((".config/nasy-emacs" . ".emacs.d")))
 #+end_src
 
 ** 函數
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;;###autoload
   (defun nasy/file-sym-t (file)
     "Trans true file name to symlink file name."
@@ -614,7 +617,7 @@
 
 ** 重新加載 ~user-init-file~ 文件
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;;###autoload
   (defun nasy/reload-init ()
     "Reload init.el."
@@ -657,7 +660,7 @@
 
 ** 臿入旹間
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;;###autoload
   (defun nasy/insert-current-date ()
     "Insert current date."
@@ -673,7 +676,7 @@
 
 ** buffer 相關
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;;###autoload
   (defvar nasy/real-buffer-functions
     '(nasy/dired-buffer-p)
@@ -1056,7 +1059,7 @@
 
 ** 布局相關
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;; When splitting window, show (other-buffer) in the new window
   (defun split-window-func-with-other-buffer (split-function)
     "Split window with `SPLIT-FUNCTION'."
@@ -1120,7 +1123,7 @@
 
 ** 文字處理
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;;###autoload
   (defun nasy/delete-backward-word (arg)
     "Like `backward-kill-word', but doesn't affect the kill-ring."
@@ -1233,7 +1236,7 @@
 
 ** 挈壺                                                      :benchmark:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defmacro nasy/timer (&rest body)
     "Measure and return the time it takes evaluating BODY."
     `(let ((time (current-time)))
@@ -1243,7 +1246,7 @@
 
 ** Modes
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defvar nasy/active-region--on nil)
 
   (defun nasy/on--active-region ()
@@ -1277,14 +1280,14 @@
 
 ** 末
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (provide '風雨旹用)
   ;;; 風雨旹用.el ends here
 #+end_src
 
 * 結                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   (provide '風雨)
   ;;; 風雨.el ends here
 #+end_src

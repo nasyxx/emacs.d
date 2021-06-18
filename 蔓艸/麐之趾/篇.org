@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "麐之趾.el") :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "麐之趾.el") :lexical t
 #+title: 麐之趾
 
 #+begin_verse
@@ -20,7 +20,7 @@ Programming Languages
 
 * 題                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   ;;; 麐之趾.el --- Nasy's emacs.d langs file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2021  Nasy
@@ -66,7 +66,7 @@ Emacs client/library for the Language Server Protocol
 
 *** lsp-mode                                                :languages:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf lsp-mode
     :doc "Language Server Protocol Support for Emacs."
     :url "https://github.com/emacs-lsp/lsp-mode"
@@ -141,7 +141,7 @@ Emacs client/library for the Language Server Protocol
 
 *** lsp-ui                                            :languages:tools:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf lsp-ui
     :doc "UI integrations for lsp-mode."
     :url "https://github.com/emacs-lsp/lsp-ui"
@@ -177,7 +177,7 @@ Emacs client/library for the Language Server Protocol
 
 *** lsp-treemacs                                            :languages:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf lsp-treemacs
     :doc "lsp-mode ❤ treemacs."
     :url "https://github.com/emacs-lsp/lsp-treemacs"
@@ -194,7 +194,7 @@ Emacs client/library for the Language Server Protocol
 
 ** dap-mode                                                  :languages:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nr dap-mode
     :custom `(dap-breakpoints-file . ,(concat *nasy-var* "dap/breakpoints.el")))
 #+end_src
@@ -203,7 +203,7 @@ Emacs client/library for the Language Server Protocol
 
 *** haskell-mode                                              :haskell:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf haskell-mode
     :after haskell-mode
     :custom
@@ -305,7 +305,7 @@ Emacs client/library for the Language Server Protocol
 
 *** lsp-haskell                                               :haskell:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf lsp-haskell
     :custom (lsp-haskell-formatting-provider . "brittany")
     :hook
@@ -325,7 +325,7 @@ Emacs client/library for the Language Server Protocol
 
 ** HTML                                                 :html:languages:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf lsp-html
     :hook
     ((html-mode-hook mhtml-mode-hook sgml-mode-hook web-mode-hook)
@@ -334,7 +334,7 @@ Emacs client/library for the Language Server Protocol
 
 ** JavaScript & TypeScript             :javascript:typescript:languages:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf lsp-javascript
     :hook
     ((javascript-mode-hook js-mode-hook) . lsp-deferred))
@@ -344,7 +344,7 @@ Emacs client/library for the Language Server Protocol
 
 *** elisp-def                                                    :lisp:
 
- #+begin_src elisp
+ #+begin_src emacs-lisp
    (n/leaf elisp-def
      :init (sup 'elisp-def)
      :hook (((emacs-lisp-mode-hook ielm-mode-hook) . elisp-def-mode)))
@@ -352,7 +352,7 @@ Emacs client/library for the Language Server Protocol
 
 *** Highlight-quoted                                             :lisp:
 
- #+begin_src elisp
+ #+begin_src emacs-lisp
    (n/leaf highlight-quoted
      :init (sup 'highlight-quoted)
      :hook (emacs-lisp-mode-hook))
@@ -368,7 +368,7 @@ Emacs client/library for the Language Server Protocol
 
  https://framagit.org/steckerhalter/ipretty
 
- #+begin_src elisp
+ #+begin_src emacs-lisp
    (n/leaf ipretty
      :doc "Interactive Emacs Lisp pretty-printing"
      :url "https://framagit.org/steckerhalter/ipretty"
@@ -381,7 +381,7 @@ Emacs client/library for the Language Server Protocol
 
 *** lisp-mode                                                    :lisp:
 
- #+begin_src elisp
+ #+begin_src emacs-lisp
    (n/leaf lisp-mode
      :bind
      (:emacs-lisp-mode-map
@@ -398,7 +398,7 @@ Emacs client/library for the Language Server Protocol
 
 *** macrostep                                                    :lisp:
 
- #+begin_src elisp
+ #+begin_src emacs-lisp
    (n/leaf macrostep
      :bind
      (:emacs-lisp-mode-map
@@ -409,7 +409,7 @@ Emacs client/library for the Language Server Protocol
 
 *** parinfer-rust-mode                                           :lisp:
 
- #+begin_src elisp
+ #+begin_src emacs-lisp
    (n/leaf parinfer-rust-mode
      :custom
      (parinfer-rust-auto-download . nil)
@@ -426,7 +426,7 @@ Emacs client/library for the Language Server Protocol
 
 ** Markdown                                         :markdown:languages:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf markdown-mode
     :mode ("INSTALL\\'"
            "CONTRIBUTORS\\'"
@@ -442,7 +442,7 @@ Emacs client/library for the Language Server Protocol
 
 ** Nix                                                   :nix:languages:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf nix-mode
     :hook (nix-mode-hook . start-nix-lsp)
     :init
@@ -462,7 +462,7 @@ Emacs client/library for the Language Server Protocol
 
 *** 自定義                                                        :org:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defvar nasy-org-first-key-hook nil)
   (defvar nasy--org-first-key-hook nil)
 
@@ -741,7 +741,7 @@ Emacs client/library for the Language Server Protocol
 
 *** Basic & Functions                                             :org:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf org
     :init
     ;; Exclude DONE state tasks from refile targets
@@ -853,7 +853,7 @@ Emacs client/library for the Language Server Protocol
 
 *** Org Agenda                                                    :org:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf org-agenda
     :bind (:org-mode-map
            ("C-," . nil))
@@ -880,7 +880,7 @@ element
 
 https://github.com/awth13/org-appear
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv org-appear
     :doc "Make invisible parts of Org elements appear visible."
     :url "https://github.com/awth13/org-appear"
@@ -891,7 +891,7 @@ https://github.com/awth13/org-appear
 
 *** Org Capture                                                   :org:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf org-capture
     :defer-config
     (add-to-list 'org-capture-templates '("t" "Tasks"))
@@ -929,7 +929,7 @@ https://github.com/awth13/org-appear
 
 *** Org Clock                                                     :org:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf org-clock
     :hook ((org-clock-in-hook . nasy/show-org-clock-in-header-line)
            ((org-clock-out-hook . org-clock-cancel) . nasy/hide-org-clock-from-header-line))
@@ -949,13 +949,13 @@ https://github.com/awth13/org-appear
 
 *** Org Prettify Source Block                                     :org:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv org-prettify-source-block
     :load-path* "桃夭/麐之趾"
     :hook nasy-org-first-key-hook)
 #+end_src
 
-#+begin_src elisp :tangle (concat temporary-file-directory "org-prettify-source-block.el")
+#+begin_src emacs-lisp :tangle (concat temporary-file-directory "org-prettify-source-block.el")
   ;;; org-prettify-source-block.el --- Org Prettify Source Block -*- lexical-binding: t; -*-
 
   ;;; Commentary:
@@ -1083,7 +1083,7 @@ https://www.orgroam.com/
 https://github.com/org-roam/org-roam
 
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf org-roam
     :doc "Rudimentary Roam replica with org-mode."
     :url "https://github.com/org-roam/org-roam"
@@ -1103,7 +1103,7 @@ https://github.com/org-roam/org-roam
 
 *** Org superstar                                                 :org:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nr org-superstar
     :hook
     (nasy/font-change-hook
@@ -1150,7 +1150,7 @@ https://github.com/org-roam/org-roam
 
 *** 尾                                                            :org:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defun nasy/load-org ()
     (setq nasy--org-first-key-hook nasy-org-first-key-hook)
     (nasy/run-hook-once-on 'nasy--org-first-key-hook 'pre-command-hook))
@@ -1162,7 +1162,7 @@ https://github.com/org-roam/org-roam
 
 *** Functions                                                  :python:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf python
     :leaf-autoload nil
     :leaf-defun nil
@@ -1179,7 +1179,7 @@ https://github.com/org-roam/org-roam
 
 *** python                                                     :python:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf python
     :defun nasy/tempo-python python-flycheck-setup
     :init
@@ -1196,7 +1196,7 @@ https://github.com/org-roam/org-roam
 
 *** elpy                                                       :python:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf elpy
     :commands nasy/elpy-init
     :custom
@@ -1215,7 +1215,7 @@ https://github.com/org-roam/org-roam
 
 *** lsp-pyright                                                :python:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf lsp-pyright
     :init
     (sup 'lsp-pyright)
@@ -1260,7 +1260,7 @@ https://github.com/org-roam/org-roam
 
 *** isort                                                      :python:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf python-isort
     :commands python-isort-buffer python-isort-region python-isort-on-save-mode
     :after reformatter
@@ -1274,7 +1274,7 @@ HTTP REST client tool for emacs
 
 https://github.com/pashky/restclient.el
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf restclient
     :init
     (nasy/sup '(restclient company-restclient))
@@ -1288,7 +1288,7 @@ https://github.com/pashky/restclient.el
 
 ** Yaml                                                 :yaml:languages:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf yaml-mode
     :init
     (if nasy--require
@@ -1301,7 +1301,7 @@ https://github.com/pashky/restclient.el
 
 ** MISC                                                      :languages:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf elvish-mode
     :init
     (if nasy--require
@@ -1319,7 +1319,7 @@ https://github.com/pashky/restclient.el
 
 * 結                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   (provide '麐之趾)
   ;;; 麐之趾.el ends here
 #+end_src

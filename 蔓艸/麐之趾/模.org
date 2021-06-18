@@ -1,8 +1,8 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "模.el")
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "模.el")
 
 * 題                                                           :noexport:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;; 模.el --- Nasy's Emacs Configuration language template file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2020  Nasy
@@ -20,7 +20,7 @@
 
 * Haskell
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;;###autoload
   (defun nasy/tempo-haskell ()
     "Nasy haskell tempo."
@@ -72,7 +72,7 @@
 
 * Python
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;;###autoload
   (defun nasy/tempo-python ()
     "Nasy python tempo."
@@ -117,7 +117,7 @@
 
 * 結                                                           :noexport:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (provide '模)
   ;;; 模.el ends here
 #+end_src

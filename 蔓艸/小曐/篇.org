@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "小曐.el") :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "小曐.el") :lexical t
 #+title: 小曐
 
 #+begin_verse
@@ -17,7 +17,7 @@ Library.
 
 * 題                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   ;;; 小曐.el --- Nasy's emacs.d library file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2021  Nasy
@@ -44,7 +44,7 @@ Library.
 
 ** all-the-icons
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf all-the-icons
     :hook (nasy--defer-load-hook . (lambda () (require 'all-the-icons)))
     :init (add-to-list 'nasy--defer-loads 'all-the-icons))
@@ -56,7 +56,7 @@ A modern list library for Emacs.
 
 https://github.com/magnars/dash.el
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf dash
     :doc "A modern list library for Emacs."
     :url "https://github.com/magnars/dash.el"
@@ -70,13 +70,13 @@ https://github.com/magnars/dash.el
 
 ** Reformatter                                       :convenience:tools:
 
-This library lets elisp authors easily define an idiomatic command to reformat
+This library lets emacs-lisp authors easily define an idiomatic command to reformat
 the current buffer using a command-line program, together with an optional minor
 mode which can apply this command automatically on save.
 
 https://github.com/purcell/emacs-reformatter
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (leaf reformatter
     :doc "Define commands which run reformatters on the current Emacs buffer."
     :url "https://github.com/purcell/emacs-reformatter"
@@ -87,7 +87,7 @@ https://github.com/purcell/emacs-reformatter
 
 ** 餘                                                             :misc:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (defvar nasy-misc-packages
     '(gist git-blamed git-messenger git-modes git-timemachine wgrep
            company-dict company-math flycheck-package ibuffer-vc all-the-icons-ibuffer
@@ -103,7 +103,7 @@ https://github.com/purcell/emacs-reformatter
 
 * 結                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   (provide '小曐)
   ;;; 小曐.el ends here
 #+end_src

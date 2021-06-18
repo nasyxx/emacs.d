@@ -1,8 +1,8 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "early-init.el") :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "early-init.el") :lexical t
 
 開始之歬 加載之初 所用
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;;; early-init.el --- Nasy's early-init.el  -*- lexical-binding: t; -*-
 
   ;;; Commentary:

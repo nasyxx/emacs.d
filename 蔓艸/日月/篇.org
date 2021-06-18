@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "日月.el") :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "日月.el") :lexical t
 #+title: 日月
 
 #+begin_verse
@@ -27,7 +27,7 @@ Applications.
 
 * 題                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   ;;; 日月.el --- Nasy's emacs.d application file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2021  Nasy
@@ -58,7 +58,7 @@ A Growl-like alerts notifier for Emacs
 
 https://github.com/jwiegley/alert
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf alert
     :doc "A Growl-like alerts notifier for Emacs."
     :url "https://github.com/jwiegley/alert"
@@ -76,7 +76,7 @@ https://github.com/veelenga/carbon-now-sh.el
 
 Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>@@
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf carbon-now-sh
     :doc "Emacs to carbon.now.sh integration."
     :url "https://github.com/veelenga/carbon-now-sh.el"
@@ -90,7 +90,7 @@ Simple Emacs interface for cheat.sh.
 
 https://github.com/davep/cheat-sh.el
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf cheat-sh
     :doc "Simple Emacs interface for cheat.sh"
     :url "https://github.com/davep/cheat-sh.el"
@@ -104,7 +104,7 @@ RIME ㄓ in Emacs
 
 https://github.com/DogLooksGood/emacs-rime
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf rime
     :doc "RIME ㄓ in Emacs"
     :url "https://github.com/DogLooksGood/emacs-rime"
@@ -166,7 +166,7 @@ Benchmark Emacs Startup time without ever leaving your Emacs.
 
 https://github.com/jschaf/esup
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf esup
     :doc "Benchmark Emacs Startup time without ever leaving your Emacs."
     :url "https://github.com/jschaf/esup"
@@ -180,7 +180,7 @@ top, but for Emacs.
 
 https://github.com/lastquestion/explain-pause-mode
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf explain-pause-mode
     :doc "top, but for Emacs."
     :url "https://github.com/lastquestion/explain-pause-mode"
@@ -194,7 +194,7 @@ Grab link from Mac Apps and insert it into Emacs.
 
 https://github.com/xuchunyang/grab-mac-link.el
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf grab-mac-link
     :doc "Grab link from Mac Apps."
     :url "https://github.com/xuchunyang/grab-mac-link.el"
@@ -209,7 +209,7 @@ Convert buffer text and decorations to HTML.
 
 https://github.com/hniksic/emacs-htmlize
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf htmlize
     :doc "Convert buffer text and decorations to HTML."
     :url "https://github.com/hniksic/emacs-htmlize"
@@ -225,7 +225,7 @@ yaml, python and the like.
 
 https://gitlab.com/emacs-stuff/indent-tools
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf indent-tools
     :doc "Emacs mode to indent, navigate around and act on indentation units:
   perfect for yaml, python and the like."
@@ -242,7 +242,7 @@ list of matching characters with their names in a buffer.
 
 https://github.com/purcell/list-unicode-display
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf list-unicode-display
     :doc "Search for and list unicode characters in Emacs.
 
@@ -258,7 +258,7 @@ PDF Tools is, among other things, a replacement of DocView for PDF files.
 
 https://github.com/politza/pdf-tools
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf pdf-tools
     :doc "Emacs support library for PDF files."
     :url "https://github.com/politza/pdf-tools"
@@ -294,7 +294,7 @@ Emacs libvterm integration.
 
 https://github.com/akermu/emacs-libvterm
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (with-no-warnings
     (setq vterm-always-compile-module t))
   (n/leaf vterm
@@ -311,7 +311,7 @@ Toggles between the vterm buffer and whatever buffer you are editing.
 
 https://github.com/jixiuf/vterm-toggle
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf vterm-toggle
     :doc "Toggles between the vterm buffer and whatever buffer you are editing."
     :url "https://github.com/jixiuf/vterm-toggle"
@@ -339,7 +339,7 @@ https://github.com/jixiuf/vterm-toggle
 
 https://github.com/wakatime/wakatime-mode
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf wakatime-mode
     :doc "Emacs plugin for automatic time tracking and metrics generated from your programming activity."
     :url "https://github.com/wakatime/wakatime-mode"
@@ -350,7 +350,7 @@ https://github.com/wakatime/wakatime-mode
 
 * 結                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   (provide '日月)
   ;;; 日月.el ends here
 #+end_src

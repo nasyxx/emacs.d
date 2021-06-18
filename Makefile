@@ -56,7 +56,7 @@ init.el: 蔓艸/篇.org early-init.el
 $(foreach dir,$(DS),$(eval $(call tangle_template,$(dir))))
 
 
-## Generate elisp files
+## Generate emacs-lisp files
 generate: $(DS) early-init.el init.el 譯.el 芄蘭/芄蘭.el 芄蘭/芄蘭之例.el
 
 

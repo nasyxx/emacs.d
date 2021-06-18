@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:elisp :tangle (concat temporary-file-directory "擊鼓.el") :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "擊鼓.el") :lexical t
 #+title: 擊鼓
 
 #+begin_verse
@@ -24,7 +24,7 @@
 
 * 題                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   ;;; 擊鼓.el --- Nasy's emacs.d init bootstrap file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2021  Nasy
@@ -52,7 +52,7 @@
 
 * 初 ~early-init~
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (eval-and-compile
     (unless (boundp '*nasy*)
       (load (locate-user-emacs-file"early-init.el") nil t)))
@@ -62,7 +62,7 @@
 
 * straight
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (with-no-warnings
     (customize-set-variable 'straight-vc-git-default-clone-depth 1
           "Customized by Nasy.")
@@ -147,7 +147,7 @@
 
 * leaf
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (eval-and-compile
     (straight-use-package 'leaf)
     (straight-use-package 'leaf-keywords)
@@ -188,7 +188,7 @@
 
 以 ~straight~ 載入本墬包即可。
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;; (defmacro nasy/local-repo (repo &rest body)
   ;;   "Nasy load local REPO."
   ;;   (let ((n-repo (symbol-name repo)))
@@ -228,7 +228,7 @@
 
 * melpa/elpa 之外
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (cl-eval-when (compile eval load)
     (straight-register-package
      '(keytar :type git
@@ -253,7 +253,7 @@
 
 * 載入 org
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (sup 'org)
   (sup 'org-contrib)
 #+end_src
@@ -267,7 +267,7 @@
 
 ** 載入
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (cl-eval-when (compile eval load)
     (add-to-list 'load-path *nasy-custom*))
 
@@ -288,7 +288,7 @@ Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
 
 https://gitlab.com/koral/gcmh
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf-nv gcmh
     :doc "Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection."
     :url "https://gitlab.com/koral/gcmh"
@@ -319,7 +319,7 @@ https://gitlab.com/koral/gcmh
 
 * 整置文件                                                  :convenience:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (with-no-warnings
     (customize-set-variable 'abbrev-file-name
                             (concat *nasy-etc* "abbrev.el") "Customized by Nasy.")
@@ -343,7 +343,7 @@ https://gitlab.com/koral/gcmh
 
 * 結                                                           :noexport:
 
-#+begin_src elisp :exports none
+#+begin_src emacs-lisp :exports none
   (provide '擊鼓)
   ;;; 擊鼓.el ends here
 #+end_src
