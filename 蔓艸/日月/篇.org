@@ -135,10 +135,13 @@ https://github.com/DogLooksGood/emacs-rime
     :custom
     `(rime-librime-root    . ,(expand-file-name "~/.nix-profile"))
     `(rime-user-data-dir   . ,(expand-file-name "~/.config/rime"))
-    ;; (rime-cursor           . "˰")
-    (rime-show-candidate   . 'posframe)
-    (rime-posframe-style   . 'vertical)
-    (rime-show-preedit     . nil)
+    (rime-cursor           . "˰")
+    ;; (rime-show-candidate   . 'posframe)
+    ;; (rime-posframe-style   . 'vertical)
+    (rime-show-preedit     . 't)
+    (rime-show-candidate   . 'sidewindow)
+    ;; (rime-sidewindow-style . 'horizontal)
+    ;; (rime-sidewindow-side  . 'top)
     ;; (rime-candidate-num-format-function
     ;;  . #'nasy/rime--candidate-num-format)
     (rime-translate-keybindings
@@ -157,7 +160,6 @@ https://github.com/DogLooksGood/emacs-rime
          "<prior>"
          "<next>"
          "<delete>")))
-
 #+end_src
 
 ** ESUP -- Emacs Start Up Profiler     :benchmark:convenience:processes:
