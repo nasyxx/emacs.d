@@ -1,6 +1,6 @@
-#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:{} arch:headline
+#+options: ':nil *:t -:t ::t <:t H:6 \n:nil ^:{} arch:headline
 #+options: author:t broken-links:mark c:nil creator:nil
-#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:nil
 #+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+options: timestamp:t title:t toc:t todo:t |:t
 #+title: Nasy Emacs 配置
@@ -11,6 +11,16 @@
 #+select_tags: export
 #+exclude_tags: noexport
 #+creator: Emacs 28.0.50 (Org mode 9.4.6)
+
+#+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+
+#+html_head: <link rel="stylesheet" type="text/css" href="style.css">
+
+#+latex_header: \setmainfont{Cormorant Garamond}
+#+latex_header: \setmainjfont{FandolSong}
+#+latex_header: \setsansfont{Lato}
+#+latex_header: \setsansjfont{PingFang SC}
+
 
 * 新配置文件尙在加工中
 
@@ -60,3 +70,7 @@
 自定義文件全位于~芄蘭~有~芄蘭.el~與~custom.el~
 
 雖有 ~custom.el~ 但未在配置中加載苟欲用之加載于 ~芄蘭/芄蘭.el~
+
+* 配置
+
+#+include: ./蔓艸/篇.org
