@@ -1,50 +1,22 @@
 # Custom
-.emacs.desktop*
-.historian
-.session
-.smex-items
-.zsh_history
-.mc-lists.el
-.bookmarks.el
-.lsp-session*
-
-.cache
-anaconda-mode
-custom/user-config-example.el
-custom/user-config.el
-emojis
-straight
-url/
-var/
-etc/
-
-patches/
-
-ltximg/
-
-custom.el
-ditaa0_9.jar
-forge-database.sqlite
-history
-init.html
 init.el
-plantuml.jar
-projectile-bookmarks.eld
-nix-buffer
+early-init.el
+/*.el
 README.html
-recentf
 
+custom/
+eln-cache
+extra/
+ltximg/
+snippets/
+straight
 木瓜/
 桃夭/
 舊書/
 芄蘭/
 萚兮/
-.DS_Store
-extra/
-snippets/
-custom/
-eln-cache
 
+.DS_Store
 
 # Created by https://www.gitignore.io/api/emacs
 # Edit at https://www.gitignore.io/?templates=emacs
