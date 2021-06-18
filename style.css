@@ -1,10 +1,14 @@
 #content {
-    background-color: #e0ffcd;
-    max-width: 100vw!important;
+    background-color: #f2ecde;
+    max-width: 100vw !important;
+}
+
+#postamble {
+    display: none;
 }
 
 #table-of-contents a {
-    color: #e0ffcd;
+    color: #f2ecde;
 }
 
 #table-of-contents a:hover {
@@ -12,7 +16,7 @@
 }
 
 #table-of-contents a span {
-    color: #50616D;
+    color: #50616d;
     background-color: initial;
 }
 
@@ -23,6 +27,7 @@
 
 #table-of-contents {
     background: #745c97;
+    padding-bottom: 1rem !important;
 }
 
 #table-of-contents li ul li ul li ul li a {
@@ -52,20 +57,42 @@ kbd {
     border-style: outset;
 }
 
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 p {
-    font-family: nasycjk1, nasycjk2, nasycjk3;
+    font-family: STFLGQKJF, FZLiuGongQuanKaiShuJF, Kaiti, "Kaiti SC", "Kaiti TC",
+                 "Source Han Serif SC", nasycjk1, nasycjk2, nasycjk3, serif;
 }
 
+p.verse {
+    writing-mode: vertical-rl;
+    font-style: normal;
+    border-left: none;
+    border-right: 5px solid #d2b38c;
+    background-color: #fef8de;
+    box-shadow: 1px 1px 5px #50616d;
+}
+
+code,
+.src,
 pre * {
-    font-family: "OperatorMonoSSmLig Nerd Font", nasymono;
+    font-family: "OperatorMonoSSmLig Nerd Font", nasymono, "OperatorMonoSSM",
+                 "OperatorMono", Consolas, "Andale Mono WT", "Andale Mono",
+                 "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono",
+                 "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco,
+                 "Courier New", Courier, monospace;
 }
 
 pre.src {
     text-shadow: 0px 0px 0px;
-    box-shadow: 1px 1px 5px #7a378b;
-    color: #39375b;
-    background-color: #ffffd2;
-    font-family: Menlo, Monaco, Console, monospace;
+    box-shadow: 1px 1px 5px #50616d;
+    color: #50616d;
+    background-color: #fef8de;
 }
 
 pre.src:before {
@@ -93,4 +120,12 @@ ul.nav li.active ul li a {
 
 ul.nav li.active ul li.active a {
     background-color: #ffebbb;
+}
+
+ul.nav li.active ul li.active ul li.active a {
+    background-color: #c8e6c6;
+}
+
+ul.nav li.active ul li.active ul li.active ul li.active a {
+    background-color: #e3efd1;
 }
