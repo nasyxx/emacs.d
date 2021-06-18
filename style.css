@@ -67,8 +67,9 @@ h4,
 h5,
 h6,
 p {
-    font-family: STFLGQKJF, FZLiuGongQuanKaiShuJF, Kaiti, "Kaiti SC", "Kaiti TC",
-                 "Source Han Serif SC", nasycjk1, nasycjk2, nasycjk3, serif;
+    font-family: "Alegreya", "Cormorant Garamond", STFLGQKJF,
+                 FZLiuGongQuanKaiShuJF, Kaiti, "Kaiti SC", "Kaiti TC", "FZJinLT-L-GB",
+                 FZQingKeBenYueSongJF, "Source Han Serif SC", HanaMinA, HanaMinB, serif;
 }
 
 p.verse {
@@ -83,8 +84,8 @@ p.verse {
 code,
 .src,
 pre * {
-    font-family: "OperatorMonoSSmLig Nerd Font", nasymono, "OperatorMonoSSM",
-                 "OperatorMono", Consolas, "Andale Mono WT", "Andale Mono",
+    font-family: "OperatorMonoSSmLig Nerd Font", "OperatorMonoSSM", "OperatorMono",
+                 "Recursive Mono Linear Static", Consolas, "Andale Mono WT", "Andale Mono",
                  "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono",
                  "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco,
                  "Courier New", Courier, monospace;
