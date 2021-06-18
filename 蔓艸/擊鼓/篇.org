@@ -333,14 +333,16 @@ https://gitlab.com/koral/gcmh
                             (concat *nasy-etc* "eshell/aliases") "Customized by Nasy.")
     (customize-set-variable 'eshell-directory-name
                             (concat *nasy-var* "eshell/") "Customized by Nasy.")
+    (customize-set-variable 'save-place-file
+                            (concat *nasy-var* "save-place.el") "Customized by Nasy.")
     (customize-set-variable 'tramp-auto-save-directory
-                            (concat *nasy-var* "tramp/auto-save/"))
+                            (concat *nasy-var* "tramp/auto-save/") "Customized by Nasy.")
     (customize-set-variable 'tramp-persistency-file-name
-                            (concat *nasy-var* "tramp/persistency.el"))
+                            (concat *nasy-var* "tramp/persistency.el") "Customized by Nasy.")
     (customize-set-variable 'url-cache-directory
-                            (concat *nasy-var* "url/cache/"))
+                            (concat *nasy-var* "url/cache/") "Customized by Nasy.")
     (customize-set-variable 'url-configuration-directory
-                            (concat *nasy-var* "url/configuration/")))
+                            (concat *nasy-var* "url/configuration/") "Customized by Nasy."))
 #+end_src
 
 * 結                                                           :noexport:

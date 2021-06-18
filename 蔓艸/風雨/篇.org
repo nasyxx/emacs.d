@@ -443,10 +443,12 @@
     (fset 'yes-or-no-p 'y-or-n-p)
 
     (column-number-mode 1)
-    (delete-selection-mode t)
+    (delete-selection-mode 1)
     (display-battery-mode 1)
-    (global-auto-revert-mode t)
-    (minibuffer-depth-indicate-mode 1))
+    (global-auto-revert-mode 1)
+    (minibuffer-depth-indicate-mode 1)
+    (save-place-mode 1))
+
 
   (add-hook 'nasy-first-key-hook #'nasy/-cus-emacs)
 #+end_src
