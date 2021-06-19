@@ -1025,7 +1025,7 @@ https://github.com/AndreaCrotti/yasnippet-snippets
     :after company
     :commands (yas-minor-mode
                yas-reload-all)
-    :custom `(yas-snippet-dirs . ,(concat *nasy-etc* "yasnippet/snippets/"))
+    :custom (yas-snippet-dirs . `(,(concat *nasy-etc* "yasnippet/snippets/")))
     :hook (((prog-mode-hook text-mode-hook) . yas-minor-mode))
     :init
     (sup 'yasnippet)
