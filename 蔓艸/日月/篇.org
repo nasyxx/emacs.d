@@ -290,6 +290,21 @@ https://github.com/politza/pdf-tools
     :init (sup 'pdf-tools))
 #+end_src
 
+** Prettier                                 :convenience:files:languages:
+
+The prettier Emacs package reformats your code by running [[https://github.com/prettier/prettier][Prettier]]
+with minimal overhead, by request or transparently on file save.
+
+https://github.com/jscheid/prettier.el
+
+#+begin_src elisp
+  (n/leaf prettier
+    :doc "Prettier code formatting for Emacs."
+    :url "https://github.com/jscheid/prettier.el"
+    :tag "convenience" "files" "languages"
+    :init (sup 'prettier))
+#+end_src
+
 ** vterm                                                     :terminals:
 
 Emacs libvterm integration.
