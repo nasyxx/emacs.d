@@ -143,6 +143,9 @@
   (run-with-idle-timer 100 nil
                        #'run-hooks 'nasy-first-key-hook)
 
+  (run-with-idle-timer 300 300
+                       #'nasy/閒置)
+
   ;; (when (file-exists-p custom-file)
   ;;   (load custom-file))
 #+end_src
