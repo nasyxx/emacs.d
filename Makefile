@@ -28,9 +28,6 @@ clean-$(1):
 	$(EE) --eval '(org-babel-tangle-publish t "$$<" "$$(@D)")'
 endef
 
-%.elc: %.el
-	$(EL) --eval '(byte-compile-file "$*.el")'
-
 
 譯.el: 蔓艸/擊鼓/譯.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
