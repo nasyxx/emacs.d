@@ -235,7 +235,6 @@ https://github.com/ema2159/centaur-tabs
      (after-init-hook     . dashboard-setup-startup-hook)
      (after-init-hook     . dashboard-refresh-buffer))
     :custom
-    `(dashboard-startup-banner        . ,(locate-user-emacs-file "n_icon.png"))
     (dashboard-items . '((n-items . t)))
                          ;; (bookmarks . t)))
                          ;; (registers . 5)
@@ -248,6 +247,8 @@ https://github.com/ema2159/centaur-tabs
       dashboard-set-navigator) . t)
     :advice (:before dashboard-refresh-buffer nasy/-set-dashboard-init-info)
     :config
+    (setq dashboard-startup-banner
+          (concat *nasy-etc* "n_icon.png"))
     (after-x 'all-the-icons
       (setq dashboard-navigator-buttons
             `(;; line1
@@ -259,8 +260,8 @@ https://github.com/ema2159/centaur-tabs
                 "Config"
                 "Config File"
                 (lambda (&rest _)
-                  (let ((upath (locate-user-emacs-file "芄蘭/芄蘭.el"))
-                        (epath (locate-user-emacs-file "芄蘭/芄蘭之例.el")))
+                  (let ((upath (concat *nasy-custom* "芄蘭.el"))
+                        (epath (concat *nasy-custom* "芄蘭之例.el")))
                     (when (and (file-exists-p epath)
                               (not (file-exists-p upath)))
                       (copy-file epath upath))
@@ -771,8 +772,7 @@ https://github.com/ema2159/centaur-tabs
 
 #+begin_src emacs-lisp
   (n/leaf-nv nasy-theme
-    :init
-    (sup `(nasy-theme :local-repo ,(locate-user-emacs-file "木瓜/nasy/nasy-theme"))))
+    :init (sup `(nasy-theme :local-repo ,(concat *nasy-site* "nasy/nasy-theme"))))
 #+end_src
 
 ** Main Theme

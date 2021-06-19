@@ -493,7 +493,7 @@ Emacs client/library for the Language Server Protocol
     :custom
     (;; org-agnda
      (org-agenda-compact-blocks   . t)
-     (org-agenda-files            . `(,(locate-user-emacs-file "萚兮/standard-agenda.org")))
+     (org-agenda-files            . `(,(concat *nasy-etc* "standard-agenda.org")))
      (org-agenda-start-on-weekday . nil)
      (org-agenda-prefix-format
       . '((agenda . " %i %+15c\t%?-15t% s")
@@ -613,7 +613,7 @@ Emacs client/library for the Language Server Protocol
     (;; Pandoc
      ((org-pandoc-options-for-context
        org-pandoc-options-for-context-pdf)
-      . '((template . "~/.emacs.d/extra/nasy-context.tex")))))
+      . `((template . ,(concat *nasy-etc* "nasy-context.tex"))))))
 
 
   (leaf org-indent
@@ -1264,8 +1264,7 @@ https://github.com/org-roam/org-roam
   (n/leaf python-isort
     :commands python-isort-buffer python-isort-region python-isort-on-save-mode
     :after reformatter
-    :init
-    (sup `(python-isort :local-repo ,(locate-user-emacs-file "木瓜/nasy/python-isort"))))
+    :init (sup `(python-isort :local-repo ,(concat *nasy-site* "nasy/python-isort"))))
 #+end_src
 
 ** restclient.el                                  :restclient:languages:

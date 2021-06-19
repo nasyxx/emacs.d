@@ -1,8 +1,0 @@
-* Calendar
-:PROPERTIES:
-:CATEGORY: Calendar
-:END:
-
-%%(diary-lunar-phases)
-%%(diary-iso-date)
-%%(diary-chinese-date)

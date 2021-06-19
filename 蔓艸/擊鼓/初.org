@@ -57,6 +57,7 @@
   (defconst *is-a-mac* (eq system-type 'darwin))
 
   (defconst *nasy-custom* (concat user-emacs-directory "芄蘭/"))
+  (defconst *nasy-site*   (concat user-emacs-directory "木瓜/"))
   (defconst *nasy-dir*    (concat user-emacs-directory "萚兮/"))
   (defconst *nasy-etc*    (concat *nasy-dir* "恆/"))
   (defconst *nasy-var*    (concat *nasy-dir* "旹/"))
