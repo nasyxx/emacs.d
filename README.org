@@ -73,4 +73,4 @@
 
 * 配置
 
-#+include: ./蔓艸/篇.org
+#+include: ./蔓艸/篇.org :lines "3-"
