@@ -254,6 +254,115 @@ https://github.com/purcell/list-unicode-display
     :init (sup 'list-unicode-display))
 #+end_src
 
+** Magit                                                  :git:tools:vc:
+
+Magit is an interface to the version control system Git, implemented as an Emacs
+package. Magit aspires to be a complete Git porcelain. While we cannot (yet)
+claim that Magit wraps and improves upon each and every Git command, it is
+complete enough to allow even experienced Git users to perform almost all of
+their daily version control tasks directly from within Emacs. While many fine
+Git clients exist, only Magit and Git itself deserve to be called porcelains.
+
+https://github.com/magit/magit
+
+#+begin_src emacs-lisp
+  (defvar nasy-magit-first-key-hook nil)
+  (defvar nasy--magit-first-key-hook nil)
+
+
+  (defun nasy/load-magit ()
+    (setq nasy--magit-first-key-hook nasy-magit-first-key-hook)
+    (nasy/run-hook-once-on 'nasy--magit-first-key-hook 'pre-command-hook))
+
+  (n/leaf magit
+    :doc "It's Magit! A Git porcelain inside Emacs."
+    :url "https://github.com/magit/magit"
+    :tag "git" "tools" "vc"
+    :commands magit-status
+    :hook ((magit-popup-mode-hook . no-trailing-whitespace))
+    :mode-hook (nasy/load-magit)
+    :custom ((vc-handled-backends . nil))
+    :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
+           ("C-x g"      . magit-status)
+           ("C-x M-g"    . magit-dispatch)
+           ("C-c M-g"    . magit-file-dispatch)
+           (:magit-status-mode-map
+            ("C-M-<up>"  . magit-section-up))
+           (:vc-prefix-map
+            ("f"         . vc-git-grep)))
+    :init (sup 'magit))
+#+end_src
+
+*** Forge                                                :git:tools:vc:
+
+Work with Git forges from the comfort of Magit.
+
+https://github.com/magit/forge
+
+#+begin_src emacs-lisp
+  (n/leaf forge
+    :doc "Work with Git forges from the comfort of Magit."
+    :url "https://github.com/magit/forge"
+    :tag "git" "tools" "vc"
+    :after magit
+    :custom
+    `((forge-database-file . ,(concat *nasy-var* "forge/database.sqlite"))
+      (forge-post-directory . ,(concat *nasy-var* "forge/posts/")))
+    :init (sup 'forge))
+#+end_src
+
+*** Magit Delta                                          :git:tools:vc:
+
+https://github.com/dandavison/magit-delta
+
+#+begin_src emacs-lisp
+  (n/leaf magit-delta
+    :doc "Use delta (dandavison/delta) when viewing diffs in Magit."
+    :url "https://github.com/dandavison/magit-delta"
+    :tag "git" "tools" "vc"
+    :when (executable-find "delta")
+    :after magit
+    :custom (magit-delta-delta-args
+             . '("--max-line-distance"
+                 "0.6" "--24-bit-color"
+                 "always" "--color-only"
+                 "--syntax-theme='Solarized (light)'"))
+    :hook (magit-mode-hook . magit-delta-mode)
+    :init (sup 'magit-delta))
+#+end_src
+
+*** Magit Org Todos                               :magit:orgmode:tools:
+
+Get `todo.org` into your magit status.
+
+https://github.com/danielma/magit-org-todos.el
+
+#+begin_src emacs-lisp
+  (n/leaf-nr magit-org-todos
+    :doc "Get `todo.org` into your magit status"
+    :url "https://github.com/danielma/magit-org-todos.el"
+    :tag "magit" "orgmode" "tools"
+    :after magit
+    :init (sup 'magit-org-todos)
+    :config (magit-org-todos-autoinsert))
+#+end_src
+
+*** Magit Todos                                              :magit:vc:
+
+Show source files' TODOs (and FIXMEs, etc) in Magit status buffer.
+
+https://github.com/alphapapa/magit-todos
+
+#+begin_src emacs-lisp
+  (n/leaf-nv magit-todos
+    :doc "Show source files' TODOs (and FIXMEs, etc) in Magit status buffer."
+    :url "https://github.com/alphapapa/magit-todos"
+    :tag "magit" "vc"
+    :after magit
+    :custom (magit-todos-exclude-globs . '("*.map"))
+    :init (sup 'magit-todos))
+#+end_src
+
 ** PDF Tools                                          :files:multimedia:
 
 PDF Tools is, among other things, a replacement of DocView for PDF files.
