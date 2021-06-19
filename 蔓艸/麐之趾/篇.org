@@ -486,8 +486,9 @@ Emacs client/library for the Language Server Protocol
               1)))
     :config
     (add-to-list 'safe-local-variable-values
-                 '(org-src-fontify-natively
-                   org-startup-indented)))
+                 '(org-src-fontify-natively))
+    (add-to-list 'safe-local-variable-values
+                 '(org-startup-indented)))
 #+end_src
 
 #+begin_src emacs-lisp
