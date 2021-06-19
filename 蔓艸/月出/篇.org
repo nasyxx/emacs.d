@@ -452,8 +452,7 @@ https://github.com/magit/magit
     :commands magit-status
     :hook ((magit-popup-mode-hook . no-trailing-whitespace))
     :mode-hook (nasy/load-magit)
-    :custom ((magit-diff-refine-hunk . t)
-             (vc-handled-backends    . nil))
+    :custom ((vc-handled-backends . nil))
     :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
            ("C-x g"      . magit-status)
            ("C-x M-g"    . magit-dispatch)
