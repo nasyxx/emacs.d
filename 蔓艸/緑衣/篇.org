@@ -1086,7 +1086,8 @@ https://github.com/raxod502/selectrum
 #+begin_src emacs-lisp
   (n/leaf-nv session
     :hook
-    (emacs-startup-hook . session-initialize)
+    (nasy-first-key-hook . session-initialize)
+    (after-save-hook     . session-save-session)
     :custom
     `(session-save-file              . ,(concat *nasy-var* "session"))
     (session-name-disable-regexp     . "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)")
