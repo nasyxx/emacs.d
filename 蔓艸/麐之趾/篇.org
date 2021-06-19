@@ -1160,15 +1160,6 @@ https://github.com/org-roam/org-roam
     (require 'easy-mmode)
     (require 'ox))
 
-  (define-minor-mode nasy/org-export-html-with-useful-ids-mode
-    "Attempt to export Org as HTML with useful link IDs.
-  Instead of random IDs like \"#orga1b2c3\", use heading titles,
-  made unique when necessary."
-    :global t
-    (if nasy/org-export-html-with-useful-ids-mode
-        (advice-add #'org-export-get-reference :override #'nasy/org-export-get-reference)
-      (advice-remove #'org-export-get-reference #'nasy/org-export-get-reference)))
-
 
   (defun nasy/-c-s (ns)
     (cl-loop for c in '(" " "~" "(" ")" "~" "&" "/")
@@ -1254,6 +1245,25 @@ https://github.com/org-roam/org-roam
             ;; No more ancestors: add and increment a number.
             (inc-suffixf ref)))
         ref)))
+
+
+  (with-no-warnings
+    (define-minor-mode nasy/ox-html-with-useful-ids-mode
+      "Attempt to export Org as HTML with useful link IDs.
+  Instead of random IDs like \"#orga1b2c3\", use heading titles,
+  made unique when necessary."
+      :lighter "n/oxh"
+      :global t
+      (if nasy/ox-html-with-useful-ids-mode
+          (progn
+            (when (featurep 'gcmh)
+              (gcmh-mode -1)
+              (setq gc-cons-threshold most-positive-fixnum))
+            (advice-add #'org-export-get-reference :override #'nasy/org-export-get-reference))
+        (progn
+          (when (featurep 'gcmh)
+            (gcmh-mode 1))
+          (advice-remove #'org-export-get-reference #'nasy/org-export-get-reference)))))
 #+end_src
 
 *** 尾                                                            :org:
