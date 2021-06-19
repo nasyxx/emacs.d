@@ -1170,6 +1170,12 @@ https://github.com/org-roam/org-roam
       (advice-remove #'org-export-get-reference #'nasy/org-export-get-reference)))
 
 
+  (defun nasy/-c-s (ns)
+    (cl-loop for c in '(" " "~" "(" ")" "~" "&" "/")
+             do (setq ns (string-replace c "-" ns))
+             finally return ns))
+
+
   (defun nasy/org-export-get-reference (datum info)
       "Like `org-export-get-reference', except use heading titles (DATUM INFO) instead of random numbers."
       (let ((cache (plist-get info :internal-references)))
@@ -1232,7 +1238,8 @@ https://github.com/org-roam/org-roam
                                                     0)))
                                     (setf ,place (format "%s--%s" s1 (cl-incf suffix)))))))
       (let* ((title (org-element-property :raw-value datum))
-             (ref (url-hexify-string (substring-no-properties title)))
+             ;; (ref (url-hexify-string (substring-no-properties title)))
+             (ref (nasy/-c-s (substring-no-properties title)))
              (parent (org-element-property :parent datum)))
         (while (--any (equal ref (car it))
                       cache)
@@ -1241,7 +1248,8 @@ https://github.com/org-roam/org-roam
               ;; Append ancestor title.
               (setf title (concat (org-element-property :raw-value parent)
                                   "--" title)
-                    ref (url-hexify-string (substring-no-properties title))
+                    ;; ref (url-hexify-string (substring-no-properties title))
+                    ref (nasy/-c-s (substring-no-properties title))
                     parent (org-element-property :parent parent))
             ;; No more ancestors: add and increment a number.
             (inc-suffixf ref)))
