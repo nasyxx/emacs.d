@@ -99,6 +99,8 @@ https://github.com/purcell/emacs-reformatter
              (add-to-list 'nasy--defer-loads package)
              (when nasy--require
                (add-hook 'nasy--defer-load-hook #'(lambda () (require package))))))
+
+  (add-hook 'nasy--defer-load-hook #'(lambda () (require 'wgrep)))
 #+end_src
 
 * 結                                                           :noexport:

@@ -460,6 +460,10 @@ Emacs client/library for the Language Server Protocol
 
 ** Org Mode                                              :org:languages:
 
+#+begin_src emacs-lisp
+  (add-hook 'nasy-first-key-hook #'(lambda () (require 'org)))
+#+end_src
+
 *** 自定義                                                        :org:
 
 #+begin_src emacs-lisp
