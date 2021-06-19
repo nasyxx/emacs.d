@@ -1,5 +1,6 @@
 #+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "麐之趾.el") :lexical t
 #+title: 麐之趾
+#+startup: noindent
 
 #+begin_verse
   國風・周南・麐之趾
@@ -484,14 +485,20 @@ Emacs client/library for the Language Server Protocol
               "."
               1)))
     :config
-    (add-to-list 'safe-local-variable-values '(org-src-fontify-natively)))
+    (add-to-list 'safe-local-variable-values
+                 '(org-src-fontify-natively
+                   org-startup-indented)))
+#+end_src
 
+#+begin_src emacs-lisp
   (leaf org
     :custom
     (org-ellipsis          . "略")
     (org-startup-folded    . 'content)
     (org-startup-truncated . nil))
+#+end_src
 
+#+begin_src emacs-lisp
   (leaf org-agenda
     :after org
     :custom
@@ -516,8 +523,9 @@ Emacs client/library for the Language Server Protocol
           "-----------------------------------------------------"))
      (org-agenda-clockreport-parameter-plist . '(:link t :maxlevel 3))
      (org-agenda-window-setup . 'current-window)))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-appear
     :after org
     :custom
@@ -526,8 +534,9 @@ Emacs client/library for the Language Server Protocol
       org-appear-autolinks
       org-appear-autosubmarkers)
      . t))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-appearance
     :after org
     :custom
@@ -539,21 +548,24 @@ Emacs client/library for the Language Server Protocol
      . t)
     ((org-image-actual-width)
      . nil))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf babel
     :after org
     :custom
     (org-babel-latex-preamble
      . (lambda (_) "\\documentclass[preview]{standalone}\n")))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-capture
     :after org
     :custom
     (org-default-notes-file . "~/notes/default.org"))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-export
     :after org
     :custom
@@ -618,14 +630,16 @@ Emacs client/library for the Language Server Protocol
      ((org-pandoc-options-for-context
        org-pandoc-options-for-context-pdf)
       . `((template . ,(concat *nasy-etc* "nasy-context.tex"))))))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-indent
     :after org
     :custom
     (org-indent-mode-turns-on-hiding-stars . nil))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-keywords
     :after org
     :custom
@@ -638,8 +652,9 @@ Emacs client/library for the Language Server Protocol
           "|"
           "CANCELLED(c@/!)"
           "DONE(d!/!)"))))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org  ;; LaTeX
     :after org
     :custom
@@ -688,8 +703,9 @@ Emacs client/library for the Language Server Protocol
         :image-converter ("dvisvgm %f -n -b min -Z 2 -o %O")))
              ;; :image-converter ("inkscape --pdf-poppler %f -T -l -o %O")))
     (add-to-list 'org-preview-latex-process-alist nasy-luasvg))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-refile
     :after org
     :custom
@@ -698,30 +714,34 @@ Emacs client/library for the Language Server Protocol
     ((org-refile-use-outline-path
       org-refile-use-cache)
      . t))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-roam
     :after org
     :custom
     (org-roam-directory . "~/orgmode"))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-structure
     :after org
     :custom
     (org-startup-indented      . t)
     (org-archive-location      . "%s_archive::* Archive")
     (org-catch-invisible-edits . 'smart))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-tags
     :after org
     :custom
     (org-fast-tag-selection-single-key . 'expert)
     (org-tags-column                   . -74)
     (org-tags-sort-function            . 'org-string-collate-lessp))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-time
     :after org
     :custom
@@ -735,8 +755,9 @@ Emacs client/library for the Language Server Protocol
     (org-log-done . 'time)
     (org-time-stamp-custom-formats    . '("<%a, %b %d, %Y>" . "<%a, %b %d, %Y at %H:%M>"))
     (org-export-date-timestamp-format . "%b %d, %Y"))
+#+end_src
 
-
+#+begin_src emacs-lisp
   (leaf org-TODO
     :after org
     :custom
@@ -1152,7 +1173,7 @@ https://github.com/org-roam/org-roam
     (sup 'org-superstar))
 #+end_src
 
-*** Org Misc
+*** Org Misc                                                      :org:
 
 #+begin_src emacs-lisp
   ;; https://github.com/alphapapa/unpackaged.el#export-to-html-with-useful-anchors
