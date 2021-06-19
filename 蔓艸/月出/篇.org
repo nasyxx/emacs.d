@@ -515,13 +515,17 @@ restoring it from a file.
 
 https://github.com/Fanael/persistent-scratch
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf persistent-scratch
     :doc "Preserve the scratch buffer across Emacs sessions."
     :url "https://github.com/Fanael/persistent-scratch"
     :tag "convenience" "history"
-    :custom `(persistent-scratch-save-file
-              . ,(concat *nasy-var* "persistent-scratch.el"))
+    :leaf-autoload nil
+    :leaf-defun nil
+    :custom `((persistent-scratch-save-file
+               . ,(concat *nasy-var* "persistent-scratch.el"))
+              (persistent-scratch-backup-directory
+               . ,(concat *nasy-var* "persistent-scratch/")))
     :init (sup 'persistent-scratch)
     :advice (:after persistent-scratch-restore nasy/scratch))
 #+end_src

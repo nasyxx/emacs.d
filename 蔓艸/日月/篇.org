@@ -406,7 +406,7 @@ with minimal overhead, by request or transparently on file save.
 
 https://github.com/jscheid/prettier.el
 
-#+begin_src elisp
+#+begin_src emacs-lisp
   (n/leaf prettier
     :doc "Prettier code formatting for Emacs."
     :url "https://github.com/jscheid/prettier.el"
