@@ -530,6 +530,7 @@
     (require '擊鼓)
     (require '風雨)
 
+    (sup 'dashboard)
     (sup 'projectile)
     (sup 'smartparens)
 
@@ -615,6 +616,35 @@
     "Forward 2 chars."
     (interactive "p")
     (forward-char 2))
+
+
+  ;;;###autoload
+  (defun nasy/閒置 ()
+    "閒置 Emacs."
+    (interactive)
+    (dashboard-refresh-buffer)
+    (delete-other-windows))
+
+
+  ;;;###autoload
+  (defun nasy/-open-custom ()
+    "Open custom 芄蘭.el."
+    (interactive)
+    (find-file (concat *nasy-custom* "芄蘭.el")))
+
+
+  ;;;###autoload
+  (defun nasy/-open-source-page ()
+    "Open source page."
+    (interactive)
+    (browse-url "https://github.com/nasyxx/emacs.d/"))
+
+
+  ;;;###autoload
+  (defun nasy/-open-document ()
+    "Open document."
+    (interactive)
+    (browse-url "https://emacs.nasy.moe/"))
 #+end_src
 
 ** 重新加載 ~user-init-file~ 文件

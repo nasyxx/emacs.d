@@ -159,7 +159,6 @@ https://github.com/ema2159/centaur-tabs
     :init (sup 'dashboard))
 
 
-
   (defun nasy/-set-dashboard-init-info (&rest _)
     (setq dashboard-init-info
           (let ((package-count 0) (time (emacs-init-time)))
@@ -172,7 +171,7 @@ https://github.com/ema2159/centaur-tabs
   (defun nasy/-dashboard-items (_)
     (insert "\n")
     (widget-create 'item
-                   :tag "Recent Files (r)"
+                   :tag "近期 (r)"
                    :action #'consult-recent-file
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
@@ -180,19 +179,19 @@ https://github.com/ema2159/centaur-tabs
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open recent files")
-    (insert "\n\n")
+    (insert "\t")
     (widget-create 'item
-                   :tag "Bookmarks (b)"
+                   :tag "書籤 (b)"
                    :action #'consult-bookmark
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
-                   :button-prefix "📚 "
+                   :button-prefix "🔖 "
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open bookmarks")
-    (insert "\n\n")
+    (insert "\t")
     (widget-create 'item
-                   :tag "Projects (p)"
+                   :tag "項目 (p)"
                    :action #'projectile-switch-project
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
@@ -200,7 +199,67 @@ https://github.com/ema2159/centaur-tabs
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open projects")
-    (insert "\n"))
+    (insert "               \n\n")
+    (widget-create 'item
+                   :tag "草稿 (c)"
+                   :action #'persistent-scratch-restore
+                   :mouse-face 'highlight
+                   :button-face 'dashboard-heading
+                   :button-prefix "📝 "
+                   :button-suffix ""
+                   :format "%[%t%]"
+                   :help-echo "restore scratch buffer")
+    (insert "\t")
+    (widget-create 'item
+                   :tag "議程 (a)"
+                   :action #'org-agenda
+                   :mouse-face 'highlight
+                   :button-face 'dashboard-heading
+                   :button-prefix "🗓 "
+                   :button-suffix ""
+                   :format "%[%t%]"
+                   :help-echo "Org Agenda")
+    (insert "\t")
+    (widget-create 'item
+                   :tag "日曆 (d)"
+                   :action #'calendar
+                   :mouse-face 'highlight
+                   :button-face 'dashboard-heading
+                   :button-prefix "📅 "
+                   :button-suffix ""
+                   :format "%[%t%]"
+                   :help-echo "open calendar")
+    (insert "               \n\n")
+    (widget-create 'item
+                   :tag "芄蘭 (C)"
+                   :action #'nasy/-open-custom
+                   :mouse-face 'highlight
+                   :button-face 'dashboard-heading
+                   :button-prefix "⚙ "
+                   :button-suffix ""
+                   :format "%[%t%]"
+                   :help-echo "open custom file")
+    (insert "\t")
+    (widget-create 'item
+                   :tag "源碼 (s)"
+                   :action #'nasy/-open-source-page
+                   :mouse-face 'highlight
+                   :button-face 'dashboard-heading
+                   :button-prefix "🍭 "
+                   :button-suffix ""
+                   :format "%[%t%]"
+                   :help-echo "open https://github.com/nasyxx/emacs.d/")
+    (insert "\t")
+    (widget-create 'item
+                   :tag "文檔 (D)"
+                   :action #'nasy/-open-document
+                   :mouse-face 'highlight
+                   :button-face 'dashboard-heading
+                   :button-prefix "📖 "
+                   :button-suffix ""
+                   :format "%[%t%]"
+                   :help-echo "open https://emacs.nasy.moe")
+    (insert "               \n\n"))
 
 
   (after-x 'dashboard
@@ -220,6 +279,12 @@ https://github.com/ema2159/centaur-tabs
      ("r"              . consult-recent-file)
      ("b"              . consult-bookmark)
      ("p"              . projectile-switch-project)
+     ("c"              . persistent-scratch-restore)
+     ("a"              . org-agenda)
+     ("d"              . calendar)
+     ("C"              . nasy/-open-custom)
+     ("s"              . nasy/-open-source-page)
+     ("D"              . nasy/-open-document)
      ("g"              . dashboard-refresh-buffer)
      ("<down-mouse-1>" . nil)
      ("H-p"            . dashboard-previous-line)
@@ -243,33 +308,10 @@ https://github.com/ema2159/centaur-tabs
     (dashboard-item-generators . '((n-items . nasy/-dashboard-items)))
     ((dashboard-center-content
       dashboard-set-heading-icons
-      dashboard-set-init-info
-      dashboard-set-navigator) . t)
-    :advice (:before dashboard-refresh-buffer nasy/-set-dashboard-init-info)
-    :config
-    (setq dashboard-startup-banner
-          (concat *nasy-etc* "n_icon.png"))
-    (after-x 'all-the-icons
-      (setq dashboard-navigator-buttons
-            `(;; line1
-              ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
-                "Source"
-                "Source Page"
-                (lambda (&rest _) (browse-url "https://github.com/nasyxx/emacs.d/")))
-               (,(all-the-icons-octicon "gear" :height 1.1 :v-adjust 0.0)
-                "Config"
-                "Config File"
-                (lambda (&rest _)
-                  (let ((upath (concat *nasy-custom* "芄蘭.el"))
-                        (epath (concat *nasy-custom* "芄蘭之例.el")))
-                    (when (and (file-exists-p epath)
-                              (not (file-exists-p upath)))
-                      (copy-file epath upath))
-                    (find-file upath))))
-               (,(all-the-icons-octicon "book" :height 1.1 :v-adjust 0.0)
-                "Document"
-                "Document Page"
-                (lambda (&rest _) (browse-url "https://emacs.nasy.moe/"))))))))
+      dashboard-set-init-info) . t)
+    `(dashboard-startup-banner
+      . ,(concat *nasy-etc* "n_icon.png"))
+    :advice (:before dashboard-refresh-buffer nasy/-set-dashboard-init-info))
 #+end_src
 
 ** doom Theme
