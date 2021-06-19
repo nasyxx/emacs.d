@@ -507,6 +507,25 @@ https://github.com/magnars/multiple-cursors.el
     (sup 'multiple-cursors))
 #+end_src
 
+** Persistent Scratch                              :convenience:history:
+
+~persistent-scratch~ is an Emacs package that preserves the state of
+scratch buffers accross Emacs sessions by saving the state to and
+restoring it from a file.
+
+https://github.com/Fanael/persistent-scratch
+
+#+begin_src elisp
+  (n/leaf persistent-scratch
+    :doc "Preserve the scratch buffer across Emacs sessions."
+    :url "https://github.com/Fanael/persistent-scratch"
+    :tag "convenience" "history"
+    :custom `(persistent-scratch-save-file
+              . ,(concat *nasy-var* "persistent-scratch.el"))
+    :init (sup 'persistent-scratch)
+    :advice (:after persistent-scratch-restore nasy/scratch))
+#+end_src
+
 ** Point History                                       :editing:history:
 
 Show the history of points you visited before.

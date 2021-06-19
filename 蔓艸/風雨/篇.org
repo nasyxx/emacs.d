@@ -1057,6 +1057,13 @@
      (cl-loop for buffer in (nasy/buffer-list)
             when (not (string-match-p "company-box" (buffer-name buffer)))
             collect buffer)))
+
+
+  ;;;###autoload
+  (defun nasy/scratch ()
+    "Switch buffer to scratch."
+    (interactive)
+    (switch-to-buffer "*scratch*"))
 #+end_src
 
 ** 布局相關
@@ -1293,3 +1300,7 @@
   (provide '風雨)
   ;;; 風雨.el ends here
 #+end_src
+
+# Local Variables:
+# org-src-fontify-natively: nil
+# End:
