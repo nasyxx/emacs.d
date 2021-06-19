@@ -78,25 +78,32 @@ https://github.com/ema2159/centaur-tabs
     (centaur-tabs-local-mode -1))
 
 
+  (defvar nasy--centaur-text-modes
+    '(org-mode org-agenda-mode org-agenda-clockreport-mode
+               org-agenda-log-mode org-beamer-mode
+               org-bullets-mode org-cdlatex-mode
+               org-indent-mode org-src-mode diary-mode
+               text-mode markdown-mode))
+
+  (defvar nasy--centaur-vc-modes
+    '(magit-blame-mode magit-blob-mode magit-diff-mode
+                       magit-file-mode magit-log-mode
+                       magit-process-mode magit-status-mode))
+
+
   (defun nasy/-centaur-tabs-buffer-groups ()
     "Nasy's centaur tabs groups."
     (let ((bn (buffer-name)))
       (list
        (cond
         ;; org, markdown & text
-        ((or (memq major-mode '(org-mode org-agenda-mode org-agenda-clockreport-mode
-                                         org-agenda-log-mode org-beamer-mode
-                                         org-bullets-mode org-cdlatex-mode
-                                         org-indent-mode org-src-mode diary-mode
-                                         text-mode markdown-mode))
+        ((or (memq major-mode nasy--centaur-text-modes)
              (string-prefix-p "*Org Src" bn)
              (string-prefix-p "*Org Export" bn))
          "書寫")
 
         ;; VC
-        ((memq major-mode '(magit-blame-mode magit-blob-mode magit-diff-mode
-                                             magit-file-mode magit-log-mode
-                                             magit-process-mode magit-status-mode))
+        ((memq major-mode nasy--centaur-vc-modes)
          "Magit")
 
         ;; Shell
