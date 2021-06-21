@@ -509,8 +509,6 @@ https://github.com/ema2159/centaur-tabs
            (nasy/set-symbol ?∅ 11 'bold)
            (nasy/set-symbol ?⋃ 11 'bold))))
     (prog-mode-hook
-     . (lambda () (prettify-symbols-mode 1)))
-    (prog-mode-hook
      . (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
                    '(;; Data Type             P N
                      ("Float"  . #x211d)  ;; ℝxxxx
@@ -709,6 +707,19 @@ https://github.com/ema2159/centaur-tabs
                 ("pure" . (#x21f0 (Br . Bl) #x2006)))))) ;; ⇰  x
                        ;; (" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; ∘
     :init)
+#+end_src
+
+#+begin_src emacs-lisp
+  (defvar nasy-prog-mode-first-key-hook nil)
+  (defvar nasy--prog-mode-first-key-hook nil)
+
+  (defun nasy/-load-prog-mode ()
+    (setq nasy--prog-mode-first-key-hook nasy-prog-mode-first-key-hook)
+    (nasy/run-hook-once-on 'nasy--prog-mode-first-key-hook 'pre-command-hook))
+
+  (add-hook 'prog-mode-hook #'nasy/-load-prog-mode)
+
+  (add-hook 'nasy-prog-mode-first-key-hook #'(lambda () (prettify-symbols-mode 1)))
 #+end_src
 
 ** Mode Line
