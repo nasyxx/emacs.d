@@ -331,6 +331,7 @@ https://github.com/ema2159/centaur-tabs
       doom-dracula-colorful-headers
       doom-dracula-comment-bg) . t)
     (doom-themes-treemacs-theme . "doom-colors")
+    (doom-themes-org-fontify-special-tags . nil)
     :init (sup 'doom-themes)
     :config
     (after-x 'treemacs

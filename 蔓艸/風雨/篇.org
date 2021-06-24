@@ -1283,7 +1283,7 @@
        (float-time (time-since time))))
 #+end_src
 
-** Modes
+** 模式
 
 #+begin_src emacs-lisp
   (defvar nasy/active-region--on nil)
