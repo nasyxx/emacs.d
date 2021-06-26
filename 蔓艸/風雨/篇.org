@@ -1271,6 +1271,12 @@
       (delete-horizontal-space t)
       (newline nil t)
       (indent-according-to-mode)))
+
+
+  (defun nasy/insert-zero-width-space ()
+    "Insert a zero width space \u200b."
+    (interactive)
+    (insert "\u200b"))
 #+end_src
 
 ** 挈壺                                                      :benchmark:

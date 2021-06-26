@@ -1288,6 +1288,18 @@ https://github.com/org-roam/org-roam
           (advice-remove #'org-export-get-reference #'nasy/org-export-get-reference)))))
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun nasy/-org-export-remove-zero-width-space (text _backend _info)
+    "Remove zero width spaces from TEXT."
+    (unless (org-export-derived-backend-p 'org)
+      (replace-regexp-in-string "\u200b" "" text)))
+
+
+  (after-x 'ox
+    (add-to-list 'org-export-filter-final-output-functions
+                 #'nasy/-org-export-remove-zero-width-space t))
+#+end_src
+
 *** 尾                                                            :org:
 
 #+begin_src emacs-lisp
