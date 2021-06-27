@@ -53,6 +53,7 @@ code {
     border: none;
     white-space: pre-wrap;
     font-size: 100%;
+    padding: 0;
 }
 
 kbd {
@@ -131,4 +132,8 @@ ul.nav li.active ul li.active ul li.active a {
 
 ul.nav li.active ul li.active ul li.active ul li.active a {
     background-color: #e3efd1;
+}
+
+::selection {
+    background-color: #D3CBAF;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-06-19 Sat 03:47 -->
+<!-- 2021-06-26 Sat 20:54 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Nasy Emacs 配置</title>
@@ -293,7 +293,12 @@
 <li><a href="#布局相關">布局相關</a></li>
 <li><a href="#文字處理">文字處理</a></li>
 <li><a href="#挈壺">挈壺&#xa0;&#xa0;&#xa0;<span class="tag"><span class="benchmark">benchmark</span></span></a></li>
-<li><a href="#Modes">Modes</a></li>
+<li><a href="#模式">模式</a>
+<ul>
+<li><a href="#激活區域">激活區域</a></li>
+<li><a href="#快捷鍵">快捷鍵</a></li>
+</ul>
+</li>
 <li><a href="#末">末</a></li>
 </ul>
 </li>
@@ -493,7 +498,7 @@
 <li><a href="#Org-Prettify-Source-Block">Org Prettify Source Block&#xa0;&#xa0;&#xa0;<span class="tag"><span class="org">org</span></span></a></li>
 <li><a href="#org-roam">org roam&#xa0;&#xa0;&#xa0;<span class="tag"><span class="convenience">convenience</span>&#xa0;<span class="roam">roam</span>&#xa0;<span class="org">org</span></span></a></li>
 <li><a href="#Org-superstar">Org superstar&#xa0;&#xa0;&#xa0;<span class="tag"><span class="org">org</span></span></a></li>
-<li><a href="#Org-Misc">Org Misc</a></li>
+<li><a href="#Org-Misc">Org Misc&#xa0;&#xa0;&#xa0;<span class="tag"><span class="org">org</span></span></a></li>
 <li><a href="#尾">尾&#xa0;&#xa0;&#xa0;<span class="tag"><span class="org">org</span></span></a></li>
 </ul>
 </li>
@@ -2475,6 +2480,12 @@ Use GCMH &#x2013;  the Garbage Collector Magic Hack &#x2013; to adjust garbage c
 <code>    <span style="color: #909183;">(</span>delete-horizontal-space t<span style="color: #909183;">)</span></code>
 <code>    <span style="color: #909183;">(</span>newline nil t<span style="color: #909183;">)</span></code>
 <code>    <span style="color: #909183;">(</span>indent-according-to-mode<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/insert-zero-width-space</span> <span style="color: #7388d6;">(</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Insert a zero width space \u200b."</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">interactive</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>insert <span style="color: #177CB0;">"\u200b"</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
 </pre>
 </div>
 </div>
@@ -2494,9 +2505,13 @@ Use GCMH &#x2013;  the Garbage Collector Magic Hack &#x2013; to adjust garbage c
 </div>
 </div>
 
-<div id="outline-container-Modes" class="outline-5">
-<h5 id="Modes">Modes</h5>
-<div class="outline-text-5" id="text-Modes">
+<div id="outline-container-模式" class="outline-5">
+<h5 id="模式">模式</h5>
+<div class="outline-text-5" id="text-模式">
+</div>
+<div id="outline-container-激活區域" class="outline-6">
+<h6 id="激活區域">激活區域</h6>
+<div class="outline-text-6" id="text-激活區域">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defvar</span> <span style="color: #B35C44;">nasy/active-region--on</span> nil<span style="color: #707183;">)</span></code>
 <code></code>
@@ -2528,6 +2543,85 @@ Use GCMH &#x2013;  the Garbage Collector Magic Hack &#x2013; to adjust garbage c
 <code>    <span style="color: #909183;">(</span>remove-hook <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">deactivate-mark-hook</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy/off--active-region</span><span style="color: #909183;">)</span></code>
 <code>    <span style="color: #909183;">(</span>nasy/off--active-region<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
 </pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-快捷鍵" class="outline-6">
+<h6 id="快捷鍵">快捷鍵</h6>
+<div class="outline-text-6" id="text-快捷鍵">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defvar</span> <span style="color: #B35C44;">nasy-code-map</span> <span style="color: #7388d6;">(</span>make-sparse-keymap<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy Key Map."</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/-code-map</span> <span style="color: #7388d6;">(</span><span style="color: #057748; font-weight: bold; font-style: italic;">&amp;optional</span> set<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy SET nasy code map."</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>keymap  nasy-code-map<span style="color: #709870;">)</span></code>
+<code>        <span style="color: #709870;">(</span>keypair <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #907373;">(</span><span style="color: #6276ba;">(</span><span style="color: #177CB0;">"c"</span>   . compile<span style="color: #6276ba;">)</span></code>
+<code>                   <span style="color: #6276ba;">(</span><span style="color: #177CB0;">"C"</span>   . recompile<span style="color: #6276ba;">)</span></code>
+<code>                   <span style="color: #6276ba;">(</span><span style="color: #177CB0;">"x"</span>   . flycheck-list-errors<span style="color: #6276ba;">)</span></code>
+<code>                   <span style="color: #6276ba;">(</span><span style="color: #177CB0;">"SPC"</span> . nasy/insert-zero-width-space<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>    <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">if</span> set</code>
+<code>        <span style="color: #709870;">(</span><span style="color: #50616D; font-weight: bold;">cl-loop</span> for <span style="color: #907373;">(</span>ks . command<span style="color: #907373;">)</span> in keypair</code>
+<code>                  do</code>
+<code>                  <span style="color: #907373;">(</span>define-key keymap <span style="color: #6276ba;">(</span>kbd ks<span style="color: #6276ba;">)</span> command<span style="color: #907373;">)</span><span style="color: #709870;">)</span></code>
+<code>      <span style="color: #709870;">(</span><span style="color: #50616D; font-weight: bold;">cl-loop</span> for <span style="color: #907373;">(</span>ks . _<span style="color: #907373;">)</span> in keypair</code>
+<code>               do <span style="color: #907373;">(</span>define-key keymap <span style="color: #6276ba;">(</span>kbd ks<span style="color: #6276ba;">)</span> nil<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defvar</span> <span style="color: #B35C44;">nasy-treemacs-map</span> <span style="color: #7388d6;">(</span>make-sparse-keymap<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy Treemacs Map."</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/-treemacs-map</span> <span style="color: #7388d6;">(</span><span style="color: #057748; font-weight: bold; font-style: italic;">&amp;optional</span> set<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy SET nasy treemacs map."</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>keymap nasy-treemacs-map<span style="color: #709870;">)</span></code>
+<code>        <span style="color: #709870;">(</span>keypair <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #907373;">(</span><span style="color: #6276ba;">(</span><span style="color: #177CB0;">"t"</span>   . treemacs<span style="color: #6276ba;">)</span></code>
+<code>                   <span style="color: #6276ba;">(</span><span style="color: #177CB0;">"1"</span>   . treemacs-delete-other-windows<span style="color: #6276ba;">)</span></code>
+<code>                   <span style="color: #6276ba;">(</span><span style="color: #177CB0;">"B"</span>   . treemacs-bookmark<span style="color: #6276ba;">)</span></code>
+<code>                   <span style="color: #6276ba;">(</span><span style="color: #177CB0;">"f"</span>   . treemacs-find-file<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>    <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">if</span> set</code>
+<code>        <span style="color: #709870;">(</span><span style="color: #50616D; font-weight: bold;">cl-loop</span> for <span style="color: #907373;">(</span>ks . command<span style="color: #907373;">)</span> in keypair</code>
+<code>                  do</code>
+<code>                  <span style="color: #907373;">(</span>define-key keymap <span style="color: #6276ba;">(</span>kbd ks<span style="color: #6276ba;">)</span> command<span style="color: #907373;">)</span><span style="color: #709870;">)</span></code>
+<code>      <span style="color: #709870;">(</span><span style="color: #50616D; font-weight: bold;">cl-loop</span> for <span style="color: #907373;">(</span>ks . _<span style="color: #907373;">)</span> in keypair</code>
+<code>               do <span style="color: #907373;">(</span>define-key keymap <span style="color: #6276ba;">(</span>kbd ks<span style="color: #6276ba;">)</span> nil<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/-set-key-map</span> <span style="color: #7388d6;">(</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy Set keymap for config."</span></code>
+<code>  <span style="color: #7388d6;">(</span>define-key global-map <span style="color: #909183;">(</span>kbd <span style="color: #177CB0;">"s-SPC"</span><span style="color: #909183;">)</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy/insert-zero-width-space</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/-unset-key-map</span> <span style="color: #7388d6;">(</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy Unet keymap for config."</span></code>
+<code>  <span style="color: #7388d6;">(</span>define-key global-map <span style="color: #909183;">(</span>kbd <span style="color: #177CB0;">"s-SPC"</span><span style="color: #909183;">)</span> nil<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">define-minor-mode</span> <span style="color: #057748; text-decoration: underline;">nasy-keybinding-mode</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy Keybinding Mode."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:init-value</span> t</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:lighter</span> <span style="color: #177CB0;">"n/k"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:global</span> t</code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">if</span> nasy-keybinding-mode</code>
+<code>      <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">progn</span></code>
+<code>        <span style="color: #709870;">(</span>nasy/-set-key-map<span style="color: #709870;">)</span></code>
+<code></code>
+<code>        <span style="color: #709870;">(</span>define-key mode-specific-map <span style="color: #177CB0;">"c"</span> nasy-code-map<span style="color: #709870;">)</span></code>
+<code>        <span style="color: #709870;">(</span>define-key mode-specific-map <span style="color: #177CB0;">"t"</span> nasy-treemacs-map<span style="color: #709870;">)</span></code>
+<code></code>
+<code>        <span style="color: #709870;">(</span>nasy/-code-map t<span style="color: #709870;">)</span></code>
+<code>        <span style="color: #709870;">(</span>nasy/-treemacs-map t<span style="color: #709870;">)</span></code>
+<code></code>
+<code>        <span style="color: #709870;">(</span>which-key-add-key-based-replacements</code>
+<code>          <span style="color: #177CB0;">"C-c c"</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #907373;">(</span><span style="color: #177CB0;">"nasy code"</span> . <span style="color: #6276ba;">(</span>nasy-code-map<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span></code>
+<code>          <span style="color: #177CB0;">"C-c t"</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #907373;">(</span><span style="color: #177CB0;">"nasy treemacs"</span> . <span style="color: #6276ba;">(</span>nasy-treemacs-map<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>    <span style="color: #909183;">(</span>define-key mode-specific-map <span style="color: #177CB0;">"c"</span> nil<span style="color: #909183;">)</span></code>
+<code>    <span style="color: #909183;">(</span>define-key mode-specific-map <span style="color: #177CB0;">"t"</span> nil<span style="color: #909183;">)</span></code>
+<code></code>
+<code>    <span style="color: #909183;">(</span>nasy/-code-map nil<span style="color: #909183;">)</span></code>
+<code>    <span style="color: #909183;">(</span>nasy/-treemacs-map nil<span style="color: #909183;">)</span></code>
+<code>    <span style="color: #909183;">(</span>nasy/-unset-key-map<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+</pre>
+</div>
 </div>
 </div>
 </div>
@@ -3798,7 +3892,8 @@ Better solution for incremental narrowing in Emacs.
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">n/leaf-nv</span> session</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span></code>
-<code>  <span style="color: #7388d6;">(</span>emacs-startup-hook . session-initialize<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>nasy-first-key-hook . session-initialize<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>after-save-hook     . session-save-session<span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #7388d6;">(</span>session-save-file              . ,<span style="color: #909183;">(</span>concat *nasy-var* <span style="color: #177CB0;">"session"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>session-name-disable-regexp     . <span style="color: #177CB0;">"</span><span style="color: #177CB0; font-weight: bold;">\\</span><span style="color: #177CB0; font-weight: bold;">(?:</span><span style="color: #177CB0;">\\`'/tmp</span><span style="color: #177CB0; font-weight: bold;">\\</span><span style="color: #177CB0; font-weight: bold;">|</span><span style="color: #177CB0;">\\.git/[A-Z_]+\\'</span><span style="color: #177CB0; font-weight: bold;">\\</span><span style="color: #177CB0; font-weight: bold;">)</span><span style="color: #177CB0;">"</span><span style="color: #7388d6;">)</span></code>
@@ -5389,25 +5484,32 @@ tabs plugin for Emacs with a lot of customization options.
 <code>  <span style="color: #7388d6;">(</span>centaur-tabs-local-mode -1<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
 <code></code>
 <code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defvar</span> <span style="color: #B35C44;">nasy--centaur-text-modes</span></code>
+<code>  <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #7388d6;">(</span>org-mode org-agenda-mode org-agenda-clockreport-mode</code>
+<code>             org-agenda-log-mode org-beamer-mode</code>
+<code>             org-bullets-mode org-cdlatex-mode</code>
+<code>             org-indent-mode org-src-mode diary-mode</code>
+<code>             text-mode markdown-mode<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defvar</span> <span style="color: #B35C44;">nasy--centaur-vc-modes</span></code>
+<code>  <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #7388d6;">(</span>magit-blame-mode magit-blob-mode magit-diff-mode</code>
+<code>                     magit-file-mode magit-log-mode</code>
+<code>                     magit-process-mode magit-status-mode<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code></code>
 <code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/-centaur-tabs-buffer-groups</span> <span style="color: #7388d6;">(</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy's centaur tabs groups."</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">let</span> <span style="color: #909183;">(</span><span style="color: #709870;">(</span>bn <span style="color: #907373;">(</span>buffer-name<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
 <code>    <span style="color: #909183;">(</span>list</code>
 <code>     <span style="color: #709870;">(</span><span style="color: #50616D; font-weight: bold;">cond</span></code>
 <code>      <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">org, markdown &amp; text</span></code>
-<code>      <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span><span style="color: #50616D; font-weight: bold;">or</span> <span style="color: #858580;">(</span>memq major-mode <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #80a880;">(</span>org-mode org-agenda-mode org-agenda-clockreport-mode</code>
-<code>                                       org-agenda-log-mode org-beamer-mode</code>
-<code>                                       org-bullets-mode org-cdlatex-mode</code>
-<code>                                       org-indent-mode org-src-mode diary-mode</code>
-<code>                                       text-mode markdown-mode<span style="color: #80a880;">)</span><span style="color: #858580;">)</span></code>
+<code>      <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span><span style="color: #50616D; font-weight: bold;">or</span> <span style="color: #858580;">(</span>memq major-mode nasy--centaur-text-modes<span style="color: #858580;">)</span></code>
 <code>           <span style="color: #858580;">(</span>string-prefix-p <span style="color: #177CB0;">"*Org Src"</span> bn<span style="color: #858580;">)</span></code>
 <code>           <span style="color: #858580;">(</span>string-prefix-p <span style="color: #177CB0;">"*Org Export"</span> bn<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span></code>
 <code>       <span style="color: #177CB0;">"&#26360;&#23531;"</span><span style="color: #907373;">)</span></code>
 <code></code>
 <code>      <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">VC</span></code>
-<code>      <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>memq major-mode <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #858580;">(</span>magit-blame-mode magit-blob-mode magit-diff-mode</code>
-<code>                                           magit-file-mode magit-log-mode</code>
-<code>                                           magit-process-mode magit-status-mode<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span></code>
+<code>      <span style="color: #907373;">(</span><span style="color: #6276ba;">(</span>memq major-mode nasy--centaur-vc-modes<span style="color: #6276ba;">)</span></code>
 <code>       <span style="color: #177CB0;">"Magit"</span><span style="color: #907373;">)</span></code>
 <code></code>
 <code>      <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">Shell</span></code>
@@ -5643,6 +5745,7 @@ tabs plugin for Emacs with a lot of customization options.
 <code>    doom-dracula-colorful-headers</code>
 <code>    doom-dracula-comment-bg<span style="color: #909183;">)</span> <span style="color: #50616D; background-color: #FAFF72; font-weight: bold;">. t</span><span style="color: #7388d6; background-color: #FAFF72; font-weight: bold;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>doom-themes-treemacs-theme . <span style="color: #177CB0;">"doom-colors"</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>doom-themes-org-fontify-special-tags . nil<span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:init</span> <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">sup</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">doom-themes</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:config</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">after-x</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">treemacs</span></code>
@@ -5825,8 +5928,6 @@ tabs plugin for Emacs with a lot of customization options.
 <code>         <span style="color: #907373;">(</span>nasy/set-symbol ?&#8719; 11 <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">bold</span><span style="color: #907373;">)</span></code>
 <code>         <span style="color: #907373;">(</span>nasy/set-symbol ?&#8709; 11 <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">bold</span><span style="color: #907373;">)</span></code>
 <code>         <span style="color: #907373;">(</span>nasy/set-symbol ?&#8899; 11 <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">bold</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
-<code>  <span style="color: #7388d6;">(</span>prog-mode-hook</code>
-<code>   . <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">lambda</span> <span style="color: #709870;">()</span> <span style="color: #709870;">(</span>prettify-symbols-mode 1<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>prog-mode-hook</code>
 <code>   . <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">lambda</span> <span style="color: #709870;">()</span> <span style="color: #709870;">(</span>mapc <span style="color: #907373;">(</span><span style="color: #50616D; font-weight: bold;">lambda</span> <span style="color: #6276ba;">(</span>pair<span style="color: #6276ba;">)</span> <span style="color: #6276ba;">(</span><span style="color: #50616D; font-weight: bold;">push</span> pair prettify-symbols-alist<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span></code>
 <code>                 <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #907373;">(</span><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">Data Type             P N</span></code>
@@ -6026,6 +6127,20 @@ tabs plugin for Emacs with a lot of customization options.
 <code>              <span style="color: #6276ba;">(</span><span style="color: #177CB0;">"pure"</span> . <span style="color: #858580;">(</span>#x21f0 <span style="color: #80a880;">(</span>Br . Bl<span style="color: #80a880;">)</span> #x2006<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span> <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">&#8688;&#8198; x</span></code>
 <code>                     <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">(" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; &#8728;</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:init</span><span style="color: #707183;">)</span></code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defvar</span> <span style="color: #B35C44;">nasy-prog-mode-first-key-hook</span> nil<span style="color: #707183;">)</span></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defvar</span> <span style="color: #B35C44;">nasy--prog-mode-first-key-hook</span> nil<span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/-load-prog-mode</span> <span style="color: #7388d6;">(</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">setq</span> nasy--prog-mode-first-key-hook nasy-prog-mode-first-key-hook<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>nasy/run-hook-once-on <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy--prog-mode-first-key-hook</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">pre-command-hook</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span>add-hook <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">prog-mode-hook</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy/-load-prog-mode</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span>add-hook <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy-prog-mode-first-key-hook</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">lambda</span> <span style="color: #909183;">()</span> <span style="color: #909183;">(</span>prettify-symbols-mode 1<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
 </pre>
 </div>
 </div>
@@ -6367,10 +6482,11 @@ RIME ㄓ in Emacs
 <code>  <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #7388d6;">(</span>rime-librime-root    . ,<span style="color: #909183;">(</span>expand-file-name <span style="color: #177CB0;">"~/.nix-profile"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #7388d6;">(</span>rime-user-data-dir   . ,<span style="color: #909183;">(</span>expand-file-name <span style="color: #177CB0;">"~/.config/rime"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>rime-cursor           . <span style="color: #177CB0;">"&#752;"</span><span style="color: #7388d6;">)</span></code>
-<code>  <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">(rime-show-candidate   . 'posframe)</span></code>
-<code>  <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">(rime-posframe-style   . 'vertical)</span></code>
+<code>  <span style="color: #7388d6;">(</span>rime-show-candidate   . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">posframe</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>rime-posframe-style   . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">vertical</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>rime-show-preedit     . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">t</span><span style="color: #7388d6;">)</span></code>
-<code>  <span style="color: #7388d6;">(</span>rime-show-candidate   . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">sidewindow</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">(rime-show-candidate   . 'sidewindow)</span></code>
+<code>  <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">(rime-sidewindow-keep-window . t)</span></code>
 <code>  <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">(rime-sidewindow-style . 'horizontal)</span></code>
 <code>  <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">(rime-sidewindow-side  . 'top)</span></code>
 <code>  <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">(rime-candidate-num-format-function</span></code>
@@ -7385,15 +7501,24 @@ pretty print.
 <code>            <span style="color: #177CB0;">"."</span></code>
 <code>            1<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:config</span></code>
-<code>  <span style="color: #7388d6;">(</span>add-to-list <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">safe-local-variable-values</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span>org-src-fontify-natively<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org</code>
+<code>  <span style="color: #7388d6;">(</span>add-to-list <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">safe-local-variable-values</span></code>
+<code>               <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span>org-src-fontify-natively<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>add-to-list <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">safe-local-variable-values</span></code>
+<code>               <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span>org-startup-indented<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-ellipsis          . <span style="color: #177CB0;">"&#30053;"</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-startup-folded    . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">content</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-startup-truncated . nil<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-agenda</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-agenda</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">org-agnda</span></code>
@@ -7417,9 +7542,11 @@ pretty print.
 <code>        <span style="color: #177CB0;">"-----------------------------------------------------"</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
 <code>   <span style="color: #909183;">(</span>org-agenda-clockreport-parameter-plist . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #709870;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:link</span> t <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:maxlevel</span> 3<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
 <code>   <span style="color: #909183;">(</span>org-agenda-window-setup . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">current-window</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-appear</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-appear</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #909183;">(</span>org-appear-autoemphasis</code>
@@ -7427,9 +7554,11 @@ pretty print.
 <code>    org-appear-autolinks</code>
 <code>    org-appear-autosubmarkers<span style="color: #909183;">)</span></code>
 <code>   . t<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-appearance</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-appearance</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #909183;">(</span>org-allow-promoting-top-level-subtree</code>
@@ -7440,22 +7569,28 @@ pretty print.
 <code>   . t<span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #909183;">(</span>org-image-actual-width<span style="color: #909183;">)</span></code>
 <code>   . nil<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> babel</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> babel</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-babel-latex-preamble</code>
 <code>   . <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>_<span style="color: #709870;">)</span> <span style="color: #177CB0; background-color: #DDEEC4;">"\\documentclass[preview]{standalone}\n"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-capture</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-capture</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-default-notes-file . <span style="color: #177CB0;">"~/notes/default.org"</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-export</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-export</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">general</span></code>
@@ -7519,15 +7654,19 @@ pretty print.
 <code>   <span style="color: #909183;">(</span><span style="color: #709870;">(</span>org-pandoc-options-for-context</code>
 <code>     org-pandoc-options-for-context-pdf<span style="color: #709870;">)</span></code>
 <code>    . <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #709870;">(</span><span style="color: #907373;">(</span>template . ,<span style="color: #6276ba;">(</span>concat *nasy-etc* <span style="color: #177CB0;">"nasy-context.tex"</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-indent</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-indent</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-indent-mode-turns-on-hiding-stars . nil<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-keywords</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-keywords</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-todo-keywords</code>
@@ -7539,9 +7678,11 @@ pretty print.
 <code>        <span style="color: #177CB0;">"|"</span></code>
 <code>        <span style="color: #177CB0;">"CANCELLED(c@/!)"</span></code>
 <code>        <span style="color: #177CB0;">"DONE(d!/!)"</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org  <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">LaTeX</span></code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org  <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">LaTeX</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-preview-latex-default-process . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy-luasvg</span><span style="color: #7388d6;">)</span></code>
@@ -7589,9 +7730,11 @@ pretty print.
 <code>      <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:image-converter</span> <span style="color: #709870;">(</span><span style="color: #177CB0;">"dvisvgm %f -n -b min -Z 2 -o %O"</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>           <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">:image-converter ("inkscape --pdf-poppler %f -T -l -o %O")))</span></code>
 <code>  <span style="color: #7388d6;">(</span>add-to-list <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">org-preview-latex-process-alist</span> nasy-luasvg<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-refile</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-refile</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-outline-path-complete-in-steps . nil<span style="color: #7388d6;">)</span></code>
@@ -7599,31 +7742,39 @@ pretty print.
 <code>  <span style="color: #7388d6;">(</span><span style="color: #909183;">(</span>org-refile-use-outline-path</code>
 <code>    org-refile-use-cache<span style="color: #909183;">)</span></code>
 <code>   . t<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-roam</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-roam</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-roam-directory . <span style="color: #177CB0;">"~/orgmode"</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-structure</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-structure</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-startup-indented      . t<span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-archive-location      . <span style="color: #177CB0;">"%s_archive::* Archive"</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-catch-invisible-edits . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">smart</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-tags</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-tags</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-fast-tag-selection-single-key . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">expert</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-tags-column                   . -74<span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-tags-sort-function            . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">org-string-collate-lessp</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-time</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-time</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #909183;">(</span>org-display-custom-times</code>
@@ -7636,9 +7787,11 @@ pretty print.
 <code>  <span style="color: #7388d6;">(</span>org-log-done . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">time</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-time-stamp-custom-formats    . <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span><span style="color: #177CB0;">"&lt;%a, %b %d, %Y&gt;"</span> . <span style="color: #177CB0;">"&lt;%a, %b %d, %Y at %H:%M&gt;"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-export-date-timestamp-format . <span style="color: #177CB0;">"%b %d, %Y"</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-TODO</code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> org-TODO</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> org</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-todo-repeat-to-state . <span style="color: #177CB0;">"NEXT"</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
@@ -8102,22 +8255,13 @@ Rudimentary Roam replica with org-mode.
 </div>
 
 <div id="outline-container-Org-Misc" class="outline-6">
-<h6 id="Org-Misc">Org Misc</h6>
+<h6 id="Org-Misc">Org Misc&#xa0;&#xa0;&#xa0;<span class="tag"><span class="org">org</span></span></h6>
 <div class="outline-text-6" id="text-Org-Misc">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><code><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">https://github.com/alphapapa/unpackaged.el#export-to-html-with-useful-anchors</span></code>
 <code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">cl-eval-when</span> <span style="color: #7388d6;">(</span>compile<span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">require</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">easy-mmode</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">require</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">ox</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
-<code></code>
-<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">define-minor-mode</span> <span style="color: #057748; text-decoration: underline;">nasy/org-export-html-with-useful-ids-mode</span></code>
-<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Attempt to export Org as HTML with useful link IDs.</span></code>
-<code><span style="color: #177CB0; background-color: #DDEEC4;">Instead of random IDs like \"#orga1b2c3\", use heading titles,</span></code>
-<code><span style="color: #177CB0; background-color: #DDEEC4;">made unique when necessary."</span></code>
-<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:global</span> t</code>
-<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">if</span> nasy/org-export-html-with-useful-ids-mode</code>
-<code>      <span style="color: #909183;">(</span>advice-add <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">org-export-get-reference</span> <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:override</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy/org-export-get-reference</span><span style="color: #909183;">)</span></code>
-<code>    <span style="color: #909183;">(</span>advice-remove <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">org-export-get-reference</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy/org-export-get-reference</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
 <code></code>
 <code></code>
 <code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/-c-s</span> <span style="color: #7388d6;">(</span>ns<span style="color: #7388d6;">)</span></code>
@@ -8204,6 +8348,38 @@ Rudimentary Roam replica with org-mode.
 <code>          <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">No more ancestors: add and increment a number.</span></code>
 <code>          <span style="color: #6276ba;">(</span>inc-suffixf ref<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span></code>
 <code>      ref<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code></code>
+<code><span style="color: #707183;">(</span>with-no-warnings</code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">define-minor-mode</span> <span style="color: #057748; text-decoration: underline;">nasy/ox-html-with-useful-ids-mode</span></code>
+<code>    <span style="color: #177CB0; background-color: #DDEEC4;">"Attempt to export Org as HTML with useful link IDs.</span></code>
+<code><span style="color: #177CB0; background-color: #DDEEC4;">Instead of random IDs like \"#orga1b2c3\", use heading titles,</span></code>
+<code><span style="color: #177CB0; background-color: #DDEEC4;">made unique when necessary."</span></code>
+<code>    <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:lighter</span> <span style="color: #177CB0;">"n/oxh"</span></code>
+<code>    <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:global</span> t</code>
+<code>    <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">if</span> nasy/ox-html-with-useful-ids-mode</code>
+<code>        <span style="color: #709870;">(</span><span style="color: #50616D; font-weight: bold;">progn</span></code>
+<code>          <span style="color: #907373;">(</span><span style="color: #50616D; font-weight: bold;">when</span> <span style="color: #6276ba;">(</span><span style="color: #50616D; font-weight: bold;">featurep</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">gcmh</span><span style="color: #6276ba;">)</span></code>
+<code>            <span style="color: #6276ba;">(</span>gcmh-mode -1<span style="color: #6276ba;">)</span></code>
+<code>            <span style="color: #6276ba;">(</span><span style="color: #50616D; font-weight: bold;">setq</span> gc-cons-threshold most-positive-fixnum<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span></code>
+<code>          <span style="color: #907373;">(</span>advice-add <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">org-export-get-reference</span> <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:override</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy/org-export-get-reference</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span></code>
+<code>      <span style="color: #709870;">(</span><span style="color: #50616D; font-weight: bold;">progn</span></code>
+<code>        <span style="color: #907373;">(</span><span style="color: #50616D; font-weight: bold;">when</span> <span style="color: #6276ba;">(</span><span style="color: #50616D; font-weight: bold;">featurep</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">gcmh</span><span style="color: #6276ba;">)</span></code>
+<code>          <span style="color: #6276ba;">(</span>gcmh-mode 1<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span></code>
+<code>        <span style="color: #907373;">(</span>advice-remove <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">org-export-get-reference</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy/org-export-get-reference</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/-org-export-remove-zero-width-space</span> <span style="color: #7388d6;">(</span>text _backend _info<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Remove zero width spaces from TEXT."</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">unless</span> <span style="color: #909183;">(</span>org-export-derived-backend-p <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">org</span><span style="color: #909183;">)</span></code>
+<code>    <span style="color: #909183;">(</span>replace-regexp-in-string <span style="color: #177CB0;">"\u200b"</span> <span style="color: #177CB0;">""</span> text<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">after-x</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">ox</span></code>
+<code>  <span style="color: #7388d6;">(</span>add-to-list <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">org-export-filter-final-output-functions</span></code>
+<code>               <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy/-org-export-remove-zero-width-space</span> t<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
 </pre>
 </div>
 </div>
@@ -8573,7 +8749,7 @@ mode which can apply this command automatically on save.
 <div id="postamble" class="status">
 <p class="date">Date: 2021-06-16 Wed 00:00</p>
 <p class="author">Author: Nasy</p>
-<p class="date">Created: 2021-06-19 Sat 03:47</p>
+<p class="date">Created: 2021-06-26 Sat 20:54</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 <script>window.klipse_settings = {selector_eval_html: '.src-html',
