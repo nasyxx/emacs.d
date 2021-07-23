@@ -1193,7 +1193,7 @@ https://github.com/org-roam/org-roam
 
 
   (defun nasy/-c-s (ns)
-    (cl-loop for c in '(" " "~" "(" ")" "~" "&" "/")
+    (cl-loop for c in '(" " "~" "(" ")" "~" "&" "/" "[" "]" ":")
              do (setq ns (string-replace c "-" ns))
              finally return ns))
 

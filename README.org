@@ -73,7 +73,7 @@
 
 * 頟外
 
-#+include: ./木瓜/nasy/README.org
+#+include: ./木瓜/nasy/寚.org :lines "15-"
 
 * 配置
 

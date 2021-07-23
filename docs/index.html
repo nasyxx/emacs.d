@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-06-26 Sat 20:54 -->
+<!-- 2021-07-23 Fri 00:43 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Nasy Emacs 配置</title>
 <meta name="author" content="Nasy" />
 <meta name="generator" content="Org Mode" />
-<style type="text/css">
+<style>
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -223,9 +223,9 @@
 <div id="content" class="content">
 <header>
 <h1 class="title">Nasy Emacs 配置</h1>
-</header><nav id="table-of-contents">
+</header><nav id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#新配置文件尙在加工中">新配置文件尙在加工中</a></li>
 <li><a href="#安裝-Install">安裝 Install</a>
@@ -241,6 +241,22 @@
 </ul>
 </li>
 <li><a href="#自定義">自定義</a></li>
+<li><a href="#頟外">頟外</a>
+<ul>
+<li><a href="#--file-木瓜-nasy-python-isort-README.org--Python-isort--">Python isort</a></li>
+<li><a href="#外皃-Theme">外皃 Theme</a>
+<ul>
+<li><a href="#Definition">Definition</a></li>
+<li><a href="#Theme">Theme</a></li>
+</ul>
+</li>
+<li><a href="#襍">襍</a>
+<ul>
+<li><a href="#Single-Function-to-Center-Emacs-Window-on-Screen">Single Function to Center Emacs Window on Screen</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#配置">配置</a>
 <ul>
 <li><a href="#叙">叙</a></li>
@@ -411,6 +427,7 @@
 <ul>
 <li><a href="#庭尞--章">章</a>
 <ul>
+<li><a href="#cal-china-x">cal-china-x</a></li>
 <li><a href="#Centaur-Tab">Centaur Tab</a></li>
 <li><a href="#Dashboard">Dashboard</a></li>
 <li><a href="#doom-Theme">doom Theme</a></li>
@@ -625,6 +642,627 @@
 <p>
 雖有 <code>custom.el</code> 但未在配置中加載苟欲用之加載于 <code>芄蘭/芄蘭.el</code>
 </p>
+</div>
+</div>
+
+<div id="outline-container-頟外" class="outline-2">
+<h2 id="頟外">頟外</h2>
+<div class="outline-text-2" id="text-頟外">
+</div>
+<div id="outline-container---file-木瓜-nasy-python-isort-README.org--Python-isort--" class="outline-3">
+<h3 id="--file-木瓜-nasy-python-isort-README.org--Python-isort--"><a href="木瓜/nasy/python-isort/README.html">Python isort</a></h3>
+<div class="outline-text-3" id="text---file-木瓜-nasy-python-isort-README.org--Python-isort--">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">python-isort.el --- Utility to sort Python imports -*- lexical-binding: t; -*-</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">require</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">reformatter</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defcustom</span> <span style="color: #B35C44;">python-isort-command</span> <span style="color: #177CB0;">"isort"</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Name of the `isort` executable."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:type</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">string</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defvar</span> <span style="color: #B35C44;">python-isort--base-args</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #7388d6;">(</span><span style="color: #177CB0;">"--quiet"</span> <span style="color: #177CB0;">"--atomic"</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Base arguments to pass to isort."</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defcustom</span> <span style="color: #B35C44;">python-isort-extra-args</span> <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #7388d6;">(</span><span style="color: #177CB0;">"--sp"</span> ,<span style="color: #909183;">(</span>expand-file-name <span style="color: #177CB0;">"~/.config/isort.cfg"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Extra arguments to pass to isort."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:type</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #7388d6;">(</span>repeat string<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;;</span><span style="color: #758A99; font-style: italic; text-decoration: underline;">###</span><span style="color: #50616D; background-color: #FAFF72; font-weight: bold; font-style: italic; text-decoration: underline;">autoload</span><span style="color: #758A99; font-style: italic; text-decoration: underline;"> (autoload 'python-isort-buffer "python-isort" nil t)</span></code>
+<code><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;;</span><span style="color: #758A99; font-style: italic; text-decoration: underline;">###</span><span style="color: #50616D; background-color: #FAFF72; font-weight: bold; font-style: italic; text-decoration: underline;">autoload</span><span style="color: #758A99; font-style: italic; text-decoration: underline;"> (autoload 'python-isort-region "python-isort" nil t)</span></code>
+<code><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;;</span><span style="color: #758A99; font-style: italic; text-decoration: underline;">###</span><span style="color: #50616D; background-color: #FAFF72; font-weight: bold; font-style: italic; text-decoration: underline;">autoload</span><span style="color: #758A99; font-style: italic; text-decoration: underline;"> (autoload 'python-isort-on-save-mode "python-isort" nil t)</span></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">reformatter-define</span> python-isort</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:program</span> python-isort-command</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:args</span> <span style="color: #7388d6;">(</span>python-isort--make-args beg end<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:lighter</span> <span style="color: #177CB0;">" isort"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">python-isort</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">python-isort--make-args</span> <span style="color: #7388d6;">(</span>beg end<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Helper to build the argument list for isort for span BEG to END."</span></code>
+<code>  <span style="color: #7388d6;">(</span>append python-isort--base-args</code>
+<code>          python-isort-extra-args</code>
+<code>          <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span><span style="color: #177CB0;">"-"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">provide</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">python-isort</span><span style="color: #707183;">)</span></code>
+<code><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">python-isort.el ends here</span></code>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-外皃-Theme" class="outline-3">
+<h3 id="外皃-Theme">外皃 Theme</h3>
+<div class="outline-text-3" id="text-外皃-Theme">
+<p>
+外皃
+</p>
+
+<p>
+Nasy's Emacs Theme
+</p>
+</div>
+
+<div id="outline-container-Definition" class="outline-4">
+<h4 id="Definition">Definition</h4>
+<div class="outline-text-4" id="text-Definition">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defgroup</span> <span style="color: #057748; font-weight: bold; font-style: italic;">nasy-theme</span> nil</code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Options of Nasy's theme."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">faces</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defcustom</span> <span style="color: #B35C44;">nasy-theme-light/dark</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">light</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy theme uses light theme or dark theme?"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:type</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">symbol</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defcustom</span> <span style="color: #B35C44;">nasy-theme-org-scale</span> t</code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy theme uses scale up in `</span><span style="color: #B35C44; background-color: #DDEEC4; font-weight: bold;">org-mode</span><span style="color: #177CB0; background-color: #DDEEC4;">' or not."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:type</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">boolean</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defcustom</span> <span style="color: #B35C44;">nasy-theme-underlines-list</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #7388d6;">(</span>comment<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy theme uses underline on list.</span></code>
+<code></code>
+<code><span style="color: #177CB0; background-color: #DDEEC4;">Should be one or more in `</span><span style="color: #B35C44; background-color: #DDEEC4; font-weight: bold;">comment</span><span style="color: #177CB0; background-color: #DDEEC4;">', `</span><span style="color: #B35C44; background-color: #DDEEC4; font-weight: bold;">hl-line</span><span style="color: #177CB0; background-color: #DDEEC4;">'."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:type</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #7388d6;">(</span>list symbol<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defcustom</span> <span style="color: #B35C44;">nasy-theme-fixed-pitch-font</span> <span style="color: #177CB0;">"Recursive Mono Casual Static"</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy theme fixed pitch font."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:type</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">string</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defcustom</span> <span style="color: #B35C44;">nasy-theme-variable-pitch-font</span> <span style="color: #177CB0;">"Cardo"</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy theme variable patch font."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:type</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">string</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defcustom</span> <span style="color: #B35C44;">nasy-theme-fixed-pitch-font-scale</span> 1.0</code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy theme fixed pitch font scale."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:type</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">float</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defcustom</span> <span style="color: #B35C44;">nasy-theme-variable-pitch-font-scale</span> 1.3</code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy theme variable pitch font scale."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:type</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">float</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defcustom</span> <span style="color: #B35C44;">nasy-theme-rescale-f/v-pitch-font</span> t</code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy theme rescale f/v-pitch-font or not."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:group</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:type</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">boolean</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy-theme--light?dark</span> <span style="color: #7388d6;">(</span>light dark<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Determine using the LIGHT or the DARK color of nasy-theme."</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">if</span> <span style="color: #909183;">(</span>eq nasy-theme-light/dark <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">light</span><span style="color: #909183;">)</span></code>
+<code>      light</code>
+<code>    dark<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defalias</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #057748; text-decoration: underline;">--l?d</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme--light?dark</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy-theme--scale?</span> <span style="color: #7388d6;">(</span>scale<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Determine using `</span><span style="color: #B35C44; background-color: #DDEEC4; font-weight: bold;">org-mode</span><span style="color: #177CB0; background-color: #DDEEC4;">' SCALE or not."</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">if</span> nasy-theme-org-scale</code>
+<code>      scale</code>
+<code>    1<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defalias</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #057748; text-decoration: underline;">--s?</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme--scale?</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy-theme--check-underline-list</span> <span style="color: #7388d6;">(</span>sym<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Check if SYM in `</span><span style="color: #B35C44; background-color: #DDEEC4; font-weight: bold;">nasy-theme-underlines-list</span><span style="color: #177CB0; background-color: #DDEEC4;">' or not."</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">when</span> <span style="color: #909183;">(</span>memq sym nasy-theme-underlines-list<span style="color: #909183;">)</span></code>
+<code>    t<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defalias</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #057748; text-decoration: underline;">--u?</span> <span style="color: #50616D; font-weight: bold;">#'</span><span style="color: #B35C44; font-weight: bold;">nasy-theme--check-underline-list</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy-theme--rescale-font</span> <span style="color: #7388d6;">(</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Nasy theme rescale font."</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">when</span> nasy-theme-rescale-f/v-pitch-font</code>
+<code>    <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">setf</span> <span style="color: #709870;">(</span>alist-get</code>
+<code>           nasy-theme-fixed-pitch-font</code>
+<code>           face-font-rescale-alist</code>
+<code>           nasy-theme-fixed-pitch-font-scale nil <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">string=</span><span style="color: #709870;">)</span></code>
+<code>          nasy-theme-fixed-pitch-font-scale<span style="color: #909183;">)</span></code>
+<code>    <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">setf</span> <span style="color: #709870;">(</span>alist-get</code>
+<code>           nasy-theme-variable-pitch-font</code>
+<code>           face-font-rescale-alist</code>
+<code>           nasy-theme-variable-pitch-font-scale nil <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">string=</span><span style="color: #709870;">)</span></code>
+<code>          nasy-theme-variable-pitch-font-scale<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span>nasy-theme--rescale-font<span style="color: #707183;">)</span></code>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-Theme" class="outline-4">
+<h4 id="Theme">Theme</h4>
+<div class="outline-text-4" id="text-Theme">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">deftheme</span> <span style="color: #057748; font-weight: bold; font-style: italic;">nasy</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">let*</span> <span style="color: #7388d6;">(</span><span style="color: #909183;">(</span>class <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #709870;">(</span><span style="color: #907373;">(</span>class color<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>min-colors 89<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#19969;&#39321;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #CCA4E3;">#CCA4E3</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#21697;&#32418;     <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #F00056;">#F00056</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#22696;       <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #50616D;">#50616D</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#22696;&#28784;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #758A99;">#758A99</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#23500;&#26149;&#32033;   <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #FEF4B4;">#FEF4B4</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#26149;&#32209;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #E3EFD1;">#E3EFD1</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#26494;&#32511;     <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #057748;">#057748</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#26494;&#33457;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #BCE672;">#BCE672</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#27700;&#40644;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #DDEEC4;">#DDEEC4</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#40845;&#27849;&#38737;&#29943; <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #C8E6C6;">#C8E6C6</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#28246;&#34013;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #30DFF3;">#30DFF3</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#28422;       <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #161823;">#161823</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#28779;&#32418;     <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #FF2D51;">#FF2D51</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#29273;       <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #EEDEB0;">#EEDEB0</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#29640;&#29746;&#26934;   <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #705438;">#705438</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#31859;&#28784;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #D3CBAF;">#D3CBAF</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#32025;&#26837;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #D2B38C;">#D2B38C</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#32032;       <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #E0F0E9;">#E0F0E9</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#32043;&#25159;&#35997;   <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #923A60;">#923A60</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#32543;       <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #F2ECDE;">#F2ECDE</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#32993;&#31881;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #FFFAE8;">#FFFAE8</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#33469;&#28784;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #E3DBBF;">#E3DBBF</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#33590;       <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #B35C44;">#B35C44</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#33660;       <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #F3F9F1;">#F3F9F1</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#34847;&#30333;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #FEF8DE;">#FEF8DE</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#38263;&#33797;&#34128;   <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #FF47D1;">#FF47D1</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#38684;       <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #E9F1F6;">#E9F1F6</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#38738;&#33714;     <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #801DAE;">#801DAE</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#38747;&#38738;     <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #177CB0;">#177CB0</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#40060;&#32922;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #FCEFE8;">#FCEFE8</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#40493;&#40644;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #FAFF72;">#FAFF72</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#40517;&#40644;     <span style="color: #177CB0;">"</span><span style="color: #000000; background-color: #FFF143;">#FFF143</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n-&#40667;       <span style="color: #177CB0;">"</span><span style="color: #ffffff; background-color: #4A4266;">#4A4266</span><span style="color: #177CB0;">"</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#19969;&#39321;&#38738;&#33714;  <span style="color: #709870;">(</span>--l?d n-&#38738;&#33714; n-&#38738;&#33714;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#22696;&#22696;&#28784;    <span style="color: #709870;">(</span>--l?d n-&#22696; n-&#22696;&#28784;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#22696;&#28784;&#22696;    <span style="color: #709870;">(</span>--l?d n-&#22696;&#28784; n-&#22696;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#22696;&#28784;&#32032;    <span style="color: #709870;">(</span>--l?d n-&#22696;&#28784; n-&#32032;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#22696;&#32543;      <span style="color: #709870;">(</span>--l?d n-&#22696; n-&#32543;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#28246;&#34013;&#38747;&#38738;  <span style="color: #709870;">(</span>--l?d n-&#28246;&#34013; n-&#38747;&#38738;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#28422;&#32543;      <span style="color: #709870;">(</span>--l?d n-&#28422; n-&#32543;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#29273;&#22696;      <span style="color: #709870;">(</span>--l?d n-&#29273; n-&#22696;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#29273;&#40667;      <span style="color: #709870;">(</span>--l?d n-&#29273; n-&#40667;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#32032;&#22696;      <span style="color: #709870;">(</span>--l?d n-&#32032; n-&#22696;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#32032;&#22696;&#28784;    <span style="color: #709870;">(</span>--l?d n-&#32032; n-&#22696;&#28784;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#32543;&#22696;      <span style="color: #709870;">(</span>--l?d n-&#32543; n-&#22696;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#32543;&#28422;      <span style="color: #709870;">(</span>--l?d n-&#32543; n-&#28422;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#32543;&#40667;      <span style="color: #709870;">(</span>--l?d n-&#32543; n-&#40667;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#38684;&#40667;      <span style="color: #709870;">(</span>--l?d n-&#38684; n-&#40667;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#38738;&#33714;&#19969;&#39321;  <span style="color: #709870;">(</span>--l?d n-&#38738;&#33714; n-&#19969;&#39321;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#38738;&#33714;&#29273;    <span style="color: #709870;">(</span>--l?d n-&#38738;&#33714; n-&#29273;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#38747;&#38738;&#28246;&#34013;  <span style="color: #709870;">(</span>--l?d n-&#38747;&#38738; n-&#28246;&#34013;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#40667;&#32543;      <span style="color: #709870;">(</span>--l?d n-&#40667; n-&#32543;<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>       <span style="color: #909183;">(</span>n/&#40667;&#38684;      <span style="color: #709870;">(</span>--l?d n-&#40667; n-&#38684;<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>custom-theme-set-faces</code>
+<code>   <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy</span></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">essential styles</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>default <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#32543;&#28422;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">Basic</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>bold <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>button          <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:line-width</span> 1<span style="color: #858580;">)</span> <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> t <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>cursor          <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#40667;&#38684; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#38684;&#40667;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span><span style="color: #50616D; background-color: #FAFF72; font-weight: bold;">error</span>           <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#40060;&#32922; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#21697;&#32418; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>escape-glyph    <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#33590;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>fixed-pitch</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:family</span> ,nasy-theme-fixed-pitch-font<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>fringe          <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#32543;&#28422; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>header-line     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#33660;</code>
+<code>                                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:line-width</span> 2 <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:style</span> released-button<span style="color: #858580;">)</span></code>
+<code>                                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#38747;&#38738;&#28246;&#34013;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>highlight    <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#22696;&#32543;</code>
+<code>                                        <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:distant-foreground</span> ,n/&#38684;&#40667;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>internal-border <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#32543;&#28422;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>link         <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38747;&#38738; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> t<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>link-visited <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38738;&#33714; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> t<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>region       <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#40845;&#27849;&#38737;&#29943; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:distant-foreground</span> ,n/&#22696;&#32543; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>secondary-selection <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#33469;&#28784;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>success      <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#40060;&#32922; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38747;&#38738; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>variable-pitch</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:family</span> ,nasy-theme-variable-pitch-font<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>warning      <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#40060;&#32922; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#33590; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">centaur-tabs</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>centaur-tabs-default</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#31859;&#28784;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>centaur-tabs-selected</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#23500;&#26149;&#32033;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>centaur-tabs-selected-modified</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#23500;&#26149;&#32033;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>centaur-tabs-unselected</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#26149;&#32209;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;&#28784;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>centaur-tabs-unselected-modified</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#27700;&#40644;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;&#28784;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>centaur-tabs-active-bar-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#22696;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">company</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>company-box-scrollbar</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#40667;&#32543;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:line-width</span> 2 <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:style</span> released-button<span style="color: #858580;">)</span></code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#32543;&#40667;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>company-box-selection</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> company-box-scrollbar<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>company-echo-common</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#33590; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#32543;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>company-preview-common</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#33660; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>company-scrollbar-bg</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#29273;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>company-scrollbar-fg</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#33590; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#32543;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>company-tooltip</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#38684;&#40667; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#40667;&#38684;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>company-tooltip-common</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#32032; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#26494;&#32511; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>company-tooltip-common-selection</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#40667;&#32543; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#26494;&#33457; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> company-tooltip-common<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>company-tooltip-selection</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#40667;&#32543;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:style</span> released-button<span style="color: #858580;">)</span></code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#32543;&#40667;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">counsel &amp; ivy</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>all-the-icons-ivy-rich-icon-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:line-width</span> 2 <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:style</span> released-button<span style="color: #858580;">)</span></code>
+<code>               <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> default<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>ivy-current-match</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#40667;&#32543;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#32543;&#22696;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>ivy-highlight-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> counsel-active-mode<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>ivy-minibuffer-match-face-1</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#26494;&#33457;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>ivy-minibuffer-match-face-2</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#40517;&#40644;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>ivy-minibuffer-match-face-3</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#19969;&#39321;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>ivy-minibuffer-match-face-4</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#28779;&#32418;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">customize faces</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>custom-button</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:line-width</span> 2 <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:style</span> released-button<span style="color: #858580;">)</span></code>
+<code>                    <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#38684;&#40667;</code>
+<code>                    <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#40667;&#38684;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>custom-button-mouse</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:line-width</span> 2 <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:style</span> released-button<span style="color: #858580;">)</span></code>
+<code>                    <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#38684;&#40667;</code>
+<code>                    <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#40667;&#38684;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>custom-button-pressed</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:line-width</span> 2 <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:style</span> pressed-button<span style="color: #858580;">)</span></code>
+<code>                    <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> custom-button<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>custom-button-pressed-unraised</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38738;&#33714; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> custom-button-unraised<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>custom-button-unraised</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> t<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>custom-comment</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#38684;&#40667; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#40667;&#38684;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>custom-group-tag</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38747;&#38738;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> 1.4</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> normal</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> variable-pitch<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>custom-group-subtitle</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> 1.2</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>custom-variable-obsolete</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#40667;&#38684;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:strike-through</span> t<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>custom-variable-tag</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38747;&#38738;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> normal</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">dashboard</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>widget-button</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> unspecified<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">display-fill-column-indicator-mode</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>fill-column-indicator <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#28246;&#34013; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38747;&#38738;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">font-lock faces</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-builtin-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#26149;&#32209; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#29640;&#29746;&#26934; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-comment-delimiter-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> font-lock-comment-face <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-comment-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#28784;&#32032;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> ,<span style="color: #858580;">(</span>--u? <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">comment</span><span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-constant-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> font-lock-variable-name-face <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-doc-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#27700;&#40644; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#38747;&#38738;&#28246;&#34013; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-function-name-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#26494;&#32511; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> t<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-keyword-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-negation-char-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#29640;&#29746;&#26934;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-string-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#38747;&#38738;&#28246;&#34013;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-type-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#26494;&#32511; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-variable-name-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#33590;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>font-lock-warning-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#40493;&#40644; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">highlight</span></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">highlight-indents-guide</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>highlight-indent-guides-even-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#27700;&#40644;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>highlight-indent-guides-odd-face</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#26149;&#32209;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">hl-line</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>hl-line <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#33469;&#28784;</code>
+<code>                                   <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:distant-foreground</span> ,n-&#22696;</code>
+<code>                                   <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                                   <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> ,<span style="color: #858580;">(</span>--u? <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">hl-line</span><span style="color: #858580;">)</span></code>
+<code>                                   <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">mode line</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>doom-modeline-buffer-minor-mode</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> mode-line<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>doom-modeline-buffer-modified</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#28779;&#32418;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> mode-line</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>doom-modeline-info</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38747;&#38738;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> mode-line</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>doom-modeline-lsp-error</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> doom-modeline-urgent<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>doom-modeline-lsp-running</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> doom-modeline-warning<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>doom-modeline-lsp-warning</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> doom-modeline-warning<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>doom-modeline-urgent</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#21697;&#32418;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> mode-line</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>doom-modeline-warning</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#26494;&#33457;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> mode-line</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>mode-line          <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#32993;&#31881;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>mode-line-inactive <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#32032;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">org mode</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-block</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#34847;&#30333; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-block-begin-line</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#27700;&#40644;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:line-width</span> 1 <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:style</span> released-button<span style="color: #858580;">)</span></code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-code <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#31859;&#28784;</code>
+<code>                                    <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;</code>
+<code>                                    <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inheit</span> fixed-pitch<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-document-title</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#23500;&#26149;&#32033;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> nil</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.7<span style="color: #858580;">)</span></code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-document-info</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#32032;&#22696;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.2<span style="color: #858580;">)</span></code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-document-info-keyword</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#32032;&#22696;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.2<span style="color: #858580;">)</span></code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-done</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:line-width</span> 2 <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:style</span> released-button<span style="color: #858580;">)</span></code>
+<code>                    <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-headline-done</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> <span style="color: #858580;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:color</span> ,n-&#26494;&#33457;<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-level-1</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#34847;&#30333;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38747;&#38738;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.4<span style="color: #858580;">)</span></code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-level-2</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#34847;&#30333;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#32043;&#25159;&#35997;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.2<span style="color: #858580;">)</span></code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-level-3</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#34847;&#30333;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#26494;&#32511;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.1<span style="color: #858580;">)</span></code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-level-4</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#34847;&#30333;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#38738;&#33714;&#19969;&#39321;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.1<span style="color: #858580;">)</span></code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-level-5</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38747;&#38738;</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.1<span style="color: #858580;">)</span></code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> normal<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-level-6</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#33590;</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.1<span style="color: #858580;">)</span></code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> normal<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-level-7</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#26494;&#32511;</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.1<span style="color: #858580;">)</span></code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> normal<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-level-8</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:extend</span> t</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#38738;&#33714;&#19969;&#39321;</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.1<span style="color: #858580;">)</span></code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> italic</code>
+<code>                       <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> normal<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-list-dt <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:height</span> ,<span style="color: #858580;">(</span>--s? 1.1<span style="color: #858580;">)</span> <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-meta-line</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> font-lock-comment-face</code>
+<code>                        <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> nil<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-roam-link</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> org-link</code>
+<code>                        <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:overline</span>  t</code>
+<code>                        <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> t<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-superstar-header-bullet <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#23500;&#26149;&#32033;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-superstar-item <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38747;&#38738;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-tag</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n/&#29273;&#40667;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:box</span> t</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n/&#22696;&#32543;</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> normal</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> nil</code>
+<code>                           <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:weight</span> bold<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>org-verbatim <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#26149;&#32209;</code>
+<code>                                        <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;</code>
+<code>                                        <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inheit</span> fixed-pitch<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">page break lines</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>page-break-lines</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> font-lock-comment-face <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:slant</span> normal <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:underline</span> nil<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">tab-line and tab-bar</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tab-line                               <span style="color: #709870;">(</span><span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> mode-line<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tab-line-tab                           <span style="color: #709870;">(</span><span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> mode-line<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tab-line-tab-inactive                  <span style="color: #709870;">(</span><span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> mode-line-inactive<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tab-line-tab-face-inactive-alternating <span style="color: #709870;">(</span><span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> mode-line-inactive<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tab-line-tab-current                   <span style="color: #709870;">(</span><span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> mode-line <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#23500;&#26149;&#32033;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tab-line-highlight                     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> tab-line-tab<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tab-bar                <span style="color: #709870;">(</span><span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> tab-line<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tab-bar-tab            <span style="color: #709870;">(</span><span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> tab-line-tab<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tab-bar-tab-inactive   <span style="color: #709870;">(</span><span style="color: #907373;">(</span>t <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> tab-line-tab-inactive<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">term</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>term-color-<span style="color: #ffffff; background-color: #000000;">black</span>   <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#22696;     <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#22696;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>term-color-<span style="color: #ffffff; background-color: #0000ff;">blue</span>    <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#38747;&#38738;   <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38747;&#38738;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>term-color-<span style="color: #000000; background-color: #00ffff;">cyan</span>    <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#28246;&#34013;   <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#28246;&#34013;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>term-color-<span style="color: #000000; background-color: #00ff00;">green</span>   <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#26494;&#32511;   <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#26494;&#32511;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>term-color-<span style="color: #ffffff; background-color: #ff00ff;">magenta</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#38263;&#33797;&#34128; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#38263;&#33797;&#34128;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>term-color-<span style="color: #ffffff; background-color: #ff0000;">red</span>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#28779;&#32418;   <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#28779;&#32418;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>term-color-<span style="color: #000000; background-color: #ffffff;">white</span>   <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#32543;     <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#32543;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>term-color-<span style="color: #000000; background-color: #ffff00;">yellow</span>  <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#32025;&#26837;   <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:foreground</span> ,n-&#32025;&#26837;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>vterm-color-inverse-video</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#22696;<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">tree sitter</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tree-sitter-hl-face:constructor</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> tree-sitter-hl-face:type <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:bold</span> nil<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tree-sitter-hl-face:property</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> font-lock-constant-face <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:bold</span> nil<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>   <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #909183;">(</span>tree-sitter-hl-face:operator</code>
+<code>     <span style="color: #709870;">(</span><span style="color: #907373;">(</span>,class <span style="color: #6276ba;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:background</span> ,n-&#34847;&#30333; <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:bold</span> t <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:inherit</span> font-lock-negation-char-face<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;;</span><span style="color: #758A99; font-style: italic; text-decoration: underline;">###</span><span style="color: #50616D; background-color: #FAFF72; font-weight: bold; font-style: italic; text-decoration: underline;">autoload</span></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">and</span> load-file-name</code>
+<code>     <span style="color: #7388d6;">(</span>boundp <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">custom-theme-load-path</span><span style="color: #7388d6;">)</span></code>
+<code>     <span style="color: #7388d6;">(</span>add-to-list <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">custom-theme-load-path</span></code>
+<code>                  <span style="color: #909183;">(</span>file-name-as-directory</code>
+<code>                   <span style="color: #709870;">(</span>file-name-directory load-file-name<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span>provide-theme <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy</span><span style="color: #707183;">)</span></code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-襍" class="outline-3">
+<h3 id="襍">襍</h3>
+<div class="outline-text-3" id="text-襍">
+</div>
+
+
+<div id="outline-container-Single-Function-to-Center-Emacs-Window-on-Screen" class="outline-4">
+<h4 id="Single-Function-to-Center-Emacs-Window-on-Screen">Single Function to Center Emacs Window on Screen</h4>
+<div class="outline-text-4" id="text-Single-Function-to-Center-Emacs-Window-on-Screen">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;;;</span><span style="color: #758A99; font-style: italic; text-decoration: underline;">###</span><span style="color: #50616D; background-color: #FAFF72; font-weight: bold; font-style: italic; text-decoration: underline;">autoload</span></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/frame-recenter</span> <span style="color: #7388d6;">(</span><span style="color: #057748; font-weight: bold; font-style: italic;">&amp;optional</span> frame<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Center FRAME on the screen.</span></code>
+<code><span style="color: #177CB0; background-color: #DDEEC4;">FRAME can be a frame name, a terminal name, or a frame.</span></code>
+<code><span style="color: #177CB0; background-color: #DDEEC4;">If FRAME is omitted or nil, use currently selected frame."</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">interactive</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">unless</span> <span style="color: #909183;">(</span>eq <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">maximised</span> <span style="color: #709870;">(</span>frame-parameter nil <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">fullscreen</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
+<code>    <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">let*</span> <span style="color: #709870;">(</span><span style="color: #907373;">(</span>frame <span style="color: #6276ba;">(</span><span style="color: #50616D; font-weight: bold;">or</span> <span style="color: #858580;">(</span><span style="color: #50616D; font-weight: bold;">and</span> <span style="color: #80a880;">(</span>boundp <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">frame</span><span style="color: #80a880;">)</span> frame<span style="color: #858580;">)</span> <span style="color: #858580;">(</span>selected-frame<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span></code>
+<code>           <span style="color: #907373;">(</span>frame-w <span style="color: #6276ba;">(</span>frame-pixel-width frame<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span></code>
+<code>           <span style="color: #907373;">(</span>frame-h <span style="color: #6276ba;">(</span>frame-pixel-height frame<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span></code>
+<code>            <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">frame-monitor-workarea returns (x y width height) for the monitor</span></code>
+<code>           <span style="color: #907373;">(</span>monitor-w <span style="color: #6276ba;">(</span>nth 2 <span style="color: #858580;">(</span>frame-monitor-workarea frame<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span></code>
+<code>           <span style="color: #907373;">(</span>monitor-h <span style="color: #6276ba;">(</span>nth 3 <span style="color: #858580;">(</span>frame-monitor-workarea frame<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span></code>
+<code>           <span style="color: #907373;">(</span>center <span style="color: #6276ba;">(</span>list <span style="color: #858580;">(</span>/ <span style="color: #80a880;">(</span>- monitor-w frame-w<span style="color: #80a880;">)</span> 2<span style="color: #858580;">)</span></code>
+<code>                         <span style="color: #858580;">(</span>/ <span style="color: #80a880;">(</span>- monitor-h frame-h<span style="color: #80a880;">)</span> 2<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span></code>
+<code>      <span style="color: #709870;">(</span>apply <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">set-frame-position</span> <span style="color: #907373;">(</span>flatten-list <span style="color: #6276ba;">(</span>list frame center<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 
@@ -5449,6 +6087,104 @@ UI
 <h4 id="庭尞--章">章</h4>
 <div class="outline-text-4" id="text-庭尞--章">
 </div>
+<div id="outline-container-cal-china-x" class="outline-5">
+<h5 id="cal-china-x">cal-china-x</h5>
+<div class="outline-text-5" id="text-cal-china-x">
+<p>
+This extension mainly adds the following extra features:
+</p>
+
+<ul class="org-ul">
+<li>Chinese localizations</li>
+<li>Display holiday, lunar(农历), horoscope(星座), zodiac(属相、十二生肖), solar term(节气) info on mode line</li>
+<li>Define holidays using holiday-lunar, holiday-solar-term</li>
+<li>Highlight holidays based on different priorities</li>
+<li>Add cal-china-x-chinese-holidays, cal-china-x-japanese-holidays.</li>
+<li>Custom week diary (like weeks in school)</li>
+</ul>
+
+<p>
+<a href="https://github.com/xwl/cal-china-x">https://github.com/xwl/cal-china-x</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">n/leaf</span> cal-china-x</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:doc</span> <span style="color: #177CB0;">"chinese localization, prioritized holiday highlight, lunar, horoscope, zodiac, etc."</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://github.com/xwl/cal-china-x"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"calendar"</span> <span style="color: #177CB0;">"date"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> calendar</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
+<code>  <span style="color: #7388d6;">(</span>cal-china-x-force-chinese-week-day . t<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>cal-china-x-always-show-jieqi      . t<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span> <span style="color: #7388d6;">(</span>nasy-first-key-hook . <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span><span style="color: #709870;">)</span></code>
+<code>                                 <span style="color: #709870;">(</span><span style="color: #50616D; font-weight: bold;">require</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">cal-china-x</span><span style="color: #709870;">)</span></code>
+<code>                                 <span style="color: #709870;">(</span>nasy/init-chinese-calendar<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:init</span> <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">sup</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">cal-china-x</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code></code>
+<code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/init-chinese-calendar</span> <span style="color: #7388d6;">(</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #177CB0; background-color: #DDEEC4;">"Initial Chinese calendar."</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">setq</span> calendar-date-display-form</code>
+<code>        <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span><span style="color: #709870;">(</span>cal-china-x-calendar-display-form</code>
+<code>           <span style="color: #907373;">(</span>mapcar <span style="color: #6276ba;">(</span><span style="color: #50616D; font-weight: bold;">lambda</span> <span style="color: #858580;">(</span>el<span style="color: #858580;">)</span> <span style="color: #858580;">(</span>string-to-number el<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span></code>
+<code>                   <span style="color: #6276ba;">(</span>list month day year<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">setq</span> diary-date-forms chinese-date-diary-pattern<span style="color: #7388d6;">)</span></code>
+<code></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">setq</span> calendar-chinese-celestial-stem cal-china-x-celestial-stem</code>
+<code>        calendar-chinese-terrestrial-branch cal-china-x-terrestrial-branch<span style="color: #7388d6;">)</span></code>
+<code></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">setq</span> calendar-month-header <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span>propertize <span style="color: #709870;">(</span>format <span style="color: #177CB0;">"%d&#24180;%2d&#26376;"</span> year month<span style="color: #709870;">)</span></code>
+<code>                                           <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">font-lock-face</span></code>
+<code>                                           <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-month-header</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">when</span> cal-china-x-force-chinese-week-day</code>
+<code>    <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">setq</span> calendar-day-header-array cal-china-x-days<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">setq</span> calendar-mode-line-format</code>
+<code>        <span style="color: #909183;">(</span>list</code>
+<code>         <span style="color: #709870;">(</span>calendar-mode-line-entry <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-scroll-right</span> <span style="color: #177CB0;">"previous month"</span> <span style="color: #177CB0;">"&lt;"</span><span style="color: #709870;">)</span></code>
+<code>         <span style="color: #177CB0;">"&#26085;&#26310;"</span></code>
+<code></code>
+<code>         <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #709870;">(</span>cal-china-x-get-holiday date<span style="color: #709870;">)</span></code>
+<code></code>
+<code>         <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #709870;">(</span>concat <span style="color: #177CB0;">" "</span> <span style="color: #907373;">(</span>calendar-date-string date t<span style="color: #907373;">)</span></code>
+<code>                  <span style="color: #907373;">(</span>format <span style="color: #177CB0;">" &#31532;%d&#21608;"</span></code>
+<code>                          <span style="color: #6276ba;">(</span>funcall <span style="color: #858580;">(</span><span style="color: #50616D; font-weight: bold;">if</span> cal-china-x-custom-week-start-date</code>
+<code>                                       <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">cal-china-x-custom-week-of-date</span></code>
+<code>                                     <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">cal-china-x-week-of-date</span><span style="color: #858580;">)</span></code>
+<code>                                   date<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span></code>
+<code></code>
+<code>         <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #709870;">(</span>cal-china-x-chinese-date-string date<span style="color: #709870;">)</span></code>
+<code></code>
+<code></code>
+<code>         <span style="color: #709870;">(</span>concat</code>
+<code>          <span style="color: #907373;">(</span>calendar-mode-line-entry <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-goto-info-node</span> <span style="color: #177CB0;">"read Info on Calendar"</span></code>
+<code>                                    nil <span style="color: #177CB0;">"info"</span><span style="color: #907373;">)</span></code>
+<code>          <span style="color: #177CB0;">" / "</span></code>
+<code>          <span style="color: #907373;">(</span>calendar-mode-line-entry <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-other-month</span> <span style="color: #177CB0;">"choose another month"</span></code>
+<code>                                    nil <span style="color: #177CB0;">"other"</span><span style="color: #907373;">)</span></code>
+<code>          <span style="color: #177CB0;">" / "</span></code>
+<code>          <span style="color: #907373;">(</span>calendar-mode-line-entry <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-goto-today</span> <span style="color: #177CB0;">"go to today's date"</span></code>
+<code>                                    nil <span style="color: #177CB0;">"today"</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span></code>
+<code></code>
+<code>         <span style="color: #709870;">(</span>calendar-mode-line-entry <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-scroll-left</span> <span style="color: #177CB0;">"next month"</span> <span style="color: #177CB0;">"&gt;"</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code></code>
+<code>  <span style="color: #7388d6;">(</span>add-hook <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-move-hook</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-update-mode-line</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>add-hook <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-initial-window-hook</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-update-mode-line</span><span style="color: #7388d6;">)</span></code>
+<code></code>
+<code>  <span style="color: #7388d6;">(</span>add-hook <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-mode-hook</span></code>
+<code>            <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span><span style="color: #709870;">)</span></code>
+<code>              <span style="color: #709870;">(</span>set <span style="color: #907373;">(</span>make-local-variable <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">font-lock-defaults</span><span style="color: #907373;">)</span></code>
+<code>                   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">chinese month and year</span></code>
+<code>                   <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #907373;">(</span><span style="color: #6276ba;">(</span><span style="color: #858580;">(</span><span style="color: #177CB0;">"[0-9]+&#24180;\\ *[0-9]+&#26376;"</span> . font-lock-function-name-face<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span> t<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code></code>
+<code></code>
+<code>  <span style="color: #7388d6;">(</span>advice-add <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">calendar-mark-holidays</span> <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:around</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">cal-china-x-mark-holidays</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>advice-add <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">mouse-set-point</span> <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">cal-china-x-mouse-set-point</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+</pre>
+</div>
+</div>
+</div>
+
 <div id="outline-container-Centaur-Tab" class="outline-5">
 <h5 id="Centaur-Tab">Centaur Tab</h5>
 <div class="outline-text-5" id="text-Centaur-Tab">
@@ -8188,16 +8924,25 @@ Rudimentary Roam replica with org-mode.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://github.com/org-roam/org-roam"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"convenience"</span> <span style="color: #177CB0;">"roam"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:bind</span></code>
-<code>  <span style="color: #7388d6;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:org-roam-mode-map</span></code>
-<code>   <span style="color: #909183;">(</span><span style="color: #709870;">(</span><span style="color: #177CB0;">"C-c n l"</span> . org-roam<span style="color: #709870;">)</span></code>
-<code>    <span style="color: #709870;">(</span><span style="color: #177CB0;">"C-c n f"</span> . org-roam-find-file<span style="color: #709870;">)</span></code>
-<code>    <span style="color: #709870;">(</span><span style="color: #177CB0;">"C-c n g"</span> . org-roam-graph<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:org-mode-map</span></code>
-<code>   <span style="color: #909183;">(</span><span style="color: #709870;">(</span><span style="color: #177CB0;">"C-c n i"</span> . org-roam-insert<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
-<code>   <span style="color: #909183;">(</span><span style="color: #709870;">(</span><span style="color: #177CB0;">"C-c n I"</span> . org-roam-insert-immediate<span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
-<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span> <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #7388d6;">(</span>org-roam-db-location . ,<span style="color: #909183;">(</span>concat *nasy-var* <span style="color: #177CB0;">"org/org-roam.db"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
-<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span> nasy-org-first-key-hook</code>
-<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:init</span> <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">sup</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">org-roam</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
+<code>   <span style="color: #909183;">(</span><span style="color: #177CB0;">"C-c n c"</span> . org-roam-capture<span style="color: #909183;">)</span></code>
+<code>   <span style="color: #909183;">(</span><span style="color: #177CB0;">"C-c n f"</span> . org-roam-node-find<span style="color: #909183;">)</span></code>
+<code>   <span style="color: #909183;">(</span><span style="color: #177CB0;">"C-c n g"</span> . org-roam-graph<span style="color: #909183;">)</span></code>
+<code>   <span style="color: #909183;">(</span><span style="color: #177CB0;">"C-c n i"</span> . org-roam-node-insert<span style="color: #909183;">)</span></code>
+<code>   <span style="color: #909183;">(</span><span style="color: #177CB0;">"C-c n I"</span> . org-roam-insert-immediate<span style="color: #909183;">)</span></code>
+<code>   <span style="color: #909183;">(</span><span style="color: #177CB0;">"C-c n l"</span> . org-roam-buffer-toggle<span style="color: #909183;">)</span></code>
+<code>   <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">Dailies</span></code>
+<code>   <span style="color: #909183;">(</span><span style="color: #177CB0;">"C-c n j"</span> . org-roam-dailies-capture-today<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
+<code>  <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #7388d6;">(</span>org-roam-db-location . ,<span style="color: #909183;">(</span>concat *nasy-var* <span style="color: #177CB0;">"org/org-roam.db"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #758A99; font-weight: bold; font-style: italic; text-decoration: underline;">;; </span><span style="color: #758A99; font-style: italic; text-decoration: underline;">:hook (nasy-first-key-hook . org-roam-setup)</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:init</span> <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">sup</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">org-roam</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">setq</span> org-roam-v2-ack t<span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>add-to-list <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">safe-local-variable-values</span></code>
+<code>               <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span>org-roam-directory<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span>add-to-list <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">safe-local-variable-values</span></code>
+<code>               <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span>eval setq-local org-roam-directory</code>
+<code>                      <span style="color: #709870;">(</span>locate-dominating-file default-directory <span style="color: #177CB0;">".dir-locals.el"</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
 </pre>
 </div>
 </div>
@@ -8265,7 +9010,7 @@ Rudimentary Roam replica with org-mode.
 <code></code>
 <code></code>
 <code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">defun</span> <span style="color: #057748; text-decoration: underline;">nasy/-c-s</span> <span style="color: #7388d6;">(</span>ns<span style="color: #7388d6;">)</span></code>
-<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">cl-loop</span> for c in <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span><span style="color: #177CB0;">" "</span> <span style="color: #177CB0;">"~"</span> <span style="color: #177CB0;">"("</span> <span style="color: #177CB0;">")"</span> <span style="color: #177CB0;">"~"</span> <span style="color: #177CB0;">"&amp;"</span> <span style="color: #177CB0;">"/"</span><span style="color: #909183;">)</span></code>
+<code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">cl-loop</span> for c in <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #909183;">(</span><span style="color: #177CB0;">" "</span> <span style="color: #177CB0;">"~"</span> <span style="color: #177CB0;">"("</span> <span style="color: #177CB0;">")"</span> <span style="color: #177CB0;">"~"</span> <span style="color: #177CB0;">"&amp;"</span> <span style="color: #177CB0;">"/"</span> <span style="color: #177CB0;">"["</span> <span style="color: #177CB0;">"]"</span> <span style="color: #177CB0;">":"</span><span style="color: #909183;">)</span></code>
 <code>           do <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">setq</span> ns <span style="color: #709870;">(</span>string-replace c <span style="color: #177CB0;">"-"</span> ns<span style="color: #709870;">)</span><span style="color: #909183;">)</span></code>
 <code>           finally return ns<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
 <code></code>
@@ -8749,7 +9494,7 @@ mode which can apply this command automatically on save.
 <div id="postamble" class="status">
 <p class="date">Date: 2021-06-16 Wed 00:00</p>
 <p class="author">Author: Nasy</p>
-<p class="date">Created: 2021-06-26 Sat 20:54</p>
+<p class="date">Created: 2021-07-23 Fri 00:43</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 <script>window.klipse_settings = {selector_eval_html: '.src-html',
