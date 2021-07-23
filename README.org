@@ -71,6 +71,10 @@
 
 雖有 ~custom.el~ 但未在配置中加載苟欲用之加載于 ~芄蘭/芄蘭.el~
 
+* 頟外
+
+#+include: ./木瓜/nasy/README.org
+
 * 配置
 
 #+include: ./蔓艸/篇.org :lines "3-"
