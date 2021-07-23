@@ -1115,16 +1115,25 @@ https://github.com/org-roam/org-roam
     :url "https://github.com/org-roam/org-roam"
     :tag "convenience" "roam"
     :bind
-    (:org-roam-mode-map
-     (("C-c n l" . org-roam)
-      ("C-c n f" . org-roam-find-file)
-      ("C-c n g" . org-roam-graph)))
     (:org-mode-map
-     (("C-c n i" . org-roam-insert))
-     (("C-c n I" . org-roam-insert-immediate)))
-    :custom `(org-roam-db-location . ,(concat *nasy-var* "org/org-roam.db"))
-    :hook nasy-org-first-key-hook
-    :init (sup 'org-roam))
+     ("C-c n c" . org-roam-capture)
+     ("C-c n f" . org-roam-node-find)
+     ("C-c n g" . org-roam-graph)
+     ("C-c n i" . org-roam-node-insert)
+     ("C-c n I" . org-roam-insert-immediate)
+     ("C-c n l" . org-roam-buffer-toggle)
+     ;; Dailies
+     ("C-c n j" . org-roam-dailies-capture-today))
+    :custom
+    `(org-roam-db-location . ,(concat *nasy-var* "org/org-roam.db"))
+    ;; :hook (nasy-first-key-hook . org-roam-setup)
+    :init (sup 'org-roam)
+    (setq org-roam-v2-ack t)
+    (add-to-list 'safe-local-variable-values
+                 '(org-roam-directory))
+    (add-to-list 'safe-local-variable-values
+                 '(eval setq-local org-roam-directory
+                        (locate-dominating-file default-directory ".dir-locals.el"))))
 #+end_src
 
 *** Org superstar                                                 :org:
