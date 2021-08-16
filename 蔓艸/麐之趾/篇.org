@@ -634,6 +634,12 @@ Emacs client/library for the Language Server Protocol
 #+end_src
 
 #+begin_src emacs-lisp
+  (leaf org-id
+    :after org
+    :custom (org-id-link-to-org-use-id . t))
+#+end_src
+
+#+begin_src emacs-lisp
   (leaf org-indent
     :after org
     :custom
