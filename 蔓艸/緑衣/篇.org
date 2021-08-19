@@ -651,6 +651,33 @@ Include consult, consult-selectrum & consult-flycheck.
     :init (sup 'consult-flycheck))
 #+end_src
 
+*** consult-dir                                           :convenience:
+
+Consult-dir allows you to easily select and switch between “active”
+directories.
+
+https://github.com/karthink/consult-dir
+
+#+begin_src emacs-lisp
+  (n/leaf-nv consult-dir
+    :doc "consult-dir: switch directories easily in Emacs"
+    :url "https://github.com/karthink/consult-dir"
+    :tag "convenience"
+    :leaf-autoload nil
+    :leaf-defun nil
+    :after consult selectrum
+    :bind
+    ("C-x C-d" . consult-dir)
+    (:minibuffer-local-completion-map
+     ("C-x C-d" . consult-dir)
+     ("C-x C-j" . consult-dir-jump-file))
+    (:selectrum-minibuffer-map
+     ("C-x C-d" . consult-dir)
+     ("C-x C-j" . consult-dir-jump-file))
+    :init (sup 'consult-dir))
+#+end_src
+
+
 ** Dired                                                         :files:
 
 DiredMode is the mode of a Dired buffer.  It shows a directory (folder) listing
