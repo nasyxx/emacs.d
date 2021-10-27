@@ -677,7 +677,6 @@ https://github.com/karthink/consult-dir
     :init (sup 'consult-dir))
 #+end_src
 
-
 ** Dired                                                         :files:
 
 DiredMode is the mode of a Dired buffer.  It shows a directory (folder) listing
