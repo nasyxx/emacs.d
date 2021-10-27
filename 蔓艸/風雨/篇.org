@@ -222,7 +222,7 @@
                         ,*font-cjk-scale*))))))
 
   (defun nasy/set-symbol (charset &optional size weight frame)
-      "Set CHARSET fontset to HanaMin with SIZE with WEIGHT on FRAME.
+      "Set CHARSET fontset to Symbol with SIZE with WEIGHT on FRAME.
 
     Font for char like ∷."
       (when (display-graphic-p)
@@ -235,6 +235,20 @@
                                          :size   size)
                               frame
                               'prepend)))))
+
+
+  (defun nasy/set-apple-symbol (charset &optional frame)
+      "Set CHARSET fontset to Apple Color Emoji with SIZE with WEIGHT on FRAME.
+
+    Font for char like ∷."
+      (when (display-graphic-p)
+        (when (nasy/check-font *font-symbol-family*)
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :family "Apple Color Emoji")
+                            frame
+                            'prepend))))
+
 
   (defun nasy/-set--font (frame)
     "Nasy set font for `FRAME'."

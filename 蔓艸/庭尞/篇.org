@@ -48,6 +48,95 @@ UI
 
 * 章
 
+
+** cal-china-x
+
+This extension mainly adds the following extra features:
+
++ Chinese localizations
++ Display holiday, lunar(农历), horoscope(星座), zodiac(属相、十二生肖), solar term(节气) info on mode line
++ Define holidays using holiday-lunar, holiday-solar-term
++ Highlight holidays based on different priorities
++ Add cal-china-x-chinese-holidays, cal-china-x-japanese-holidays.
++ Custom week diary (like weeks in school)
+
+https://github.com/xwl/cal-china-x
+
+#+begin_src emacs-lisp
+  (n/leaf cal-china-x
+    :doc "chinese localization, prioritized holiday highlight, lunar, horoscope, zodiac, etc."
+    :url "https://github.com/xwl/cal-china-x"
+    :tag "calendar" "date"
+    :after calendar
+    :custom
+    (cal-china-x-force-chinese-week-day . t)
+    (cal-china-x-always-show-jieqi      . t)
+    :hook (nasy-first-key-hook . (lambda ()
+                                   (require 'cal-china-x)
+                                   (nasy/init-chinese-calendar)))
+    :init (sup 'cal-china-x))
+
+  (defun nasy/init-chinese-calendar ()
+    "Initial Chinese calendar."
+    (setq calendar-date-display-form
+          '((cal-china-x-calendar-display-form
+             (mapcar (lambda (el) (string-to-number el))
+                     (list month day year)))))
+
+    (setq diary-date-forms chinese-date-diary-pattern)
+
+    (setq calendar-chinese-celestial-stem cal-china-x-celestial-stem
+          calendar-chinese-terrestrial-branch cal-china-x-terrestrial-branch)
+
+    (setq calendar-month-header '(propertize (format "%d年%2d月" year month)
+                                             'font-lock-face
+                                             'calendar-month-header))
+    (when cal-china-x-force-chinese-week-day
+      (setq calendar-day-header-array cal-china-x-days))
+
+    (setq calendar-mode-line-format
+          (list
+           (calendar-mode-line-entry 'calendar-scroll-right "previous month" "<")
+           "日曆"
+
+           '(cal-china-x-get-holiday date)
+
+           '(concat " " (calendar-date-string date t)
+                    (format " 第%d周"
+                            (funcall (if cal-china-x-custom-week-start-date
+                                         'cal-china-x-custom-week-of-date
+                                       'cal-china-x-week-of-date)
+                                     date)))
+
+           '(cal-china-x-chinese-date-string date)
+
+
+           (concat
+            (calendar-mode-line-entry 'calendar-goto-info-node "read Info on Calendar"
+                                      nil "info")
+            " / "
+            (calendar-mode-line-entry 'calendar-other-month "choose another month"
+                                      nil "other")
+            " / "
+            (calendar-mode-line-entry 'calendar-goto-today "go to today's date"
+                                      nil "today"))
+
+           (calendar-mode-line-entry 'calendar-scroll-left "next month" ">")))
+
+    (add-hook 'calendar-move-hook 'calendar-update-mode-line)
+    (add-hook 'calendar-initial-window-hook 'calendar-update-mode-line)
+
+    (add-hook 'calendar-mode-hook
+              (lambda ()
+                (set (make-local-variable 'font-lock-defaults)
+                     ;; chinese month and year
+                     '((("[0-9]+年\\ *[0-9]+月" . font-lock-function-name-face)) t))))
+
+
+    (advice-add 'calendar-mark-holidays :around 'cal-china-x-mark-holidays)
+    (advice-add 'mouse-set-point :after 'cal-china-x-mouse-set-point))
+#+end_src
+
 ** Centaur Tab
 
 This projects aims to become an aesthetic, functional and efficient
@@ -306,6 +395,18 @@ https://github.com/ema2159/centaur-tabs
     ((dashboard-mode-hook . (lambda () (setq-local tab-width 1)))
      (after-init-hook     . dashboard-setup-startup-hook)
      (after-init-hook     . dashboard-refresh-buffer))
+    (nasy/font-change-hook
+     . (lambda ()
+         (progn
+           (nasy/set-apple-symbol ?🌓)
+           (nasy/set-apple-symbol ?🔖)
+           (nasy/set-apple-symbol ?🚀)
+           (nasy/set-apple-symbol ?📝)
+           (nasy/set-apple-symbol ?🗓)
+           (nasy/set-apple-symbol ?📅)
+           (nasy/set-apple-symbol ?⚙)
+           (nasy/set-apple-symbol ?🍭)
+           (nasy/set-apple-symbol ?📖))))
     :custom
     (dashboard-items . '((n-items . t)))
                          ;; (bookmarks . t)))
