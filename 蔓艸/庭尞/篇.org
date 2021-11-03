@@ -151,7 +151,7 @@ https://github.com/ema2159/centaur-tabs
     :custom
     (centaur-tabs-style . "wave")
     :hook
-    (nasy-first-key-hook   . (lambda () (require 'tab-line) (centaur-tabs-mode)))
+    ;; (nasy-first-key-hook   . (lambda () (require 'tab-line) (centaur-tabs-mode)))
     (nasy/font-change-hook . (lambda () (nasy/set-symbol ?⏺ 14)))
     :init (sup 'centaur-tabs))
 
