@@ -872,6 +872,17 @@ https://github.com/Wilfred/helpful
     :init (sup 'helpful))
 #+end_src
 
+*** elisp-demos
+
+#+begin_src emacs-lisp
+  (n/leaf-nv elisp-demos
+    :doc "Demonstrate Emacs Lisp APIs."
+    :url "https://github.com/xuchunyang/elisp-demos"
+    :tag "lisp" "docs"
+    :init (sup 'elisp-demos)
+    :advice (:after helpful-update elisp-demos-advice-helpful-update))
+#+end_src
+
 ** marginalia                                               :extensions:
 
 marginalia.el - Marginalia in the minibuffer
@@ -1153,6 +1164,20 @@ https://github.com/raxod502/selectrum
   (n/leaf-nv subword
     :tag "builtin"
     :hook prog-mode-hook)
+#+end_src
+
+** Sudo Edit
+
+Utilities for opening files with sudo
+
+https://github.com/nflath/sudo-edit
+
+#+begin_src emacs-lisp
+  (n/leaf-nv sudo-edit
+    :doc "Utilities for opening files with sudo."
+    :url "https://github.com/nflath/sudo-edit"
+    :tag "convenience"
+    :init (sup 'sudo-edit))
 #+end_src
 
 ** switch-window                                           :convenience:
