@@ -120,7 +120,7 @@
     (defun nasy/-font-doc (cname ftype)
       "Generate font custome variable doc with CNAME and FTYPE."
       (concat "The " cname " font " ftype ".
-    After change it, run `M-x nasy/set-font' to see the effect."))
+       After change it, run `M-x nasy/set-font' to see the effect."))
 
 
     (defun nasy/-cus-font ()
@@ -156,9 +156,7 @@
 
   (defun nasy/check-font (font)
     "Check if FONT avaliable."
-    (if (find-font (font-spec :family font
-                              :weight *font-main-weight*
-                              :size   *font-main-size*))
+    (if (find-font (font-spec :family font))
         t
       (message (format "`%s' font not find" font))))
 
@@ -177,8 +175,8 @@
 
   (defun nasy/set-hanamin (charset &optional size frame)
     "Set CHARSET fontset to HanaMin with SIZE on FRAME.
-  https://github.com/cjkvi/HanaMinAFDKO/releases
-  Font for char like 𨉚."
+   https://github.com/cjkvi/HanaMinAFDKO/releases
+   Font for char like 𨉚."
     (when (display-graphic-p)
       (let ((size (or size *font-cjk-size*)))
         (when (nasy/check-font "HanaMinB")
@@ -280,8 +278,8 @@
                        (set-fontset-font (frame-parameter nil 'font)
                                          charset
                                          (font-spec :family ff
-                                                    :weight fw
-                                                    :size   fs)
+                                                    :weight fw)
+                                                    ;; :size   fs)
                                          frame
                                          'prepend))
                      (let ((ffn (concat ".*" ff ".*")))
@@ -373,15 +371,18 @@
 
       ((*font-main-weight*
         ,*font-symbol-weight*
-        ,*font-cjk-weight*
-        ,*font-cjk-2-weight*
-        ,*font-cjk-3-weight*
         ;; *font-cjk-4-weight*
         ;; *font-cjk-5-weight*
         ,*font-mode-line-weight*
         ,*font-tab-line-weight*
         ,*font-header-line-weight*)
        . 'normal)
+
+      ((*font-cjk-weight*
+        ,*font-cjk-2-weight*
+        ,*font-cjk-3-weight*)
+       . 'medium)
+
 
       ((*font-cjk-4-weight*
         ,*font-cjk-5-weight*) . 'bold))
