@@ -48,7 +48,6 @@ UI
 
 * 章
 
-
 ** cal-china-x
 
 This extension mainly adds the following extra features:
@@ -661,8 +660,8 @@ https://github.com/ema2159/centaur-tabs
                      ("not in"    . #x2288)  ;; ⊈
                      ("`notElem`" . #x2288)  ;; ⊈
 
-                     ("return" . (#x21d2 (Br . Bl) #x2006 (Br . Bl) #x2004))  ;; ⇒  x
-                     ("yield"  . (#x21d4 (Br . Bl) #x2004))  ;; ⇔ x
+                     ("return" . (#x21d2 (Br . Bl) #x2005 ))  ;; ⇒  x (Br . Bl) #x2006
+                     ("yield"  . (#x21d4 (Br . Bl) #x2004))  ;; ⇔ x xxxxxxxxxxxxxxxxx
                      ("pure"   . (#x21f0 (Br . Bl)))))))          ;; ⇰ x
 
     ((prog-mode-hook
