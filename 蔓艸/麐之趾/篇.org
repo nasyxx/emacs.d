@@ -200,6 +200,14 @@ Emacs client/library for the Language Server Protocol
     :custom `(dap-breakpoints-file . ,(concat *nasy-var* "dap/breakpoints.el")))
 #+end_src
 
+** Flex
+
+#+begin_src emacs-lisp
+  (n/leaf flex-mode
+    :mode "\\.l\\'"
+    :init (sup `(flex-mode :local-repo ,(concat *nasy-site* "villadora"))))
+#+end_src
+
 ** Haskell                                           :haskell:languages:
 
 *** haskell-mode                                              :haskell:
