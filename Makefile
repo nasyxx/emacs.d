@@ -54,6 +54,10 @@ init.el: 蔓艸/篇.org early-init.el
 $(foreach dir,$(DS),$(eval $(call tangle_template,$(dir))))
 
 
+straight/build/tsc/tsc-dyn.dylib: 月出
+	cd straight/build/tsc && cargo build --release && cp target/release/libtsc_dyn.dylib tsc-dyn.dylib
+
+
 ## Generate emacs-lisp files
 generate: $(DS) early-init.el init.el 譯.el 芄蘭/芄蘭.el 芄蘭/芄蘭之例.el
 
