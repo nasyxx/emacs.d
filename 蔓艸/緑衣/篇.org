@@ -772,6 +772,12 @@ https://github.com/oantolin/embark/
                     '(horizontal :before-candidates "[" :after-candidates "]"
                                  :more-candidates "" :candidates-separator "")))))
 
+  (defun embark-act-noquit ()
+    "Run action but don't quit the minibuffer afterwards."
+    (interactive)
+    (let ((embark-quit-after-action nil))
+      (embark-act)))
+
   (n/leaf-nr embark
     :doc "Emacs Mini-Buffer Actions Rooted in Keymaps."
     :url "https://github.com/oantolin/embark"
@@ -782,10 +788,11 @@ https://github.com/oantolin/embark/
     :require t
     :bind
     ([remap describe-bindings] . embark-bindings)
+    ("C-," . embark-dwim)
     (:embark-file-map
      ("s" . sudo-edit))
     (:selectrum-minibuffer-map
-     ("M-o" . embark-act))
+     ("M-o" . embark-act-noquit))
     (:nasy/active-region-map
      :package 風雨旹用
      ("M-o" . embark-act))
@@ -810,7 +817,21 @@ https://github.com/oantolin/embark/
     ;; misc
     (embark-collect-post-revert-hook . nasy/-resize-embark-collect-window)
 
-    :init (sup 'embark))
+    :init (sup 'embark)
+    :config
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
+
+
+  (n/leaf-nr embark-consult
+    :leaf-autoload nil
+    :leaf-defun nil
+    :after embark consult
+    :require t
+    :hook (embark-collect-mode-hook . consult-preview-at-point-mode))
 #+end_src
 
 ** Flycheck                                :convenience:languages:tools:
