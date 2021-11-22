@@ -14,7 +14,8 @@
 
   (setq load-prefer-newer t
         nasy--require t
-        native-comp-deferred-compilation nil)
+        native-comp-deferred-compilation nil
+        org-roam-v2-ack t)
 
   (message "\n\n---------------- Load el of 桃夭 ----------------\n\n")
 
