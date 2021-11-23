@@ -831,7 +831,8 @@ https://github.com/oantolin/embark/
     :leaf-defun nil
     :after embark consult
     :require t
-    :hook (embark-collect-mode-hook . consult-preview-at-point-mode))
+    :hook (embark-collect-mode-hook . consult-preview-at-point-mode)
+    :init (sup 'embark-consult))
 #+end_src
 
 ** Flycheck                                :convenience:languages:tools:
