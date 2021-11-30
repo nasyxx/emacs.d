@@ -462,7 +462,8 @@
     (display-battery-mode 1)
     (global-auto-revert-mode 1)
     (minibuffer-depth-indicate-mode 1)
-    (save-place-mode 1))
+    (save-place-mode 1)
+    (pixel-scroll-precision-mode 1))
 
 
   (add-hook 'nasy-first-key-hook #'nasy/-cus-emacs)
@@ -516,7 +517,7 @@
       (default-frame-alist
         . '((ns-transparent-titlebar . t)
             (ns-appearance           . light)
-            (alpha                   . (80 . 75))
+            (alpha                   . (90 . 75))
             (vertical-scroll-bars    . nil)
             (border-width            . 5)
             (internal-border-width   . 24)))
