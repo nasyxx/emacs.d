@@ -1,3 +1,7 @@
 [submodule "nasy-site-lisp"]
 	path = 木瓜/nasy
 	url = https://github.com/nasyxx/emacs-site-lisp.git
+[submodule "tree-sitter-rangs"]
+	path = 木瓜/emacs-tree-sitter/tree-sitter-langs
+	url = https://github.com/emacs-tree-sitter/tree-sitter-langs.git
+	ignore = dirty

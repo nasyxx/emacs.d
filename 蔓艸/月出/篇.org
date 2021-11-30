@@ -757,13 +757,14 @@ https://ubolonton.github.io/emacs-tree-sitter/
 #+begin_src emacs-lisp
   (n/leaf tree-sitter
     :doc "emacs-tree-sitter is an Emacs binding for tree-sitter, an incremental parsing
-  system."
+   system."
     :url "https://github.com/ubolonton/emacs-tree-sitter"
     :tag "languagues" "parsers" "tools"
     :hook (agda-mode-hook
            c-mode-hook
            c++-mode-hook
            css-mode-hook
+           emacs-lisp-mode-hook
            html-mode-hook
            js-mode-hook
            js2-mode-hook
@@ -775,14 +776,17 @@ https://ubolonton.github.io/emacs-tree-sitter/
     :init
     (sup 'tsc)
     (sup 'tree-sitter)
-    (sup 'tree-sitter-langs)
+    (nasy/extra-repo tree-sitter-langs
+                     "emacs-tree-sitter/tree-sitter-langs"
+                     :files ("*"))
     :defer-config
     (require 'tree-sitter-langs)
-    (add-to-list 'tree-sitter-major-mode-language-alist '(mhtml-mode . html)))
+    (add-to-list 'tree-sitter-major-mode-language-alist '(mhtml-mode . html))
+    (add-to-list 'tree-sitter-major-mode-language-alist '(emacs-lisp-mode . elisp)))
 
 
   (n/leaf tree-sitter-hl
-    :after tree-sitter
+    :after tree-sitter tree-sitter-langs
     :hook (css-mode-hook python-mode-hook))
 #+end_src
 

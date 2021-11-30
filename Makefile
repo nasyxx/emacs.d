@@ -1,9 +1,21 @@
 EE ?= emacs -Q --batch --eval "(require 'ob-tangle)"
+ETS ?= emacs -Q --batch --directory . --load tree-sitter-langs-build
 # EL ?= emacs -Q --batch -l "init.el" --eval "(setq load-prefer-newer t load-suffixes '(\".el\") nasy--require t)" --eval "(progn (run-hooks 'after-init-hook 'emacs-startup-hook 'nasy-first-key-hook 'pre-command-hook 'prog-mode-hook 'org-mode-hook 'nasy-org-first-key-hook))"
 
 EL ?= emacs -Q
 
 DS = 小曐 庭尞 擊鼓 日月 月出 緑衣 風雨 麐之趾
+
+LANGS = agda cpp elm html jsdoc pgn rust bash css fluent janet-simple json php \
+	scala c elisp go java julia python swift c-sharp elixir hcl javascript ocaml ruby typescript
+
+TSLD = 木瓜/emacs-tree-sitter/tree-sitter-langs
+
+ifeq ($(shell uname -s), Darwin)
+suf = dylib
+else
+suf = so
+endif
 
 
 all: help
@@ -58,6 +70,18 @@ straight/build/tsc/tsc-dyn.dylib: 月出
 	cd straight/build/tsc && cargo build --release && cp target/release/libtsc_dyn.dylib tsc-dyn.dylib
 
 
+木瓜/emacs-tree-sitter/tree-sitter-langs/bin/%: 芄蘭/langs
+	cd $(dir $(@D)) && \
+	$(ETS) --eval "(tree-sitter-langs-compile '$*)"
+	touch $@
+
+芄蘭/langs:
+	@date > 芄蘭/langs
+
+
+langs: $(patsubst %,木瓜/emacs-tree-sitter/tree-sitter-langs/bin/%,$(LANGS))
+
+
 ## Generate emacs-lisp files
 generate: $(DS) early-init.el init.el 譯.el 芄蘭/芄蘭.el 芄蘭/芄蘭之例.el
 
@@ -83,6 +107,16 @@ clean:
 	rm -rf 桃夭 芄蘭/芄蘭之例.el init.el early-init.el 芄蘭/build-time
 
 
+## Clean tree-sitter
+clean-tsc:
+	rm -rf 木瓜/emacs-tree-sitter/tree-sitter-langs/bin/*
+	rm -rf 芄蘭/langs
+	rm -rf .git/modules/tree-sitter-rangs/modules/repos/elisp
+
+	cd $(TSLD) && rm -rf repos/elisp queries/elisp && git reset --hard && \
+		git submodule add -b main -- https://github.com/Wilfred/tree-sitter-elisp.git repos/elisp
+	cd $(TSLD) && mkdir -p queries/elisp && cp repos/elisp/queries/*.scm queries/elisp
+
 ## Clean Elc
 clean-elc:
 	rm -rf 桃夭/*/*.elc
@@ -94,7 +128,7 @@ clean-straight:
 
 
 ## Clean all (clean and clean straight)
-clean-all: clean clean-straight
+clean-all: clean clean-straight clean-tsc
 
 
 ## Re-Generate Config
@@ -104,6 +138,8 @@ regenerate: clean
 
 ## Re-Build Config
 rebuild: clean
+	-make langs -j
+	-make langs -j
 	make config -j
 
 
