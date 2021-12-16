@@ -1330,6 +1330,22 @@ https://github.com/m00natic/vlfi
         (vlf file))))
 #+end_src
 
+** wgrep                                        :editing:extensions:grep:
+
+wgrep allows you to edit a grep buffer and apply those changes to the
+file buffer like sed interactively. No need to learn sed script, just
+learn Emacs.
+
+https://github.com/mhayashi1120/Emacs-wgrep
+
+#+begin_src emacs-lisp
+  (n/leaf-nv wgrep
+    :doc "Writable grep buffer and apply the changes to files."
+    :url "https://github.com/mhayashi1120/Emacs-wgrep"
+    :tag "editing" "extensions" "grep"
+    :init (sup 'wgrep))
+#+end_src
+
 ** Which Function                                              :builtin:
 
 #+begin_src emacs-lisp
