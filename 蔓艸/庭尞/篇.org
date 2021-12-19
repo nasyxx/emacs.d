@@ -436,7 +436,7 @@ https://github.com/ema2159/centaur-tabs
     :config
     (after-x 'treemacs
       (doom-themes-treemacs-config))
-    (doom-themes-visual-bell-config)
+    ;; (doom-themes-visual-bell-config)
     (after-x 'org
       (doom-themes-org-config)))
 #+end_src
