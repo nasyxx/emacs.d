@@ -439,9 +439,12 @@
   (defun nasy/-cus-emacs ()
     "Nasy customize emacs misc variable."
     (customize-set-variable 'custom-raised-buttons nil "Customized by Nasy.")
+    (customize-set-variable 'help-window-select    t "Customized by Nasy.")
     (customize-set-variable 'make-backup-files     nil "Customized by Nasy.")
     (customize-set-variable 'mouse-yank-at-point   t "Customized by Nasy.")
     (customize-set-variable 'resize-mini-windows   t "Customized by Nasy.")
+    (customize-set-variable 'scroll-conservatively 5 "Customized by Nasy.")
+    (customize-set-variable 'scroll-margin         5 "Customized by Nasy.")
     (customize-set-variable 'tab-always-indent     'complete "Customized by Nasy.")
     (customize-set-variable 'use-dialog-box        nil "Customized by Nasy.")
     (customize-set-variable 'use-file-dialog       nil "Customized by Nasy.")
