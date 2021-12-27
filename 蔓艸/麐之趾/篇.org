@@ -1384,9 +1384,13 @@ https://github.com/org-roam/org-roam
 #+begin_src emacs-lisp
   (n/leaf elpy
     :commands nasy/elpy-init
+    :bind
+    (:elpy-mode-map
+     ("M-<left>"  . left-word)
+     ("M-<right>" . right-word))
     :custom
     (elpy-rpc-virtualenv-path . 'current)
-    (elpy-modules             . '(elpy-module-company
+    (elpy-modules             . '(;; elpy-module-company
                                   elpy-module-folding
                                   elpy-module-yasnippet))
     :init
