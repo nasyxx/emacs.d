@@ -615,7 +615,7 @@ Emacs client/library for the Language Server Protocol
      (org-html-wrap-src-lines . t))
 
     (;; Latex
-     (org-latex-compiler . "lualatex")
+     (org-latex-compiler . "xelatex")
      (org-latex-default-packages-alist
       . '(("AUTO" "inputenc"  t   ("pdflatex"))
           ("T1"   "fontenc"   t   ("pdflatex"))
