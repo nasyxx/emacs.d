@@ -920,6 +920,26 @@ https://github.com/joostkremers/writeroom-mode
     :init (sup 'writeroom-mode))
 #+end_src
 
+** yank-pulse                                                     :text:
+
+#+begin_src emacs-lisp
+  ;; From https://christiantietze.de/posts/2020/12/emacs-pulse-highlight-yanked-text/
+  (defun nasy/-yank-pulse-advice (orig-fn &rest args)
+    ;; Define the variables first
+    (let (begin end)
+      ;; Initialize `begin` to the current point before pasting
+      (setq begin (point))
+      ;; Forward to the decorated function (i.e. `yank`)
+      (apply orig-fn args)
+      ;; Initialize `end` to the current point after pasting
+      (setq end (point))
+      ;; Pulse to highlight!
+      (pulse-momentary-highlight-region begin end)))
+
+  (leaf pulse
+    :advice (:around yank nasy/-yank-pulse-advice))
+#+end_src
+
 ** Yasnipeet                                     :convenience:emulation:
 
 YASnippet is a template system for Emacs. It allows you to type an abbreviation
