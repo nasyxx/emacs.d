@@ -824,7 +824,7 @@ https://github.com/oantolin/embark/
     (:embark-file-map
      ("s" . sudo-edit))
     (:selectrum-minibuffer-map
-     ("M-o" . embark-act-noquit))
+     ("M-o" . embark-act))
     (:nasy/active-region-map
      :package 風雨旹用
      ("M-o" . embark-act))
@@ -837,10 +837,10 @@ https://github.com/oantolin/embark/
     ;; icomplete
     ;; (embark-pre-action-hook . completion--flush-all-sorted-completions)
     ;; selectrum
-    (embark-pre-action-hook   . refresh-selectrum)
+    ;; (embark-pre-action-hook   . refresh-selectrum)
     (embark-collect-mode-hook . shrink-selectrum)
     ;; Embark Collect
-    (embark-post-action-hook . embark-collect--update-linked)
+    ;; (embark-post-action-hook . embark-collect--update-linked)
 
     ;; misc
     (embark-collect-post-revert-hook . nasy/-resize-embark-collect-window)
