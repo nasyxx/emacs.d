@@ -425,6 +425,27 @@ https://github.com/bmag/imenu-list
     :init (sup 'imenu-list))
 #+end_src
 
+** kind-icon                                                :completion:
+
+kind-icon — colorful icons for completion in Emacs
+
+This emacs package adds configurable icon or text-based completion
+prefixes based on the :company-kind property that many completion
+backends (such as lsp-mode and Emacs 28's elisp-mode) provide.
+
+https://github.com/jdtsmith/kind-icon
+
+#+begin_src emacs-lisp
+  (n/leaf-nr kind-icon
+    :doc "Completion kind text/icon prefix labelling for emacs in-region completion."
+    :url "https://github.com/jdtsmith/kind-icon"
+    :tag "completion"
+    :after corfu
+    :require t
+    :init (sup 'kind-icon)
+    :defer-config (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+#+end_src
+
 ** mixed-pitch                                                   :faces:
 
 Mixed pitch is a minor mode that enables mixing fixed-pitch (also known as
