@@ -74,6 +74,14 @@ Emacs client/library for the Language Server Protocol
     :tag "languages"
     :init (sup 'lsp-mode))
 
+
+  (defun nasy/lsp-setup-completion ()
+    "Nasy lsp mode completion."
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))
+    (nasy/-merge-capf))
+
+
   (n/leaf lsp-mode
     :leaf-autoload nil
     :leaf-defun nil
@@ -86,6 +94,7 @@ Emacs client/library for the Language Server Protocol
       (lsp-session-file                . ,(concat *nasy-var* "lsp/session.el")))
     :hook
     (kill-emacs-hook . (lambda () (setq lsp-restart 'ignore)))
+    (lsp-completion-mode-hook . nasy/lsp-setup-completion)
     :mode-hook
     (nasy/lsp-init)
     :init
@@ -129,6 +138,7 @@ Emacs client/library for the Language Server Protocol
 
     (lsp-restart . 'interactive)
 
+    (lsp-completion-provider  . :none)
     (lsp-diagnostics-provider . :auto)
 
     ;; (lsp-imenu-container-name-separator . "/")

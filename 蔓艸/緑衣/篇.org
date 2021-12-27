@@ -50,6 +50,8 @@ You cannot disable anything here.
     (require 'winner)
 
     (sup 'alert)
+    (sup 'cape)
+    (sup 'corfu)
     (sup 'embark)
     (sup 'selectrum)
     (sup 'transient)
@@ -122,6 +124,66 @@ https://github.com/DamienCassou/beginend
     :leaf-defun nil
     :hook ((emacs-startup-hook . beginend-global-mode))
     :init (sup 'beginend))
+#+end_src
+
+** cape                                             :editing:extensions:
+
+Cape provides a bunch of Completion At Point Extensions which can be
+used in combination with my Corfu completion UI or the default
+completion UI. The completion backends used by completion-at-point are
+so called completion-at-point-functions (Capfs). In principle, the
+Capfs provided by Cape can also be used by Company.
+
+https://github.com/minad/cape
+
+#+begin_src emacs-lisp
+  (defvar nasy-capfs)
+  (declare-function company--multi-backend-adapter "company")
+
+  (defun nasy/merge-capf (c)
+    "Merge c into completion-at-point-functions."
+    (remove-hook 'completion-at-point-functions t t)
+    (add-hook 'completion-at-point-functions c 1 t))
+
+  (defun nasy/-merge-capf ()
+    "Merge nasy capy."
+    (require 'cape)
+    (nasy/merge-capf nasy-capfs))
+
+
+  (n/leaf-nr cape
+    :doc "Completion At Point Extensions."
+    :url "https://github.com/minad/cape"
+    :tag "editing" "extensions"
+    :after corfu
+    :require corfu company company-tabnine
+    :bind (("C-c p p" . completion-at-point) ;; capf
+           ("C-c p t" . complete-tag)        ;; etags
+           ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
+           ("C-c p f" . cape-file)
+           ("C-c p k" . cape-keyword)
+           ("C-c p s" . cape-symbol)
+           ("C-c p a" . cape-abbrev)
+           ("C-c p i" . cape-ispell)
+           ("C-c p l" . cape-line)
+           ("C-c p w" . cape-dict)
+           ("C-c p \\" . cape-tex)
+           ("C-c p A-¥" . cape-tex)
+           ("C-c p &" . cape-sgml)
+           ("C-c p r" . cape-rfc1345))
+    :hook ((prog-mode-hook
+            org-mode-hook)
+           . nasy/-merge-capf)
+    :init (sup 'cape)
+    :config
+    (defvar nasy-capfs
+      (cape-capf-buster
+       (cape-company-to-capf
+        (apply-partially
+         #'company--multi-backend-adapter
+         '(company-tabnine company-yasnippet
+                           company-files company-dabbrev)))))
+    (setq completion-at-point-functions nasy-capfs))
 #+end_src
 
 ** Company                                          :editing:extensions:
@@ -385,18 +447,19 @@ https://github.com/DamienCassou/beginend
      nasy/-post-popup-draw
      nasy/company-filter-c
      nasy/company-box-icons--elisp-fn
-     nasy/company-remove-scrollbar-a))
+     nasy/company-remove-scrollbar-a
+     company-indent-or-complete-common))
 
   (n/leaf-nv company
     :leaf-autoload nil
     :leaf-defun nil
-    :hook (prog-mode-hook org-mode-hook)
+    ;; :hook (prog-mode-hook org-mode-hook)
     :bind
-    ("C-;"     . nasy/company-complete)
-    ("M-/"     . company-files)
-    ("C-<tab>" . nasy/company-complete)
-    ([remap indent-for-tab-command]
-     . company-indent-or-complete-common)
+    ;; ("C-;"     . nasy/company-complete)
+    ;; ("M-/"     . company-files)
+    ;; ("C-<tab>" . nasy/company-complete)
+    ;; ([remap indent-for-tab-command]
+    ;;  . company-indent-or-complete-common)
     (:company-mode-map
      ([remap indent-for-tab-command]
       . company-indent-or-complete-common)
@@ -675,6 +738,42 @@ https://github.com/karthink/consult-dir
      ("C-x C-d" . consult-dir)
      ("C-x C-j" . consult-dir-jump-file))
     :init (sup 'consult-dir))
+#+end_src
+
+** corfu                                            :editing:extensions:
+
+Corfu enhances the default completion in region function with a completion overlay.
+
+https://github.com/minad/corfu
+
+#+begin_src emacs-lisp
+  (defun nasy/orderless-dispatch-flex-first (_pattern index _total)
+    "orderless-flex for corfu."
+    (and (eq index 0) 'orderless-flex))
+
+  (defun nasy/setup-corfu ()
+    "Setup corfu."
+    (corfu-mode 1)
+    (setq-local orderless-matching-styles '(orderless-flex)
+                orderless-style-dispatchers nil)
+    (add-hook 'orderless-style-dispatchers #'nasy/orderless-dispatch-flex-first nil 'local))
+
+  (n/leaf-nv corfu
+    :doc "Completion Overlay Region FUnction."
+    :url "https://github.com/minad/corfu"
+    :tag "editing" "extensions"
+    :custom
+    ((corfu-cycle
+      corfu-auto
+      corfu-quit-no-match
+      corfu-quit-at-boundary)
+     . t)
+    (corfu-auto-delay  . 0)
+    (corfu-auto-prefix . 2)
+    (corfu-echo-documentation . 1)
+    :hook
+    ((prog-mode-hook org-mode-hook) . nasy/setup-corfu)
+    :init (sup 'corfu))
 #+end_src
 
 ** Dired                                                         :files:
