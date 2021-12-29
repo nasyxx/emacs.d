@@ -33,12 +33,14 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
 
   (cl-eval-when (compile) ;;eval-when-compile
     (setq nasy--require t)
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
     (require '擊鼓)
     (require '風雨)
     (require '風雨旹用)
     (require 'compile)
+    (sup 'beacon)
+    (sup 'corfu)
     (sup 'pcre2el)
     (sup 'winum)
     (setq nasy--require nil))
@@ -92,6 +94,72 @@ https://www.emacswiki.org/emacs/AnsiColor
       (when (eq major-mode 'compilation-mode)
         (ansi-color-apply-on-region compilation-filter-start
                                     (point-max)))))
+#+end_src
+
+** beacon                                                  :convenience:
+
+A light that follows your cursor around so you don't lose it!
+
+https://github.com/Malabarba/beacon
+
+#+begin_src emacs-lisp
+  (defun beacon--shine-b ()
+    "Shine a beacon at point."
+    (let ((colors (beacon--color-range)))
+      (save-excursion
+        (backward-char 1)
+        (while colors
+          (if (looking-at "^")
+              (setq colors nil)
+            (beacon--colored-overlay (pop colors))
+            (backward-char 1))))))
+
+
+  (defun nasy/beacon-blink (&rest _)
+    "Blink the beacon at the position of the cursor."
+    (interactive)
+    (beacon--vanish)
+    (run-hooks 'beacon-before-blink-hook)
+    (beacon--shine-b)
+    (when (timerp beacon--timer)
+      (cancel-timer beacon--timer))
+    (setq beacon--timer
+          (run-at-time beacon-blink-delay
+                       (/ beacon-blink-duration 1.0 beacon-size)
+                       #'beacon--dec)))
+
+
+  (defun nasy/blink ()
+    (cond ((member this-command '(left-char
+                                  backward-char
+                                  backward-word
+                                  delete-char
+                                  backward-delete-char-untabify
+                                  move-beginning-of-line))
+           (beacon-blink))
+          ((member this-command '(right-char
+                                  forward-char
+                                  forward-word
+                                  self-insert-command
+                                  move-end-of-line))
+           (nasy/beacon-blink))))
+
+
+  (n/leaf beacon
+    :doc "Never lose your cursor again."
+    :url "https://github.com/Malabarba/beacon"
+    :tag "convenience"
+    :commands (nasy/blink)
+    :custom
+    (beacon-size . 8)
+    (beacon-blink-delay . 0.1)
+    ((beacon-blink-when-point-moves-vertically
+      beacon-blink-when-point-moves-horizontally)
+     . 1)
+    (blink-cursor-interval . 1)
+    (beacon-dont-blink-commands . nil)
+    :hook (post-command-hook . nasy/blink)
+    :init (sup 'beacon))
 #+end_src
 
 ** Color Identifiers Mode                              :faces:languages:
