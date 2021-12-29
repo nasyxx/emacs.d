@@ -395,6 +395,21 @@ https://github.com/DarthFennec/highlight-indent-guides
     :init (sup 'highlight-indent-guides))
 #+end_src
 
+** Highlight Tail                        :color:effect:highlight:visual:
+
+This minor-mode draws a tail in real time, when you write.
+
+https://www.emacswiki.org/emacs/highlight-tail.el
+
+#+begin_src emacs-lisp
+  (n/leaf highlight-tail
+    :doc "This minor-mode draws a tail in real time, when you write."
+    :url "https://www.emacswiki.org/emacs/highlight-tail.el"
+    :tag "color" "effect" "highlight" "visual"
+    :disabled t
+    :init (sup 'highlight-tail))
+#+end_src
+
 ** hl-line                                      :faces:frame:emulations:
 
 Highlight the current line of characters.
