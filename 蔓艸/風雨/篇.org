@@ -33,6 +33,7 @@
     (setq nasy--require t)
     (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓/擊鼓.el"))
     (require '擊鼓)
+    (sup 'beacon)
     (sup 'doom-modeline)
     (setq nasy--require nil))
 #+end_src

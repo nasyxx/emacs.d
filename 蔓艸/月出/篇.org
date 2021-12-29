@@ -859,6 +859,7 @@ system.
 https://ubolonton.github.io/emacs-tree-sitter/
 
 #+begin_src emacs-lisp
+  (defvar tsc-dyn-get-from)
   (setq tsc-dyn-get-from '(:compilation))
 
   (n/leaf tree-sitter
