@@ -408,6 +408,42 @@
     (nasy/set-font))
 #+end_src
 
+** 光幖
+
+#+begin_src emacs-lisp
+  (defvar nasy-cursor-colors '("#F00056"
+                               "#057748"
+                               "#30DFF3"
+                               "#FF9393"
+                               "#50616D"
+                               "#FFC34D"
+                               "#801DAE"
+                               "#705438"
+                               "#FAFF72")
+    "Blink cursor colors.")
+
+  (defvar nasy--blink-cursor-count 0
+    "Blink cursor counter.")
+
+
+  (defun nasy/blink-cursor-timer-function (&rest _)
+    (when (not (internal-show-cursor-p))
+      (when (>= nasy--blink-cursor-count (length nasy-cursor-colors))
+        (setq nasy--blink-cursor-count 0))
+      (let ((color (nth nasy--blink-cursor-count nasy-cursor-colors))
+            (hl-color (nth nasy--blink-cursor-count (reverse nasy-cursor-colors))))
+        (set-cursor-color color)
+        (when (featurep 'beacon)
+          (setq beacon-color color))
+        (setq nasy--blink-cursor-count (1+ nasy--blink-cursor-count)))))
+
+
+  (add-hook 'nasy-first-key-hook
+            #'(lambda ()
+                (advice-add 'blink-cursor-timer-function :before
+                            #'nasy/blink-cursor-timer-function)))
+#+end_src
+
 ** 定製
 
 *** 餘
