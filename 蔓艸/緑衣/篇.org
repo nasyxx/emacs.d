@@ -779,6 +779,25 @@ https://github.com/minad/corfu
     :init (sup 'corfu))
 #+end_src
 
+** corfu-doc                     :convenience:corfu:documentation:popup:
+
+Display a documentation popup for completion candidate when using
+Corfu. It can be re regarded as company-quickhelp for Corfu.
+
+https://github.com/galeo/corfu-doc
+
+#+begin_src emacs-lisp
+  (n/leaf-nv corfu-doc
+    :doc "Documentation popup for Corfu."
+    :url "https://github.com/galeo/corfu-doc"
+    :tag "convenience" "corfu" "documentation" "popup"
+    :bind (:corfu-map
+           ("M-p" . corfu-doc-scroll-down)
+           ("M-n" . corfu-doc-scroll-up))
+    :hook (corfu-mode-hook . corfu-doc-mode)
+    :init (sup '(corfu-doc :type git :host github :repo "galeo/corfu-doc")))
+#+end_src
+
 ** Dired                                                         :files:
 
 DiredMode is the mode of a Dired buffer.  It shows a directory (folder) listing
