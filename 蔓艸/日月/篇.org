@@ -30,7 +30,7 @@ Applications.
 #+begin_src emacs-lisp :exports none
   ;;; 日月.el --- Nasy's emacs.d application file.  -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2021  Nasy
+  ;; Copyright (C) 2022  Nasy
 
   ;; Author: Nasy <nasyxx@gmail.com>
 

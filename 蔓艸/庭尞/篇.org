@@ -23,7 +23,7 @@ UI
 #+begin_src emacs-lisp :exports none
   ;;; 庭尞.el --- Nasy's emacs.d UI file.  -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2021  Nasy
+  ;; Copyright (C) 2022  Nasy
 
   ;; Author: Nasy <nasyxx@gmail.com>
 

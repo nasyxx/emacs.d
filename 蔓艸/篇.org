@@ -17,7 +17,7 @@
 
 #+begin_src emacs-lisp :exports none
   ;;; init.el --- Nasy's Emacs Configuration file.            -*- lexical-binding: t; -*-
-  ;; Copyright (C) 2021  Nasy
+  ;; Copyright (C) 2022  Nasy
 
   ;; Author: Nasy <nasyxx+emacs@gmail.com>
 

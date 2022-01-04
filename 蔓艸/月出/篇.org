@@ -21,7 +21,7 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
 #+begin_src emacs-lisp :exports none
   ;;; 月出.el --- Nasy's emacs.d selective file.  -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2021  Nasy
+  ;; Copyright (C) 2022  Nasy
 
   ;; Author: Nasy <nasyxx@gmail.com>
 

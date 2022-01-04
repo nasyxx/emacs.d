@@ -19,7 +19,7 @@
 #+begin_src emacs-lisp :exports none
   ;;; 風雨.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2021  Nasy
+  ;; Copyright (C) 2022  Nasy
 
   ;; Author: Nasy <nasyxx@gmail.com>
 

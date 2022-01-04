@@ -20,7 +20,7 @@ Library.
 #+begin_src emacs-lisp :exports none
   ;;; 小曐.el --- Nasy's emacs.d library file.  -*- lexical-binding: t; -*-
 
-  ;; Copyright (C) 2021  Nasy
+  ;; Copyright (C) 2022  Nasy
 
   ;; Author: Nasy <nasyxx@gmail.com>
 
