@@ -997,6 +997,24 @@ https://github.com/awth13/org-appear
                                     "tell application \"org-clock-statusbar\" to clock out")))))
 #+end_src
 
+*** Org Latex Impatient
+
+org-latex-impatient provides instant preview of LaTeX snippets via
+MathJax outputed SVG.
+
+https://github.com/yangsheng6810/org-latex-impatient
+
+#+begin_src emacs-lisp
+  (n/leaf org-latex-impatient
+    :doc "Instant Previews LaTeX snippets in Org-mode."
+    :url "https://github.com/yangsheng6810/org-latex-impatient"
+    :tag "org" "tex" "tool"
+    :custom `(org-latex-impatient-tex2svg-bin . ,(executable-find "tex2svg"))
+    :hook (nasy-org-first-key-hook . org-latex-impatient-mode)
+    :init (sup 'org-latex-impatient))
+
+#+end_src
+
 *** Org Prettify Source Block                                     :org:
 
 #+begin_src emacs-lisp
