@@ -30,7 +30,8 @@
     (cl-loop for package in packages
              do (require package)))
 
-  (shell-command "make straight/build/tsc/tsc-dyn.dylib")
+  (when (and (eq system-type 'darwin) (executable-find "cargo"))
+    (shell-command "make straight/build/tsc/tsc-dyn.dylib"))
 
 
   (message "\n\n---------------- Run hooks ----------------\n\n")
