@@ -430,6 +430,21 @@ https://github.com/technomancy/find-file-in-project
     :init (sup 'find-file-in-project))
 #+end_src
 
+** ftables                                      :convenience:table:text:
+
+This package provides some convenient commands for filling a table,
+i.e., adjusting the layout of the table so it can fit in n columns.
+
+https://github.com/casouri/ftable
+
+#+begin_src emacs-lisp
+  (n/leaf ftable
+    :doc "Fill (auto-layout) tables."
+    :url "https://github.com/casouri/ftable"
+    :tag "convenience" "table" "text"
+    :init (sup 'ftable))
+#+end_src
+
 ** Git Gutter                                                   :vc:git:
 
 Emacs port of GitGutter which is Sublime Text Plugin [[https://github.com/jisaacks/GitGutter][GitGutter]].
