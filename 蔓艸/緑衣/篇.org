@@ -1353,9 +1353,9 @@ https://github.com/dimitri/switch-window
     ("C-c 3" . split-window--h)
     ("C-x |" . split-window-horizontally-instead)
     ("C-x _" . split-window-vertically-instead)
-    ("C-x o" . other-window)
+    ("C-x o" . switch-window)
     ("C-c x" . nasy/split-window)
-    ("M-o"   . switch-window)
+    ("M-o"   . other-window)
     :custom
     (switch-window-shortcut-style . 'alphabet)
     (switch-window-timeout        . nil)
