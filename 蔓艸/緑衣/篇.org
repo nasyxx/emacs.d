@@ -139,11 +139,14 @@ https://github.com/minad/cape
 #+begin_src emacs-lisp
   (defvar nasy-capfs)
   (declare-function company--multi-backend-adapter "company")
+  (declare-function cape-super-capf "cape")
 
   (defun nasy/merge-capf (c)
     "Merge c into completion-at-point-functions."
     (remove-hook 'completion-at-point-functions t t)
-    (add-hook 'completion-at-point-functions c 1 t))
+    (add-hook 'completion-at-point-functions c)
+    (setq completion-at-point-functions
+          (list (apply #'cape-super-capf completion-at-point-functions))))
 
   (defun nasy/-merge-capf ()
     "Merge nasy capy."
@@ -768,7 +771,7 @@ https://github.com/minad/corfu
       corfu-quit-no-match
       corfu-quit-at-boundary)
      . t)
-    (corfu-auto-delay  . 0)
+    (corfu-auto-delay  . 0.1)
     (corfu-auto-prefix . 2)
     (corfu-echo-documentation . 1)
     :hook
