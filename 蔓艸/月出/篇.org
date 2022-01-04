@@ -135,13 +135,19 @@ https://github.com/Malabarba/beacon
                                   backward-word
                                   delete-char
                                   backward-delete-char-untabify
-                                  move-beginning-of-line))
+                                  move-beginning-of-line
+                                  org-beginning-of-line
+                                  org-beginning-of-item
+                                  org-beginning-of-block))
            (beacon-blink))
           ((member this-command '(right-char
                                   forward-char
                                   forward-word
                                   self-insert-command
-                                  move-end-of-line))
+                                  move-end-of-line
+                                  org-end-of-line
+                                  org-end-of-item
+                                  org-end-of-block))
            (nasy/beacon-blink))))
 
 
@@ -149,7 +155,6 @@ https://github.com/Malabarba/beacon
     :doc "Never lose your cursor again."
     :url "https://github.com/Malabarba/beacon"
     :tag "convenience"
-    :commands (nasy/blink)
     :custom
     (beacon-size . 8)
     (beacon-blink-delay . 0.1)
@@ -158,7 +163,9 @@ https://github.com/Malabarba/beacon
      . 1)
     (blink-cursor-interval . 1)
     (beacon-dont-blink-commands . nil)
-    :hook (post-command-hook . nasy/blink)
+    :hook
+    (post-command-hook . nasy/blink)
+    (nasy-first-key-hook . (lambda () (require 'beacon)))
     :init (sup 'beacon))
 #+end_src
 
