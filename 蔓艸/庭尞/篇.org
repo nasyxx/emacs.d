@@ -655,11 +655,10 @@ https://github.com/ema2159/centaur-tabs
                      ("None"   . #x2205)  ;; ∅
                      ("none"   . #x2205)  ;; ∅
 
-                     ("in"     . #x2286)  ;; ⊆
-                     ("`elem`" . #x2286)  ;; ⊆
-                     ("not in"    . #x2288)  ;; ⊈
-                     ("`notElem`" . #x2288)  ;; ⊈
-
+                     ("in"     . (#x2006 (Br . Bl) #x2208 (Br . Bl) #x2009 (Br . Bl) #x2009))  ;;  ∈  
+                     ("`elem`" . (#x2006 (Br . Bl) #x2208 (Br . Bl) #x2009 (Br . Bl) #x2009))  ;;  ∈  
+                     ("not in"    . (#x2006 (Br . Bl) #x2209 (Br . Bl) #x2009 (Br . Bl) #x2009))  ;;  ∉  
+                     ("`notElem`" . (#x2006 (Br . Bl) #x2209 (Br . Bl) #x2009 (Br . Bl) #x2009))  ;;  ∉  
                      ("return" . (#x21d2 (Br . Bl) #x2005 ))  ;; ⇒  x (Br . Bl) #x2006
                      ("yield"  . (#x21d4 (Br . Bl) #x2004))  ;; ⇔ x xxxxxxxxxxxxxxxxx
                      ("pure"   . (#x21f0 (Br . Bl)))))))          ;; ⇰ x
