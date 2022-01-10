@@ -475,6 +475,7 @@
 
   (defun nasy/-cus-emacs ()
     "Nasy customize emacs misc variable."
+    (customize-set-variable 'colon-double-space    nil "Customized by Nasy.")
     (customize-set-variable 'custom-raised-buttons nil "Customized by Nasy.")
     (customize-set-variable 'help-window-select    t "Customized by Nasy.")
     (customize-set-variable 'make-backup-files     nil "Customized by Nasy.")
