@@ -60,7 +60,7 @@ init.el: 蔓艸/篇.org early-init.el
 芄蘭/芄蘭.el:
 	mkdir -p 芄蘭
 	[ -f 芄蘭/芄蘭.el ] || \
-	echo "(require '芄蘭之例 nil t)\n\n(provide '芄蘭)" > 芄蘭/芄蘭.el
+	echo -e "(require '芄蘭之例 nil t)\n\n(provide '芄蘭)" > 芄蘭/芄蘭.el
 
 
 $(foreach dir,$(DS),$(eval $(call tangle_template,$(dir))))
