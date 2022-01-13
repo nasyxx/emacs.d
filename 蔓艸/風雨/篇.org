@@ -1456,6 +1456,68 @@
       (nasy/-unset-key-map)))
 #+end_src
 
+*** 光影
+
+#+begin_src emacs-lisp
+  (defun beacon--shine-b ()
+    "Shine a beacon at point."
+    (let ((colors (beacon--color-range)))
+      (save-excursion
+        (backward-char 1)
+        (while colors
+          (if (looking-at "^")
+              (setq colors nil)
+            (beacon--colored-overlay (pop colors))
+            (backward-char 1))))))
+
+
+  (defun nasy/beacon-blink (&rest _)
+    "Blink the beacon at the position of the cursor."
+    (interactive)
+    (beacon--vanish)
+    (run-hooks 'beacon-before-blink-hook)
+    (beacon--shine-b)
+    (when (timerp beacon--timer)
+      (cancel-timer beacon--timer))
+    (setq beacon--timer
+          (run-at-time beacon-blink-delay
+                       (/ beacon-blink-duration 1.0 beacon-size)
+                       #'beacon--dec)))
+
+
+  (defun nasy/blink ()
+    (cond ((member this-command '(left-char
+                                  backward-char
+                                  backward-word
+                                  delete-char
+                                  backward-delete-char-untabify
+                                  move-beginning-of-line
+                                  org-beginning-of-line
+                                  org-beginning-of-item
+                                  org-beginning-of-block))
+           (beacon-blink))
+          ((member this-command '(right-char
+                                  forward-char
+                                  forward-word
+                                  self-insert-command
+                                  move-end-of-line
+                                  org-end-of-line
+                                  org-end-of-item
+                                  org-end-of-block))
+           (nasy/beacon-blink))))
+
+  (define-minor-mode nasy-beacon-cursor-mode
+    "Nasy beacon on moving cursor."
+    :init-value t
+    :lighter "n/bc"
+    :global t
+    (if nasy-beacon-cursor-mode
+        (progn
+          (require 'beacon)
+          (add-hook 'pre-command-hook #'nasy/blink))
+      (remove-hook 'pre-command-hook #'nasy/blink)))
+#+end_src
+
 ** 末
 
 #+begin_src emacs-lisp
