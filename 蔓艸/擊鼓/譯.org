@@ -49,7 +49,7 @@
 
   (message "\n\n---------------- Wait straight.el ----------------\n\n")
 
-  (when (fboundp 'native-compile)
+  (when (native-comp-available-p)
     (while (or comp-files-queue
                (> (comp-async-runnings) 0))
       (sleep-for 1)))
@@ -60,7 +60,7 @@
     (message "\n\n---------------- Build elc of 桃夭 ----------------\n\n")
     (byte-recompile-directory (locate-user-emacs-file "桃夭/") 0)
 
-    (when (fboundp 'native-compile)
+    (when (native-comp-available-p)
       (message "\n\n---------------- Build eln of 桃夭 ----------------")
       (native-compile-async (locate-user-emacs-file "桃夭/") t)
 
