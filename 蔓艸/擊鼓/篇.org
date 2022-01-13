@@ -304,19 +304,19 @@ https://gitlab.com/koral/gcmh
     (when (and (not noninteractive)
                (not (and (boundp '*no-gcmh*)
                        ,*no-gcmh*)))
+      (customize-set-variable
+       'gcmh-verbose t
+       "Customized with leaf in `gcmh' block")
+      (customize-set-variable
+       'gcmh-low-cons-threshold #x4000000  ;; 64MB
+       "Customized with leaf in `gcmh' block")
+      (customize-set-variable
+       'gcmh-high-cons-threshold #x10000000 ;; 256MB
+       "Customized with leaf in `gcmh' block")
+      (customize-set-variable
+       'gcmh-idle-delay 360
+       "Customized with leaf in `gcmh' block")
       (gcmh-mode 1)))
-
-  (n/leaf-nv gcmh
-    :leaf-autoload nil
-    :leaf-defun nil
-    :disabled (or nasy--require noninteractive)
-    :after gcmh
-    :custom
-    (garbage-collection-messages . t)
-    (gcmh-verbose                . t)
-    (gcmh-lows-cons-threshold    . #x4000000)  ;; 64MB
-    (gcmh-high-cons-threshold    . #x10000000) ;; 256MB
-    (gcmh-idle-delay             . 360))
 #+end_src
 
 * 整置文件                                                  :convenience:
