@@ -702,6 +702,14 @@
     "Open document."
     (interactive)
     (browse-url "https://emacs.nasy.moe/"))
+
+
+  ;;;###autoload
+  (defun nasy/clear-text-overlay ()
+    "Clear text overlay."
+    (interactive)
+    (let ((inhibit-read-only t))
+      (set-text-properties (point-min) (point-max) nil)))
 #+end_src
 
 ** 重新加載 ~user-init-file~ 文件
