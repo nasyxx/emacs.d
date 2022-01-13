@@ -6,8 +6,8 @@ EL ?= emacs -Q
 
 DS = 小曐 庭尞 擊鼓 日月 月出 緑衣 風雨 麐之趾
 
-LANGS = agda cpp elm html jsdoc pgn rust bash css fluent janet-simple json php \
-	scala c elisp go java julia python swift c-sharp elixir hcl javascript ocaml ruby typescript
+LANGS = agda cpp html jsdoc pgn rust bash css fluent janet-simple json php \
+	scala c elisp go java julia python swift c-sharp hcl javascript ocaml ruby typescript # elm elixir
 
 TSLD = 木瓜/emacs-tree-sitter/tree-sitter-langs
 
@@ -60,7 +60,7 @@ init.el: 蔓艸/篇.org early-init.el
 芄蘭/芄蘭.el:
 	mkdir -p 芄蘭
 	[ -f 芄蘭/芄蘭.el ] || \
-	echo -e "(require '芄蘭之例 nil t)\n\n(provide '芄蘭)" > 芄蘭/芄蘭.el
+	echo "(require '芄蘭之例 nil t)\\n\\n(provide '芄蘭)" > 芄蘭/芄蘭.el
 
 
 $(foreach dir,$(DS),$(eval $(call tangle_template,$(dir))))
