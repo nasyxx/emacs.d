@@ -1422,9 +1422,8 @@
 
   (define-minor-mode nasy-keybinding-mode
     "Nasy Keybinding Mode."
-    :init-value t
+    :init-value nil
     :lighter "n/k"
-    :global t
     (if nasy-keybinding-mode
         (progn
           (let ((keymap (nasy/-keymap)))
@@ -1434,6 +1433,14 @@
 
       (define-key global-map "\C-c" mode-specific-map)
       (nasy/-unset-key-map)))
+
+
+  (leaf nasy-keybinding
+    :leaf-autoload nil
+    :leaf-defun nil
+    :hook (org-mode-hook
+           prog-mode-hook
+           text-mode-hook))
 #+end_src
 
 *** 光影
