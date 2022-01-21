@@ -1393,40 +1393,6 @@
 *** 快捷鍵
 
 #+begin_src emacs-lisp
-  (defvar nasy-code-map (make-sparse-keymap)
-    "Nasy Key Map.")
-
-  (defun nasy/-code-map (&optional set)
-    "Nasy SET nasy code map."
-    (let ((keymap  nasy-code-map)
-          (keypair '(("c"   . compile)
-                     ("C"   . recompile)
-                     ("x"   . flycheck-list-errors)
-                     ("SPC" . nasy/insert-zero-width-space))))
-      (if set
-          (cl-loop for (ks . command) in keypair
-                    do
-                    (define-key keymap (kbd ks) command))
-        (cl-loop for (ks . _) in keypair
-                 do (define-key keymap (kbd ks) nil)))))
-
-  (defvar nasy-treemacs-map (make-sparse-keymap)
-    "Nasy Treemacs Map.")
-
-  (defun nasy/-treemacs-map (&optional set)
-    "Nasy SET nasy treemacs map."
-    (let ((keymap nasy-treemacs-map)
-          (keypair '(("t"   . treemacs)
-                     ("1"   . treemacs-delete-other-windows)
-                     ("B"   . treemacs-bookmark)
-                     ("f"   . treemacs-find-file))))
-      (if set
-          (cl-loop for (ks . command) in keypair
-                    do
-                    (define-key keymap (kbd ks) command))
-        (cl-loop for (ks . _) in keypair
-                 do (define-key keymap (kbd ks) nil)))))
-
   (defun nasy/-set-key-map ()
     "Nasy Set keymap for config."
     (define-key global-map (kbd "s-SPC") #'nasy/insert-zero-width-space))
@@ -1437,6 +1403,23 @@
     (define-key global-map (kbd "s-SPC") nil))
 
 
+  (defun nasy/-keymap ()
+    "Define nasy key map."
+    (define-keymap :parent mode-specific-map
+      "c" (define-keymap :prefix 'nasy-code-map
+            "c" #'compile
+            "C" #'recompile
+            "x" #'flycheck-list-errors)
+      "e" (define-keymap :prefix 'nasy-edit-map
+            "c"   #'comment-line
+            "SPC" #'nasy/insert-zero-width-space)
+      "t" (define-keymap :prefix 'nasy-treemacs-map
+            "t" #'treemacs
+            "1" #'treemacs-delete-other-windows
+            "B" #'treemacs-bookmark
+            "f" #'treemacs-find-file)))
+
+
   (define-minor-mode nasy-keybinding-mode
     "Nasy Keybinding Mode."
     :init-value t
@@ -1444,23 +1427,12 @@
     :global t
     (if nasy-keybinding-mode
         (progn
-          (nasy/-set-key-map)
+          (let ((keymap (nasy/-keymap)))
+            (define-key global-map "\C-c" keymap))
 
-          (define-key mode-specific-map "c" nasy-code-map)
-          (define-key mode-specific-map "t" nasy-treemacs-map)
+          (nasy/-set-key-map))
 
-          (nasy/-code-map t)
-          (nasy/-treemacs-map t)
-
-          (which-key-add-key-based-replacements
-            "C-c c" '("nasy code" . (nasy-code-map))
-            "C-c t" '("nasy treemacs" . (nasy-treemacs-map))))
-
-      (define-key mode-specific-map "c" nil)
-      (define-key mode-specific-map "t" nil)
-
-      (nasy/-code-map nil)
-      (nasy/-treemacs-map nil)
+      (define-key global-map "\C-c" mode-specific-map)
       (nasy/-unset-key-map)))
 #+end_src
 
