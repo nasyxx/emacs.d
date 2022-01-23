@@ -997,7 +997,7 @@ https://github.com/awth13/org-appear
                                     "tell application \"org-clock-statusbar\" to clock out")))))
 #+end_src
 
-*** Org Latex Impatient
+*** Org Latex Impatient                                   :org:tex:tools:
 
 org-latex-impatient provides instant preview of LaTeX snippets via
 MathJax outputed SVG.
