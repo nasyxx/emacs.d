@@ -70,9 +70,15 @@
   (leaf 緑衣
     :load-path* "桃夭/緑衣"
     :require t)
+
+  (leaf 補
+    :load-path* "桃夭/緑衣"
+    :require t)
 #+end_src
 
 #+include: ./緑衣/篇.org :lines "3-"
+
+#+include: ./緑衣/補.org :lines "3-"
 
 * 月出
 

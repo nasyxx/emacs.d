@@ -42,7 +42,7 @@ Programming Languages
     (require '擊鼓)
     (require '風雨)
     (require '風雨旹用)
-    (require 'nasy-company)
+    (require '補)
     (require 'align)
 
     (sup 'all-the-icons)
