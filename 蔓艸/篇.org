@@ -118,6 +118,8 @@
 
 #+include: ./麐之趾/篇.org :lines "3-"
 
+#+include: ./麐之趾/模.org :lines "3-"
+
 * 小曐
 
 #+begin_src emacs-lisp

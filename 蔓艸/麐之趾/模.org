@@ -1,4 +1,5 @@
-#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "模.el")
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "模.el") :lexical t
+#+title: 模
 
 * 題                                                           :noexport:
 
