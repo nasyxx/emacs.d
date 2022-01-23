@@ -357,13 +357,12 @@ https://github.com/ema2159/centaur-tabs
     (insert "               \n\n"))
 
 
-  (after-x 'dashboard
-    (defun nasy/dashboard-refresh ()
-      "Refresh dashboard buffer."
-      (interactive)
-      (unless (get-buffer dashboard-buffer-name)
-        (generate-new-buffer "*dashboard*"))
-      (dashboard-refresh-buffer)))
+  (defun nasy/dashboard-refresh ()
+    "Refresh dashboard buffer."
+    (interactive)
+    (unless (get-buffer dashboard-buffer-name)
+      (generate-new-buffer "*dashboard*"))
+    (dashboard-refresh-buffer))
 
 
   (n/leaf-nv dashboard
