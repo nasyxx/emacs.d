@@ -310,10 +310,10 @@ https://gitlab.com/koral/gcmh
        'gcmh-verbose t
        "Customized with leaf in `gcmh' block")
       (customize-set-variable
-       'gcmh-low-cons-threshold #x4000000  ;; 64MB
+       'gcmh-low-cons-threshold #x2000000  ;; 32MB
        "Customized with leaf in `gcmh' block")
       (customize-set-variable
-       'gcmh-high-cons-threshold #x10000000 ;; 256MB
+       'gcmh-high-cons-threshold #x8000000 ;; 128MB
        "Customized with leaf in `gcmh' block")
       (customize-set-variable
        'gcmh-idle-delay 360
