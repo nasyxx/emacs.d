@@ -1468,9 +1468,23 @@ https://github.com/org-roam/org-roam
 *** isort                                                      :python:
 
 #+begin_src emacs-lisp
+  (defun nasy/find-isort-config ()
+    "Find isort config file."
+    (let ((file (expand-file-name "~/.config/isort/isort.toml")))
+      (when (file-exists-p file)
+        file)))
+
+  (defun nasy/empty-isort-config ()
+    "Cancel isort extra args."
+    (interactive)
+    (setq python-isort-extra-args nil))
+
+
   (n/leaf python-isort
-    :commands python-isort-buffer python-isort-region python-isort-on-save-mode
     :after reformatter
+    :commands python-isort-buffer python-isort-region python-isort-on-save-mode
+    :hook (python-mode-hook
+           . (lambda () (setq python-isort-extra-args `("--sp" ,(nasy/find-isort-config)))))
     :init (sup `(python-isort :local-repo ,(concat *nasy-site* "nasy/python-isort"))))
 #+end_src
 
