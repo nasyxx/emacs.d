@@ -310,7 +310,10 @@ https://github.com/dgutov/diff-hl
     :tag "vc" "diffs"
     :hook ((dired-mode-hook         . diff-hl-dired-mode)
            (magit-pre-refresh-hook  . diff-hl-magit-pre-refresh)
-           (magit-post-refresh-hook . diff-hl-magit-post-refresh))
+           (magit-post-refresh-hook . diff-hl-magit-post-refresh)
+           (nasy-first-key-hook     . global-diff-hl-mode)
+           (nasy-first-key-hook     . global-diff-hl-show-hunk-mouse-mode)
+           (nasy-first-key-hook     . diff-hl-margin-mode))
     :init (sup 'diff-hl))
 #+end_src
 
@@ -398,11 +401,13 @@ https://github.com/casouri/ftable
 
 ** Git Gutter                                                   :vc:git:
 
+*Disabled. Now use diff-hl*
+
 Emacs port of GitGutter which is Sublime Text Plugin [[https://github.com/jisaacks/GitGutter][GitGutter]].
 
 https://github.com/emacsorphanage/git-gutter
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (n/leaf git-gutter
     :doc "Emacs port of GitGutter which is Sublime Text Plugin."
     :url "https://github.com/emacsorphanage/git-gutter"
