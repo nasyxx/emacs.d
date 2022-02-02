@@ -1406,18 +1406,21 @@
   (defun nasy/-keymap ()
     "Define nasy key map."
     (define-keymap :parent mode-specific-map
-      "c" (define-keymap :prefix 'nasy-code-map
-            "c" #'compile
-            "C" #'recompile
-            "x" #'flycheck-list-errors)
-      "e" (define-keymap :prefix 'nasy-edit-map
-            "c"   #'comment-line
-            "SPC" #'nasy/insert-zero-width-space)
-      "t" (define-keymap :prefix 'nasy-treemacs-map
-            "t" #'treemacs
-            "1" #'treemacs-delete-other-windows
-            "B" #'treemacs-bookmark
-            "f" #'treemacs-find-file)))
+      "c"     (define-keymap :prefix 'nasy-code-map
+                "c" #'compile
+                "C" #'recompile
+                "x" #'flycheck-list-errors)
+      "e"     (define-keymap :prefix 'nasy-edit-map
+                "a"   #'avy-goto-char
+                "c"   #'comment-line
+                "SPC" #'nasy/insert-zero-width-space)
+      "t"     (define-keymap :prefix 'nasy-treemacs-map
+                "t" #'treemacs
+                "1" #'treemacs-delete-other-windows
+                "B" #'treemacs-bookmark
+                "f" #'treemacs-find-file)
+      "o"     (define-keymap :prefix 'nasy-org-map
+                "b" #'org-tree-to-indirect-buffer)))
 
 
   (define-minor-mode nasy-keybinding-mode
@@ -1438,7 +1441,7 @@
   (leaf nasy-keybinding
     :leaf-autoload nil
     :leaf-defun nil
-    :hook (org-mode-hook
+    :hook (nasy-org-first-key-hook
            prog-mode-hook
            text-mode-hook))
 #+end_src
