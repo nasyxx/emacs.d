@@ -66,8 +66,8 @@
   (with-no-warnings
     (customize-set-variable 'straight-vc-git-default-clone-depth 1
           "Customized by Nasy.")
-    ;; (customize-set-variable 'straight-repository-branch          "develop"
-    ;;       "Customized by Nasy.")
+    (customize-set-variable 'straight-repository-branch "develop"
+          "Customized by Nasy.")
     (customize-set-variable 'straight-enable-use-package-integration nil
           "Customized by Nasy.")
     (customize-set-variable 'straight-check-for-modifications nil
