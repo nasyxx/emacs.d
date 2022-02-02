@@ -323,11 +323,12 @@ https://github.com/dandavison/magit-delta
     :tag "git" "tools" "vc"
     :when (executable-find "delta")
     :after magit
-    :custom (magit-delta-delta-args
-             . '("--max-line-distance"
-                 "0.6" "--24-bit-color"
-                 "always" "--color-only"
-                 "--syntax-theme='Solarized (light)'"))
+    :custom
+    (magit-delta-default-light-theme . "Solarized (light)")
+    (magit-delta-delta-args
+     . '("--max-line-distance"
+         "0.6" "--24-bit-color"
+         "always" "--color-only"))
     :hook (magit-mode-hook . magit-delta-mode)
     :init (sup 'magit-delta))
 #+end_src
