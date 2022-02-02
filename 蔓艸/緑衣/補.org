@@ -312,20 +312,21 @@ https://github.com/minad/cape
     :tag "editing" "extensions"
     :after corfu
     :require t corfu company company-tabnine
-    :bind (("C-c p p" . completion-at-point) ;; capf
-           ("C-c p t" . complete-tag)        ;; etags
-           ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
-           ("C-c p f" . cape-file)
-           ("C-c p k" . cape-keyword)
-           ("C-c p s" . cape-symbol)
-           ("C-c p a" . cape-abbrev)
-           ("C-c p i" . cape-ispell)
-           ("C-c p l" . cape-line)
-           ("C-c p w" . cape-dict)
-           ("C-c p \\" . cape-tex)
-           ("C-c p A-¥" . cape-tex)
-           ("C-c p &" . cape-sgml)
-           ("C-c p r" . cape-rfc1345))
+    :bind (:mode-specific-map
+           ("p p" . completion-at-point) ;; capf
+           ("p t" . complete-tag)        ;; etags
+           ("p d" . cape-dabbrev)        ;; or dabbrev-completion
+           ("p f" . cape-file)
+           ("p k" . cape-keyword)
+           ("p s" . cape-symbol)
+           ("p a" . cape-abbrev)
+           ("p i" . cape-ispell)
+           ("p l" . cape-line)
+           ("p w" . cape-dict)
+           ("p \\" . cape-tex)
+           ("p A-¥" . cape-tex)
+           ("p &" . cape-sgml)
+           ("p r" . cape-rfc1345))
     :hook ((corfu-mode-hook)
            . nasy/-merge-capf)
     :init (sup 'cape)
