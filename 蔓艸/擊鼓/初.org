@@ -31,7 +31,8 @@
    native-comp-async-report-warnings-errors 'silent)
 
   (setq initial-scratch-message
-        (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n"))
+        (concat ";; Happy hacking, "
+                user-login-name " - Emacs ♥ you!\n\n"))
 
 
   (let ((old-file-name-handler-alist file-name-handler-alist))
