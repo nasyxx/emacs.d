@@ -337,6 +337,8 @@ https://gitlab.com/koral/gcmh
                             (concat *nasy-var* "eshell/") "Customized by Nasy.")
     (customize-set-variable 'save-place-file
                             (concat *nasy-var* "save-place.el") "Customized by Nasy.")
+    (customize-set-variable 'svg-lib-icons-dir
+                            (concat *nasy-var* "svg-lib/") "Customized by Nasy.")
     (customize-set-variable 'tramp-auto-save-directory
                             (concat *nasy-var* "tramp/auto-save/") "Customized by Nasy.")
     (customize-set-variable 'tramp-persistency-file-name
