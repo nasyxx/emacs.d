@@ -1,8 +1,9 @@
-EE ?= emacs -Q --batch --eval "(require 'ob-tangle)"
-ETS ?= emacs -Q --batch --directory . --load tree-sitter-langs-build
-# EL ?= emacs -Q --batch -l "init.el" --eval "(setq load-prefer-newer t load-suffixes '(\".el\") nasy--require t)" --eval "(progn (run-hooks 'after-init-hook 'emacs-startup-hook 'nasy-first-key-hook 'pre-command-hook 'prog-mode-hook 'org-mode-hook 'nasy-org-first-key-hook))"
+EM ?= emacs
+EE ?= $(EM) -Q --batch --eval "(require 'ob-tangle)"
+ETS ?= $(EM) -Q --batch --directory . --load tree-sitter-langs-build
+# EL ?= $(EM) -Q --batch -l "init.el" --eval "(setq load-prefer-newer t load-suffixes '(\".el\") nasy--require t)" --eval "(progn (run-hooks 'after-init-hook 'emacs-startup-hook 'nasy-first-key-hook 'pre-command-hook 'prog-mode-hook 'org-mode-hook 'nasy-org-first-key-hook))"
 
-EL ?= emacs -Q
+EL ?= $(EM) -Q
 
 DS = 小曐 庭尞 擊鼓 日月 月出 緑衣 風雨 麐之趾
 
