@@ -31,7 +31,7 @@
              do (require package)))
 
   (when (and (eq system-type 'darwin) (executable-find "cargo"))
-    (shell-command "make straight/build/tsc/tsc-dyn.dylib"))
+    (shell-command (concat "make " (straight--build-dir "tsc") "tsc-dyn.dylib")))
 
 
   (message "\n\n---------------- Run hooks ----------------\n\n")

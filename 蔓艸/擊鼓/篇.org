@@ -71,6 +71,8 @@
     (customize-set-variable 'straight-enable-use-package-integration nil
           "Customized by Nasy.")
     (customize-set-variable 'straight-check-for-modifications nil
+          "Customized by Nasy.")
+    (customize-set-variable 'straight-build-dir (concat "build-" emacs-version)
           "Customized by Nasy."))
 
   (eval-and-compile
