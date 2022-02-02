@@ -89,9 +89,9 @@ https://github.com/purcell/emacs-reformatter
 
 #+begin_src emacs-lisp
   (defvar nasy-misc-packages
-    '(gist git-blamed git-messenger git-modes git-timemachine wgrep
-           company-dict company-math flycheck-package ibuffer-vc all-the-icons-ibuffer
-           nix-buffer nix-update nixpkgs-fmt thingopt dap-mode haskell-snippets))
+    '(git-blamed git-messenger git-modes git-timemachine wgrep
+                 company-dict company-math flycheck-package ibuffer-vc all-the-icons-ibuffer
+                 nix-buffer nix-update nixpkgs-fmt thingopt dap-mode haskell-snippets))
 
   (cl-loop for package in nasy-misc-packages
            do
