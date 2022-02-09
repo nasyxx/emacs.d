@@ -70,8 +70,6 @@
                  (> (comp-async-runnings) 0))
         (sleep-for 1))))
 
-  (straight-prune-build)
-
   (provide '譯)
   ;;; 譯.el ends here
 #+end_src
