@@ -492,9 +492,9 @@ Emacs client/library for the Language Server Protocol
 
   (leaf org
     :custom
-    (;; org)
-     (org-export-backends . '(ascii beamer html latex md org))
+    ((org-export-backends . '(ascii beamer html latex md org))
      (org-support-shift-select . 'always))
+    (org-modules . nil)
     :init
     (with-no-warnings
       (setq org-emphasis-regexp-components
