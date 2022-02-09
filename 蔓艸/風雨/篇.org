@@ -370,14 +370,15 @@
         ,*font-cjk-5-scale*)
        . 1.3)
 
-      ((*font-main-weight*
-        ,*font-symbol-weight*
+      ((*font-symbol-weight*
         ;; *font-cjk-4-weight*
         ;; *font-cjk-5-weight*
         ,*font-mode-line-weight*
         ,*font-tab-line-weight*
         ,*font-header-line-weight*)
        . 'normal)
+
+      (*font-main-weight* . 'medium)
 
       ((*font-cjk-weight*
         ,*font-cjk-2-weight*
@@ -476,6 +477,7 @@
   (defun nasy/-cus-emacs ()
     "Nasy customize emacs misc variable."
     (customize-set-variable 'colon-double-space    nil "Customized by Nasy.")
+    (customize-set-variable 'cursor-type           'box "Customized by Nasy.")
     (customize-set-variable 'custom-raised-buttons nil "Customized by Nasy.")
     (customize-set-variable 'help-window-select    t "Customized by Nasy.")
     (customize-set-variable 'make-backup-files     nil "Customized by Nasy.")
@@ -582,14 +584,18 @@
   ;;; 風雨旹用.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
   (cl-eval-when (compile)
     (setq nasy--require t)
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
     (require '擊鼓)
     (require '風雨)
 
+    (sup 'avy)
+    (sup 'beacon)
     (sup 'dashboard)
+    (sup 'flycheck)
     (sup 'projectile)
     (sup 'smartparens)
+    (sup 'treemacs)
 
     (require 'winner)
     (require 'xref)
@@ -1453,7 +1459,7 @@
     "Shine a beacon at point."
     (let ((colors (beacon--color-range)))
       (save-excursion
-        (backward-char 1)
+        ;; (backward-char 1)
         (while colors
           (if (looking-at "^")
               (setq colors nil)
@@ -1480,11 +1486,14 @@
                                   backward-char
                                   backward-word
                                   delete-char
+                                  delete-backward-char
                                   backward-delete-char-untabify
                                   move-beginning-of-line
                                   org-beginning-of-line
                                   org-beginning-of-item
-                                  org-beginning-of-block))
+                                  org-beginning-of-block
+                                  org-delete-backward-char
+                                  org-metaleft))
            (beacon-blink))
           ((member this-command '(right-char
                                   forward-char
@@ -1493,19 +1502,20 @@
                                   move-end-of-line
                                   org-end-of-line
                                   org-end-of-item
-                                  org-end-of-block))
+                                  org-end-of-block
+                                  org-metaright))
            (nasy/beacon-blink))))
 
   (define-minor-mode nasy-beacon-cursor-mode
     "Nasy beacon on moving cursor."
-    :init-value t
     :lighter "n/bc"
     :global t
+    :group 'nasy
     (if nasy-beacon-cursor-mode
-        (progn
-          (require 'beacon)
-          (add-hook 'pre-command-hook #'nasy/blink))
+        (add-hook 'pre-command-hook #'nasy/blink)
       (remove-hook 'pre-command-hook #'nasy/blink)))
+
+  (nasy-beacon-cursor-mode 1)
 #+end_src
 
 ** 末
