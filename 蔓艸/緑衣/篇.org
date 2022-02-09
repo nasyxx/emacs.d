@@ -636,6 +636,7 @@ https://github.com/purcell/page-break-lines
 #+begin_src emacs-lisp
   (n/leaf-nv paren
     :tag "builtin"
+    :custom (show-paren-context-when-offscreen . t)
     :hook (nasy-first-key-hook . show-paren-mode))
 #+end_src
 
