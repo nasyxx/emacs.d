@@ -388,14 +388,15 @@ Emacs client/library for the Language Server Protocol
  https://framagit.org/steckerhalter/ipretty
 
  #+begin_src emacs-lisp
-   (n/leaf ipretty
+   (leaf ipretty
      :doc "Interactive Emacs Lisp pretty-printing"
      :url "https://framagit.org/steckerhalter/ipretty"
      :tag "buffer" "emacslisp" "pprint"
+     :disabled t
      :bind (("C-h C-j" . ipretty-last-sexp)
             ("C-h C-k" . ipretty-last-sexp-other-buffer))
      :hook emacs-lisp-mode-hook
-     :init (sup 'ipretty))
+     :init (sup '(ipretty :type git :repo "https://framagit.org/steckerhalter/ipretty.git")))
  #+end_src
 
 *** lisp-mode                                                    :lisp:
