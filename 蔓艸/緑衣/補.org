@@ -510,6 +510,28 @@ Corfu enhances the default completion in region function with a completion overl
 https://github.com/minad/corfu
 
 #+begin_src emacs-lisp
+  (defun nasy/corfu-commit-predicate ()
+    "Auto-commit candidates if:
+    1. A '.' is typed, except after a SPACE.
+    2. A selection was made, aside from entering SPACE.
+    3. Just one candidate exists, and we continue to non-symbol info.
+    4. The 1st match is exact."
+    (cond
+     ((seq-contains-p (this-command-keys-vector) ?.)
+      (or (string-empty-p (car corfu--input))
+	  (not (string= (substring (car corfu--input) -1) " "))))
+
+     ((/= corfu--index corfu--preselect) ; a selection was made
+      (not (seq-contains-p (this-command-keys-vector) ?\s)))
+
+     ((eq corfu--total 1) ;just one candidate
+      (seq-intersection (this-command-keys-vector) [?: ?, ?\) ?\] ?\( ?\s]))
+
+     ((and corfu--input ; exact 1st match
+	   (string-equal (substring (car corfu--input) corfu--base)
+			 (car corfu--candidates)))
+      (seq-intersection (this-command-keys-vector) [?: ?\. ?, ?\) ?\] ?\" ?' ?\s]))))
+
   (n/leaf-nv corfu
     :doc "Completion Overlay Region FUnction."
     :url "https://github.com/minad/corfu"
@@ -520,16 +542,17 @@ https://github.com/minad/corfu
      ("<backtab>" . corfu-last))
     :custom
     ((corfu-cycle
-      corfu-auto
-      corfu-quit-no-match
-      corfu-quit-at-boundary)
+      corfu-auto)
      . t)
+    (corfu-quit-no-match . 'separator)
+    (corfu-separator . #x00b7)
     ((corfu-preselect-first
       corfu-preview-current)
      . nil)
     (corfu-auto-delay  . 0.4)
     (corfu-auto-prefix . 2)
     (corfu-echo-documentation . 1)
+    (corfu-commit-predicate . #'nasy/corfu-commit-predicate)
     :hook
     ((prog-mode-hook
       org-mode-hook

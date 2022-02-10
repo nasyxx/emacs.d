@@ -569,7 +569,7 @@ https://github.com/oantolin/orderless
          orderless-literal))
     (selectrum-highlight-candidates-function . #'orderless-highlight-matches)
     (orderless-style-dispatchers   . '(nasy/-orderless-dispatch))
-    (orderless-component-separator . "[ &]")
+    (orderless-component-separator . "[ &·]")
     (completion-category-overrides . '((file (styles . (partial-completion)))))
 
     :init
@@ -579,13 +579,13 @@ https://github.com/oantolin/orderless
   (defun nasy/-orderless-dispatch (pattern _index _total)
     "Orderless (PATTERN) dispatch.
 
-  Recognizes the following patterns:
-  ,* ~flex flex~
-  ,* =literal literal=
-  ,* `initialism initialism`
-  ,* !without-literal without-literal!
-  ,* .ext (file extension)
-  ,* regexp$ (regexp matching at end)"
+   Recognizes the following patterns:
+   ,* ~flex flex~
+   ,* =literal literal=
+   ,* `initialism initialism`
+   ,* !without-literal without-literal!
+   ,* .ext (file extension)
+   ,* regexp$ (regexp matching at end)"
     (cond
      ;; Ensure that $ works with Consult commands, which add disambiguation suffixes
      ((string-suffix-p "$" pattern) `(orderless-regexp . ,(concat (substring pattern 0 -1) "[\x100000-\x10FFFD]*$")))
