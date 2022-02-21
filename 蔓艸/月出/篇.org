@@ -522,6 +522,7 @@ https://gitlab.com/jabranham/mixed-pitch
     :doc "Mix fixed-pitch and variable-pitch fonts in Emacs."
     :url "https://gitlab.com/jabranham/mixed-pitch"
     :tag "faces"
+    :custom (mixed-pitch-variable-pitch-cursor . '(hbar . 3))
     :hook (org-mode-hook)
     :mode-hook
     (progn
