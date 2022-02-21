@@ -197,15 +197,15 @@ Include consult, consult-selectrum & consult-flycheck.
     (consult-customize
      consult-theme
      :preview-key (list (kbd "M-.")
-                        :debounce 0.5 (kbd "<up>") (kbd "<down>")
+                        :debounce 3 (kbd "<up>") (kbd "<down>")
                         :debounce 1 'any)
      consult-ripgrep consult-git-grep consult-grep
      consult-bookmark consult-recent-file consult-xref
      consult--source-recent-file consult--source-project-recent-file
      consult--source-bookmark consult-buffer
      :preview-key (list (kbd "M-.")
-                        :debounce 1 (kbd "<up>") (kbd "<down>")
-                        :debounce 1 'any))
+                        :debounce 5 (kbd "<up>") (kbd "<down>")
+                        :debounce 5 'any))
     (defun nasy/consult-line-symbol-at-point ()
       (interactive)
       (consult-line (thing-at-point 'symbol))))
