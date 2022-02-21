@@ -61,6 +61,16 @@ Programming Languages
 
 * 章
 
+** Bibtex
+
+*** bibtex-tidy
+
+#+begin_src emacs-lisp
+  (n/leaf bibtex-tidy
+    :after reformatter
+    :init (sup `(bibtex-tidy :local-repo ,(concat *nasy-site* "nasy/bibtex-tidy-mode"))))
+#+end_src
+
 ** Language Server Protocol & Debug Adapter Protocol         :languages:
 
 Emacs client/library for the Language Server Protocol
