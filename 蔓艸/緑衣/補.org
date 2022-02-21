@@ -512,14 +512,17 @@ https://github.com/minad/corfu
 #+begin_src emacs-lisp
   (defun nasy/corfu-commit-predicate ()
     "Auto-commit candidates if:
-    1. A '.' is typed, except after a SPACE.
+    1. A '.' is typed, except after a SPACE or text/org mode.
     2. A selection was made, aside from entering SPACE.
     3. Just one candidate exists, and we continue to non-symbol info.
     4. The 1st match is exact."
     (cond
      ((seq-contains-p (this-command-keys-vector) ?.)
       (or (string-empty-p (car corfu--input))
-	  (not (string= (substring (car corfu--input) -1) " "))))
+          (not
+           (or (string= (substring (car corfu--input) -1) " ")
+               org-mode
+               text-mode))))
 
      ((/= corfu--index corfu--preselect) ; a selection was made
       (not (seq-contains-p (this-command-keys-vector) ?\s)))
@@ -528,8 +531,8 @@ https://github.com/minad/corfu
       (seq-intersection (this-command-keys-vector) [?: ?, ?\) ?\] ?\( ?\s]))
 
      ((and corfu--input ; exact 1st match
-	   (string-equal (substring (car corfu--input) corfu--base)
-			 (car corfu--candidates)))
+           (string-equal (substring (car corfu--input) corfu--base)
+                         (car corfu--candidates)))
       (seq-intersection (this-command-keys-vector) [?: ?\. ?, ?\) ?\] ?\" ?' ?\s]))))
 
   (n/leaf-nv corfu
