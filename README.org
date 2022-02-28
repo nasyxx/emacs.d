@@ -31,7 +31,7 @@
 克隆到 ~.emacs.d~
 
 #+begin_src sh
-  git clone https://github.com/nasyxx/emacs.d ~/nasy-emacs
+  git clone https://github.com/nasyxx/emacs.d ~/nasy-emacs --recursive
   ln -s ~/nasy-emacs ~/.emacs.d
 #+end_src
 
