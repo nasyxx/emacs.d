@@ -641,7 +641,7 @@ Emacs client/library for the Language Server Protocol
           (""     "textcomp"  t   nil)
           (""     "amssymb"   t   nil)
           (""     "capt-of"   nil nil)
-          ("colorlinks,unicode,linkcolor=blue,anchorcolor=blue,citecolor=green,filecolor=black,urlcolor=blue"
+          ("colorlinks,unicode,linkcolor=blue,anchorcolor=blue,citecolor=blue,filecolor=black,urlcolor=blue"
            "hyperref" t nil)
           (""            "luatexja-fontspec" t ("lualatex"))
           (""            "listings"          t nil)
@@ -1020,7 +1020,14 @@ https://github.com/yangsheng6810/org-latex-impatient
     :doc "Instant Previews LaTeX snippets in Org-mode."
     :url "https://github.com/yangsheng6810/org-latex-impatient"
     :tag "org" "tex" "tool"
-    :custom `(org-latex-impatient-tex2svg-bin . ,(executable-find "tex2svg"))
+    :custom
+    `(org-latex-impatient-tex2svg-bin . ,(executable-find "tex2svg"))
+    (org-latex-impatient-user-latex-definitions
+     . '("\\newcommand{\\ensuremath}[1]{#1}"
+         "\\renewcommand{\\usepackage}[2][]{}"
+         "\\renewcommand{\\useoutertheme}[1]{}"
+         "\\renewcommand{\\setbeamertemplate}[2]{}"
+         "\\renewcommand{\\setbeamercolor}[2]{}"))
     :hook (nasy-org-first-key-hook . org-latex-impatient-mode)
     :init (sup 'org-latex-impatient))
 
