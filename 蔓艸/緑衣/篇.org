@@ -474,11 +474,20 @@ https://github.com/flycheck/flycheck
      ("C-p" . flycheck-error-list-previous-error)
      ("RET" . flycheck-error-list-goto-error)
      ([return] . flycheck-error-list-goto-error))
-    :init (sup 'flycheck)
+    :init
+    (sup 'flycheck)
+    (add-to-list 'display-buffer-alist
+                 `(,(rx bos "*Flycheck errors*" eos)
+                   (display-buffer-reuse-window
+                    display-buffer-in-side-window)
+                   (side            . bottom)
+                   (reusable-frames . visible)
+                   (window-height   . 0.33)))
     :defer-config
     (defalias 'show-error-at-point-soon
       'flycheck-show-error-at-point)
     (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space))
+
 #+end_src
 
 ** Grep                                                        :builtin:
