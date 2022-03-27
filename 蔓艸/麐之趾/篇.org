@@ -1442,6 +1442,7 @@ https://github.com/org-roam/org-roam
 
 #+begin_src emacs-lisp
   (n/leaf lsp-pyright
+    :custom (lsp-pyright-multi-root . nil)
     :init
     (sup 'lsp-pyright)
 
@@ -1503,7 +1504,8 @@ https://github.com/org-roam/org-roam
     :commands python-isort-buffer python-isort-region python-isort-on-save-mode
     :hook (python-mode-hook
            . (lambda () (setq python-isort-extra-args `("--sp" ,(nasy/find-isort-config)))))
-    :init (sup `(python-isort :local-repo ,(concat *nasy-site* "nasy/python-isort"))))
+    :init (sup `(python-isort :local-repo ,(concat *nasy-site* "nasy/python-isort")))
+    (add-to-list 'safe-local-variable-values '(python-isort-extra-args)))
 #+end_src
 
 ** restclient.el                                  :restclient:languages:
