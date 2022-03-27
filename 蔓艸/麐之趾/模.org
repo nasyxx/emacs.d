@@ -30,7 +30,7 @@
      '("--------------------------------------------------------------------------------" n>
        "-- |" n>
        "-- Filename    : " (file-name-nondirectory (buffer-file-name)) n>
-       "-- Project     : " (file-name-nondirectory (directory-file-name (or projectile-project-root default-directory))) n>
+       "-- Project     : " (file-name-nondirectory (directory-file-name (or (project-root (project-current)) default-directory))) n>
        "-- Author      : Nasy" n>
        "-- Module      : " n>
        "-- License     : GPL-3.0+" n>
@@ -108,7 +108,7 @@
        "date     : " (format-time-string "%b %e, %Y") n>
        "email    : Nasy <nasyxx+python@gmail.com>" n>
        "filename : " (file-name-nondirectory (buffer-file-name)) n>
-       "project  : " (file-name-nondirectory (directory-file-name (or projectile-project-root default-directory))) n>
+       "project  : " (file-name-nondirectory (directory-file-name (or (project-root (project-current)) default-directory))) n>
        "license  : GPL-3.0+" n n> p n>
        "\"\"\"" n>))
 
