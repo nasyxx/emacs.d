@@ -1412,7 +1412,8 @@ https://github.com/org-roam/org-roam
       (flycheck-remove-next-checker 'python-flake8 'python-pylint))
     :mode-hook
     (python-flycheck-setup)
-    (nasy/tempo-python))
+    (nasy/tempo-python)
+    (setq-local tab-width 4))
 #+end_src
 
 *** elpy                                                       :python:
@@ -1442,7 +1443,6 @@ https://github.com/org-roam/org-roam
 
 #+begin_src emacs-lisp
   (n/leaf lsp-pyright
-    :custom (lsp-pyright-multi-root . nil)
     :init
     (sup 'lsp-pyright)
 
