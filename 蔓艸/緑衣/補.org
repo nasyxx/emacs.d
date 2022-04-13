@@ -23,7 +23,9 @@
     (require '風雨)
     (require '風雨旹用)
 
-    (sup '(company corfu cape))
+    (sup 'company)
+    (sup 'corfu)
+    (sup 'cape)
 
     (require 'cape)
     (require 'company)
