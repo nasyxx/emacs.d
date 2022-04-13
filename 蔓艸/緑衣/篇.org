@@ -99,7 +99,8 @@ https://github.com/abo-abo/avy
     :custom
     (avy-keys . '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)) ;; for dvorak
     :bind
-    ("C-:"     . avy-goto-char)
+    ("C-;"     . avy-goto-char)
+    ("C-:"     . avy-goto-char-2)
     ;; ("C-'"     . avy-goto-char-2)
     ;; ("C-`"     . avy-goto-char-2)
     ("M-g e"   . avy-goto-word-0)

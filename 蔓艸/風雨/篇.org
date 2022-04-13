@@ -1419,6 +1419,7 @@
       "e"     (define-keymap :prefix 'nasy-edit-map
                 "a"   #'avy-goto-char
                 "c"   #'comment-line
+                "e"   #'er/expand-region
                 "SPC" #'nasy/insert-zero-width-space)
       "t"     (define-keymap :prefix 'nasy-treemacs-map
                 "t" #'treemacs

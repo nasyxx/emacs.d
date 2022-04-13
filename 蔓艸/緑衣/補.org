@@ -578,10 +578,11 @@ https://github.com/galeo/corfu-doc
     :url "https://github.com/galeo/corfu-doc"
     :tag "convenience" "corfu" "documentation" "popup"
     :bind (:corfu-map
+           ("M-d" . corfu-doc-toggle)
            ("M-p" . corfu-doc-scroll-down)
            ("M-n" . corfu-doc-scroll-up))
     :hook (corfu-mode-hook . corfu-doc-mode)
-    :init (sup '(corfu-doc :type git :host github :repo "galeo/corfu-doc")))
+    :init (sup 'corfu-doc))
 #+end_src
 
 ** citre
