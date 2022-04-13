@@ -61,6 +61,7 @@ https://github.com/magnars/dash.el
     :doc "A modern list library for Emacs."
     :url "https://github.com/magnars/dash.el"
     :tag "lists"
+    :leaf-autoload t
     :commands global-dash-fontify-mode
     :hook (nasy--defer-load-hook . (lambda () (require 'dash)))
     :init (add-to-list 'nasy--defer-loads 'dash)

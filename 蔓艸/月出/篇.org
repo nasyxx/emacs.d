@@ -84,6 +84,7 @@ https://www.emacswiki.org/emacs/AnsiColor
   with face colours, bold, etc."
     :url "https://www.emacswiki.org/emacs/AnsiColor"
     :tag "comm" "processes" "terminals" "services"
+    :leaf-autoload t
     :commands colourise-compilation-buffer
     :after compile
     :hook ((compilation-filter-hook . colourise-compilation-buffer))
@@ -141,6 +142,7 @@ https://github.com/ankurdave/color-identifiers-mode
 
 #+begin_src emacs-lisp
   (leaf default-text-scale
+    :leaf-autoload t
     :commands default-text-scale-mode
     :hook nasy-first-key-hook
     :init (sup 'default-text-scale))
@@ -157,6 +159,7 @@ https://github.com/jwiegley/emacs-async
     :doc "Simple library for asynchronous processing in Emacs."
     :url "https://github.com/jwiegley/emacs-async"
     :tag "dired" "async" "network"
+    :leaf-autoload t
     :commands dired-async-mode
     :hook dired-mode-hook
     :init (sup 'async))
@@ -217,6 +220,7 @@ https://github.com/Fuco1/dired-hacks
 
 
   (leaf dired-filter
+    :leaf-autoload t
     :commands dired-filter-group-mode)
 #+end_src
 
@@ -224,6 +228,7 @@ https://github.com/Fuco1/dired-hacks
 
 #+begin_src emacs-lisp
   (leaf dired-rainbow
+    :leaf-autoload t
     :commands (dired nasy/-init-dired-rainbow dired-rainbow-define dired-rainbow-define-chmod)
     :defun nasy/-init-dired-rainbow
     :after dired
@@ -633,6 +638,7 @@ https://elpa.gnu.org/packages/rainbow-mode.html
     :doc "Colorize color names in buffers."
     :url "https://elpa.gnu.org/packages/rainbow-mode.html"
     :tag "faces"
+    :leaf-autoload t
     :commands nasy/rainbow-colorize-match
     :advice (:override rainbow-colorize-match nasy/rainbow-colorize-match)
     :hook (after-init-hook
@@ -908,6 +914,7 @@ https://github.com/joostkremers/visual-fill-column
     :doc "Emacs mode for wrapping visual-line-mode buffers at fill-column."
     :url "https://github.com/joostkremers/visual-fill-column"
     :tag "convenience"
+    :leaf-autoload t
     :commands maybe-adjust-visual-fill-column
     :hook (visual-line-mode-hook
            (visual-fill-column-mode-hook . maybe-adjust-visual-fill-column))
@@ -1034,6 +1041,7 @@ https://github.com/AndreaCrotti/yasnippet-snippets
     :doc "A template system for Emacs"
     :url "https://github.com/joaotavora/yasnippet"
     :tag "convenience" "enmulation"
+    :leaf-autoload t
     :after company
     :commands (yas-minor-mode
                yas-reload-all)

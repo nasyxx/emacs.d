@@ -1016,6 +1016,7 @@ https://github.com/yangsheng6810/org-latex-impatient
     :doc "Instant Previews LaTeX snippets in Org-mode."
     :url "https://github.com/yangsheng6810/org-latex-impatient"
     :tag "org" "tex" "tool"
+    :leaf-autoload t
     :custom
     `(org-latex-impatient-tex2svg-bin . ,(executable-find "tex2svg"))
     (org-latex-impatient-user-latex-definitions
@@ -1415,6 +1416,7 @@ https://github.com/org-roam/org-roam
 
 #+begin_src emacs-lisp
   (leaf elpy
+    :leaf-autoload t
     :commands nasy/elpy-init
     :bind
     (:elpy-mode-map
@@ -1495,6 +1497,7 @@ https://github.com/org-roam/org-roam
 
 
   (leaf python-isort
+    :leaf-autoload t
     :after reformatter
     :commands python-isort-buffer python-isort-region python-isort-on-save-mode
     :hook (python-mode-hook

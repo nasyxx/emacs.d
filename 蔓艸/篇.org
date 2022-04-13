@@ -117,6 +117,7 @@
     :load-path* "桃夭/麐之趾"
     :require t)
   (leaf 模
+    :leaf-autoload t
     :load-path* "桃夭/麐之趾"
     :commands (nasy/tempo-haskell
                nasy/tempo-python))

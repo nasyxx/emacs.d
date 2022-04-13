@@ -545,6 +545,7 @@ https://github.com/oantolin/orderless
     :doc "Emacs completion style that matches multiple regexps in any order."
     :url "https://github.com/oantolin/orderless"
     :tag "extensions"
+    :leaf-autoload t
     :commands (n/first-initialism n/flex-if-twiddle
                n/strict-if-hash n/without-if-bang)
     :custom
@@ -850,6 +851,7 @@ https://github.com/dimitri/switch-window
 #+begin_src emacs-lisp
   (leaf tempo
     :tag "builtin"
+    :leaf-autoload t
     :commands tempo-define-template)
 #+end_src
 
@@ -941,6 +943,7 @@ https://github.com/m00natic/vlfi
     :doc "View Large Files in Emacs"
     :url "https://github.com/m00natic/vlfi"
     :tag "files" "large files" "utilities"
+    :leaf-autoload t
     :commands ffap-vlf
     :init
     (sup 'vlf)
