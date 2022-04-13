@@ -840,9 +840,6 @@ system.
 https://ubolonton.github.io/emacs-tree-sitter/
 
 #+begin_src emacs-lisp
-  (defvar tsc-dyn-get-from)
-  (setq tsc-dyn-get-from '(:compilation))
-
   (n/leaf tree-sitter
     :doc "emacs-tree-sitter is an Emacs binding for tree-sitter, an incremental parsing
    system."
@@ -864,9 +861,10 @@ https://ubolonton.github.io/emacs-tree-sitter/
     :init
     (sup 'tsc)
     (sup 'tree-sitter)
-    (nasy/extra-repo tree-sitter-langs
-                     "emacs-tree-sitter/tree-sitter-langs"
-                     :files ("*"))
+    (sup 'tree-sitter-langs)
+    ;; (nasy/extra-repo tree-sitter-langs
+    ;;                  "emacs-tree-sitter/tree-sitter-langs"
+    ;;                  :files ("*"))
     :defer-config
     (require 'tree-sitter-langs)
     (add-to-list 'tree-sitter-major-mode-language-alist '(mhtml-mode . html))
