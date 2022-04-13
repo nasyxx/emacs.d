@@ -328,6 +328,9 @@ https://gitlab.com/koral/gcmh
                             (concat *nasy-etc* "abbrev.el") "Customized by Nasy.")
     (customize-set-variable 'auto-save-list-file-prefix
                             (concat *nasy-var* "auto-save/sessions/") "Customized by Nasy.")
+    (customize-set-variable 'auto-save-file-name-transforms
+                            `((".*" ,(concat *nasy-var* "auto-save/") t))
+                            "Customized by Nasy.")
     (customize-set-variable 'bookmark-default-file
                             (concat *nasy-var* "bookmarks.el") "Customized by Nasy.")
     (customize-set-variable 'eshell-aliases-file

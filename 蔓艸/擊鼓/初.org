@@ -67,6 +67,11 @@
   (when (boundp 'native-comp-eln-load-path)
     (add-to-list 'native-comp-eln-load-path (concat *nasy-var* "eln/")))
 
+  (when (fboundp 'startup-redirect-eln-cache)
+    (startup-redirect-eln-cache
+     (convert-standard-filename
+      (concat *nasy-var* "eln/"))))
+
 
   (defvar *debug* (or (getenv-internal "DEBUG") init-file-debug))
 
