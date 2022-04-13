@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-04-13 Wed 14:10 -->
+<!-- 2022-04-13 Wed 14:31 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Nasy Emacs 配置</title>
@@ -4131,6 +4131,7 @@ literal matches are enabled.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:doc</span> <span style="color: #177CB0; background-color: #DDEEC4;">"Emacs completion style that matches multiple regexps in any order."</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://github.com/oantolin/orderless"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"extensions"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> <span style="color: #7388d6;">(</span>n/first-initialism n/flex-if-twiddle</code>
 <code>             n/strict-if-hash n/without-if-bang<span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
@@ -4504,6 +4505,7 @@ Offer a <b>visual</b> way to choose a window to switch to.
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> tempo</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"builtin"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> tempo-define-template<span style="color: #707183;">)</span></code>
 </pre>
 </div>
@@ -4633,6 +4635,7 @@ files in batches, trading memory for processor time.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:doc</span> <span style="color: #177CB0; background-color: #DDEEC4;">"View Large Files in Emacs"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://github.com/m00natic/vlfi"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"files"</span> <span style="color: #177CB0;">"large files"</span> <span style="color: #177CB0;">"utilities"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> ffap-vlf</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:init</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">sup</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">vlf</span><span style="color: #7388d6;">)</span></code>
@@ -5488,6 +5491,7 @@ colours, bold, etc.
 <code><span style="color: #177CB0; background-color: #DDEEC4;">with face colours, bold, etc."</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://www.emacswiki.org/emacs/AnsiColor"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"comm"</span> <span style="color: #177CB0;">"processes"</span> <span style="color: #177CB0;">"terminals"</span> <span style="color: #177CB0;">"services"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> colourise-compilation-buffer</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> compile</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span> <span style="color: #7388d6;">(</span><span style="color: #909183;">(</span>compilation-filter-hook . colourise-compilation-buffer<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
@@ -5565,6 +5569,7 @@ name.
 <div class="outline-text-5" id="text-Default-Text-Scale">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> default-text-scale</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> default-text-scale-mode</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span> nasy-first-key-hook</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:init</span> <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">sup</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">default-text-scale</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
@@ -5589,6 +5594,7 @@ Simple library for asynchronous processing in Emacs.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:doc</span> <span style="color: #177CB0; background-color: #DDEEC4;">"Simple library for asynchronous processing in Emacs."</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://github.com/jwiegley/emacs-async"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"dired"</span> <span style="color: #177CB0;">"async"</span> <span style="color: #177CB0;">"network"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> dired-async-mode</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span> dired-mode-hook</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:init</span> <span style="color: #7388d6;">(</span><span style="color: #50616D; font-weight: bold;">sup</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">async</span><span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
@@ -5660,6 +5666,7 @@ Collection of useful dired additions
 <code></code>
 <code></code>
 <code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> dired-filter</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> dired-filter-group-mode<span style="color: #707183;">)</span></code>
 </pre>
 </div>
@@ -5671,6 +5678,7 @@ Collection of useful dired additions
 <div class="outline-text-6" id="text-Dired-Rainbow">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> dired-rainbow</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> <span style="color: #7388d6;">(</span>dired nasy/-init-dired-rainbow dired-rainbow-define dired-rainbow-define-chmod<span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:defun</span> nasy/-init-dired-rainbow</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> dired</code>
@@ -6237,6 +6245,7 @@ e.g. #0000ff is displayed in white with a blue background.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:doc</span> <span style="color: #177CB0; background-color: #DDEEC4;">"Colorize color names in buffers."</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://elpa.gnu.org/packages/rainbow-mode.html"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"faces"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> nasy/rainbow-colorize-match</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:advice</span> <span style="color: #7388d6;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:override</span> rainbow-colorize-match nasy/rainbow-colorize-match<span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span> <span style="color: #7388d6;">(</span>after-init-hook</code>
@@ -6582,6 +6591,7 @@ Emacs mode for wrapping visual-line-mode buffers at fill-column.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:doc</span> <span style="color: #177CB0; background-color: #DDEEC4;">"Emacs mode for wrapping visual-line-mode buffers at fill-column."</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://github.com/joostkremers/visual-fill-column"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"convenience"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> maybe-adjust-visual-fill-column</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span> <span style="color: #7388d6;">(</span>visual-line-mode-hook</code>
 <code>         <span style="color: #909183;">(</span>visual-fill-column-mode-hook . maybe-adjust-visual-fill-column<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
@@ -6750,6 +6760,7 @@ TextMate templates to YASnippet. Watch a demo on YouTube.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:doc</span> <span style="color: #177CB0; background-color: #DDEEC4;">"A template system for Emacs"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://github.com/joaotavora/yasnippet"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"convenience"</span> <span style="color: #177CB0;">"enmulation"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> company</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> <span style="color: #7388d6;">(</span>yas-minor-mode</code>
 <code>             yas-reload-all<span style="color: #7388d6;">)</span></code>
@@ -8141,6 +8152,7 @@ Git clients exist, only Magit and Git itself deserve to be called porcelains.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:doc</span> <span style="color: #177CB0; background-color: #DDEEC4;">"It's Magit! A Git porcelain inside Emacs."</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://github.com/magit/magit"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"git"</span> <span style="color: #177CB0;">"tools"</span> <span style="color: #177CB0;">"vc"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> magit-status</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span> <span style="color: #7388d6;">(</span><span style="color: #909183;">(</span>magit-popup-mode-hook . no-trailing-whitespace<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:mode-hook</span> <span style="color: #7388d6;">(</span>nasy/load-magit<span style="color: #7388d6;">)</span></code>
@@ -8420,6 +8432,7 @@ Toggles between the vterm buffer and whatever buffer you are editing.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:load-path*</span> <span style="color: #177CB0;">"&#26691;&#22829;/&#40592;&#20043;&#36286;"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:require</span> t<span style="color: #707183;">)</span></code>
 <code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> &#27169;</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:load-path*</span> <span style="color: #177CB0;">"&#26691;&#22829;/&#40592;&#20043;&#36286;"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> <span style="color: #7388d6;">(</span>nasy/tempo-haskell</code>
 <code>             nasy/tempo-python<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span></code>
@@ -9552,6 +9565,7 @@ MathJax outputed SVG.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:doc</span> <span style="color: #177CB0; background-color: #DDEEC4;">"Instant Previews LaTeX snippets in Org-mode."</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://github.com/yangsheng6810/org-latex-impatient"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"org"</span> <span style="color: #177CB0;">"tex"</span> <span style="color: #177CB0;">"tool"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:custom</span></code>
 <code>  <span style="color: #50616D; font-weight: bold;">`</span><span style="color: #7388d6;">(</span>org-latex-impatient-tex2svg-bin . ,<span style="color: #909183;">(</span>executable-find <span style="color: #177CB0;">"tex2svg"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #7388d6;">(</span>org-latex-impatient-user-latex-definitions</code>
@@ -9996,6 +10010,7 @@ Rudimentary Roam replica with org-mode.
 <div class="outline-text-6" id="text-elpy">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> elpy</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> nasy/elpy-init</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:bind</span></code>
 <code>  <span style="color: #7388d6;">(</span><span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:elpy-mode-map</span></code>
@@ -10084,6 +10099,7 @@ Rudimentary Roam replica with org-mode.
 <code></code>
 <code></code>
 <code><span style="color: #707183;">(</span><span style="color: #50616D; font-weight: bold;">leaf</span> python-isort</code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:after</span> reformatter</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> python-isort-buffer python-isort-region python-isort-on-save-mode</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span> <span style="color: #7388d6;">(</span>python-mode-hook</code>
@@ -10329,6 +10345,7 @@ A modern list library for Emacs.
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:doc</span> <span style="color: #177CB0; background-color: #DDEEC4;">"A modern list library for Emacs."</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:url</span> <span style="color: #177CB0;">"https://github.com/magnars/dash.el"</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:tag</span> <span style="color: #177CB0;">"lists"</span></code>
+<code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:leaf-autoload</span> t</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:commands</span> global-dash-fontify-mode</code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:hook</span> <span style="color: #7388d6;">(</span>nasy--defer-load-hook . <span style="color: #909183;">(</span><span style="color: #50616D; font-weight: bold;">lambda</span> <span style="color: #709870;">()</span> <span style="color: #709870;">(</span><span style="color: #50616D; font-weight: bold;">require</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">dash</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span></code>
 <code>  <span style="color: #705438; background-color: #E3EFD1; font-style: italic;">:init</span> <span style="color: #7388d6;">(</span>add-to-list <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">nasy--defer-loads</span> <span style="color: #50616D; font-weight: bold;">'</span><span style="color: #B35C44; font-weight: bold;">dash</span><span style="color: #7388d6;">)</span></code>
@@ -10417,7 +10434,7 @@ mode which can apply this command automatically on save.
 <div id="postamble" class="status">
 <p class="date">Date: 2021-06-16 Wed 00:00</p>
 <p class="author">Author: Nasy</p>
-<p class="date">Created: 2022-04-13 Wed 14:10</p>
+<p class="date">Created: 2022-04-13 Wed 14:31</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 <script>window.klipse_settings = {selector_eval_html: '.src-html',
