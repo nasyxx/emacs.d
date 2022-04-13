@@ -63,19 +63,12 @@
 * straight
 
 #+begin_src emacs-lisp
-  (require 'cl-lib)
-  (cl-eval-when (compile eval load)
-
+  (eval-and-compile
     (with-no-warnings
-     (customize-set-variable 'straight-vc-git-default-clone-depth 1
-           "Customized by Nasy.")
-     (customize-set-variable 'straight-repository-branch "develop"
-           "Customized by Nasy.")
-     (customize-set-variable 'straight-enable-use-package-integration nil
-           "Customized by Nasy.")
-     (customize-set-variable 'straight-check-for-modifications nil
-           "Customized by Nasy."))
-
+      (setq straight-vc-git-default-clone-depth     1
+            straight-repository-branch              "develop"
+            straight-enable-use-package-integration nil
+            straight-check-for-modifications        nil))
     (defvar bootstrap-version)
 
     (let ((bootstrap-file
