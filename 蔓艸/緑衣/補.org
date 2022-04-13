@@ -308,7 +308,7 @@ Capfs provided by Cape can also be used by Company.
 https://github.com/minad/cape
 
 #+begin_src emacs-lisp
-  (n/leaf-nr cape
+  (leaf cape
     :doc "Completion At Point Extensions."
     :url "https://github.com/minad/cape"
     :tag "editing" "extensions"
@@ -345,9 +345,7 @@ https://github.com/minad/cape
 *** company
 
 #+begin_src emacs-lisp
-  (n/leaf-nv company
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf company
     ;; :hook (prog-mode-hook org-mode-hook)
     :bind
     ;; ("C-;"     . nasy/company-complete)
@@ -405,9 +403,9 @@ https://github.com/minad/cape
 *** Company Quickhelp
 
 #+begin_src emacs-lisp
-  (n/leaf company-quickhelp
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf company-quickhelp
+
+
     :after company
     :bind
     (:company-active-map
@@ -421,9 +419,7 @@ https://github.com/minad/cape
 *** Company Tabnine
 
 #+begin_src emacs-lisp
-  (n/leaf-nv company-tabnine
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf company-tabnine
     :after company
     :custom
     `(company-tabnine-binaries-folder . ,(concat *nasy-var* "company/tabnine-binaries"))
@@ -435,9 +431,7 @@ https://github.com/minad/cape
 *** Company Flx
 
 #+begin_src emacs-lisp
-  (n/leaf-nv company-flx
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf company-flx
     :after company
     :hook company-mode-hook
     :init (sup 'company-flx))
@@ -446,9 +440,7 @@ https://github.com/minad/cape
 *** Company Box
 
 #+begin_src emacs-lisp
-  (n/leaf-nv company-box
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf company-box
     :after company
     :hook company-mode-hook
     :custom
@@ -530,9 +522,6 @@ https://github.com/zerolfx/copilot.el
     (copilto-idle-delay . 3)
     :hook (prog-mode-hook python-mode-hook)
     :init
-    (sup 'dash)
-    (sup 's)
-    (sup 'editorconfig)
     (sup '(copilot :host github :repo "zerolfx/copilot.el"
                    :files ("dist" "copilot.el"))))
 #+end_src
@@ -569,7 +558,7 @@ https://github.com/minad/corfu
                          (car corfu--candidates)))
       (seq-intersection (this-command-keys-vector) [?: ?\. ?, ?\) ?\] ?\" ?' ?\s]))))
 
-  (n/leaf-nv corfu
+  (leaf corfu
     :doc "Completion Overlay Region FUnction."
     :url "https://github.com/minad/corfu"
     :tag "editing" "extensions"
@@ -607,7 +596,7 @@ Corfu. It can be re regarded as company-quickhelp for Corfu.
 https://github.com/galeo/corfu-doc
 
 #+begin_src emacs-lisp
-  (n/leaf-nv corfu-doc
+  (leaf corfu-doc
     :doc "Documentation popup for Corfu."
     :url "https://github.com/galeo/corfu-doc"
     :tag "convenience" "corfu" "documentation" "popup"

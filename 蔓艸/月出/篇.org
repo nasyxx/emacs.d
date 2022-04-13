@@ -60,7 +60,7 @@ which changed).
 https://github.com/jdtsmith/abridge-diff
 
 #+begin_src emacs-lisp
-  (n/leaf abridge-diff
+  (leaf abridge-diff
     :doc "Emacs package for refining diff hunks with very long lines (as in LaTeX files)."
     :url "https://github.com/jdtsmith/abridge-diff"
     :tag "diffs" "magit" "tools"
@@ -79,7 +79,7 @@ colours, bold, etc.
 https://www.emacswiki.org/emacs/AnsiColor
 
 #+begin_src emacs-lisp
-  (n/leaf ansi-color
+  (leaf ansi-color
     :doc "ansi-color.el translates ANSI SGR (Select Graphic Rendition) escape sequences
   with face colours, bold, etc."
     :url "https://www.emacswiki.org/emacs/AnsiColor"
@@ -103,7 +103,7 @@ A light that follows your cursor around so you don't lose it!
 https://github.com/Malabarba/beacon
 
 #+begin_src emacs-lisp
-  (n/leaf beacon
+  (leaf beacon
     :doc "Never lose your cursor again."
     :url "https://github.com/Malabarba/beacon"
     :tag "convenience"
@@ -128,7 +128,7 @@ name.
 https://github.com/ankurdave/color-identifiers-mode
 
 #+begin_src emacs-lisp
-  (n/leaf color-identifiers-mode
+  (leaf color-identifiers-mode
     :doc "Emacs minor mode to highlight each source code identifier uniquely based
   on its name."
     :url "https://github.com/ankurdave/color-identifiers-mode"
@@ -140,7 +140,7 @@ https://github.com/ankurdave/color-identifiers-mode
 ** Default Text Scale                                             :text:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv default-text-scale
+  (leaf default-text-scale
     :commands default-text-scale-mode
     :hook nasy-first-key-hook
     :init (sup 'default-text-scale))
@@ -153,7 +153,7 @@ Simple library for asynchronous processing in Emacs.
 https://github.com/jwiegley/emacs-async
 
 #+begin_src emacs-lisp
-  (n/leaf dired-async
+  (leaf dired-async
     :doc "Simple library for asynchronous processing in Emacs."
     :url "https://github.com/jwiegley/emacs-async"
     :tag "dired" "async" "network"
@@ -169,7 +169,7 @@ Collection of useful dired additions
 https://github.com/Fuco1/dired-hacks
 
 #+begin_src emacs-lisp
-  (n/leaf-nr dired-hacks
+  (leaf dired-hacks
     :doc "Collection of useful dired additions"
     :url "https://github.com/Fuco1/dired-hacks"
     :tag "files"
@@ -181,9 +181,7 @@ https://github.com/Fuco1/dired-hacks
 *** Dired Filter
 
 #+begin_src emacs-lisp
-  (n/leaf-nv dired-filter
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf dired-filter
     :after dash
     :bind
     (:dired-filter-map
@@ -218,16 +216,15 @@ https://github.com/Fuco1/dired-hacks
     (define-key dired-filter-map (kbd "/") dired-filter-mark-map))
 
 
-  (n/leaf-nv dired-filter
+  (leaf dired-filter
     :commands dired-filter-group-mode)
 #+end_src
 
 *** Dired Rainbow
 
 #+begin_src emacs-lisp
-  (n/leaf-nv dired-rainbow
+  (leaf dired-rainbow
     :commands (dired nasy/-init-dired-rainbow dired-rainbow-define dired-rainbow-define-chmod)
-    :leaf-defun nil
     :defun nasy/-init-dired-rainbow
     :after dired
     :require t
@@ -283,7 +280,7 @@ https://github.com/Fuco1/dired-hacks
 *** Dired Narrow
 
 #+begin_src emacs-lisp
-  (n/leaf-nv dired-narrow
+  (leaf dired-narrow
     :after dired
     :init (sup 'dired-narrow))
 #+end_src
@@ -291,7 +288,7 @@ https://github.com/Fuco1/dired-hacks
 *** Dired Collapse
 
 #+begin_src emacs-lisp
-  (n/leaf-nv dired-collapse
+  (leaf dired-collapse
     :after dired
     :hook dired-mode-hook
     :init (sup 'dired-collapse))
@@ -304,7 +301,7 @@ Emacs package for highlighting uncommitted changes
 https://github.com/dgutov/diff-hl
 
 #+begin_src emacs-lisp
-  (n/leaf diff-hl
+  (leaf diff-hl
     :doc "Emacs package for highlighting uncommitted changes"
     :url "https://github.com/dgutov/diff-hl"
     :tag "vc" "diffs"
@@ -324,12 +321,10 @@ This package displays ElDoc documentations in a childframe.
 https://github.com/casouri/eldoc-box
 
 #+begin_src emacs-lisp
-  (n/leaf eldoc-box
+  (leaf eldoc-box
     :doc "This package displays ElDoc documentations in a childframe."
     :url "https://github.com/casouri/eldoc-box"
     :tag "docs" "extensions" "help"
-    :leaf-autoload nil
-    :leaf-defun nil
     :custom
     (eldoc-box-position-function . #'eldoc-box--default-at-point-position-function)
     :hook ((eldoc-mode-hook . eldoc-box-hover-mode)
@@ -344,12 +339,10 @@ Display eldoc doc with contextual documentation overlay for easy to look.
 https://github.com/stardiviner/eldoc-overlay
 
 #+begin_src emacs-lisp
-  (n/leaf eldoc-overlay
+  (leaf eldoc-overlay
     :doc "Display eldoc doc with contextual documentation overlay for easy to look."
     :url "https://github.com/stardiviner/eldoc-overlay"
     :tag "extensions"
-    :leaf-autoload nil
-    :leaf-defun nil
     :hook eldoc-mode-hook
     :init (sup 'eldoc-overlay))
 #+end_src
@@ -361,12 +354,10 @@ Emacs extension to increase selected region by semantic units.
 https://github.com/magnars/expand-region.el
 
 #+begin_src emacs-lisp
-  (n/leaf expand-region
+  (leaf expand-region
     :doc "Emacs extension to increase selected region by semantic units."
     :url "https://github.com/magnars/expand-region.el"
     :tag "marking" "region"
-    :leaf-autoload nil
-    :leaf-defun nil
     :bind ("C-=" . er/expand-region)
     :init (sup 'expand-region))
 #+end_src
@@ -378,7 +369,7 @@ Find file/directory and review Diff/Patch/Commit quickly everywhere.
 https://github.com/technomancy/find-file-in-project
 
 #+begin_src emacs-lisp
-  (n/leaf find-file-in-project
+  (leaf find-file-in-project
     :doc "Find file/directory and review Diff/Patch/Commit quickly everywhere."
     :url "https://github.com/technomancy/find-file-in-project"
     :tag "project" "convenience"
@@ -394,7 +385,7 @@ i.e., adjusting the layout of the table so it can fit in n columns.
 https://github.com/casouri/ftable
 
 #+begin_src emacs-lisp
-  (n/leaf ftable
+  (leaf ftable
     :doc "Fill (auto-layout) tables."
     :url "https://github.com/casouri/ftable"
     :tag "convenience" "table" "text"
@@ -410,7 +401,7 @@ Emacs port of GitGutter which is Sublime Text Plugin [[https://github.com/jisaac
 https://github.com/emacsorphanage/git-gutter
 
 #+begin_src emacs-lisp :tangle no
-  (n/leaf git-gutter
+  (leaf git-gutter
     :doc "Emacs port of GitGutter which is Sublime Text Plugin."
     :url "https://github.com/emacsorphanage/git-gutter"
     :tag "vc" "git"
@@ -433,7 +424,7 @@ Emacs minor mode to highlight indentation.
 https://github.com/DarthFennec/highlight-indent-guides
 
 #+begin_src emacs-lisp
-  (n/leaf highlight-indent-guides
+  (leaf highlight-indent-guides
     :doc "Emacs minor mode to highlight indentation."
     :url "https://github.com/DarthFennec/highlight-indent-guides"
     :tag "faces"
@@ -450,7 +441,7 @@ This minor-mode draws a tail in real time, when you write.
 https://www.emacswiki.org/emacs/highlight-tail.el
 
 #+begin_src emacs-lisp
-  (n/leaf highlight-tail
+  (leaf highlight-tail
     :doc "This minor-mode draws a tail in real time, when you write."
     :url "https://www.emacswiki.org/emacs/highlight-tail.el"
     :tag "color" "effect" "highlight" "visual"
@@ -465,7 +456,7 @@ Highlight the current line of characters.
 https://www.emacswiki.org/emacs/HighlightCurrentLine
 
 #+begin_src emacs-lisp
-  (n/leaf hl-line
+  (leaf hl-line
     :doc "Highlight the current line of characters."
     :url "https://www.emacswiki.org/emacs/HighlightCurrentLine"
     :tag "faces" "frames" "emulations"
@@ -479,7 +470,7 @@ Emacs plugin to show the current buffer's imenu entries in a seperate buffer.
 https://github.com/bmag/imenu-list
 
 #+begin_src emacs-lisp
-  (n/leaf imenu-list
+  (leaf imenu-list
     :doc "Emacs plugin to show the current buffer's imenu entries in a seperate buffer"
     :url "https://github.com/bmag/imenu-list"
     :tag "tools" "convenience"
@@ -499,7 +490,7 @@ backends (such as lsp-mode and Emacs 28's elisp-mode) provide.
 https://github.com/jdtsmith/kind-icon
 
 #+begin_src emacs-lisp
-  (n/leaf-nr kind-icon
+  (leaf kind-icon
     :doc "Completion kind text/icon prefix labelling for emacs in-region completion."
     :url "https://github.com/jdtsmith/kind-icon"
     :tag "completion"
@@ -520,7 +511,7 @@ variable-pitch.
 https://gitlab.com/jabranham/mixed-pitch
 
 #+begin_src emacs-lisp
-  (n/leaf mixed-pitch
+  (leaf mixed-pitch
     :doc "Mix fixed-pitch and variable-pitch fonts in Emacs."
     :url "https://gitlab.com/jabranham/mixed-pitch"
     :tag "faces"
@@ -552,7 +543,7 @@ in one buffer.
 https://github.com/purcell/mmm-mode
 
 #+begin_src emacs-lisp
-  (n/leaf-nr mmm-auto
+  (leaf mmm-auto
     :doc "MMM Mode is a minor mode for Emacs that allows Multiple Major Modes
   to coexist in one buffer."
     :url "https://github.com/purcell/mmm-mode"
@@ -574,7 +565,7 @@ Multiple cursors for Emacs.
 https://github.com/magnars/multiple-cursors.el
 
 #+begin_src emacs-lisp
-  (n/leaf multiple-cursors
+  (leaf multiple-cursors
     :doc "Multiple cursors for Emacs."
     :url "https://github.com/magnars/multiple-cursors.el"
     :tag "editing" "cursors"
@@ -601,12 +592,10 @@ restoring it from a file.
 https://github.com/Fanael/persistent-scratch
 
 #+begin_src emacs-lisp
-  (n/leaf persistent-scratch
+  (leaf persistent-scratch
     :doc "Preserve the scratch buffer across Emacs sessions."
     :url "https://github.com/Fanael/persistent-scratch"
     :tag "convenience" "history"
-    :leaf-autoload nil
-    :leaf-defun nil
     :custom `((persistent-scratch-save-file
                . ,(concat *nasy-var* "persistent-scratch.el"))
               (persistent-scratch-backup-directory
@@ -622,7 +611,7 @@ Show the history of points you visited before.
 https://github.com/blue0513/point-history
 
 #+begin_src emacs-lisp
-  (n/leaf point-history
+  (leaf point-history
     :doc "Show the history of points you visited before."
     :url "https://github.com/blue0513/point-history"
     :tag "editing"
@@ -640,7 +629,7 @@ e.g. #0000ff is displayed in white with a blue background.
 https://elpa.gnu.org/packages/rainbow-mode.html
 
 #+begin_src emacs-lisp
-  (n/leaf rainbow-mode
+  (leaf rainbow-mode
     :doc "Colorize color names in buffers."
     :url "https://elpa.gnu.org/packages/rainbow-mode.html"
     :tag "faces"
@@ -682,7 +671,7 @@ statements are at a given depth.
 https://github.com/Fanael/rainbow-delimiters
 
 #+begin_src emacs-lisp
-  (n/leaf rainbow-delimiters
+  (leaf rainbow-delimiters
     :doc "Emacs rainbow delimiters mode"
     :url "https://github.com/Fanael/rainbow-delimiters"
     :tag "convenience" "faces" "lisp" "tools"
@@ -714,7 +703,7 @@ it.
 https://github.com/Fuco1/smartparens
 
 #+begin_src emacs-lisp
-  (n/leaf smartparens-config
+  (leaf smartparens-config
     :doc "Minor mode for Emacs that deals with parens pairs and tries to be smart about it."
     :url "https://github.com/Fuco1/smartparens"
     :tag "abbrev" "convenience" "editing"
@@ -734,7 +723,7 @@ font-lock mechanism used in highlight-symbol.
 https://github.com/wolray/symbol-overlay
 
 #+begin_src emacs-lisp
-  (n/leaf symbol-overlay
+  (leaf symbol-overlay
     :doc "Highlight symbols with keymap-enabled overlays."
     :url "https://github.com/wolray/symbol-overlay"
     :tag "faces" "matching"
@@ -754,7 +743,7 @@ Treemacs is a file and project explorer similar to NeoTree or vim’s NerdTree, 
 https://github.com/Alexander-Miller/treemacs
 
 #+begin_src emacs-lisp
-  (n/leaf treemacs
+  (leaf treemacs
     :doc "A tree layout file explorer for Emacs"
     :url "https://github.com/Alexander-Miller/treemacs"
     :tag "convenience" "files"
@@ -818,16 +807,16 @@ https://github.com/Alexander-Miller/treemacs
        (treemacs-git-mode 'simple))))
 
 
-  (n/leaf treemacs-icons-dired
+  (leaf treemacs-icons-dired
     :after treemacs dired
     :init (sup 'treemacs-icons-dired)
     :config (treemacs-icons-dired-mode))
 
-  (n/leaf treemacs-magit
+  (leaf treemacs-magit
     :after treemacs magit
     :init (sup 'treemacs-magit))
 
-  (n/leaf treemacs-projectile
+  (leaf treemacs-projectile
     :after treemacs projectile
     :init (sup 'treemacs-projectile))
 #+end_src
@@ -840,7 +829,7 @@ system.
 https://ubolonton.github.io/emacs-tree-sitter/
 
 #+begin_src emacs-lisp
-  (n/leaf tree-sitter
+  (leaf tree-sitter
     :doc "emacs-tree-sitter is an Emacs binding for tree-sitter, an incremental parsing
    system."
     :url "https://github.com/ubolonton/emacs-tree-sitter"
@@ -871,7 +860,7 @@ https://ubolonton.github.io/emacs-tree-sitter/
     (add-to-list 'tree-sitter-major-mode-language-alist '(emacs-lisp-mode . elisp)))
 
 
-  (n/leaf tree-sitter-hl
+  (leaf tree-sitter-hl
     :after tree-sitter tree-sitter-langs
     :hook (css-mode-hook python-mode-hook))
 #+end_src
@@ -881,14 +870,14 @@ https://ubolonton.github.io/emacs-tree-sitter/
 https://codeberg.org/FelipeLema/tree-sitter-indent.el.git
 
 #+begin_src emacs-lisp
-  (n/leaf tree-sitter-indent
+  (leaf tree-sitter-indent
     :doc "Use Tree-sitter as backend to source code indentation."
     :url "https://codeberg.org/FelipeLema/tree-sitter-indent.el"
     :tag "convenience" "internal"
     :hook (tree-sitter-mode-hook)
     :init (sup 'tree-sitter-indent))
 
-  (n/leaf tree-sitter-indent
+  (leaf tree-sitter-indent
     :after tree-sitter-indent
     :custom (c-indent-offset . tree-sitter-indent-offset))
 #+end_src
@@ -900,7 +889,7 @@ Navigate the emacs undo history by staging undo's in a temporary buffer.
 https://github.com/jackkamm/undo-propose-el
 
 #+begin_src emacs-lisp
-  (n/leaf undo-propose
+  (leaf undo-propose
     :doc "Navigate the emacs undo history by staging undo's in a temporary buffer."
     :url "https://github.com/jackkamm/undo-propose-el"
     :tag "convenience" "files" "undo" "redo" "history"
@@ -915,7 +904,7 @@ Emacs mode for wrapping visual-line-mode buffers at fill-column.
 https://github.com/joostkremers/visual-fill-column
 
 #+begin_src emacs-lisp
-  (n/leaf visual-fill-column
+  (leaf visual-fill-column
     :doc "Emacs mode for wrapping visual-line-mode buffers at fill-column."
     :url "https://github.com/joostkremers/visual-fill-column"
     :tag "convenience"
@@ -941,7 +930,7 @@ https://archive.casouri.cat/note/2021/visual-undo-tree/index.html
 https://github.com/casouri/vundo
 
 #+begin_src emacs-lisp
-  (n/leaf vundo
+  (leaf vundo
     :doc "Visual undo tree."
     :url "https://github.com/casouri/vundo"
     :tag "undo" "redo"
@@ -970,7 +959,7 @@ Emacs package that displays available keybindings in popup.
 https://github.com/justbur/emacs-which-key
 
 #+begin_src emacs-lisp
-  (n/leaf which-key
+  (leaf which-key
     :doc "Emacs package that displays available keybindings in popup."
     :url "https://github.com/justbur/emacs-which-key"
     :tag "help"
@@ -987,7 +976,7 @@ writing mode similar to the famous Writeroom editor for macOS.
 https://github.com/joostkremers/writeroom-mode
 
 #+begin_src emacs-lisp
-  (n/leaf writeroom-mode
+  (leaf writeroom-mode
     :doc "Writeroom-mode: distraction-free writing for Emacs."
     :url "https://github.com/joostkremers/writeroom-mode"
     :tag "text"
@@ -1041,7 +1030,7 @@ https://github.com/sei40kr/license-snippets
 https://github.com/AndreaCrotti/yasnippet-snippets
 
 #+begin_src emacs-lisp
-  (n/leaf yasnippet
+  (leaf yasnippet
     :doc "A template system for Emacs"
     :url "https://github.com/joaotavora/yasnippet"
     :tag "convenience" "enmulation"

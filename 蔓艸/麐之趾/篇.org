@@ -66,7 +66,7 @@ Programming Languages
 *** bibtex-tidy
 
 #+begin_src emacs-lisp
-  (n/leaf bibtex-tidy
+  (leaf bibtex-tidy
     :after reformatter
     :init (sup `(bibtex-tidy :local-repo ,(concat *nasy-site* "nasy/bibtex-tidy-mode"))))
 #+end_src
@@ -78,7 +78,7 @@ Emacs client/library for the Language Server Protocol
 *** lsp-mode                                                :languages:
 
 #+begin_src emacs-lisp
-  (n/leaf lsp-mode
+  (leaf lsp-mode
     :doc "Language Server Protocol Support for Emacs."
     :url "https://github.com/emacs-lsp/lsp-mode"
     :tag "languages"
@@ -92,9 +92,7 @@ Emacs client/library for the Language Server Protocol
     (nasy/-merge-capf))
 
 
-  (n/leaf lsp-mode
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf lsp-mode
     :defun nasy/lsp-init
     :after lsp-mode
     :custom
@@ -163,7 +161,7 @@ Emacs client/library for the Language Server Protocol
 *** lsp-ui                                            :languages:tools:
 
 #+begin_src emacs-lisp
-  (n/leaf lsp-ui
+  (leaf lsp-ui
     :doc "UI integrations for lsp-mode."
     :url "https://github.com/emacs-lsp/lsp-ui"
     :tag "languages" "tools"
@@ -199,7 +197,7 @@ Emacs client/library for the Language Server Protocol
 *** lsp-treemacs                                            :languages:
 
 #+begin_src emacs-lisp
-  (n/leaf lsp-treemacs
+  (leaf lsp-treemacs
     :doc "lsp-mode ❤ treemacs."
     :url "https://github.com/emacs-lsp/lsp-treemacs"
     :tag "languages"
@@ -216,14 +214,14 @@ Emacs client/library for the Language Server Protocol
 ** dap-mode                                                  :languages:
 
 #+begin_src emacs-lisp
-  (n/leaf-nr dap-mode
+  (leaf dap-mode
     :custom `(dap-breakpoints-file . ,(concat *nasy-var* "dap/breakpoints.el")))
 #+end_src
 
 ** Flex
 
 #+begin_src emacs-lisp
-  (n/leaf flex-mode
+  (leaf flex-mode
     :mode "\\.l\\'"
     :init (sup `(flex-mode :local-repo ,(concat *nasy-site* "villadora"))))
 #+end_src
@@ -233,7 +231,7 @@ Emacs client/library for the Language Server Protocol
 *** haskell-mode                                              :haskell:
 
 #+begin_src emacs-lisp
-  (n/leaf haskell-mode
+  (leaf haskell-mode
     :after haskell-mode
     :custom
     ((haskell-tags-on-save
@@ -251,9 +249,7 @@ Emacs client/library for the Language Server Protocol
     (haskell-doc-chop-off-context                 . nil))
 
 
-  (n/leaf haskell-mode
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf haskell-mode
     :defun nasy/tempo-haskell stack-exec-path-mode
     :bind
     (:haskell-mode-map
@@ -335,7 +331,7 @@ Emacs client/library for the Language Server Protocol
 *** lsp-haskell                                               :haskell:
 
 #+begin_src emacs-lisp
-  (n/leaf lsp-haskell
+  (leaf lsp-haskell
     :custom (lsp-haskell-formatting-provider . "brittany")
     :hook
     (haskell-mode-hook . start-lsp-haskell)
@@ -355,7 +351,7 @@ Emacs client/library for the Language Server Protocol
 ** HTML                                                 :html:languages:
 
 #+begin_src emacs-lisp
-  (n/leaf lsp-html
+  (leaf lsp-html
     :hook
     ((html-mode-hook mhtml-mode-hook sgml-mode-hook web-mode-hook)
      . lsp-deferred))
@@ -364,7 +360,7 @@ Emacs client/library for the Language Server Protocol
 ** JavaScript & TypeScript             :javascript:typescript:languages:
 
 #+begin_src emacs-lisp
-  (n/leaf lsp-javascript
+  (leaf lsp-javascript
     :hook
     ((javascript-mode-hook js-mode-hook) . lsp-deferred))
 #+end_src
@@ -374,7 +370,7 @@ Emacs client/library for the Language Server Protocol
 *** elisp-def                                                    :lisp:
 
  #+begin_src emacs-lisp
-   (n/leaf elisp-def
+   (leaf elisp-def
      :init (sup 'elisp-def)
      :hook (((emacs-lisp-mode-hook ielm-mode-hook) . elisp-def-mode)))
  #+end_src
@@ -382,7 +378,7 @@ Emacs client/library for the Language Server Protocol
 *** Highlight-quoted                                             :lisp:
 
  #+begin_src emacs-lisp
-   (n/leaf highlight-quoted
+   (leaf highlight-quoted
      :init (sup 'highlight-quoted)
      :hook (emacs-lisp-mode-hook))
  #+end_src
@@ -412,7 +408,7 @@ Emacs client/library for the Language Server Protocol
 *** lisp-mode                                                    :lisp:
 
  #+begin_src emacs-lisp
-   (n/leaf lisp-mode
+   (leaf lisp-mode
      :bind
      (:emacs-lisp-mode-map
       ([remap eval-expression] . pp-eval-expression)
@@ -429,7 +425,7 @@ Emacs client/library for the Language Server Protocol
 *** macrostep                                                    :lisp:
 
  #+begin_src emacs-lisp
-   (n/leaf macrostep
+   (leaf macrostep
      :bind
      (:emacs-lisp-mode-map
       ("C-c e" . macrostep-expand))
@@ -440,7 +436,7 @@ Emacs client/library for the Language Server Protocol
 *** parinfer-rust-mode                                           :lisp:
 
  #+begin_src emacs-lisp
-   (n/leaf parinfer-rust-mode
+   (leaf parinfer-rust-mode
      :custom
      (parinfer-rust-auto-download . nil)
      `(parinfer-rust-library
@@ -457,7 +453,7 @@ Emacs client/library for the Language Server Protocol
 ** Markdown                                         :markdown:languages:
 
 #+begin_src emacs-lisp
-  (n/leaf markdown-mode
+  (leaf markdown-mode
     :mode ("INSTALL\\'"
            "CONTRIBUTORS\\'"
            "LICENSE\\'"
@@ -473,7 +469,7 @@ Emacs client/library for the Language Server Protocol
 ** Nix                                                   :nix:languages:
 
 #+begin_src emacs-lisp
-  (n/leaf nix-mode
+  (leaf nix-mode
     :hook (nix-mode-hook . start-nix-lsp)
     :init
     (sup 'nix-mode)
@@ -942,7 +938,7 @@ element
 https://github.com/awth13/org-appear
 
 #+begin_src emacs-lisp
-  (n/leaf-nv org-appear
+  (leaf org-appear
     :doc "Make invisible parts of Org elements appear visible."
     :url "https://github.com/awth13/org-appear"
     :tag "convenience"
@@ -1016,7 +1012,7 @@ MathJax outputed SVG.
 https://github.com/yangsheng6810/org-latex-impatient
 
 #+begin_src emacs-lisp
-  (n/leaf org-latex-impatient
+  (leaf org-latex-impatient
     :doc "Instant Previews LaTeX snippets in Org-mode."
     :url "https://github.com/yangsheng6810/org-latex-impatient"
     :tag "org" "tex" "tool"
@@ -1036,8 +1032,9 @@ https://github.com/yangsheng6810/org-latex-impatient
 *** Org Prettify Source Block                                     :org:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv org-prettify-source-block
+  (leaf org-prettify-source-block
     :load-path* "桃夭/麐之趾"
+    :leaf-autoload t
     :hook nasy-org-first-key-hook)
 #+end_src
 
@@ -1170,7 +1167,7 @@ https://github.com/org-roam/org-roam
 
 
 #+begin_src emacs-lisp
-  (n/leaf org-roam
+  (leaf org-roam
     :doc "Rudimentary Roam replica with org-mode."
     :url "https://github.com/org-roam/org-roam"
     :tag "convenience" "roam"
@@ -1199,7 +1196,7 @@ https://github.com/org-roam/org-roam
 *** Org superstar                                                 :org:
 
 #+begin_src emacs-lisp
-  (n/leaf-nr org-superstar
+  (leaf org-superstar
     :hook
     (nasy/font-change-hook
      . (lambda ()
@@ -1223,7 +1220,7 @@ https://github.com/org-roam/org-roam
            (nasy/change-char-width ?✚ 1)
            (nasy/change-char-width ?⁍ 1)))))
 
-  (n/leaf-nv org-superstar
+  (leaf org-superstar
     :after org
     :hook nasy-org-first-key-hook
     :custom
@@ -1385,8 +1382,6 @@ https://github.com/org-roam/org-roam
 
 #+begin_src emacs-lisp
   (leaf python
-    :leaf-autoload nil
-    :leaf-defun nil
     :disabled t
     :bind
     (:python-mode-map
@@ -1401,7 +1396,7 @@ https://github.com/org-roam/org-roam
 *** python                                                     :python:
 
 #+begin_src emacs-lisp
-  (n/leaf python
+  (leaf python
     :defun nasy/tempo-python python-flycheck-setup
     :init
     (defun python-flycheck-setup ()
@@ -1419,7 +1414,7 @@ https://github.com/org-roam/org-roam
 *** elpy                                                       :python:
 
 #+begin_src emacs-lisp
-  (n/leaf elpy
+  (leaf elpy
     :commands nasy/elpy-init
     :bind
     (:elpy-mode-map
@@ -1442,7 +1437,7 @@ https://github.com/org-roam/org-roam
 *** lsp-pyright                                                :python:
 
 #+begin_src emacs-lisp
-  (n/leaf lsp-pyright
+  (leaf lsp-pyright
     :init
     (sup 'lsp-pyright)
 
@@ -1499,7 +1494,7 @@ https://github.com/org-roam/org-roam
     (setq python-isort-extra-args nil))
 
 
-  (n/leaf python-isort
+  (leaf python-isort
     :after reformatter
     :commands python-isort-buffer python-isort-region python-isort-on-save-mode
     :hook (python-mode-hook
@@ -1515,7 +1510,7 @@ HTTP REST client tool for emacs
 https://github.com/pashky/restclient.el
 
 #+begin_src emacs-lisp
-  (n/leaf restclient
+  (leaf restclient
     :init
     (nasy/sup '(restclient company-restclient))
     (after-x 'ob
@@ -1529,20 +1524,20 @@ https://github.com/pashky/restclient.el
 ** Yaml                                                 :yaml:languages:
 
 #+begin_src emacs-lisp
-  (n/leaf yaml-mode
+  (leaf yaml-mode
     :init
     (if nasy--require
         (sup 'yaml-mode)
       (add-to-list 'nasy--defer-loads 'yaml-mode)))
 
-  (n/leaf lsp-yaml
+  (leaf lsp-yaml
     :hook ((yaml-mode-hook . lsp-deferred)))
 #+end_src
 
 ** MISC                                                      :languages:
 
 #+begin_src emacs-lisp
-  (n/leaf elvish-mode
+  (leaf elvish-mode
     :init
     (if nasy--require
         (sup 'elvish-mode)
@@ -1550,7 +1545,7 @@ https://github.com/pashky/restclient.el
     (after-x 'ob
       (sup 'ob-elvish)))
 
-  (n/leaf toml-mode
+  (leaf toml-mode
     :init
     (if nasy--require
         (sup 'toml-mode)

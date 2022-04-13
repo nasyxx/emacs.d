@@ -59,7 +59,7 @@ A Growl-like alerts notifier for Emacs
 https://github.com/jwiegley/alert
 
 #+begin_src emacs-lisp
-  (n/leaf alert
+  (leaf alert
     :doc "A Growl-like alerts notifier for Emacs."
     :url "https://github.com/jwiegley/alert"
     :tag "notification" "emacs" "message"
@@ -77,7 +77,7 @@ https://github.com/veelenga/carbon-now-sh.el
 Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>@@
 
 #+begin_src emacs-lisp
-  (n/leaf carbon-now-sh
+  (leaf carbon-now-sh
     :doc "Emacs to carbon.now.sh integration."
     :url "https://github.com/veelenga/carbon-now-sh.el"
     :tag "convenience"
@@ -91,7 +91,7 @@ Simple Emacs interface for cheat.sh.
 https://github.com/davep/cheat-sh.el
 
 #+begin_src emacs-lisp
-  (n/leaf cheat-sh
+  (leaf cheat-sh
     :doc "Simple Emacs interface for cheat.sh"
     :url "https://github.com/davep/cheat-sh.el"
     :tag "docs" "help"
@@ -105,7 +105,7 @@ RIME ㄓ in Emacs
 https://github.com/DogLooksGood/emacs-rime
 
 #+begin_src emacs-lisp
-  (n/leaf rime
+  (leaf rime
     :doc "RIME ㄓ in Emacs"
     :url "https://github.com/DogLooksGood/emacs-rime"
     :tag "convenience" "input-method"
@@ -119,9 +119,9 @@ https://github.com/DogLooksGood/emacs-rime
   ;; (defun nasy/rime--candidate-num-format (num)
   ;;   (format "%s. " (nth (- num 1) nasy-rime-candidate-labels)))
 
-  (n/leaf rime
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf rime
+
+
     :after rime
     :bind
     ("C-M-¥"  . toggle-input-method)
@@ -170,7 +170,7 @@ Benchmark Emacs Startup time without ever leaving your Emacs.
 https://github.com/jschaf/esup
 
 #+begin_src emacs-lisp
-  (n/leaf esup
+  (leaf esup
     :doc "Benchmark Emacs Startup time without ever leaving your Emacs."
     :url "https://github.com/jschaf/esup"
     :tag "benchmark" "convenience" "processes"
@@ -184,7 +184,7 @@ top, but for Emacs.
 https://github.com/lastquestion/explain-pause-mode
 
 #+begin_src emacs-lisp
-  (n/leaf explain-pause-mode
+  (leaf explain-pause-mode
     :doc "top, but for Emacs."
     :url "https://github.com/lastquestion/explain-pause-mode"
     :tag "performance" "speed" "config"
@@ -198,7 +198,7 @@ Grab link from Mac Apps and insert it into Emacs.
 https://github.com/xuchunyang/grab-mac-link.el
 
 #+begin_src emacs-lisp
-  (n/leaf grab-mac-link
+  (leaf grab-mac-link
     :doc "Grab link from Mac Apps."
     :url "https://github.com/xuchunyang/grab-mac-link.el"
     :tag "mac" "hyperlink"
@@ -213,7 +213,7 @@ Convert buffer text and decorations to HTML.
 https://github.com/hniksic/emacs-htmlize
 
 #+begin_src emacs-lisp
-  (n/leaf htmlize
+  (leaf htmlize
     :doc "Convert buffer text and decorations to HTML."
     :url "https://github.com/hniksic/emacs-htmlize"
     :tag "hypermedia" "extensions"
@@ -229,7 +229,7 @@ yaml, python and the like.
 https://gitlab.com/emacs-stuff/indent-tools
 
 #+begin_src emacs-lisp
-  (n/leaf indent-tools
+  (leaf indent-tools
     :doc "Emacs mode to indent, navigate around and act on indentation units:
   perfect for yaml, python and the like."
     :url "https://gitlab.com/emacs-stuff/indent-tools"
@@ -246,7 +246,7 @@ list of matching characters with their names in a buffer.
 https://github.com/purcell/list-unicode-display
 
 #+begin_src emacs-lisp
-  (n/leaf list-unicode-display
+  (leaf list-unicode-display
     :doc "Search for and list unicode characters in Emacs.
 
   `list-unicode-display'"
@@ -275,7 +275,7 @@ https://github.com/magit/magit
     (setq nasy--magit-first-key-hook nasy-magit-first-key-hook)
     (nasy/run-hook-once-on 'nasy--magit-first-key-hook 'pre-command-hook))
 
-  (n/leaf magit
+  (leaf magit
     :doc "It's Magit! A Git porcelain inside Emacs."
     :url "https://github.com/magit/magit"
     :tag "git" "tools" "vc"
@@ -300,7 +300,7 @@ Work with Git forges from the comfort of Magit.
 https://github.com/magit/forge
 
 #+begin_src emacs-lisp
-  (n/leaf forge
+  (leaf forge
     :doc "Work with Git forges from the comfort of Magit."
     :url "https://github.com/magit/forge"
     :tag "git" "tools" "vc"
@@ -316,7 +316,7 @@ https://github.com/magit/forge
 https://github.com/dandavison/magit-delta
 
 #+begin_src emacs-lisp
-  (n/leaf magit-delta
+  (leaf magit-delta
     :doc "Use delta (dandavison/delta) when viewing diffs in Magit."
     :url "https://github.com/dandavison/magit-delta"
     :tag "git" "tools" "vc"
@@ -339,7 +339,7 @@ Get `todo.org` into your magit status.
 https://github.com/danielma/magit-org-todos.el
 
 #+begin_src emacs-lisp
-  (n/leaf-nr magit-org-todos
+  (leaf magit-org-todos
     :doc "Get `todo.org` into your magit status"
     :url "https://github.com/danielma/magit-org-todos.el"
     :tag "magit" "orgmode" "tools"
@@ -355,7 +355,7 @@ Show source files' TODOs (and FIXMEs, etc) in Magit status buffer.
 https://github.com/alphapapa/magit-todos
 
 #+begin_src emacs-lisp
-  (n/leaf-nv magit-todos
+  (leaf magit-todos
     :doc "Show source files' TODOs (and FIXMEs, etc) in Magit status buffer."
     :url "https://github.com/alphapapa/magit-todos"
     :tag "magit" "vc"
@@ -371,7 +371,7 @@ PDF Tools is, among other things, a replacement of DocView for PDF files.
 https://github.com/politza/pdf-tools
 
 #+begin_src emacs-lisp
-  (n/leaf pdf-tools
+  (leaf pdf-tools
     :doc "Emacs support library for PDF files."
     :url "https://github.com/politza/pdf-tools"
     :tag "files" "multimedia"
@@ -408,7 +408,7 @@ with minimal overhead, by request or transparently on file save.
 https://github.com/jscheid/prettier.el
 
 #+begin_src emacs-lisp
-  (n/leaf prettier
+  (leaf prettier
     :doc "Prettier code formatting for Emacs."
     :url "https://github.com/jscheid/prettier.el"
     :tag "convenience" "files" "languages"
@@ -424,7 +424,7 @@ https://github.com/akermu/emacs-libvterm
 #+begin_src emacs-lisp
   (with-no-warnings
     (setq vterm-always-compile-module t))
-  (n/leaf vterm
+  (leaf vterm
     :doc "Emacs libvterm integration."
     :url "https://github.com/akermu/emacs-libvterm"
     :tag "terminals"
@@ -439,7 +439,7 @@ Toggles between the vterm buffer and whatever buffer you are editing.
 https://github.com/jixiuf/vterm-toggle
 
 #+begin_src emacs-lisp
-  (n/leaf vterm-toggle
+  (leaf vterm-toggle
     :doc "Toggles between the vterm buffer and whatever buffer you are editing."
     :url "https://github.com/jixiuf/vterm-toggle"
     :tag "terminals"
@@ -467,7 +467,7 @@ https://github.com/jixiuf/vterm-toggle
 https://github.com/wakatime/wakatime-mode
 
 #+begin_src emacs-lisp
-  (n/leaf wakatime-mode
+  (leaf wakatime-mode
     :doc "Emacs plugin for automatic time tracking and metrics generated from your programming activity."
     :url "https://github.com/wakatime/wakatime-mode"
     :tag "calendar" "comm"

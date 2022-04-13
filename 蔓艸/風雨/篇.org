@@ -526,8 +526,6 @@
 
   (defun nasy/-cus-mac ()
     (leaf mac
-      :leaf-autoload nil
-      :leaf-defun nil
       :when *is-a-mac*
       :bind
       ("C-z"   . stop-minimizing-window)
@@ -1447,8 +1445,6 @@
 
 
   (leaf nasy-keybinding
-    :leaf-autoload nil
-    :leaf-defun nil
     :hook (nasy-org-first-key-hook
            prog-mode-hook
            text-mode-hook))

@@ -71,12 +71,10 @@ search modes.
 https://github.com/emacsorphanage/anzu
 
 #+begin_src emacs-lisp
-  (n/leaf-nv anzu
+  (leaf anzu
     :doc "anzu.el is an Emacs port of anzu.vim."
     :url "https://github.com/emacsorphanage/anzu"
     :tag "search" "tools"
-    :leaf-autoload nil
-    :leaf-defun nil
     :hook ((nasy-first-key-hook . global-anzu-mode))
     :bind (([remap query-replace]        . anzu-query-replace)
            ([remap query-replace-regexp] . anzu-query-replace-regexp))
@@ -90,12 +88,10 @@ Jump to things in Emacs tree-style.
 https://github.com/abo-abo/avy
 
 #+begin_src emacs-lisp
-  (n/leaf-nv avy
+  (leaf avy
     :doc "Jump to things in Emacs tree-style."
     :url "https://github.com/abo-abo/avy"
     :tag "point" "location"
-    :leaf-autoload nil
-    :leaf-defun nil
     :custom
     (avy-keys . '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)) ;; for dvorak
     :bind
@@ -117,12 +113,10 @@ Emacs package to redefine M-< and M-> for some modes
 https://github.com/DamienCassou/beginend
 
 #+begin_src emacs-lisp
-  (n/leaf-nv beginend
+  (leaf beginend
     :doc "Emacs package to redefine M-< and M-> for some modes"
     :url "https://github.com/DamienCassou/beginend"
     :tag "editing"
-    :leaf-autoload nil
-    :leaf-defun nil
     :hook ((emacs-startup-hook . beginend-global-mode))
     :init (sup 'beginend))
 #+end_src
@@ -130,9 +124,9 @@ https://github.com/DamienCassou/beginend
 ** Compile                                                     :builtin:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv compile
+  (leaf compile
     :tag "builtin"
-    :leaf-autoload nil
+
     :advice (:after compilation-start nasy/save-compilation-buffer)
     :bind (([f6] . recompile))
     :hook ((compilation-finish-functions . alert-after-compilation-finish))
@@ -168,12 +162,10 @@ Include consult, consult-selectrum & consult-flycheck.
 *** consult
 
 #+begin_src emacs-lisp
-  (n/leaf-nr consult
+  (leaf consult
     :doc "consult.el - Consulting completing-read"
     :url "https://github.com/minad/consult"
     :tag "extensions"
-    :leaf-autoload nil
-    :leaf-defun nil
     :after selectrum
     :require t recentf
     :custom
@@ -215,7 +207,7 @@ Include consult, consult-selectrum & consult-flycheck.
 *** consult-selectrum
 
 #+begin_src emacs-lisp
-  (n/leaf-nr consult-selectrum
+  (leaf consult-selectrum
     :doc "consult.el - Consulting completing-read"
     :url "https://github.com/minad/consult"
     :tag "extensions"
@@ -226,12 +218,10 @@ Include consult, consult-selectrum & consult-flycheck.
 *** consult-flycheck
 
 #+begin_src emacs-lisp
-  (n/leaf-nv consult-flycheck
+  (leaf consult-flycheck
     :doc "consult.el - Consulting completing-read"
     :url "https://github.com/minad/consult"
     :tag "extensions"
-    :leaf-autoload nil
-    :leaf-defun nil
     :after consult
     :bind (:flycheck-command-map
            ("!" . consult-flycheck))
@@ -246,12 +236,10 @@ directories.
 https://github.com/karthink/consult-dir
 
 #+begin_src emacs-lisp
-  (n/leaf-nv consult-dir
+  (leaf consult-dir
     :doc "consult-dir: switch directories easily in Emacs"
     :url "https://github.com/karthink/consult-dir"
     :tag "convenience"
-    :leaf-autoload nil
-    :leaf-defun nil
     :after consult selectrum
     :bind
     ("C-x C-d" . consult-dir)
@@ -275,12 +263,10 @@ subdirectories to byte-compiling files, searching files, and of course visiting
 https://www.emacswiki.org/emacs/DiredMode
 
 #+begin_src emacs-lisp
-  (n/leaf-nv dired
+  (leaf dired
     :doc "DiredMode is the mode of a Dired buffer."
     :url "https://www.emacswiki.org/emacs/DiredMode"
     :tag "files"
-    :leaf-autoload nil
-    :leaf-defun nil
     :bind
     (:dired-mode-map
      ([mouse-2] . dired-find-file)
@@ -298,12 +284,10 @@ Provide commands easy-kill and easy-mark to let users kill or mark things easily
 https://github.com/leoliu/easy-kill
 
 #+begin_src emacs-lisp
-  (n/leaf-nv easy-kill
+  (leaf easy-kill
     :doc "Kill & Mark Things Easily in Emacs."
     :url "https://github.com/leoliu/easy-kill"
     :tag "killing" "convenience"
-    :leaf-autoload nil
-    :leaf-defun nil
     :init (sup 'easy-kill)
     :bind (([remap kill-ring-save] . easy-kill)
            ([remap mark-sexp]      . easy-mark)))
@@ -316,12 +300,10 @@ Spatial navigation in Emacs.
 https://gitlab.com/ideasman42/emacs-spatial-navigate
 
 #+begin_src emacs-lisp
-  (n/leaf-nv spatial-navigate
+  (leaf spatial-navigate
     :doc "Spatial navigation in Emacs."
     :url "https://gitlab.com/ideasman42/emacs-spatial-navigate"
     :tag "editing"
-    :leaf-autoload nil
-    :leaf-defun nil
     :bind (("<C-p>" . spatial-navigate-backward-vertical-bar)
            ("<C-n>" . spatial-navigate-forward-vertical-bar)
            ("<M-b>" . spatial-navigate-backward-horizontal-bar)
@@ -395,12 +377,10 @@ https://github.com/oantolin/embark/
            (remq #'embark-which-key-indicator embark-indicators)))
       (apply fn args)))
 
-  (n/leaf-nr embark
+  (leaf embark
     :doc "Emacs Mini-Buffer Actions Rooted in Keymaps."
     :url "https://github.com/oantolin/embark"
     :tag "convenience"
-    :leaf-autoload nil
-    :leaf-defun nil
     :after selectrum
     :require t
     :advice
@@ -441,9 +421,7 @@ https://github.com/oantolin/embark/
                    (window-parameters (mode-line-format . none)))))
 
 
-  (n/leaf-nr embark-consult
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf embark-consult
     :after embark consult
     :require t
     :hook (embark-collect-mode-hook . consult-preview-at-point-mode)
@@ -459,7 +437,7 @@ Modern on-the-fly syntax checking extension for GNU Emacs.
 https://github.com/flycheck/flycheck
 
 #+begin_src emacs-lisp
-  (n/leaf-nv flycheck
+  (leaf flycheck
     :doc "On the fly syntax checking for GNU Emacs."
     :url "https://github.com/flycheck/flycheck"
     :tag "convenience" "languages" "tools"
@@ -493,7 +471,7 @@ https://github.com/flycheck/flycheck
 ** Grep                                                        :builtin:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv grep
+  (leaf grep
     :tag "builtin"
     :custom
     ((grep-highlight-matches grep-scroll-output) . t))
@@ -506,7 +484,7 @@ A better Emacs *help* buffer.
 https://github.com/Wilfred/helpful
 
 #+begin_src emacs-lisp
-  (n/leaf-nv helpful
+  (leaf helpful
     :doc "A better Emacs *help* buffer."
     :url "https://github.com/Wilfred/helpful"
     :tag "help" "lisp"
@@ -520,7 +498,7 @@ https://github.com/Wilfred/helpful
 *** elisp-demos
 
 #+begin_src emacs-lisp
-  (n/leaf-nv elisp-demos
+  (leaf elisp-demos
     :doc "Demonstrate Emacs Lisp APIs."
     :url "https://github.com/xuchunyang/elisp-demos"
     :tag "lisp" "docs"
@@ -535,7 +513,7 @@ marginalia.el - Marginalia in the minibuffer
 https://github.com/minad/marginalia
 
 #+begin_src emacs-lisp
-  (n/leaf marginalia
+  (leaf marginalia
     :doc "marginalia.el - Marginalia in the minibuffer."
     :url "https://github.com/minad/marginalia"
     :tag "extensions"
@@ -563,7 +541,7 @@ literal matches are enabled.
 https://github.com/oantolin/orderless
 
 #+begin_src emacs-lisp
-  (n/leaf-nv orderless
+  (leaf orderless
     :doc "Emacs completion style that matches multiple regexps in any order."
     :url "https://github.com/oantolin/orderless"
     :tag "extensions"
@@ -624,7 +602,7 @@ characters as tidy horizontal rules.
 https://github.com/purcell/page-break-lines
 
 #+begin_src emacs-lisp
-  (n/leaf-nv page-break-lines
+  (leaf page-break-lines
     :doc "Emacs: display ugly ^L page breaks as tidy horizontal lines"
     :url "https://github.com/purcell/page-break-lines"
     :tag "convenience" "faces"
@@ -643,7 +621,7 @@ https://github.com/purcell/page-break-lines
 ** Parens                               :faces:languages:parens:builtin:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv paren
+  (leaf paren
     :tag "builtin"
     :custom (show-paren-context-when-offscreen . t)
     :hook (nasy-first-key-hook . show-paren-mode))
@@ -661,7 +639,7 @@ exists as well).
 https://github.com/bbatsov/projectile
 
 #+begin_src emacs-lisp
-  (n/leaf-nv projectile
+  (leaf projectile
     :doc "Projectile is a project interaction library for Emacs."
     :url "https://github.com/bbatsov/projectile"
     :tag "project" "convenience"
@@ -688,7 +666,7 @@ https://www.emacswiki.org/emacs/RecentFiles
 #+begin_src emacs-lisp
   (defvar nasy--recentf-cleaned nil)
 
-  (n/leaf-nv recentf
+  (leaf recentf
     :doc "Recentf is a minor mode that builds a list of recently opened files."
     :url "https://www.emacswiki.org/emacs/RecentFiles"
     :tag "files"
@@ -726,7 +704,7 @@ https://www.emacswiki.org/emacs/RecentFiles
 ** Savehist                                                    :history:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv savehist
+  (leaf savehist
     :hook emacs-startup-hook
     :custom
     (kill-ring-max              . 300)
@@ -750,7 +728,7 @@ Better solution for incremental narrowing in Emacs.
 https://github.com/raxod502/selectrum
 
 #+begin_src emacs-lisp
-  (n/leaf-nv selectrum
+  (leaf selectrum
     :doc "Better solution for incremental narrowing in Emacs."
     :url "https://github.com/raxod502/selectrum"
     :tag "extensions"
@@ -767,7 +745,7 @@ https://github.com/raxod502/selectrum
 ** Sessions                                                    :history:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv session
+  (leaf session
     :hook
     (nasy-first-key-hook . session-initialize)
     (after-save-hook     . session-save-session)
@@ -807,7 +785,7 @@ https://github.com/raxod502/selectrum
 ** Subword                                                     :builtin:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv subword
+  (leaf subword
     :tag "builtin"
     :hook prog-mode-hook)
 #+end_src
@@ -819,7 +797,7 @@ Utilities for opening files with sudo
 https://github.com/nflath/sudo-edit
 
 #+begin_src emacs-lisp
-  (n/leaf-nv sudo-edit
+  (leaf sudo-edit
     :doc "Utilities for opening files with sudo."
     :url "https://github.com/nflath/sudo-edit"
     :tag "convenience"
@@ -833,12 +811,10 @@ Offer a *visual* way to choose a window to switch to.
 https://github.com/dimitri/switch-window
 
 #+begin_src emacs-lisp
-  (n/leaf-nv switch-window
+  (leaf switch-window
     :doc "Offer a *visual* way to choose a window to switch to."
     :url "https://github.com/dimitri/switch-window"
     :tag "convenience"
-    :leaf-autoload nil
-    :leaf-defun nil
     :after transient
     :bind
     ("C-c o" . transient-dwim--nasy/switch-window)
@@ -872,7 +848,7 @@ https://github.com/dimitri/switch-window
 ** Tempo                                                       :builtin:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv tempo
+  (leaf tempo
     :tag "builtin"
     :commands tempo-define-template)
 #+end_src
@@ -910,7 +886,7 @@ Functions providing the inverse of Emacs' fill-paragraph and fill-region
 https://github.com/purcell/unfill
 
 #+begin_src emacs-lisp
-  (n/leaf-nv unfill
+  (leaf unfill
     :doc "Functions providing the inverse of Emacs' fill-paragraph and fill-region"
     :url "https://github.com/purcell/unfill"
     :tag "convenience"
@@ -921,7 +897,7 @@ https://github.com/purcell/unfill
 ** Uniquify                                              :builtin:files:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv uniquify
+  (leaf uniquify
     :tag "builtin" "files"
     :custom
     (uniquify-buffer-name-style   . 'reverse)
@@ -945,7 +921,7 @@ untouched.
 https://github.com/casouri/valign
 
 #+begin_src emacs-lisp
-  (n/leaf-nv valign
+  (leaf valign
     :doc "Pixel-perfect visual alignment for Org and Markdown tables."
     :url "https://github.com/casouri/valign"
     :tag "convenience" "table" "text"
@@ -961,7 +937,7 @@ files in batches, trading memory for processor time.
 https://github.com/m00natic/vlfi
 
 #+begin_src emacs-lisp
-  (n/leaf-nv vlf
+  (leaf vlf
     :doc "View Large Files in Emacs"
     :url "https://github.com/m00natic/vlfi"
     :tag "files" "large files" "utilities"
@@ -986,7 +962,7 @@ learn Emacs.
 https://github.com/mhayashi1120/Emacs-wgrep
 
 #+begin_src emacs-lisp
-  (n/leaf-nv wgrep
+  (leaf wgrep
     :doc "Writable grep buffer and apply the changes to files."
     :url "https://github.com/mhayashi1120/Emacs-wgrep"
     :tag "editing" "extensions" "grep"
@@ -996,7 +972,7 @@ https://github.com/mhayashi1120/Emacs-wgrep
 ** Which Function                                              :builtin:
 
 #+begin_src emacs-lisp
-  (n/leaf-nv which-func
+  (leaf which-func
     :tag "builtin"
     :hook (nasy-first-key-hook . which-function-mode))
 #+end_src
@@ -1012,7 +988,7 @@ In Emacs, intelligently call whitespace-cleanup on save.
 https://github.com/purcell/whitespace-cleanup-mode
 
 #+begin_src emacs-lisp
-  (n/leaf-nv whitespace
+  (leaf whitespace
     :tag "data" "wp"
     :init
     (defun no-trailing-whitespace ()
@@ -1033,7 +1009,7 @@ https://github.com/purcell/whitespace-cleanup-mode
       minibuffer-setup-hook
       fundamental-mode) . no-trailing-whitespace))
 
-  (n/leaf-nv whitespace-cleanup-mode
+  (leaf whitespace-cleanup-mode
     :doc "In Emacs, intelligently call whitespace-cleanup on save."
     :url "https://github.com/purcell/whitespace-cleanup-mode"
     :tag "convonience"
@@ -1053,7 +1029,6 @@ https://github.com/purcell/whitespace-cleanup-mode
 
 #+begin_src emacs-lisp
   (leaf xref
-    :leaf-autoload nil
     :custom
     ((xref-show-xrefs-function
       xref-show-definitions-function)

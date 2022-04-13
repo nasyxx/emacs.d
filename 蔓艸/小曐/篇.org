@@ -61,7 +61,6 @@ https://github.com/magnars/dash.el
     :doc "A modern list library for Emacs."
     :url "https://github.com/magnars/dash.el"
     :tag "lists"
-    :leaf-autoload nil
     :commands global-dash-fontify-mode
     :hook (nasy--defer-load-hook . (lambda () (require 'dash)))
     :init (add-to-list 'nasy--defer-loads 'dash)
@@ -89,7 +88,7 @@ https://github.com/purcell/emacs-reformatter
 
 #+begin_src emacs-lisp
   (defvar nasy-misc-packages
-    '(git-blamed git-messenger git-modes git-timemachine wgrep
+    '(git-blamed git-messenger git-modes git-timemachine wgrep rg
                  company-dict company-math flycheck-package ibuffer-vc all-the-icons-ibuffer
                  nix-buffer nix-update nixpkgs-fmt thingopt dap-mode haskell-snippets))
 

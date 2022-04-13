@@ -62,7 +62,7 @@ This extension mainly adds the following extra features:
 https://github.com/xwl/cal-china-x
 
 #+begin_src emacs-lisp
-  (n/leaf cal-china-x
+  (leaf cal-china-x
     :doc "chinese localization, prioritized holiday highlight, lunar, horoscope, zodiac, etc."
     :url "https://github.com/xwl/cal-china-x"
     :tag "calendar" "date"
@@ -144,9 +144,7 @@ tabs plugin for Emacs with a lot of customization options.
 https://github.com/ema2159/centaur-tabs
 
 #+begin_src emacs-lisp
-  (n/leaf centaur-tabs
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf centaur-tabs
     :custom
     (centaur-tabs-style . "wave")
     :hook
@@ -219,9 +217,7 @@ https://github.com/ema2159/centaur-tabs
         (t (centaur-tabs-get-group-name (current-buffer)))))))
 
 
-  (n/leaf centaur-tabs
-    :leaf-autoload nil
-    :leaf-defun nil
+  (leaf centaur-tabs
     :after centaur-tabs
     :custom
     (centaur-tabs-set-modified-marker . t)
@@ -248,7 +244,8 @@ https://github.com/ema2159/centaur-tabs
 ** Dashboard
 
 #+begin_src emacs-lisp
-  (n/leaf-nv dashboard
+  (leaf dashboard
+    :leaf-autoload t
     :commands (dashboard-refresh-buffer
                dashboard-setup-startup-hook)
     :init (sup 'dashboard))
@@ -365,8 +362,7 @@ https://github.com/ema2159/centaur-tabs
     (dashboard-refresh-buffer))
 
 
-  (n/leaf-nv dashboard
-    :leaf-autoload nil
+  (leaf dashboard
     :bind
     ("<f5>" . dashboard-refresh-buffer)
     (:dashboard-mode-map
@@ -423,7 +419,7 @@ https://github.com/ema2159/centaur-tabs
 ** doom Theme
 
 #+begin_src emacs-lisp
-  (n/leaf-nv doom-themes
+  (leaf doom-themes
     :after all-the-icons
     :custom
     ((doom-dracula-brighter-comments
@@ -567,7 +563,7 @@ https://github.com/ema2159/centaur-tabs
       ("\\(<=\\)"                    #Xe157))
     "Fira font ligatures and their regexes.")
 
-  (n/leaf pretty-mode
+  (leaf pretty-mode
     :hook
     (nasy/font-change-hook
      . (lambda ()
@@ -587,7 +583,7 @@ https://github.com/ema2159/centaur-tabs
 #+end_src
 
 #+begin_src emacs-lisp
-  (n/leaf pretty-mode
+  (leaf pretty-mode
     :hook
     (nasy/font-change-hook
      . (lambda ()
@@ -836,7 +832,7 @@ https://github.com/ema2159/centaur-tabs
 #+end_src
 
 #+begin_src emacs-lisp
-  (n/leaf nyan-mode
+  (leaf nyan-mode
     :custom (nyan-animate-nyancat . t)
             (nyan-bar-length      . 16)
             (nyan-wavy-trail      . t)
@@ -845,18 +841,18 @@ https://github.com/ema2159/centaur-tabs
 #+end_src
 
 #+begin_src emacs-lisp
-  (n/leaf minions
+  (leaf minions
     :custom (minions-mode-line-lighter . "✬")
     :hook after-init-hook
     :init (sup 'minions))
 #+end_src
 
 #+begin_src emacs-lisp
-  (n/leaf doom-modeline
+  (leaf doom-modeline
     :hook emacs-startup-hook
     :init (sup 'doom-modeline))
 
-  (n/leaf doom-modeline
+  (leaf doom-modeline
     :after doom-modeline
     :defun doom-modeline-def-modeline doom-modeline-def-segment
     :custom
@@ -930,7 +926,7 @@ https://github.com/ema2159/centaur-tabs
 ** Nasy Theme
 
 #+begin_src emacs-lisp
-  (n/leaf-nv nasy-theme
+  (leaf nasy-theme
     :init (sup `(nasy-theme :local-repo ,(concat *nasy-site* "nasy/nasy-theme"))))
 #+end_src
 

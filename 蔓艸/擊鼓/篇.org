@@ -147,7 +147,19 @@
     (straight-use-package 'leaf-keywords)
     (require 'leaf)
     (require 'leaf-keywords)
-    (leaf-keywords-init))
+    (leaf-keywords-init)
+    (setq leaf-defaults '(:leaf-autoload nil :leaf-defun nil)))
+
+  (defun nasy/-package-filter (name &rest _)
+    "Ignore package NAME if *no-packages* is t."
+    (let ((sym (intern (format "*no-%s*" name))))
+      (if (and (boundp sym) sym)
+          (progn
+            (message "Ignore package: %s" name)
+            nil)
+        t)))
+
+  (advice-add 'leaf :before-while #'nasy/-package-filter)
 
   (defmacro n/leaf-nv (name &rest body)
     "Nasy wrap leaf no defvar BODY with a default require and NAME."
@@ -283,12 +295,10 @@ Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
 https://gitlab.com/koral/gcmh
 
 #+begin_src emacs-lisp
-  (n/leaf-nv gcmh
+  (leaf gcmh
     :doc "Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection."
     :url "https://gitlab.com/koral/gcmh"
     :tag "internal"
-    :leaf-autoload nil
-    :leaf-defun nil
     :defun gcmh-mode
     :hook (nasy-first-key-hook . nasy/-start-gcmh)
     :init (sup 'gcmh))
