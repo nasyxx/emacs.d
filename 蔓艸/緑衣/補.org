@@ -505,6 +505,38 @@ https://github.com/minad/cape
              nasy/company-remove-scrollbar-a))
 #+end_src
 
+** copilot.el                                       :editing:extensions:
+
+Copilot.el is an Emacs plugin for GitHub Copilot.
+
+https://github.com/zerolfx/copilot.el
+
+#+begin_src emacs-lisp
+  (defun nasy/copilot-complete ()
+    "Copilot complete."
+    (interactive)
+    (copilot-clear-overlay)
+    (copilot-complete))
+
+  (leaf copilot
+    :doc "An unofficial Copilot plugin for Emacs."
+    :url "https://github.com/zerolfx/copilot.el"
+    :tag "editing" "extensions"
+    :advice (:after keyboard-quit copilot-clear-overlay)
+    :bind
+    (("C-<tab>" . copilot-accept-completion)
+     ("H-SPC"   . nasy/copilot-complete))
+    :custom
+    (copilto-idle-delay . 3)
+    :hook (prog-mode-hook python-mode-hook)
+    :init
+    (sup 'dash)
+    (sup 's)
+    (sup 'editorconfig)
+    (sup '(copilot :host github :repo "zerolfx/copilot.el"
+                   :files ("dist" "copilot.el"))))
+#+end_src
+
 ** corfu                                            :editing:extensions:
 
 Corfu enhances the default completion in region function with a completion overlay.
