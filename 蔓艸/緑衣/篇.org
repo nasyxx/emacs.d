@@ -488,7 +488,6 @@ https://github.com/flycheck/flycheck
     (defalias 'show-error-at-point-soon
       'flycheck-show-error-at-point)
     (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space))
-
 #+end_src
 
 ** Grep                                                        :builtin:
@@ -813,7 +812,7 @@ https://github.com/raxod502/selectrum
     :hook prog-mode-hook)
 #+end_src
 
-** Sudo Edit
+** Sudo Edit                                               :convenience:
 
 Utilities for opening files with sudo
 
@@ -1048,6 +1047,17 @@ https://github.com/purcell/whitespace-cleanup-mode
     :hook (text-mode-hook prog-mode-hook)
     :bind (("<remap> <just-one-space>" . cycle-spacing))
     :init (sup 'whitespace-cleanup-mode))
+#+end_src
+
+** xref                                                        :builtin:
+
+#+begin_src emacs-lisp
+  (leaf xref
+    :leaf-autoload nil
+    :custom
+    ((xref-show-xrefs-function
+      xref-show-definitions-function)
+     . #'xref-show-definitions-completing-read))
 #+end_src
 
 * 結                                                           :noexport:

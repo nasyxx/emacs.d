@@ -53,7 +53,7 @@
   (setq selection-coding-system 'utf-8)
 
 
-  (defconst *nasy* "20210525")
+  (defconst *nasy* "20220409")
 
   (defconst *is-a-mac* (eq system-type 'darwin))
 

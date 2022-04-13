@@ -488,6 +488,7 @@
     (customize-set-variable 'tab-always-indent     'complete "Customized by Nasy.")
     (customize-set-variable 'use-dialog-box        nil "Customized by Nasy.")
     (customize-set-variable 'use-file-dialog       nil "Customized by Nasy.")
+    (customize-set-variable 'word-wrap-by-category t   "Customized by Nasy.")
 
     (customize-set-variable 'enable-recursive-minibuffers t "Customized by Nasy.")
 
