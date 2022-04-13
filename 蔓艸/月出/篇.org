@@ -330,6 +330,8 @@ https://github.com/casouri/eldoc-box
     :tag "docs" "extensions" "help"
     :leaf-autoload nil
     :leaf-defun nil
+    :custom
+    (eldoc-box-position-function . #'eldoc-box--default-at-point-position-function)
     :hook ((eldoc-mode-hook . eldoc-box-hover-mode)
            (eldoc-mode-hook . eldoc-box-hover-at-point-mode))
     :init (sup 'eldoc-box))
