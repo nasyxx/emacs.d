@@ -280,6 +280,7 @@ https://github.com/magit/magit
     :url "https://github.com/magit/magit"
     :tag "git" "tools" "vc"
     :leaf-autoload t
+    :leaf-defun t
     :commands magit-status
     :hook ((magit-popup-mode-hook . no-trailing-whitespace))
     :mode-hook (nasy/load-magit)

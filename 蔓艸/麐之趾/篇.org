@@ -36,9 +36,9 @@ Programming Languages
 
   (cl-eval-when (compile)
     (setq nasy--require t)
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/緑衣" ))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/緑衣"))
     (require '擊鼓)
     (require '風雨)
     (require '風雨旹用)
@@ -56,6 +56,7 @@ Programming Languages
     (require 'ob)
     (sup 'page-break-lines)
     (sup 'reformatter)
+    (sup 'haskell-mode)
     (setq nasy--require nil))
 #+end_src
 
@@ -231,6 +232,46 @@ Emacs client/library for the Language Server Protocol
 *** haskell-mode                                              :haskell:
 
 #+begin_src emacs-lisp
+  (define-minor-mode stack-exec-path-mode
+    "If this is a stack project, set `exec-path' to the path \"stack exec\" would use."
+    :init-value nil
+    :lighter ""
+    :global nil
+    (if stack-exec-path-mode
+        (when (and (executable-find "stack")
+                   (locate-dominating-file default-directory "stack.yaml"))
+          (setq-local
+           exec-path
+           (seq-uniq
+            (append (list (concat (string-trim-right
+                                   (shell-command-to-string "stack path --local-install-root")
+                                   "/bin")))
+                    (parse-colon-path
+                     (replace-regexp-in-string "[\r\n]+\\'" ""
+                                               (shell-command-to-string "stack path --bin-path"))))
+            'string-equal)))
+      (kill-local-variable 'exec-path)))
+
+
+  (defun haskell-mode-generate-tags (&optional and-then-find-this-tag)
+    "Generate tags using Hasktags.  This is synchronous function.
+
+    If optional AND-THEN-FIND-THIS-TAG argument is present it is used
+    with function `xref-find-definitions' after new table was
+    generated."
+    (interactive)
+    (let* ((dir (haskell-cabal--find-tags-dir))
+           (command (haskell-cabal--compose-hasktags-command dir)))
+      (if (not command)
+          (error "Unable to compose hasktags command")
+        ;; I disabled the noisy shell command output.
+        ;; The original is (shell-command command)
+        (call-process-shell-command command nil "*Shell Command Output*" t)
+        (haskell-mode-message-line "Tags generated.")
+        (when and-then-find-this-tag
+          (let ((tags-file-name dir))
+            (xref-find-definitions and-then-find-this-tag))))))
+
   (leaf haskell-mode
     :after haskell-mode
     :custom
@@ -284,46 +325,7 @@ Emacs client/library for the Language Server Protocol
                      (modes quote (haskell-mode literate-haskell-mode)))))
     :init
     (sup 'haskell-mode)
-
-    (define-minor-mode stack-exec-path-mode
-      "If this is a stack project, set `exec-path' to the path \"stack exec\" would use."
-      :init-value nil
-      :lighter ""
-      :global nil
-      (if stack-exec-path-mode
-          (when (and (executable-find "stack")
-                     (locate-dominating-file default-directory "stack.yaml"))
-            (setq-local
-             exec-path
-             (seq-uniq
-              (append (list (concat (string-trim-right
-                                     (shell-command-to-string "stack path --local-install-root")
-                                     "/bin")))
-                      (parse-colon-path
-                       (replace-regexp-in-string "[\r\n]+\\'" ""
-                                                 (shell-command-to-string "stack path --bin-path"))))
-              'string-equal)))
-        (kill-local-variable 'exec-path)))
-
     :defer-config
-    (defun haskell-mode-generate-tags (&optional and-then-find-this-tag)
-      "Generate tags using Hasktags.  This is synchronous function.
-
-      If optional AND-THEN-FIND-THIS-TAG argument is present it is used
-      with function `xref-find-definitions' after new table was
-      generated."
-      (interactive)
-      (let* ((dir (haskell-cabal--find-tags-dir))
-             (command (haskell-cabal--compose-hasktags-command dir)))
-        (if (not command)
-            (error "Unable to compose hasktags command")
-          ;; I disabled the noisy shell command output.
-          ;; The original is (shell-command command)
-          (call-process-shell-command command nil "*Shell Command Output*" t)
-          (haskell-mode-message-line "Tags generated.")
-          (when and-then-find-this-tag
-            (let ((tags-file-name dir))
-              (xref-find-definitions and-then-find-this-tag))))))
     (after-x 'page-break-lines
       (add-to-list 'page-break-lines-modes 'haskell-mode)))
 #+end_src
@@ -331,16 +333,17 @@ Emacs client/library for the Language Server Protocol
 *** lsp-haskell                                               :haskell:
 
 #+begin_src emacs-lisp
+  (defun start-lsp-haskell ()
+    (require 'lsp)
+    (require 'lsp-haskell)
+    (lsp))
+
   (leaf lsp-haskell
     :custom (lsp-haskell-formatting-provider . "brittany")
     :hook
     (haskell-mode-hook . start-lsp-haskell)
     :init
     (sup 'lsp-haskell)
-    (defun start-lsp-haskell ()
-      (require 'lsp)
-      (require 'lsp-haskell)
-      (lsp-deferred))
     (after-x 'company
       (nasy/add-company-backend 'haskell-mode
         '(company-capf
@@ -469,19 +472,19 @@ Emacs client/library for the Language Server Protocol
 ** Nix                                                   :nix:languages:
 
 #+begin_src emacs-lisp
+  (defun start-nix-lsp ()
+    (after-x 'lsp-mode
+      (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+      (lsp-register-client
+       (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+                        :major-modes '(nix-mode)
+                        :server-id 'nix))
+      (lsp)))
+
   (leaf nix-mode
     :hook (nix-mode-hook . start-nix-lsp)
     :init
-    (sup 'nix-mode)
-    :defer-config
-    (defun start-nix-lsp ()
-      (after-x 'lsp-mode
-        (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
-        (lsp-register-client
-         (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
-                          :major-modes '(nix-mode)
-                          :server-id 'nix))
-        (lsp-deferred))))
+    (sup 'nix-mode))
 #+end_src
 
 ** Org Mode                                              :org:languages:
@@ -799,83 +802,81 @@ Emacs client/library for the Language Server Protocol
 *** Basic & Functions                                             :org:
 
 #+begin_src emacs-lisp
-  (leaf org
-    :init
-    ;; Exclude DONE state tasks from refile targets
-    ;;;###autoload
-    (defun nasy/verify-refile-target ()
-      "Exclude todo keywords with a done state from refile targets."
-      (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+  ;; Exclude DONE state tasks from refile targets
+  ;;;###autoload
+  (defun nasy/verify-refile-target ()
+    "Exclude todo keywords with a done state from refile targets."
+    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
-    (setq org-refile-target-verify-function 'nasy/verify-refile-target)
+  (setq org-refile-target-verify-function 'nasy/verify-refile-target)
 
     ;;;###autoload
-    (defun nasy/org-refile-anywhere (&optional goto default-buffer rfloc msg)
-      "A version of `org-refile' which allows refiling to any subtree."
-      (interactive "P")
-      (let ((org-refile-target-verify-function))
-        (org-refile goto default-buffer rfloc msg)))
+  (defun nasy/org-refile-anywhere (&optional goto default-buffer rfloc msg)
+    "A version of `org-refile' which allows refiling to any subtree."
+    (interactive "P")
+    (let ((org-refile-target-verify-function))
+      (org-refile goto default-buffer rfloc msg)))
 
     ;;;###autoload
-    (defun nasy/org-agenda-refile-anywhere (&optional goto rfloc no-update)
-      "A version of `org-agenda-refile' which allows refiling to any subtree."
-      (interactive "P")
-      (let ((org-refile-target-verify-function))
-        (org-agenda-refile goto rfloc no-update)))
+  (defun nasy/org-agenda-refile-anywhere (&optional goto rfloc no-update)
+    "A version of `org-agenda-refile' which allows refiling to any subtree."
+    (interactive "P")
+    (let ((org-refile-target-verify-function))
+      (org-agenda-refile goto rfloc no-update)))
 
     ;;;###autoload
-    (defun nasy/org-html-paragraph-advice (orig paragraph contents &rest args)
-      "Join consecutive Chinese lines into a single long line without
-      unwanted space when exporting org-mode to html."
-      (let* ((fix-regexp "[[:multibyte:]]")
-             (fixed-contents
-              (replace-regexp-in-string
-               (concat
-                "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents)))
-        (apply orig paragraph fixed-contents args)))
+  (defun nasy/org-html-paragraph-advice (orig paragraph contents &rest args)
+    "Join consecutive Chinese lines into a single long line without
+    unwanted space when exporting org-mode to html."
+    (let* ((fix-regexp "[[:multibyte:]]")
+           (fixed-contents
+            (replace-regexp-in-string
+             (concat
+              "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents)))
+      (apply orig paragraph fixed-contents args)))
 
     ;;;###autoload
-    (defun nasy/org-fix-saveplace ()
-      "Fix a problem with saveplace.el putting you back in a folded position"
-      (when (outline-invisible-p)
-        (save-excursion
-          (outline-previous-visible-heading 1)
-          (org-show-subtree))))
-
-    ;;;###autoload
-    (defun nasy/org-agenda-log-mode-colorize-block ()
-      "Set different line spacing based on clock time duration."
+  (defun nasy/org-fix-saveplace ()
+    "Fix a problem with saveplace.el putting you back in a folded position"
+    (when (outline-invisible-p)
       (save-excursion
-        (let* ((colors (cl-case (alist-get 'background-mode (frame-parameters))
-                         ('light
-                          (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))
-                         ('dark
-                          (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))))
-               pos
-               duration)
-          (nconc colors colors)
-          (goto-char (point-min))
-          (while (setq pos (next-single-property-change (point) 'duration))
-            (goto-char pos)
-            (when (and (not (equal pos (point-at-eol)))
-                      (setq duration (org-get-at-bol 'duration)))
-              ;; larger duration bar height
-              (let ((line-height (if (< duration 15) 1.0 (+ 0.5 (/ duration 30))))
-                    (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
-                (overlay-put ov 'face `(:background ,(car colors) :foreground "black"))
-                (setq colors (cdr colors))
-                (overlay-put ov 'line-height line-height)
-                (overlay-put ov 'line-spacing (1- line-height))))))))
+        (outline-previous-visible-heading 1)
+        (org-show-subtree))))
 
     ;;;###autoload
-    (defun nasy/show-org-clock-in-header-line ()
-      "Show the clocked-in task in header line"
-      (setq-default header-line-format '((" " org-mode-line-string ""))))
+  (defun nasy/org-agenda-log-mode-colorize-block ()
+    "Set different line spacing based on clock time duration."
+    (save-excursion
+      (let* ((colors (cl-case (alist-get 'background-mode (frame-parameters))
+                       ('light
+                        (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))
+                       ('dark
+                        (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))))
+             pos
+             duration)
+        (nconc colors colors)
+        (goto-char (point-min))
+        (while (setq pos (next-single-property-change (point) 'duration))
+          (goto-char pos)
+          (when (and (not (equal pos (point-at-eol)))
+                    (setq duration (org-get-at-bol 'duration)))
+            ;; larger duration bar height
+            (let ((line-height (if (< duration 15) 1.0 (+ 0.5 (/ duration 30))))
+                  (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
+              (overlay-put ov 'face `(:background ,(car colors) :foreground "black"))
+              (setq colors (cdr colors))
+              (overlay-put ov 'line-height line-height)
+              (overlay-put ov 'line-spacing (1- line-height))))))))
 
     ;;;###autoload
-    (defun nasy/hide-org-clock-from-header-line ()
-      "Hide the clocked-in task from header line"
-      (setq-default header-line-format nil)))
+  (defun nasy/show-org-clock-in-header-line ()
+    "Show the clocked-in task in header line"
+    (setq-default header-line-format '((" " org-mode-line-string ""))))
+
+    ;;;###autoload
+  (defun nasy/hide-org-clock-from-header-line ()
+    "Hide the clocked-in task from header line"
+    (setq-default header-line-format nil))
 
   (leaf org
     :bind (:org-src-mode-map
@@ -1017,6 +1018,7 @@ https://github.com/yangsheng6810/org-latex-impatient
     :url "https://github.com/yangsheng6810/org-latex-impatient"
     :tag "org" "tex" "tool"
     :leaf-autoload t
+    :leaf-defun t
     :custom
     `(org-latex-impatient-tex2svg-bin . ,(executable-find "tex2svg"))
     (org-latex-impatient-user-latex-definitions
@@ -1036,6 +1038,7 @@ https://github.com/yangsheng6810/org-latex-impatient
   (leaf org-prettify-source-block
     :load-path* "桃夭/麐之趾"
     :leaf-autoload t
+    :leaf-defun t
     :hook nasy-org-first-key-hook)
 #+end_src
 
@@ -1186,7 +1189,6 @@ https://github.com/org-roam/org-roam
     `(org-roam-db-location . ,(concat *nasy-var* "org/org-roam.db"))
     ;; :hook (nasy-first-key-hook . org-roam-setup)
     :init (sup 'org-roam)
-    (setq org-roam-v2-ack t)
     (add-to-list 'safe-local-variable-values
                  '(org-roam-directory))
     (add-to-list 'safe-local-variable-values
@@ -1417,6 +1419,7 @@ https://github.com/org-roam/org-roam
 #+begin_src emacs-lisp
   (leaf elpy
     :leaf-autoload t
+    :leaf-defun t
     :commands nasy/elpy-init
     :bind
     (:elpy-mode-map
@@ -1439,35 +1442,35 @@ https://github.com/org-roam/org-roam
 *** lsp-pyright                                                :python:
 
 #+begin_src emacs-lisp
+  (defun python-setup-lsp-flycheck ()
+    "Setup python lsp flycheck."
+    (if lsp-diagnostics-mode
+        (progn
+          ;; (flycheck-inline-mode -1)
+          (flycheck-add-next-checker 'lsp 'python-flake8))
+      (progn
+        ;; (flycheck-inline-mode 1)
+        (flycheck-remove-next-checker 'lsp 'python-flake8))))
+
+  (defun start-lsp-pyright ()
+    "Start lsp pyright."
+    (require 'lsp-pyright)
+    (when (zerop (shell-command "pdm info"))
+      (setq-local
+       lsp-pyright-python-executable-cmd
+       (string-trim (shell-command-to-string
+                     "pdm info --python")))
+      (setq-local
+       lsp-pyright-extra-paths
+       (vector
+        (concat (string-trim (shell-command-to-string
+                              "pdm info --package"))
+                "/lib"))))
+    (lsp))
+
   (leaf lsp-pyright
     :init
     (sup 'lsp-pyright)
-
-    (defun python-setup-lsp-flycheck ()
-      "Setup python lsp flycheck."
-      (if lsp-diagnostics-mode
-          (progn
-            ;; (flycheck-inline-mode -1)
-            (flycheck-add-next-checker 'lsp 'python-flake8))
-        (progn
-          ;; (flycheck-inline-mode 1)
-          (flycheck-remove-next-checker 'lsp 'python-flake8))))
-
-    (defun start-lsp-pyright ()
-      "Start lsp pyright."
-      (require 'lsp-pyright)
-      (when (zerop (shell-command "pdm info"))
-        (setq-local
-         lsp-pyright-python-executable-cmd
-         (string-trim (shell-command-to-string
-                       "pdm info --python")))
-        (setq-local
-         lsp-pyright-extra-paths
-         (vector
-          (concat (string-trim (shell-command-to-string
-                                "pdm info --package"))
-                  "/lib"))))
-      (lsp-deferred))
 
     :hook
     (python-mode-hook          . start-lsp-pyright)
@@ -1490,20 +1493,21 @@ https://github.com/org-roam/org-roam
       (when (file-exists-p file)
         file)))
 
-  (defun nasy/empty-isort-config ()
-    "Cancel isort extra args."
-    (interactive)
-    (setq python-isort-extra-args nil))
-
 
   (leaf python-isort
     :leaf-autoload t
+    :leaf-defun t
     :after reformatter
     :commands python-isort-buffer python-isort-region python-isort-on-save-mode
     :hook (python-mode-hook
            . (lambda () (setq python-isort-extra-args `("--sp" ,(nasy/find-isort-config)))))
     :init (sup `(python-isort :local-repo ,(concat *nasy-site* "nasy/python-isort")))
     (add-to-list 'safe-local-variable-values '(python-isort-extra-args)))
+
+  (defun nasy/empty-isort-config ()
+    "Cancel isort extra args."
+    (interactive)
+    (setq python-isort-extra-args nil))
 #+end_src
 
 ** restclient.el                                  :restclient:languages:

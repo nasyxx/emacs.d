@@ -118,6 +118,8 @@
     :require t)
   (leaf 模
     :leaf-autoload t
+    :leaf-defun t
+    :leaf-defun t
     :load-path* "桃夭/麐之趾"
     :commands (nasy/tempo-haskell
                nasy/tempo-python))

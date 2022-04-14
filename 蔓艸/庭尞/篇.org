@@ -246,6 +246,7 @@ https://github.com/ema2159/centaur-tabs
 #+begin_src emacs-lisp
   (leaf dashboard
     :leaf-autoload t
+    :leaf-defun t
     :commands (dashboard-refresh-buffer
                dashboard-setup-startup-hook)
     :init (sup 'dashboard))
@@ -360,6 +361,9 @@ https://github.com/ema2159/centaur-tabs
     (unless (get-buffer dashboard-buffer-name)
       (generate-new-buffer "*dashboard*"))
     (dashboard-refresh-buffer))
+
+
+  (declare-function persistent-scratch-restore "persistent-scratch")
 
 
   (leaf dashboard
