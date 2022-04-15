@@ -507,6 +507,52 @@ https://github.com/Wilfred/helpful
     :advice (:after helpful-update elisp-demos-advice-helpful-update))
 #+end_src
 
+** Keyfreq                               :extensions:utilities:
+
+Track Emacs commands frequency
+
+https://github.com/dacap/keyfreq
+
+#+begin_src emacs-lisp
+  (leaf keyfreq
+    :doc "Track Emacs commands frequency"
+    :url "https://github.com/dacap/keyfreq"
+    :tag "extensions" "utilities"
+    :custom
+    `(keyfreq-file . ,(concat *nasy-var* "keyfreq"))
+    (keyfreq-excluded-commands
+     . '(
+         backward-char
+         delete-backward-char
+         execute-extended-command
+         forward-char
+         keyboard-quit
+         kill-buffer
+         left-char
+         minibuffer-keyboard-quit
+         mouse-drag-region
+         mouse-set-point
+         move-beginning-of-line
+         move-end-of-line
+         next-line
+         org-delete-backward-char
+         org-end-of-line
+         org-return
+         org-self-insert-command
+         previous-line
+         previous-line
+         right-char
+         right-word
+         save-buffer
+         selectrum-next-candidate
+         selectrum-select-current-candidate
+         self-insert-command
+         yank))
+    :hook (nasy-first-key-hook)
+    :mode-hook (keyfreq-autosave-mode 1)
+    :init (sup 'keyfreq))
+#+end_src
+
 ** marginalia                                               :extensions:
 
 marginalia.el - Marginalia in the minibuffer
