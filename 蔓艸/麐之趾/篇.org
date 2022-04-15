@@ -762,7 +762,7 @@ Emacs client/library for the Language Server Protocol
   (leaf org-structure
     :after org
     :custom
-    (org-startup-indented      . t)
+    (org-startup-indented      . nil)
     (org-archive-location      . "%s_archive::* Archive")
     (org-catch-invisible-edits . 'smart))
 #+end_src
