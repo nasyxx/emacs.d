@@ -695,7 +695,7 @@ https://www.emacswiki.org/emacs/RecentFiles
          ;; horizontal space the recentf listing uses to list recent files.
          abbreviate-file-name))
     (recentf-auto-cleanup    . 'never)
-    (recentf-max-saved-items . 100)
+    (recentf-max-saved-items . 1000)
     (recentf-exclude
      . `(,(abbreviate-file-name
            (locate-user-emacs-file *nasy-etc*))
