@@ -18,7 +18,7 @@
 
 UI
 
-* 題                                                           :noexport:
+* 題                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 庭尞.el --- Nasy's emacs.d UI file.  -*- lexical-binding: t; -*-
@@ -440,7 +440,7 @@ https://github.com/ema2159/centaur-tabs
       (doom-themes-org-config)))
 #+end_src
 
-** Pretty Mode                                                  :pretty:
+** Pretty Mode                                         :pretty:
 
 #+begin_src emacs-lisp
   ;; https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
@@ -974,7 +974,7 @@ https://github.com/ema2159/centaur-tabs
   ;; (setq tab-line-close-tab-function #'kill-buffer)
 #+end_src
 
-* 結                                                           :noexport:
+* 結                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '庭尞)

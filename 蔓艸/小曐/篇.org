@@ -15,7 +15,7 @@
 
 Library.
 
-* 題                                                           :noexport:
+* 題                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 小曐.el --- Nasy's emacs.d library file.  -*- lexical-binding: t; -*-
@@ -50,7 +50,7 @@ Library.
     :init (add-to-list 'nasy--defer-loads 'all-the-icons))
 #+end_src
 
-** Dash                                                          :lists:
+** Dash                                                 :lists:
 
 A modern list library for Emacs.
 
@@ -69,7 +69,7 @@ https://github.com/magnars/dash.el
     :defer-config (global-dash-fontify-mode 1))
 #+end_src
 
-** Reformatter                                       :convenience:tools:
+** Reformatter                              :convenience:tools:
 
 This library lets emacs-lisp authors easily define an idiomatic command to reformat
 the current buffer using a command-line program, together with an optional minor
@@ -86,7 +86,7 @@ https://github.com/purcell/emacs-reformatter
     :init (add-to-list 'nasy--defer-loads 'reformatter))
 #+end_src
 
-** 餘                                                             :misc:
+** 餘                                                    :misc:
 
 #+begin_src emacs-lisp
   (defvar nasy-misc-packages
@@ -104,7 +104,7 @@ https://github.com/purcell/emacs-reformatter
   (add-hook 'nasy--defer-load-hook #'(lambda () (require 'wgrep)))
 #+end_src
 
-* 結                                                           :noexport:
+* 結                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '小曐)

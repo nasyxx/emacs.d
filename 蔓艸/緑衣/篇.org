@@ -23,7 +23,7 @@ Permanent configuration file.
 
 You cannot disable anything here.
 
-* 題                                                           :noexport:
+* 題                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 緑衣.el --- Nasy's emacs.d permanent file.  -*- lexical-binding: t; -*-
@@ -63,7 +63,7 @@ You cannot disable anything here.
 
 * 章
 
-** Anzu                                                   :search:tools:
+** Anzu                                          :search:tools:
 
 anzu.el is an Emacs port of anzu.vim. anzu.el provides a minor mode which
 displays current match and total matches information in the mode-line in various
@@ -82,7 +82,7 @@ https://github.com/emacsorphanage/anzu
     :init (sup 'anzu))
 #+end_src
 
-** Avy                                                  :point:location:
+** Avy                                         :point:location:
 
 Jump to things in Emacs tree-style.
 
@@ -107,7 +107,7 @@ https://github.com/abo-abo/avy
     :init (sup 'avy))
 #+end_src
 
-** Beginend                                                    :editing:
+** Beginend                                           :editing:
 
 Emacs package to redefine M-< and M-> for some modes
 
@@ -122,7 +122,7 @@ https://github.com/DamienCassou/beginend
     :init (sup 'beginend))
 #+end_src
 
-** Compile                                                     :builtin:
+** Compile                                            :builtin:
 
 #+begin_src emacs-lisp
   (defvar nasy/last-compilation-buffer nil
@@ -152,7 +152,7 @@ https://github.com/DamienCassou/beginend
     :hook ((compilation-finish-functions . alert-after-compilation-finish)))
 #+end_src
 
-** Consult                                                  :extensions:
+** Consult                                         :extensions:
 
 consult.el - Consulting completing-read.
 
@@ -229,7 +229,7 @@ Include consult, consult-selectrum & consult-flycheck.
     :init (sup 'consult-flycheck))
 #+end_src
 
-*** consult-dir                                           :convenience:
+*** consult-dir                                   :convenience:
 
 Consult-dir allows you to easily select and switch between “active”
 directories.
@@ -253,7 +253,7 @@ https://github.com/karthink/consult-dir
     :init (sup 'consult-dir))
 #+end_src
 
-** Dired                                                         :files:
+** Dired                                                :files:
 
 DiredMode is the mode of a Dired buffer.  It shows a directory (folder) listing
 that you can use to perform various operations on files and subdirectories in
@@ -278,7 +278,7 @@ https://www.emacswiki.org/emacs/DiredMode
     (dired-recursive-deletes  . 'top))
 #+end_src
 
-** Easy Kill                                       :killing:convenience:
+** Easy Kill                              :killing:convenience:
 
 Provide commands easy-kill and easy-mark to let users kill or mark things easily.
 
@@ -294,7 +294,7 @@ https://github.com/leoliu/easy-kill
            ([remap mark-sexp]      . easy-mark)))
 #+end_src
 
-** Emacs Spatial Navigate                                      :editing:
+** Emacs Spatial Navigate                             :editing:
 
 Spatial navigation in Emacs.
 
@@ -316,7 +316,7 @@ https://gitlab.com/ideasman42/emacs-spatial-navigate
     :init (sup 'spatial-navigate))
 #+end_src
 
-** embark                                                  :convenience:
+** embark                                         :convenience:
 
 Emacs Mini-Buffer Actions Rooted in Keymaps.
 
@@ -429,7 +429,7 @@ https://github.com/oantolin/embark/
     :init (sup 'embark-consult))
 #+end_src
 
-** Flycheck                                :convenience:languages:tools:
+** Flycheck                       :convenience:languages:tools:
 
 Modern on-the-fly syntax checking extension for GNU Emacs.
 
@@ -469,7 +469,7 @@ https://github.com/flycheck/flycheck
     (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space))
 #+end_src
 
-** Grep                                                        :builtin:
+** Grep                                               :builtin:
 
 #+begin_src emacs-lisp
   (leaf grep
@@ -478,7 +478,7 @@ https://github.com/flycheck/flycheck
     ((grep-highlight-matches grep-scroll-output) . t))
 #+end_src
 
-** Helpful                                                   :help:lisp:
+** Helpful                                          :help:lisp:
 
 A better Emacs *help* buffer.
 
@@ -553,7 +553,7 @@ https://github.com/dacap/keyfreq
     :init (sup 'keyfreq))
 #+end_src
 
-** marginalia                                               :extensions:
+** marginalia                                      :extensions:
 
 marginalia.el - Marginalia in the minibuffer
 
@@ -576,7 +576,7 @@ https://github.com/minad/marginalia
                         (selectrum-exhibit)))))
 #+end_src
 
-** Orderless                                                :extensions:
+** Orderless                                       :extensions:
 
 This package provides an orderless completion style that divides the
 pattern into space-separated components, and matches candidates that
@@ -643,7 +643,7 @@ https://github.com/oantolin/orderless
      ((string-suffix-p "~" pattern) `(orderless-flex . ,(substring pattern 0 -1)))))
 #+end_src
 
-** Page Break Lines                                  :convenience:faces:
+** Page Break Lines                         :convenience:faces:
 
 This Emacs library provides a global mode which displays ugly form feed
 characters as tidy horizontal rules.
@@ -667,7 +667,7 @@ https://github.com/purcell/page-break-lines
     :init (sup 'page-break-lines))
 #+end_src
 
-** Parens                               :faces:languages:parens:builtin:
+** Parens                      :faces:languages:parens:builtin:
 
 #+begin_src emacs-lisp
   (leaf paren
@@ -676,7 +676,7 @@ https://github.com/purcell/page-break-lines
     :hook (nasy-first-key-hook . show-paren-mode))
 #+end_src
 
-** Projectile                                      :convenience:project:
+** Projectile                             :convenience:project:
 
 Projectile is a project interaction library for Emacs. Its goal is to provide a
 nice set of features operating on a project level without introducing external
@@ -706,7 +706,7 @@ https://github.com/bbatsov/projectile
                    projectile-project-root-files-top-down-recurring)))
 #+end_src
 
-** Recentf                                                       :files:
+** Recentf                                              :files:
 
 Recentf is a minor mode that builds a list of recently opened files.
 
@@ -750,7 +750,7 @@ https://www.emacswiki.org/emacs/RecentFiles
          "/tmp/" "/ssh:" "/nix/store" "~/.nix/store" ,(locate-user-emacs-file "straight"))))
 #+end_src
 
-** Savehist                                                    :history:
+** Savehist                                           :history:
 
 #+begin_src emacs-lisp
   (leaf savehist
@@ -770,7 +770,7 @@ https://www.emacswiki.org/emacs/RecentFiles
          extended-command-history)))
 #+end_src
 
-** Selectrum                                                :extensions:
+** Selectrum                                       :extensions:
 
 Better solution for incremental narrowing in Emacs.
 
@@ -791,7 +791,7 @@ https://github.com/raxod502/selectrum
     (sup 'selectrum))
 #+end_src
 
-** Sessions                                                    :history:
+** Sessions                                           :history:
 
 #+begin_src emacs-lisp
   (leaf session
@@ -831,7 +831,7 @@ https://github.com/raxod502/selectrum
     :init (sup 'session))
 #+end_src
 
-** Subword                                                     :builtin:
+** Subword                                            :builtin:
 
 #+begin_src emacs-lisp
   (leaf subword
@@ -839,7 +839,7 @@ https://github.com/raxod502/selectrum
     :hook prog-mode-hook)
 #+end_src
 
-** Sudo Edit                                               :convenience:
+** Sudo Edit                                      :convenience:
 
 Utilities for opening files with sudo
 
@@ -853,7 +853,7 @@ https://github.com/nflath/sudo-edit
     :init (sup 'sudo-edit))
 #+end_src
 
-** switch-window                                           :convenience:
+** switch-window                                  :convenience:
 
 Offer a *visual* way to choose a window to switch to.
 
@@ -894,7 +894,7 @@ https://github.com/dimitri/switch-window
     :init (sup 'switch-window))
 #+end_src
 
-** Tempo                                                       :builtin:
+** Tempo                                              :builtin:
 
 #+begin_src emacs-lisp
   (leaf tempo
@@ -904,7 +904,7 @@ https://github.com/dimitri/switch-window
     :commands tempo-define-template)
 #+end_src
 
-** transient                                                  :bindings:
+** transient                                         :bindings:
 
 Taking inspiration from prefix keys and prefix arguments, Transient
 implements a similar abstraction involving a prefix command, infix
@@ -930,7 +930,7 @@ https://github.com/magit/transient
     :init (add-to-list 'nasy--defer-loads 'transient))
 #+end_src
 
-** Unfill                                                  :convenience:
+** Unfill                                         :convenience:
 
 Functions providing the inverse of Emacs' fill-paragraph and fill-region
 
@@ -945,7 +945,7 @@ https://github.com/purcell/unfill
     :init (sup 'unfill))
 #+end_src
 
-** Uniquify                                              :builtin:files:
+** Uniquify                                     :builtin:files:
 
 #+begin_src emacs-lisp
   (leaf uniquify
@@ -957,7 +957,7 @@ https://github.com/purcell/unfill
     (uniquify-ignore-buffers-re   . "^\\*"))
 #+end_src
 
-** valign                                       :convenience:table:text:
+** valign                              :convenience:table:text:
 
 这个包能对齐 Org Mode、Markdown和table.el 的表格。它能对齐包含不等宽字
 体、中日韩字符、图片的表格。valign 不会影响 Org Mode（或 Markdown mode）
@@ -980,7 +980,7 @@ https://github.com/casouri/valign
     :init (sup 'valign))
 #+end_src
 
-** View Large File                          :files:largefiles:utilities:
+** View Large File                 :files:largefiles:utilities:
 
 Emacs minor mode that allows viewing, editing, searching and comparing large
 files in batches, trading memory for processor time.
@@ -1006,7 +1006,7 @@ https://github.com/m00natic/vlfi
         (vlf file))))
 #+end_src
 
-** wgrep                                        :editing:extensions:grep:
+** wgrep                              :editing:extensions:grep:
 
 wgrep allows you to edit a grep buffer and apply those changes to the
 file buffer like sed interactively. No need to learn sed script, just
@@ -1022,7 +1022,7 @@ https://github.com/mhayashi1120/Emacs-wgrep
     :init (sup 'wgrep))
 #+end_src
 
-** Which Function                                              :builtin:
+** Which Function                                     :builtin:
 
 #+begin_src emacs-lisp
   (leaf which-func
@@ -1030,7 +1030,7 @@ https://github.com/mhayashi1120/Emacs-wgrep
     :hook (nasy-first-key-hook . which-function-mode))
 #+end_src
 
-** Whitespace                                      :convenience:data:wp:
+** Whitespace                             :convenience:data:wp:
 
 Visualize blanks (TAB, (HARD) SPACE and NEWLINE).
 
@@ -1079,7 +1079,7 @@ https://github.com/purcell/whitespace-cleanup-mode
     :init (sup 'whitespace-cleanup-mode))
 #+end_src
 
-** xref                                                        :builtin:
+** xref                                               :builtin:
 
 #+begin_src emacs-lisp
   (leaf xref
@@ -1089,7 +1089,7 @@ https://github.com/purcell/whitespace-cleanup-mode
      . #'xref-show-definitions-completing-read))
 #+end_src
 
-* 結                                                           :noexport:
+* 結                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '緑衣)

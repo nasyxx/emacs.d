@@ -25,7 +25,7 @@
 
 Applications.
 
-* 題                                                           :noexport:
+* 題                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 日月.el --- Nasy's emacs.d application file.  -*- lexical-binding: t; -*-
@@ -52,7 +52,7 @@ Applications.
 
 * 章
 
-** alert                                    :emacs:message:notification:
+** alert                           :emacs:message:notification:
 
 A Growl-like alerts notifier for Emacs
 
@@ -68,7 +68,7 @@ https://github.com/jwiegley/alert
     :init (sup 'alert))
 #+end_src
 
-** Carbon Now sh                                           :convenience:
+** Carbon Now sh                                  :convenience:
 
 Emacs to carbon.now.sh integration.
 
@@ -84,7 +84,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>@@
     :init (sup 'carbon-now-sh))
 #+end_src
 
-** Cheat Sh                                                  :docs:help:
+** Cheat Sh                                         :docs:help:
 
 Simple Emacs interface for cheat.sh.
 
@@ -98,7 +98,7 @@ https://github.com/davep/cheat-sh.el
     :init (sup 'cheat-sh))
 #+end_src
 
-** Emacs Rime                                  :convenience:inputmethod:
+** Emacs Rime                         :convenience:inputmethod:
 
 RIME ㄓ in Emacs
 
@@ -163,7 +163,7 @@ https://github.com/DogLooksGood/emacs-rime
          "<delete>")))
 #+end_src
 
-** ESUP -- Emacs Start Up Profiler     :benchmark:convenience:processes:
+** ESUP -- Emacs Start Up Profiler :benchmark:convenience:processes:
 
 Benchmark Emacs Startup time without ever leaving your Emacs.
 
@@ -177,7 +177,7 @@ https://github.com/jschaf/esup
     :init (sup 'esup))
 #+end_src
 
-** explain-pause-mode                         :performance:config:speed:
+** explain-pause-mode                :performance:config:speed:
 
 top, but for Emacs.
 
@@ -191,7 +191,7 @@ https://github.com/lastquestion/explain-pause-mode
     :init (sup 'explain-pause-mode))
 #+end_src
 
-** Grab Mac Link                                         :mac:hyperlink:
+** Grab Mac Link                                :mac:hyperlink:
 
 Grab link from Mac Apps and insert it into Emacs.
 
@@ -206,7 +206,7 @@ https://github.com/xuchunyang/grab-mac-link.el
     :init (sup 'grab-mac-link))
 #+end_src
 
-** Htmlize                                       :hypermedia:extensions:
+** Htmlize                              :hypermedia:extensions:
 
 Convert buffer text and decorations to HTML.
 
@@ -221,7 +221,7 @@ https://github.com/hniksic/emacs-htmlize
     :init (sup 'htmlize))
 #+end_src
 
-** indent-tools                                 :indentation:navigation:
+** indent-tools                        :indentation:navigation:
 
 Emacs mode to indent, navigate around and act on indentation units: perfect for
 yaml, python and the like.
@@ -238,7 +238,7 @@ https://gitlab.com/emacs-stuff/indent-tools
     :init (sup 'indent-tools))
 #+end_src
 
-** List Unicode Display                                    :convenience:
+** List Unicode Display                           :convenience:
 
 Provides a command which searches for unicode characters by name, and displays a
 list of matching characters with their names in a buffer.
@@ -255,7 +255,7 @@ https://github.com/purcell/list-unicode-display
     :init (sup 'list-unicode-display))
 #+end_src
 
-** Magit                                                  :git:tools:vc:
+** Magit                                         :git:tools:vc:
 
 Magit is an interface to the version control system Git, implemented as an Emacs
 package. Magit aspires to be a complete Git porcelain. While we cannot (yet)
@@ -366,7 +366,7 @@ https://github.com/alphapapa/magit-todos
     :init (sup 'magit-todos))
 #+end_src
 
-** PDF Tools                                          :files:multimedia:
+** PDF Tools                                 :files:multimedia:
 
 PDF Tools is, among other things, a replacement of DocView for PDF files.
 
@@ -402,7 +402,7 @@ https://github.com/politza/pdf-tools
     :init (sup 'pdf-tools))
 #+end_src
 
-** Prettier                                 :convenience:files:languages:
+** Prettier                       :convenience:files:languages:
 
 The prettier Emacs package reformats your code by running [[https://github.com/prettier/prettier][Prettier]]
 with minimal overhead, by request or transparently on file save.
@@ -417,7 +417,7 @@ https://github.com/jscheid/prettier.el
     :init (sup 'prettier))
 #+end_src
 
-** vterm                                                     :terminals:
+** vterm                                            :terminals:
 
 Emacs libvterm integration.
 
@@ -434,7 +434,7 @@ https://github.com/akermu/emacs-libvterm
     :init (sup 'vterm))
 #+end_src
 
-** vterm-toggle                                              :terminals:
+** vterm-toggle                                     :terminals:
 
 Toggles between the vterm buffer and whatever buffer you are editing.
 
@@ -462,7 +462,7 @@ https://github.com/jixiuf/vterm-toggle
                    (window-height . 0.3))))
 #+end_src
 
-** Wakatime-mode                                         :calendar:comm:
+** Wakatime-mode                                :calendar:comm:
 
 ~wakatime-mode~ is an automatic time tracking extension for Emacs using [[https://wakatime.com/][WakaTime]].
 
@@ -477,7 +477,7 @@ https://github.com/wakatime/wakatime-mode
     :init (sup 'wakatime-mode))
 #+end_src
 
-* 結                                                           :noexport:
+* 結                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '日月)

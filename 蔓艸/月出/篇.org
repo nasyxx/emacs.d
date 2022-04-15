@@ -16,7 +16,7 @@
 
 Selective packages.  Disabled the ~package~ by setting *no-package* in the custom file.
 
-* 題                                                           :noexport:
+* 題                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 月出.el --- Nasy's emacs.d selective file.  -*- lexical-binding: t; -*-
@@ -48,7 +48,7 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
 
 * 章
 
-** abridge-diff                                      :diffs:tools:magit:
+** abridge-diff                             :diffs:tools:magit:
 
 A simple Emacs package for abridging refined diff hunks (for example in
 magit). Why abridge a diff hunk? Most diffs are line based. If you are working
@@ -70,7 +70,7 @@ https://github.com/jdtsmith/abridge-diff
     (abridge-diff-mode 1))
 #+end_src
 
-** Ansi-Color                        :comm:processes:terminals:services:
+** Ansi-Color               :comm:processes:terminals:services:
 
 ansi-color.el translates ANSI SGR (Select Graphic Rendition) escape sequences
 like "Esc[30m" into EmacsOverlays, TextProperties, or XEmacsExtents with face
@@ -98,7 +98,7 @@ https://www.emacswiki.org/emacs/AnsiColor
                                     (point-max)))))
 #+end_src
 
-** beacon                                                  :convenience:
+** beacon                                         :convenience:
 
 A light that follows your cursor around so you don't lose it!
 
@@ -122,7 +122,7 @@ https://github.com/Malabarba/beacon
     :init (sup 'beacon))
 #+end_src
 
-** Color Identifiers Mode                              :faces:languages:
+** Color Identifiers Mode                     :faces:languages:
 
 Emacs minor mode to highlight each source code identifier uniquely based on its
 name.
@@ -139,7 +139,7 @@ https://github.com/ankurdave/color-identifiers-mode
     :init (sup 'color-identifiers-mode))
 #+end_src
 
-** Default Text Scale                                             :text:
+** Default Text Scale                                    :text:
 
 #+begin_src emacs-lisp
   (leaf default-text-scale
@@ -150,7 +150,7 @@ https://github.com/ankurdave/color-identifiers-mode
     :init (sup 'default-text-scale))
 #+end_src
 
-** dired-async                                     :dired:async:network:
+** dired-async                            :dired:async:network:
 
 Simple library for asynchronous processing in Emacs.
 
@@ -168,7 +168,7 @@ https://github.com/jwiegley/emacs-async
     :init (sup 'async))
 #+end_src
 
-** Dired Hack                                                    :files:
+** Dired Hack                                           :files:
 
 Collection of useful dired additions
 
@@ -304,7 +304,7 @@ https://github.com/Fuco1/dired-hacks
     :init (sup 'dired-collapse))
 #+end_src
 
-** Diff-hl (only for dired)                                   :vc:diffs:
+** Diff-hl (only for dired)                          :vc:diffs:
 
 Emacs package for highlighting uncommitted changes
 
@@ -324,7 +324,7 @@ https://github.com/dgutov/diff-hl
     :init (sup 'diff-hl))
 #+end_src
 
-** eldoc box                                      :docs:extensions:help:
+** eldoc box                             :docs:extensions:help:
 
 This package displays ElDoc documentations in a childframe.
 
@@ -342,7 +342,7 @@ https://github.com/casouri/eldoc-box
     :init (sup 'eldoc-box))
 #+end_src
 
-** eldoc-overlay                                            :extensions:
+** eldoc-overlay                                   :extensions:
 
 Display eldoc doc with contextual documentation overlay for easy to look.
 
@@ -357,7 +357,7 @@ https://github.com/stardiviner/eldoc-overlay
     :init (sup 'eldoc-overlay))
 #+end_src
 
-** Expand Region                                        :marking:region:
+** Expand Region                               :marking:region:
 
 Emacs extension to increase selected region by semantic units.
 
@@ -372,7 +372,7 @@ https://github.com/magnars/expand-region.el
     :init (sup 'expand-region))
 #+end_src
 
-** Find File in Project                            :project:convenience:
+** Find File in Project                   :project:convenience:
 
 Find file/directory and review Diff/Patch/Commit quickly everywhere.
 
@@ -387,7 +387,7 @@ https://github.com/technomancy/find-file-in-project
     :init (sup 'find-file-in-project))
 #+end_src
 
-** ftables                                      :convenience:table:text:
+** ftables                             :convenience:table:text:
 
 This package provides some convenient commands for filling a table,
 i.e., adjusting the layout of the table so it can fit in n columns.
@@ -402,7 +402,7 @@ https://github.com/casouri/ftable
     :init (sup 'ftable))
 #+end_src
 
-** Git Gutter                                                   :vc:git:
+** Git Gutter                                          :vc:git:
 
 *Disabled. Now use diff-hl*
 
@@ -427,7 +427,7 @@ https://github.com/emacsorphanage/git-gutter
     :init (sup 'git-gutter))
 #+end_src
 
-** Highlight Indent Guides                                       :faces:
+** Highlight Indent Guides                              :faces:
 
 Emacs minor mode to highlight indentation.
 
@@ -444,7 +444,7 @@ https://github.com/DarthFennec/highlight-indent-guides
     :init (sup 'highlight-indent-guides))
 #+end_src
 
-** Highlight Tail                        :color:effect:highlight:visual:
+** Highlight Tail               :color:effect:highlight:visual:
 
 This minor-mode draws a tail in real time, when you write.
 
@@ -459,7 +459,7 @@ https://www.emacswiki.org/emacs/highlight-tail.el
     :init (sup 'highlight-tail))
 #+end_src
 
-** hl-line                                      :faces:frame:emulations:
+** hl-line                             :faces:frame:emulations:
 
 Highlight the current line of characters.
 
@@ -473,7 +473,7 @@ https://www.emacswiki.org/emacs/HighlightCurrentLine
     :hook ((after-init-hook . global-hl-line-mode)))
 #+end_src
 
-** imenu list                                        :tools:convenience:
+** imenu list                               :tools:convenience:
 
 Emacs plugin to show the current buffer's imenu entries in a seperate buffer.
 
@@ -489,7 +489,7 @@ https://github.com/bmag/imenu-list
     :init (sup 'imenu-list))
 #+end_src
 
-** kind-icon                                                :completion:
+** kind-icon                                       :completion:
 
 kind-icon — colorful icons for completion in Emacs
 
@@ -510,7 +510,7 @@ https://github.com/jdtsmith/kind-icon
     :defer-config (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 
-** mixed-pitch                                                   :faces:
+** mixed-pitch                                          :faces:
 
 Mixed pitch is a minor mode that enables mixing fixed-pitch (also known as
 fixed-width or monospace) and variable-pitch (AKA “proportional”) fonts. It
@@ -545,7 +545,7 @@ https://gitlab.com/jabranham/mixed-pitch
                   '(whitespace-hspace whitespace-space))))
 #+end_src
 
-** mmm-mode                          :convenience:faces:languages:tools:
+** mmm-mode                 :convenience:faces:languages:tools:
 
 MMM Mode is a minor mode for Emacs that allows Multiple Major Modes to coexist
 in one buffer.
@@ -568,7 +568,7 @@ https://github.com/purcell/mmm-mode
       (require 'mmm-mode)))
 #+end_src
 
-** Multiple Cursors                                    :cursors:editing:
+** Multiple Cursors                           :cursors:editing:
 
 Multiple cursors for Emacs.
 
@@ -593,7 +593,7 @@ https://github.com/magnars/multiple-cursors.el
     (sup 'multiple-cursors))
 #+end_src
 
-** Persistent Scratch                              :convenience:history:
+** Persistent Scratch                     :convenience:history:
 
 ~persistent-scratch~ is an Emacs package that preserves the state of
 scratch buffers accross Emacs sessions by saving the state to and
@@ -614,7 +614,7 @@ https://github.com/Fanael/persistent-scratch
     :advice (:after persistent-scratch-restore nasy/scratch))
 #+end_src
 
-** Point History                                       :editing:history:
+** Point History                              :editing:history:
 
 Show the history of points you visited before.
 
@@ -631,7 +631,7 @@ https://github.com/blue0513/point-history
     :init (sup 'point-history))
 #+end_src
 
-** Rainbow-Mode                                                  :faces:
+** Rainbow-Mode                                         :faces:
 
 This minor mode sets background color to strings that match color names,
 e.g. #0000ff is displayed in white with a blue background.
@@ -672,7 +672,7 @@ https://elpa.gnu.org/packages/rainbow-mode.html
       (diminish 'rainbow-mode)))
 #+end_src
 
-** Rainbow Delimiters              :convenience:faces:lisp:tools:parens:
+** Rainbow Delimiters     :convenience:faces:lisp:tools:parens:
 
 rainbow-delimiters is a "rainbow parentheses"-like mode which highlights
 delimiters such as parentheses, brackets or braces according to their
@@ -691,7 +691,7 @@ https://github.com/Fanael/rainbow-delimiters
     :init (sup 'rainbow-delimiters))
 #+end_src
 
-** Shellcop                                                 :tools:unix:
+** Shellcop                                        :tools:unix:
 
 Analyze errors reported in Emacs builtin shell
 
@@ -707,7 +707,7 @@ https://github.com/redguardtoo/shellcop
     :init (sup 'shellcop))
 #+end_src
 
-** Smartparens                       :abbrev:convenience:editing:parens:
+** Smartparens              :abbrev:convenience:editing:parens:
 
 Minor mode for Emacs that deals with parens pairs and tries to be smart about
 it.
@@ -724,7 +724,7 @@ https://github.com/Fuco1/smartparens
     :init (sup 'smartparens))
 #+end_src
 
-** Symbol Overlay                                       :faces:matching:
+** Symbol Overlay                              :faces:matching:
 
 Highlight symbols with overlays while providing a keymap for various operations
 about highlighted symbols. It was originally inspired by the package
@@ -747,7 +747,7 @@ https://github.com/wolray/symbol-overlay
     :init (sup 'symbol-overlay))
 #+end_src
 
-** Treemacs                                          :convenience:files:
+** Treemacs                                 :convenience:files:
 
 Treemacs is a file and project explorer similar to NeoTree or vim’s NerdTree, but largely inspired by the Project Explorer in Eclipse. It shows the file system outlines
  of your projects in a simple tree layout allowing quick navigation and exploration, while also possessing basic file management utilities.
@@ -833,7 +833,7 @@ https://github.com/Alexander-Miller/treemacs
     :init (sup 'treemacs-projectile))
 #+end_src
 
-** Tree Sitter                                 :languages:parsers:tools:
+** Tree Sitter                        :languages:parsers:tools:
 
 ~emacs-tree-sitter~ is an Emacs binding for tree-sitter, an incremental parsing
 system.
@@ -877,7 +877,7 @@ https://ubolonton.github.io/emacs-tree-sitter/
     :hook (css-mode-hook python-mode-hook))
 #+end_src
 
-** Tree Sitter Indent                             :convenience:internal:
+** Tree Sitter Indent                    :convenience:internal:
 
 https://codeberg.org/FelipeLema/tree-sitter-indent.el.git
 
@@ -894,7 +894,7 @@ https://codeberg.org/FelipeLema/tree-sitter-indent.el.git
     :custom (c-indent-offset . tree-sitter-indent-offset))
 #+end_src
 
-** Undo Propose                    :convenience:files:undo:redo:history:
+** Undo Propose           :convenience:files:undo:redo:history:
 
 Navigate the emacs undo history by staging undo's in a temporary buffer.
 
@@ -909,7 +909,7 @@ https://github.com/jackkamm/undo-propose-el
     :init (sup 'undo-propose))
 #+end_src
 
-** Visual-fill-column                                      :convenience:
+** Visual-fill-column                             :convenience:
 
 Emacs mode for wrapping visual-line-mode buffers at fill-column.
 
@@ -935,7 +935,7 @@ https://github.com/joostkremers/visual-fill-column
         (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t))))
 #+end_src
 
-** vundo                                                     :undo:redo:
+** vundo                                            :undo:redo:
 
 Visual undo tree.
 
@@ -966,7 +966,7 @@ https://github.com/casouri/vundo
     :init (sup 'vundo))
 #+end_src
 
-** Which Key                                                      :help:
+** Which Key                                             :help:
 
 Emacs package that displays available keybindings in popup.
 
@@ -982,7 +982,7 @@ https://github.com/justbur/emacs-which-key
     :init (sup 'which-key))
 #+end_src
 
-** Writeroom                                                      :text:
+** Writeroom                                             :text:
 
 ~writeroom-mode~ is a minor mode for Emacs that implements a distraction-free
 writing mode similar to the famous Writeroom editor for macOS.
@@ -1009,7 +1009,7 @@ https://github.com/joostkremers/writeroom-mode
     :init (sup 'writeroom-mode))
 #+end_src
 
-** yank-pulse                                                     :text:
+** yank-pulse                                            :text:
 
 #+begin_src emacs-lisp
   ;; From https://christiantietze.de/posts/2020/12/emacs-pulse-highlight-yanked-text/
@@ -1029,7 +1029,7 @@ https://github.com/joostkremers/writeroom-mode
     :advice (:around yank nasy/-yank-pulse-advice))
 #+end_src
 
-** Yasnipeet                                     :convenience:emulation:
+** Yasnipeet                            :convenience:emulation:
 
 YASnippet is a template system for Emacs. It allows you to type an abbreviation
 and automatically expand it into function templates. Bundled language templates
@@ -1064,7 +1064,7 @@ https://github.com/AndreaCrotti/yasnippet-snippets
     (yas-reload-all))
 #+end_src
 
-* 結                                                           :noexport:
+* 結                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '月出)

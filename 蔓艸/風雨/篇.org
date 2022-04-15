@@ -14,7 +14,7 @@
 
 函數與宏定製其文宜其用之
 
-* 題                                                           :noexport:
+* 題                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 風雨.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
@@ -1349,7 +1349,7 @@
     (insert "\u200b"))
 #+end_src
 
-** 挈壺                                                      :benchmark:
+** 挈壺                                             :benchmark:
 
 #+begin_src emacs-lisp
   (defmacro nasy/timer (&rest body)
@@ -1523,7 +1523,7 @@
   ;;; 風雨旹用.el ends here
 #+end_src
 
-* 結                                                           :noexport:
+* 結                                                 :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '風雨)
