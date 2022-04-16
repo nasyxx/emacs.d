@@ -13,7 +13,7 @@
   邂逅相遇、與子偕臧
 #+end_verse
 
-* 題                                                           :noexport:
+* 題                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; init.el --- Nasy's Emacs Configuration file.            -*- lexical-binding: t; -*-
@@ -161,7 +161,7 @@
   ;;   (load custom-file))
 #+end_src
 
-* 結                                                           :noexport:
+* 結                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;(provide 'init)

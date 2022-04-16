@@ -15,7 +15,7 @@
 
 Library.
 
-* 題                                                 :noexport:
+* 題                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 小曐.el --- Nasy's emacs.d library file.  -*- lexical-binding: t; -*-
@@ -104,7 +104,7 @@ https://github.com/purcell/emacs-reformatter
   (add-hook 'nasy--defer-load-hook #'(lambda () (require 'wgrep)))
 #+end_src
 
-* 結                                                 :noexport:
+* 結                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '小曐)

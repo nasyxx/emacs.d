@@ -23,7 +23,7 @@ Permanent configuration file.
 
 You cannot disable anything here.
 
-* 題                                                 :noexport:
+* 題                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 緑衣.el --- Nasy's emacs.d permanent file.  -*- lexical-binding: t; -*-
@@ -229,7 +229,7 @@ Include consult, consult-selectrum & consult-flycheck.
     :init (sup 'consult-flycheck))
 #+end_src
 
-*** consult-dir                                   :convenience:
+*** consult-dir                                    :convenience:
 
 Consult-dir allows you to easily select and switch between “active”
 directories.
@@ -1089,7 +1089,7 @@ https://github.com/purcell/whitespace-cleanup-mode
      . #'xref-show-definitions-completing-read))
 #+end_src
 
-* 結                                                 :noexport:
+* 結                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '緑衣)

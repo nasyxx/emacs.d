@@ -25,7 +25,7 @@
 
 Applications.
 
-* 題                                                 :noexport:
+* 題                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 日月.el --- Nasy's emacs.d application file.  -*- lexical-binding: t; -*-
@@ -295,7 +295,7 @@ https://github.com/magit/magit
     :init (sup 'magit))
 #+end_src
 
-*** Forge                                                :git:tools:vc:
+*** Forge                                         :git:tools:vc:
 
 Work with Git forges from the comfort of Magit.
 
@@ -313,7 +313,7 @@ https://github.com/magit/forge
     :init (sup 'forge))
 #+end_src
 
-*** Magit Delta                                          :git:tools:vc:
+*** Magit Delta                                   :git:tools:vc:
 
 https://github.com/dandavison/magit-delta
 
@@ -334,7 +334,7 @@ https://github.com/dandavison/magit-delta
     :init (sup 'magit-delta))
 #+end_src
 
-*** Magit Org Todos                               :magit:orgmode:tools:
+*** Magit Org Todos                        :magit:orgmode:tools:
 
 Get `todo.org` into your magit status.
 
@@ -350,7 +350,7 @@ https://github.com/danielma/magit-org-todos.el
     :config (magit-org-todos-autoinsert))
 #+end_src
 
-*** Magit Todos                                              :magit:vc:
+*** Magit Todos                                       :magit:vc:
 
 Show source files' TODOs (and FIXMEs, etc) in Magit status buffer.
 
@@ -477,7 +477,7 @@ https://github.com/wakatime/wakatime-mode
     :init (sup 'wakatime-mode))
 #+end_src
 
-* 結                                                 :noexport:
+* 結                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '日月)

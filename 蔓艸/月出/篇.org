@@ -16,7 +16,7 @@
 
 Selective packages.  Disabled the ~package~ by setting *no-package* in the custom file.
 
-* 題                                                 :noexport:
+* 題                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 月出.el --- Nasy's emacs.d selective file.  -*- lexical-binding: t; -*-
@@ -1064,7 +1064,7 @@ https://github.com/AndreaCrotti/yasnippet-snippets
     (yas-reload-all))
 #+end_src
 
-* 結                                                 :noexport:
+* 結                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '月出)

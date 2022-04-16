@@ -1,7 +1,7 @@
 #+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "模.el") :lexical t
 #+title: 模
 
-* 題                                                 :noexport:
+* 題                                                :noexport:
 
 #+begin_src emacs-lisp
   ;;; 模.el --- Nasy's Emacs Configuration language template file.  -*- lexical-binding: t; -*-
@@ -116,7 +116,7 @@
       (define-abbrev python-mode-abbrev-table "pyh" "" 'tempo-template-py-header)))
 #+end_src
 
-* 結                                                 :noexport:
+* 結                                                :noexport:
 
 #+begin_src emacs-lisp
   (provide '模)

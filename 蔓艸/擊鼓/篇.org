@@ -22,7 +22,7 @@
 
 必要組件之于 Emacs 啓勭
 
-* 題                                                 :noexport:
+* 題                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   ;;; 擊鼓.el --- Nasy's emacs.d init bootstrap file.  -*- lexical-binding: t; -*-
@@ -323,7 +323,7 @@ https://gitlab.com/koral/gcmh
       (gcmh-mode 1)))
 #+end_src
 
-* 整置文件                                        :convenience:
+* 整置文件                                       :convenience:
 
 #+begin_src emacs-lisp
   (with-no-warnings
@@ -354,7 +354,7 @@ https://gitlab.com/koral/gcmh
                             (concat *nasy-var* "url/configuration/") "Customized by Nasy."))
 #+end_src
 
-* 結                                                 :noexport:
+* 結                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
   (provide '擊鼓)
