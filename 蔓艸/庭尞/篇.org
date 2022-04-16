@@ -931,7 +931,9 @@ https://github.com/ema2159/centaur-tabs
 
 #+begin_src emacs-lisp
   (leaf nasy-theme
-    :init (sup `(nasy-theme :local-repo ,(concat *nasy-site* "nasy/nasy-theme"))))
+    :init
+    (sup `(nasy-theme :local-repo ,(concat *nasy-site* "nasy/nasy-theme")
+                      :files ("nasy-theme.el"))))
 #+end_src
 
 ** Main Theme
