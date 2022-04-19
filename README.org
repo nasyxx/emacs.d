@@ -15,6 +15,14 @@
 #+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
 #+html_head: <link rel="stylesheet" type="text/css" href="style.css">
+#+html_head: <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+#+html_head: <script>
+#+html_head:   window.dataLayer = window.dataLayer || [];
+#+html_head:   function gtag(){window.dataLayer.push(arguments);}
+#+html_head:   gtag('js', new Date());
+#+html_head:
+#+html_head:   gtag('config', 'GA_MEASUREMENT_ID');
+#+html_head: </script>
 
 #+latex_header: \setmainfont{Cormorant Garamond}
 #+latex_header: \setmainjfont{FandolSong}
