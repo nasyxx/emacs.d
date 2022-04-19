@@ -27,6 +27,9 @@
     (sup 'corfu)
     (sup 'cape)
 
+    (sup '(copilot :host github :repo "zerolfx/copilot.el"
+                   :files ("dist" "copilot.el")))
+
     (require 'cape)
     (require 'company)
     (require 'company)
