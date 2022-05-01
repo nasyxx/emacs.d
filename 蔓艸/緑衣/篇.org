@@ -961,7 +961,7 @@ https://github.com/purcell/unfill
 
 这个包能对齐 Org Mode、Markdown和table.el 的表格。它能对齐包含不等宽字
 体、中日韩字符、图片的表格。valign 不会影响 Org Mode（或 Markdown mode）
-基于等宽字符的对齐。
+基于等宽字符的对齐。  (注：目歬不在 org-mode 中启用)
 
 This package provides visual alignment for Org Mode, Markdown and
 table.el tables on GUI Emacs. It can properly align tables containing
@@ -976,7 +976,7 @@ https://github.com/casouri/valign
     :doc "Pixel-perfect visual alignment for Org and Markdown tables."
     :url "https://github.com/casouri/valign"
     :tag "convenience" "table" "text"
-    :hook (org-mode-hook)
+    :hook (markdown-mode-hook)
     :init (sup 'valign))
 #+end_src
 
