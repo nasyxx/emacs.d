@@ -460,7 +460,6 @@ Emacs client/library for the Language Server Protocol
     :mode ("INSTALL\\'"
            "CONTRIBUTORS\\'"
            "LICENSE\\'"
-           "README\\'"
            "\\.markdown\\'"
            "\\.md\\'")
     :init
@@ -491,6 +490,8 @@ Emacs client/library for the Language Server Protocol
 
 #+begin_src emacs-lisp
   (add-hook 'nasy-first-key-hook #'(lambda () (require 'org)))
+  (leaf org-mode
+    :mode ("README\\'"))
 #+end_src
 
 *** 自定義                                                 :org:
