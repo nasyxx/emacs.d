@@ -117,7 +117,7 @@
            '(progn ,@body)))))
 #+end_src
 
-** Font
+** 字体
 
 #+begin_src emacs-lisp
   (defvar nasy/font-change-hook nil
@@ -335,8 +335,9 @@
                                              :weight *font-header-line-weight*
                                              :size   *font-header-line-size*)))
 
-      (after-x 'doom-modeline
-        (doom-modeline--set-char-widths doom-modeline-rhs-icons-alist)))
+      ;; (after-x 'doom-modeline
+          ;;     (doom-modeline--set-char-widths doom-modeline-rhs-icons-alist))
+      )
     (run-hooks 'nasy/font-change-hook))
 
 

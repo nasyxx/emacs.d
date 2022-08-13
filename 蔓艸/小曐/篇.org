@@ -46,6 +46,7 @@ Library.
 
 #+begin_src emacs-lisp
   (leaf all-the-icons
+    :custom (all-the-icons-scale-factor . 1)
     :hook (nasy--defer-load-hook . (lambda () (require 'all-the-icons)))
     :init (add-to-list 'nasy--defer-loads 'all-the-icons))
 #+end_src
