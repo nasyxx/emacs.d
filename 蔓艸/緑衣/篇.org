@@ -656,12 +656,13 @@ https://github.com/purcell/page-break-lines
     :url "https://github.com/purcell/page-break-lines"
     :tag "convenience" "faces"
     :hook
-    (nasy-first-key-hook . global-page-break-lines-mode)
+    ;; (nasy-first-key-hook . global-page-break-lines-mode)
     (nasy/font-change-hook
      . (lambda ()
          (progn
-           (nasy/change-char-width page-break-lines-char 2)
-           (nasy/set-symbol ?⊸ 18 nil))))
+           (after-x 'page-break-lines
+             (nasy/change-char-width page-break-lines-char 2)
+             (nasy/set-symbol ?⊸ 18 nil)))))
     :custom
     (page-break-lines-char . ?⊸)
     :init (sup 'page-break-lines))
