@@ -576,6 +576,12 @@ https://github.com/minad/marginalia
                         (selectrum-exhibit)))))
 #+end_src
 
+#+begin_src emacs-lisp
+  (leaf all-the-icons-completion
+    :hook (marginalia-mode-hook . all-the-icons-completion-marginalia-setup)
+    :init (sup 'all-the-icons-completion))
+#+end_src
+
 ** Orderless                                       :extensions:
 
 This package provides an orderless completion style that divides the

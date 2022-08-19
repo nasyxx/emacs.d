@@ -894,6 +894,22 @@ https://codeberg.org/FelipeLema/tree-sitter-indent.el.git
     :custom (c-indent-offset . tree-sitter-indent-offset))
 #+end_src
 
+** Tree Sitter Fold (ts-fold)             :convenience:folding:
+
+ts-fold builds on top of [[https://github.com/emacs-tree-sitter/elisp-tree-sitter][elisp-tree-sitter]] to provide code folding
+base on the tree-sitter syntax tree.
+
+https://github.com/jcs090218/ts-fold
+
+#+begin_src emacs-lisp
+  (leaf ts-fold
+    :doc "Code-folding using tree-sitter."
+    :url "https://github.com/jcs090218/ts-fold"
+    :tag "folding" "convenience"
+    :bind ("C-c @" . ts-fold-toggle)
+    :init (sup '(ts-fold :type git :host github :repo "jcs090218/ts-fold")))
+#+end_src
+
 ** Undo Propose           :convenience:files:undo:redo:history:
 
 Navigate the emacs undo history by staging undo's in a temporary buffer.
