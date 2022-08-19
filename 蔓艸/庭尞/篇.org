@@ -863,7 +863,7 @@ https://github.com/ema2159/centaur-tabs
     (inhibit-compacting-font-caches . t)
     ((doom-modeline-bar-width                   . 5)
      (doom-modeline-window-width-limit          . fill-column)
-     (doom-modeline-project-detection           . 'project)  ;; changed
+     (doom-modeline-project-detection           . 'ffip)  ;; changed
      ((doom-modeline-icon             ;; changed
        doom-modeline-unicode-fallback ;; changed
        doom-modeline-minor-modes)      ;; changed
