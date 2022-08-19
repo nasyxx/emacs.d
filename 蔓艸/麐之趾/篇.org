@@ -48,12 +48,15 @@ Programming Languages
     (sup 'all-the-icons)
     (sup 'lsp-mode)
     (require 'lsp-diagnostics)
+    (sup 'citeproc)
     (sup 'org)
     (sup 'org-contrib)
+    (require 'org)
     (require 'org-agenda)
     (require 'org-capture)
     (require 'org-clock)
     (require 'ob)
+    (require 'oc-biblatex)
     (sup 'page-break-lines)
     (sup 'reformatter)
     (sup 'haskell-mode)
@@ -858,6 +861,29 @@ TeX related works.
     :after org
     :custom
     (org-todo-repeat-to-state . "NEXT"))
+#+end_src
+
+#+begin_src emacs-lisp
+  (leaf oc
+    :after org
+    :custom (org-cite-global-bibliography . `(,(concat *nasy-var* "refs/ref.bib"))))
+
+  (leaf oc-biblatex
+    :after org oc
+    :defer-config
+    (add-to-list 'org-cite-biblatex-styles
+                 '("foot" "full" "footfullcite" nil nil))
+    (add-to-list 'org-cite-biblatex-styles
+                 '("foot" nil "footcite" nil nil))
+    (add-to-list 'org-cite-biblatex-styles
+                 '(nil "full" "fullcite" nil nil))
+    (add-to-list 'org-cite-biblatex-style-shortcuts
+                 '("ft" . "foot")))
+
+  (leaf oc-csl
+    :after org oc
+    :custom (org-cite-csl-styles-dir . "~/Zotero/styles")
+    :init (sup 'citeproc))
 #+end_src
 
 *** Basic & Functions                                      :org:
