@@ -464,9 +464,11 @@ TeX related works.
 
 #+begin_src emacs-lisp
   (leaf tex
-    :hook ((tex-mode-hook
-            latex-mode-hook
-            LaTeX-mode-hook) . visual-line-mode))
+    :hook
+    ((tex-mode-hook
+      TeX-mode-hook
+      latex-mode-hook
+      LaTeX-mode-hook) . visual-line-mode))
 #+end_src
 
 *** auctex
@@ -979,7 +981,7 @@ TeX related works.
            ("C-c _" . org-edit-src-exit))
     :mode-hook
     ;; (auto-fill-mode 1)
-    ;; (visual-line-mode)
+    (visual-line-mode)
     (eldoc-mode 1)
     :init
     (after-x 'company

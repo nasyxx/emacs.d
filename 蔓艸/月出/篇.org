@@ -937,6 +937,13 @@ https://github.com/joostkremers/visual-fill-column
     :url "https://github.com/joostkremers/visual-fill-column"
     :tag "convenience"
     :advice (:after text-scale-adjust visual-fill-column-adjust)
+    :custom
+    (visual-fill-column-width . 100)
+    :hook
+    ((tex-mode-hook
+      TeX-mode-hook
+      latex-mode-hook
+      LaTeX-mode-hook) . visual-fill-column-mode)
     :init (sup 'visual-fill-column)
     :mode-hook
     (if visual-fill-column-mode
