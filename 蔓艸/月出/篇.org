@@ -936,19 +936,12 @@ https://github.com/joostkremers/visual-fill-column
     :doc "Emacs mode for wrapping visual-line-mode buffers at fill-column."
     :url "https://github.com/joostkremers/visual-fill-column"
     :tag "convenience"
-    :leaf-autoload t
-    :leaf-defun t
-    :commands maybe-adjust-visual-fill-column
-    :hook (visual-line-mode-hook
-           (visual-fill-column-mode-hook . maybe-adjust-visual-fill-column))
+    :advice (:after text-scale-adjust visual-fill-column-adjust)
     :init (sup 'visual-fill-column)
-    :config
-    (defun maybe-adjust-visual-fill-column ()
-      "Readjust visual fill column when the global font size is modified.
-  This is helpful for writeroom-mode, in particular."
-      (if visual-fill-column-mode
-          (add-hook 'after-setting-font-hook 'visual-fill-column--adjust-window nil t)
-        (remove-hook 'after-setting-font-hook 'visual-fill-column--adjust-window t))))
+    :mode-hook
+    (if visual-fill-column-mode
+        (setq split-window-preferred-function #'visual-fill-column-split-window-sensibly)
+      (setq split-window-preferred-function #'split-window-sensibly)))
 #+end_src
 
 ** vundo                                            :undo:redo:

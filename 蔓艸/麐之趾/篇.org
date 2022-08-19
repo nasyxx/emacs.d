@@ -472,9 +472,9 @@ TeX related works.
 *** auctex
 
 #+begin_src emacs-lisp
-  (leaf tex
+  (leaf auctex
     :init
-    (sup `(auctex
+    (sup `(tex-site
            :type git :host nil
            :repo "https://git.savannah.gnu.org/git/auctex.git"
            :pre-build ,(pcase system-type
@@ -493,8 +493,8 @@ TeX related works.
       ;`(preview-TeX-style-dir ,(concat ".:" (straight--repos-dir "auctex") "latex:"))
     (setq preview-TeX-style-dir (concat ".:" (straight--repos-dir "auctex") "latex:"))
 
-     ;; (load "auctex.el" nil t t)
-     ;; (load "preview-latex.el" nil t t)
+    (load "auctex.el" nil t t)
+    (load "preview-latex.el" nil t t)
 
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
@@ -979,7 +979,7 @@ TeX related works.
            ("C-c _" . org-edit-src-exit))
     :mode-hook
     ;; (auto-fill-mode 1)
-    (visual-line-mode)
+    ;; (visual-line-mode)
     (eldoc-mode 1)
     :init
     (after-x 'company
