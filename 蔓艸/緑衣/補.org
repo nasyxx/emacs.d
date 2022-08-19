@@ -519,14 +519,17 @@ https://github.com/zerolfx/copilot.el
     :tag "editing" "extensions"
     :advice (:after keyboard-quit copilot-clear-overlay)
     :bind
-    (("C-<tab>" . copilot-accept-completion)
+    (:copilot-mode-map
+     ("C-<tab>" . copilot-accept-completion)
      ("H-SPC"   . nasy/copilot-complete))
     :custom
-    (copilto-idle-delay . 3)
-    :hook (prog-mode-hook python-mode-hook)
+    (copilto-idle-delay . 0.8)
+    :hook (prog-mode-hook python-mode-hook org-mode-hook emacs-lisp-mode-hook)
     :init
     (sup '(copilot :host github :repo "zerolfx/copilot.el"
-                   :files ("dist" "copilot.el"))))
+                   :files ("dist" "copilot.el")))
+    :mode-hook
+    (setq copilot-idle-delay 0.8))
 #+end_src
 
 ** corfu                                            :editing:extensions:
@@ -588,7 +591,18 @@ https://github.com/minad/corfu
       shell-mode-hook
       eshell-mode-hook)
      . nasy/setup-corfu)
-    :init (sup 'corfu))
+    :init
+    (sup 'corfu)
+    (sup `(corfu-extensions
+           :local-repo ,(concat (straight--repos-dir "corfu") "extensions"))))
+
+
+  ;; Extensions
+  (leaf corfu
+    :mode-hook
+    (corfu-history-mode)
+    (corfu-indexed-mode)
+    (add-to-list 'savehist-additional-variables 'corfu-history))
 #+end_src
 
 ** corfu-doc                     :convenience:corfu:documentation:popup:
