@@ -726,6 +726,17 @@
     (interactive)
     (let ((inhibit-read-only t))
       (set-text-properties (point-min) (point-max) nil)))
+
+
+  ;;;###autoload
+  (defun nasy/up-directory (arg)
+    "Move up a directory ARGth times."
+    (interactive "p")
+    (if minibuffer-completing-file-name
+        (if (string-match-p "/." (minibuffer-contents))
+            (zap-up-to-char (- arg) ?/)
+          (delete-minibuffer-contents))
+      (backward-kill-word arg)))
 #+end_src
 
 ** 重新加載 ~user-init-file~ 文件

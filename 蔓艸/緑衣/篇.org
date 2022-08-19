@@ -781,6 +781,8 @@ https://github.com/raxod502/selectrum
     :doc "Better solution for incremental narrowing in Emacs."
     :url "https://github.com/raxod502/selectrum"
     :tag "extensions"
+    :bind (:minibuffer-local-map
+           ("M-DEL" . nasy/up-directory))
     :hook
     (nasy-first-key-hook)
     (nasy--defer-load-hook . (lambda () (require 'selectrum)))
