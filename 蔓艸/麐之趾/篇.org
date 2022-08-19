@@ -453,6 +453,50 @@ Emacs client/library for the Language Server Protocol
                   '(quoted-insert . "paren")))
  #+end_src
 
+** LaTeX                                                  :tex:
+
+TeX related works.
+
+*** auctex
+
+#+begin_src emacs-lisp
+  (leaf tex
+    :init
+    (sup `(auctex
+           :type git :host nil
+           :repo "https://git.savannah.gnu.org/git/auctex.git"
+           :pre-build ,(pcase system-type
+                         (`berkeley-unix '("gmake"))
+                         (_ '(  ;; also for macos
+                              `("bash" "-c" "cd" ,(straight--repos-dir "auctex"))
+                              ("./autogen.sh")
+                              ("./configure" "--without-texmf-dir" "--with-lispdir=.")
+                              ("gmake"))))))
+
+    (setq TeX-data-directory (straight--repos-dir "auctex")
+          TeX-lisp-directory TeX-data-directory)
+
+      ; Or set the following variable via custom-set-variables in the opened buffer by the following command.
+      ; M-x describe-variable RET preview-TeX-style-dir RET
+      ;`(preview-TeX-style-dir ,(concat ".:" (straight--repos-dir "auctex") "latex:"))
+    (setq preview-TeX-style-dir (concat ".:" (straight--repos-dir "auctex") "latex:"))
+
+     ;; (load "auctex.el" nil t t)
+     ;; (load "preview-latex.el" nil t t)
+
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq-default TeX-master nil))
+#+end_src
+
+*** cdlatex
+
+#+begin_src emacs-lisp
+  (leaf cdlatex
+    :custom (cdlatex-use-dollar-to-ensure-math . nil)
+    :init (sup 'cdlatex))
+#+end_src
+
 ** Markdown                                :markdown:languages:
 
 #+begin_src emacs-lisp
@@ -985,6 +1029,15 @@ https://github.com/awth13/org-appear
                  '("n" "Notes" entry
                    (file "~/notes/notes.org")
                    "* %^{heading} %t %^g\n  %?\n")))
+#+end_src
+
+*** Org CDLatex                                        :org:tex:
+
+https://orgmode.org/manual/CDLaTeX-mode.html
+
+#+begin_src emacs-lisp
+  (leaf org
+    :hook (nasy-org-first-key-hook . org-cdlatex-mode))
 #+end_src
 
 *** Org Clock                                              :org:
