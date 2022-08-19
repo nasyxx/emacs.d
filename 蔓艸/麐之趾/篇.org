@@ -1157,10 +1157,18 @@ individually via the org-modern customization group.
     :url "https://github.com/minad/org-modern"
     :tag "org"
     :custom
-    (org-modern-star . ["✿" "❀" "✫" "◈" "◇"])
+    (org-modern-star . ["✿" "❀" "✭" "✫" "✦" "✧" "◈" "◇"])
+    ;; (org-modern-star . ["⚀" "⚁" "⚂" "⚃" "⚄" "⚅"])
+    ;; (org-modern-star . ["☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷"])
     (org-modern-hide-stars . 'leading)
     (org-modern-variable-pitch . 'fixed-pitch)
     (org-modern-table . nil)
+    ;; (org-modern-list . '((?+ . "⊕")
+    ;;                      (?- . "⊖")
+    ;;                      (?* . "⊛")))
+    (org-modern-list . '((?+ . "✨")
+                         (?- . "💫")
+                         (?* . "💥")))
     :hook nasy-org-first-key-hook
     :init (sup 'org-modern))
 #+end_src
