@@ -686,19 +686,19 @@ TeX related works.
           (""     "textcomp"  t   nil)
           (""     "amssymb"   t   nil)
           (""     "capt-of"   nil nil)
-          ("colorlinks,unicode,linkcolor=blue,anchorcolor=blue,citecolor=blue,filecolor=black,urlcolor=blue"
+          (""     "nicefrac"  t   nil)
+          ("dvipsnames" "xcolor" t nil)
+          ("colorlinks,unicode,linkcolor=violet,anchorcolor=blueviolet,citecolor=YellowOrange,filecolor=black,urlcolor=Aquamarine"
            "hyperref" t nil)
           (""            "luatexja-fontspec" t ("lualatex"))
-          (""            "listings"          t nil)
-          (""            "algorithm"         t nil)
-          (""            "algpseudocode"     t nil)
-          ("cache=false" "minted"            t nil)))
+          (""            "listings"          t nil)))
+          ;; (""            "algorithm"         t nil)
+          ;; (""            "algpseudocode"     t nil)
+          ;; ("cache=false" "minted"            t nil)))
      (org-latex-default-table-environment . "longtable")
      (org-latex-listings                  . 'minted)
      (org-latex-pdf-process
-      . '("%latex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "%latex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "%latex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+      . '("latexmk -f -pdf -%latex -interaction=nonstopmode -shell-escape -output-directory=%o %f"))
      (org-latex-tables-booktabs . t))
 
     (;; Pandoc
@@ -739,7 +739,7 @@ TeX related works.
   (leaf org  ;; LaTeX
     :after org
     :custom
-    (org-preview-latex-default-process . 'nasy-luasvg)
+    (org-preview-latex-default-process . 'xesvg)
     (org-highlight-latex-and-related   . '(native latex script entities))
     :defer-config
     (defvar
@@ -783,7 +783,22 @@ TeX related works.
         :latex-compiler ("lualatex -interaction nonstopmode --output-format dvi -output-directory %o %f")
         :image-converter ("dvisvgm %f -n -b min -Z 2 -o %O")))
              ;; :image-converter ("inkscape --pdf-poppler %f -T -l -o %O")))
-    (add-to-list 'org-preview-latex-process-alist nasy-luasvg))
+    (add-to-list 'org-preview-latex-process-alist nasy-luasvg)
+
+    (defvar
+     nasy-xesvg
+     '(xesvg
+       :programs ("xelatex" "dvisvgm")
+       :description "xdv > svg"
+       :message "you need to install xelatex and dvisvgm."
+       :use-xcolor t
+       :image-input-type "xdv"
+       :image-output-type "svg"
+       :image-size-adjust (1.7 . 1.5)
+       :latex-compiler ("xelatex -interaction nonstopmode -no-pdf -output-directory %o %f")
+       :image-converter ("dvisvgm %f -n -b min -Z 2 -c %S -o %O")))
+       ;; :image-converter ("inkscape --pdf-poppler %f -T -l -o %O")))
+    (add-to-list 'org-preview-latex-process-alist nasy-xesvg))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1081,7 +1096,8 @@ https://github.com/yangsheng6810/org-latex-impatient
          "\\renewcommand{\\usepackage}[2][]{}"
          "\\renewcommand{\\useoutertheme}[1]{}"
          "\\renewcommand{\\setbeamertemplate}[2]{}"
-         "\\renewcommand{\\setbeamercolor}[2]{}"))
+         "\\renewcommand{\\setbeamercolor}[2]{}"
+         "\\renewcommand{\\input}[1]{}"))
     :hook (nasy-org-first-key-hook . org-latex-impatient-mode)
     :init (sup 'org-latex-impatient))
 
