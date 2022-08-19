@@ -464,9 +464,9 @@ TeX related works.
 
 #+begin_src emacs-lisp
   (leaf tex
-    :hook (tex-mode-hook
-           latex-mode-hook
-           LaTeX-mode-hook) . visual-line-mode)
+    :hook ((tex-mode-hook
+            latex-mode-hook
+            LaTeX-mode-hook) . visual-line-mode))
 #+end_src
 
 *** auctex
