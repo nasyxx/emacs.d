@@ -928,7 +928,7 @@ TeX related works.
     (when (outline-invisible-p)
       (save-excursion
         (outline-previous-visible-heading 1)
-        (org-show-subtree))))
+        (org-fold-show-subtree))))
 
     ;;;###autoload
   (defun nasy/org-agenda-log-mode-colorize-block ()
@@ -1148,6 +1148,7 @@ individually via the org-modern customization group.
     (org-modern-star . ["✿" "❀" "✫" "◈" "◇"])
     (org-modern-hide-stars . 'leading)
     (org-modern-variable-pitch . 'fixed-pitch)
+    (org-modern-table . nil)
     :hook nasy-org-first-key-hook
     :init (sup 'org-modern))
 #+end_src
