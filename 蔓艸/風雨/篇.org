@@ -347,7 +347,7 @@
     (leaf nasy-font
       :doc "一些默訒値。"
       :custom
-      (*font-main-family*   . "OperatorMonoSSmLig Nerd Font")
+      (*font-main-family*   . "MonoLisa Nasy")
       (*font-symbol-family* . "Symbola")
       (*font-cjk-family*    . "STFLGQKJF")
       (*font-cjk-2-family*  . "FZLiuGongQuanKaiShuJF")
@@ -394,7 +394,7 @@
       ((*font-cjk-weight*
         ,*font-cjk-2-weight*
         ,*font-cjk-3-weight*)
-       . 'medium)
+       . 'normal)
 
 
       ((*font-cjk-4-weight*
