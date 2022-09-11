@@ -48,7 +48,8 @@
 
 #+begin_src emacs-lisp
   (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
-  (require '擊鼓)
+  (eval-and-compile
+    (require '擊鼓))
 #+end_src
 
 #+include: ./擊鼓/篇.org :lines "3-"

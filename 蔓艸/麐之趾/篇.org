@@ -47,8 +47,11 @@ Programming Languages
 
     (sup 'all-the-icons)
     (sup 'lsp-mode)
+    (sup 'lsp-ui)
     (require 'lsp-diagnostics)
     (sup 'citeproc)
+    (sup 'highlight-quoted)
+    (sup 'elisp-def)
     (sup 'org)
     (sup 'org-contrib)
     (require 'org)
@@ -58,6 +61,7 @@ Programming Languages
     (require 'ob)
     (require 'oc-biblatex)
     (sup 'page-break-lines)
+    (sup 'parinfer-rust-mode)
     (sup 'reformatter)
     (sup 'haskell-mode)
     (setq nasy--require nil))
@@ -442,18 +446,18 @@ Emacs client/library for the Language Server Protocol
 *** parinfer-rust-mode                                    :lisp:
 
  #+begin_src emacs-lisp
-   (leaf parinfer-rust-mode
-     :custom
-     (parinfer-rust-auto-download . nil)
-     `(parinfer-rust-library
-       . ,(concat *nasy-var* "parinfer-rust/parinfer-rust-darwin.so"))
-     :hook `(,lisp-modes-hooks)
-     :init
-     (sup 'parinfer-rust-mode)
-     :defer-config
-     ;; https://github.com/justinbarclay/parinfer-rust-mode/issues/53
-     (add-to-list 'parinfer-rust-treat-command-as
-                  '(quoted-insert . "paren")))
+  (leaf parinfer-rust-mode
+    :custom
+    (parinfer-rust-auto-download . nil)
+    `(parinfer-rust-library
+      . ,(concat *nasy-var* "parinfer-rust/parinfer-rust-darwin.so"))
+    :hook `(,lisp-modes-hooks)
+    :init
+    (sup 'parinfer-rust-mode)
+    :defer-config
+    ;; https://github.com/justinbarclay/parinfer-rust-mode/issues/53
+    (add-to-list 'parinfer-rust-treat-command-as
+                 '(quoted-insert . "paren")))
  #+end_src
 
 ** TeX                                                    :tex:
@@ -1625,7 +1629,8 @@ https://github.com/org-roam/org-roam
         '(company-capf
           elpy-company-backend
           company-files
-          :with company-tabnine company-yasnippet))))
+          ;; :with company-tabnine company-yasnippet
+          :with company-yasnippet))))
 #+end_src
 
 *** isort                                               :python:
@@ -1633,7 +1638,7 @@ https://github.com/org-roam/org-roam
 #+begin_src emacs-lisp
   (defun nasy/find-isort-config ()
     "Find isort config file."
-    (let ((file (expand-file-name "~/.config/isort/isort.toml")))
+    (let ((file (expand-file-name "~/.config/python/pyproject.toml")))
       (when (file-exists-p file)
         file)))
 

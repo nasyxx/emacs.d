@@ -83,6 +83,9 @@
           (eval-print-last-sexp)))
       (load bootstrap-file nil 'nomessage)))
 
+  (eval-and-compile
+    (require 'cl))
+
 
   (defun nasy/-s-u-p (package)
     "Handle special PACKAGE var."

@@ -41,8 +41,14 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
     (require 'compile)
     (sup 'beacon)
     (sup 'corfu)
+    (sup 'color-identifiers-mode)
+    (sup 'eldoc-box)
     (sup 'pcre2el)
+    (sup 'rainbow-delimiters)
     (sup 'winum)
+    (sup 'tsc)
+    (sup 'tree-sitter)
+    (sup 'tree-sitter-langs)
     (setq nasy--require nil))
 #+end_src
 

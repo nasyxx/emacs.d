@@ -35,6 +35,7 @@
     (require '擊鼓)
     (sup 'beacon)
     (sup 'doom-modeline)
+    (sup 'ibuffer)
     (setq nasy--require nil))
 #+end_src
 
@@ -543,6 +544,7 @@
       ("M-¥"   . nasy/-insert-backslash)
       ("A-¥"   . nasy/-insert-backslash)
       ("A-C-¥" . toggle-input-method)
+      ([remap list-buffers] . ibuffer)
 
       ;; cursor Movement
       ("H-<up>"   . beginning-of-buffer)
@@ -607,6 +609,7 @@
     (sup 'smartparens)
     (sup 'treemacs)
 
+    (require 'flycheck)
     (require 'winner)
     (require 'xref)
     (setq nasy--require nil))

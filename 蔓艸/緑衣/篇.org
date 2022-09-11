@@ -53,9 +53,11 @@ You cannot disable anything here.
     (sup 'cape)
     (sup 'corfu)
     (sup 'embark)
+    (sup 'flycheck)
     (sup 'selectrum)
     (sup 'transient)
     (sup 'which-key)
+    (sup 'whitespace-cleanup-mode)
     (require 'xref)
     (setq nasy--require nil))
 

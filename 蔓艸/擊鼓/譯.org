@@ -21,14 +21,16 @@
 
   (load (locate-user-emacs-file "init.el"))
 
+  (require 'cl-lib)
   (sup 'winum)
 
   (let ((packages '(all-the-icons company dash doom-modeline lisp-mode
-                                  lsp-ui ob org ox page-break-lines
+                                  ob org ox page-break-lines
                                   savehist smartparens-config tab-line
                                   treemacs winum xref yasnippet)))
     (cl-loop for package in packages
-             do (require package)))
+             do (progn
+                  (require package))))
 
   (when (and (eq system-type 'darwin) (executable-find "cargo"))
     (shell-command (concat "make " (straight--build-dir "tsc") "tsc-dyn.dylib")))
