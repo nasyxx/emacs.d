@@ -56,7 +56,8 @@ You cannot disable anything here.
     (sup 'corfu)
     (sup 'embark)
     (sup 'flycheck)
-    (sup 'selectrum)
+    ;; (sup 'selectrum)
+    (sup '(vertico :files (:defaults "extensions/*")))
     (sup 'transient)
     (sup 'which-key)
     (sup 'whitespace-cleanup-mode)
@@ -162,7 +163,7 @@ consult.el - Consulting completing-read.
 
 https://github.com/minad/consult
 
-Include consult, consult-selectrum & consult-flycheck.
+Include consult & consult-flycheck.
 
 *** consult
 
@@ -171,7 +172,7 @@ Include consult, consult-selectrum & consult-flycheck.
     :doc "consult.el - Consulting completing-read"
     :url "https://github.com/minad/consult"
     :tag "extensions"
-    :after selectrum
+    :after vertico
     :require t recentf
     :custom
     `(consult-narrow-key . ,(kbd "C-."))
@@ -209,17 +210,6 @@ Include consult, consult-selectrum & consult-flycheck.
       (consult-line (thing-at-point 'symbol))))
 #+end_src
 
-*** consult-selectrum
-
-#+begin_src emacs-lisp
-  (leaf consult-selectrum
-    :doc "consult.el - Consulting completing-read"
-    :url "https://github.com/minad/consult"
-    :tag "extensions"
-    :after consult selectrum
-    :require t)
-#+end_src
-
 *** consult-flycheck
 
 #+begin_src emacs-lisp
@@ -245,13 +235,15 @@ https://github.com/karthink/consult-dir
     :doc "consult-dir: switch directories easily in Emacs"
     :url "https://github.com/karthink/consult-dir"
     :tag "convenience"
-    :after consult selectrum
     :bind
     ("C-x C-d" . consult-dir)
     (:minibuffer-local-completion-map
      ("C-x C-d" . consult-dir)
      ("C-x C-j" . consult-dir-jump-file))
-    (:selectrum-minibuffer-map
+    ;; (:selectrum-minibuffer-map
+    ;;  ("C-x C-d" . consult-dir)
+    ;;  ("C-x C-j" . consult-dir-jump-file))
+    (:vertico-map
      ("C-x C-d" . consult-dir)
      ("C-x C-j" . consult-dir-jump-file))
     :init (sup 'consult-dir))
@@ -327,25 +319,6 @@ Emacs Mini-Buffer Actions Rooted in Keymaps.
 https://github.com/oantolin/embark/
 
 #+begin_src emacs-lisp
-  (defun refresh-selectrum ()
-    (setq selectrum--previous-input-string nil))
-
-
-  ;; (defun nasy/-resize-embark-collect-window (&rest _)
-  ;;   "Automatically resizing auto-updating Embark Collect buffers to fit their contents."
-  ;;   (when (memq embark-collect--kind '(:live :completions))
-  ;;     (fit-window-to-buffer (get-buffer-window)
-  ;;                           (floor (frame-height) 2) 1)))
-
-  ;; (defun shrink-selectrum ()
-  ;;   "Shrink Selectrum to a single line while using embark-collect-live."
-  ;;   (when (eq embark-collect--kind :live)
-  ;;     (with-selected-window (active-minibuffer-window)
-  ;;       (setq-local selectrum-num-candidates-displayed 1)
-  ;;       (setq-local selectrum-display-style
-  ;;                   '(horizontal :before-candidates "[" :after-candidates "]"
-  ;;                                :more-candidates "" :candidates-separator "")))))
-
   (defun embark-act-noquit ()
     "Run action but don't quit the minibuffer afterwards."
     (interactive)
@@ -382,11 +355,20 @@ https://github.com/oantolin/embark/
            (remq #'embark-which-key-indicator embark-indicators)))
       (apply fn args)))
 
+  (defun embark-live-vertico ()
+    "Shrink Vertico minibuffer when `embark-live' is active."
+    (when-let (win (and (string-prefix-p "*Embark Live" (buffer-name))
+                        (active-minibuffer-window)))
+      (with-selected-window win
+        (when (and (bound-and-true-p vertico--input)
+                   (fboundp 'vertico-multiform-unobtrusive))
+          (vertico-multiform-unobtrusive)))))
+
   (leaf embark
     :doc "Emacs Mini-Buffer Actions Rooted in Keymaps."
     :url "https://github.com/oantolin/embark"
     :tag "convenience"
-    :after selectrum
+    :after vertico
     :require t
     :advice
     (:around embark-completiing-read-prompter embark-hide-which-key-indicator)
@@ -395,7 +377,7 @@ https://github.com/oantolin/embark/
     ("C-," . embark-dwim)
     (:embark-file-map
      ("s" . sudo-edit))
-    (:selectrum-minibuffer-map
+    (:vertico-map
      ("M-o" . embark-act))
     (:nasy/active-region-map
      :package 風雨旹用
@@ -405,18 +387,7 @@ https://github.com/oantolin/embark/
      . '(embark-which-key-indicator
          embark-highlight-indicator
          embark-isearch-highlight-indicator))
-    :hook
-    ;; icomplete
-    ;; (embark-pre-action-hook . completion--flush-all-sorted-completions)
-    ;; selectrum
-    ;; (embark-pre-action-hook   . refresh-selectrum)
-    ;; (embark-collect-mode-hook . shrink-selectrum)
-    ;; Embark Collect
-    ;; (embark-post-action-hook . embark-collect--update-linked)
-
-    ;; misc
-    ;; (embark-collect-post-revert-hook . nasy/-resize-embark-collect-window)
-
+    :hook (embark-collect-mode-hook . embark-live-vertico)
     :init (sup 'embark)
     :config
     ;; Hide the mode line of the Embark live/completions buffers
@@ -569,16 +540,12 @@ https://github.com/minad/marginalia
     :doc "marginalia.el - Marginalia in the minibuffer."
     :url "https://github.com/minad/marginalia"
     :tag "extensions"
-    :after selectrum
+    :after vertico
     :bind (:minibuffer-local-map
            ("M-a" . marginalia-cycle))
     :init
     (sup 'marginalia)
-    (marginalia-mode 1)
-    :advice (:after marginalia-cycle
-                    (lambda ()
-                      (when (bound-and-true-p selectrum-mode)
-                        (selectrum-exhibit)))))
+    (marginalia-mode 1))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -781,29 +748,6 @@ https://www.emacswiki.org/emacs/RecentFiles
          extended-command-history)))
 #+end_src
 
-** Selectrum                                       :extensions:
-
-Better solution for incremental narrowing in Emacs.
-
-https://github.com/raxod502/selectrum
-
-#+begin_src emacs-lisp
-  (leaf selectrum
-    :doc "Better solution for incremental narrowing in Emacs."
-    :url "https://github.com/raxod502/selectrum"
-    :tag "extensions"
-    :bind (:minibuffer-local-map
-           ("M-DEL" . nasy/up-directory))
-    :hook
-    (nasy-first-key-hook)
-    (nasy--defer-load-hook . (lambda () (require 'selectrum)))
-    :mode-hook
-    (after-x '風雨旹用
-      (nasy/active-region-mode 1))
-    :init
-    (sup 'selectrum))
-#+end_src
-
 ** Sessions                                           :history:
 
 #+begin_src emacs-lisp
@@ -991,6 +935,50 @@ https://github.com/casouri/valign
     :tag "convenience" "table" "text"
     :hook (markdown-mode-hook)
     :init (sup 'valign))
+#+end_src
+
+** Vertico                              :completion:extensions:
+
+Vertico provides a performant and minimalistic vertical completion UI
+based on the default completion system. The main focus of Vertico is
+to provide a UI which behaves correctly under all circumstances. By
+reusing the built-in facilities system, Vertico achieves full
+compatibility with built-in Emacs completion commands and completion
+tables. Vertico only provides the completion UI but aims to be highly
+flexible, extensible and modular. Additional enhancements are
+available as extensions or complementary packages. The code base is
+small and maintainable. The main vertico.el package is only about 600
+lines of code without white space and comments.
+
+https://github.com/minad/vertico
+
+#+begin_src emacs-lisp
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+
+  (leaf vertico
+    :doc "Vertico provides a performant and minimalistic vertical completion UI based on the default completion system."
+    :url "https://github.com/minad/vertico"
+    :tag "completion"
+    :advice (:filter-args completing-read-multiple crm-indicator)
+    :bind (:vertico-map
+           ("M-<DEL>" . vertico-directory-delete-word))
+
+    :hook
+    (nasy-first-key-hook)
+    (minibuffer-setup-hook . vertico-repeat-save)
+    :init (sup '(vertico :files (:defaults "extensions/*")))
+    :mode-hook
+    (vertico-mouse-mode 1)
+    (after-x '風雨旹用
+      (nasy/active-region-mode 1)))
 #+end_src
 
 ** View Large File                 :files:largefiles:utilities:
