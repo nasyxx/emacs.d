@@ -6,11 +6,13 @@ straight
 var/
 etc/
 eln-cache
+elpaca/
 
 early-init.el
 init.html
 init.el
 譯.el
+启.el
 
 README.html
 

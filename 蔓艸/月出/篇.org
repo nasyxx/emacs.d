@@ -31,7 +31,7 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
 
   ;;; Code:
 
-  (cl-eval-when (compile) ;;eval-when-compile
+  (cl-eval-when (compile eval) ;;eval-when-compile
     (setq nasy--require t)
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
@@ -548,7 +548,23 @@ https://gitlab.com/jabranham/mixed-pitch
     (setq mixed-pitch-fixed-pitch-faces
           (append mixed-pitch-fixed-pitch-faces
                   org-level-faces
-                  '(whitespace-hspace whitespace-space))))
+                  '(whitespace-hspace whitespace-space)
+                  '(fixed-pitch fixed-pitch-serif)
+                  '(org-date
+                    org-footnote
+                    org-special-keyword
+                    org-property-value
+                    org-ref-cite-face
+                    org-tag
+                    org-todo-keyword-todo
+                    org-todo-keyword-habt
+                    org-todo-keyword-done
+                    org-todo-keyword-wait
+                    org-todo-keyword-kill
+                    org-todo-keyword-outd
+                    org-todo
+                    org-done
+                    font-lock-comment-face))))
 #+end_src
 
 ** mmm-mode                 :convenience:faces:languages:tools:

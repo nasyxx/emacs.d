@@ -572,7 +572,7 @@
       (default-frame-alist
         . '((ns-transparent-titlebar . t)
             (ns-appearance           . light)
-            (alpha                   . (90 . 75))
+            (alpha-background        . 75)
             (vertical-scroll-bars    . nil)
             (border-width            . 5)
             (internal-border-width   . 24)))

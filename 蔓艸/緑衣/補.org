@@ -16,7 +16,7 @@
 
   ;;; Code:
 
-  (cl-eval-when (compile)
+  (cl-eval-when (compile eval)
     (setq nasy--require t)
 
     (require '擊鼓)
@@ -28,14 +28,13 @@
     (sup 'company-tabnine)
     (sup 'corfu)
     (sup 'corfu-doc)
+    (require 'company)
     (sup 'cape)
 
     (sup '(copilot :host github :repo "zerolfx/copilot.el"
                    :files ("dist" "copilot.el")))
 
     (require 'cape)
-    (require 'company)
-    (require 'company)
     (require 'company-dabbrev)
     (require 'company-dabbrev-code)
     (require 'corfu)
@@ -123,7 +122,7 @@
        (setq-local company-backends (nasy/company-backends))))
 
 
-  (put 'nasy/company-init-backends-h 'permanent-local-hook t)
+  ;; (put 'nasy/company-init-backends-h 'permanent-local-hook t)
 
 
   ;;;###autoload
@@ -398,9 +397,9 @@ https://github.com/minad/cape
      (company-format-margin-function    . #'company-vscode-dark-icons-margin))
     :init (sup 'company)
     :config
-    (add-hook 'after-change-major-mode-hook #'nasy/company-init-backends-h 'append)
+    ;; (add-hook 'after-change-major-mode-hook #'nasy/company-init-backends-h 'append)
     :defer-config
-    (add-to-list 'completion-styles 'initials t)
+    ;; (add-to-list 'completion-styles 'initials t)
     (setq company-backends '(company-capf))
     :advice
     (:before company-pseudo-tooltip-unhide nasy/-pre-popup-draw)

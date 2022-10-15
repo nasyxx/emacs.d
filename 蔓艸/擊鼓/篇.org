@@ -66,21 +66,21 @@
   (eval-and-compile
     (with-no-warnings
       (setq straight-vc-git-default-clone-depth     1
-            straight-repository-branch              "develop"
-            straight-enable-use-package-integration nil
-            straight-check-for-modifications        nil))
+	    straight-repository-branch              "develop"
+	    straight-enable-use-package-integration nil
+	    straight-check-for-modifications        nil))
     (defvar bootstrap-version)
 
     (let ((bootstrap-file
-           (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-          (bootstrap-version 5))
+	   (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	  (bootstrap-version 5))
       (unless (file-exists-p bootstrap-file)
-        (with-current-buffer
-            (url-retrieve-synchronously
-             "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-             'silent 'inhibit-cookies)
-          (goto-char (point-max))
-          (eval-print-last-sexp)))
+	(with-current-buffer
+	    (url-retrieve-synchronously
+	     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	     'silent 'inhibit-cookies)
+	  (goto-char (point-max))
+	  (eval-print-last-sexp)))
       (load bootstrap-file nil 'nomessage)))
 
   (eval-and-compile
@@ -90,40 +90,40 @@
   (defun nasy/-s-u-p (package)
     "Handle special PACKAGE var."
     (if (boundp package)
-        (when (eval package)
-          (straight-use-package (eval package)))
+	(when (eval package)
+	  (straight-use-package (eval package)))
       (straight-use-package package)))
 
 
   (defun nasy/sup (&rest packages-sets)
     "Straight use multiple PACKAGES-SETS."
     (cl-loop for packages-set in packages-sets
-             when (not (null packages-set))
-             do
-             (cl-loop for package in packages-set
-                      do
-                      (cond ((symbolp package)
-                             (nasy/-s-u-p package))
-                            ((listp package)
-                             (dolist (p package)
-                               (nasy/-s-u-p p)))
-                            (t (error "???"))))))
+	     when (not (null packages-set))
+	     do
+	     (cl-loop for package in packages-set
+		      do
+		      (cond ((symbolp package)
+			     (nasy/-s-u-p package))
+			    ((listp package)
+			     (dolist (p package)
+			       (nasy/-s-u-p p)))
+			    (t (error "???"))))))
 
 
   (cl-eval-when (compile eval load)
     (defmacro sup (&rest body)
       `(progn
-         (cl-eval-when (compile eval load)
-           (straight-use-package ,@body))
-         (if nasy--require
-             (cl-eval-when (compile eval load)
-               (if (symbolp ,@body)
-                   (require ,@body nil t)
-                 (require (car ,@body) nil t)))
-           (cl-eval-when (compile)
-             (if (symbolp ,@body)
-                 (require ,@body nil t)
-               (require (car ,@body) nil t)))))))
+	 (cl-eval-when (compile eval load)
+	   (straight-use-package ,@body))
+	 (if nasy--require
+	     (cl-eval-when (compile eval load)
+	       (if (symbolp ,@body)
+		   (require ,@body nil t)
+		 (require (car ,@body) nil t)))
+	   (cl-eval-when (compile)
+	     (if (symbolp ,@body)
+		 (require ,@body nil t)
+	       (require (car ,@body) nil t)))))))
 
 
   ;; (eval-and-compile
@@ -142,25 +142,73 @@
   ;;              (require (car ,@body) nil t)))))))
 #+end_src
 
+* Elpaca
+
+https://github.com/progfolio/elpaca
+
+Elpaca is an elisp package manager. It allows users to find, install, update, and remove third-party packages for Emacs. It is a replacement for the built-in Emacs package manager, package.el.
+
+#+begin_src emacs-lisp
+  ;; (eval-and-compile
+  ;;   (declare-function elpaca-generate-autoloads "elpaca")
+  ;;   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+  ;;   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+  ;;   (when-let ((elpaca-repo (expand-file-name "repos/elpaca/" elpaca-directory))
+  ;;              (elpaca-build (expand-file-name "elpaca/" elpaca-builds-directory))
+  ;;              (elpaca-target (if (file-exists-p elpaca-build) elpaca-build elpaca-repo))
+  ;;              (elpaca-url  "https://www.github.com/progfolio/elpaca.git")
+  ;;              ((add-to-list 'load-path elpaca-target))
+  ;;              ((not (file-exists-p elpaca-repo)))
+  ;;              (buffer (get-buffer-create "*elpaca-bootstrap*")))
+  ;;     (condition-case-unless-debug err
+  ;;         (progn
+  ;;           (unless (zerop (call-process "git" nil buffer t "clone" elpaca-url elpaca-repo))
+  ;;             (error "%s" (list (with-current-buffer buffer (buffer-string)))))
+  ;;           (byte-recompile-directory elpaca-repo 0 'force)
+  ;;           (require 'elpaca)
+  ;;           (elpaca-generate-autoloads "elpaca" elpaca-repo)
+  ;;           (kill-buffer buffer))
+  ;;       ((error)
+  ;;        (delete-directory elpaca-directory 'recursive)
+  ;;        (with-current-buffer buffer
+  ;;          (goto-char (point-max))
+  ;;          (insert (format "\n%S" err))
+  ;;          (display-buffer buffer)))))
+  ;;   (require 'elpaca-autoloads)
+  ;;   (add-hook 'after-init-hook #'elpaca-process-queues)
+  ;;   (elpaca (elpaca :host github :repo "progfolio/elpaca")))
+#+end_src
+
 * leaf
 
 #+begin_src emacs-lisp
+  ;; (eval-and-compile
+  ;;   (elpaca leaf (message "Leaf done"))
+  ;;   ;; (elpaca leaf-keywords)
+  ;;   (elpaca (leaf-keywords :host github :repo "conao3/leaf-keywords.el")
+  ;;     (require 'leaf)
+  ;;     (require 'leaf-keywords))
+  ;;   (elpaca-process-queues)
+  ;;   (message "%s" load-path)
+  ;;   (setq leaf-defaults '(:leaf-autoload nil :leaf-defun nil))
+  ;;   (leaf-keywords-init))
+
   (eval-and-compile
-    (straight-use-package 'leaf)
-    (straight-use-package 'leaf-keywords)
+    (sup 'leaf)
+    (sup 'leaf-keywords)
     (require 'leaf)
     (require 'leaf-keywords)
-    (leaf-keywords-init)
-    (setq leaf-defaults '(:leaf-autoload nil :leaf-defun nil)))
+    (setq leaf-defaults '(:leaf-autoload nil :leaf-defun nil))
+    (leaf-keywords-init))
 
   (defun nasy/-package-filter (name &rest _)
     "Ignore package NAME if *no-packages* is t."
     (let ((sym (intern (format "*no-%s*" name))))
       (if (and (boundp sym) sym)
-          (progn
-            (message "Ignore package: %s" name)
-            nil)
-        t)))
+	  (progn
+	    (message "Ignore package: %s" name)
+	    nil)
+	t)))
 
   (advice-add 'leaf :before-while #'nasy/-package-filter)
 
@@ -176,21 +224,21 @@
     (declare (indent 1))
     (let ((namesym (intern (format "*no-%s*" name))))
       `(leaf ,name
-         :defvar ,namesym
-         :disabled (and (boundp ',namesym)
-                       ,namesym)
-         ,@body)))
+	 :defvar ,namesym
+	 :disabled (and (boundp ',namesym)
+		       ,namesym)
+	 ,@body)))
 
   (defmacro n/leaf (name &rest body)
     "Nasy wrap leaf BODY with a default defvar and require and NAME."
     (declare (indent 1))
     (let ((namesym (intern (format "*no-%s*" name))))
       `(leaf ,name
-         :defvar ,namesym
-         :disabled (and (boundp ',namesym)
-                       ,namesym)
-         :require ,(or nasy--require nasy-pdump)
-         ,@body)))
+	 :defvar ,namesym
+	 :disabled (and (boundp ',namesym)
+		       ,namesym)
+	 :require ,(or nasy--require nasy-pdump)
+	 ,@body)))
 #+end_src
 
 * 包之墬阯 ~load-path~
@@ -219,20 +267,20 @@
     "Nasy extra local site-lisp REPO."
     (let ((path (or path (symbol-name repo))))
       `(sup
-        '(,repo
-          ,@body
-          :local-repo ,(locate-user-emacs-file
-                        (format "木瓜/%s" path))))))
+	'(,repo
+	  ,@body
+	  :local-repo ,(locate-user-emacs-file
+			(format "木瓜/%s" path))))))
 
 
   (defmacro nasy/-repo (repo &rest body)
     "Nasy extra local site-lisp REPO."
     (let ((path (symbol-name repo)))
       `(sup
-        '(,repo
-          ,@body
-          :local-repo ,(locate-user-emacs-file
-                        (format "木瓜/nasy/%s" path))))))
+	'(,repo
+	  ,@body
+	  :local-repo ,(locate-user-emacs-file
+			(format "木瓜/nasy/%s" path))))))
 #+end_src
 
 * melpa/elpa 之外
@@ -241,23 +289,18 @@
   (cl-eval-when (compile eval load)
     (straight-register-package
      '(keytar :type git
-              :host github
-              :repo "emacs-grammarly/keytar"))
-
-    (straight-register-package
-     '(parinfer-rust-mode :type git
-                          :host github
-                          :repo "justinbarclay/parinfer-rust-mode"))
+	      :host github
+	      :repo "emacs-grammarly/keytar"))
 
     (straight-register-package
      '(point-history :type git
-                     :host github
-                     :repo "blue0513/point-history"))
+		     :host github
+		     :repo "blue0513/point-history"))
 
     (straight-register-package
      '(vundo :type git
-             :host github
-             :repo "casouri/vundo")))
+	     :host github
+	     :repo "casouri/vundo")))
 #+end_src
 
 * 載入 org
@@ -309,8 +352,8 @@ https://gitlab.com/koral/gcmh
   (defun nasy/-start-gcmh (&rest _)
     "Start GCMH."
     (when (and (not noninteractive)
-               (not (and (boundp '*no-gcmh*)
-                       ,*no-gcmh*)))
+	       (not (and (boundp '*no-gcmh*)
+		       ,*no-gcmh*)))
       (customize-set-variable
        'gcmh-verbose t
        "Customized with leaf in `gcmh' block")
@@ -331,30 +374,30 @@ https://gitlab.com/koral/gcmh
 #+begin_src emacs-lisp
   (with-no-warnings
     (customize-set-variable 'abbrev-file-name
-                            (concat *nasy-etc* "abbrev.el") "Customized by Nasy.")
+			    (concat *nasy-etc* "abbrev.el") "Customized by Nasy.")
     (customize-set-variable 'auto-save-list-file-prefix
-                            (concat *nasy-var* "auto-save/sessions/") "Customized by Nasy.")
+			    (concat *nasy-var* "auto-save/sessions/") "Customized by Nasy.")
     (customize-set-variable 'auto-save-file-name-transforms
-                            `((".*" ,(concat *nasy-var* "auto-save/") t))
-                            "Customized by Nasy.")
+			    `((".*" ,(concat *nasy-var* "auto-save/") t))
+			    "Customized by Nasy.")
     (customize-set-variable 'bookmark-default-file
-                            (concat *nasy-var* "bookmarks.el") "Customized by Nasy.")
+			    (concat *nasy-var* "bookmarks.el") "Customized by Nasy.")
     (customize-set-variable 'eshell-aliases-file
-                            (concat *nasy-etc* "eshell/aliases") "Customized by Nasy.")
+			    (concat *nasy-etc* "eshell/aliases") "Customized by Nasy.")
     (customize-set-variable 'eshell-directory-name
-                            (concat *nasy-var* "eshell/") "Customized by Nasy.")
+			    (concat *nasy-var* "eshell/") "Customized by Nasy.")
     (customize-set-variable 'save-place-file
-                            (concat *nasy-var* "save-place.el") "Customized by Nasy.")
+			    (concat *nasy-var* "save-place.el") "Customized by Nasy.")
     (customize-set-variable 'svg-lib-icons-dir
-                            (concat *nasy-var* "svg-lib/") "Customized by Nasy.")
+			    (concat *nasy-var* "svg-lib/") "Customized by Nasy.")
     (customize-set-variable 'tramp-auto-save-directory
-                            (concat *nasy-var* "tramp/auto-save/") "Customized by Nasy.")
+			    (concat *nasy-var* "tramp/auto-save/") "Customized by Nasy.")
     (customize-set-variable 'tramp-persistency-file-name
-                            (concat *nasy-var* "tramp/persistency.el") "Customized by Nasy.")
+			    (concat *nasy-var* "tramp/persistency.el") "Customized by Nasy.")
     (customize-set-variable 'url-cache-directory
-                            (concat *nasy-var* "url/cache/") "Customized by Nasy.")
+			    (concat *nasy-var* "url/cache/") "Customized by Nasy.")
     (customize-set-variable 'url-configuration-directory
-                            (concat *nasy-var* "url/configuration/") "Customized by Nasy."))
+			    (concat *nasy-var* "url/configuration/") "Customized by Nasy."))
 #+end_src
 
 * 結                                                :noexport:

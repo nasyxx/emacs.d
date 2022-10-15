@@ -12,7 +12,6 @@
 
   (setq
    ad-redefinition-action            'accept
-   auto-mode-case-fold               nil
    fast-but-imprecise-scrolling      t
    ffap-machine-p-known              'reject
    gc-cons-percentage                1.0
@@ -44,7 +43,8 @@
       (setq file-name-handler-alist
             (delete-dups
              (append file-name-handler-alist
-                     old-file-name-handler-alist))))
+                     old-file-name-handler-alist))
+            inhibit-trace nil))
 
     (add-hook 'emacs-startup-hook #'nasy/restore-default))
 
@@ -74,6 +74,7 @@
 
 
   (defvar *debug* (or (getenv-internal "DEBUG") init-file-debug))
+  (setq inhibit-trace (not *debug*))
 
   (defvar native-comp-deferred-compilation-deny-list nil)
 

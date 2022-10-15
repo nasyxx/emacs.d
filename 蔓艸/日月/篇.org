@@ -40,7 +40,7 @@ Applications.
 
   ;;; Code:
 
-  (cl-eval-when (compile)
+  (cl-eval-when (compile eval)
     (setq nasy--require t)
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
@@ -424,8 +424,9 @@ Emacs libvterm integration.
 https://github.com/akermu/emacs-libvterm
 
 #+begin_src emacs-lisp
-  (with-no-warnings
-    (setq vterm-always-compile-module t))
+  (eval-and-compile
+    (with-no-warnings
+      (setq vterm-always-compile-module t)))
   (leaf vterm
     :doc "Emacs libvterm integration."
     :url "https://github.com/akermu/emacs-libvterm"

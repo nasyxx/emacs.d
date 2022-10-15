@@ -34,7 +34,7 @@ Programming Languages
 
   ;;; Code:
 
-  (cl-eval-when (compile)
+  (cl-eval-when (compile eval)
     (setq nasy--require t)
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
@@ -52,18 +52,20 @@ Programming Languages
     (sup 'citeproc)
     (sup 'highlight-quoted)
     (sup 'elisp-def)
+    (setq parinfer-rust-library
+          (concat *nasy-var* "parinfer-rust/parinfer-rust-darwin.so"))
+    (sup 'parinfer-rust-mode)
     (sup 'org)
     (sup 'org-contrib)
+    (sup 'page-break-lines)
+    (sup 'reformatter)
+    (sup 'haskell-mode)
     (require 'org)
     (require 'org-agenda)
     (require 'org-capture)
     (require 'org-clock)
     (require 'ob)
     (require 'oc-biblatex)
-    (sup 'page-break-lines)
-    (sup 'parinfer-rust-mode)
-    (sup 'reformatter)
-    (sup 'haskell-mode)
     (setq nasy--require nil))
 #+end_src
 
@@ -494,9 +496,9 @@ TeX related works.
     (setq TeX-data-directory (straight--repos-dir "auctex")
           TeX-lisp-directory TeX-data-directory)
 
-      ; Or set the following variable via custom-set-variables in the opened buffer by the following command.
-      ; M-x describe-variable RET preview-TeX-style-dir RET
-      ;`(preview-TeX-style-dir ,(concat ".:" (straight--repos-dir "auctex") "latex:"))
+    ;; Or set the following variable via custom-set-variables in the opened buffer by the following command.
+    ;; M-x describe-variable RET preview-TeX-style-dir RET
+    ;;`(preview-TeX-style-dir ,(concat ".:" (straight--repos-dir "auctex") "latex:"))
     (setq preview-TeX-style-dir (concat ".:" (straight--repos-dir "auctex") "latex:"))
 
     (load "auctex.el" nil t t)
@@ -565,16 +567,18 @@ TeX related works.
   (leaf org
     :custom
     ((org-export-backends . '(ascii beamer html latex md org))
-     (org-support-shift-select . 'always))
+     (org-support-shift-select . 'always)
+     (org-safe-remote-resources
+      . '("\\`https://raw\\.githubusercontent\\.com\\(?:/\\|\\'\\)")))
     (org-modules . nil)
     :init
     (with-no-warnings
       (setq org-emphasis-regexp-components
             '(" \t('\"{[:nonascii:]"
-              "- \t.,:!?)));'\")}\\[[:nonascii:]"
-              " \t\r\n,\"'"
-              "."
-              1)))
+                "- \t.,:!?)));'\")}\\[[:nonascii:]"
+                " \t\r\n,\"'"
+                "."
+                1)))
     :config
     (add-to-list 'safe-local-variable-values
                  '(org-src-fontify-natively))
@@ -634,7 +638,7 @@ TeX related works.
     :custom
     ((org-allow-promoting-top-level-subtree
       org-fontify-todo-headline
-      org-fontify-whole-heading-line
+      ;; org-fontify-whole-heading-line
       org-hide-emphasis-markers
       org-hide-leading-stars)
      . t)
@@ -950,9 +954,9 @@ TeX related works.
     "Set different line spacing based on clock time duration."
     (save-excursion
       (let* ((colors (cl-case (alist-get 'background-mode (frame-parameters))
-                       ('light
+                       (light
                         (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))
-                       ('dark
+                       (dark
                         (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))))
              pos
              duration)
@@ -960,11 +964,11 @@ TeX related works.
         (goto-char (point-min))
         (while (setq pos (next-single-property-change (point) 'duration))
           (goto-char pos)
-          (when (and (not (equal pos (point-at-eol)))
+          (when (and (not (equal pos (pos-eol)))
                     (setq duration (org-get-at-bol 'duration)))
             ;; larger duration bar height
             (let ((line-height (if (< duration 15) 1.0 (+ 0.5 (/ duration 30))))
-                  (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
+                  (ov (make-overlay (pos-bol) (1+ (pos-eol)))))
               (overlay-put ov 'face `(:background ,(car colors) :foreground "black"))
               (setq colors (cdr colors))
               (overlay-put ov 'line-height line-height)
@@ -1139,6 +1143,7 @@ https://github.com/yangsheng6810/org-latex-impatient
          "\\renewcommand{\\useoutertheme}[1]{}"
          "\\renewcommand{\\setbeamertemplate}[2]{}"
          "\\renewcommand{\\setbeamercolor}[2]{}"
+         "\\renewcommand{\\setbeamerfont}[2]{}"
          "\\renewcommand{\\input}[1]{}"))
     :hook (nasy-org-first-key-hook . org-latex-impatient-mode)
     :init (sup 'org-latex-impatient))
@@ -1161,11 +1166,11 @@ individually via the org-modern customization group.
     :url "https://github.com/minad/org-modern"
     :tag "org"
     :custom
+    (org-modern--timestamp . '(" %a, %b %d, %Y " . " %H:%M "))
     (org-modern-star . ["✿" "❀" "✭" "✫" "✦" "✧" "◈" "◇"])
     ;; (org-modern-star . ["⚀" "⚁" "⚂" "⚃" "⚄" "⚅"])
     ;; (org-modern-star . ["☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷"])
     (org-modern-hide-stars . 'leading)
-    (org-modern-variable-pitch . 'fixed-pitch)
     (org-modern-table . nil)
     ;; (org-modern-list . '((?+ . "⊕")
     ;;                      (?- . "⊖")

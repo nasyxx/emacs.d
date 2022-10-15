@@ -38,7 +38,7 @@ You cannot disable anything here.
 
   ;;; Code:
 
-  (cl-eval-when (compile)
+  (cl-eval-when (compile eval)
     (setq nasy--require t)
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
@@ -48,6 +48,8 @@ You cannot disable anything here.
 
     (require 'ffap)
     (require 'winner)
+    (require 'cl-lib)
+    (require 'cl)
 
     (sup 'alert)
     (sup 'cape)
@@ -440,6 +442,7 @@ Modern on-the-fly syntax checking extension for GNU Emacs.
 https://github.com/flycheck/flycheck
 
 #+begin_src emacs-lisp
+  (sup 'flycheck)
   (leaf flycheck
     :doc "On the fly syntax checking for GNU Emacs."
     :url "https://github.com/flycheck/flycheck"
@@ -605,16 +608,15 @@ https://github.com/oantolin/orderless
     :commands (n/first-initialism n/flex-if-twiddle
                n/strict-if-hash n/without-if-bang)
     :custom
-    (completion-styles . '(orderless))
-    (orderless-skip-highlighting . (lambda () selectrum-is-active))
+    (completion-styles . '(orderless initials basic))
     (orderless-matching-styles
      . '(orderless-regexp
          orderless-initialism
          orderless-literal))
-    (selectrum-highlight-candidates-function . #'orderless-highlight-matches)
     (orderless-style-dispatchers   . '(nasy/-orderless-dispatch))
     (orderless-component-separator . "[ &·]")
-    (completion-category-overrides . '((file (styles . (partial-completion)))))
+    (completion-category-defaults  . nil)
+    (completion-category-overrides . '((file (styles partial-completion))))
 
     :init
     (sup 'orderless))
@@ -1074,6 +1076,7 @@ https://github.com/purcell/whitespace-cleanup-mode
       minibuffer-setup-hook
       fundamental-mode) . no-trailing-whitespace))
 
+  (sup 'whitespace-cleanup-mode)
   (leaf whitespace-cleanup-mode
     :doc "In Emacs, intelligently call whitespace-cleanup on save."
     :url "https://github.com/purcell/whitespace-cleanup-mode"

@@ -52,6 +52,7 @@ early-init.el: 蔓艸/擊鼓/初.org
 
 init.el: 蔓艸/篇.org early-init.el
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+启.el: init.el
 
 
 芄蘭/芄蘭之例.el: 蔓艸/擊鼓/芄蘭之例.org
@@ -84,7 +85,7 @@ langs: $(patsubst %,木瓜/emacs-tree-sitter/tree-sitter-langs/bin/%,$(LANGS))
 
 
 ## Generate emacs-lisp files
-generate: $(DS) early-init.el init.el 譯.el 芄蘭/芄蘭.el 芄蘭/芄蘭之例.el
+generate: $(DS) early-init.el init.el 启.el 譯.el 芄蘭/芄蘭.el 芄蘭/芄蘭之例.el
 
 
 芄蘭/build-time: $(wildcard 桃夭/*/*.el)
@@ -105,7 +106,7 @@ config: generate
 
 ## Clean Config
 clean:
-	rm -rf 桃夭 芄蘭/芄蘭之例.el init.el early-init.el 芄蘭/build-time
+	rm -rf 桃夭 芄蘭/芄蘭之例.el 启.el init.el early-init.el 芄蘭/build-time
 
 
 ## Clean tree-sitter
@@ -115,7 +116,7 @@ clean-tsc:
 	rm -rf .git/modules/tree-sitter-rangs/modules/repos/elisp
 
 	cd $(TSLD) && rm -rf repos/elisp queries/elisp && git reset --hard && \
-		git submodule add -b main -- https://github.com/Wilfred/tree-sitter-elisp.git repos/elisp
+		git submodule add --force -b main -- https://github.com/Wilfred/tree-sitter-elisp.git repos/elisp
 	cd $(TSLD) && mkdir -p queries/elisp && cp repos/elisp/queries/*.scm queries/elisp
 
 ## Clean Elc
