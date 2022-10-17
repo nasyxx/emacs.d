@@ -698,22 +698,22 @@ TeX related works.
       . '(("AUTO" "inputenc"  t   ("pdflatex"))
           ("T1"   "fontenc"   t   ("pdflatex"))
           (""     "graphicx"  t   nil)
-          (""     "grffile"   t   nil)
-          (""     "longtable" t   nil)
-          (""     "booktabs"  t   nil)
+          (""     "grffile"   nil nil)
+          (""     "longtable" nil nil)
+          (""     "booktabs"  nil nil)
           (""     "wrapfig"   nil nil)
           (""     "rotating"  nil nil)
-          ("normalem" "ulem"  t   nil)
+          ("normalem" "ulem"  nil nil)
           (""     "amsmath"   t   nil)
           (""     "textcomp"  t   nil)
           (""     "amssymb"   t   nil)
           (""     "capt-of"   nil nil)
           (""     "nicefrac"  t   nil)
-          ("dvipsnames" "xcolor" t nil)
-          ("colorlinks,unicode,linkcolor=violet,anchorcolor=blueviolet,citecolor=YellowOrange,filecolor=black,urlcolor=Aquamarine"
-           "hyperref" t nil)
-          (""            "luatexja-fontspec" t ("lualatex"))
-          (""            "listings"          t nil)))
+          ("dvipsnames" "xcolor" nil nil)
+          ("colorlinks,unicode,linkcolor=violet,anchorcolor=BlueViolet,citecolor=YellowOrange,filecolor=black,urlcolor=Aquamarine"
+           "hyperref" nil nil)
+          (""            "luatexja-fontspec" t ("lualatex"))))
+          ;; (""            "listings"          t nil)))
           ;; (""            "algorithm"         t nil)
           ;; (""            "algpseudocode"     t nil)
           ;; ("cache=false" "minted"            t nil)))
@@ -1120,6 +1120,22 @@ https://orgmode.org/manual/CDLaTeX-mode.html
       (add-hook 'org-clock-out-hook
                 (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
                                     "tell application \"org-clock-statusbar\" to clock out")))))
+#+end_src
+
+*** Org Fragtag                                          :org:tex:
+
+Automatically toggle Org mode LaTeX fragment previews as the cursor
+enters and exits them.
+
+https://github.com/io12/org-fragtog
+
+#+begin_src emacs-lisp
+  (leaf org-fragtog
+    :doc "Automatically toggle Org mode LaTeX fragment previews as the cursor enters and exits them."
+    :url "https://github.com/io12/org-fragtog"
+    :tag "org" "tex"
+    :hook nasy-org-first-key-hook
+    :init (sup 'org-fragtog))
 #+end_src
 
 *** Org Latex Impatient                          :org:tex:tools:
