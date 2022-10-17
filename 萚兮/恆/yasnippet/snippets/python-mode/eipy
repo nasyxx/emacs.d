@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: embedipy
+# key: eipy
+# --
+from ptpython.ipython import embed;embed(user_ns={**globals(), **locals()}, vi_mode=False)
