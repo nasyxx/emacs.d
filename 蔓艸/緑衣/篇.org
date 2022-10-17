@@ -235,6 +235,7 @@ https://github.com/karthink/consult-dir
     :doc "consult-dir: switch directories easily in Emacs"
     :url "https://github.com/karthink/consult-dir"
     :tag "convenience"
+    :after vertico
     :bind
     ("C-x C-d" . consult-dir)
     (:minibuffer-local-completion-map
@@ -371,7 +372,7 @@ https://github.com/oantolin/embark/
     :after vertico
     :require t
     :advice
-    (:around embark-completiing-read-prompter embark-hide-which-key-indicator)
+    ;; (:around embark-completiing-read-prompter embark-hide-which-key-indicator)
     :bind
     ([remap describe-bindings] . embark-bindings)
     ("C-," . embark-dwim)
@@ -383,10 +384,10 @@ https://github.com/oantolin/embark/
      :package 風雨旹用
      ("M-o" . embark-act))
     :custom
-    (embark-indicators
-     . '(embark-which-key-indicator
-         embark-highlight-indicator
-         embark-isearch-highlight-indicator))
+    ;; (embark-indicators
+    ;;  . '(embark-which-key-indicator
+    ;;      embark-highlight-indicator
+    ;;      embark-isearch-highlight-indicator))
     :hook (embark-collect-mode-hook . embark-live-vertico)
     :init (sup 'embark)
     :config

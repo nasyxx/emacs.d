@@ -511,6 +511,7 @@ https://github.com/jdtsmith/kind-icon
     :url "https://github.com/jdtsmith/kind-icon"
     :tag "completion"
     :after corfu
+    :custom (kind-icon-default-face . 'corfu-default)
     :require t
     :init (sup 'kind-icon)
     :defer-config (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))

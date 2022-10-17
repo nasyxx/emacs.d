@@ -357,7 +357,7 @@ Emacs client/library for the Language Server Protocol
       (nasy/add-company-backend 'haskell-mode
         '(company-capf
           company-files
-          :with company-tabnine company-yasnippet))))
+          :with company-yasnippet))))
 #+end_src
 
 ** HTML                                        :html:languages:
@@ -994,7 +994,7 @@ TeX related works.
     :init
     (after-x 'company
       (nasy/add-company-backend 'org-mode
-        '(company-tabnine
+        '(;; company-tabnine
           company-files
           :with company-yasnippet)))
     :defer-config
@@ -1008,7 +1008,8 @@ TeX related works.
       (require 'ox-pandoc))
     (after-x 'company
       (nasy/add-company-backend 'org-mode
-              '(company-tabnine company-files)))
+        '(;; company-tabnine
+          company-files)))
     :advice
     (:after org-refile
             (lambda (&rest _) (org-save-all-org-buffers)))
