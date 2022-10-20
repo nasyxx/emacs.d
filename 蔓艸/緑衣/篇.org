@@ -723,10 +723,9 @@ https://www.emacswiki.org/emacs/RecentFiles
     (recentf-max-saved-items . 1000)
     (recentf-exclude
      . `(,(abbreviate-file-name
-           (locate-user-emacs-file *nasy-etc*))
-         ,(abbreviate-file-name
            (locate-user-emacs-file *nasy-var*))
-         "/tmp/" "/ssh:" "/nix/store" "~/.nix/store" ,(locate-user-emacs-file "straight"))))
+         "/tmp/" "/ssh:" "/nix/store" "~/.nix/store" "/private/var/folders"
+         ,(locate-user-emacs-file "straight"))))
 #+end_src
 
 ** Savehist                                           :history:
