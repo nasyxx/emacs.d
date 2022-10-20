@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: ifmain_nasy
+# key: _ifm
+# --
+if __name__ == "__main__":
+    ${0:pass}
