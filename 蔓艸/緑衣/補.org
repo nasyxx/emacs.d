@@ -516,6 +516,11 @@ https://github.com/zerolfx/copilot.el
     (copilot-clear-overlay)
     (copilot-complete))
 
+  (defun nasy/copilot-disable-p ()
+    "Disable copilot when at the end of the file and not changed."
+    (and (= (point-max) (point))
+         (not (buffer-modified-p))))
+
   (leaf copilot
     :doc "An unofficial Copilot plugin for Emacs."
     :url "https://github.com/zerolfx/copilot.el"
@@ -531,6 +536,7 @@ https://github.com/zerolfx/copilot.el
     :init
     (sup '(copilot :host github :repo "zerolfx/copilot.el"
                    :files ("dist" "copilot.el")))
+    (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p)
     :mode-hook
     (setq copilot-idle-delay 0.8))
 #+end_src
