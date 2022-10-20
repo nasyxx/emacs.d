@@ -532,11 +532,12 @@ https://github.com/zerolfx/copilot.el
      ("H-SPC"   . nasy/copilot-complete))
     :custom
     (copilto-idle-delay . 0.8)
+    :defer-config
+    (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p)
     :hook (prog-mode-hook python-mode-hook org-mode-hook emacs-lisp-mode-hook)
     :init
     (sup '(copilot :host github :repo "zerolfx/copilot.el"
                    :files ("dist" "copilot.el")))
-    (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p)
     :mode-hook
     (setq copilot-idle-delay 0.8))
 #+end_src
