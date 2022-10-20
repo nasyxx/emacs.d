@@ -599,7 +599,8 @@ https://github.com/minad/corfu
     ((prog-mode-hook
       org-mode-hook
       shell-mode-hook
-      eshell-mode-hook)
+      eshell-mode-hook
+      eval-expression-minibuffer-setup-hook)
      . nasy/setup-corfu)
     :init
     (sup 'corfu)
