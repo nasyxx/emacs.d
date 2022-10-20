@@ -48,7 +48,9 @@ UI
 
 * 章
 
-** cal-china-x
+** Calendar
+
+Also cal-china-x
 
 This extension mainly adds the following extra features:
 
@@ -75,6 +77,34 @@ https://github.com/xwl/cal-china-x
                                    (nasy/init-chinese-calendar)))
     :init (sup 'cal-china-x))
 
+  (leaf calendar
+    :custom
+    ;; 爾雅 月名
+    (calendar-chinese-month-name-array
+     . ["陬月" "如月" "寎月" "余月" "皋月" "且月"
+        "相月" "壯月" "玄月" "陽月" "辜月" "涂月"])
+    (cal-china-x-month-name
+     . ["陬月" "如月" "寎月" "余月" "皋月" "且月"
+        "相月" "壯月" "玄月" "陽月" "辜月" "涂月"]))
+
+  (defun nasy/chinese-date-string (date)
+    "Nasy version calendar string of DATE."
+    (let* ((cn-date (calendar-chinese-from-absolute
+                     (calendar-absolute-from-gregorian date)))
+           (cn-year  (cadr   cn-date))
+           (cn-month (cl-caddr  cn-date))
+           (cn-day   (cl-cadddr cn-date)))
+      (format "黃帝%s%s%s%s%s%s(%s)"
+              (+ 2698 (calendar-extract-year date))
+              (calendar-chinese-sexagesimal-name cn-year)
+              ;; (aref cal-china-x-zodiac-name (% (1- cn-year) 12))
+              (aref cal-china-x-month-name (1-  (floor cn-month)))
+              (if (integerp cn-month) "" "(闰月)")
+              (aref cal-china-x-day-name (1- cn-day))
+              (cal-china-x-get-solar-term date)
+              (cal-china-x-get-horoscope (car date) (cadr date)))))
+
+
   (defun nasy/init-chinese-calendar ()
     "Initial Chinese calendar."
     (setq calendar-date-display-form
@@ -87,16 +117,17 @@ https://github.com/xwl/cal-china-x
     (setq calendar-chinese-celestial-stem cal-china-x-celestial-stem
           calendar-chinese-terrestrial-branch cal-china-x-terrestrial-branch)
 
-    (setq calendar-month-header '(propertize (format "%d年%2d月" year month)
-                                             'font-lock-face
-                                             'calendar-month-header))
+    ;; (setq calendar-month-header '(propertize (format "%d年%2d月" year month)
+    ;;                                          'font-lock-face
+    ;;                                          'calendar-month-header))
+
     (when cal-china-x-force-chinese-week-day
       (setq calendar-day-header-array cal-china-x-days))
 
     (setq calendar-mode-line-format
           (list
            (calendar-mode-line-entry 'calendar-scroll-right "previous month" "<")
-           "日曆"
+           ;; "日曆"
 
            '(cal-china-x-get-holiday date)
 
@@ -107,18 +138,19 @@ https://github.com/xwl/cal-china-x
                                        'cal-china-x-week-of-date)
                                      date)))
 
-           '(cal-china-x-chinese-date-string date)
+           '(nasy/chinese-date-string date)
 
+           ;; " "
 
-           (concat
-            (calendar-mode-line-entry 'calendar-goto-info-node "read Info on Calendar"
-                                      nil "info")
-            " / "
-            (calendar-mode-line-entry 'calendar-other-month "choose another month"
-                                      nil "other")
-            " / "
-            (calendar-mode-line-entry 'calendar-goto-today "go to today's date"
-                                      nil "today"))
+           ;; (concat
+           ;;  (calendar-mode-line-entry 'calendar-goto-info-node "read Info on Calendar"
+           ;;                            nil "info")
+           ;;  " / "
+           ;;  (calendar-mode-line-entry 'calendar-other-month "choose another month"
+           ;;                            nil "other")
+           ;;  " / "
+           ;;  (calendar-mode-line-entry 'calendar-goto-today "go to today's date"
+           ;;                            nil "today"))
 
            (calendar-mode-line-entry 'calendar-scroll-left "next month" ">")))
 
