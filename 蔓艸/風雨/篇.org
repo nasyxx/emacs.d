@@ -29,14 +29,10 @@
 
   ;;; Code:
 
-  (cl-eval-when (compile)
-    (setq nasy--require t)
+  (cl-eval-when (compile eval load)
     (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓/擊鼓.el"))
     (require '擊鼓)
-    (sup 'beacon)
-    (sup 'doom-modeline)
-    (sup 'ibuffer)
-    (setq nasy--require nil))
+    (require '風雨之包))
 #+end_src
 
 * 恆用之
@@ -93,16 +89,6 @@
     (run-hooks 'nasy--defer-load-hook))
 
   (add-hook 'nasy-first-key-hook #'nasy/defer-load -1)
-#+end_src
-
-** 彩
-
-#+begin_src emacs-lisp
-  (leaf 彩
-    :init
-    (sup `(彩 :local-repo ,(concat *nasy-site* "nasy/nasy-theme")
-              :files ("彩.el")))
-    (require '彩))
 #+end_src
 
 ** 宏
