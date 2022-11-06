@@ -585,38 +585,20 @@
   (add-hook 'emacs-startup-hook #'nasy/-cus-mac)
 #+end_src
 
-* 旹用之
+* 時用之
 :PROPERTIES:
-:header-args:emacs-lisp: :tangle (concat temporary-file-directory "風雨旹用.el") :lexical t
+:header-args:emacs-lisp: :tangle (concat temporary-file-directory "風雨時用.el") :lexical t
 :END:
 
 主勭使用。
 
 #+begin_src emacs-lisp
-  ;;; 風雨旹用.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
-  (cl-eval-when (compile)
-    (setq nasy--require t)
+  ;;; 風雨時用.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
+  (cl-eval-when (compile eval load)
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
     (require '擊鼓)
     (require '風雨)
-
-    (sup 'avy)
-    (sup 'beacon)
-    (sup 'dashboard)
-    (sup 'flycheck)
-    (sup 'projectile)
-    (sup 'smartparens)
-    (sup 'treemacs)
-
-    (require 'flycheck)
-    (require 'winner)
-    (require 'xref)
-    (setq nasy--require nil))
-
-
-  (cl-eval-when (compile eval load)
-    (require '風雨))
+    (require '風雨之包))
 #+end_src
 
 ** 元
@@ -785,7 +767,7 @@
           (message "Evaluating %s...done" name)))))
 #+end_src
 
-** 臿入旹間
+** 臿入時間
 
 #+begin_src emacs-lisp
   ;;;###autoload
@@ -1544,8 +1526,8 @@
 ** 末
 
 #+begin_src emacs-lisp
-  (provide '風雨旹用)
-  ;;; 風雨旹用.el ends here
+  (provide '風雨時用)
+  ;;; 風雨時用.el ends here
 #+end_src
 
 * 結                                                :noexport:

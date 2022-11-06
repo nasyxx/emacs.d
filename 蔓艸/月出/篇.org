@@ -37,7 +37,7 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
     (require '擊鼓)
     (require '風雨)
-    (require '風雨旹用)
+    (require '風雨時用)
     (require 'compile)
     (sup 'beacon)
     (sup 'corfu)

@@ -67,7 +67,7 @@
 
 ** 更新 Update straight (可選 optional)
 
-同旹更新 elc 與 eln
+同時更新 elc 與 eln
 
 #+begin_src sh
   make update-all

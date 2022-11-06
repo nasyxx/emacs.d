@@ -98,7 +98,7 @@
   (leaf 風雨
     :load-path* "桃夭/風雨"
     :require t
-    :config (add-hook 'nasy-first-key-hook #'(lambda () (require '風雨旹用))))
+    :config (add-hook 'nasy-first-key-hook #'(lambda () (require '風雨時用))))
 #+end_src
 
 #+include: ./風雨/篇.org :lines "3-"

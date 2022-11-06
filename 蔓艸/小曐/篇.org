@@ -36,7 +36,7 @@ Library.
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
     (require '擊鼓)
     (require '風雨)
-    (require '風雨旹用)
+    (require '風雨時用)
     (setq nasy--require nil))
 #+end_src
 

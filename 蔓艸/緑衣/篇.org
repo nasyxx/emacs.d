@@ -17,7 +17,7 @@
   我恖古人、實獲我心
 #+end_verse
 
-永不弃者載入于初始之旹也
+永不弃者載入于初始之時也
 
 Permanent configuration file.
 
@@ -34,7 +34,7 @@ You cannot disable anything here.
 
   ;;; Commentary:
 
-  ;; 永不弃者載入于初始之旹也
+  ;; 永不弃者載入于初始之時也
 
   ;;; Code:
 
@@ -44,7 +44,7 @@ You cannot disable anything here.
     (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
     (require '擊鼓)
     (require '風雨)
-    (require '風雨旹用)
+    (require '風雨時用)
 
     (require 'ffap)
     (require 'winner)
@@ -381,7 +381,7 @@ https://github.com/oantolin/embark/
     (:vertico-map
      ("M-o" . embark-act))
     (:nasy/active-region-map
-     :package 風雨旹用
+     :package 風雨時用
      ("M-o" . embark-act))
     :custom
     ;; (embark-indicators
@@ -701,7 +701,7 @@ https://www.emacswiki.org/emacs/RecentFiles
     :bind ("C-c r" . recentf-open-files)
     :hook nasy-first-key-hook
     :mode-hook
-    (after-x '風雨旹用
+    (after-x '風雨時用
       (unless nasy--recentf-cleaned
         (setq nasy--recentf-cleaned t)
         (recentf-cleanup)))
@@ -977,7 +977,7 @@ https://github.com/minad/vertico
     :init (sup '(vertico :files (:defaults "extensions/*")))
     :mode-hook
     (vertico-mouse-mode 1)
-    (after-x '風雨旹用
+    (after-x '風雨時用
       (nasy/active-region-mode 1)))
 #+end_src
 
