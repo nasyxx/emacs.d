@@ -80,14 +80,14 @@
 
 #+include: ./月出/篇.org :lines "3-"
 
-* 庭尞
+* 庭燎
 
 #+begin_src emacs-lisp
-  (nasy/local-repo 庭尞)
-  (leaf 庭尞 :require t)
+  (nasy/local-repo 庭燎)
+  (leaf 庭燎 :require t)
 #+end_src
 
-#+include: ./庭尞/篇.org :lines "3-"
+#+include: ./庭燎/篇.org :lines "3-"
 
 * 日月
 

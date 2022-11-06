@@ -5,7 +5,7 @@ ETS ?= $(EM) -Q --batch --directory . --load tree-sitter-langs-build
 
 EL ?= $(EM) -Q
 
-DS = 小曐 庭尞 擊鼓 日月 月出 緑衣 風雨 麐之趾
+DS = 小曐 庭燎 擊鼓 日月 月出 緑衣 風雨 麐之趾
 
 LANGS = agda cpp html jsdoc pgn rust bash css fluent janet-simple json php \
 	scala c elisp go java julia python swift c-sharp hcl javascript ocaml ruby typescript # elm elixir
@@ -48,7 +48,6 @@ endef
 
 early-init.el: 蔓艸/擊鼓/初.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
-
 
 init.el: 蔓艸/篇.org early-init.el
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'

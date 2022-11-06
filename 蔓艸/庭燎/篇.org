@@ -1,16 +1,16 @@
-#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "庭尞.el") :lexical t
-#+title: 庭尞
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "庭燎.el") :lexical t
+#+title: 庭燎
 
 #+begin_verse
-  小雅・彤弓之什・庭尞
+  小雅・彤弓之什・庭燎
 
-  夜如何其、夜未央、庭尞之光
+  夜如何其、夜未央、庭燎之光
   君子至止、鸞聲將將
 
-  夜如何其、夜未艾、庭尞皙皙
+  夜如何其、夜未艾、庭燎皙皙
   君子至止、鸞聲噦噦
 
-  夜如何其、夜郷晨、庭尞有煇
+  夜如何其、夜郷晨、庭燎有煇
   君子至止、言觀其旂
 #+end_verse
 
@@ -21,7 +21,7 @@ UI
 * 題                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
-  ;;; 庭尞.el --- Nasy's emacs.d UI file.  -*- lexical-binding: t; -*-
+  ;;; 庭燎.el --- Nasy's emacs.d UI file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2022  Nasy
 
@@ -64,29 +64,6 @@ This extension mainly adds the following extra features:
 https://github.com/xwl/cal-china-x
 
 #+begin_src emacs-lisp
-  (leaf cal-china-x
-    :doc "chinese localization, prioritized holiday highlight, lunar, horoscope, zodiac, etc."
-    :url "https://github.com/xwl/cal-china-x"
-    :tag "calendar" "date"
-    :after calendar
-    :custom
-    (cal-china-x-force-chinese-week-day . t)
-    (cal-china-x-always-show-jieqi      . t)
-    :hook (nasy-first-key-hook . (lambda ()
-                                   (require 'cal-china-x)
-                                   (nasy/init-chinese-calendar)))
-    :init (sup 'cal-china-x))
-
-  (leaf calendar
-    :custom
-    ;; 爾雅 月名
-    (calendar-chinese-month-name-array
-     . ["陬月" "如月" "寎月" "余月" "皋月" "且月"
-        "相月" "壯月" "玄月" "陽月" "辜月" "涂月"])
-    (cal-china-x-month-name
-     . ["陬月" "如月" "寎月" "余月" "皋月" "且月"
-        "相月" "壯月" "玄月" "陽月" "辜月" "涂月"]))
-
   (defun nasy/chinese-date-string (date)
     "Nasy version calendar string of DATE."
     (let* ((cn-date (calendar-chinese-from-absolute
@@ -166,6 +143,30 @@ https://github.com/xwl/cal-china-x
 
     (advice-add 'calendar-mark-holidays :around 'cal-china-x-mark-holidays)
     (advice-add 'mouse-set-point :after 'cal-china-x-mouse-set-point))
+
+
+  (leaf cal-china-x
+    :doc "chinese localization, prioritized holiday highlight, lunar, horoscope, zodiac, etc."
+    :url "https://github.com/xwl/cal-china-x"
+    :tag "calendar" "date"
+    :after calendar
+    :custom
+    (cal-china-x-force-chinese-week-day . t)
+    (cal-china-x-always-show-jieqi      . t)
+    :hook (nasy-first-key-hook . (lambda ()
+                                   (require 'cal-china-x)
+                                   (nasy/init-chinese-calendar)))
+    :init (sup 'cal-china-x))
+
+  (leaf calendar
+    :custom
+    ;; 爾雅 月名
+    (calendar-chinese-month-name-array
+     . ["陬月" "如月" "寎月" "余月" "皋月" "且月"
+        "相月" "壯月" "玄月" "陽月" "辜月" "涂月"])
+    (cal-china-x-month-name
+     . ["陬月" "如月" "寎月" "余月" "皋月" "且月"
+        "相月" "壯月" "玄月" "陽月" "辜月" "涂月"]))
 #+end_src
 
 ** Centaur Tab
@@ -1011,8 +1012,8 @@ https://github.com/ema2159/centaur-tabs
 * 結                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
-  (provide '庭尞)
-  ;;; 庭尞.el ends here
+  (provide '庭燎)
+  ;;; 庭燎.el ends here
 #+end_src
 
 # Local Variables:
