@@ -19,22 +19,18 @@
 
   (message "\n\n---------------- Load el of 桃夭 ----------------\n\n")
 
+  (load (locate-user-emacs-file "桃夭/擊鼓/擊鼓.el"))
+  (load (locate-user-emacs-file "桃夭/風雨/風雨之包.el"))
+  (load (locate-user-emacs-file "桃夭/緑衣/緑衣之包.el"))
+  (load (locate-user-emacs-file "桃夭/日月/日月之包.el"))
+  (load (locate-user-emacs-file "桃夭/月出/月出之包.el"))
+  (load (locate-user-emacs-file "桃夭/麐之趾/麐之趾之包.el"))
+  (load (locate-user-emacs-file "桃夭/庭燎/庭燎之包.el"))
+  (load (locate-user-emacs-file "桃夭/小曐/小曐.el"))
   (load (locate-user-emacs-file "init.el"))
-
-  (require 'cl-lib)
-  (sup 'winum)
-
-  (let ((packages '(all-the-icons company dash doom-modeline lisp-mode
-                                  ob org ox page-break-lines
-                                  savehist smartparens-config tab-line
-                                  treemacs winum xref yasnippet)))
-    (cl-loop for package in packages
-             do (progn
-                  (require package))))
 
   (when (and (eq system-type 'darwin) (executable-find "cargo"))
     (shell-command (concat "make " (straight--build-dir "tsc") "tsc-dyn.dylib")))
-
 
   (message "\n\n---------------- Run hooks ----------------\n\n")
 

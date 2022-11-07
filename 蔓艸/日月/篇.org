@@ -40,14 +40,8 @@ Applications.
 
   ;;; Code:
 
-  (cl-eval-when (compile eval)
-    (setq nasy--require t)
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
-    (require '擊鼓)
-    (require '風雨)
-    (require '風雨時用)
-    (setq nasy--require nil))
+  (cl-eval-when (compile eval load)
+    (require '日月之包))
 #+end_src
 
 * 章
@@ -64,8 +58,7 @@ https://github.com/jwiegley/alert
     :url "https://github.com/jwiegley/alert"
     :tag "notification" "emacs" "message"
     :custom
-    (alert-default-style . 'osx-notifier)
-    :init (sup 'alert))
+    (alert-default-style . 'osx-notifier))
 #+end_src
 
 ** Carbon Now sh                                  :convenience:
@@ -80,8 +73,7 @@ Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>@@
   (leaf carbon-now-sh
     :doc "Emacs to carbon.now.sh integration."
     :url "https://github.com/veelenga/carbon-now-sh.el"
-    :tag "convenience"
-    :init (sup 'carbon-now-sh))
+    :tag "convenience")
 #+end_src
 
 ** Cheat Sh                                         :docs:help:
@@ -94,8 +86,7 @@ https://github.com/davep/cheat-sh.el
   (leaf cheat-sh
     :doc "Simple Emacs interface for cheat.sh"
     :url "https://github.com/davep/cheat-sh.el"
-    :tag "docs" "help"
-    :init (sup 'cheat-sh))
+    :tag "docs" "help")
 #+end_src
 
 ** Emacs Rime                         :convenience:inputmethod:
@@ -110,8 +101,7 @@ https://github.com/DogLooksGood/emacs-rime
     :url "https://github.com/DogLooksGood/emacs-rime"
     :tag "convenience" "input-method"
     :custom (default-input-method  . "rime")
-    :hook (nasy-first-key-hook . (lambda () (require 'rime)))
-    :init (sup 'rime))
+    :hook (nasy-first-key-hook . (lambda () (require 'rime))))
 
   ;; (defvar nasy-rime-candidate-labels
   ;;   '("〡" "〢" "〣" "〤" "〥" "〦" "〧" "〨" "〩"))
@@ -187,8 +177,7 @@ https://github.com/lastquestion/explain-pause-mode
   (leaf explain-pause-mode
     :doc "top, but for Emacs."
     :url "https://github.com/lastquestion/explain-pause-mode"
-    :tag "performance" "speed" "config"
-    :init (sup 'explain-pause-mode))
+    :tag "performance" "speed" "config")
 #+end_src
 
 ** Grab Mac Link                                :mac:hyperlink:
@@ -202,8 +191,7 @@ https://github.com/xuchunyang/grab-mac-link.el
     :doc "Grab link from Mac Apps."
     :url "https://github.com/xuchunyang/grab-mac-link.el"
     :tag "mac" "hyperlink"
-    :when *is-a-mac*
-    :init (sup 'grab-mac-link))
+    :when *is-a-mac*)
 #+end_src
 
 ** Htmlize                              :hypermedia:extensions:
@@ -217,8 +205,7 @@ https://github.com/hniksic/emacs-htmlize
     :doc "Convert buffer text and decorations to HTML."
     :url "https://github.com/hniksic/emacs-htmlize"
     :tag "hypermedia" "extensions"
-    :custom (htmlize-pre-style . t)
-    :init (sup 'htmlize))
+    :custom (htmlize-pre-style . t))
 #+end_src
 
 ** indent-tools                        :indentation:navigation:
@@ -234,8 +221,7 @@ https://gitlab.com/emacs-stuff/indent-tools
   perfect for yaml, python and the like."
     :url "https://gitlab.com/emacs-stuff/indent-tools"
     :tag "indentation" "navigation"
-    :bind (("C-c TAB" . indent-tools-hydra/body))
-    :init (sup 'indent-tools))
+    :bind (("C-c TAB" . indent-tools-hydra/body)))
 #+end_src
 
 ** List Unicode Display                           :convenience:
@@ -251,8 +237,7 @@ https://github.com/purcell/list-unicode-display
 
   `list-unicode-display'"
     :url "https://github.com/purcell/list-unicode-display"
-    :tag "convenience"
-    :init (sup 'list-unicode-display))
+    :tag "convenience")
 #+end_src
 
 ** Magit                                         :git:tools:vc:
@@ -293,8 +278,7 @@ https://github.com/magit/magit
            (:magit-status-mode-map
             ("C-M-<up>"  . magit-section-up))
            (:vc-prefix-map
-            ("f"         . vc-git-grep)))
-    :init (sup 'magit))
+            ("f"         . vc-git-grep))))
 #+end_src
 
 *** Forge                                         :git:tools:vc:
@@ -311,8 +295,7 @@ https://github.com/magit/forge
     :after magit
     :custom
     `((forge-database-file . ,(concat *nasy-var* "forge/database.sqlite"))
-      (forge-post-directory . ,(concat *nasy-var* "forge/posts/")))
-    :init (sup 'forge))
+      (forge-post-directory . ,(concat *nasy-var* "forge/posts/"))))
 #+end_src
 
 *** Magit Delta                                   :git:tools:vc:
@@ -332,8 +315,7 @@ https://github.com/dandavison/magit-delta
      . '("--max-line-distance"
          "0.6" "--24-bit-color"
          "always" "--color-only"))
-    :hook (magit-mode-hook . magit-delta-mode)
-    :init (sup 'magit-delta))
+    :hook (magit-mode-hook . magit-delta-mode))
 #+end_src
 
 *** Magit Org Todos                        :magit:orgmode:tools:
@@ -348,7 +330,6 @@ https://github.com/danielma/magit-org-todos.el
     :url "https://github.com/danielma/magit-org-todos.el"
     :tag "magit" "orgmode" "tools"
     :after magit
-    :init (sup 'magit-org-todos)
     :config (magit-org-todos-autoinsert))
 #+end_src
 
@@ -364,8 +345,7 @@ https://github.com/alphapapa/magit-todos
     :url "https://github.com/alphapapa/magit-todos"
     :tag "magit" "vc"
     :after magit
-    :custom (magit-todos-exclude-globs . '("*.map"))
-    :init (sup 'magit-todos))
+    :custom (magit-todos-exclude-globs . '("*.map")))
 #+end_src
 
 ** PDF Tools                                 :files:multimedia:
@@ -400,8 +380,7 @@ https://github.com/politza/pdf-tools
     ;;        ("s"  . pdf-occur)
     ;;        ("b"  . pdf-view-set-slice-from-bounding-box)
     ;;        ("r"  . pdf-view-reset-slice))
-    :custom (pdf-view-display-size . 'fit-width)
-    :init (sup 'pdf-tools))
+    :custom (pdf-view-display-size . 'fit-width))
 #+end_src
 
 ** Prettier                       :convenience:files:languages:

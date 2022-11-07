@@ -33,17 +33,8 @@ UI
 
   ;;; Code:
 
-  (cl-eval-when (compile)
-    (setq nasy--require t)
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
-    (require '擊鼓)
-    (require '風雨)
-    (require '風雨時用)
-    (sup 'consult)
-    (sup 'dash)
-    (sup 'projectile)
-    (setq nasy--require nil))
+  (cl-eval-when (compile eval load)
+    (require '庭燎之包))
 #+end_src
 
 * 章
@@ -155,8 +146,7 @@ https://github.com/xwl/cal-china-x
     (cal-china-x-always-show-jieqi      . t)
     :hook (nasy-first-key-hook . (lambda ()
                                    (require 'cal-china-x)
-                                   (nasy/init-chinese-calendar)))
-    :init (sup 'cal-china-x))
+                                   (nasy/init-chinese-calendar))))
 
   (leaf calendar
     :custom
@@ -182,8 +172,7 @@ https://github.com/ema2159/centaur-tabs
     (centaur-tabs-style . "wave")
     :hook
     ;; (nasy-first-key-hook   . (lambda () (require 'tab-line) (centaur-tabs-mode)))
-    (nasy/font-change-hook . (lambda () (nasy/set-symbol ?⏺ 14)))
-    :init (sup 'centaur-tabs))
+    (nasy/font-change-hook . (lambda () (nasy/set-symbol ?⏺ 14))))
 
 
   (defun nasy/-enable-centaur-tabs-local-mode ()
@@ -281,8 +270,7 @@ https://github.com/ema2159/centaur-tabs
     :leaf-autoload t
     :leaf-defun t
     :commands (dashboard-refresh-buffer
-               dashboard-setup-startup-hook)
-    :init (sup 'dashboard))
+               dashboard-setup-startup-hook))
 
 
   (defun nasy/-set-dashboard-init-info (&rest _)
@@ -464,7 +452,6 @@ https://github.com/ema2159/centaur-tabs
       doom-dracula-comment-bg) . t)
     (doom-themes-treemacs-theme . "doom-colors")
     (doom-themes-org-fontify-special-tags . nil)
-    :init (sup 'doom-themes)
     :config
     (after-x 'treemacs
       (doom-themes-treemacs-config))
@@ -610,7 +597,6 @@ https://github.com/ema2159/centaur-tabs
                                '(#Xe100 . #Xe16f)
                                "Fira Code Symbol")
              (nasy/adjust-fira-code-symbol #Xe126 15)))))
-    :init (sup 'pretty-mode)
     :defer-config
     (when (fboundp 'mac-auto-operator-composition-mode)
       (mac-auto-operator-composition-mode))
@@ -873,21 +859,18 @@ https://github.com/ema2159/centaur-tabs
     :custom (nyan-animate-nyancat . t)
             (nyan-bar-length      . 16)
             (nyan-wavy-trail      . t)
-    :hook after-init-hook
-    :init (sup 'nyan-mode))
+    :hook after-init-hook)
 #+end_src
 
 #+begin_src emacs-lisp
   (leaf minions
     :custom (minions-mode-line-lighter . "✬")
-    :hook after-init-hook
-    :init (sup 'minions))
+    :hook after-init-hook)
 #+end_src
 
 #+begin_src emacs-lisp
   (leaf doom-modeline
-    :hook emacs-startup-hook
-    :init (sup 'doom-modeline))
+    :hook emacs-startup-hook)
 
   (leaf doom-modeline
     :after doom-modeline
@@ -963,10 +946,7 @@ https://github.com/ema2159/centaur-tabs
 ** Nasy Theme
 
 #+begin_src emacs-lisp
-  (leaf nasy-theme
-    :init
-    (sup `(nasy-theme :local-repo ,(concat *nasy-site* "nasy/nasy-theme")
-                      :files ("nasy-theme.el"))))
+  (leaf nasy-theme)
 #+end_src
 
 ** Main Theme

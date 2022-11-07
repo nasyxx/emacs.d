@@ -91,6 +91,8 @@
   (defvar nasy-first-key-hook nil
     "The hook to run functions before press first key.")
 
+  (load (locate-user-emacs-file "init.el") nil t)
+
   (provide 'early-init)
   ;;; early-init.el ends here
 #+end_src

@@ -1,0 +1,62 @@
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "日月之包.el") :lexical t
+
+* 題                                                :noexport:
+
+#+begin_src emacs-lisp :exports none
+  ;;; 日月之包.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2022  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; 無關 Emacs 者也用之亦可弃置亦可
+
+  ;;; Code:
+#+end_src
+
+* 包
+
+#+begin_src emacs-lisp
+  (cl-eval-when (compile)
+    (setq nasy--require t))
+
+  (cl-eval-when (compile eval load)
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/風雨"))
+    (require '擊鼓)
+    (require '風雨)
+    (require '風雨時用)
+    (require 'cl)
+
+    (sup 'alert)
+    (sup 'carbon-now-sh)
+    (sup 'cheat-sh)
+    (sup 'rime)
+    (sup 'esup)
+    (sup 'explain-pause-mode)
+    (sup 'grab-mac-link)
+    (sup 'htmlize)
+    (sup 'indent-tools)
+    (sup 'list-unicode-display)
+    (sup 'magit)
+    (sup 'forge)
+    (sup 'magit-delta)
+    (sup 'magit-org-todos)
+    (sup 'magit-todos)
+    (sup 'pdf-tools)
+    (sup 'prettier)
+    (sup 'vterm)
+    (sup '(vterm-toggle :build (:not native-compile)))
+    (sup 'wakatime-mode))
+
+
+#+end_src
+
+* 結                                                :noexport:
+
+#+begin_src emacs-lisp :exports none
+  (provide '日月之包)
+  ;;; 日月之包.el ends here
+#+end_src

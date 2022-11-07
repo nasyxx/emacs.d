@@ -19,20 +19,22 @@
 * 包
 
 #+begin_src emacs-lisp
+  (cl-eval-when (compile)
+    (setq nasy--require t))
   (cl-eval-when (compile eval load)
-    (setq nasy--require t)
     (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓/擊鼓.el"))
     (require '擊鼓)
     (sup 'avy)
     (sup 'beacon)
     (sup 'dashboard)
     (sup 'doom-modeline)
-    (sup 'ibuffer)
     (sup 'flycheck)
+    (sup 'ibuffer)
     (sup 'projectile)
     (sup 'smartparens)
     (sup `(彩 :local-repo ,(concat *nasy-site* "nasy/nasy-theme")
               :files ("彩.el")))
+    (require 'cl)
     (setq nasy--require nil))
 #+end_src
 

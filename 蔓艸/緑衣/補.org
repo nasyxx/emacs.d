@@ -16,31 +16,8 @@
 
   ;;; Code:
 
-  (cl-eval-when (compile eval)
-    (setq nasy--require t)
-
-    (require '擊鼓)
-    (require '風雨)
-    (require '風雨時用)
-    (fset 'defun* 'cl-defun)
-    (sup 'company)
-    (sup 'company-quickhelp)
-    ;; (sup 'company-tabnine)
-    (sup 'corfu)
-    (sup 'corfu-doc)
-    (require 'company)
-    (sup 'cape)
-
-    (sup '(copilot :host github :repo "zerolfx/copilot.el"
-                   :files ("dist" "copilot.el")))
-
-    (require 'cape)
-    (require 'company-dabbrev)
-    (require 'company-dabbrev-code)
-    (require 'corfu)
-    (require 'whitespace)
-
-    (setq nasy--require nil))
+  (cl-eval-when (compile eval load)
+    (require '緑衣之包))
 #+end_src
 
 * 文
@@ -337,7 +314,6 @@ https://github.com/minad/cape
            ("p r" . cape-rfc1345))
     :hook ((corfu-mode-hook)
            . nasy/-merge-capf)
-    :init (sup 'cape)
     :config
     (setq completion-at-point-functions
           (cape-capf-buster (cape-company-to-capf
@@ -396,7 +372,6 @@ https://github.com/minad/cape
      (company-require-match             . 'never)
      (company-format-margin-function    . #'company-vscode-dark-icons-margin))
     :hook (nasy--defer-load-hook . (lambda () (require 'company)))
-    :init (sup 'company)
     :config
     ;; (add-hook 'after-change-major-mode-hook #'nasy/company-init-backends-h 'append)
     :defer-config
@@ -417,8 +392,7 @@ https://github.com/minad/cape
      ("C-c h" . company-quickhelp-manual-begin))
     :hook company-mode-hook
     :custom
-    (pos-tip-use-relative-coordinates . t)
-    :init (sup 'company-quickhelp))
+    (pos-tip-use-relative-coordinates . t))
 #+end_src
 
 *** Company Tabnine
@@ -430,8 +404,7 @@ https://github.com/minad/cape
     :custom
     `(company-tabnine-binaries-folder . ,(concat *nasy-var* "company/tabnine-binaries"))
     `(company-tabnine-log-file-path
-      . ,(concat *nasy-var* "company/tabnine-binaries/log"))
-    :init (sup 'company-tabnine))
+      . ,(concat *nasy-var* "company/tabnine-binaries/log")))
 #+end_src
 
 *** Company Flx
@@ -439,8 +412,8 @@ https://github.com/minad/cape
 #+begin_src emacs-lisp
   (leaf company-flx
     :after company
-    :hook company-mode-hook
-    :init (sup 'company-flx))
+    :disabled t
+    :hook company-mode-hook)
 #+end_src
 
 *** Company Box
@@ -453,8 +426,6 @@ https://github.com/minad/cape
     (company-box-show-single-candidate . t)
     (company-box-max-candidates        . 25)
     (company-box-icons-alist           . 'company-box-icons-all-the-icons)
-    :init
-    (sup 'company-box)
     :config
     (setq
      company-box-icons-functions
@@ -535,9 +506,6 @@ https://github.com/zerolfx/copilot.el
     :defer-config
     (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p)
     :hook (prog-mode-hook python-mode-hook org-mode-hook emacs-lisp-mode-hook)
-    :init
-    (sup '(copilot :host github :repo "zerolfx/copilot.el"
-                   :files ("dist" "copilot.el")))
     :mode-hook
     (setq copilot-idle-delay 0.8))
 #+end_src
@@ -601,11 +569,7 @@ https://github.com/minad/corfu
       shell-mode-hook
       eshell-mode-hook
       eval-expression-minibuffer-setup-hook)
-     . nasy/setup-corfu)
-    :init
-    (sup 'corfu)
-    (sup `(corfu-extensions
-           :local-repo ,(concat (straight--repos-dir "corfu") "extensions"))))
+     . nasy/setup-corfu))
 
 
   ;; Extensions
@@ -632,8 +596,7 @@ https://github.com/galeo/corfu-doc
            ("M-d" . corfu-doc-toggle)
            ("M-p" . corfu-doc-scroll-down)
            ("M-n" . corfu-doc-scroll-up))
-    :hook (corfu-mode-hook . corfu-doc-mode)
-    :init (sup 'corfu-doc))
+    :hook (corfu-mode-hook . corfu-doc-mode))
 #+end_src
 
 ** citre

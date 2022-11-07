@@ -1,0 +1,51 @@
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "庭燎之包.el") :lexical t
+
+* 題                                                :noexport:
+
+#+begin_src emacs-lisp :exports none
+  ;;; 庭燎之包.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2022  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; 容皃也
+
+  ;;; Code:
+#+end_src
+
+* 包
+
+#+begin_src emacs-lisp
+  (cl-eval-when (compile)
+    (setq nasy--require t))
+
+  (cl-eval-when (compile eval load)
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/風雨"))
+    (require '擊鼓)
+    (require '風雨)
+    (require '風雨時用)
+    (require 'cl)
+    (sup 'consult)
+    (sup 'dash)
+    (sup 'projectile)
+    (sup 'cal-china-x)
+    (sup 'centaur-tabs)
+    (sup 'dashboard)
+    (sup 'doom-themes)
+    (sup 'pretty-mode)
+    (sup 'nyan-mode)
+    (sup 'minions)
+    (sup 'doom-modeline)
+    (sup `(nasy-theme :local-repo ,(concat *nasy-site* "nasy/nasy-theme"))))
+#+end_src
+
+* 結                                                :noexport:
+
+#+begin_src emacs-lisp :exports none
+  (provide '庭燎之包)
+  ;;; 庭燎之包.el ends here
+#+end_src

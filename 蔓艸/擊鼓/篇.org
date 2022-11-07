@@ -218,7 +218,7 @@ Elpaca is an elisp package manager. It allows users to find, install, update, an
 
 #+begin_src emacs-lisp
   (eval-and-compile
-    (setq leaf-defaults '(:leaf-autoload nil :leaf-defun nil))
+    (setq leaf-defaults '(:leaf-autoload nil :leaf-defun nil :leaf-defer t))
     (leaf-keywords-init))
 
   (defun nasy/-package-filter (name &rest _)

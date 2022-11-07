@@ -78,7 +78,7 @@
     (setq nasy--init-file-loaded-p t)
     (load (expand-file-name "启" user-emacs-directory)))
 
-  ;;(provide 'init)
+  (provide 'init)
   ;;; init.el ends here
 #+end_src
 

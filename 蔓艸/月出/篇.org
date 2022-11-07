@@ -31,25 +31,8 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
 
   ;;; Code:
 
-  (cl-eval-when (compile eval) ;;eval-when-compile
-    (setq nasy--require t)
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
-    (require '擊鼓)
-    (require '風雨)
-    (require '風雨時用)
-    (require 'compile)
-    (sup 'beacon)
-    (sup 'corfu)
-    (sup 'color-identifiers-mode)
-    (sup 'eldoc-box)
-    (sup 'pcre2el)
-    (sup 'rainbow-delimiters)
-    (sup 'winum)
-    (sup 'tsc)
-    (sup 'tree-sitter)
-    (sup 'tree-sitter-langs)
-    (setq nasy--require nil))
+  (cl-eval-when (compile eval load)
+    (require '月出之包))
 #+end_src
 
 * 章
@@ -72,7 +55,6 @@ https://github.com/jdtsmith/abridge-diff
     :tag "diffs" "magit" "tools"
     :after magit
     :init
-    (sup 'abridge-diff)
     (abridge-diff-mode 1))
 #+end_src
 
@@ -95,8 +77,6 @@ https://www.emacswiki.org/emacs/AnsiColor
     :commands colourise-compilation-buffer
     :after compile
     :hook ((compilation-filter-hook . colourise-compilation-buffer))
-    :init
-    (sup 'ansi-color)
     :defer-config
     (defun colourise-compilation-buffer ()
       (when (eq major-mode 'compilation-mode)
@@ -124,8 +104,7 @@ https://github.com/Malabarba/beacon
     (blink-cursor-interval . 1)
     (beacon-dont-blink-commands . nil)
     :hook
-    (nasy-first-key-hook . (lambda () (require 'beacon)))
-    :init (sup 'beacon))
+    (nasy-first-key-hook . (lambda () (require 'beacon))))
 #+end_src
 
 ** Color Identifiers Mode                     :faces:languages:
@@ -141,8 +120,7 @@ https://github.com/ankurdave/color-identifiers-mode
   on its name."
     :url "https://github.com/ankurdave/color-identifiers-mode"
     :tag "faces" "languages"
-    :hook prog-mode-hook
-    :init (sup 'color-identifiers-mode))
+    :hook prog-mode-hook)
 #+end_src
 
 ** Default Text Scale                                    :text:
@@ -152,8 +130,7 @@ https://github.com/ankurdave/color-identifiers-mode
     :leaf-autoload t
     :leaf-defun t
     :commands default-text-scale-mode
-    :hook nasy-first-key-hook
-    :init (sup 'default-text-scale))
+    :hook nasy-first-key-hook)
 #+end_src
 
 ** dired-async                            :dired:async:network:
@@ -170,8 +147,7 @@ https://github.com/jwiegley/emacs-async
     :leaf-autoload t
     :leaf-defun t
     :commands dired-async-mode
-    :hook dired-mode-hook
-    :init (sup 'async))
+    :hook dired-mode-hook)
 #+end_src
 
 ** Dired Hack                                           :files:
@@ -184,10 +160,7 @@ https://github.com/Fuco1/dired-hacks
   (leaf dired-hacks
     :doc "Collection of useful dired additions"
     :url "https://github.com/Fuco1/dired-hacks"
-    :tag "files"
-    :init
-    (sup 'f)
-    (sup 'dired-hacks))
+    :tag "files")
 #+end_src
 
 *** Dired Filter
@@ -223,7 +196,6 @@ https://github.com/Fuco1/dired-hacks
            (extension "zip" "rar" "gz" "bz2" "tar"))
           ("Images"
            (extension "jpg" "JPG" "webp" "png" "PNG" "jpeg" "JPEG" "bmp" "BMP" "TIFF" "tiff" "gif" "GIF")))))
-    :init (sup 'dired-filter)
     :defer-config
     (define-key dired-filter-map (kbd "/") dired-filter-mark-map))
 
@@ -246,7 +218,6 @@ https://github.com/Fuco1/dired-hacks
     :require t
     :hook (dired-mode-hook . nasy/-init-dired-rainbow)
     :init
-    (sup 'dired-rainbow)
     (defun nasy/-init-dired-rainbow ()
       "Nasy init dired-rainbow."
       (require 'dired-rainbow)
@@ -297,8 +268,7 @@ https://github.com/Fuco1/dired-hacks
 
 #+begin_src emacs-lisp
   (leaf dired-narrow
-    :after dired
-    :init (sup 'dired-narrow))
+    :after dired)
 #+end_src
 
 *** Dired Collapse
@@ -306,8 +276,7 @@ https://github.com/Fuco1/dired-hacks
 #+begin_src emacs-lisp
   (leaf dired-collapse
     :after dired
-    :hook dired-mode-hook
-    :init (sup 'dired-collapse))
+    :hook dired-mode-hook)
 #+end_src
 
 ** Diff-hl (only for dired)                          :vc:diffs:
@@ -326,8 +295,7 @@ https://github.com/dgutov/diff-hl
            (magit-post-refresh-hook . diff-hl-magit-post-refresh)
            (nasy-first-key-hook     . global-diff-hl-mode)
            (nasy-first-key-hook     . global-diff-hl-show-hunk-mouse-mode)
-           (nasy-first-key-hook     . diff-hl-margin-mode))
-    :init (sup 'diff-hl))
+           (nasy-first-key-hook     . diff-hl-margin-mode)))
 #+end_src
 
 ** eldoc box                             :docs:extensions:help:
@@ -344,8 +312,7 @@ https://github.com/casouri/eldoc-box
     :custom
     (eldoc-box-position-function . #'eldoc-box--default-at-point-position-function)
     :hook ((eldoc-mode-hook . eldoc-box-hover-mode)
-           (eldoc-mode-hook . eldoc-box-hover-at-point-mode))
-    :init (sup 'eldoc-box))
+           (eldoc-mode-hook . eldoc-box-hover-at-point-mode)))
 #+end_src
 
 ** eldoc-overlay                                   :extensions:
@@ -359,8 +326,7 @@ https://github.com/stardiviner/eldoc-overlay
     :doc "Display eldoc doc with contextual documentation overlay for easy to look."
     :url "https://github.com/stardiviner/eldoc-overlay"
     :tag "extensions"
-    :hook eldoc-mode-hook
-    :init (sup 'eldoc-overlay))
+    :hook eldoc-mode-hook)
 #+end_src
 
 ** Expand Region                               :marking:region:
@@ -374,8 +340,7 @@ https://github.com/magnars/expand-region.el
     :doc "Emacs extension to increase selected region by semantic units."
     :url "https://github.com/magnars/expand-region.el"
     :tag "marking" "region"
-    :bind ("C-=" . er/expand-region)
-    :init (sup 'expand-region))
+    :bind ("C-=" . er/expand-region))
 #+end_src
 
 ** Find File in Project                   :project:convenience:
@@ -389,8 +354,7 @@ https://github.com/technomancy/find-file-in-project
     :doc "Find file/directory and review Diff/Patch/Commit quickly everywhere."
     :url "https://github.com/technomancy/find-file-in-project"
     :tag "project" "convenience"
-    :custom (ffip-use-rust-fd . t)
-    :init (sup 'find-file-in-project))
+    :custom (ffip-use-rust-fd . t))
 #+end_src
 
 ** ftables                             :convenience:table:text:
@@ -404,8 +368,7 @@ https://github.com/casouri/ftable
   (leaf ftable
     :doc "Fill (auto-layout) tables."
     :url "https://github.com/casouri/ftable"
-    :tag "convenience" "table" "text"
-    :init (sup 'ftable))
+    :tag "convenience" "table" "text")
 #+end_src
 
 ** Git Gutter                                          :vc:git:
@@ -429,8 +392,7 @@ https://github.com/emacsorphanage/git-gutter
              (git-gutter:deleted-sign   . "✘"))
     :bind (("C-x v =" . git-gutter:popup-hunk)
            ("C-x p"   . git-gutter:previous-hunk)
-           ("C-x n"   . git-gutter:next-hunk))
-    :init (sup 'git-gutter))
+           ("C-x n"   . git-gutter:next-hunk)))
 #+end_src
 
 ** Highlight Indent Guides                              :faces:
@@ -446,8 +408,7 @@ https://github.com/DarthFennec/highlight-indent-guides
     :tag "faces"
     :hook (prog-mode-hook text-mode-hook org-mode-hook)
     :custom
-    (highlight-indent-guides-delay . 0.5)
-    :init (sup 'highlight-indent-guides))
+    (highlight-indent-guides-delay . 0.5))
 #+end_src
 
 ** Highlight Tail               :color:effect:highlight:visual:
@@ -461,8 +422,7 @@ https://www.emacswiki.org/emacs/highlight-tail.el
     :doc "This minor-mode draws a tail in real time, when you write."
     :url "https://www.emacswiki.org/emacs/highlight-tail.el"
     :tag "color" "effect" "highlight" "visual"
-    :disabled t
-    :init (sup 'highlight-tail))
+    :disabled t)
 #+end_src
 
 ** hl-line                             :faces:frame:emulations:
@@ -491,8 +451,7 @@ https://github.com/bmag/imenu-list
     :url "https://github.com/bmag/imenu-list"
     :tag "tools" "convenience"
     :bind (("C-." . imenu-list-smart-toggle))
-    :custom (imenu-list-auto-resize . t)
-    :init (sup 'imenu-list))
+    :custom (imenu-list-auto-resize . t))
 #+end_src
 
 ** kind-icon                                       :completion:
@@ -513,7 +472,6 @@ https://github.com/jdtsmith/kind-icon
     :after corfu
     :custom (kind-icon-default-face . 'corfu-default)
     :require t
-    :init (sup 'kind-icon)
     :defer-config (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 
@@ -542,7 +500,7 @@ https://gitlab.com/jabranham/mixed-pitch
         (if mixed-pitch-mode
             (set-face-attribute 'hl-line nil :weight 'unspecified)
           (set-face-attribute 'hl-line nil :weight nasy--hl-line-bold))))
-    :init (sup 'mixed-pitch)
+    :init
     (eval-when-compile
       (defvar nasy--hl-line-bold nil))
     :config
@@ -586,7 +544,6 @@ https://github.com/purcell/mmm-mode
     (mmm-global-mode              . 'maybe)
     (mmm-submode-decoration-level . 2)
     :init
-    (sup 'mmm-mode)
     (when (or nasy--require nasy-pdump)
       (require 'mmm-mode)))
 #+end_src
@@ -611,9 +568,7 @@ https://github.com/magnars/multiple-cursors.el
      ("C-c m c" . mc/edit-lines)
      ("C-c m e" . mc/edit-ends-of-lines)
      ("C-c m a" . mc/edit-beginnings-of-lines))
-    :custom `(mc/list-file . ,(concat *nasy-var* "mc-list.el"))
-    :init
-    (sup 'multiple-cursors))
+    :custom `(mc/list-file . ,(concat *nasy-var* "mc-list.el")))
 #+end_src
 
 ** Persistent Scratch                     :convenience:history:
@@ -629,12 +584,11 @@ https://github.com/Fanael/persistent-scratch
     :doc "Preserve the scratch buffer across Emacs sessions."
     :url "https://github.com/Fanael/persistent-scratch"
     :tag "convenience" "history"
+    :advice (:after persistent-scratch-restore nasy/scratch)
     :custom `((persistent-scratch-save-file
                . ,(concat *nasy-var* "persistent-scratch.el"))
               (persistent-scratch-backup-directory
-               . ,(concat *nasy-var* "persistent-scratch/")))
-    :init (sup 'persistent-scratch)
-    :advice (:after persistent-scratch-restore nasy/scratch))
+               . ,(concat *nasy-var* "persistent-scratch/"))))
 #+end_src
 
 ** Point History                              :editing:history:
@@ -650,8 +604,7 @@ https://github.com/blue0513/point-history
     :tag "editing"
     :hook after-init-hook
     :bind (("C-c C-/" . point-history-show))
-    :custom (point-history-ignore-buffer . "^ \\*Minibuf\\|^ \\*point-history-show*")
-    :init (sup 'point-history))
+    :custom (point-history-ignore-buffer . "^ \\*Minibuf\\|^ \\*point-history-show*"))
 #+end_src
 
 ** Rainbow-Mode                                         :faces:
@@ -676,7 +629,6 @@ https://elpa.gnu.org/packages/rainbow-mode.html
            css-mode-hook
            html-mode-hook
            prog-mode-hook)
-    :init (sup 'rainbow-mode)
     :defer-config
     (eval-when-compile
       (defvar *font-main-family*))
@@ -710,8 +662,7 @@ https://github.com/Fanael/rainbow-delimiters
     :doc "Emacs rainbow delimiters mode"
     :url "https://github.com/Fanael/rainbow-delimiters"
     :tag "convenience" "faces" "lisp" "tools"
-    :hook prog-mode-hook org-src-mode-hook
-    :init (sup 'rainbow-delimiters))
+    :hook prog-mode-hook org-src-mode-hook)
 #+end_src
 
 ** Shellcop                                        :tools:unix:
@@ -726,8 +677,7 @@ https://github.com/redguardtoo/shellcop
     :doc "Analyze errors reported in Emacs builtin shell."
     :url "https://github.com/redguardtoo/shellcop"
     :tag "unix" "tools"
-    :hook (shell-mode-hook . shellcop-start)
-    :init (sup 'shellcop))
+    :hook (shell-mode-hook . shellcop-start))
 #+end_src
 
 ** Smartparens              :abbrev:convenience:editing:parens:
@@ -743,8 +693,7 @@ https://github.com/Fuco1/smartparens
     :url "https://github.com/Fuco1/smartparens"
     :tag "abbrev" "convenience" "editing"
     :hook (after-init-hook . smartparens-global-mode)
-    :custom ((sp-hybrid-kill-entire-symbol . nil))
-    :init (sup 'smartparens))
+    :custom ((sp-hybrid-kill-entire-symbol . nil)))
 #+end_src
 
 ** Symbol Overlay                              :faces:matching:
@@ -766,8 +715,7 @@ https://github.com/wolray/symbol-overlay
            ("M-n"  . symbol-overlay-switch-forward)
            ("M-p"  . symbol-overlay-switch-backward)
            ("<f8>" . symbol-overlay-remove-all)
-           ("<f7>" . symbol-overlay-mode))
-    :init (sup 'symbol-overlay))
+           ("<f7>" . symbol-overlay-mode)))
 #+end_src
 
 ** Treemacs                                 :convenience:files:
@@ -782,8 +730,6 @@ https://github.com/Alexander-Miller/treemacs
     :doc "A tree layout file explorer for Emacs"
     :url "https://github.com/Alexander-Miller/treemacs"
     :tag "convenience" "files"
-    :init
-    (sup 'treemacs)
     :defer-config
     (after-x 'winum
       (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
@@ -844,16 +790,13 @@ https://github.com/Alexander-Miller/treemacs
 
   (leaf treemacs-icons-dired
     :after treemacs dired
-    :init (sup 'treemacs-icons-dired)
     :config (treemacs-icons-dired-mode))
 
   (leaf treemacs-magit
-    :after treemacs magit
-    :init (sup 'treemacs-magit))
+    :after treemacs magit)
 
   (leaf treemacs-projectile
-    :after treemacs projectile
-    :init (sup 'treemacs-projectile))
+    :after treemacs projectile)
 #+end_src
 
 ** Tree Sitter                        :languages:parsers:tools:
@@ -882,13 +825,6 @@ https://ubolonton.github.io/emacs-tree-sitter/
            ruby-mode-hook
            rust-mode-hook
            typescript-mode-hook)
-    :init
-    (sup 'tsc)
-    (sup 'tree-sitter)
-    (sup 'tree-sitter-langs)
-    ;; (nasy/extra-repo tree-sitter-langs
-    ;;                  "emacs-tree-sitter/tree-sitter-langs"
-    ;;                  :files ("*"))
     :defer-config
     (require 'tree-sitter-langs)
     (add-to-list 'tree-sitter-major-mode-language-alist '(mhtml-mode . html))
@@ -909,8 +845,7 @@ https://codeberg.org/FelipeLema/tree-sitter-indent.el.git
     :doc "Use Tree-sitter as backend to source code indentation."
     :url "https://codeberg.org/FelipeLema/tree-sitter-indent.el"
     :tag "convenience" "internal"
-    :hook (tree-sitter-mode-hook)
-    :init (sup 'tree-sitter-indent))
+    :hook (tree-sitter-mode-hook))
 
   (leaf tree-sitter-indent
     :after tree-sitter-indent
@@ -929,8 +864,7 @@ https://github.com/jcs090218/ts-fold
     :doc "Code-folding using tree-sitter."
     :url "https://github.com/jcs090218/ts-fold"
     :tag "folding" "convenience"
-    :bind ("C-c @" . ts-fold-toggle)
-    :init (sup '(ts-fold :type git :host github :repo "jcs090218/ts-fold")))
+    :bind ("C-c @" . ts-fold-toggle))
 #+end_src
 
 ** Undo Propose           :convenience:files:undo:redo:history:
@@ -944,8 +878,7 @@ https://github.com/jackkamm/undo-propose-el
     :doc "Navigate the emacs undo history by staging undo's in a temporary buffer."
     :url "https://github.com/jackkamm/undo-propose-el"
     :tag "convenience" "files" "undo" "redo" "history"
-    :bind (("C-c u" . undo-propose))
-    :init (sup 'undo-propose))
+    :bind (("C-c u" . undo-propose)))
 #+end_src
 
 ** Visual-fill-column                             :convenience:
@@ -967,7 +900,6 @@ https://github.com/joostkremers/visual-fill-column
       TeX-mode-hook
       latex-mode-hook
       LaTeX-mode-hook) . visual-fill-column-mode)
-    :init (sup 'visual-fill-column)
     :mode-hook
     (if visual-fill-column-mode
         (setq split-window-preferred-function #'visual-fill-column-split-window-sensibly)
@@ -1001,8 +933,7 @@ https://github.com/casouri/vundo
     ;; `(vundo-stem      . '((t (:foreground "#50616D"
     ;;                                       :inherit 'vundo-default))))
     :bind
-    ("s-/" . vundo)
-    :init (sup 'vundo))
+    ("s-/" . vundo))
 #+end_src
 
 ** Which Key                                             :help:
@@ -1017,8 +948,7 @@ https://github.com/justbur/emacs-which-key
     :url "https://github.com/justbur/emacs-which-key"
     :tag "help"
     :custom (which-key-allow-imprecise-window-fit . nil)
-    :hook after-init-hook
-    :init (sup 'which-key))
+    :hook after-init-hook)
 #+end_src
 
 ** Writeroom                                             :text:
@@ -1044,8 +974,7 @@ https://github.com/joostkremers/writeroom-mode
          writeroom-set-bottom-divider-width))
     (writeroom-fullscreen-effect . 'maximized)
     (writeroom-maximize-window   . nil)
-    (writeroom-width             . 1.0)
-    :init (sup 'writeroom-mode))
+    (writeroom-width             . 1.0))
 #+end_src
 
 ** yank-pulse                                            :text:
@@ -1094,10 +1023,6 @@ https://github.com/AndreaCrotti/yasnippet-snippets
                yas-reload-all)
     :custom (yas-snippet-dirs . `(,(concat *nasy-etc* "yasnippet/snippets/")))
     :hook (((prog-mode-hook text-mode-hook) . yas-minor-mode))
-    :init
-    (sup 'yasnippet)
-    (sup 'license-snippets)
-    (sup 'yasnippet-snippets)
     :defer-config
     (license-snippets-init)
     (yas-reload-all))

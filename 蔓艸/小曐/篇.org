@@ -32,8 +32,8 @@ Library.
 
   (cl-eval-when (compile) ;;eval-when-compile
     (setq nasy--require t)
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
     (require '擊鼓)
     (require '風雨)
     (require '風雨時用)

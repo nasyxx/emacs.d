@@ -38,32 +38,8 @@ You cannot disable anything here.
 
   ;;; Code:
 
-  (cl-eval-when (compile eval)
-    (setq nasy--require t)
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
-    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
-    (require '擊鼓)
-    (require '風雨)
-    (require '風雨時用)
-
-    (require 'ffap)
-    (require 'winner)
-    (require 'cl-lib)
-    (require 'cl)
-
-    (sup 'alert)
-    (sup 'cape)
-    (sup 'corfu)
-    (sup 'embark)
-    (sup 'flycheck)
-    ;; (sup 'selectrum)
-    (sup '(vertico :files (:defaults "extensions/*")))
-    (sup 'transient)
-    (sup 'which-key)
-    (sup 'whitespace-cleanup-mode)
-    (require 'xref)
-    (setq nasy--require nil))
-
+  (cl-eval-when (compile eval load)
+    (require '緑衣之包))
 #+end_src
 
 * 章
@@ -83,8 +59,7 @@ https://github.com/emacsorphanage/anzu
     :tag "search" "tools"
     :hook ((nasy-first-key-hook . global-anzu-mode))
     :bind (([remap query-replace]        . anzu-query-replace)
-           ([remap query-replace-regexp] . anzu-query-replace-regexp))
-    :init (sup 'anzu))
+           ([remap query-replace-regexp] . anzu-query-replace-regexp)))
 #+end_src
 
 ** Avy                                         :point:location:
@@ -108,8 +83,7 @@ https://github.com/abo-abo/avy
     ("M-g e"   . avy-goto-word-0)
     ("M-g w"   . avy-goto-word-1)
     ;; ("C-~"     . avy-goto-word-1)
-    ("C-c C-j" . avy-resume)
-    :init (sup 'avy))
+    ("C-c C-j" . avy-resume))
 #+end_src
 
 ** Beginend                                           :editing:
@@ -123,8 +97,7 @@ https://github.com/DamienCassou/beginend
     :doc "Emacs package to redefine M-< and M-> for some modes"
     :url "https://github.com/DamienCassou/beginend"
     :tag "editing"
-    :hook ((emacs-startup-hook . beginend-global-mode))
-    :init (sup 'beginend))
+    :hook ((emacs-startup-hook . beginend-global-mode)))
 #+end_src
 
 ** Compile                                            :builtin:
@@ -173,7 +146,6 @@ Include consult & consult-flycheck.
     :url "https://github.com/minad/consult"
     :tag "extensions"
     :after vertico
-    :require t recentf
     :custom
     `(consult-narrow-key . ,(kbd "C-."))
     :bind
@@ -191,7 +163,6 @@ Include consult & consult-flycheck.
 
     (("C-s"   . consult-line)
      ("C-S-s" . nasy/consult-line-symbol-at-point))
-    :init (sup 'consult)
     :defer-config
     (consult-customize
      consult-theme
@@ -219,8 +190,7 @@ Include consult & consult-flycheck.
     :tag "extensions"
     :after consult
     :bind (:flycheck-command-map
-           ("!" . consult-flycheck))
-    :init (sup 'consult-flycheck))
+           ("!" . consult-flycheck)))
 #+end_src
 
 *** consult-dir                                    :convenience:
@@ -246,8 +216,7 @@ https://github.com/karthink/consult-dir
     ;;  ("C-x C-j" . consult-dir-jump-file))
     (:vertico-map
      ("C-x C-d" . consult-dir)
-     ("C-x C-j" . consult-dir-jump-file))
-    :init (sup 'consult-dir))
+     ("C-x C-j" . consult-dir-jump-file)))
 #+end_src
 
 ** Dired                                                :files:
@@ -286,7 +255,6 @@ https://github.com/leoliu/easy-kill
     :doc "Kill & Mark Things Easily in Emacs."
     :url "https://github.com/leoliu/easy-kill"
     :tag "killing" "convenience"
-    :init (sup 'easy-kill)
     :bind (([remap kill-ring-save] . easy-kill)
            ([remap mark-sexp]      . easy-mark)))
 #+end_src
@@ -309,8 +277,7 @@ https://gitlab.com/ideasman42/emacs-spatial-navigate
            ("<M-up>" . spatial-navigate-backward-vertical-box)
            ("<M-down>" . spatial-navigate-forward-vertical-box)
            ("<H-left>" . spatial-navigate-backward-horizontal-box)
-           ("<H-right>" . spatial-navigate-forward-horizontal-box))
-    :init (sup 'spatial-navigate))
+           ("<H-right>" . spatial-navigate-forward-horizontal-box)))
 #+end_src
 
 ** embark                                         :convenience:
@@ -389,7 +356,6 @@ https://github.com/oantolin/embark/
     ;;      embark-highlight-indicator
     ;;      embark-isearch-highlight-indicator))
     :hook (embark-collect-mode-hook . embark-live-vertico)
-    :init (sup 'embark)
     :config
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
@@ -401,8 +367,7 @@ https://github.com/oantolin/embark/
   (leaf embark-consult
     :after embark consult
     :require t
-    :hook (embark-collect-mode-hook . consult-preview-at-point-mode)
-    :init (sup 'embark-consult))
+    :hook (embark-collect-mode-hook . consult-preview-at-point-mode))
 #+end_src
 
 ** Flycheck                       :convenience:languages:tools:
@@ -414,7 +379,6 @@ Modern on-the-fly syntax checking extension for GNU Emacs.
 https://github.com/flycheck/flycheck
 
 #+begin_src emacs-lisp
-  (sup 'flycheck)
   (leaf flycheck
     :doc "On the fly syntax checking for GNU Emacs."
     :url "https://github.com/flycheck/flycheck"
@@ -432,7 +396,6 @@ https://github.com/flycheck/flycheck
      ("RET" . flycheck-error-list-goto-error)
      ([return] . flycheck-error-list-goto-error))
     :init
-    (sup 'flycheck)
     (add-to-list 'display-buffer-alist
                  `(,(rx bos "*Flycheck errors*" eos)
                    (display-buffer-reuse-window
@@ -469,8 +432,7 @@ https://github.com/Wilfred/helpful
     :bind (("C-c d" . helpful-at-point)
            ([remap describe-function]   . helpful-callable)
            ([remap describe-variable]   . helpful-variable)
-           ([remap describe-key]        . helpful-key))
-    :init (sup 'helpful))
+           ([remap describe-key]        . helpful-key)))
 #+end_src
 
 *** elisp-demos
@@ -480,7 +442,6 @@ https://github.com/Wilfred/helpful
     :doc "Demonstrate Emacs Lisp APIs."
     :url "https://github.com/xuchunyang/elisp-demos"
     :tag "lisp" "docs"
-    :init (sup 'elisp-demos)
     :advice (:after helpful-update elisp-demos-advice-helpful-update))
 #+end_src
 
@@ -526,8 +487,7 @@ https://github.com/dacap/keyfreq
          self-insert-command
          yank))
     :hook (nasy-first-key-hook)
-    :mode-hook (keyfreq-autosave-mode 1)
-    :init (sup 'keyfreq))
+    :mode-hook (keyfreq-autosave-mode 1))
 #+end_src
 
 ** marginalia                                      :extensions:
@@ -545,14 +505,12 @@ https://github.com/minad/marginalia
     :bind (:minibuffer-local-map
            ("M-a" . marginalia-cycle))
     :init
-    (sup 'marginalia)
     (marginalia-mode 1))
 #+end_src
 
 #+begin_src emacs-lisp
   (leaf all-the-icons-completion
-    :hook (marginalia-mode-hook . all-the-icons-completion-marginalia-setup)
-    :init (sup 'all-the-icons-completion))
+    :hook (marginalia-mode-hook . all-the-icons-completion-marginalia-setup))
 #+end_src
 
 ** Orderless                                       :extensions:
@@ -584,10 +542,7 @@ https://github.com/oantolin/orderless
     (orderless-style-dispatchers   . '(nasy/-orderless-dispatch))
     (orderless-component-separator . "[ &·]")
     (completion-category-defaults  . nil)
-    (completion-category-overrides . '((file (styles partial-completion))))
-
-    :init
-    (sup 'orderless))
+    (completion-category-overrides . '((file (styles partial-completion)))))
 
 
   (defun nasy/-orderless-dispatch (pattern _index _total)
@@ -642,8 +597,7 @@ https://github.com/purcell/page-break-lines
              (nasy/change-char-width page-break-lines-char 2)
              (nasy/set-symbol ?⊸ 18 nil)))))
     :custom
-    (page-break-lines-char . ?⊸)
-    :init (sup 'page-break-lines))
+    (page-break-lines-char . ?⊸))
 #+end_src
 
 ** Parens                      :faces:languages:parens:builtin:
@@ -677,7 +631,6 @@ https://github.com/bbatsov/projectile
     (projectile-indexing-method          . 'hybrid)
     (projectile-require-project-root     . 'prompt)
     (projectile-ignored-project-function . #'nasy/p-ignore-p)
-    :init (sup 'projectile)
     :config
     (setq projectile-project-root-files-top-down-recurring
            (append '("compile_commands.json"
@@ -784,8 +737,7 @@ https://www.emacswiki.org/emacs/RecentFiles
          (shell-command-history    . 50)
          tags-file-name
          tags-table-list
-         kill-ring))
-    :init (sup 'session))
+         kill-ring)))
 #+end_src
 
 ** Subword                                            :builtin:
@@ -806,8 +758,7 @@ https://github.com/nflath/sudo-edit
   (leaf sudo-edit
     :doc "Utilities for opening files with sudo."
     :url "https://github.com/nflath/sudo-edit"
-    :tag "convenience"
-    :init (sup 'sudo-edit))
+    :tag "convenience")
 #+end_src
 
 ** switch-window                                  :convenience:
@@ -847,8 +798,7 @@ https://github.com/dimitri/switch-window
         ("b" "Split window below" split-window-below)
         ("|" "Split window horizontally" split-window-horizontally-instead)
         ("_" "Split window vertically" split-window-vertically-instead)
-        ("x" "Split window show recently" nasy/split-window)]])
-    :init (sup 'switch-window))
+        ("x" "Split window show recently" nasy/split-window)]]))
 #+end_src
 
 ** Tempo                                              :builtin:
@@ -898,8 +848,7 @@ https://github.com/purcell/unfill
     :doc "Functions providing the inverse of Emacs' fill-paragraph and fill-region"
     :url "https://github.com/purcell/unfill"
     :tag "convenience"
-    :bind (("M-q" . unfill-toggle))
-    :init (sup 'unfill))
+    :bind (("M-q" . unfill-toggle)))
 #+end_src
 
 ** Uniquify                                     :builtin:files:
@@ -933,8 +882,7 @@ https://github.com/casouri/valign
     :doc "Pixel-perfect visual alignment for Org and Markdown tables."
     :url "https://github.com/casouri/valign"
     :tag "convenience" "table" "text"
-    :hook (markdown-mode-hook)
-    :init (sup 'valign))
+    :hook (markdown-mode-hook))
 #+end_src
 
 ** Vertico                              :completion:extensions:
@@ -974,7 +922,6 @@ https://github.com/minad/vertico
     :hook
     (nasy-first-key-hook)
     (minibuffer-setup-hook . vertico-repeat-save)
-    :init (sup '(vertico :files (:defaults "extensions/*")))
     :mode-hook
     (vertico-mouse-mode 1)
     (after-x '風雨時用
@@ -997,7 +944,6 @@ https://github.com/m00natic/vlfi
     :leaf-defun t
     :commands ffap-vlf
     :init
-    (sup 'vlf)
     (defun ffap-vlf ()
       "Find file at point with VLF."
       (interactive)
@@ -1019,8 +965,7 @@ https://github.com/mhayashi1120/Emacs-wgrep
   (leaf wgrep
     :doc "Writable grep buffer and apply the changes to files."
     :url "https://github.com/mhayashi1120/Emacs-wgrep"
-    :tag "editing" "extensions" "grep"
-    :init (sup 'wgrep))
+    :tag "editing" "extensions" "grep")
 #+end_src
 
 ** Which Function                                     :builtin:
@@ -1048,7 +993,6 @@ https://github.com/purcell/whitespace-cleanup-mode
 
   (leaf whitespace
     :tag "data" "wp"
-    :init
     :hook
     ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
     ((artist-mode-hook
@@ -1064,7 +1008,6 @@ https://github.com/purcell/whitespace-cleanup-mode
       minibuffer-setup-hook
       fundamental-mode) . no-trailing-whitespace))
 
-  (sup 'whitespace-cleanup-mode)
   (leaf whitespace-cleanup-mode
     :doc "In Emacs, intelligently call whitespace-cleanup on save."
     :url "https://github.com/purcell/whitespace-cleanup-mode"
@@ -1077,8 +1020,7 @@ https://github.com/purcell/whitespace-cleanup-mode
               space-after-tab space-before-tab
               space-mark tab-mark newline-mark))
     :hook (text-mode-hook prog-mode-hook)
-    :bind (("<remap> <just-one-space>" . cycle-spacing))
-    :init (sup 'whitespace-cleanup-mode))
+    :bind (("<remap> <just-one-space>" . cycle-spacing)))
 #+end_src
 
 ** xref                                               :builtin:
