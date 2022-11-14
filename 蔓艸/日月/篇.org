@@ -39,9 +39,21 @@ Applications.
   ;; 無關 Emacs 者也用之亦可弃置亦可
 
   ;;; Code:
+  (cl-eval-when (compile)
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/風雨"))
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/緑衣"))
+    (require '擊鼓)
+    (require '風雨)
+    (require '風雨時用)
+    (require '緑衣)
 
-  (cl-eval-when (compile eval load)
-    (require '日月之包))
+    (require 'vc-git)
+
+    (sup 'rime t)
+    (sup 'magit t)(with-no-warnings
+                   (setq vterm-always-compile-module t))
+    (sup 'vterm t))
 #+end_src
 
 * 章
@@ -53,12 +65,12 @@ A Growl-like alerts notifier for Emacs
 https://github.com/jwiegley/alert
 
 #+begin_src emacs-lisp
-  (leaf alert
-    :doc "A Growl-like alerts notifier for Emacs."
-    :url "https://github.com/jwiegley/alert"
-    :tag "notification" "emacs" "message"
-    :custom
-    (alert-default-style . 'osx-notifier))
+  (setup alert
+    (:doc "A Growl-like alerts notifier for Emacs.")
+    (:url "https://github.com/jwiegley/alert")
+    (:tag "notification" "emacs" "message")
+    (:custom
+     alert-default-style 'osx-notifier))
 #+end_src
 
 ** Carbon Now sh                                  :convenience:
@@ -70,10 +82,10 @@ https://github.com/veelenga/carbon-now-sh.el
 Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>@@
 
 #+begin_src emacs-lisp
-  (leaf carbon-now-sh
-    :doc "Emacs to carbon.now.sh integration."
-    :url "https://github.com/veelenga/carbon-now-sh.el"
-    :tag "convenience")
+  (setup carbon-now-sh
+    (:doc "Emacs to carbon.now.sh integration.")
+    (:url "https://github.com/veelenga/carbon-now-sh.el")
+    (:tag "convenience"))
 #+end_src
 
 ** Cheat Sh                                         :docs:help:
@@ -83,10 +95,10 @@ Simple Emacs interface for cheat.sh.
 https://github.com/davep/cheat-sh.el
 
 #+begin_src emacs-lisp
-  (leaf cheat-sh
-    :doc "Simple Emacs interface for cheat.sh"
-    :url "https://github.com/davep/cheat-sh.el"
-    :tag "docs" "help")
+  (setup cheat-sh
+    (:doc "Simple Emacs interface for cheat.sh")
+    (:url "https://github.com/davep/cheat-sh.el")
+    (:tag "docs" "help"))
 #+end_src
 
 ** Emacs Rime                         :convenience:inputmethod:
@@ -96,61 +108,50 @@ RIME ㄓ in Emacs
 https://github.com/DogLooksGood/emacs-rime
 
 #+begin_src emacs-lisp
-  (leaf rime
-    :doc "RIME ㄓ in Emacs"
-    :url "https://github.com/DogLooksGood/emacs-rime"
-    :tag "convenience" "input-method"
-    :custom (default-input-method  . "rime")
-    :hook (nasy-first-key-hook . (lambda () (require 'rime))))
+  (setup rime
+    (:doc "RIME ㄓ in Emacs")
+    (:url "https://github.com/DogLooksGood/emacs-rime")
+    (:tag "convenience" "input-method")
+    (:custom default-input-method "rime")
+    (:first-key (lambda () (require 'rime))))
 
-  ;; (defvar nasy-rime-candidate-labels
-  ;;   '("〡" "〢" "〣" "〤" "〥" "〦" "〧" "〨" "〩"))
-
-  ;; (defun nasy/rime--candidate-num-format (num)
-  ;;   (format "%s. " (nth (- num 1) nasy-rime-candidate-labels)))
-
-  (leaf rime
-
-
-    :after rime
-    :bind
-    ("C-M-¥"  . toggle-input-method)
-    (:rime-mode-map
-     ("C-`"   . rime-send-keybinding)
-     ("C-S-`" . rime-send-keybinding)
-     ("C-,"   . rime-send-keybinding))
-    (:rime-active-mode-map
-     ("C-;"   . rime-send-keybinding)
-     ("C-SPC" . rime-send-keybinding))
-    :custom
-    `(rime-librime-root    . ,(expand-file-name "~/.macports"))
-    `(rime-user-data-dir   . ,(expand-file-name "~/.config/rime"))
-    (rime-cursor           . "˰")
-    (rime-show-candidate   . 'posframe)
-    (rime-posframe-style   . 'vertical)
-    (rime-show-preedit     . 't)
-    ;; (rime-show-candidate   . 'sidewindow)
-    ;; (rime-sidewindow-keep-window . t)
-    ;; (rime-sidewindow-style . 'horizontal)
-    ;; (rime-sidewindow-side  . 'top)
-    ;; (rime-candidate-num-format-function
-    ;;  . #'nasy/rime--candidate-num-format)
-    (rime-translate-keybindings
-     . '("C-f"
-         "C-b"
-         "C-n"
-         "C-p"
-         "C-g"
-         "C-`"
-         "C-;"
-         "C-SPC"
-         "<left>"
-         "<right>"
-         "<up>"
-         "<down>"
-         "<prior>"
-         "<next>"
-         "<delete>")))
+  (setup rime
+    (:global
+     "C-M-¥" toggle-input-method)
+    (:bind-into rime-mode-map
+     "C-`"   rime-send-keybinding
+     "C-S-`" rime-send-keybinding
+     "C-,"   rime-send-keybinding)
+    (:bind-into rime-active-mode-map
+     "C-;"   rime-send-keybinding
+     "C-SPC" rime-send-keybinding)
+    (:custom
+     rime-librime-root  (expand-file-name "~/.macports")
+     rime-user-data-dir (expand-file-name "~/.config/rime")
+     rime-cursor         "˰"
+     rime-show-candidate 'posframe
+     rime-posframe-style 'vertical
+     rime-show-preedit   't
+     ;; rime-show-candidate           'sidewindow
+     ;; rime-sidewindow-keep-window   t
+     ;; rime-sidewindow-style         'horizontal
+     ;; rime-sidewindow-side          'top
+     rime-translate-keybindings
+     '("C-f"
+       "C-b"
+       "C-n"
+       "C-p"
+       "C-g"
+       "C-`"
+       "C-;"
+       "C-SPC"
+       "<left>"
+       "<right>"
+       "<up>"
+       "<down>"
+       "<prior>"
+       "<next>"
+       "<delete>")))
 #+end_src
 
 ** ESUP -- Emacs Start Up Profiler :benchmark:convenience:processes:
@@ -160,11 +161,11 @@ Benchmark Emacs Startup time without ever leaving your Emacs.
 https://github.com/jschaf/esup
 
 #+begin_src emacs-lisp
-  (leaf esup
-    :doc "Benchmark Emacs Startup time without ever leaving your Emacs."
-    :url "https://github.com/jschaf/esup"
-    :tag "benchmark" "convenience" "processes"
-    :init (sup 'esup))
+  (setup esup
+    (:doc "Benchmark Emacs Startup time without ever leaving your Emacs.")
+    (:url "https://github.com/jschaf/esup")
+    (:tag "benchmark" "convenience" "processes")
+    (:opt esup-depth 1))
 #+end_src
 
 ** explain-pause-mode                :performance:config:speed:
@@ -174,10 +175,10 @@ top, but for Emacs.
 https://github.com/lastquestion/explain-pause-mode
 
 #+begin_src emacs-lisp
-  (leaf explain-pause-mode
-    :doc "top, but for Emacs."
-    :url "https://github.com/lastquestion/explain-pause-mode"
-    :tag "performance" "speed" "config")
+  (setup explain-pause-mode
+    (:doc "top, but for Emacs.")
+    (:url "https://github.com/lastquestion/explain-pause-mode")
+    (:tag "performance" "speed" "config"))
 #+end_src
 
 ** Grab Mac Link                                :mac:hyperlink:
@@ -187,11 +188,11 @@ Grab link from Mac Apps and insert it into Emacs.
 https://github.com/xuchunyang/grab-mac-link.el
 
 #+begin_src emacs-lisp
-  (leaf grab-mac-link
-    :doc "Grab link from Mac Apps."
-    :url "https://github.com/xuchunyang/grab-mac-link.el"
-    :tag "mac" "hyperlink"
-    :when *is-a-mac*)
+  (setup grab-mac-link
+    (:only-if *is-a-mac*)
+    (:doc "Grab link from Mac Apps.")
+    (:url "https://github.com/xuchunyang/grab-mac-link.el")
+    (:tag "mac" "hyperlink"))
 #+end_src
 
 ** Htmlize                              :hypermedia:extensions:
@@ -201,11 +202,11 @@ Convert buffer text and decorations to HTML.
 https://github.com/hniksic/emacs-htmlize
 
 #+begin_src emacs-lisp
-  (leaf htmlize
-    :doc "Convert buffer text and decorations to HTML."
-    :url "https://github.com/hniksic/emacs-htmlize"
-    :tag "hypermedia" "extensions"
-    :custom (htmlize-pre-style . t))
+  (setup htmlize
+    (:doc "Convert buffer text and decorations to HTML.")
+    (:url "https://github.com/hniksic/emacs-htmlize")
+    (:tag "hypermedia" "extensions")
+    (:custom htmlize-pre-style t))
 #+end_src
 
 ** indent-tools                        :indentation:navigation:
@@ -216,12 +217,11 @@ yaml, python and the like.
 https://gitlab.com/emacs-stuff/indent-tools
 
 #+begin_src emacs-lisp
-  (leaf indent-tools
-    :doc "Emacs mode to indent, navigate around and act on indentation units:
-  perfect for yaml, python and the like."
-    :url "https://gitlab.com/emacs-stuff/indent-tools"
-    :tag "indentation" "navigation"
-    :bind (("C-c TAB" . indent-tools-hydra/body)))
+  (setup indent-tools
+    (:doc "Emacs mode to indent, navigate around and act on indentation units: perfect for yaml, python and the like.")
+    (:url "https://gitlab.com/emacs-stuff/indent-tools")
+    (:tag "indentation" "navigation")
+    (:global "C-c TAB" indent-tools-hydra/body))
 #+end_src
 
 ** List Unicode Display                           :convenience:
@@ -232,12 +232,12 @@ list of matching characters with their names in a buffer.
 https://github.com/purcell/list-unicode-display
 
 #+begin_src emacs-lisp
-  (leaf list-unicode-display
-    :doc "Search for and list unicode characters in Emacs.
+  (setup list-unicode-display
+    (:doc "Search for and list unicode characters in Emacs.
 
-  `list-unicode-display'"
-    :url "https://github.com/purcell/list-unicode-display"
-    :tag "convenience")
+  `list-unicode-display'")
+    (:url "https://github.com/purcell/list-unicode-display")
+    (:tag "convenience"))
 #+end_src
 
 ** Magit                                         :git:tools:vc:
@@ -260,25 +260,25 @@ https://github.com/magit/magit
     (setq nasy--magit-first-key-hook nasy-magit-first-key-hook)
     (nasy/run-hook-once-on 'nasy--magit-first-key-hook 'pre-command-hook))
 
-  (leaf magit
-    :doc "It's Magit! A Git porcelain inside Emacs."
-    :url "https://github.com/magit/magit"
-    :tag "git" "tools" "vc"
-    :leaf-autoload t
-    :leaf-defun t
-    :commands magit-status
-    :hook ((magit-popup-mode-hook . no-trailing-whitespace))
-    :mode-hook (nasy/load-magit)
-    :bind (([(meta f12)] . magit-status)  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
-           ("C-x g"      . magit-status)
-           ("C-x M-g"    . magit-dispatch)
-           ("C-c M-g"    . magit-file-dispatch)
-           (:magit-mode-map
-            ("s" . magit-stage))
-           (:magit-status-mode-map
-            ("C-M-<up>"  . magit-section-up))
-           (:vc-prefix-map
-            ("f"         . vc-git-grep))))
+  (setup magit
+    (:doc "It's Magit! A Git porcelain inside Emacs.")
+    (:url "https://github.com/magit/magit")
+    (:tag "git" "tools" "vc")
+    (:autoload magit-status)
+    (:with-hook magit-popup-mode-hook
+      (:hook no-trailing-whitespace))
+    (:mode-hook (nasy/load-magit))
+    (:global
+     [(meta f12)] magit-status  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
+     "C-x g"      magit-status
+     "C-x M-g"    magit-dispatch
+     "C-c M-g"    magit-file-dispatch)
+    (:bind-into magit-mode-map
+      "s" magit-stage)
+    (:bind-into magit-status-mode-map
+      "C-M-<up>" magit-section-up)
+    (:bind-into vc-prefix-map
+      "f" vc-git-grep))
 #+end_src
 
 *** Forge                                         :git:tools:vc:
@@ -288,14 +288,14 @@ Work with Git forges from the comfort of Magit.
 https://github.com/magit/forge
 
 #+begin_src emacs-lisp
-  (leaf forge
-    :doc "Work with Git forges from the comfort of Magit."
-    :url "https://github.com/magit/forge"
-    :tag "git" "tools" "vc"
-    :after magit
-    :custom
-    `((forge-database-file . ,(concat *nasy-var* "forge/database.sqlite"))
-      (forge-post-directory . ,(concat *nasy-var* "forge/posts/"))))
+  (setup forge
+    (:doc "Work with Git forges from the comfort of Magit.")
+    (:url "https://github.com/magit/forge")
+    (:tag "git" "tools" "vc")
+    (:load-first magit)
+    (:custom
+     forge-database-file  (concat *nasy-var* "forge/database.sqlite")
+     forge-post-directory (concat *nasy-var* "forge/posts/")))
 #+end_src
 
 *** Magit Delta                                   :git:tools:vc:
@@ -303,19 +303,18 @@ https://github.com/magit/forge
 https://github.com/dandavison/magit-delta
 
 #+begin_src emacs-lisp
-  (leaf magit-delta
-    :doc "Use delta (dandavison/delta) when viewing diffs in Magit."
-    :url "https://github.com/dandavison/magit-delta"
-    :tag "git" "tools" "vc"
-    :when (executable-find "delta")
-    :after magit
-    :custom
-    (magit-delta-default-light-theme . "Solarized (light)")
-    (magit-delta-delta-args
-     . '("--max-line-distance"
-         "0.6" "--24-bit-color"
-         "always" "--color-only"))
-    :hook (magit-mode-hook . magit-delta-mode))
+  (setup magit-delta
+    (:doc "Use delta (dandavison/delta) when viewing diffs in Magit.")
+    (:url "https://github.com/dandavison/magit-delta")
+    (:tag "git" "tools" "vc")
+    (:only-if (executable-find "delta"))
+    (:load-first magit)
+    (:custom
+     magit-delta-default-light-theme "Solarized (light)"
+     magit-delta-delta-args '("--max-line-distance"
+                              "0.6" "--24-bit-color"
+                              "always" "--color-only"))
+    (:hook-into magit-mode-hook))
 #+end_src
 
 *** Magit Org Todos                        :magit:orgmode:tools:
@@ -325,12 +324,12 @@ Get `todo.org` into your magit status.
 https://github.com/danielma/magit-org-todos.el
 
 #+begin_src emacs-lisp
-  (leaf magit-org-todos
-    :doc "Get `todo.org` into your magit status"
-    :url "https://github.com/danielma/magit-org-todos.el"
-    :tag "magit" "orgmode" "tools"
-    :after magit
-    :config (magit-org-todos-autoinsert))
+  (setup magit-org-todos
+    (:doc "Get `todo.org` into your magit status")
+    (:url "https://github.com/danielma/magit-org-todos.el")
+    (:tag "magit" "orgmode" "tools")
+    (:load-first magit)
+    (:when-loaded (magit-org-todos-autoinsert)))
 #+end_src
 
 *** Magit Todos                                       :magit:vc:
@@ -340,12 +339,12 @@ Show source files' TODOs (and FIXMEs, etc) in Magit status buffer.
 https://github.com/alphapapa/magit-todos
 
 #+begin_src emacs-lisp
-  (leaf magit-todos
-    :doc "Show source files' TODOs (and FIXMEs, etc) in Magit status buffer."
-    :url "https://github.com/alphapapa/magit-todos"
-    :tag "magit" "vc"
-    :after magit
-    :custom (magit-todos-exclude-globs . '("*.map")))
+  (setup magit-todos
+    (:doc "Show source files' TODOs (and FIXMEs, etc) in Magit status buffer.")
+    (:url "https://github.com/alphapapa/magit-todos")
+    (:tag "magit" "vc")
+    (:load-first magit)
+    (:custom magit-todos-exclude-globs '("*.map")))
 #+end_src
 
 ** PDF Tools                                 :files:multimedia:
@@ -355,32 +354,11 @@ PDF Tools is, among other things, a replacement of DocView for PDF files.
 https://github.com/politza/pdf-tools
 
 #+begin_src emacs-lisp
-  (leaf pdf-tools
-    :doc "Emacs support library for PDF files."
-    :url "https://github.com/politza/pdf-tools"
-    :tag "files" "multimedia"
-    ;; :bind (:pdf-view-mode-map
-    ;;        ("\\" . hydra-pdftools/body)
-    ;;        ("<s-spc>" .  pdf-view-scroll-down-or-next-page)
-    ;;        ("g"  . pdf-view-first-page)
-    ;;        ("G"  . pdf-view-last-page)
-    ;;        ("l"  . image-forward-hscroll)
-    ;;        ("h"  . image-backward-hscroll)
-    ;;        ("j"  . pdf-view-next-page)
-    ;;        ("k"  . pdf-view-previous-page)
-    ;;        ("e"  . pdf-view-goto-page)
-    ;;        ("u"  . pdf-view-revert-buffer)
-    ;;        ("al" . pdf-annot-list-annotations)
-    ;;        ("ad" . pdf-annot-delete)
-    ;;        ("aa" . pdf-annot-attachment-dired)
-    ;;        ("am" . pdf-annot-add-markup-annotation)
-    ;;        ("at" . pdf-annot-add-text-annotation)
-    ;;        ("y"  . pdf-view-kill-ring-save)
-    ;;        ("i"  . pdf-misc-display-metadata)
-    ;;        ("s"  . pdf-occur)
-    ;;        ("b"  . pdf-view-set-slice-from-bounding-box)
-    ;;        ("r"  . pdf-view-reset-slice))
-    :custom (pdf-view-display-size . 'fit-width))
+  (setup pdf-tools
+    (:doc "Emacs support library for PDF files.")
+    (:url "https://github.com/politza/pdf-tools")
+    (:tag "files" "multimedia")
+    (:custom pdf-view-display-size 'fit-width))
 #+end_src
 
 ** Prettier                       :convenience:files:languages:
@@ -391,11 +369,10 @@ with minimal overhead, by request or transparently on file save.
 https://github.com/jscheid/prettier.el
 
 #+begin_src emacs-lisp
-  (leaf prettier
-    :doc "Prettier code formatting for Emacs."
-    :url "https://github.com/jscheid/prettier.el"
-    :tag "convenience" "files" "languages"
-    :init (sup 'prettier))
+  (setup prettier
+    (:doc "Prettier code formatting for Emacs.")
+    (:url "https://github.com/jscheid/prettier.el")
+    (:tag "convenience" "files" "languages"))
 #+end_src
 
 ** vterm                                            :terminals:
@@ -408,12 +385,11 @@ https://github.com/akermu/emacs-libvterm
   (eval-and-compile
     (with-no-warnings
       (setq vterm-always-compile-module t)))
-  (leaf vterm
-    :doc "Emacs libvterm integration."
-    :url "https://github.com/akermu/emacs-libvterm"
-    :tag "terminals"
-    :custom (vterm-always-compile-module . t)
-    :init (sup 'vterm))
+  (setup vterm
+    (:doc "Emacs libvterm integration.")
+    (:url "https://github.com/akermu/emacs-libvterm")
+    (:tag "terminals")
+    (:custom vterm-always-compile-module t))
 #+end_src
 
 ** vterm-toggle                                     :terminals:
@@ -423,25 +399,25 @@ Toggles between the vterm buffer and whatever buffer you are editing.
 https://github.com/jixiuf/vterm-toggle
 
 #+begin_src emacs-lisp
-  (leaf vterm-toggle
-    :doc "Toggles between the vterm buffer and whatever buffer you are editing."
-    :url "https://github.com/jixiuf/vterm-toggle"
-    :tag "terminals"
-    :bind (("C-<f2>" . vterm-toggle)
-           (:vterm-mode-map
-            ("s-n" . vterm-toggle-forward)
-            ("s-p" . vterm-toggle-backward)))
-    :custom (vterm-toggle-fullscreen-p . nil)
-    :init
-    (defvar native-comp-deferred-compilation-deny-list)
-    (sup '(vterm-toggle :build (:not native-compile)))
-    (add-to-list 'display-buffer-alist
-                 '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
-                   (display-buffer-reuse-window display-buffer-in-side-window)
-                   (side . bottom)
-                   (dedicated . t) ;dedicated is supported in emacs27
-                   (reusable-frames . visible)
-                   (window-height . 0.3))))
+  (setup vterm-toggle
+    (:doc "Toggles between the vterm buffer and whatever buffer you are editing.")
+    (:url "https://github.com/jixiuf/vterm-toggle")
+    (:tag "terminals")
+    (:global
+     "C-<f2>" vterm-toggle)
+    (:bind-into vterm-mode-map
+     "s-n" vterm-toggle-forward
+     "s-p" vterm-toggle-backward)
+    (:custom vterm-toggle-fullscreen-p nil)
+    (:when-loaded
+      (add-to-list
+       'display-buffer-alist
+       '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+         (display-buffer-reuse-window display-buffer-in-side-window)
+         (side . bottom)
+         (dedicated . t) ;dedicated is supported in emacs27
+         (reusable-frames . visible)
+         (window-height . 0.3)))))
 #+end_src
 
 ** Wakatime-mode                                :calendar:comm:
@@ -451,12 +427,11 @@ https://github.com/jixiuf/vterm-toggle
 https://github.com/wakatime/wakatime-mode
 
 #+begin_src emacs-lisp
-  (leaf wakatime-mode
-    :doc "Emacs plugin for automatic time tracking and metrics generated from your programming activity."
-    :url "https://github.com/wakatime/wakatime-mode"
-    :tag "calendar" "comm"
-    :hook (nasy-first-key-hook . global-wakatime-mode)
-    :init (sup 'wakatime-mode))
+  (setup wakatime-mode
+    (:doc "Emacs plugin for automatic time tracking and metrics generated from your programming activity.")
+    (:url "https://github.com/wakatime/wakatime-mode")
+    (:tag "calendar" "comm")
+    (:first-key global-wakatime-mode))
 #+end_src
 
 * 結                                                :noexport:

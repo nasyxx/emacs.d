@@ -30,12 +30,14 @@ Library.
 
   ;;; Code:
 
-  (cl-eval-when (compile)
-    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓"))
-    (add-to-list 'load-path (locate-user-emacs-file "桃夭/風雨"))
+  (cl-eval-when (compile) ;;eval-when-compile
+    (setq nasy--require t)
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
     (require '擊鼓)
     (require '風雨)
-    (require '風雨時用))
+    (require '風雨旹用)
+    (setq nasy--require nil))
 #+end_src
 
 * 章
@@ -43,11 +45,10 @@ Library.
 ** all-the-icons
 
 #+begin_src emacs-lisp
-  (setup all-the-icons
-    (:custom all-the-icons-scale-factor 1)
-    (:with-hook nasy--defer-load-hook
-      (:hook (lambda () (require 'all-the-icons))))
-    (:init (add-to-list 'nasy--defer-loads 'all-the-icons)))
+  (leaf all-the-icons
+    :custom (all-the-icons-scale-factor . 1)
+    :hook (nasy--defer-load-hook . (lambda () (require 'all-the-icons)))
+    :init (add-to-list 'nasy--defer-loads 'all-the-icons))
 #+end_src
 
 ** Dash                                                 :lists:
@@ -57,15 +58,16 @@ A modern list library for Emacs.
 https://github.com/magnars/dash.el
 
 #+begin_src emacs-lisp
-  (setup dash
-    (:doc "A modern list library for Emacs.")
-    (:url "https://github.com/magnars/dash.el")
-    (:tag "lists")
-    (:autoload global-dash-fontify-mode)
-    (:with-hook nasy--defer-load-hook
-      (:hook (lambda () (require 'dash))))
-    (:init (add-to-list 'nasy--defer-loads 'dash))
-    (:when-loaded (global-dash-fontify-mode 1)))
+  (leaf dash
+    :doc "A modern list library for Emacs."
+    :url "https://github.com/magnars/dash.el"
+    :tag "lists"
+    :leaf-autoload t
+    :leaf-defun t
+    :commands global-dash-fontify-mode
+    :hook (nasy--defer-load-hook . (lambda () (require 'dash)))
+    :init (add-to-list 'nasy--defer-loads 'dash)
+    :defer-config (global-dash-fontify-mode 1))
 #+end_src
 
 ** Reformatter                              :convenience:tools:
@@ -77,13 +79,12 @@ mode which can apply this command automatically on save.
 https://github.com/purcell/emacs-reformatter
 
 #+begin_src emacs-lisp
-  (setup reformatter
-    (:doc "Define commands which run reformatters on the current Emacs buffer.")
-    (:url "https://github.com/purcell/emacs-reformatter")
-    (:tag "convenience" "tools")
-    (:with-hook nasy--defer-load-hook
-      (:hook (lambda () (require 'reformatter))))
-    (:init (add-to-list 'nasy--defer-loads 'reformatter)))
+  (leaf reformatter
+    :doc "Define commands which run reformatters on the current Emacs buffer."
+    :url "https://github.com/purcell/emacs-reformatter"
+    :tag "convenience" "tools"
+    :hook (nasy--defer-load-hook . (lambda () (require 'reformatter)))
+    :init (add-to-list 'nasy--defer-loads 'reformatter))
 #+end_src
 
 ** 餘                                                    :misc:

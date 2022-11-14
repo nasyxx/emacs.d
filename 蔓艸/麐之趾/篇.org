@@ -33,9 +33,53 @@ Programming Languages
   ;; 程序之言也
 
   ;;; Code:
+  (cl-eval-when (compile)
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/風雨"))
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/緑衣"))
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/麐之趾"))
+    (require '擊鼓)
+    (require '風雨)
+    (require '風雨時用)
+    (require '模)
 
-  (cl-eval-when (compile eval load)
-    (require '麐之趾之包))
+    (require 'align)
+    (sup 'org t)
+    (require 'oc-biblatex)
+    (require 'org-agenda)
+    (require 'org-capture)
+    (require 'org-clock)
+
+    (sup 'all-the-icons t)
+    (sup 'haskell-mode t)
+    (sup 'lsp-mode t)
+    (require 'lsp-diagnostics)
+    (sup 'lsp-ui t)
+    (with-no-warnings
+      (setq parinfer-rust-auto-download nil
+       parinfer-rust-library
+       (concat *nasy-var* "parinfer-rust/parinfer-rust-darwin.so")))
+    (sup 'org-roam t)
+    (sup 'parinfer-rust-mode t)
+    (sup `(tex-site
+           :type git :host nil
+           :repo "https://git.savannah.gnu.org/git/auctex.git"
+           :pre-build ,(pcase system-type
+                        (`berkeley-unix '("gmake"))
+                        (_ '(  ;; also for macos
+                             `("bash" "-c" "cd" ,(straight--repos-dir "auctex"))
+                             ("./autogen.sh")
+                             ("./configure" "--without-texmf-dir" "--with-lispdir=.")
+                             ("gmake")))))
+         t)
+    (require 'preview)
+    (require 'tex)
+
+    (sup 'elpy t)
+    (sup `(python-isort :local-repo ,(concat *nasy-site* "nasy/python-isort")) t)
+    (sup 'page-break-lines t))
+
+  (require '補)
 #+end_src
 
 * 章
@@ -45,8 +89,9 @@ Programming Languages
 *** bibtex-tidy
 
 #+begin_src emacs-lisp
-  (leaf bibtex-tidy
-    :after reformatter)
+  (setup bibtex-tidy
+    (:with-function bibtex-tidy-on-save-mode
+      (:hook-into bibtex-mode)))
 #+end_src
 
 ** Language Server Protocol & Debug Adapter Protocol :languages:
@@ -56,147 +101,134 @@ Emacs client/library for the Language Server Protocol
 *** lsp-mode                                         :languages:
 
 #+begin_src emacs-lisp
-  (leaf lsp-mode
-    :doc "Language Server Protocol Support for Emacs."
-    :url "https://github.com/emacs-lsp/lsp-mode"
-    :tag "languages")
+  (setup lsp-mode
+    (:doc "Language Server Protocol Support for Emacs.")
+    (:url "https://github.com/emacs-lsp/lsp-mode")
+    (:tag "languages"))
 
 
   (defun nasy/lsp-setup-completion ()
     "Nasy lsp mode completion."
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-	  '(orderless))
+          '(orderless))
     (nasy/-merge-capf))
 
 
-  (leaf lsp-mode
-    :defun nasy/lsp-init
-    :after lsp-mode
-    :custom
-    `((lsp-eslint-library-choices-file . ,(concat *nasy-var* "lsp/eslint-library-choices.el"))
-      (lsp-python-ms-dir               . ,(concat *nasy-var* "lsp/lsp-python-ms/"))
-      (lsp-server-install-dir          . ,(concat *nasy-var* "lsp/server/"))
-      (lsp-session-file                . ,(concat *nasy-var* "lsp/session.el")))
-    :hook
-    (kill-emacs-hook . (lambda () (setq lsp-restart 'ignore)))
-    (lsp-completion-mode-hook . nasy/lsp-setup-completion)
-    :mode-hook
-    (nasy/lsp-init)
-    :init
-    (defun nasy/lsp-init ()
-      "Nasy lsp mode init.")
-    ;; :advice
-    ;; (:after lsp-diagnostics--enable (lambda () (flycheck-inline-mode -1)))
-    :custom
-    (lsp-log-io . *debug*)
+  (setup lsp-mode
+    (:opt
+     lsp-eslint-library-choices-file (concat *nasy-var* "lsp/eslint-library-choices.el")
+     lsp-python-ms-dir               (concat *nasy-var* "lsp/lsp-python-ms/")
+     lsp-server-install-dir          (concat *nasy-var* "lsp/server/")
+     lsp-session-file                (concat *nasy-var* "lsp/session.el")
+     lsp-log-io *debug*)
+    (:hooks
+     kill-emacs-hook (lambda () (setq lsp-restart 'ignore))
+     lsp-completion-mode-hook nasy/lsp-setup-completion)
+    (:opts
+     ((
+       ;; lsp-auto-configure
+       ;; lsp-before-save-edits
+       ;; lsp-completion-enable
+       ;; lsp-eldoc-enable-hover
+       lsp-eldoc-render-all
+       ;; lsp-enable-folding
+       ;; lsp-enable-imenu
+       ;; lsp-enable-indentation
+       ;; lsp-enable-links
+       ;; lsp-enable-on-type-formatting
+       ;; lsp-enable-snippet
+       ;; lsp-enable-symbol-highlighting
+       ;; lsp-enable-text-document-color
+       ;; lsp-enable-xref
+       ;; lsp-headerline-breadcrumb-enable
+       ;; lsp-imenu-show-container-name
+       ;; lsp-signature-render-documentation
+       lsp-semantic-tokens-enable)
+      . t)
+     ((
+       lsp-keep-workspace-alive
+       ;; lsp-auto-guess-root
+       lsp-document-sync-method
+       lsp-auto-execute-action
+       lsp-enable-file-watchers
+       ;; lsp-server-trace
+       lsp-modeline-diagnostics-enable)
+      . nil))
+    (:opt*
+     lsp-restart 'interactive
 
-    ((
-      ;; lsp-auto-configure
-      ;; lsp-before-save-edits
-      ;; lsp-completion-enable
-      ;; lsp-eldoc-enable-hover
-      lsp-eldoc-render-all
-      ;; lsp-enable-folding
-      ;; lsp-enable-imenu
-      ;; lsp-enable-indentation
-      ;; lsp-enable-links
-      ;; lsp-enable-on-type-formatting
-      ;; lsp-enable-snippet
-      ;; lsp-enable-symbol-highlighting
-      ;; lsp-enable-text-document-color
-      ;; lsp-enable-xref
-      ;; lsp-headerline-breadcrumb-enable
-      ;; lsp-imenu-show-container-name
-      ;; lsp-signature-render-documentation
-      lsp-semantic-tokens-enable)
-     . t)
-
-    ((
-      lsp-keep-workspace-alive
-      ;; lsp-auto-guess-root
-      lsp-document-sync-method
-      lsp-auto-execute-action
-      lsp-enable-file-watchers
-      ;; lsp-server-trace
-      lsp-modeline-diagnostics-enable) . nil)
-
-    (lsp-restart . 'interactive)
-
-    (lsp-completion-provider  . :none)
-    (lsp-diagnostics-provider . :auto)
-
-    ;; (lsp-imenu-container-name-separator . "/")
-    ;; (lsp-imenu-sort-methods             . '(kind position name))
-
-    ;; (lsp-signature-auto-activate . '(:on-trigger-char :after-completion))
-
-    (lsp-response-timeout . 10))
+     lsp-completion-provider  :none
+     lsp-diagnostics-provider :auto
+     lsp-response-timeout 10))
 
 #+end_src
 
 *** lsp-ui                                     :languages:tools:
 
 #+begin_src emacs-lisp
-  (leaf lsp-ui
-    :doc "UI integrations for lsp-mode."
-    :url "https://github.com/emacs-lsp/lsp-ui"
-    :tag "languages" "tools"
-    :after lsp-mode
-    :bind
-    ([remap imenu] . nasy/toggle-lsp-ui-imenu)
-    :custom
-    (lsp-ui-doc-enable . nil)
-    ((lsp-ui-doc-include-signature
-      lsp-ui-sideline-show-hover
-      lsp-ui-sideline-show-symbol
-      lsp-ui-sideline-show-diagnostics
-      lsp-ui-sideline-show-code-actions
-      lsp-ui-sideline-ignore-duplicate) . t)
-    (lsp-ui-doc-position         . 'at-point)
-    (lsp-ui-sideline-update-mode . 'point)
-    :hook lsp-mode-hook
-    :mode-hook
-    (lsp-ui-sideline-mode 1)
+  (defun nasy/toggle-lsp-ui-imenu ()
+    "Nasy toggle lsp ui imenu."
+    (interactive)
+    (if (get-buffer "*lsp-ui-imenu*")
+        (kill-buffer "*lsp-ui-imenu*")
+      (lsp-ui-imenu)))
+
+  (setup lsp-ui
+    (:doc "UI integrations for lsp-mode.")
+    (:url "https://github.com/emacs-lsp/lsp-ui")
+    (:tag "languages" "tools")
+    (:global
+     [remap imenu] nasy/toggle-lsp-ui-imenu)
+    (:opt
+     lsp-ui-doc-enable nil)
+    (:opts
+     ((lsp-ui-doc-include-signature
+       lsp-ui-sideline-show-hover
+       lsp-ui-sideline-show-symbol
+       lsp-ui-sideline-show-diagnostics
+       lsp-ui-sideline-show-code-actions
+       lsp-ui-sideline-ignore-duplicate)
+      . t))
+    (:opt
+     lsp-ui-doc-position         'at-point
+     lsp-ui-sideline-update-mode 'point)
+    (:hook-into lsp-mode-hook)
+    (:mode-hook
+     (lsp-ui-sideline-mode 1))
     ;; (flycheck-inline-mode -1)
-    :init
-    (defun nasy/toggle-lsp-ui-imenu ()
-      "Nasy toggle lsp ui imenu."
-      (interactive)
-      (if (get-buffer "*lsp-ui-imenu*")
-	  (kill-buffer "*lsp-ui-imenu*")
-	(lsp-ui-imenu)))
-    :defer-config
-    (require 'lsp-ui-peek))
+    (:when-loaded
+      (require 'lsp-ui-peek)))
 #+end_src
 
 *** lsp-treemacs                                     :languages:
 
 #+begin_src emacs-lisp
-  (leaf lsp-treemacs
-    :doc "lsp-mode ❤ treemacs."
-    :url "https://github.com/emacs-lsp/lsp-treemacs"
-    :tag "languages"
-    :after lsp-mode
-    :custom
-    (lsp-metals-treeview-show-when-views-received
-     . t)
-    (lsp-treemacs-theme . "doom-colors")
-    :defer-config
-    (lsp-treemacs-sync-mode t))
+  (setup lsp-treemacs
+    (:doc "lsp-mode ❤ treemacs.")
+    (:url "https://github.com/emacs-lsp/lsp-treemacs")
+    (:tag "languages")
+    (:with-hook lsp-mode-hook
+      (:hook (lambda () (require 'lsp-treemacs))))
+    (:opt
+     lsp-metals-treeview-show-when-views-received t
+     lsp-treemacs-theme "doom-colors")
+    (:when-loaded
+      (lsp-treemacs-sync-mode t)))
 #+end_src
 
 ** dap-mode                                         :languages:
 
 #+begin_src emacs-lisp
-  (leaf dap-mode
-    :custom `(dap-breakpoints-file . ,(concat *nasy-var* "dap/breakpoints.el")))
+  (setup dap-mode
+    (:custom dap-breakpoints-file (concat *nasy-var* "dap/breakpoints.el")))
 #+end_src
 
 ** Flex
 
 #+begin_src emacs-lisp
-  (leaf flex-mode
-    :mode "\\.l\\'")
+  (setup flex-mode
+    (add-to-list 'auto-mode-alist
+                 '("\\.l\\'" . flex-mode)))
 #+end_src
 
 ** Haskell                                  :haskell:languages:
@@ -210,18 +242,18 @@ Emacs client/library for the Language Server Protocol
     :lighter ""
     :global nil
     (if stack-exec-path-mode
-	(when (and (executable-find "stack")
-		   (locate-dominating-file default-directory "stack.yaml"))
-	  (setq-local
-	   exec-path
-	   (seq-uniq
-	    (append (list (concat (string-trim-right
-				   (shell-command-to-string "stack path --local-install-root")
-				   "/bin")))
-		    (parse-colon-path
-		     (replace-regexp-in-string "[\r\n]+\\'" ""
-					       (shell-command-to-string "stack path --bin-path"))))
-	    'string-equal)))
+        (when (and (executable-find "stack")
+                   (locate-dominating-file default-directory "stack.yaml"))
+          (setq-local
+           exec-path
+           (seq-uniq
+            (append (list (concat (string-trim-right
+                                   (shell-command-to-string "stack path --local-install-root")
+                                   "/bin")))
+                    (parse-colon-path
+                     (replace-regexp-in-string "[\r\n]+\\'" ""
+                                               (shell-command-to-string "stack path --bin-path"))))
+            'string-equal)))
       (kill-local-variable 'exec-path)))
 
 
@@ -233,70 +265,67 @@ Emacs client/library for the Language Server Protocol
     generated."
     (interactive)
     (let* ((dir (haskell-cabal--find-tags-dir))
-	   (command (haskell-cabal--compose-hasktags-command dir)))
+           (command (haskell-cabal--compose-hasktags-command dir)))
       (if (not command)
-	  (error "Unable to compose hasktags command")
-	;; I disabled the noisy shell command output.
-	;; The original is (shell-command command)
-	(call-process-shell-command command nil "*Shell Command Output*" t)
-	(haskell-mode-message-line "Tags generated.")
-	(when and-then-find-this-tag
-	  (let ((tags-file-name dir))
-	    (xref-find-definitions and-then-find-this-tag))))))
+          (error "Unable to compose hasktags command")
+        ;; I disabled the noisy shell command output.
+        ;; The original is (shell-command command)
+        (call-process-shell-command command nil "*Shell Command Output*" t)
+        (haskell-mode-message-line "Tags generated.")
+        (when and-then-find-this-tag
+          (let ((tags-file-name dir))
+            (xref-find-definitions and-then-find-this-tag))))))
 
-  (leaf haskell-mode
-    :after haskell-mode
-    :custom
-    ((haskell-tags-on-save
-      haskell-process-auto-import-loaded-modules
-      haskell-process-log
-      haskell-process-suggest-haskell-docs-imports
-      haskell-process-suggest-hoogle-imports
-      haskell-process-suggest-remove-import-lines
-      haskell-svg-render-images
-      haskell-doc-show-global-types)
-     . t)
-    (haskell-mode-stylish-haskell-path            . "stylish-haskell")
-    (haskell-indentation-layout-offset            . 4)
-    (haskell-indentation-left-offset              . 2)
-    (haskell-doc-chop-off-context                 . nil))
+  (setup haskell-mode
+    (:opts
+     ((haskell-tags-on-save
+       haskell-process-auto-import-loaded-modules
+       haskell-process-log
+       haskell-process-suggest-haskell-docs-imports
+       haskell-process-suggest-hoogle-imports
+       haskell-process-suggest-remove-import-lines
+       haskell-svg-render-images
+       haskell-doc-show-global-types)
+      . t))
+    (:opt
+     haskell-mode-stylish-haskell-path "stylish-haskell"
+     haskell-indentation-layout-offset 4
+     haskell-indentation-left-offset   2
+     haskell-doc-chop-off-context      nil))
 
 
-  (leaf haskell-mode
-    :defun nasy/tempo-haskell stack-exec-path-mode
-    :bind
-    (:haskell-mode-map
-     ("C-x a a" . align)
-     ("C-c h"   . hoogle)
-     ("C-o"     . open-line))
-    :mode-hook
-    (subword-mode 1)
-    (haskell-auto-insert-module-template)
-    (haskell-collapse-mode)
-    (interactive-haskell-mode)
-    (setq tab-width 4)
-    (nasy/tempo-haskell)
-    (stack-exec-path-mode 1)
-    (progn
-      (require 'align)
-      (add-to-list 'align-rules-list
-		   '(haskell-types
-		     (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
-		     (modes quote (haskell-mode literate-haskell-mode))))
-      (add-to-list 'align-rules-list
-		   '(haskell-assignment
-		     (regexp . "\\(\\s-+\\)=\\s-+")
-		     (modes quote (haskell-mode literate-haskell-mode))))
-      (add-to-list 'align-rules-list
-		   '(haskell-arrows
-		     (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
-		     (modes quote (haskell-mode literate-haskell-mode))))
-      (add-to-list 'align-rules-list
-		   '(haskell-left-arrows
-		     (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
-		     (modes quote (haskell-mode literate-haskell-mode)))))
-    :defer-config
-    (after-x 'page-break-lines
+  (setup haskell-mode
+    (:bind-into haskell-mode-map
+     "C-x a a" align
+     "C-c h"   hoogle
+     "C-o"     open-line)
+    (:mode-hook
+     (subword-mode 1)
+     (haskell-auto-insert-module-template)
+     (haskell-collapse-mode)
+     (interactive-haskell-mode)
+     (setq tab-width 4)
+     (nasy/tempo-haskell)
+     (stack-exec-path-mode 1)
+     (progn
+       (require 'align)
+       (add-to-list 'align-rules-list
+                    '(haskell-types
+                      (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
+                      (modes quote (haskell-mode literate-haskell-mode))))
+       (add-to-list 'align-rules-list
+                    '(haskell-assignment
+                      (regexp . "\\(\\s-+\\)=\\s-+")
+                      (modes quote (haskell-mode literate-haskell-mode))))
+       (add-to-list 'align-rules-list
+                    '(haskell-arrows
+                      (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
+                      (modes quote (haskell-mode literate-haskell-mode))))
+       (add-to-list 'align-rules-list
+                    '(haskell-left-arrows
+                      (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
+                      (modes quote (haskell-mode literate-haskell-mode))))))
+    (:after page-break-lines
       (add-to-list 'page-break-lines-modes 'haskell-mode)))
 #+end_src
 
@@ -308,33 +337,31 @@ Emacs client/library for the Language Server Protocol
     (require 'lsp-haskell)
     (lsp))
 
-  (leaf lsp-haskell
-    :custom (lsp-haskell-formatting-provider . "brittany")
-    :hook
-    (haskell-mode-hook . start-lsp-haskell)
-    :init
-    (after-x 'company
+  (setup lsp-haskell
+    (:custom lsp-haskell-formatting-provider "brittany")
+    (:with-hook haskell-mode-hook
+      (:hook start-lsp-haskell))
+    (:after company
       (nasy/add-company-backend 'haskell-mode
-	'(company-capf
-	  company-files
-	  :with company-yasnippet))))
+        '(company-capf
+          company-files
+          :with company-yasnippet))))
 #+end_src
 
 ** HTML                                        :html:languages:
 
 #+begin_src emacs-lisp
-  (leaf lsp-html
-    :hook
-    ((html-mode-hook mhtml-mode-hook sgml-mode-hook web-mode-hook)
-     . lsp-deferred))
+  (setup lsp-html
+    (:with-function lsp
+      (:hook-into html-mode-hook mhtml-mode-hook sgml-mode-hook web-mode-hook)))
 #+end_src
 
 ** JavaScript & TypeScript    :javascript:typescript:languages:
 
 #+begin_src emacs-lisp
-  (leaf lsp-javascript
-    :hook
-    ((javascript-mode-hook js-mode-hook) . lsp-deferred))
+  (setup lsp-javascript
+    (:with-function lsp
+      (:hook-into javascript-mode-hook js-mode-hook)))
 #+end_src
 
 ** Lisp                                        :lisp:languages:
@@ -342,15 +369,16 @@ Emacs client/library for the Language Server Protocol
 *** elisp-def                                             :lisp:
 
  #+begin_src emacs-lisp
-   (leaf elisp-def
-     :hook (((emacs-lisp-mode-hook ielm-mode-hook) . elisp-def-mode)))
+   (setup elisp-def
+     (:with-function elisp-def-mode
+       (:hook-into emacs-lisp-mode-hook ielm-mode-hook)))
  #+end_src
 
 *** Highlight-quoted                                      :lisp:
 
  #+begin_src emacs-lisp
-   (leaf highlight-quoted
-     :hook (emacs-lisp-mode-hook))
+   (setup highlight-quoted
+     (:hook-into emacs-lisp-mode-hook))
  #+end_src
 
 *** ipretty                                               :lisp:
@@ -364,55 +392,52 @@ Emacs client/library for the Language Server Protocol
  https://framagit.org/steckerhalter/ipretty
 
  #+begin_src emacs-lisp
-   (leaf ipretty
-     :doc "Interactive Emacs Lisp pretty-printing"
-     :url "https://framagit.org/steckerhalter/ipretty"
-     :tag "buffer" "emacslisp" "pprint"
-     :disabled t
-     :bind (("C-h C-j" . ipretty-last-sexp)
-	    ("C-h C-k" . ipretty-last-sexp-other-buffer))
-     :hook emacs-lisp-mode-hook)
+   ;; (leaf ipretty
+   ;;   :doc "Interactive Emacs Lisp pretty-printing"
+   ;;   :url "https://framagit.org/steckerhalter/ipretty"
+   ;;   :tag "buffer" "emacslisp" "pprint"
+   ;;   :disabled t
+   ;;   :bind (("C-h C-j" . ipretty-last-sexp)
+   ;;          ("C-h C-k" . ipretty-last-sexp-other-buffer))
+   ;;   :hook emacs-lisp-mode-hook)
  #+end_src
 
 *** lisp-mode                                             :lisp:
 
  #+begin_src emacs-lisp
-   (leaf lisp-mode
-     :bind
-     (:emacs-lisp-mode-map
-      ([remap eval-expression] . pp-eval-expression)
-      ("C-x C-e"               . eval-last-sexp-or-region))
-     :init
-     (defun eval-last-sexp-or-region (prefix)
-       "Eval region from BEG to END if active, otherwise the last sexp."
-       (interactive "P")
-       (if (and (mark) (use-region-p))
-	   (eval-region (min (point) (mark)) (max (point) (mark)))
-	 (pp-eval-last-sexp prefix))))
+   (defun eval-last-sexp-or-region (prefix)
+     "Eval region from BEG to END if active, otherwise the last sexp."
+     (interactive "P")
+     (if (and (mark) (use-region-p))
+         (eval-region (min (point) (mark)) (max (point) (mark)))
+       (pp-eval-last-sexp prefix)))
+
+   (setup lisp-mode
+     (:bind-into emacs-lisp-mode-map
+      [remap eval-expression] pp-eval-expression
+      "C-x C-e"               eval-last-sexp-or-region))
  #+end_src
 
 *** macrostep                                             :lisp:
 
  #+begin_src emacs-lisp
-   (leaf macrostep
-     :bind
-     (:emacs-lisp-mode-map
-      ("C-c e m" . macrostep-expand)))
+   (setup macrostep
+     (:bind-into emacs-lisp-mode-map
+       "C-c e m" macrostep-expand))
  #+end_src
 
 *** parinfer-rust-mode                                    :lisp:
 
  #+begin_src emacs-lisp
-  (leaf parinfer-rust-mode
-    :custom
-    (parinfer-rust-auto-download . nil)
-    `(parinfer-rust-library
-      . ,(concat *nasy-var* "parinfer-rust/parinfer-rust-darwin.so"))
-    :hook `(,lisp-modes-hooks)
-    :defer-config
-    ;; https://github.com/justinbarclay/parinfer-rust-mode/issues/53
-    (add-to-list 'parinfer-rust-treat-command-as
-		 '(quoted-insert . "paren")))
+   (setup parinfer-rust-mode
+     (:custom
+      parinfer-rust-auto-download nil
+      parinfer-rust-library (concat *nasy-var* "parinfer-rust/parinfer-rust-darwin.so"))
+     (:init (lisp-modes-hooks-add parinfer-rust-mode))
+     (:when-loaded
+       ;; https://github.com/justinbarclay/parinfer-rust-mode/issues/53
+       (add-to-list 'parinfer-rust-treat-command-as
+                    '(quoted-insert . "paren"))))
  #+end_src
 
 ** TeX                                                    :tex:
@@ -422,53 +447,61 @@ TeX related works.
 *** TeX
 
 #+begin_src emacs-lisp
-  (leaf tex
-    :hook
-    ((tex-mode-hook
-      TeX-mode-hook
-      latex-mode-hook
-      LaTeX-mode-hook) . visual-line-mode))
+  (setup tex
+    (:with-function visual-line-mode
+      (:hook-into
+       tex-mode-hook
+       TeX-mode-hook
+       latex-mode-hook
+       LaTeX-mode-hook)))
 #+end_src
 
 *** auctex
 
 #+begin_src emacs-lisp
-  (leaf auctex
-    :init
-    (setq TeX-data-directory (straight--repos-dir "auctex")
-	  TeX-lisp-directory TeX-data-directory)
+  (setup auctex
+    (:init
+     (setq TeX-data-directory (straight--repos-dir "auctex")
+           TeX-lisp-directory TeX-data-directory)
 
-    ;; Or set the following variable via custom-set-variables in the opened buffer by the following command.
-    ;; M-x describe-variable RET preview-TeX-style-dir RET
-    ;;`(preview-TeX-style-dir ,(concat ".:" (straight--repos-dir "auctex") "latex:"))
-    (setq preview-TeX-style-dir (concat ".:" (straight--repos-dir "auctex") "latex:"))
+     ;; Or set the following variable via custom-set-variables in the opened buffer by the following command.
+     ;; M-x describe-variable RET preview-TeX-style-dir RET
+     ;;`(preview-TeX-style-dir ,(concat ".:" (straight--repos-dir "auctex") "latex:"))
+     (setq preview-TeX-style-dir (concat ".:" (straight--repos-dir "auctex") "latex:"))
 
-    (load "auctex.el" nil t t)
-    (load "preview-latex.el" nil t t)
+     (load "auctex.el" nil t t)
+     (load "preview-latex.el" nil t t)
 
-    (setq TeX-auto-save t)
-    (setq TeX-parse-self t)
-    (setq-default TeX-master nil))
+     (setq TeX-auto-save t)
+     (setq TeX-parse-self t)
+     (setq-default TeX-master nil)))
 #+end_src
 
 *** cdlatex
 
 #+begin_src emacs-lisp
-  (leaf cdlatex
-    :custom (cdlatex-use-dollar-to-ensure-math . nil)
-    :init (sup 'cdlatex))
+  (setup cdlatex
+    (:custom cdlatex-use-dollar-to-ensure-math nil))
 #+end_src
 
 ** Markdown                                :markdown:languages:
 
 #+begin_src emacs-lisp
-  (leaf markdown-mode
-    :mode ("INSTALL\\'"
-	   "CONTRIBUTORS\\'"
-	   "LICENSE\\'"
-	   "\\.markdown\\'"
-	   "\\.md\\'")
-    :init (add-to-list 'nasy--defer-loads 'markdown-mode))
+  (setup markdown-mode
+    (:init
+     (progn
+      (add-to-list 'auto-mode-alist
+                   '("INSTALL\\'" . markdown-mode))
+      (add-to-list 'auto-mode-alist
+                   '("CONTRIBUTORS\\'" . markdown-mode))
+      (add-to-list 'auto-mode-alist
+                   '("LICENSE\\'" . markdown-mode))
+      (add-to-list 'auto-mode-alist
+                   '("\\.markdown\\'" . markdown-mode))
+      (add-to-list 'auto-mode-alist
+                   '("\\.md\\'" . markdown-mode))
+      (add-to-list 'nasy--defer-loads 'markdown-mode))))
+
 #+end_src
 
 ** Nix                                          :nix:languages:
@@ -479,20 +512,21 @@ TeX related works.
       (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
       (lsp-register-client
        (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
-			:major-modes '(nix-mode)
-			:server-id 'nix))
+                        :major-modes '(nix-mode)
+                        :server-id 'nix))
       (lsp)))
 
-  (leaf nix-mode
-    :hook (nix-mode-hook . start-nix-lsp))
+  (setup nix-mode
+    (:with-hook nix-mode-hook
+      (:hook start-nix-lsp)))
 #+end_src
 
 ** Org Mode                                     :org:languages:
 
 #+begin_src emacs-lisp
   (add-hook 'nasy-first-key-hook #'(lambda () (require 'org)))
-  (leaf org-mode
-    :mode ("README\\'"))
+  (add-to-list 'auto-mode-alist
+               '("README\\'" . org-mode))
 #+end_src
 
 *** 自定義                                                 :org:
@@ -501,344 +535,339 @@ TeX related works.
   (defvar nasy-org-first-key-hook nil)
   (defvar nasy--org-first-key-hook nil)
 
-  (leaf org
-    :custom
-    ((org-export-backends . '(ascii beamer html latex md org))
-     (org-support-shift-select . 'always)
-     (org-safe-remote-resources
-      . '("\\`https://raw\\.githubusercontent\\.com\\(?:/\\|\\'\\)")))
-    (org-modules . nil)
-    :init
-    (with-no-warnings
-      (setq org-emphasis-regexp-components
-	    '(" \t('\"{[:nonascii:]"
-		"- \t.,:!?)));'\")}\\[[:nonascii:]"
-		" \t\r\n,\"'"
-		"."
-		1)))
-    :config
-    (add-to-list 'safe-local-variable-values
-		 '(org-src-fontify-natively))
-    (add-to-list 'safe-local-variable-values
-		 '(org-startup-indented)))
+  (setup org
+    (:opt
+     org-export-backends      '(ascii beamer html latex md org)
+     org-support-shift-select 'always
+     org-safe-remote-resources '("\\`https://raw\\.githubusercontent\\.com\\(?:/\\|\\'\\)")
+     org-modules nil)
+    (:init
+     (with-no-warnings
+       (setq org-emphasis-regexp-components
+             '(" \t('\"{[:nonascii:]"
+               "- \t.,:!?)));'\")}\\[[:nonascii:]"
+               " \t\r\n,\"'"
+               "."
+               1))))
+    (:when-loaded
+      (add-to-list 'safe-local-variable-values
+                 '(org-src-fontify-natively))
+      (add-to-list 'safe-local-variable-values
+                 '(org-startup-indented))))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org
-    :custom
-    (org-ellipsis          . "略")
-    (org-startup-folded    . 'content)
-    (org-startup-truncated . nil))
+  (setup org
+    (:customs
+     (org-ellipsis          . " 略")
+     (org-startup-folded    . 'content)
+     (org-startup-truncated . nil)))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-agenda
-    :after org
-    :custom
-    (;; org-agnda
-     (org-agenda-compact-blocks   . t)
-     (org-agenda-files            . `(,(concat *nasy-etc* "standard-agenda.org")))
-     (org-agenda-start-on-weekday . nil)
-     (org-agenda-prefix-format
-      . '((agenda . " %i %+15c\t%?-15t% s")
-	  (todo   . " %i %+15c\t")
-	  (tags   . " %i %+15c\t")
-	  (search . " %i %+15c\t")))
-     (org-agenda-sorting-strategy
-      . '((agenda habit-down time-up user-defined-up effort-up category-keep)
-	  (todo category-up effort-up)
-	  (tags category-up effort-up)
-	  (search category-up)))
-     (org-agenda-time-grid
-      . '((daily today weekly require-timed remove-match)
-	  (0 600 900 1200 1300 1600 1800 2000 2200 2400 2600)
-	  "......"
-	  "-----------------------------------------------------"))
-     (org-agenda-clockreport-parameter-plist . '(:link t :maxlevel 3))
-     (org-agenda-window-setup . 'current-window)))
+  (setup org-agenda
+    (:custom
+     org-agenda-compact-blocks   t
+     org-agenda-files            (list (concat *nasy-etc* "standard-agenda.org"))
+     org-agenda-start-on-weekday nil
+     org-agenda-prefix-format '((agenda . " %i %+15c\t%?-15t% s")
+                                (todo   . " %i %+15c\t")
+                                (tags   . " %i %+15c\t")
+                                (search . " %i %+15c\t"))
+     org-agenda-sorting-strategy
+     '((agenda habit-down time-up user-defined-up effort-up category-keep)
+       (todo category-up effort-up)
+       (tags category-up effort-up)
+       (search category-up))
+
+     org-agenda-time-grid
+     '((daily today weekly require-timed remove-match)
+       (0 600 900 1200 1300 1600 1800 2000 2200 2400 2600)
+       "......"
+       "-----------------------------------------------------")
+
+     org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3)
+     org-agenda-window-setup 'current-window))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-appear
-    :after org
-    :custom
-    ((org-appear-autoemphasis
-      org-appear-autoentities
-      org-appear-autolinks
-      org-appear-autosubmarkers)
-     . t))
+  (setup org-appear
+    (:opts
+     ((org-appear-autoemphasis
+       org-appear-autoentities
+       org-appear-autolinks
+       org-appear-autosubmarkers)
+      . t)))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-appearance
-    :after org
-    :custom
-    ((org-allow-promoting-top-level-subtree
-      org-fontify-todo-headline
-      ;; org-fontify-whole-heading-line
-      org-hide-emphasis-markers
-      org-hide-leading-stars)
-     . t)
-    ((org-image-actual-width
-      org-pretty-entities)
-     . nil))
+  (setup org-appearance
+    (:opts
+     ((org-allow-promoting-top-level-subtree
+       org-fontify-todo-headline
+       ;; org-fontify-whole-heading-line
+       org-hide-emphasis-markers
+       org-hide-leading-stars)
+      . t)
+     ((org-image-actual-width
+       org-pretty-entities)
+      . nil)))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf babel
-    :after org
-    :custom
-    (org-babel-latex-preamble
-     . (lambda (_) "\\documentclass[preview]{standalone}\n")))
+  (setup ob-latex
+    (:after org
+      (:custom
+       org-babel-latex-preamble
+       (lambda (_) "\\documentclass[preview]{standalone}\n"))))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-capture
-    :after org
-    :custom
-    (org-default-notes-file . "~/notes/default.org"))
+  (setup org-capture
+    (:after org)
+    (:custom org-default-notes-file "~/notes/default.org"))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-export
-    :after org
-    :custom
-    (;; general
-     (org-export-coding-system         . 'utf-8)
-     (org-export-with-broken-links     . 'mark)
-     (org-export-with-sub-superscripts . '{})
-     (org-use-sub-superscripts         . '{})
-     (org-html-checkbox-type           . 'unicode))
+  (setup org-export
+    (:after org
+      (:custom
+       ;; general
+       org-export-coding-system         'utf-8
+       org-export-with-broken-links     'mark
+       org-export-with-sub-superscripts '{}
+       org-use-sub-superscripts         '{}
+       org-html-checkbox-type           'unicode)
+      (:custom
+       ;; html
+       org-html-doctype              "html5"
+       org-html-head-include-scripts t
+       org-html-klipsify-src         t
+       org-html-html5-fancy          t
+       org-html-mathjax-options
+       '((path          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML")
+         (scale         "100")
+         (align         "center")
+         (font          "Neo-Euler")
+         (linebreaks    "false")
+         (autonumber    "AMS")
+         (indent        "0em")
+         (multlinewidth "85%")
+         (tagindent     ".8em")
+         (tagside       "right"))
+        org-html-with-latex     'mathjax
+        org-html-wrap-src-lines t)
 
-    (;; html
-     (org-html-doctype              . "html5")
-     (org-html-head-include-scripts . t)
-     (org-html-klipsify-src         . t)
-     (org-html-html5-fancy          . t)
-     (org-html-mathjax-options
-      . '((path          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML")
-	  (scale         "100")
-	  (align         "center")
-	  (font          "Neo-Euler")
-	  (linebreaks    "false")
-	  (autonumber    "AMS")
-	  (indent        "0em")
-	  (multlinewidth "85%")
-	  (tagindent     ".8em")
-	  (tagside       "right")))
-     (org-html-with-latex     . 'mathjax)
-     (org-html-wrap-src-lines . t))
-
-    (;; Latex
-     (org-latex-compiler . "xelatex")
-     (org-latex-default-packages-alist
-      . '(("AUTO" "inputenc"  t   ("pdflatex"))
-	  ("T1"   "fontenc"   t   ("pdflatex"))
-	  (""     "graphicx"  t   nil)
-	  (""     "grffile"   nil nil)
-	  (""     "longtable" nil nil)
-	  (""     "booktabs"  nil nil)
-	  (""     "wrapfig"   nil nil)
-	  (""     "rotating"  nil nil)
-	  ("normalem" "ulem"  nil nil)
-	  (""     "amsmath"   t   nil)
-	  (""     "textcomp"  t   nil)
-	  (""     "amssymb"   t   nil)
-	  (""     "capt-of"   nil nil)
-	  (""     "nicefrac"  t   nil)
-	  ("dvipsnames" "xcolor" nil nil)
-	  ("colorlinks,unicode,linkcolor=violet,anchorcolor=BlueViolet,citecolor=YellowOrange,filecolor=black,urlcolor=Aquamarine"
-	   "hyperref" nil nil)
-	  (""            "luatexja-fontspec" t ("lualatex"))))
-	  ;; (""            "listings"          t nil)))
-	  ;; (""            "algorithm"         t nil)
-	  ;; (""            "algpseudocode"     t nil)
-	  ;; ("cache=false" "minted"            t nil)))
-     (org-latex-default-table-environment . "longtable")
-     (org-latex-listings                  . 'minted)
-     (org-latex-pdf-process
-      . '("latexmk -f -pdf -%latex -interaction=nonstopmode -shell-escape -output-directory=%o %f"))
-     (org-latex-tables-booktabs . t))
-
-    (;; Pandoc
-     ((org-pandoc-options-for-context
-       org-pandoc-options-for-context-pdf)
-      . `((template . ,(concat *nasy-etc* "nasy-context.tex"))))))
+      (:custom
+       ;; Latex
+       org-latex-compiler "xelatex"
+       org-latex-default-packages-alist
+       '(("AUTO" "inputenc"  t   ("pdflatex"))
+         ("T1"   "fontenc"   t   ("pdflatex"))
+         (""     "graphicx"  t   nil)
+         (""     "grffile"   nil nil)
+         (""     "longtable" nil nil)
+         (""     "booktabs"  nil nil)
+         (""     "wrapfig"   nil nil)
+         (""     "rotating"  nil nil)
+         ("normalem" "ulem"  nil nil)
+         (""     "amsmath"   t   nil)
+         (""     "textcomp"  t   nil)
+         (""     "amssymb"   t   nil)
+         (""     "capt-of"   nil nil)
+         (""     "nicefrac"  t   nil)
+         ("dvipsnames" "xcolor" nil nil)
+         ("colorlinks,unicode,linkcolor=violet,anchorcolor=BlueViolet,citecolor=YellowOrange,filecolor=black,urlcolor=Aquamarine"
+          "hyperref" nil nil)
+         (""            "luatexja-fontspec" t ("lualatex")))
+        ;; (""            "listings"          t nil)))
+        ;; (""            "algorithm"         t nil)
+        ;; (""            "algpseudocode"     t nil)
+        ;; ("cache=false" "minted"            t nil)))
+        org-latex-default-table-environment "longtable"
+        org-latex-listings                  'minted
+        org-latex-pdf-process
+        '("latexmk -f -pdf -%latex -interaction=nonstopmode -shell-escape -output-directory=%o %f")
+        org-latex-tables-booktabs t)
+      (:customs
+       ;; Pandoc
+       ((org-pandoc-options-for-context
+         org-pandoc-options-for-context-pdf)
+        . `((template . ,(concat *nasy-etc* "nasy-context.tex")))))))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-id
-    :after org
-    :custom (org-id-link-to-org-use-id . t))
+  (setup org-id
+    (:after org
+      (:custom org-id-link-to-org-use-id t)))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-indent
-    :after org
-    :custom
-    (org-indent-mode-turns-on-hiding-stars . nil))
+  (setup org-indent
+    (:after org
+      (:custom
+       org-indent-mode-turns-on-hiding-stars nil)))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-keywords
-    :after org
-    :custom
-    (org-todo-keywords
-     . '((sequence
-	  "TODO(t)"
-	  "WIP(w/!)"
-	  "WAIT(W@/!)"
-	  "HOLD(h)"
-	  "|"
-	  "CANCELLED(c@/!)"
-	  "DONE(d!/!)"))))
+  (setup org-keywords
+    (:after org
+      (:custom
+       org-todo-keywords
+       '((sequence
+          "TODO(t)"
+          "WIP(w/!)"
+          "WAIT(W@/!)"
+          "HOLD(h)"
+          "|"
+          "CANCELLED(c@/!)"
+          "DONE(d!/!)")))))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org  ;; LaTeX
-    :after org
-    :custom
-    (org-preview-latex-default-process . 'xesvg)
-    (org-highlight-latex-and-related   . '(native latex script entities))
-    :defer-config
-    (defvar
-      nasy-luamagick
-      '(luamagick
-	:programs ("lualatex" "convert")
-	:description "pdf > png"
-	:message "you need to install lualatex and imagemagick."
-	:use-xcolor t
-	:image-input-type "pdf"
-	:image-output-type "png"
-	:image-size-adjust (1.0 . 1.0)
-	:latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
-	:image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
-    (add-to-list 'org-preview-latex-process-alist nasy-luamagick)
+  ;; LaTeX
+  (setup org
+    (:after org
+      (:custom
+       org-preview-latex-default-process 'xesvg
+       org-highlight-latex-and-related   '(native latex script entities)))
+    (:when-loaded
+      (defvar
+        nasy-luamagick
+        '(luamagick
+          :programs ("lualatex" "convert")
+          :description "pdf > png"
+          :message "you need to install lualatex and imagemagick."
+          :use-xcolor t
+          :image-input-type "pdf"
+          :image-output-type "png"
+          :image-size-adjust (1.0 . 1.0)
+          :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+          :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+      (add-to-list 'org-preview-latex-process-alist nasy-luamagick)
 
-    (defvar
-      nasy-luamsvg
-      '(luamsvg
-	:programs ("lualatex" "convert")
-	:description "pdf > svg"
-	:message "you need to install lualatex and imagemagick."
-	:use-xcolor t
-	:image-input-type "pdf"
-	:image-output-type "svg"
-	:image-size-adjust (1.0 . 1.0)
-	:latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
-	:image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
-    (add-to-list 'org-preview-latex-process-alist nasy-luamsvg)
+      (defvar
+        nasy-luamsvg
+        '(luamsvg
+          :programs ("lualatex" "convert")
+          :description "pdf > svg"
+          :message "you need to install lualatex and imagemagick."
+          :use-xcolor t
+          :image-input-type "pdf"
+          :image-output-type "svg"
+          :image-size-adjust (1.0 . 1.0)
+          :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+          :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+      (add-to-list 'org-preview-latex-process-alist nasy-luamsvg)
 
-    (defvar
-      nasy-luasvg
-      '(luasvg
-	:programs ("lualatex" "dvisvgm")
-	:description "dvi > svg"
-	:message "you need to install lualatex and dvisvgm."
-	:use-xcolor t
-	:image-input-type "dvi"
-	:image-output-type "svg"
-	:image-size-adjust (1.0 . 1.0)
-	:latex-compiler ("lualatex -interaction nonstopmode --output-format dvi -output-directory %o %f")
-	:image-converter ("dvisvgm %f -n -b min -Z 2 -o %O")))
-	     ;; :image-converter ("inkscape --pdf-poppler %f -T -l -o %O")))
-    (add-to-list 'org-preview-latex-process-alist nasy-luasvg)
+      (defvar
+        nasy-luasvg
+        '(luasvg
+          :programs ("lualatex" "dvisvgm")
+          :description "dvi > svg"
+          :message "you need to install lualatex and dvisvgm."
+          :use-xcolor t
+          :image-input-type "dvi"
+          :image-output-type "svg"
+          :image-size-adjust (1.0 . 1.0)
+          :latex-compiler ("lualatex -interaction nonstopmode --output-format dvi -output-directory %o %f")
+          :image-converter ("dvisvgm %f -n -b min -Z 2 -o %O")))
+              ;; :image-converter ("inkscape --pdf-poppler %f -T -l -o %O")))
+      (add-to-list 'org-preview-latex-process-alist nasy-luasvg)
 
-    (defvar
-     nasy-xesvg
-     '(xesvg
-       :programs ("xelatex" "dvisvgm")
-       :description "xdv > svg"
-       :message "you need to install xelatex and dvisvgm."
-       :use-xcolor t
-       :image-input-type "xdv"
-       :image-output-type "svg"
-       :image-size-adjust (1.7 . 1.5)
-       :latex-compiler ("xelatex -interaction nonstopmode -no-pdf -output-directory %o %f")
-       :image-converter ("dvisvgm %f -n -b min -Z 4 -c %S -o %O")))
-       ;; :image-converter ("inkscape --pdf-poppler %f -T -l -o %O")))
-    (add-to-list 'org-preview-latex-process-alist nasy-xesvg))
+      (defvar
+       nasy-xesvg
+       '(xesvg
+         :programs ("xelatex" "dvisvgm")
+         :description "xdv > svg"
+         :message "you need to install xelatex and dvisvgm."
+         :use-xcolor t
+         :image-input-type "xdv"
+         :image-output-type "svg"
+         :image-size-adjust (1.7 . 1.5)
+         :latex-compiler ("xelatex -interaction nonstopmode -no-pdf -output-directory %o %f")
+         :image-converter ("dvisvgm %f -n -b min -Z 4 -c %S -o %O")))
+        ;; :image-converter ("inkscape --pdf-poppler %f -T -l -o %O")))
+      (add-to-list 'org-preview-latex-process-alist nasy-xesvg)))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-refile
-    :after org
-    :custom
-    (org-outline-path-complete-in-steps . nil)
-    (org-refile-allow-creating-parent-nodes . 'confirm)
-    ((org-refile-use-outline-path
-      org-refile-use-cache)
-     . t))
+  (setup org-refile
+    (:after org
+      (:customs
+       (org-outline-path-complete-in-steps . nil)
+       (org-refile-allow-creating-parent-nodes . 'confirm)
+       ((org-refile-use-outline-path
+         org-refile-use-cache)
+        . t))))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-roam
-    :after org
-    :custom
-    (org-roam-directory . "~/orgmode"))
+  (setup org-roam
+    (:after org
+      (:custom
+       org-roam-directory "~/orgmode")))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-structure
-    :after org
-    :custom
-    (org-startup-indented      . nil)
-    (org-archive-location      . "%s_archive::* Archive")
-    (org-catch-invisible-edits . 'smart))
+  (setup org
+    (:after org
+      (:customs
+       (org-startup-indented      . nil)
+       (org-archive-location      . "%s_archive::* Archive")
+       (org-catch-invisible-edits . 'smart))))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-tags
-    :after org
-    :custom
-    (org-fast-tag-selection-single-key . 'expert)
-    (org-tags-column                   . -62)
-    (org-tags-sort-function            . 'org-string-collate-lessp))
+  (setup org
+    (:opts
+     (org-fast-tag-selection-single-key . 'expert)
+     (org-tags-column                   . -62)
+     (org-tags-sort-function            . 'org-string-collate-lessp)))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-time
-    :after org
-    :custom
-    ((org-display-custom-times
-      org-edit-timestamp-down-means-later
-      org-log-into-drawer
-      org-clock-in-resume
-      org-clock-out-remove-zero-time-clocks
-      org-clock-persist)
-     . t)
-    (org-log-done . 'time)
-    (org-time-stamp-custom-formats    . '("<%a, %b %d, %Y>" . "<%a, %b %d, %Y at %H:%M>"))
-    (org-export-date-timestamp-format . "%b %d, %Y"))
+  (setup org
+    (:after org
+      (:customs
+       ((org-display-custom-times
+         org-edit-timestamp-down-means-later
+         org-log-into-drawer
+         org-clock-in-resume
+         org-clock-out-remove-zero-time-clocks
+         org-clock-persist)
+        . t)
+       (org-log-done . 'time)
+       (org-time-stamp-custom-formats    . '("<%a, %b %d, %Y>" . "<%a, %b %d, %Y at %H:%M>"))
+       (org-export-date-timestamp-format . "%b %d, %Y"))))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf org-TODO
-    :after org
-    :custom
-    (org-todo-repeat-to-state . "NEXT"))
+  (setup org
+    (:opt org-todo-repeat-to-state "NEXT"))
 #+end_src
 
 #+begin_src emacs-lisp
-  (leaf oc
-    :after org
-    :custom (org-cite-global-bibliography . `(,(concat *nasy-var* "refs/ref.bib"))))
+  (setup oc
+    (:after org
+      (:custom org-cite-global-bibliography
+               `(,(concat *nasy-var* "refs/ref.bib")))))
 
-  (leaf oc-biblatex
-    :after org oc
-    :defer-config
-    (add-to-list 'org-cite-biblatex-styles
-		 '("foot" "full" "footfullcite" nil nil))
-    (add-to-list 'org-cite-biblatex-styles
-		 '("foot" nil "footcite" nil nil))
-    (add-to-list 'org-cite-biblatex-styles
-		 '(nil "full" "fullcite" nil nil))
-    (add-to-list 'org-cite-biblatex-style-shortcuts
-		 '("ft" . "foot")))
+  (setup oc-biblatex
+    (:after oc
+      (:when-loaded
+         (add-to-list 'org-cite-biblatex-styles
+                      '("foot" "full" "footfullcite" nil nil))
+         (add-to-list 'org-cite-biblatex-styles
+                      '("foot" nil "footcite" nil nil))
+         (add-to-list 'org-cite-biblatex-styles
+                      '(nil "full" "fullcite" nil nil))
+         (add-to-list 'org-cite-biblatex-style-shortcuts
+                      '("ft" . "foot")))))
 
-  (leaf oc-csl
-    :after org oc
-    :custom (org-cite-csl-styles-dir . "~/Zotero/styles"))
+  (setup oc-csl
+    (:after oc
+      (:custom org-cite-csl-styles-dir "~/Zotero/styles")))
 #+end_src
 
 *** Basic & Functions                                      :org:
@@ -871,10 +900,10 @@ TeX related works.
     "Join consecutive Chinese lines into a single long line without
     unwanted space when exporting org-mode to html."
     (let* ((fix-regexp "[[:multibyte:]]")
-	   (fixed-contents
-	    (replace-regexp-in-string
-	     (concat
-	      "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents)))
+           (fixed-contents
+            (replace-regexp-in-string
+             (concat
+              "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" contents)))
       (apply orig paragraph fixed-contents args)))
 
     ;;;###autoload
@@ -882,33 +911,33 @@ TeX related works.
     "Fix a problem with saveplace.el putting you back in a folded position"
     (when (outline-invisible-p)
       (save-excursion
-	(outline-previous-visible-heading 1)
-	(org-fold-show-subtree))))
+        (outline-previous-visible-heading 1)
+        (org-fold-show-subtree))))
 
     ;;;###autoload
   (defun nasy/org-agenda-log-mode-colorize-block ()
     "Set different line spacing based on clock time duration."
     (save-excursion
       (let* ((colors (cl-case (alist-get 'background-mode (frame-parameters))
-		       (light
-			(list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))
-		       (dark
-			(list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))))
-	     pos
-	     duration)
-	(nconc colors colors)
-	(goto-char (point-min))
-	(while (setq pos (next-single-property-change (point) 'duration))
-	  (goto-char pos)
-	  (when (and (not (equal pos (pos-eol)))
-		    (setq duration (org-get-at-bol 'duration)))
-	    ;; larger duration bar height
-	    (let ((line-height (if (< duration 15) 1.0 (+ 0.5 (/ duration 30))))
-		  (ov (make-overlay (pos-bol) (1+ (pos-eol)))))
-	      (overlay-put ov 'face `(:background ,(car colors) :foreground "black"))
-	      (setq colors (cdr colors))
-	      (overlay-put ov 'line-height line-height)
-	      (overlay-put ov 'line-spacing (1- line-height))))))))
+                       (light
+                        (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))
+                       (dark
+                        (list "#a7e9af" "#75b79e" "#6a8caf" "#eef9bf"))))
+             pos
+             duration)
+        (nconc colors colors)
+        (goto-char (point-min))
+        (while (setq pos (next-single-property-change (point) 'duration))
+          (goto-char pos)
+          (when (and (not (equal pos (pos-eol)))
+                    (setq duration (org-get-at-bol 'duration)))
+            ;; larger duration bar height
+            (let ((line-height (if (< duration 15) 1.0 (+ 0.5 (/ duration 30))))
+                  (ov (make-overlay (pos-bol) (1+ (pos-eol)))))
+              (overlay-put ov 'face `(:background ,(car colors) :foreground "black"))
+              (setq colors (cdr colors))
+              (overlay-put ov 'line-height line-height)
+              (overlay-put ov 'line-spacing (1- line-height))))))))
 
     ;;;###autoload
   (defun nasy/show-org-clock-in-header-line ()
@@ -920,59 +949,55 @@ TeX related works.
     "Hide the clocked-in task from header line"
     (setq-default header-line-format nil))
 
-  (leaf org
-    :bind (:org-src-mode-map
-	   ("C-c _" . org-edit-src-exit))
-    :mode-hook
-    ;; (auto-fill-mode 1)
-    (visual-line-mode)
-    (eldoc-mode 1)
-    :init
-    (after-x 'company
+  (setup org
+    (:bind-into org-src-mode-map
+      "C-c _" org-edit-src-exit)
+    (:mode-hook
+     ;; (auto-fill-mode 1)
+     (visual-line-mode)
+     (eldoc-mode 1))
+    (:after company
       (nasy/add-company-backend 'org-mode
-	'(;; company-tabnine
-	  company-files
-	  :with company-yasnippet)))
-    :defer-config
-    (require 'org-tempo nil t)
-    (progn
-     (require 'org-eldoc)
-     (org-eldoc-load))
-    (after-x 'ox
+        '(;; company-tabnine
+          company-files
+          :with company-yasnippet)))
+    (:when-loaded
+      (require 'org-tempo nil t)
+      (progn
+       (require 'org-eldoc)
+       (org-eldoc-load)))
+    (:after ox
       (nasy/sup '(ox-rst ox-pandoc))
       (require 'ox-rst)
       (require 'ox-pandoc))
-    (after-x 'company
-      (nasy/add-company-backend 'org-mode
-	'(;; company-tabnine
-	  company-files)))
-    :advice
-    (:after org-refile
-	    (lambda (&rest _) (org-save-all-org-buffers)))
-    (:around org-html-paragraph
-	     nasy/org-html-paragraph-advice))
+    (:advice
+     org-refile :after
+     (lambda (&rest _) (org-save-all-org-buffers))
+
+     org-html-paragraph :around
+     nasy/org-html-paragraph-advice))
 #+end_src
 
 *** Org Agenda                                             :org:
 
 #+begin_src emacs-lisp
-  (leaf org-agenda
-    :bind (:org-mode-map
-	   ("C-," . nil))
-    :hook (org-agenda-finalize-hook . nasy/org-agenda-log-mode-colorize-block)
-    :defer-config
-    (after-x 'all-the-icons
+  (setup org-agenda
+    (:bind-into org-mode-map
+      "C-," nil)
+    (:with-hook org-agenda-finalize-hook
+      (:hook nasy/org-agenda-log-mode-colorize-block))
+    (:after all-the-icons
       (setq
        org-agenda-category-icon-alist
        `(("Tasks"
-	  ,(list (all-the-icons-faicon "tasks" :height 0.8 :v-adjust 0))
-	  nil nil :ascent center)
-	 ("Calendar"
-	  ,(list (all-the-icons-octicon "calendar" :height 0.8 :v-adjust 0))
-	  nil nil :ascent center)
-	 ("Appointments"
-	  ,(list (all-the-icons-faicon "calendar-check-o" :height 0.8 :v-adjust 0))
-	  nil nil :ascent center)))))
+          ,(list (all-the-icons-faicon "tasks" :height 0.8 :v-adjust 0))
+          nil nil :ascent center)
+         ("Calendar"
+          ,(list (all-the-icons-octicon "calendar" :height 0.8 :v-adjust 0))
+          nil nil :ascent center)
+         ("Appointments"
+          ,(list (all-the-icons-faicon "calendar-check-o" :height 0.8 :v-adjust 0))
+          nil nil :ascent center)))))
 #+end_src
 
 *** Org Appear                                 :convenience:org:
@@ -983,49 +1008,49 @@ element
 https://github.com/awth13/org-appear
 
 #+begin_src emacs-lisp
-  (leaf org-appear
-    :doc "Make invisible parts of Org elements appear visible."
-    :url "https://github.com/awth13/org-appear"
-    :tag "convenience"
-    :hook nasy-org-first-key-hook)
+  (setup org-appear
+    (:doc "Make invisible parts of Org elements appear visible.")
+    (:url "https://github.com/awth13/org-appear")
+    (:tag "convenience")
+    (:hook-into nasy-org-first-key-hook))
 #+end_src
 
 *** Org Capture                                            :org:
 
 #+begin_src emacs-lisp
-  (leaf org-capture
-    :defer-config
-    (add-to-list 'org-capture-templates '("t" "Tasks"))
+  (setup org-capture
+    (:when-loaded
+     (add-to-list 'org-capture-templates '("t" "Tasks"))
 
-    (add-to-list 'org-capture-templates
-		 '("tr" "Book Reading Task" entry
-		   (file+olp "~/notes/task.org" "Reading" "Book")
-		   "* TODO %^{book name}\n%u\n%a\n" :clock-in t :clock-resume t))
+     (add-to-list 'org-capture-templates
+                  '("tr" "Book Reading Task" entry
+                    (file+olp "~/notes/task.org" "Reading" "Book")
+                    "* TODO %^{book name}\n%u\n%a\n" :clock-in t :clock-resume t))
 
-    (add-to-list 'org-capture-templates
-		 '("tw" "Work Task" entry
-		   (file+headline "~/notes/task.org" "Work")
-		   "* TODO %^{task name}\n%u\n%a\n" :clock-in t :clock-resume t))
+     (add-to-list 'org-capture-templates
+                  '("tw" "Work Task" entry
+                    (file+headline "~/notes/task.org" "Work")
+                    "* TODO %^{task name}\n%u\n%a\n" :clock-in t :clock-resume t))
 
-    (add-to-list 'org-capture-templates
-		 '("T" "Thoughts" entry
-		   (file "~/notes/thoughts.org")
-		   "* %t - %^{heading}\n\n%?"))
+     (add-to-list 'org-capture-templates
+                  '("T" "Thoughts" entry
+                    (file "~/notes/thoughts.org")
+                    "* %t - %^{heading}\n\n%?"))
 
-    (add-to-list 'org-capture-templates
-		 '("j" "Journal" entry
-		   (file "~/notes/journal.org")
-		   "* %U - %^{heading}\n  %?"))
+     (add-to-list 'org-capture-templates
+                  '("j" "Journal" entry
+                    (file "~/notes/journal.org")
+                    "* %U - %^{heading}\n  %?"))
 
-    (add-to-list 'org-capture-templates
-		 '("i" "Inbox" entry
-		   (file "~/notes/inbox.org")
-		   "* %U - %^{heading} %^g\n %?\n"))
+     (add-to-list 'org-capture-templates
+                  '("i" "Inbox" entry
+                    (file "~/notes/inbox.org")
+                    "* %U - %^{heading} %^g\n %?\n"))
 
-    (add-to-list 'org-capture-templates
-		 '("n" "Notes" entry
-		   (file "~/notes/notes.org")
-		   "* %^{heading} %t %^g\n  %?\n")))
+     (add-to-list 'org-capture-templates
+                  '("n" "Notes" entry
+                    (file "~/notes/notes.org")
+                    "* %^{heading} %t %^g\n  %?\n"))))
 #+end_src
 
 *** Org CDLatex                                        :org:tex:
@@ -1033,28 +1058,30 @@ https://github.com/awth13/org-appear
 https://orgmode.org/manual/CDLaTeX-mode.html
 
 #+begin_src emacs-lisp
-  (leaf org
-    :hook (nasy-org-first-key-hook . org-cdlatex-mode))
+  (setup org-cdlatex
+    (:hook-into nasy-org-first-key-hook))
 #+end_src
 
 *** Org Clock                                              :org:
 
 #+begin_src emacs-lisp
-  (leaf org-clock
-    :hook ((org-clock-in-hook . nasy/show-org-clock-in-header-line)
-	   ((org-clock-out-hook . org-clock-cancel) . nasy/hide-org-clock-from-header-line))
-    :bind (:org-clock-mode-line-map
-	   ([header-line mouse-2] . org-clock-goto)
-	   ([header-line mouse-1] . org-clock-menu))
-    :defer-config
-    (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
-      (add-hook 'org-clock-in-hook
-		(lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
-				    (concat "tell application \"org-clock-statusbar\" to clock in \""
-					    org-clock-current-task "\""))))
-      (add-hook 'org-clock-out-hook
-		(lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
-				    "tell application \"org-clock-statusbar\" to clock out")))))
+  (setup org-clock
+    (:with-hook org-clock-in-hook
+      (:hook nasy/show-org-clock-in-header-line))
+    (:with-function nasy/hide-org-clock-from-header-line
+      (:hook-into org-clock-out-hook org-clock-cancel))
+    (:bind-into org-clock-mode-line-map
+     [header-line mouse-2] org-clock-goto
+     [header-line mouse-1] org-clock-menu)
+    (:when-loaded
+      (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
+        (add-hook 'org-clock-in-hook
+                  (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                                      (concat "tell application \"org-clock-statusbar\" to clock in \""
+                                              org-clock-current-task "\""))))
+        (add-hook 'org-clock-out-hook
+                  (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
+                                      "tell application \"org-clock-statusbar\" to clock out"))))))
 #+end_src
 
 *** Org Fragtag                                          :org:tex:
@@ -1065,11 +1092,11 @@ enters and exits them.
 https://github.com/io12/org-fragtog
 
 #+begin_src emacs-lisp
-  (leaf org-fragtog
+  (setup org-fragtog
     :doc "Automatically toggle Org mode LaTeX fragment previews as the cursor enters and exits them."
     :url "https://github.com/io12/org-fragtog"
     :tag "org" "tex"
-    :hook nasy-org-first-key-hook)
+    (:hook-into nasy-org-first-key-hook))
 #+end_src
 
 *** Org Latex Impatient                          :org:tex:tools:
@@ -1080,24 +1107,21 @@ MathJax outputed SVG.
 https://github.com/yangsheng6810/org-latex-impatient
 
 #+begin_src emacs-lisp
-  (leaf org-latex-impatient
-    :doc "Instant Previews LaTeX snippets in Org-mode."
-    :url "https://github.com/yangsheng6810/org-latex-impatient"
-    :tag "org" "tex" "tool"
-    :leaf-autoload t
-    :leaf-defun t
-    :custom
-    `(org-latex-impatient-tex2svg-bin . ,(executable-find "tex2svg"))
-    (org-latex-impatient-user-latex-definitions
-     . '("\\newcommand{\\ensuremath}[1]{#1}"
-	 "\\renewcommand{\\usepackage}[2][]{}"
-	 "\\renewcommand{\\useoutertheme}[1]{}"
-	 "\\renewcommand{\\setbeamertemplate}[2]{}"
-	 "\\renewcommand{\\setbeamercolor}[2]{}"
-	 "\\renewcommand{\\setbeamerfont}[2]{}"
-	 "\\renewcommand{\\input}[1]{}"))
-    :hook (nasy-org-first-key-hook . org-latex-impatient-mode))
-
+  (setup org-latex-impatient
+    (:doc "Instant Previews LaTeX snippets in Org-mode.")
+    (:url "https://github.com/yangsheng6810/org-latex-impatient")
+    (:tag "org" "tex" "tool")
+    (:custom
+     org-latex-impatient-tex2svg-bin (executable-find "tex2svg")
+     org-latex-impatient-user-latex-definitions
+     '("\\newcommand{\\ensuremath}[1]{#1}"
+       "\\renewcommand{\\usepackage}[2][]{}"
+       "\\renewcommand{\\useoutertheme}[1]{}"
+       "\\renewcommand{\\setbeamertemplate}[2]{}"
+       "\\renewcommand{\\setbeamercolor}[2]{}"
+       "\\renewcommand{\\setbeamerfont}[2]{}"
+       "\\renewcommand{\\input}[1]{}"))
+    (:hook-into nasy-org-first-key-hook))
 #+end_src
 
 *** Org Modern                                             :org:
@@ -1111,35 +1135,35 @@ individually via the org-modern customization group.
 "https://github.com/minad/org-modern"
 
 #+begin_src emacs-lisp
-  (leaf org-modern
-    :doc "Modern Org Style"
-    :url "https://github.com/minad/org-modern"
-    :tag "org"
-    :custom
-    (org-modern--timestamp . '(" %a, %b %d, %Y " . " %H:%M "))
-    (org-modern-star . ["✿" "❀" "✭" "✫" "✦" "✧" "◈" "◇"])
-    ;; (org-modern-star . ["⚀" "⚁" "⚂" "⚃" "⚄" "⚅"])
-    ;; (org-modern-star . ["☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷"])
-    (org-modern-hide-stars . 'leading)
-    (org-modern-table . nil)
-    ;; (org-modern-list . '((?+ . "⊕")
-    ;;                      (?- . "⊖")
-    ;;                      (?* . "⊛")))
-    (org-modern-list . '((?+ . "✨")
-			 (?- . "💫")
-			 (?* . "💥")))
-    :hook nasy-org-first-key-hook)
+  (setup org-modern
+    (:doc "Modern Org Style")
+    (:url "https://github.com/minad/org-modern")
+    (:tag "org")
+    (:opts
+     (org-modern--timestamp . '(" %a, %b %d, %Y " . " %H:%M "))
+     (org-modern-star . ["✿" "❀" "✭" "✫" "✦" "✧" "◈" "◇"])
+     ;; (org-modern-star . ["⚀" "⚁" "⚂" "⚃" "⚄" "⚅"])
+     ;; (org-modern-star . ["☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷"])
+     (org-modern-hide-stars . 'leading)
+     (org-modern-table . nil)
+     ;; (org-modern-list . '((?+ . "⊕")
+     ;;                      (?- . "⊖")
+     ;;                      (?* . "⊛")))
+     (org-modern-list . '((?+ . "✨")
+                          (?- . "💫")
+                          (?* . "💥"))))
+    (:hook-into nasy-org-first-key-hook))
 #+end_src
 
 *** Org Prettify Source Block                              :org:
 
 #+begin_src emacs-lisp
-  (leaf org-prettify-source-block
-    :disabled t
-    :load-path* "桃夭/麐之趾"
-    :leaf-autoload t
-    :leaf-defun t
-    :hook nasy-org-first-key-hook)
+  ;; (leaf org-prettify-source-block
+  ;;   :disabled t
+  ;;   :load-path* "桃夭/麐之趾"
+  ;;   :leaf-autoload t
+  ;;   :leaf-defun t
+  ;;   :hook nasy-org-first-key-hook)
 #+end_src
 
 #+begin_src emacs-lisp :tangle (concat temporary-file-directory "org-prettify-source-block.el")
@@ -1164,81 +1188,81 @@ individually via the org-modern customization group.
     "Symbol used for babel headers")
 
   (defvar opsb-block-alist `(("#+begin_src"     . ?λ) ;; ╦ ➤ 🖝 ➟ ➤ ✎ ✎
-			     ("#+end_src"       . ?⌞) ;; ╩ □
-			     ("#+header:"       . ,opsb-ob-header-symbol)
-			     ("#+begin_comment" . ?✎)
-			     ("#+end_comment"   . ?⌞)
-			     ("#+begin_verse" . ?☾)
-			     ("#+end_verse"   . ?⌞)
-			     ("#+begin_notes"   . ?➤)
-			     ("#+end_notes"     . ?⌞)
-			     ("#+begin_quote"   . ?»)
-			     ("#+end_quote"     . ?⌞)))
+                             ("#+end_src"       . ?⌞) ;; ╩ □
+                             ("#+header:"       . ,opsb-ob-header-symbol)
+                             ("#+begin_comment" . ?✎)
+                             ("#+end_comment"   . ?⌞)
+                             ("#+begin_verse" . ?☾)
+                             ("#+end_verse"   . ?⌞)
+                             ("#+begin_notes"   . ?➤)
+                             ("#+end_notes"     . ?⌞)
+                             ("#+begin_quote"   . ?»)
+                             ("#+end_quote"     . ?⌞)))
 
   (defun opsb-org-prettify-src--update ()
     (let ((case-fold-search t)
-	  (re "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*")
-	  found)
+          (re "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*")
+          found)
       (save-excursion
-	(goto-char (point-min))
-	(while (re-search-forward re nil t)
-	  (goto-char (match-end 0))
-	  (let ((args (org-trim
-		       (buffer-substring-no-properties (point)
-						       (line-end-position)))))
-	    (when (org-string-nw-p args)
-	      (let ((new-cell (cons args opsb-ob-header-symbol)))
-		(cl-pushnew new-cell prettify-symbols-alist :test #'equal)
-		(cl-pushnew new-cell found :test #'equal)))))
+        (goto-char (point-min))
+        (while (re-search-forward re nil t)
+          (goto-char (match-end 0))
+          (let ((args (org-trim
+                       (buffer-substring-no-properties (point)
+                                                       (line-end-position)))))
+            (when (org-string-nw-p args)
+              (let ((new-cell (cons args opsb-ob-header-symbol)))
+                (cl-pushnew new-cell prettify-symbols-alist :test #'equal)
+                (cl-pushnew new-cell found :test #'equal)))))
 
-	(setq prettify-symbols-alist
-	      (cl-set-difference prettify-symbols-alist
-				 (cl-set-difference
-				  (cl-remove-if-not
-				   (lambda (elm)
-				     (eq (cdr elm) opsb-ob-header-symbol))
-				   prettify-symbols-alist)
-				  found :test #'equal)))
+        (setq prettify-symbols-alist
+              (cl-set-difference prettify-symbols-alist
+                                 (cl-set-difference
+                                  (cl-remove-if-not
+                                   (lambda (elm)
+                                     (eq (cdr elm) opsb-ob-header-symbol))
+                                   prettify-symbols-alist)
+                                  found :test #'equal)))
 
-	;; Clean up old font-lock-keywords.
-	(font-lock-remove-keywords nil prettify-symbols--keywords)
-	(setq prettify-symbols--keywords (prettify-symbols--make-keywords))
-	(font-lock-add-keywords nil prettify-symbols--keywords)
-	(while (re-search-forward re nil t)
-	  (font-lock-flush (line-beginning-position) (line-end-position))))))
+        ;; Clean up old font-lock-keywords.
+        (font-lock-remove-keywords nil prettify-symbols--keywords)
+        (setq prettify-symbols--keywords (prettify-symbols--make-keywords))
+        (font-lock-add-keywords nil prettify-symbols--keywords)
+        (while (re-search-forward re nil t)
+          (font-lock-flush (line-beginning-position) (line-end-position))))))
 
   (defun opsb-org-prettify-src ()
     "Hide src options via `prettify-symbols-mode'.
       `prettify-symbols-mode' is used because it has
       uncollapsing. It may not be efficient."
     (let* ((case-fold-search t)
-	   (at-src-block
-	    (save-excursion
-	      (beginning-of-line)
-	      (looking-at "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*"))))
+           (at-src-block
+            (save-excursion
+              (beginning-of-line)
+              (looking-at "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*"))))
       ;; Test if we moved out of a block.
       (when (or (and opsb-org-at-src-begin
-		     (not at-src-block))
-		;; File was just opened.
-		(eq opsb-org-at-src-begin -1))
-	(opsb-org-prettify-src--update))
+                     (not at-src-block))
+                ;; File was just opened.
+                (eq opsb-org-at-src-begin -1))
+        (opsb-org-prettify-src--update))
       (setq opsb-org-at-src-begin at-src-block)))
 
   (defsubst opsb-append-upcase (the-list)
       "Duplicate THE-LIST with upcased cars."
     (cl-reduce 'append
-	       (mapcar (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-		       the-list)))
+               (mapcar (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+                       the-list)))
 
   (defun opsb-append-org-prettify-symbols ()
     (setq prettify-symbols-alist
-	    (cl-union prettify-symbols-alist
-		      (opsb-append-upcase opsb-block-alist))))
+            (cl-union prettify-symbols-alist
+                      (opsb-append-upcase opsb-block-alist))))
 
   (defun opsb-delete-org-prettify-symbols ()
     (setq prettify-symbols-alist
-	  (cl-set-difference prettify-symbols-alist
-			     (opsb-append-upcase opsb-block-alist))))
+          (cl-set-difference prettify-symbols-alist
+                             (opsb-append-upcase opsb-block-alist))))
 
 
   ;;;###autoload
@@ -1246,16 +1270,40 @@ individually via the org-modern customization group.
     "Toggle prettification of org source blocks."
     :lighter ""
     (if org-prettify-source-block-mode
-	(progn
-	  (turn-on-prettify-symbols-mode)
-	  (add-hook 'post-command-hook 'opsb-org-prettify-src t t)
-	  (opsb-append-org-prettify-symbols))
+        (progn
+          (turn-on-prettify-symbols-mode)
+          (add-hook 'post-command-hook 'opsb-org-prettify-src t t)
+          (opsb-append-org-prettify-symbols))
       (remove-hook 'post-command-hook 'opsb-org-prettify-src t)
       (opsb-delete-org-prettify-symbols)))
 
 
   (provide 'org-prettify-source-block)
   ;;; org-prettify-source-block.el ends here
+#+end_src
+
+*** org rainbow tags
+
+This package adds random colors to your org tags. In order to make
+colors random but consistent between same tags, colors are generated
+from the hash of the tag names.
+
+Since it’s random, results may not make you happy, but there are some
+custom fields that you can use as seed to generate different
+colors. If you are really picky, there is already a built-in solution
+for you, please see org-tag-faces. This package aims to get rid of
+setting and updating org-tag-faces manually for each tag you use.
+
+
+
+https://github.com/KaratasFurkan/org-rainbow-tags
+
+#+begin_src emacs-lisp
+  (setup org-rainbow-tags
+    (:doc "Colorize org tags automatically to make them visually distinguishable.")
+    (:url "https://github.com/KaratasFurkan/org-rainbow-tags")
+    (:tag "org" "faces" "outlines")
+    (:hook-into nasy-org-first-key-hook))
 #+end_src
 
 *** org roam                              :convenience:roam:org:
@@ -1269,77 +1317,78 @@ https://www.orgroam.com/
 
 https://github.com/org-roam/org-roam
 
-
 #+begin_src emacs-lisp
-  (leaf org-roam
-    :doc "Rudimentary Roam replica with org-mode."
-    :url "https://github.com/org-roam/org-roam"
-    :tag "convenience" "roam"
-    :bind
-    (:org-mode-map
-     ("C-c n c" . org-roam-capture)
-     ("C-c n f" . org-roam-node-find)
-     ("C-c n g" . org-roam-graph)
-     ("C-c n i" . org-roam-node-insert)
-     ("C-c n I" . org-roam-insert-immediate)
-     ("C-c n l" . org-roam-buffer-toggle)
+  (setup org-roam
+    (:doc "Rudimentary Roam replica with org-mode.")
+    (:url "https://github.com/org-roam/org-roam")
+    (:tag "convenience" "roam")
+    (:bind
+     "C-c n c" org-roam-capture
+     "C-c n f" org-roam-node-find
+     "C-c n g" org-roam-graph
+     "C-c n i" org-roam-node-insert
+     "C-c n l" org-roam-buffer-toggle
      ;; Dailies
-     ("C-c n j" . org-roam-dailies-capture-today))
-    :custom
-    `(org-roam-db-location . ,(concat *nasy-var* "org/org-roam.db"))
+     "C-c n j" org-roam-dailies-capture-today)
+    (:custom
+     org-roam-db-location (concat *nasy-var* "org/org-roam.db"))
     ;; :hook (nasy-first-key-hook . org-roam-setup)
-    (add-to-list 'safe-local-variable-values
-		 '(org-roam-directory))
-    (add-to-list 'safe-local-variable-values
-		 '(eval setq-local org-roam-directory
-			(locate-dominating-file default-directory ".dir-locals.el"))))
+    (:when-loaded
+      (setq org-roam-node-display-template
+            (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+      (org-roam-db-autosync-mode)
+      (add-to-list 'safe-local-variable-values
+                   '(org-roam-directory))
+      (add-to-list 'safe-local-variable-values
+                   '(eval setq-local org-roam-directory
+                          (locate-dominating-file default-directory ".dir-locals.el")))))
 #+end_src
 
 *** Org superstar                                          :org:
 
 #+begin_src emacs-lisp
-  (leaf org-superstar
-    :disabled t
-    :hook
-    (nasy/font-change-hook
-     . (lambda ()
-	 (progn
-	   (nasy/set-symbol ?☯ 21 nil)
-	   (nasy/set-symbol ?✿ 18 nil)
-	   (nasy/set-symbol ?❀ 16 nil)
-	   (nasy/set-symbol ?✫ 15 nil)
-	   (nasy/set-symbol ?✸ 16 nil)
-	   (nasy/set-symbol ?◉ 16 nil)
-	   (nasy/set-symbol ?✼ 12 nil)
-	   (nasy/set-symbol ?✚ 12 nil)
-	   (nasy/set-symbol ?⁍ 13 nil)
-	   (nasy/change-char-width ?☯ 2)
-	   (nasy/change-char-width ?✿ 2)
-	   (nasy/change-char-width ?❀ 2)
-	   (nasy/change-char-width ?✫ 2)
-	   (nasy/change-char-width ?✸ 2)
-	   (nasy/change-char-width ?◉ 2)
-	   (nasy/change-char-width ?✼ 1)
-	   (nasy/change-char-width ?✚ 1)
-	   (nasy/change-char-width ?⁍ 1)))))
+  ;; (leaf org-superstar
+  ;;   :disabled t
+  ;;   :hook
+  ;;   (nasy/font-change-hook
+  ;;    . (lambda ()
+  ;;        (progn
+  ;;          (nasy/set-symbol ?☯ 21 nil)
+  ;;          (nasy/set-symbol ?✿ 18 nil)
+  ;;          (nasy/set-symbol ?❀ 16 nil)
+  ;;          (nasy/set-symbol ?✫ 15 nil)
+  ;;          (nasy/set-symbol ?✸ 16 nil)
+  ;;          (nasy/set-symbol ?◉ 16 nil)
+  ;;          (nasy/set-symbol ?✼ 12 nil)
+  ;;          (nasy/set-symbol ?✚ 12 nil)
+  ;;          (nasy/set-symbol ?⁍ 13 nil)
+  ;;          (nasy/change-char-width ?☯ 2)
+  ;;          (nasy/change-char-width ?✿ 2)
+  ;;          (nasy/change-char-width ?❀ 2)
+  ;;          (nasy/change-char-width ?✫ 2)
+  ;;          (nasy/change-char-width ?✸ 2)
+  ;;          (nasy/change-char-width ?◉ 2)
+  ;;          (nasy/change-char-width ?✼ 1)
+  ;;          (nasy/change-char-width ?✚ 1)
+  ;;          (nasy/change-char-width ?⁍ 1)))))
 
-  (leaf org-superstar
-    :disabled t
-    :after org
-    :hook nasy-org-first-key-hook
-    :custom
-    ((org-superstar-special-todo-items . t)
-     (org-superstar-headline-bullets-list
-      . '("☯"
-	  "✿"
-	  "❀"
-	  "✫"
-	  "✸"
-	  "◉"))
-     (org-superstar-item-bullet-alist
-      . '((?* . ?✼)
-	  (?+ . ?✚)
-	  (?- . ?⁍)))))
+  ;; (leaf org-superstar
+  ;;   :disabled t
+  ;;   :after org
+  ;;   :hook nasy-org-first-key-hook
+  ;;   :custom
+  ;;   ((org-superstar-special-todo-items . t)
+  ;;    (org-superstar-headline-bullets-list
+  ;;     . '("☯"
+  ;;         "✿"
+  ;;         "❀"
+  ;;         "✫"
+  ;;         "✸"
+  ;;         "◉"))
+  ;;    (org-superstar-item-bullet-alist
+  ;;     . '((?* . ?✼)
+  ;;         (?+ . ?✚)
+  ;;         (?- . ?⁍)))))
 #+end_src
 
 *** Org Misc                                               :org:
@@ -1353,88 +1402,88 @@ https://github.com/org-roam/org-roam
 
   (defun nasy/-c-s (ns)
     (cl-loop for c in '(" " "~" "(" ")" "~" "&" "/" "[" "]" ":")
-	     do (setq ns (string-replace c "-" ns))
-	     finally return ns))
+             do (setq ns (string-replace c "-" ns))
+             finally return ns))
 
 
   (defun nasy/org-export-get-reference (datum info)
       "Like `org-export-get-reference', except use heading titles (DATUM INFO) instead of random numbers."
       (let ((cache (plist-get info :internal-references)))
-	(or (car (rassq datum cache))
-	    (let* ((crossrefs (plist-get info :crossrefs))
-		   (cells (org-export-search-cells datum))
-		   ;; Preserve any pre-existing association between
-		   ;; a search cell and a reference, i.e., when some
-		   ;; previously published document referenced a location
-		   ;; within current file (see
-		   ;; `org-publish-resolve-external-link').
-		   ;;
-		   ;; However, there is no guarantee that search cells are
-		   ;; unique, e.g., there might be duplicate custom ID or
-		   ;; two headings with the same title in the file.
-		   ;;
-		   ;; As a consequence, before re-using any reference to
-		   ;; an element or object, we check that it doesn't refer
-		   ;; to a previous element or object.
-		   (new (or (cl-some
-			     (lambda (cell)
-			       (let ((stored (cdr (assoc cell crossrefs))))
-				 (when stored
-				   (let ((old (org-export-format-reference stored)))
-				     (and (not (assoc old cache)) stored)))))
-			     cells)
-			    (when (org-element-property :raw-value datum)
-			      ;; Heading with a title
-			      (nasy/org-export-new-title-reference datum cache))
-			    ;; NOTE: This probably breaks some Org Export
-			    ;; feature, but if it does what I need, fine.
-			    (org-export-format-reference
-			     (org-export-new-reference cache))))
-		   (reference-string new))
-	      ;; Cache contains both data already associated to
-	      ;; a reference and in-use internal references, so as to make
-	      ;; unique references.
-	      (dolist (cell cells) (push (cons cell new) cache))
-	      ;; Retain a direct association between reference string and
-	      ;; DATUM since (1) not every object or element can be given
-	      ;; a search cell (2) it permits quick lookup.
-	      (push (cons reference-string datum) cache)
-	      (plist-put info :internal-references cache)
-	      reference-string))))
+        (or (car (rassq datum cache))
+            (let* ((crossrefs (plist-get info :crossrefs))
+                   (cells (org-export-search-cells datum))
+                   ;; Preserve any pre-existing association between
+                   ;; a search cell and a reference, i.e., when some
+                   ;; previously published document referenced a location
+                   ;; within current file (see
+                   ;; `org-publish-resolve-external-link').
+                   ;;
+                   ;; However, there is no guarantee that search cells are
+                   ;; unique, e.g., there might be duplicate custom ID or
+                   ;; two headings with the same title in the file.
+                   ;;
+                   ;; As a consequence, before re-using any reference to
+                   ;; an element or object, we check that it doesn't refer
+                   ;; to a previous element or object.
+                   (new (or (cl-some
+                             (lambda (cell)
+                               (let ((stored (cdr (assoc cell crossrefs))))
+                                 (when stored
+                                   (let ((old (org-export-format-reference stored)))
+                                     (and (not (assoc old cache)) stored)))))
+                             cells)
+                            (when (org-element-property :raw-value datum)
+                              ;; Heading with a title
+                              (nasy/org-export-new-title-reference datum cache))
+                            ;; NOTE: This probably breaks some Org Export
+                            ;; feature, but if it does what I need, fine.
+                            (org-export-format-reference
+                             (org-export-new-reference cache))))
+                   (reference-string new))
+              ;; Cache contains both data already associated to
+              ;; a reference and in-use internal references, so as to make
+              ;; unique references.
+              (dolist (cell cells) (push (cons cell new) cache))
+              ;; Retain a direct association between reference string and
+              ;; DATUM since (1) not every object or element can be given
+              ;; a search cell (2) it permits quick lookup.
+              (push (cons reference-string datum) cache)
+              (plist-put info :internal-references cache)
+              reference-string))))
 
   (defun nasy/org-export-new-title-reference (datum cache)
     "Return new reference for DATUM that is unique in CACHE."
     (cl-macrolet ((inc-suffixf (place)
-			       `(progn
-				  (string-match (rx bos
-						    (minimal-match (group (1+ anything)))
-						    (optional "--" (group (1+ digit)))
-						    eos)
-						,place)
-				  ;; HACK: `s1' instead of a gensym.
-				  (-let* (((s1 suffix) (list (match-string 1 ,place)
-							     (match-string 2 ,place)))
-					  (suffix (if suffix
-						      (string-to-number suffix)
-						    0)))
-				    (setf ,place (format "%s--%s" s1 (cl-incf suffix)))))))
+                               `(progn
+                                  (string-match (rx bos
+                                                    (minimal-match (group (1+ anything)))
+                                                    (optional "--" (group (1+ digit)))
+                                                    eos)
+                                                ,place)
+                                  ;; HACK: `s1' instead of a gensym.
+                                  (-let* (((s1 suffix) (list (match-string 1 ,place)
+                                                             (match-string 2 ,place)))
+                                          (suffix (if suffix
+                                                      (string-to-number suffix)
+                                                    0)))
+                                    (setf ,place (format "%s--%s" s1 (cl-incf suffix)))))))
       (let* ((title (org-element-property :raw-value datum))
-	     ;; (ref (url-hexify-string (substring-no-properties title)))
-	     (ref (nasy/-c-s (substring-no-properties title)))
-	     (parent (org-element-property :parent datum)))
-	(while (--any (equal ref (car it))
-		      cache)
-	  ;; Title not unique: make it so.
-	  (if parent
-	      ;; Append ancestor title.
-	      (setf title (concat (org-element-property :raw-value parent)
-				  "--" title)
-		    ;; ref (url-hexify-string (substring-no-properties title))
-		    ref (nasy/-c-s (substring-no-properties title))
-		    parent (org-element-property :parent parent))
-	    ;; No more ancestors: add and increment a number.
-	    (inc-suffixf ref)))
-	ref)))
+             ;; (ref (url-hexify-string (substring-no-properties title)))
+             (ref (nasy/-c-s (substring-no-properties title)))
+             (parent (org-element-property :parent datum)))
+        (while (--any (equal ref (car it))
+                      cache)
+          ;; Title not unique: make it so.
+          (if parent
+              ;; Append ancestor title.
+              (setf title (concat (org-element-property :raw-value parent)
+                                  "--" title)
+                    ;; ref (url-hexify-string (substring-no-properties title))
+                    ref (nasy/-c-s (substring-no-properties title))
+                    parent (org-element-property :parent parent))
+            ;; No more ancestors: add and increment a number.
+            (inc-suffixf ref)))
+        ref)))
 
 
   (with-no-warnings
@@ -1445,15 +1494,15 @@ https://github.com/org-roam/org-roam
       :lighter "n/oxh"
       :global t
       (if nasy/ox-html-with-useful-ids-mode
-	  (progn
-	    (when (featurep 'gcmh)
-	      (gcmh-mode -1)
-	      (setq gc-cons-threshold most-positive-fixnum))
-	    (advice-add #'org-export-get-reference :override #'nasy/org-export-get-reference))
-	(progn
-	  (when (featurep 'gcmh)
-	    (gcmh-mode 1))
-	  (advice-remove #'org-export-get-reference #'nasy/org-export-get-reference)))))
+          (progn
+            (when (featurep 'gcmh)
+              (gcmh-mode -1)
+              (setq gc-cons-threshold most-positive-fixnum))
+            (advice-add #'org-export-get-reference :override #'nasy/org-export-get-reference))
+        (progn
+          (when (featurep 'gcmh)
+            (gcmh-mode 1))
+          (advice-remove #'org-export-get-reference #'nasy/org-export-get-reference)))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1465,7 +1514,7 @@ https://github.com/org-roam/org-roam
 
   (after-x 'ox
     (add-to-list 'org-export-filter-final-output-functions
-		 #'nasy/-org-export-remove-zero-width-space t))
+                 #'nasy/-org-export-remove-zero-width-space t))
 #+end_src
 
 *** 尾                                                     :org:
@@ -1483,57 +1532,73 @@ https://github.com/org-roam/org-roam
 *** Functions                                           :python:
 
 #+begin_src emacs-lisp
-  (leaf python
-    :disabled t
-    :bind
-    (:python-mode-map
-     ("C-b" . nasy/python-send-buffer)
-     ("C-r" . nasy/python-send-region)
-     ("C-r" . nasy/python-send-region)
-     ("C-c" . nasy/python-send-defun)
-     ("C-z" . nasy/python-switch-to-shell)
-     ("<S-return>" . nasy/python-send-region)))
+  ;; (leaf python
+  ;;   :disabled t
+  ;;   :bind
+  ;;   (:python-mode-map
+  ;;    ("C-b" . nasy/python-send-buffer)
+  ;;    ("C-r" . nasy/python-send-region)
+  ;;    ("C-r" . nasy/python-send-region)
+  ;;    ("C-c" . nasy/python-send-defun)
+  ;;    ("C-z" . nasy/python-switch-to-shell)
+  ;;    ("<S-return>" . nasy/python-send-region)))
 #+end_src
 
 *** python                                              :python:
 
 #+begin_src emacs-lisp
-  (leaf python
-    :defun nasy/tempo-python python-flycheck-setup
-    :init
-    (defun python-flycheck-setup ()
-      "Setup python checker."
-      ;; flake8 already have python-mypy and python-pylint as the next checker
-      ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
-      (add-to-list 'flycheck-disabled-checkers 'python-pylint)
-      (flycheck-remove-next-checker 'python-flake8 'python-pylint))
-    :mode-hook
-    (python-flycheck-setup)
-    (nasy/tempo-python)
-    (setq-local tab-width 4))
+  (defun python-flycheck-setup ()
+    "Setup python checker."
+    ;; flake8 already have python-mypy and python-pylint as the next checker
+    ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
+    (add-to-list 'flycheck-disabled-checkers 'python-pylint)
+    (flycheck-remove-next-checker 'python-flake8 'python-pylint))
+
+  (setup python
+    (:opt python-indent-def-block-scale 1)
+    (:mode-hook
+     (python-flycheck-setup)
+     (nasy/tempo-python)
+     (setq-local tab-width (python-indent-guess-indent-offset))))
+#+end_src
+
+*** black
+
+This is an Emacs package to make it easy to reformat Python code using
+black, the uncompromising Python code formatter.
+
+As an optional extra, this package can also reformat partial buffers
+using black-macchiato, which is a small wrapper around black which
+does just that.
+
+https://github.com/wbolster/emacs-python-black
+
+#+begin_src emacs-lisp
+  (setup python-black
+    (:doc "Emacs package to reformat Python using black.")
+    (:url "https://github.com/wbolster/emacs-python-black")
+    (:tag "python" "languages")
+    (:with-hook python-mode-hook
+      (:hook (lambda () (require 'python-black)))))
 #+end_src
 
 *** elpy                                                :python:
 
 #+begin_src emacs-lisp
-  (leaf elpy
-    :leaf-autoload t
-    :leaf-defun t
-    :commands nasy/elpy-init
-    :bind
-    (:elpy-mode-map
-     ("M-<left>"  . left-word)
-     ("M-<right>" . right-word))
-    :custom
-    (elpy-rpc-virtualenv-path . 'current)
-    (elpy-modules             . '(;; elpy-module-company
-				  elpy-module-folding
-				  elpy-module-yasnippet))
-    :advice
-    (:before python-mode elpy-enable)
-    (:after elpy-module-folding
-	    (lambda (&rest _)
-	      (define-key elpy-mode-map (kbd "<mouse-1>") nil))))
+  (setup elpy
+    (:bind-into elpy-mode-map
+     "M-<left>"  left-word
+     "M-<right>" right-word)
+    (:custom
+     elpy-rpc-virtualenv-path 'current
+     elpy-modules             '(;; elpy-module-company
+                                elpy-module-folding
+                                elpy-module-yasnippet))
+    (:advice
+     python-mode :before elpy-enable
+     elpy-module-folding :after
+     (lambda (&rest _)
+       (define-key elpy-mode-map (kbd "<mouse-1>") nil))))
 #+end_src
 
 *** lsp-pyright                                         :python:
@@ -1542,12 +1607,12 @@ https://github.com/org-roam/org-roam
   (defun python-setup-lsp-flycheck ()
     "Setup python lsp flycheck."
     (if lsp-diagnostics-mode
-	(progn
-	  ;; (flycheck-inline-mode -1)
-	  (flycheck-add-next-checker 'lsp 'python-flake8))
+        (progn
+          ;; (flycheck-inline-mode -1)
+          (flycheck-add-next-checker 'lsp 'python-flake8))
       (progn
-	;; (flycheck-inline-mode 1)
-	(flycheck-remove-next-checker 'lsp 'python-flake8))))
+        ;; (flycheck-inline-mode 1)
+        (flycheck-remove-next-checker 'lsp 'python-flake8))))
 
   (defun start-lsp-pyright ()
     "Start lsp pyright."
@@ -1556,27 +1621,26 @@ https://github.com/org-roam/org-roam
       (setq-local
        lsp-pyright-python-executable-cmd
        (string-trim (shell-command-to-string
-		     "pdm info --python")))
+                     "pdm info --python")))
       (setq-local
        lsp-pyright-extra-paths
        (vector
-	(concat (string-trim (shell-command-to-string
-			      "pdm info --package"))
-		"/lib"))))
+        (concat (string-trim (shell-command-to-string
+                              "pdm info --package"))
+                "/lib"))))
     (lsp))
 
-  (leaf lsp-pyright
-    :hook
-    (python-mode-hook          . start-lsp-pyright)
-    (lsp-diagnostics-mode-hook . python-setup-lsp-flycheck)
-    :config
-    (after-x 'company
+  (setup lsp-pyright
+    (:hooks
+     python-mode-hook          start-lsp-pyright
+     lsp-diagnostics-mode-hook python-setup-lsp-flycheck)
+    (:after company
       (nasy/add-company-backend 'python-mode
-	'(company-capf
-	  elpy-company-backend
-	  company-files
-	  ;; :with company-tabnine company-yasnippet
-	  :with company-yasnippet))))
+        '(company-capf
+          elpy-company-backend
+          company-files
+          ;; :with company-tabnine company-yasnippet
+          :with company-yasnippet))))
 #+end_src
 
 *** isort                                               :python:
@@ -1586,22 +1650,31 @@ https://github.com/org-roam/org-roam
     "Find isort config file."
     (let ((file (expand-file-name "~/.config/python/pyproject.toml")))
       (when (file-exists-p file)
-	file)))
-
-
-  (leaf python-isort
-    :leaf-autoload t
-    :leaf-defun t
-    :after reformatter
-    :commands python-isort-buffer python-isort-region python-isort-on-save-mode
-    :hook (python-mode-hook
-	   . (lambda () (setq python-isort-extra-args `("--sp" ,(nasy/find-isort-config)))))
-    (add-to-list 'safe-local-variable-values '(python-isort-extra-args)))
+        file)))
 
   (defun nasy/empty-isort-config ()
     "Cancel isort extra args."
     (interactive)
     (setq python-isort-extra-args nil))
+
+  (defun nasy/set-isort-config ()
+    "Set isort extra args."
+    (interactive)
+    (let ((pc (project-current)))
+      (if (and pc
+               (file-exists-p (concat (project-root pc) "/pyproject.toml")))
+          (nasy/empty-isort-config)
+        (setq python-isort-extra-args
+              `("--sp" ,(nasy/find-isort-config))))))
+
+  (setup python-isort
+    (:with-hook python-mode-hook
+      (:hook (lambda ()
+               (progn
+                 (require 'python-isort)
+                 (nasy/set-isort-config)))))
+    (:when-loaded
+      (add-to-list 'safe-local-variable-values '(python-isort-extra-args))))
 #+end_src
 
 ** restclient.el                         :restclient:languages:
@@ -1611,31 +1684,31 @@ HTTP REST client tool for emacs
 https://github.com/pashky/restclient.el
 
 #+begin_src emacs-lisp
-  (leaf restclient
-    :config
-    (after-x 'company
+  (setup restclient
+    (:after company
       (nasy/add-company-backend 'restclient-mode
-	'(company-restclient company-files))))
+        '(company-restclient company-files))))
 #+end_src
 
 ** Yaml                                        :yaml:languages:
 
 #+begin_src emacs-lisp
-  (leaf yaml-mode
-    :init (add-to-list 'nasy--defer-loads 'yaml-mode))
+  (setup yaml-mode
+    (:init (add-to-list 'nasy--defer-loads 'yaml-mode)))
 
-  (leaf lsp-yaml
-    :hook ((yaml-mode-hook . lsp)))
+  (setup lsp-yaml
+    (:with-hook yaml-mode-hook
+      (:hook lsp)))
 #+end_src
 
 ** MISC                                             :languages:
 
 #+begin_src emacs-lisp
-  (leaf elvish-mode
-    :init (add-to-list 'nasy--defer-loads 'elvish-mode))
+  (setup elvish-mode
+    (:init (add-to-list 'nasy--defer-loads 'elvish-mode)))
 
-  (leaf toml-mode
-    :init (add-to-list 'nasy--defer-loads 'toml-mode))
+  (setup toml-mode
+    (:init (add-to-list 'nasy--defer-loads 'toml-mode)))
 #+end_src
 
 * 結                                                :noexport:

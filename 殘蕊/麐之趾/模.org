@@ -1,0 +1,124 @@
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "模.el") :lexical t
+#+title: 模
+
+* 題                                                :noexport:
+
+#+begin_src emacs-lisp
+  ;;; 模.el --- Nasy's Emacs Configuration language template file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2022  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; 模
+
+  ;;; Code:
+
+  (require 'tempo)
+#+end_src
+
+* Haskell
+
+#+begin_src emacs-lisp
+  ;;;###autoload
+  (defun nasy/tempo-haskell ()
+    "Nasy haskell tempo."
+    (tempo-define-template
+     "hs-header"
+     '("--------------------------------------------------------------------------------" n>
+       "-- |" n>
+       "-- Filename    : " (file-name-nondirectory (buffer-file-name)) n>
+       "-- Project     : " (file-name-nondirectory (directory-file-name (or (project-root (project-current)) default-directory))) n>
+       "-- Author      : Nasy" n>
+       "-- Module      : " n>
+       "-- License     : GPL-3.0+" n>
+       "-- Maintainer  : Nasy <nasyxx+haskell@gmail.com>" n>
+       "-- Description : " n>
+       "--" n>
+       "-- > Haskell ♡ Nasy." n>
+       "-- >-----------------------------------------------" n>
+       "-- >             *         *" n>
+       "-- >                  .                ." n>
+       "-- >           .                               登" n>
+       "-- >     *                      ," n>
+       "-- >                   .                       至" n>
+       "-- >" n>
+       "-- >                               *           恖" n>
+       "-- >          |\\___/|" n>
+       "-- >          )    -(             .            聖·" n>
+       "-- >         =\\ -   /=" n>
+       "-- >           )===(       *" n>
+       "-- >          /   - \\" n>
+       "-- >          |-    |" n>
+       "-- >         /   -   \\     0.|.0" n>
+       "-- >  NASY___\\__( (__/_____(\\=/)__+1s____________" n>
+       "-- >  ______|____) )______|______|______|______|_" n>
+       "-- >  ___|______( (____|______|______|______|____" n>
+       "-- >  ______|____\\_|______|______|______|______|_" n>
+       "-- >  ___|______|______|______|______|______|____" n>
+       "-- >  ______|______|______|______|______|______|_" n>
+       "-- >  ___|______|______|______|______|______|____" n>
+       "-- > ----------------------------------------------" n>
+       "--" n>
+       "--" n>
+       "--" n>
+       "--" n>
+       "--------------------------------------------------------------------------------" n>))
+
+    (with-no-warnings
+      (define-abbrev haskell-mode-abbrev-table "hsh" "" 'tempo-template-hs-header)))
+#+end_src
+
+* Python
+
+#+begin_src emacs-lisp
+  ;;;###autoload
+  (defun nasy/tempo-python ()
+    "Nasy python tempo."
+    (tempo-define-template
+     "py-header"
+     '("#!/usr/bin/env python" n>
+       "# -*- coding: utf-8 -*-" n n>
+       "r\"\"\"" n>
+       "Python ♡ Nasy." n n>
+       "    |             *         *" n>
+       "    |                  .                ." n>
+       "    |           .                              登" n>
+       "    |     *                      ," n>
+       "    |                   .                      至" n>
+       "    |" n>
+       "    |                               *          恖" n>
+       "    |          |\\___/|" n>
+       "    |          )    -(             .           聖 ·" n>
+       "    |         =\\ -   /=" n>
+       "    |           )===(       *                  " n>
+       "    |          /   - \\" n>
+       "    |          |-    |                         " n>
+       "    |         /   -   \\     0.|.0" n>
+       "    |  NASY___\\__( (__/_____(\\=/)__+1s____________" n>
+       "    |  ______|____) )______|______|______|______|_" n>
+       "    |  ___|______( (____|______|______|______|____" n>
+       "    |  ______|____\\_|______|______|______|______|_" n>
+       "    |  ___|______|______|______|______|______|____" n>
+       "    |  ______|______|______|______|______|______|_" n>
+       "    |  ___|______|______|______|______|______|____" n n>
+       "author   : Nasy https://nasy.moe" n>
+       "date     : " (format-time-string "%b %e, %Y") n>
+       "email    : Nasy <nasyxx+python@gmail.com>" n>
+       "filename : " (file-name-nondirectory (buffer-file-name)) n>
+       "project  : " (file-name-nondirectory (directory-file-name (or (project-root (project-current)) default-directory))) n>
+       "license  : GPL-3.0+" n n> p n>
+       "\"\"\"" n>))
+
+    (with-no-warnings
+      (define-abbrev python-mode-abbrev-table "pyh" "" 'tempo-template-py-header)))
+#+end_src
+
+* 結                                                :noexport:
+
+#+begin_src emacs-lisp
+  (provide '模)
+  ;;; 模.el ends here
+#+end_src

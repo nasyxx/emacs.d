@@ -28,11 +28,15 @@
   ;; 函數與宏 定製其文 宜其用之
 
   ;;; Code:
+
   (cl-eval-when (compile)
-    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓"))
+    (setq nasy--require t)
+    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓/擊鼓.el"))
     (require '擊鼓)
-    (sup 'beacon t)
-    (sup 'dashboard t))
+    (sup 'beacon)
+    (sup 'doom-modeline)
+    (sup 'ibuffer)
+    (setq nasy--require nil))
 #+end_src
 
 * 恆用之
@@ -76,13 +80,12 @@
 
   (defun nasy/run-hook-once-on (hook on-hook)
     "Run HOOK on ON-HOOK once."
-    (let ((fn (intern (format "nasy-once-hook--%s-on-%s" hook on-hook)))
-          (hook* hook))
+    (let ((fn (intern (format "nasy-once-hook--%s-on-%s" hook on-hook))))
       (fset
        fn
        (lambda (&rest _)
-         (run-hooks hook*)
-         (set hook* nil)))
+         (run-hooks hook)
+         (set hook nil)))
       (add-hook on-hook fn)))
 
   (defun nasy/defer-load ()
@@ -90,15 +93,16 @@
     (run-hooks 'nasy--defer-load-hook))
 
   (add-hook 'nasy-first-key-hook #'nasy/defer-load -1)
+#+end_src
 
+** 彩
 
-    ;;;###autoload
-  (defun stop-minimizing-window ()
-    "Stop minimizing window under macOS."
-    (interactive)
-    (unless (and *is-a-mac*
-                 window-system)
-      (suspend-frame)))
+#+begin_src emacs-lisp
+  (leaf 彩
+    :init
+    (sup `(彩 :local-repo ,(concat *nasy-site* "nasy/nasy-theme")
+              :files ("彩.el")))
+    (require '彩))
 #+end_src
 
 ** 宏
@@ -122,63 +126,6 @@
 
   (defvar nasy--cus-font nil)
   (defvar nasy--set-font nil)
-
-  (defun nasy/-set-font (&rest _)
-    "Font."
-    (setq nasy--set-font t)
-    (setup nasy-font
-      (:doc "字軆初值")
-      (:opt*
-       ,*font-main-family*   "MonoLisa Nasy"
-       ,*font-symbol-family* "Symbola"
-       ,*font-cjk-family*    "STFLGQKJF"
-       ,*font-cjk-2-family*  "FZLiuGongQuanKaiShuJF"
-       ;; I.Ngaan' font from `http://founder.acgvlyric.org/iu/doku.php/造字:開源字型_i.顏體'.
-       ,*font-cjk-3-family*  "I.Ngaan"
-       ,*font-cjk-4-family*  "Kaiti SC"
-       ,*font-cjk-5-family*  "Kaiti TC")
-      (:opts*
-       ((*font-mode-line-family*
-         ,*font-header-line-family*
-         ,*font-tab-line-family*)
-        . "Recursive Mono Casual Static"))
-      (:opt*
-       ,*font-main-size*        14
-       ,*font-mode-line-size*   14
-       ,*font-tab-line-size*    13
-       ,*font-symbol-size*      17
-       ,*font-header-line-size* 12
-
-       ,*font-main-weight* 'medium)
-      (:opts*
-       ((*font-cjk-size*
-         ,*font-cjk-2-size*
-         ,*font-cjk-3-size*
-         ,*font-cjk-4-size*
-         ,*font-cjk-5-size*)
-        . nil)
-       ((*font-cjk-scale*
-         ,*font-cjk-2-scale*
-         ,*font-cjk-3-scale*
-         ,*font-cjk-4-scale*
-         ,*font-cjk-5-scale*)
-        . 1.3)
-       ((*font-symbol-weight*
-         ;; *font-cjk-4-weight*
-         ;; *font-cjk-5-weight*
-         ,*font-mode-line-weight*
-         ,*font-tab-line-weight*
-         ,*font-header-line-weight*
-
-         ,*font-cjk-weight*
-         ,*font-cjk-2-weight*
-         ,*font-cjk-3-weight*)
-        . 'normal)
-
-       ((*font-cjk-4-weight*
-         ,*font-cjk-5-weight*)
-        . 'bold)))
-    (require '芄蘭 nil t))
 
 
   (cl-eval-when (compile eval load)
@@ -216,8 +163,7 @@
 
 
   (cl-eval-when (compile)
-    (nasy/-cus-font)
-    (nasy/-set-font))
+    (nasy/-cus-font))
 
 
   (defun nasy/check-font (font)
@@ -238,7 +184,6 @@
                                      :size   size)
                           frame
                           'prepend))))
-
 
   (defun nasy/set-hanamin (charset &optional size frame)
     "Set CHARSET fontset to HanaMin with SIZE on FRAME.
@@ -389,12 +334,74 @@
         (set-face-attribute 'header-line nil
                             :font (font-spec :family *font-header-line-family*
                                              :weight *font-header-line-weight*
-                                             :size   *font-header-line-size*))))
+                                             :size   *font-header-line-size*)))
 
       ;; (after-x 'doom-modeline
           ;;     (doom-modeline--set-char-widths doom-modeline-rhs-icons-alist))
-
+      )
     (run-hooks 'nasy/font-change-hook))
+
+
+  (defun nasy/-set-font (&rest _)
+    "Font."
+    (setq nasy--set-font t)
+    (leaf nasy-font
+      :doc "一些默訒値。"
+      :custom
+      (*font-main-family*   . "MonoLisa Nasy")
+      (*font-symbol-family* . "Symbola")
+      (*font-cjk-family*    . "STFLGQKJF")
+      (*font-cjk-2-family*  . "FZLiuGongQuanKaiShuJF")
+      ;; I.Ngaan' font from `http://founder.acgvlyric.org/iu/doku.php/造字:開源字型_i.顏體'.
+      (*font-cjk-3-family*  . "I.Ngaan")
+      (*font-cjk-4-family*  . "Kaiti SC")
+      (*font-cjk-5-family*  . "Kaiti TC")
+
+      ((*font-mode-line-family*
+        ,*font-header-line-family*
+        ,*font-tab-line-family*)
+       . "Recursive Mono Casual Static")
+
+      ((*font-main-size*
+        ,*font-mode-line-size*)
+       . 14)
+      (*font-tab-line-size* . 13)
+      (*font-symbol-size* . 17)
+      ((*font-cjk-size*
+        ,*font-cjk-2-size*
+        ,*font-cjk-3-size*
+        ,*font-cjk-4-size*
+        ,*font-cjk-5-size*)
+       . nil)
+      (*font-header-line-size* . 12)
+
+      ((*font-cjk-scale*
+        ,*font-cjk-2-scale*
+        ,*font-cjk-3-scale*
+        ,*font-cjk-4-scale*
+        ,*font-cjk-5-scale*)
+       . 1.3)
+
+      ((*font-symbol-weight*
+        ;; *font-cjk-4-weight*
+        ;; *font-cjk-5-weight*
+        ,*font-mode-line-weight*
+        ,*font-tab-line-weight*
+        ,*font-header-line-weight*)
+       . 'normal)
+
+      (*font-main-weight* . 'medium)
+
+      ((*font-cjk-weight*
+        ,*font-cjk-2-weight*
+        ,*font-cjk-3-weight*)
+       . 'normal)
+
+
+      ((*font-cjk-4-weight*
+        ,*font-cjk-5-weight*) . 'bold))
+
+    (require '芄蘭 nil t))
 
 
   (defun nasy/set-font (&rest _)
@@ -474,13 +481,6 @@
     :type '(repeat symbol)
     :group 'nasy)
 
-  (defmacro lisp-modes-hooks-add (func)
-    "Add FUNC to all lisp-related modes hooks."
-    (let ((bs))
-      (dolist (hook lisp-modes-hooks)
-        (push `(add-hook ',hook #',func) bs))
-      (macroexp-progn bs)))
-
   (defcustom *theme* 'nasy-theme
     "The Theme."
     :group 'nasy
@@ -494,8 +494,6 @@
     (customize-set-variable 'help-window-select    t "Customized by Nasy.")
     (customize-set-variable 'make-backup-files     nil "Customized by Nasy.")
     (customize-set-variable 'mouse-yank-at-point   t "Customized by Nasy.")
-    (customize-set-variable 'mouse-drag-and-drop-region-cross-program
-                            t "Customized by Nasy.")
     (customize-set-variable 'resize-mini-windows   t "Customized by Nasy.")
     (customize-set-variable 'scroll-conservatively 5 "Customized by Nasy.")
     (customize-set-variable 'scroll-margin         5 "Customized by Nasy.")
@@ -539,84 +537,86 @@
     (kill-line 0))
 
   (defun nasy/-cus-mac ()
-    "Customize macOS."
-    (setup mac
-      (:only-if *is-a-mac*)
-      (:opt*
-       mac-function-modifier      'super
-       mac-option-modifier        'meta
-       mac-command-modifier       'hyper
-       mac-right-command-modifier 'super
-       mac-right-option-modifier  'alt
-       default-frame-alist '((ns-transparent-titlebar . t)
-                             (ns-appearance           . light)
-                             (alpha-background        . 75)
-                             (vertical-scroll-bars    . nil)
-                             (border-width            . 5)
-                             (internal-border-width   . 24)))
-      (:global
-       "C-z"   stop-minimizing-window
-       "M-¥"   nasy/-insert-backslash
-       "A-¥"   nasy/-insert-backslash
-       "A-C-¥" toggle-input-method
-       [remap list-buffers] ibuffer
+    (leaf mac
+      :when *is-a-mac*
+      :bind
+      ("C-z"   . stop-minimizing-window)
+      ("M-¥"   . nasy/-insert-backslash)
+      ("A-¥"   . nasy/-insert-backslash)
+      ("A-C-¥" . toggle-input-method)
+      ([remap list-buffers] . ibuffer)
 
-       ;; cursor Movement
-       "H-<up>"   beginning-of-buffer
-       "H-<down>" end-of-buffer
-       "H-l"      goto-line
+      ;; cursor Movement
+      ("H-<up>"   . beginning-of-buffer)
+      ("H-<down>" . end-of-buffer)
+      ("H-l"      . goto-line)
 
-       ;; text Operations
-       "H-a"  mark-whole-buffer
-       "H-v"  yank
-       "H-c"  kill-ring-save
-       "H-s"  save-buffer
-       "H-z"  undo
-       "H-w"  delete-window
-       "H-<backspace>" n/kill-line-0
+      ;; text Operations
+      ("H-a" . mark-whole-buffer)
+      ("H-v" . yank)
+      ("H-c" . kill-ring-save)
+      ("H-s" . save-buffer)
+      ("H-z" . undo)
+      ("H-w" . delete-window)
+      ("H-<backspace>" . n/kill-line-0)
 
-       ;; Tab
-       "H-t" dashboard-refresh-buffer)
-      (:init
-       ;; unset
-       (global-unset-key (kbd "<magnify-down>"))
-       (global-unset-key (kbd "<magnify-up>")))))
+      ;; Tab
+      ("H-t" . dashboard-refresh-buffer)
+
+      :custom
+      (mac-function-modifier      . 'super)
+      (mac-option-modifier        . 'meta)
+      (mac-command-modifier       . 'hyper)
+      (mac-right-command-modifier . 'super)
+      (mac-right-option-modifier  . 'alt)
+      (default-frame-alist
+        . '((ns-transparent-titlebar . t)
+            (ns-appearance           . light)
+            (alpha-background        . 75)
+            (vertical-scroll-bars    . nil)
+            (border-width            . 5)
+            (internal-border-width   . 24)))
+
+      :init
+      ;; unset
+      (global-unset-key (kbd "<magnify-down>"))
+      (global-unset-key (kbd "<magnify-up>"))))
 
   (add-hook 'emacs-startup-hook #'nasy/-cus-mac)
 #+end_src
 
-* 時用之
+* 旹用之
 :PROPERTIES:
-:header-args:emacs-lisp: :tangle (concat temporary-file-directory "風雨時用.el") :lexical t
+:header-args:emacs-lisp: :tangle (concat temporary-file-directory "風雨旹用.el") :lexical t
 :END:
 
 主勭使用。
 
 #+begin_src emacs-lisp
-  ;;; 風雨時用.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
+  ;;; 風雨旹用.el --- Nasy's emacs.d core file.  -*- lexical-binding: t; -*-
   (cl-eval-when (compile)
-    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓"))
-    (add-to-list 'load-path (locate-user-emacs-file "桃夭/風雨"))
+    (setq nasy--require t)
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
     (require '擊鼓)
     (require '風雨)
 
-    (require 'compile)
-    (require 'winner)
+    (sup 'avy)
+    (sup 'beacon)
+    (sup 'dashboard)
+    (sup 'flycheck)
+    (sup 'projectile)
+    (sup 'smartparens)
+    (sup 'treemacs)
 
-    (sup 'avy t)
-    (sup 'expand-region t)
-    (sup 'flycheck t)
-    (sup 'org t)
-    (sup 'projectile t)
-    (sup 'smartparens t)
-    (sup 'treemacs t)
-    (with-no-warnings
-      (setq vterm-always-compile-module t))
-    (sup 'vterm t)
-    (sup '(vterm-toggle :build (:not native-compile)) t)
-    (sup `(彩 :local-repo ,(concat *nasy-site* "nasy/nasy-theme")
-              :files ("彩.el"))
-         t))
+    (require 'flycheck)
+    (require 'winner)
+    (require 'xref)
+    (setq nasy--require nil))
+
+
+  (cl-eval-when (compile eval load)
+    (require '風雨))
 #+end_src
 
 ** 元
@@ -669,6 +669,15 @@
                 (plist-get info :posframe-width))
              2)
           (round (* 0.02 (x-display-pixel-height)))))
+
+
+  ;;;###autoload
+  (defun stop-minimizing-window ()
+    "Stop minimizing window under macOS."
+    (interactive)
+    (unless (and *is-a-mac*
+                 window-system)
+      (suspend-frame)))
 
 
   ;;;###autoload
@@ -776,7 +785,7 @@
           (message "Evaluating %s...done" name)))))
 #+end_src
 
-** 臿入時間
+** 臿入旹間
 
 #+begin_src emacs-lisp
   ;;;###autoload
@@ -919,7 +928,7 @@
 
   ;;;###autoload
   (defun nasy/real-buffer-p (buffer-or-name)
-    "Returns t if BUFFER-OR-NAME is a =real= buffer.
+    "Returns t if BUFFER-OR-NAME is a 'real' buffer.
   A real buffer is a useful buffer; a first class citizen in Doom. Real ones
   should get special treatment, because we will be spending most of our time in
   them. Unreal ones should be low-profile and easy to cast aside, so we can focus
@@ -943,7 +952,7 @@
 
   ;;;###autoload
   (defun nasy/unreal-buffer-p (buffer-or-name)
-    "Return t if BUFFER-OR-NAME is an =unreal= buffer.
+    "Return t if BUFFER-OR-NAME is an 'unreal' buffer.
   See `nasy/real-buffer-p' for details on what that means."
     (not (nasy/real-buffer-p buffer-or-name)))
 
@@ -1430,7 +1439,6 @@
       "c"     (define-keymap :prefix 'nasy-code-map
                 "c" #'compile
                 "C" #'recompile
-                "t" #'vterm-toggle
                 "x" #'flycheck-list-errors)
       "e"     (define-keymap :prefix 'nasy-edit-map
                 "a"   #'avy-goto-char
@@ -1461,10 +1469,10 @@
       (nasy/-unset-key-map)))
 
 
-  (setup nasy-keybinding
-    (:hook-into nasy-org-first-key-hook
-                prog-mode-hook
-                text-mode-hook))
+  (leaf nasy-keybinding
+    :hook (nasy-org-first-key-hook
+           prog-mode-hook
+           text-mode-hook))
 #+end_src
 
 *** 光影
@@ -1536,8 +1544,8 @@
 ** 末
 
 #+begin_src emacs-lisp
-  (provide '風雨時用)
-  ;;; 風雨時用.el ends here
+  (provide '風雨旹用)
+  ;;; 風雨旹用.el ends here
 #+end_src
 
 * 結                                                :noexport:

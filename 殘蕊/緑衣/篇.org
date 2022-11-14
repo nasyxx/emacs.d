@@ -1,0 +1,1103 @@
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "緑衣.el") :lexical t
+#+title: 緑衣
+
+#+begin_verse
+  國風・邶風・緑衣
+
+  緑兮衣兮、緑衣黃裹
+  心之憂矣、曷維其已
+
+  緑兮衣兮、緑衣黃裳
+  心之憂矣、曷維其亡
+
+  緑兮絲兮、女所治兮
+  我恖古人、俾無訧兮
+
+  絺兮綌兮、淒其以風
+  我恖古人、實獲我心
+#+end_verse
+
+永不弃者載入于初始之旹也
+
+Permanent configuration file.
+
+You cannot disable anything here.
+
+* 題                                                :noexport:
+
+#+begin_src emacs-lisp :exports none
+  ;;; 緑衣.el --- Nasy's emacs.d permanent file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2022  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; 永不弃者載入于初始之旹也
+
+  ;;; Code:
+
+  (cl-eval-when (compile eval)
+    (setq nasy--require t)
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
+    (require '擊鼓)
+    (require '風雨)
+    (require '風雨旹用)
+
+    (require 'ffap)
+    (require 'winner)
+    (require 'cl-lib)
+    (require 'cl)
+
+    (sup 'alert)
+    (sup 'cape)
+    (sup 'corfu)
+    (sup 'embark)
+    (sup 'flycheck)
+    ;; (sup 'selectrum)
+    (sup '(vertico :files (:defaults "extensions/*")))
+    (sup 'transient)
+    (sup 'which-key)
+    (sup 'whitespace-cleanup-mode)
+    (require 'xref)
+    (setq nasy--require nil))
+
+#+end_src
+
+* 章
+
+** Anzu                                          :search:tools:
+
+anzu.el is an Emacs port of anzu.vim. anzu.el provides a minor mode which
+displays current match and total matches information in the mode-line in various
+search modes.
+
+https://github.com/emacsorphanage/anzu
+
+#+begin_src emacs-lisp
+  (leaf anzu
+    :doc "anzu.el is an Emacs port of anzu.vim."
+    :url "https://github.com/emacsorphanage/anzu"
+    :tag "search" "tools"
+    :hook ((nasy-first-key-hook . global-anzu-mode))
+    :bind (([remap query-replace]        . anzu-query-replace)
+           ([remap query-replace-regexp] . anzu-query-replace-regexp))
+    :init (sup 'anzu))
+#+end_src
+
+** Avy                                         :point:location:
+
+Jump to things in Emacs tree-style.
+
+https://github.com/abo-abo/avy
+
+#+begin_src emacs-lisp
+  (leaf avy
+    :doc "Jump to things in Emacs tree-style."
+    :url "https://github.com/abo-abo/avy"
+    :tag "point" "location"
+    :custom
+    (avy-keys . '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s)) ;; for dvorak
+    :bind
+    ("C-;"     . avy-goto-char)
+    ("C-:"     . avy-goto-char-2)
+    ;; ("C-'"     . avy-goto-char-2)
+    ;; ("C-`"     . avy-goto-char-2)
+    ("M-g e"   . avy-goto-word-0)
+    ("M-g w"   . avy-goto-word-1)
+    ;; ("C-~"     . avy-goto-word-1)
+    ("C-c C-j" . avy-resume)
+    :init (sup 'avy))
+#+end_src
+
+** Beginend                                           :editing:
+
+Emacs package to redefine M-< and M-> for some modes
+
+https://github.com/DamienCassou/beginend
+
+#+begin_src emacs-lisp
+  (leaf beginend
+    :doc "Emacs package to redefine M-< and M-> for some modes"
+    :url "https://github.com/DamienCassou/beginend"
+    :tag "editing"
+    :hook ((emacs-startup-hook . beginend-global-mode))
+    :init (sup 'beginend))
+#+end_src
+
+** Compile                                            :builtin:
+
+#+begin_src emacs-lisp
+  (defvar nasy/last-compilation-buffer nil
+    "The last buffer in which compilation took place.")
+
+  (defun nasy/save-compilation-buffer (&rest _)
+    "Save the compilation buffer to find it later."
+    (setq nasy/last-compilation-buffer next-error-last-buffer))
+
+  (defun alert-after-compilation-finish (buf result)
+    "Use `alert' to report compilation RESULT if BUF is hidden."
+    (when (buffer-live-p buf)
+      (unless (catch 'is-visible
+                (walk-windows (lambda (w)
+                                (when (eq (window-buffer w) buf)
+                                  (throw 'is-visible t))))
+                nil)
+        (alert (concat "Compilation " result)
+               :buffer buf
+               :category 'compilation
+               :title "Emacs"))))
+
+  (leaf compile
+    :tag "builtin"
+    :advice (:after compilation-start nasy/save-compilation-buffer)
+    :bind (([f6] . recompile))
+    :hook ((compilation-finish-functions . alert-after-compilation-finish)))
+#+end_src
+
+** Consult                                         :extensions:
+
+consult.el - Consulting completing-read.
+
+https://github.com/minad/consult
+
+Include consult & consult-flycheck.
+
+*** consult
+
+#+begin_src emacs-lisp
+  (leaf consult
+    :doc "consult.el - Consulting completing-read"
+    :url "https://github.com/minad/consult"
+    :tag "extensions"
+    :after vertico
+    :require t recentf
+    :custom
+    `(consult-narrow-key . ,(kbd "C-."))
+    :bind
+    (([remap switch-to-buffer]              . consult-buffer)
+     ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
+     ([remap switch-to-buffer-other-frame]  . consult-buffer-other-frame))
+
+    (([remap apropos]            . consult-apropos)
+     ([remap bookmark-jump]      . consult-bookmark)
+     ([remap goto-line]          . consult-goto-line)
+     ([remap imenu]              . consult-imenu)
+     ([remap multi-occur]        . consult-multi-occur)
+     ([remap recentf-open-files] . consult-recent-file)
+     ([remap yank-pop]           . consult-yank-replace))
+
+    (("C-s"   . consult-line)
+     ("C-S-s" . nasy/consult-line-symbol-at-point))
+    :init (sup 'consult)
+    :defer-config
+    (consult-customize
+     consult-theme
+     :preview-key (list (kbd "M-.")
+                        :debounce 3 (kbd "<up>") (kbd "<down>")
+                        :debounce 1 'any)
+     consult-ripgrep consult-git-grep consult-grep
+     consult-bookmark consult-recent-file consult-xref
+     consult--source-recent-file consult--source-project-recent-file
+     consult--source-bookmark consult-buffer
+     :preview-key (list (kbd "M-.")
+                        :debounce 5 (kbd "<up>") (kbd "<down>")
+                        :debounce 5 'any))
+    (defun nasy/consult-line-symbol-at-point ()
+      (interactive)
+      (consult-line (thing-at-point 'symbol))))
+#+end_src
+
+*** consult-flycheck
+
+#+begin_src emacs-lisp
+  (leaf consult-flycheck
+    :doc "consult.el - Consulting completing-read"
+    :url "https://github.com/minad/consult"
+    :tag "extensions"
+    :after consult
+    :bind (:flycheck-command-map
+           ("!" . consult-flycheck))
+    :init (sup 'consult-flycheck))
+#+end_src
+
+*** consult-dir                                    :convenience:
+
+Consult-dir allows you to easily select and switch between “active”
+directories.
+
+https://github.com/karthink/consult-dir
+
+#+begin_src emacs-lisp
+  (leaf consult-dir
+    :doc "consult-dir: switch directories easily in Emacs"
+    :url "https://github.com/karthink/consult-dir"
+    :tag "convenience"
+    :after vertico
+    :bind
+    ("C-x C-d" . consult-dir)
+    (:minibuffer-local-completion-map
+     ("C-x C-d" . consult-dir)
+     ("C-x C-j" . consult-dir-jump-file))
+    ;; (:selectrum-minibuffer-map
+    ;;  ("C-x C-d" . consult-dir)
+    ;;  ("C-x C-j" . consult-dir-jump-file))
+    (:vertico-map
+     ("C-x C-d" . consult-dir)
+     ("C-x C-j" . consult-dir-jump-file))
+    :init (sup 'consult-dir))
+#+end_src
+
+** Dired                                                :files:
+
+DiredMode is the mode of a Dired buffer.  It shows a directory (folder) listing
+that you can use to perform various operations on files and subdirectories in
+the directory. The operations you can perform are numerous, from creating
+subdirectories to byte-compiling files, searching files, and of course visiting
+(editing) files.
+
+https://www.emacswiki.org/emacs/DiredMode
+
+#+begin_src emacs-lisp
+  (leaf dired
+    :doc "DiredMode is the mode of a Dired buffer."
+    :url "https://www.emacswiki.org/emacs/DiredMode"
+    :tag "files"
+    :bind
+    (:dired-mode-map
+     ([mouse-2] . dired-find-file)
+     ("C-c C-p" . wdired-change-to-wdired-mode))
+    :custom
+    `(insert-directory-program . ,(or (executable-find "gls")
+                                     (executable-find "ls")))
+    (dired-recursive-deletes  . 'top))
+#+end_src
+
+** Easy Kill                              :killing:convenience:
+
+Provide commands easy-kill and easy-mark to let users kill or mark things easily.
+
+https://github.com/leoliu/easy-kill
+
+#+begin_src emacs-lisp
+  (leaf easy-kill
+    :doc "Kill & Mark Things Easily in Emacs."
+    :url "https://github.com/leoliu/easy-kill"
+    :tag "killing" "convenience"
+    :init (sup 'easy-kill)
+    :bind (([remap kill-ring-save] . easy-kill)
+           ([remap mark-sexp]      . easy-mark)))
+#+end_src
+
+** Emacs Spatial Navigate                             :editing:
+
+Spatial navigation in Emacs.
+
+https://gitlab.com/ideasman42/emacs-spatial-navigate
+
+#+begin_src emacs-lisp
+  (leaf spatial-navigate
+    :doc "Spatial navigation in Emacs."
+    :url "https://gitlab.com/ideasman42/emacs-spatial-navigate"
+    :tag "editing"
+    :bind (("<C-p>" . spatial-navigate-backward-vertical-bar)
+           ("<C-n>" . spatial-navigate-forward-vertical-bar)
+           ("<M-b>" . spatial-navigate-backward-horizontal-bar)
+           ("<M-f>" . spatial-navigate-forward-horizontal-bar)
+           ("<M-up>" . spatial-navigate-backward-vertical-box)
+           ("<M-down>" . spatial-navigate-forward-vertical-box)
+           ("<H-left>" . spatial-navigate-backward-horizontal-box)
+           ("<H-right>" . spatial-navigate-forward-horizontal-box))
+    :init (sup 'spatial-navigate))
+#+end_src
+
+** embark                                         :convenience:
+
+Emacs Mini-Buffer Actions Rooted in Keymaps.
+
+https://github.com/oantolin/embark/
+
+#+begin_src emacs-lisp
+  (defun embark-act-noquit ()
+    "Run action but don't quit the minibuffer afterwards."
+    (interactive)
+    (let ((embark-quit-after-action nil))
+      (embark-act)))
+
+  (defun embark-which-key-indicator ()
+    "An embark indicator that displays keymaps using which-key.
+   The which-key help message will show the type and value of the
+   current target followed by an ellipsis if there are further
+   targets."
+    (lambda (&optional keymap targets prefix)
+      (if (null keymap)
+          (which-key--hide-popup-ignore-command)
+        (which-key--show-keymap
+         (if (eq (plist-get (car targets) :type) 'embark-become)
+             "Become"
+           (format "Act on %s '%s'%s"
+                   (plist-get (car targets) :type)
+                   (embark--truncate-target (plist-get (car targets) :target))
+                   (if (cdr targets) "…" "")))
+         (if prefix
+             (pcase (lookup-key keymap prefix 'accept-default)
+               ((and (pred keymapp) km) km)
+               (_ (key-binding prefix 'accept-default)))
+           keymap)
+         nil nil t (lambda (binding)
+                     (not (string-suffix-p "-argument" (cdr binding))))))))
+
+  (defun embark-hide-which-key-indicator (fn &rest args)
+    "Hide the which-key indicator immediately when using the completing-read prompter."
+    (which-key--hide-popup-ignore-command)
+    (let ((embark-indicators
+           (remq #'embark-which-key-indicator embark-indicators)))
+      (apply fn args)))
+
+  (defun embark-live-vertico ()
+    "Shrink Vertico minibuffer when `embark-live' is active."
+    (when-let (win (and (string-prefix-p "*Embark Live" (buffer-name))
+                        (active-minibuffer-window)))
+      (with-selected-window win
+        (when (and (bound-and-true-p vertico--input)
+                   (fboundp 'vertico-multiform-unobtrusive))
+          (vertico-multiform-unobtrusive)))))
+
+  (leaf embark
+    :doc "Emacs Mini-Buffer Actions Rooted in Keymaps."
+    :url "https://github.com/oantolin/embark"
+    :tag "convenience"
+    :after vertico
+    :require t
+    :advice
+    ;; (:around embark-completiing-read-prompter embark-hide-which-key-indicator)
+    :bind
+    ([remap describe-bindings] . embark-bindings)
+    ("C-," . embark-dwim)
+    (:embark-file-map
+     ("s" . sudo-edit))
+    (:vertico-map
+     ("M-o" . embark-act))
+    (:nasy/active-region-map
+     :package 風雨旹用
+     ("M-o" . embark-act))
+    :custom
+    ;; (embark-indicators
+    ;;  . '(embark-which-key-indicator
+    ;;      embark-highlight-indicator
+    ;;      embark-isearch-highlight-indicator))
+    :hook (embark-collect-mode-hook . embark-live-vertico)
+    :init (sup 'embark)
+    :config
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
+
+
+  (leaf embark-consult
+    :after embark consult
+    :require t
+    :hook (embark-collect-mode-hook . consult-preview-at-point-mode)
+    :init (sup 'embark-consult))
+#+end_src
+
+** Flycheck                       :convenience:languages:tools:
+
+Modern on-the-fly syntax checking extension for GNU Emacs.
+
+[[https://www.flycheck.org/][flycheck.org]]
+
+https://github.com/flycheck/flycheck
+
+#+begin_src emacs-lisp
+  (sup 'flycheck)
+  (leaf flycheck
+    :doc "On the fly syntax checking for GNU Emacs."
+    :url "https://github.com/flycheck/flycheck"
+    :tag "convenience" "languages" "tools"
+    :hook prog-mode-hook
+    :custom
+    (flycheck-display-errors-function
+     . #'flycheck-display-error-messages-unless-error-list)
+    (flycheck-check-syntax-automatically . '(save idle-change mode-enabled))
+    (flycheck-display-errors-delay       . 0.25)
+    :bind
+    (:flycheck-error-list-mode-map
+     ("C-n" . flycheck-error-list-next-error)
+     ("C-p" . flycheck-error-list-previous-error)
+     ("RET" . flycheck-error-list-goto-error)
+     ([return] . flycheck-error-list-goto-error))
+    :init
+    (sup 'flycheck)
+    (add-to-list 'display-buffer-alist
+                 `(,(rx bos "*Flycheck errors*" eos)
+                   (display-buffer-reuse-window
+                    display-buffer-in-side-window)
+                   (side            . bottom)
+                   (reusable-frames . visible)
+                   (window-height   . 0.33)))
+    :defer-config
+    (defalias 'show-error-at-point-soon
+      'flycheck-show-error-at-point)
+    (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space))
+#+end_src
+
+** Grep                                               :builtin:
+
+#+begin_src emacs-lisp
+  (leaf grep
+    :tag "builtin"
+    :custom
+    ((grep-highlight-matches grep-scroll-output) . t))
+#+end_src
+
+** Helpful                                          :help:lisp:
+
+A better Emacs *help* buffer.
+
+https://github.com/Wilfred/helpful
+
+#+begin_src emacs-lisp
+  (leaf helpful
+    :doc "A better Emacs *help* buffer."
+    :url "https://github.com/Wilfred/helpful"
+    :tag "help" "lisp"
+    :bind (("C-c d" . helpful-at-point)
+           ([remap describe-function]   . helpful-callable)
+           ([remap describe-variable]   . helpful-variable)
+           ([remap describe-key]        . helpful-key))
+    :init (sup 'helpful))
+#+end_src
+
+*** elisp-demos
+
+#+begin_src emacs-lisp
+  (leaf elisp-demos
+    :doc "Demonstrate Emacs Lisp APIs."
+    :url "https://github.com/xuchunyang/elisp-demos"
+    :tag "lisp" "docs"
+    :init (sup 'elisp-demos)
+    :advice (:after helpful-update elisp-demos-advice-helpful-update))
+#+end_src
+
+** Keyfreq                               :extensions:utilities:
+
+Track Emacs commands frequency
+
+https://github.com/dacap/keyfreq
+
+#+begin_src emacs-lisp
+  (leaf keyfreq
+    :doc "Track Emacs commands frequency"
+    :url "https://github.com/dacap/keyfreq"
+    :tag "extensions" "utilities"
+    :custom
+    `(keyfreq-file . ,(concat *nasy-var* "keyfreq"))
+    (keyfreq-excluded-commands
+     . '(
+         backward-char
+         delete-backward-char
+         execute-extended-command
+         forward-char
+         keyboard-quit
+         kill-buffer
+         left-char
+         minibuffer-keyboard-quit
+         mouse-drag-region
+         mouse-set-point
+         move-beginning-of-line
+         move-end-of-line
+         next-line
+         org-delete-backward-char
+         org-end-of-line
+         org-return
+         org-self-insert-command
+         previous-line
+         previous-line
+         right-char
+         right-word
+         save-buffer
+         selectrum-next-candidate
+         selectrum-select-current-candidate
+         self-insert-command
+         yank))
+    :hook (nasy-first-key-hook)
+    :mode-hook (keyfreq-autosave-mode 1)
+    :init (sup 'keyfreq))
+#+end_src
+
+** marginalia                                      :extensions:
+
+marginalia.el - Marginalia in the minibuffer
+
+https://github.com/minad/marginalia
+
+#+begin_src emacs-lisp
+  (leaf marginalia
+    :doc "marginalia.el - Marginalia in the minibuffer."
+    :url "https://github.com/minad/marginalia"
+    :tag "extensions"
+    :after vertico
+    :bind (:minibuffer-local-map
+           ("M-a" . marginalia-cycle))
+    :init
+    (sup 'marginalia)
+    (marginalia-mode 1))
+#+end_src
+
+#+begin_src emacs-lisp
+  (leaf all-the-icons-completion
+    :hook (marginalia-mode-hook . all-the-icons-completion-marginalia-setup)
+    :init (sup 'all-the-icons-completion))
+#+end_src
+
+** Orderless                                       :extensions:
+
+This package provides an orderless completion style that divides the
+pattern into space-separated components, and matches candidates that
+match all of the components in any order. Each component can match in
+any one of several ways: literally, as a regexp, as an initialism, in
+the flex style, or as multiple word prefixes. By default, regexp and
+literal matches are enabled.
+
+https://github.com/oantolin/orderless
+
+#+begin_src emacs-lisp
+  (leaf orderless
+    :doc "Emacs completion style that matches multiple regexps in any order."
+    :url "https://github.com/oantolin/orderless"
+    :tag "extensions"
+    :leaf-autoload t
+    :leaf-defun t
+    :commands (n/first-initialism n/flex-if-twiddle
+               n/strict-if-hash n/without-if-bang)
+    :custom
+    (completion-styles . '(orderless initials basic))
+    (orderless-matching-styles
+     . '(orderless-regexp
+         orderless-initialism
+         orderless-literal))
+    (orderless-style-dispatchers   . '(nasy/-orderless-dispatch))
+    (orderless-component-separator . "[ &·]")
+    (completion-category-defaults  . nil)
+    (completion-category-overrides . '((file (styles partial-completion))))
+
+    :init
+    (sup 'orderless))
+
+
+  (defun nasy/-orderless-dispatch (pattern _index _total)
+    "Orderless (PATTERN) dispatch.
+
+   Recognizes the following patterns:
+   ,* ~flex flex~
+   ,* =literal literal=
+   ,* `initialism initialism`
+   ,* !without-literal without-literal!
+   ,* .ext (file extension)
+   ,* regexp$ (regexp matching at end)"
+    (cond
+     ;; Ensure that $ works with Consult commands, which add disambiguation suffixes
+     ((string-suffix-p "$" pattern) `(orderless-regexp . ,(concat (substring pattern 0 -1) "[\x100000-\x10FFFD]*$")))
+     ;; File extensions
+     ((string-match-p "\\`\\.." pattern) `(orderless-regexp . ,(concat "\\." (substring pattern 1) "[\x100000-\x10FFFD]*$")))
+     ;; Ignore single !
+     ((string= "!" pattern) `(orderless-literal . ""))
+     ;; Without literal
+     ((string-prefix-p "!" pattern) `(orderless-without-literal . ,(substring pattern 1)))
+     ((string-suffix-p "!" pattern) `(orderless-without-literal . ,(substring pattern 0 -1)))
+     ;; Initialism matching
+     ((string-prefix-p "`" pattern) `(orderless-initialism . ,(substring pattern 1)))
+     ((string-suffix-p "`" pattern) `(orderless-initialism . ,(substring pattern 0 -1)))
+     ;; Literal matching
+     ((string-prefix-p "=" pattern) `(orderless-literal . ,(substring pattern 1)))
+     ((string-suffix-p "=" pattern) `(orderless-literal . ,(substring pattern 0 -1)))
+     ;; Flex matching
+     ((string-prefix-p "~" pattern) `(orderless-flex . ,(substring pattern 1)))
+     ((string-suffix-p "~" pattern) `(orderless-flex . ,(substring pattern 0 -1)))))
+#+end_src
+
+** Page Break Lines                         :convenience:faces:
+
+This Emacs library provides a global mode which displays ugly form feed
+characters as tidy horizontal rules.
+
+https://github.com/purcell/page-break-lines
+
+#+begin_src emacs-lisp
+  (leaf page-break-lines
+    :doc "Emacs: display ugly ^L page breaks as tidy horizontal lines"
+    :url "https://github.com/purcell/page-break-lines"
+    :tag "convenience" "faces"
+    :hook
+    ;; (nasy-first-key-hook . global-page-break-lines-mode)
+    (nasy/font-change-hook
+     . (lambda ()
+         (progn
+           (after-x 'page-break-lines
+             (nasy/change-char-width page-break-lines-char 2)
+             (nasy/set-symbol ?⊸ 18 nil)))))
+    :custom
+    (page-break-lines-char . ?⊸)
+    :init (sup 'page-break-lines))
+#+end_src
+
+** Parens                      :faces:languages:parens:builtin:
+
+#+begin_src emacs-lisp
+  (leaf paren
+    :tag "builtin"
+    :custom (show-paren-context-when-offscreen . t)
+    :hook (nasy-first-key-hook . show-paren-mode))
+#+end_src
+
+** Projectile                             :convenience:project:
+
+Projectile is a project interaction library for Emacs. Its goal is to provide a
+nice set of features operating on a project level without introducing external
+dependencies (when feasible). For instance - finding project files has a
+portable implementation written in pure Emacs Lisp without the use of GNU find
+(but for performance sake an indexing mechanism backed by external commands
+exists as well).
+
+https://github.com/bbatsov/projectile
+
+#+begin_src emacs-lisp
+  (leaf projectile
+    :doc "Projectile is a project interaction library for Emacs."
+    :url "https://github.com/bbatsov/projectile"
+    :tag "project" "convenience"
+    :bind ([remap find-tag] . projectile-find-tag)
+    :custom
+    `(projectile-known-projects-file . ,(concat *nasy-var* "projectile/known-projects.el"))
+    (projectile-indexing-method          . 'hybrid)
+    (projectile-require-project-root     . 'prompt)
+    (projectile-ignored-project-function . #'nasy/p-ignore-p)
+    :init (sup 'projectile)
+    :config
+    (setq projectile-project-root-files-top-down-recurring
+           (append '("compile_commands.json"
+                     ".cquery")
+                   projectile-project-root-files-top-down-recurring)))
+#+end_src
+
+** Recentf                                              :files:
+
+Recentf is a minor mode that builds a list of recently opened files.
+
+https://www.emacswiki.org/emacs/RecentFiles
+
+#+begin_src emacs-lisp
+  (defvar nasy--recentf-cleaned nil)
+
+  (leaf recentf
+    :doc "Recentf is a minor mode that builds a list of recently opened files."
+    :url "https://www.emacswiki.org/emacs/RecentFiles"
+    :tag "files"
+    :bind ("C-c r" . recentf-open-files)
+    :hook nasy-first-key-hook
+    :mode-hook
+    (after-x '風雨旹用
+      (unless nasy--recentf-cleaned
+        (setq nasy--recentf-cleaned t)
+        (recentf-cleanup)))
+    :custom
+    `(recentf-save-file . ,(concat *nasy-var* "recentf-save.el"))
+    (recentf-filename-handlers
+     . '(;; Text properties inflate the size of recentf's files, and there is
+         ;; no purpose in persisting them, so we strip them out.
+         substring-no-properties
+         ;; Resolve symlinks of local files. Otherwise we get duplicate
+         ;; entries opening symlinks.
+         nasy/file-truename
+         ;; Keep some symlinks
+         nasy/file-sym-t
+         ;; Replace $HOME with ~, which is more portable, and reduces how much
+         ;; horizontal space the recentf listing uses to list recent files.
+         abbreviate-file-name))
+    (recentf-auto-cleanup    . 'never)
+    (recentf-max-saved-items . 1000)
+    (recentf-exclude
+     . `(,(abbreviate-file-name
+           (locate-user-emacs-file *nasy-var*))
+         "/tmp/" "/ssh:" "/nix/store" "~/.nix/store" "/private/var/folders"
+         ,(locate-user-emacs-file "straight"))))
+#+end_src
+
+** Savehist                                           :history:
+
+#+begin_src emacs-lisp
+  (leaf savehist
+    :hook emacs-startup-hook
+    :custom
+    (kill-ring-max              . 300)
+    (history-length             . 3000)
+    (history-delete-duplicates  . t)
+    (savehist-autosave-interval . 3600)
+    `(savehist-file
+      . ,(concat *nasy-var* "savehist.el"))
+    (savehist-additional-variables
+     . '(mark-ring
+         global-mark-ring
+         search-ring
+         regexp-search-ring
+         extended-command-history)))
+#+end_src
+
+** Sessions                                           :history:
+
+#+begin_src emacs-lisp
+  (leaf session
+    :hook
+    (nasy-first-key-hook . session-initialize)
+    (after-save-hook     . session-save-session)
+    :custom
+    `(session-save-file              . ,(concat *nasy-var* "session"))
+    (session-name-disable-regexp     . "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)")
+    (session-save-file-coding-system . 'utf-8)
+    (desktop-globals-to-save
+     . '((comint-input-ring        . 50)
+         (compile-history          . 30)
+         desktop-missing-file-warning
+         (dired-regexp-history     . 20)
+         (extended-command-history . 30)
+         (face-name-history        . 20)
+         (file-name-history        . 100)
+         (grep-find-history        . 30)
+         (grep-history             . 30)
+         (ivy-history              . 100)
+         (magit-revision-history   . 50)
+         (minibuffer-history       . 50)
+         (org-clock-history        . 50)
+         (org-refile-history       . 50)
+         (org-tags-history         . 50)
+         (query-replace-history    . 60)
+         (read-expression-history  . 60)
+         (regexp-history           . 60)
+         (regexp-search-ring       . 20)
+         register-alist
+         (search-ring              . 20)
+         (shell-command-history    . 50)
+         tags-file-name
+         tags-table-list
+         kill-ring))
+    :init (sup 'session))
+#+end_src
+
+** Subword                                            :builtin:
+
+#+begin_src emacs-lisp
+  (leaf subword
+    :tag "builtin"
+    :hook prog-mode-hook)
+#+end_src
+
+** Sudo Edit                                      :convenience:
+
+Utilities for opening files with sudo
+
+https://github.com/nflath/sudo-edit
+
+#+begin_src emacs-lisp
+  (leaf sudo-edit
+    :doc "Utilities for opening files with sudo."
+    :url "https://github.com/nflath/sudo-edit"
+    :tag "convenience"
+    :init (sup 'sudo-edit))
+#+end_src
+
+** switch-window                                  :convenience:
+
+Offer a *visual* way to choose a window to switch to.
+
+https://github.com/dimitri/switch-window
+
+#+begin_src emacs-lisp
+  (leaf switch-window
+    :doc "Offer a *visual* way to choose a window to switch to."
+    :url "https://github.com/dimitri/switch-window"
+    :tag "convenience"
+    :after transient
+    :bind
+    ("C-c o" . transient-dwim--nasy/switch-window)
+    ("C-c 1" . toggle-delete-other-windows)
+    ("C-c 2" . split-window--v)
+    ("C-c 3" . split-window--h)
+    ("C-x |" . split-window-horizontally-instead)
+    ("C-x _" . split-window-vertically-instead)
+    ("C-x o" . switch-window)
+    ("C-c x" . nasy/split-window)
+    ("M-o"   . other-window)
+    :custom
+    (switch-window-shortcut-style . 'alphabet)
+    (switch-window-timeout        . nil)
+    :hook (nasy--defer-load-hook . (lambda () (require 'switch-window)))
+    :transient
+    (transient-dwim--nasy/switch-window nil
+      "Transient-dwim for `switch-window'."
+      [["Switch Window"
+        ("o" "Other window" other-window)
+        ("s" "Switch mindow" switch-window)
+        ("1" "Delete other window" toggle-delete-other-windows)
+        ("r" "Split window right" split-window-right)
+        ("b" "Split window below" split-window-below)
+        ("|" "Split window horizontally" split-window-horizontally-instead)
+        ("_" "Split window vertically" split-window-vertically-instead)
+        ("x" "Split window show recently" nasy/split-window)]])
+    :init (sup 'switch-window))
+#+end_src
+
+** Tempo                                              :builtin:
+
+#+begin_src emacs-lisp
+  (leaf tempo
+    :tag "builtin"
+    :leaf-autoload t
+    :leaf-defun t
+    :commands tempo-define-template)
+#+end_src
+
+** transient                                         :bindings:
+
+Taking inspiration from prefix keys and prefix arguments, Transient
+implements a similar abstraction involving a prefix command, infix
+arguments and suffix commands. We could call this abstraction a
+"transient command", but because it always involves at least two
+commands (a prefix and a suffix) we prefer to call it just a
+"transient".
+
+https://magit.vc/manual/transient
+
+https://github.com/magit/transient
+
+#+begin_src emacs-lisp
+  (leaf transient
+    :doc "Transient commands."
+    :url "https://github.com/magit/transient"
+    :tag "bindings"
+    :custom
+    `((transient-history-file . ,(concat *nasy-var* "transient/history.el"))
+      (transient-levels-file  . ,(concat *nasy-etc* "transient/levels.el"))
+      (transient-values-file  . ,(concat *nasy-etc* "transient/values.el")))
+    :hook (nasy--defer-load-hook . (lambda () (require 'transient)))
+    :init (add-to-list 'nasy--defer-loads 'transient))
+#+end_src
+
+** Unfill                                         :convenience:
+
+Functions providing the inverse of Emacs' fill-paragraph and fill-region
+
+https://github.com/purcell/unfill
+
+#+begin_src emacs-lisp
+  (leaf unfill
+    :doc "Functions providing the inverse of Emacs' fill-paragraph and fill-region"
+    :url "https://github.com/purcell/unfill"
+    :tag "convenience"
+    :bind (("M-q" . unfill-toggle))
+    :init (sup 'unfill))
+#+end_src
+
+** Uniquify                                     :builtin:files:
+
+#+begin_src emacs-lisp
+  (leaf uniquify
+    :tag "builtin" "files"
+    :custom
+    (uniquify-buffer-name-style   . 'reverse)
+    (uniquify-separator           . " • ")
+    (uniquify-after-kill-buffer-p . t)
+    (uniquify-ignore-buffers-re   . "^\\*"))
+#+end_src
+
+** valign                              :convenience:table:text:
+
+这个包能对齐 Org Mode、Markdown和table.el 的表格。它能对齐包含不等宽字
+体、中日韩字符、图片的表格。valign 不会影响 Org Mode（或 Markdown mode）
+基于等宽字符的对齐。  (注：目歬不在 org-mode 中启用)
+
+This package provides visual alignment for Org Mode, Markdown and
+table.el tables on GUI Emacs. It can properly align tables containing
+variable-pitch font, CJK characters and images. Meanwhile, the
+text-based alignment generated by Org mode (or Markdown mode) is left
+untouched.
+
+https://github.com/casouri/valign
+
+#+begin_src emacs-lisp
+  (leaf valign
+    :doc "Pixel-perfect visual alignment for Org and Markdown tables."
+    :url "https://github.com/casouri/valign"
+    :tag "convenience" "table" "text"
+    :hook (markdown-mode-hook)
+    :init (sup 'valign))
+#+end_src
+
+** Vertico                              :completion:extensions:
+
+Vertico provides a performant and minimalistic vertical completion UI
+based on the default completion system. The main focus of Vertico is
+to provide a UI which behaves correctly under all circumstances. By
+reusing the built-in facilities system, Vertico achieves full
+compatibility with built-in Emacs completion commands and completion
+tables. Vertico only provides the completion UI but aims to be highly
+flexible, extensible and modular. Additional enhancements are
+available as extensions or complementary packages. The code base is
+small and maintainable. The main vertico.el package is only about 600
+lines of code without white space and comments.
+
+https://github.com/minad/vertico
+
+#+begin_src emacs-lisp
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+
+  (leaf vertico
+    :doc "Vertico provides a performant and minimalistic vertical completion UI based on the default completion system."
+    :url "https://github.com/minad/vertico"
+    :tag "completion"
+    :advice (:filter-args completing-read-multiple crm-indicator)
+    :bind (:vertico-map
+           ("M-<DEL>" . vertico-directory-delete-word))
+
+    :hook
+    (nasy-first-key-hook)
+    (minibuffer-setup-hook . vertico-repeat-save)
+    :init (sup '(vertico :files (:defaults "extensions/*")))
+    :mode-hook
+    (vertico-mouse-mode 1)
+    (after-x '風雨旹用
+      (nasy/active-region-mode 1)))
+#+end_src
+
+** View Large File                 :files:largefiles:utilities:
+
+Emacs minor mode that allows viewing, editing, searching and comparing large
+files in batches, trading memory for processor time.
+
+https://github.com/m00natic/vlfi
+
+#+begin_src emacs-lisp
+  (leaf vlf
+    :doc "View Large Files in Emacs"
+    :url "https://github.com/m00natic/vlfi"
+    :tag "files" "large files" "utilities"
+    :leaf-autoload t
+    :leaf-defun t
+    :commands ffap-vlf
+    :init
+    (sup 'vlf)
+    (defun ffap-vlf ()
+      "Find file at point with VLF."
+      (interactive)
+      (let ((file (ffap-file-at-point)))
+        (unless (file-exists-p file)
+          (error "File does not exist: %s" file))
+        (vlf file))))
+#+end_src
+
+** wgrep                              :editing:extensions:grep:
+
+wgrep allows you to edit a grep buffer and apply those changes to the
+file buffer like sed interactively. No need to learn sed script, just
+learn Emacs.
+
+https://github.com/mhayashi1120/Emacs-wgrep
+
+#+begin_src emacs-lisp
+  (leaf wgrep
+    :doc "Writable grep buffer and apply the changes to files."
+    :url "https://github.com/mhayashi1120/Emacs-wgrep"
+    :tag "editing" "extensions" "grep"
+    :init (sup 'wgrep))
+#+end_src
+
+** Which Function                                     :builtin:
+
+#+begin_src emacs-lisp
+  (leaf which-func
+    :tag "builtin"
+    :hook (nasy-first-key-hook . which-function-mode))
+#+end_src
+
+** Whitespace                             :convenience:data:wp:
+
+Visualize blanks (TAB, (HARD) SPACE and NEWLINE).
+
+https://www.emacswiki.org/emacs/WhiteSpace
+
+In Emacs, intelligently call whitespace-cleanup on save.
+
+https://github.com/purcell/whitespace-cleanup-mode
+
+#+begin_src emacs-lisp
+  (defun no-trailing-whitespace ()
+    "Turn off display of trailing whitespace in this buffer."
+    (setq show-trailing-whitespace nil))
+
+  (leaf whitespace
+    :tag "data" "wp"
+    :init
+    :hook
+    ;; But don't show trailing whitespace in SQLi, inf-ruby etc.
+    ((artist-mode-hook
+      picture-mode-hook
+      special-mode-hook
+      Info-mode-hook
+      eww-mode-hook
+      term-mode-hook
+      vterm-mode-hook
+      comint-mode-hook
+      compilation-mode-hook
+      twittering-mode-hook
+      minibuffer-setup-hook
+      fundamental-mode) . no-trailing-whitespace))
+
+  (sup 'whitespace-cleanup-mode)
+  (leaf whitespace-cleanup-mode
+    :doc "In Emacs, intelligently call whitespace-cleanup on save."
+    :url "https://github.com/purcell/whitespace-cleanup-mode"
+    :tag "convonience"
+    :custom
+    (whitespace-cleanup-mode-only-if-initially-clean . nil)
+    (whitespace-style
+     . '(face trailing tabs spaces newline
+              missing-newline-at-eof empty indentation
+              space-after-tab space-before-tab
+              space-mark tab-mark newline-mark))
+    :hook (text-mode-hook prog-mode-hook)
+    :bind (("<remap> <just-one-space>" . cycle-spacing))
+    :init (sup 'whitespace-cleanup-mode))
+#+end_src
+
+** xref                                               :builtin:
+
+#+begin_src emacs-lisp
+  (leaf xref
+    :custom
+    ((xref-show-xrefs-function
+      xref-show-definitions-function)
+     . #'xref-show-definitions-completing-read))
+#+end_src
+
+* 結                                                :noexport:
+
+#+begin_src emacs-lisp :exports none
+  (provide '緑衣)
+  ;;; 緑衣.el ends here
+#+end_src
+
+# Local Variables:
+# org-src-fontify-natively: nil
+# End:

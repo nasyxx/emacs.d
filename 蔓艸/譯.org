@@ -1,0 +1,75 @@
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "譯.el") :lexical t
+
+譯 el 至 elc 與 eln
+
+#+begin_src emacs-lisp
+  ;;; 譯.el ---  -*- lexical-binding: t; -*-
+
+  ;;; Commentary:
+  ;; 譯 el 至 elc 與 eln
+
+  ;;; Code:
+
+  (require 'comp)
+
+  (setq load-prefer-newer t
+        native-comp-deferred-compilation nil
+        org-roam-v2-ack t
+        nasy--require nil)
+
+  (message "\n\n---------------- 下載與加載  ----------------\n\n")
+
+  (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓"))
+
+  (load (locate-user-emacs-file "桃夭/擊鼓/擊鼓.el"))
+
+  (when (and (eq system-type 'darwin) (executable-find "cargo"))
+    (shell-command (concat "make " (straight--build-dir "tsc") "tsc-dyn.dylib")))
+
+  (message "\n\n---------------- Run hooks ----------------\n\n")
+
+  (run-hooks
+   'after-init-hook
+   'emacs-startup-hook
+   'nasy/config-before-hook
+   'nasy/config-after-hook
+   'nasy-first-key-hook
+   'org-mode-hook
+   'org-first-key-hook
+   'prog-mode-hook
+   'pre-command-hook)
+
+  (message "\n\n---------------- Wait straight.el ----------------\n\n")
+
+  (when (native-comp-available-p)
+    (while (or comp-files-queue
+               (> (comp-async-runnings) 0))
+      (sleep-for 2)))
+
+  (unless (and (boundp 'nasy-first-p)
+               nasy-first-p)
+
+    (message "\n\n---------------- Build elc in 桃夭 ----------------\n\n")
+    (byte-recompile-directory (locate-user-emacs-file "桃夭/") 0 t)
+
+    (when (native-comp-available-p)
+      (message "\n\n---------------- Build eln in 桃夭 ----------------")
+      (dolist (folder '("擊鼓" "風雨" "緑衣"
+                        "月出" "庭燎" "日月"
+                        "麐之趾" "小曐"))
+
+        (message "\n\n---------------- Build eln of %s ----------------" folder)
+        (dolist (elf (directory-files-recursively
+                      (locate-user-emacs-file (concat "桃夭/" folder)) "\\.el$"))
+          (native-compile elf)
+          (while (or comp-files-queue
+                    (> (comp-async-runnings) 0))
+             (sleep-for 2))))
+
+      (while (or comp-files-queue
+                 (> (comp-async-runnings) 0))
+        (sleep-for 2))))
+
+  (provide '譯)
+  ;;; 譯.el ends here
+#+end_src

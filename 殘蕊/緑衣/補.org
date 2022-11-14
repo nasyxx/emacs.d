@@ -15,28 +15,32 @@
   ;; 補
 
   ;;; Code:
-  (cl-eval-when (compile)
-    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓"))
-    (add-to-list 'load-path (locate-user-emacs-file "桃夭/風雨"))
+
+  (cl-eval-when (compile eval)
+    (setq nasy--require t)
+
     (require '擊鼓)
     (require '風雨)
-    (require '風雨時用)
+    (require '風雨旹用)
+    (fset 'defun* 'cl-defun)
+    (sup 'company)
+    (sup 'company-quickhelp)
+    ;; (sup 'company-tabnine)
+    (sup 'corfu)
+    (sup 'corfu-doc)
+    (require 'company)
+    (sup 'cape)
 
-    (require 'text-mode)
+    (sup '(copilot :host github :repo "zerolfx/copilot.el"
+                   :files ("dist" "copilot.el")))
+
+    (require 'cape)
+    (require 'company-dabbrev)
+    (require 'company-dabbrev-code)
+    (require 'corfu)
     (require 'whitespace)
 
-    (sup 'cape t)
-    (sup 'company t)
-    (sup '(copilot :host github :repo "zerolfx/copilot.el"
-                   :files ("dist" "copilot.el"))
-         t)
-    (sup 'corfu t)
-    (sup `(corfu-extensions
-           :local-repo ,(concat (straight--repos-dir "corfu") "extensions")))
-    (sup 'corfu-doc t)
-    (sup 'org t)
-
-    (sup 'savehist t))
+    (setq nasy--require nil))
 #+end_src
 
 * 文
@@ -77,6 +81,7 @@
    (nasy/add-company-backend '(c-mode c++-mode)
      '(:separate company-irony-c-headers company-irony))
    (nasy/add-company-backend 'sh-mode nil)  ; unsets backends for `sh-mode'"
+
    (declare (indent defun))
    (dolist (mode (nasy/enlist modes))
      (if (null (car backends))
@@ -309,35 +314,36 @@ Capfs provided by Cape can also be used by Company.
 https://github.com/minad/cape
 
 #+begin_src emacs-lisp
-  (setup cape
-    (:doc "Completion At Point Extensions.")
-    (:url "https://github.com/minad/cape")
-    (:tag "editing" "extensions")
-    (:load-first corfu company)
-    (:with-map mode-specific-map
-      (:bind
-        "p p"   completion-at-point ;; capf
-        "p t"   complete-tag        ;; etags
-        "p d"   cape-dabbrev        ;; or dabbrev-completion
-        "p f"   cape-file
-        "p k"   cape-keyword
-        "p s"   cape-symbol
-        "p a"   cape-abbrev
-        "p i"   cape-ispell
-        "p l"   cape-line
-        "p w"   cape-dict
-        "p \\"  cape-tex
-        "p A-¥" cape-tex
-        "p &"   cape-sgml
-        "p r"   cape-rfc1345))
-    (:with-hook corfu-mode-hook
-      (:hook nasy/-merge-capf))
-    (:when-loaded
-      (setq completion-at-point-functions
-            (cape-capf-buster (cape-company-to-capf
-                               (apply-partially
-                                #'company--multi-backend-adapter
-                                nasy-cape/company))))))
+  (leaf cape
+    :doc "Completion At Point Extensions."
+    :url "https://github.com/minad/cape"
+    :tag "editing" "extensions"
+    :after corfu company
+    :require t corfu company ;; company-tabnine
+    :bind (:mode-specific-map
+           ("p p" . completion-at-point) ;; capf
+           ("p t" . complete-tag)        ;; etags
+           ("p d" . cape-dabbrev)        ;; or dabbrev-completion
+           ("p f" . cape-file)
+           ("p k" . cape-keyword)
+           ("p s" . cape-symbol)
+           ("p a" . cape-abbrev)
+           ("p i" . cape-ispell)
+           ("p l" . cape-line)
+           ("p w" . cape-dict)
+           ("p \\" . cape-tex)
+           ("p A-¥" . cape-tex)
+           ("p &" . cape-sgml)
+           ("p r" . cape-rfc1345))
+    :hook ((corfu-mode-hook)
+           . nasy/-merge-capf)
+    :init (sup 'cape)
+    :config
+    (setq completion-at-point-functions
+          (cape-capf-buster (cape-company-to-capf
+                             (apply-partially
+                              #'company--multi-backend-adapter
+                              nasy-cape/company)))))
 #+end_src
 
 ** company
@@ -345,150 +351,156 @@ https://github.com/minad/cape
 *** company
 
 #+begin_src emacs-lisp
-  (setup company
-    (:autoload company--multi-backend-adapter))
-    ;; ;; (:global
-    ;; ;;  "C-;"      nasy/company-complete
-    ;; ;;  "M-/"      company-files
-    ;; ;;  "C-<tab>"  nasy/company-complete
-    ;; ;;  [remap indent-for-tab-command] company-indent-or-complete-common)
-    ;; (:company-mode-map
-    ;;  ([remap indent-for-tab-command]
-    ;;   . company-indent-or-complete-common)
-    ;;  ("M-/" . company-files))
-    ;; (:company-active-map
-    ;;  ("C-o"        . company-search-kill-others)
-    ;;  ("C-n"        . company-select-next)
-    ;;  ("C-p"        . company-select-previous)
-    ;;  ("C-h"        . company-quickhelp-manual-begin)
-    ;;  ("C-S-h"      . company-show-doc-buffer)
-    ;;  ("C-s"        . company-search-candidates)
-    ;;  ("M-s"        . company-filter-candidates)
-    ;;  ([C-tab]      . nasy/company-complete)
-    ;;  ([tab]        . company-complete-common-or-cycle)
-    ;;  ([backtab]    . company-select-previous))
-    ;; (:company-search-map
-    ;;  ("C-n"        . company-search-repeat-forward)
-    ;;  ("C-p"        . company-search-repeat-backward)
-    ;;  ("C-s"        . nasy/company-filter-c))
-    ;; :custom
-    ;; ((company-tooltip-limit       . 10)
-    ;;  (company-dabbrev-downcase    . nil)
-    ;;  (company-dabbrev-ignore-case . t)
-    ;;  (company-global-modes
-    ;;   . '(not erc-mode message-mode help-mode gud-mode eshell-mode))
-    ;;  ;; `(company-frontends
-    ;;  ;;   . ,(if *c-box*
-    ;;  ;;          '(company-box-frontend)
-    ;;  ;;        '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)))
-    ;;  (company-dabbrev-other-buffers     . 'all)
-    ;;  (company-tooltip-align-annotations . t)
-    ;;  (company-minimum-prefix-length     . 2)
-    ;;  (company-idle-delay                . 1)
-    ;;  (company-tooltip-idle-delay        . .2)
-    ;;  (company-require-match             . 'never)
-    ;;  (company-format-margin-function    . #'company-vscode-dark-icons-margin))
-    ;; :hook (nasy--defer-load-hook . (lambda () (require 'company)))
-    ;; :config
-    ;; ;; (add-hook 'after-change-major-mode-hook #'nasy/company-init-backends-h 'append)
-    ;; :defer-config
-    ;; ;; (add-to-list 'completion-styles 'initials t)
-    ;; (setq company-backends '(company-capf))
-    ;; :advice
-    ;; (:before company-pseudo-tooltip-unhide nasy/-pre-popup-draw)
-    ;; (:after  company-pseudo-tooltip-hide   nasy/-post-popup-draw))
+  (leaf company
+    ;; :hook (prog-mode-hook org-mode-hook)
+    :bind
+    ;; ("C-;"     . nasy/company-complete)
+    ;; ("M-/"     . company-files)
+    ;; ("C-<tab>" . nasy/company-complete)
+    ;; ([remap indent-for-tab-command]
+    ;;  . company-indent-or-complete-common)
+    (:company-mode-map
+     ([remap indent-for-tab-command]
+      . company-indent-or-complete-common)
+     ("M-/" . company-files))
+    (:company-active-map
+     ("C-o"        . company-search-kill-others)
+     ("C-n"        . company-select-next)
+     ("C-p"        . company-select-previous)
+     ("C-h"        . company-quickhelp-manual-begin)
+     ("C-S-h"      . company-show-doc-buffer)
+     ("C-s"        . company-search-candidates)
+     ("M-s"        . company-filter-candidates)
+     ([C-tab]      . nasy/company-complete)
+     ([tab]        . company-complete-common-or-cycle)
+     ([backtab]    . company-select-previous))
+    (:company-search-map
+     ("C-n"        . company-search-repeat-forward)
+     ("C-p"        . company-search-repeat-backward)
+     ("C-s"        . nasy/company-filter-c))
+    :custom
+    ((company-tooltip-limit       . 10)
+     (company-dabbrev-downcase    . nil)
+     (company-dabbrev-ignore-case . t)
+     (company-global-modes
+      . '(not erc-mode message-mode help-mode gud-mode eshell-mode))
+     ;; `(company-frontends
+     ;;   . ,(if *c-box*
+     ;;          '(company-box-frontend)
+     ;;        '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)))
+     (company-dabbrev-other-buffers     . 'all)
+     (company-tooltip-align-annotations . t)
+     (company-minimum-prefix-length     . 2)
+     (company-idle-delay                . 1)
+     (company-tooltip-idle-delay        . .2)
+     (company-require-match             . 'never)
+     (company-format-margin-function    . #'company-vscode-dark-icons-margin))
+    :hook (nasy--defer-load-hook . (lambda () (require 'company)))
+    :init (sup 'company)
+    :config
+    ;; (add-hook 'after-change-major-mode-hook #'nasy/company-init-backends-h 'append)
+    :defer-config
+    ;; (add-to-list 'completion-styles 'initials t)
+    (setq company-backends '(company-capf))
+    :advice
+    (:before company-pseudo-tooltip-unhide nasy/-pre-popup-draw)
+    (:after  company-pseudo-tooltip-hide   nasy/-post-popup-draw))
 #+end_src
 
 *** Company Quickhelp
 
 #+begin_src emacs-lisp
-  ;; (leaf company-quickhelp
-  ;;   :after company
-  ;;   :bind
-  ;;   (:company-active-map
-  ;;    ("C-c h" . company-quickhelp-manual-begin))
-  ;;   :hook company-mode-hook
-  ;;   :custom
-  ;;   (pos-tip-use-relative-coordinates . t))
+  (leaf company-quickhelp
+    :after company
+    :bind
+    (:company-active-map
+     ("C-c h" . company-quickhelp-manual-begin))
+    :hook company-mode-hook
+    :custom
+    (pos-tip-use-relative-coordinates . t)
+    :init (sup 'company-quickhelp))
 #+end_src
 
 *** Company Tabnine
 
 #+begin_src emacs-lisp
-  ;; (leaf company-tabnine
-  ;;   :disabled t
-  ;;   :after company
-  ;;   :custom
-  ;;   `(company-tabnine-binaries-folder . ,(concat *nasy-var* "company/tabnine-binaries"))
-  ;;   `(company-tabnine-log-file-path
-  ;;     . ,(concat *nasy-var* "company/tabnine-binaries/log")))
+  (leaf company-tabnine
+    :disabled t
+    :after company
+    :custom
+    `(company-tabnine-binaries-folder . ,(concat *nasy-var* "company/tabnine-binaries"))
+    `(company-tabnine-log-file-path
+      . ,(concat *nasy-var* "company/tabnine-binaries/log"))
+    :init (sup 'company-tabnine))
 #+end_src
 
 *** Company Flx
 
 #+begin_src emacs-lisp
-  ;; (leaf company-flx
-  ;;   :after company
-  ;;   :disabled t
-  ;;   :hook company-mode-hook)
+  (leaf company-flx
+    :after company
+    :hook company-mode-hook
+    :init (sup 'company-flx))
 #+end_src
 
 *** Company Box
 
 #+begin_src emacs-lisp
-  ;; (leaf company-box
-  ;;   :after company
-  ;;   :hook company-mode-hook
-  ;;   :custom
-  ;;   (company-box-show-single-candidate . t)
-  ;;   (company-box-max-candidates        . 25)
-  ;;   (company-box-icons-alist           . 'company-box-icons-all-the-icons)
-  ;;   :config
-  ;;   (setq
-  ;;    company-box-icons-functions
-  ;;    (cons #'nasy/company-box-icons--elisp-fn
-  ;;          (delq 'company-box-icons--elisp
-  ;;                company-box-icons-functions)))
+  (leaf company-box
+    :after company
+    :hook company-mode-hook
+    :custom
+    (company-box-show-single-candidate . t)
+    (company-box-max-candidates        . 25)
+    (company-box-icons-alist           . 'company-box-icons-all-the-icons)
+    :init
+    (sup 'company-box)
+    :config
+    (setq
+     company-box-icons-functions
+     (cons #'nasy/company-box-icons--elisp-fn
+           (delq 'company-box-icons--elisp
+                 company-box-icons-functions)))
 
-  ;;   (after-x 'all-the-icons
-  ;;     (setq
-  ;;      company-box-icons-all-the-icons
-  ;;      (let ((all-the-icons-scale-factor 0.8))
-  ;;        `((Unknown       . ,(all-the-icons-material "find_in_page"             :face 'all-the-icons-purple))
-  ;;          (Text          . ,(all-the-icons-material "text_fields"              :face 'all-the-icons-green))
-  ;;          (Method        . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
-  ;;          (Function      . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
-  ;;          (Constructor   . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
-  ;;          (Field         . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
-  ;;          (Variable      . ,(all-the-icons-material "adjust"                   :face 'all-the-icons-blue))
-  ;;          (Class         . ,(all-the-icons-material "class"                    :face 'all-the-icons-cyan))
-  ;;          (Interface     . ,(all-the-icons-material "settings_input_component" :face 'all-the-icons-cyan))
-  ;;          (Module        . ,(all-the-icons-material "view_module"              :face 'all-the-icons-cyan))
-  ;;          (Property      . ,(all-the-icons-material "settings"                 :face 'all-the-icons-lorange))
-  ;;          (Unit          . ,(all-the-icons-material "straighten"               :face 'all-the-icons-red))
-  ;;          (Value         . ,(all-the-icons-material "filter_1"                 :face 'all-the-icons-red))
-  ;;          (Enum          . ,(all-the-icons-material "plus_one"                 :face 'all-the-icons-lorange))
-  ;;          (Keyword       . ,(all-the-icons-material "filter_center_focus"      :face 'all-the-icons-lgreen))
-  ;;          (Snippet       . ,(all-the-icons-material "short_text"               :face 'all-the-icons-lblue))
-  ;;          (Color         . ,(all-the-icons-material "color_lens"               :face 'all-the-icons-green))
-  ;;          (File          . ,(all-the-icons-material "insert_drive_file"        :face 'all-the-icons-green))
-  ;;          (Reference     . ,(all-the-icons-material "collections_bookmark"     :face 'all-the-icons-silver))
-  ;;          (Folder        . ,(all-the-icons-material "folder"                   :face 'all-the-icons-green))
-  ;;          (EnumMember    . ,(all-the-icons-material "people"                   :face 'all-the-icons-lorange))
-  ;;          (Constant      . ,(all-the-icons-material "pause_circle_filled"      :face 'all-the-icons-blue))
-  ;;          (Struct        . ,(all-the-icons-material "streetview"               :face 'all-the-icons-blue))
-  ;;          (Event         . ,(all-the-icons-material "event"                    :face 'all-the-icons-yellow))
-  ;;          (Operator      . ,(all-the-icons-material "control_point"            :face 'all-the-icons-red))
-  ;;          (TypeParameter . ,(all-the-icons-material "class"                    :face 'all-the-icons-red))
-  ;;          (Template      . ,(all-the-icons-material "short_text"               :face 'all-the-icons-green))
-  ;;          (ElispFunction . ,(all-the-icons-material "functions"                :face 'all-the-icons-red))
-  ;;          (ElispVariable . ,(all-the-icons-material "check_circle"             :face 'all-the-icons-blue))
-  ;;          (ElispFeature  . ,(all-the-icons-material "stars"                    :face 'all-the-icons-orange))
-  ;;          (ElispFace     . ,(all-the-icons-material "format_paint"             :face 'all-the-icons-pink))))))
+    (after-x 'all-the-icons
+      (setq
+       company-box-icons-all-the-icons
+       (let ((all-the-icons-scale-factor 0.8))
+         `((Unknown       . ,(all-the-icons-material "find_in_page"             :face 'all-the-icons-purple))
+           (Text          . ,(all-the-icons-material "text_fields"              :face 'all-the-icons-green))
+           (Method        . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
+           (Function      . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
+           (Constructor   . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
+           (Field         . ,(all-the-icons-material "functions"                :face 'all-the-icons-yellow))
+           (Variable      . ,(all-the-icons-material "adjust"                   :face 'all-the-icons-blue))
+           (Class         . ,(all-the-icons-material "class"                    :face 'all-the-icons-cyan))
+           (Interface     . ,(all-the-icons-material "settings_input_component" :face 'all-the-icons-cyan))
+           (Module        . ,(all-the-icons-material "view_module"              :face 'all-the-icons-cyan))
+           (Property      . ,(all-the-icons-material "settings"                 :face 'all-the-icons-lorange))
+           (Unit          . ,(all-the-icons-material "straighten"               :face 'all-the-icons-red))
+           (Value         . ,(all-the-icons-material "filter_1"                 :face 'all-the-icons-red))
+           (Enum          . ,(all-the-icons-material "plus_one"                 :face 'all-the-icons-lorange))
+           (Keyword       . ,(all-the-icons-material "filter_center_focus"      :face 'all-the-icons-lgreen))
+           (Snippet       . ,(all-the-icons-material "short_text"               :face 'all-the-icons-lblue))
+           (Color         . ,(all-the-icons-material "color_lens"               :face 'all-the-icons-green))
+           (File          . ,(all-the-icons-material "insert_drive_file"        :face 'all-the-icons-green))
+           (Reference     . ,(all-the-icons-material "collections_bookmark"     :face 'all-the-icons-silver))
+           (Folder        . ,(all-the-icons-material "folder"                   :face 'all-the-icons-green))
+           (EnumMember    . ,(all-the-icons-material "people"                   :face 'all-the-icons-lorange))
+           (Constant      . ,(all-the-icons-material "pause_circle_filled"      :face 'all-the-icons-blue))
+           (Struct        . ,(all-the-icons-material "streetview"               :face 'all-the-icons-blue))
+           (Event         . ,(all-the-icons-material "event"                    :face 'all-the-icons-yellow))
+           (Operator      . ,(all-the-icons-material "control_point"            :face 'all-the-icons-red))
+           (TypeParameter . ,(all-the-icons-material "class"                    :face 'all-the-icons-red))
+           (Template      . ,(all-the-icons-material "short_text"               :face 'all-the-icons-green))
+           (ElispFunction . ,(all-the-icons-material "functions"                :face 'all-the-icons-red))
+           (ElispVariable . ,(all-the-icons-material "check_circle"             :face 'all-the-icons-blue))
+           (ElispFeature  . ,(all-the-icons-material "stars"                    :face 'all-the-icons-orange))
+           (ElispFace     . ,(all-the-icons-material "format_paint"             :face 'all-the-icons-pink))))))
 
-  ;;   :advice (:around
-  ;;            company-box--update-scrollbar
-  ;;            nasy/company-remove-scrollbar-a))
+    :advice (:around
+             company-box--update-scrollbar
+             nasy/company-remove-scrollbar-a))
 #+end_src
 
 ** copilot.el                                       :editing:extensions:
@@ -509,20 +521,25 @@ https://github.com/zerolfx/copilot.el
     (and (= (point-max) (point))
          (not (buffer-modified-p))))
 
-  (setup copilot
-    (:doc "An unofficial Copilot plugin for Emacs.")
-    (:url "https://github.com/zerolfx/copilot.el")
-    (:tag "editing" "extensions")
-    (:advice keyboard-quit :after copilot-clear-overlay)
-    (:bind-into copilot-mode-map
-      "C-<tab>" copilot-accept-completion
-      "H-SPC"   nasy/copilot-complete)
-    (:opt copilto-idle-delay 0.8)
-    (:when-loaded
-      (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p))
-    (:hook-into prog-mode-hook python-mode-hook org-mode-hook emacs-lisp-mode-hook)
-    (:mode-hook
-     (setq copilot-idle-delay 0.8)))
+  (leaf copilot
+    :doc "An unofficial Copilot plugin for Emacs."
+    :url "https://github.com/zerolfx/copilot.el"
+    :tag "editing" "extensions"
+    :advice (:after keyboard-quit copilot-clear-overlay)
+    :bind
+    (:copilot-mode-map
+     ("C-<tab>" . copilot-accept-completion)
+     ("H-SPC"   . nasy/copilot-complete))
+    :custom
+    (copilto-idle-delay . 0.8)
+    :defer-config
+    (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p)
+    :hook (prog-mode-hook python-mode-hook org-mode-hook emacs-lisp-mode-hook)
+    :init
+    (sup '(copilot :host github :repo "zerolfx/copilot.el"
+                   :files ("dist" "copilot.el")))
+    :mode-hook
+    (setq copilot-idle-delay 0.8))
 #+end_src
 
 ** corfu                                            :editing:extensions:
@@ -543,8 +560,8 @@ https://github.com/minad/corfu
       (or (string-empty-p (car corfu--input))
           (not
            (or (string= (substring (car corfu--input) -1) " ")
-               (eq major-mode 'org-mode)
-               (eq major-mode 'text-mode)))))
+               org-mode
+               text-mode))))
 
      ((/= corfu--index corfu--preselect) ; a selection was made
       (not (seq-contains-p (this-command-keys-vector) ?\s)))
@@ -557,40 +574,46 @@ https://github.com/minad/corfu
                          (car corfu--candidates)))
       (seq-intersection (this-command-keys-vector) [?: ?\. ?, ?\) ?\] ?\" ?' ?\s]))))
 
-  (setup corfu
-    (:doc "Completion Overlay Region FUnction.")
-    (:url "https://github.com/minad/corfu")
-    (:tag "editing" "extensions")
-    (:bind-into corfu-map
-      "C-g"       corfu-quit
-      "<backtab>" corfu-last)
-    (:opts
-     ((corfu-cycle
-       corfu-auto)
-      . t)
-     ((corfu-preselect-first
-       corfu-preview-current)
-      . nil))
-    (:opt
-     corfu-quit-no-match      'separator
-     corfu-separator          #x00b7
-     corfu-auto-delay         0.4
-     corfu-auto-prefix        2
-     corfu-echo-documentation 1
-     corfu-commit-predicate   #'nasy/corfu-commit-predicate)
-    (:with-function nasy/setup-corfu
-      (:hook-into
-       prog-mode-hook
-       org-mode-hook
-       shell-mode-hook
-       eshell-mode-hook
-       eval-expression-minibuffer-setup-hook))
-    ;; Extensions
-    (:mode-hook
-     (corfu-history-mode)
-     (corfu-indexed-mode)
-     (:after savehist
-      (add-to-list 'savehist-additional-variables 'corfu-history))))
+  (leaf corfu
+    :doc "Completion Overlay Region FUnction."
+    :url "https://github.com/minad/corfu"
+    :tag "editing" "extensions"
+    :bind
+    (:corfu-map
+     ("C-g"       . corfu-quit)
+     ("<backtab>" . corfu-last))
+    :custom
+    ((corfu-cycle
+      corfu-auto)
+     . t)
+    (corfu-quit-no-match . 'separator)
+    (corfu-separator . #x00b7)
+    ((corfu-preselect-first
+      corfu-preview-current)
+     . nil)
+    (corfu-auto-delay  . 0.4)
+    (corfu-auto-prefix . 2)
+    (corfu-echo-documentation . 1)
+    (corfu-commit-predicate . #'nasy/corfu-commit-predicate)
+    :hook
+    ((prog-mode-hook
+      org-mode-hook
+      shell-mode-hook
+      eshell-mode-hook
+      eval-expression-minibuffer-setup-hook)
+     . nasy/setup-corfu)
+    :init
+    (sup 'corfu)
+    (sup `(corfu-extensions
+           :local-repo ,(concat (straight--repos-dir "corfu") "extensions"))))
+
+
+  ;; Extensions
+  (leaf corfu
+    :mode-hook
+    (corfu-history-mode)
+    (corfu-indexed-mode)
+    (add-to-list 'savehist-additional-variables 'corfu-history))
 #+end_src
 
 ** corfu-doc                     :convenience:corfu:documentation:popup:
@@ -601,15 +624,16 @@ Corfu. It can be re regarded as company-quickhelp for Corfu.
 https://github.com/galeo/corfu-doc
 
 #+begin_src emacs-lisp
-  (setup corfu-doc
-    (:doc "Documentation popup for Corfu.")
-    (:url "https://github.com/galeo/corfu-doc")
-    (:tag "convenience" "corfu" "documentation" "popup")
-    (:bind-into corfu-map
-      "M-d" corfu-doc-toggle
-      "M-p" corfu-doc-scroll-down
-      "M-n" corfu-doc-scroll-up)
-    (:hook-into corfu-mode-hook))
+  (leaf corfu-doc
+    :doc "Documentation popup for Corfu."
+    :url "https://github.com/galeo/corfu-doc"
+    :tag "convenience" "corfu" "documentation" "popup"
+    :bind (:corfu-map
+           ("M-d" . corfu-doc-toggle)
+           ("M-p" . corfu-doc-scroll-down)
+           ("M-n" . corfu-doc-scroll-up))
+    :hook (corfu-mode-hook . corfu-doc-mode)
+    :init (sup 'corfu-doc))
 #+end_src
 
 ** citre

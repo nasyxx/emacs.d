@@ -1,16 +1,16 @@
-#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "庭燎.el") :lexical t
-#+title: 庭燎
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "庭尞.el") :lexical t
+#+title: 庭尞
 
 #+begin_verse
-  小雅・彤弓之什・庭燎
+  小雅・彤弓之什・庭尞
 
-  夜如何其、夜未央、庭燎之光
+  夜如何其、夜未央、庭尞之光
   君子至止、鸞聲將將
 
-  夜如何其、夜未艾、庭燎皙皙
+  夜如何其、夜未艾、庭尞皙皙
   君子至止、鸞聲噦噦
 
-  夜如何其、夜郷晨、庭燎有煇
+  夜如何其、夜郷晨、庭尞有煇
   君子至止、言觀其旂
 #+end_verse
 
@@ -21,7 +21,7 @@ UI
 * 題                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
-  ;;; 庭燎.el --- Nasy's emacs.d UI file.  -*- lexical-binding: t; -*-
+  ;;; 庭尞.el --- Nasy's emacs.d UI file.  -*- lexical-binding: t; -*-
 
   ;; Copyright (C) 2022  Nasy
 
@@ -32,19 +32,18 @@ UI
   ;; 容皃也
 
   ;;; Code:
+
   (cl-eval-when (compile)
-    (add-to-list 'load-path (locate-user-emacs-file "桃夭/擊鼓"))
-    (add-to-list 'load-path (locate-user-emacs-file "桃夭/風雨"))
+    (setq nasy--require t)
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓" ))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨" ))
     (require '擊鼓)
     (require '風雨)
-    (require '風雨時用)
-
-    (require 'cal-china)
-
-    (sup 'cal-china-x t)
-    (sup 'centaur-tabs t)
-    (sup 'dashboard t)
-    (sup 'dash t))
+    (require '風雨旹用)
+    (sup 'consult)
+    (sup 'dash)
+    (sup 'projectile)
+    (setq nasy--require nil))
 #+end_src
 
 * 章
@@ -65,6 +64,29 @@ This extension mainly adds the following extra features:
 https://github.com/xwl/cal-china-x
 
 #+begin_src emacs-lisp
+  (leaf cal-china-x
+    :doc "chinese localization, prioritized holiday highlight, lunar, horoscope, zodiac, etc."
+    :url "https://github.com/xwl/cal-china-x"
+    :tag "calendar" "date"
+    :after calendar
+    :custom
+    (cal-china-x-force-chinese-week-day . t)
+    (cal-china-x-always-show-jieqi      . t)
+    :hook (nasy-first-key-hook . (lambda ()
+                                   (require 'cal-china-x)
+                                   (nasy/init-chinese-calendar)))
+    :init (sup 'cal-china-x))
+
+  (leaf calendar
+    :custom
+    ;; 爾雅 月名
+    (calendar-chinese-month-name-array
+     . ["陬月" "如月" "寎月" "余月" "皋月" "且月"
+        "相月" "壯月" "玄月" "陽月" "辜月" "涂月"])
+    (cal-china-x-month-name
+     . ["陬月" "如月" "寎月" "余月" "皋月" "且月"
+        "相月" "壯月" "玄月" "陽月" "辜月" "涂月"]))
+
   (defun nasy/chinese-date-string (date)
     "Nasy version calendar string of DATE."
     (let* ((cn-date (calendar-chinese-from-absolute
@@ -144,30 +166,6 @@ https://github.com/xwl/cal-china-x
 
     (advice-add 'calendar-mark-holidays :around 'cal-china-x-mark-holidays)
     (advice-add 'mouse-set-point :after 'cal-china-x-mouse-set-point))
-
-
-  (setup calendar
-    (:customs
-     ;; 爾雅 月名
-     ((calendar-chinese-month-name-array cal-china-x-month-name)
-      . ["陬月" "如月" "寎月" "余月" "皋月" "且月"
-         "相月" "壯月" "玄月" "陽月" "辜月" "涂月"])))
-
-
-  (setup cal-china-x
-    (:doc "chinese localization, prioritized holiday highlight, lunar, horoscope, zodiac, etc.")
-    (:url "https://github.com/xwl/cal-china-x")
-    (:tag "calendar" "date")
-    (:opt
-     cal-china-x-force-chinese-week-day t
-     cal-china-x-always-show-jieqi      t)
-    (:first-key
-     (lambda ()
-       (progn
-         (require 'calendar)
-         (require 'cal-china-x)
-         (nasy/init-chinese-calendar)))))
-
 #+end_src
 
 ** Centaur Tab
@@ -178,12 +176,13 @@ tabs plugin for Emacs with a lot of customization options.
 https://github.com/ema2159/centaur-tabs
 
 #+begin_src emacs-lisp
-  (setup centaur-tabs
-    (:advice centaur-tabs-buffer-groups :override nasy/-centaur-tabs-buffer-groups)
-    (:opt
-     centaur-tabs-style "wave")
-    (:with-hook nasy/font-change-hook
-      (:hook (lambda () (nasy/set-symbol ?⏺ 14)))))
+  (leaf centaur-tabs
+    :custom
+    (centaur-tabs-style . "wave")
+    :hook
+    ;; (nasy-first-key-hook   . (lambda () (require 'tab-line) (centaur-tabs-mode)))
+    (nasy/font-change-hook . (lambda () (nasy/set-symbol ?⏺ 14)))
+    :init (sup 'centaur-tabs))
 
 
   (defun nasy/-enable-centaur-tabs-local-mode ()
@@ -250,35 +249,39 @@ https://github.com/ema2159/centaur-tabs
         (t (centaur-tabs-get-group-name (current-buffer)))))))
 
 
-  (setup centaur-tabs
-    (:quit)
-    (:opt
-     centaur-tabs-set-modified-marker t
-     centaur-tabs-height     28
-     centaur-tabs-bar-height 30
-     centaur-tabs-set-close-button      nil
-     centaur-tabs-enable-ido-completion nil)
-    (:first-key nasy/-disable-centaur-tabs-local-mode)
-    (:mode-hook
-     ;; (centaur-tabs-headline-match)
+  (leaf centaur-tabs
+    :after centaur-tabs
+    :custom
+    (centaur-tabs-set-modified-marker . t)
+    (centaur-tabs-height     . 28)
+    (centaur-tabs-bar-height . 30)
+    ((centaur-tabs-set-close-button
+      centaur-tabs-enable-ido-completion) . nil)
+    :hook (nasy-magit-first-key-hook
+           . nasy/-disable-centaur-tabs-local-mode)
+    :mode-hook
+    ;; (centaur-tabs-headline-match)
 
-     (customize-set-variable 'centaur-tabs-set-icons t
-                             "Customized by Nasy in `centaur-tabs' block")
-     (customize-set-variable 'centaur-tabs-show-navigation-buttons t
-                             "Customized by Nasy in `centaur-tabs' block")
-     (setq centaur-tabs-active-bar
-           (centaur-tabs--make-xpm 'centaur-tabs-active-bar-face
-                                  4
-                                  centaur-tabs-bar-height))))
-
+    (customize-set-variable 'centaur-tabs-set-icons t
+                            "Customized by Nasy in `centaur-tabs' block")
+    (customize-set-variable 'centaur-tabs-show-navigation-buttons t
+                            "Customized by Nasy in `centaur-tabs' block")
+    (setq centaur-tabs-active-bar
+          (centaur-tabs--make-xpm 'centaur-tabs-active-bar-face
+           4
+           centaur-tabs-bar-height))
+    :advice (:override centaur-tabs-buffer-groups nasy/-centaur-tabs-buffer-groups))
 #+end_src
 
 ** Dashboard
 
 #+begin_src emacs-lisp
-  (setup dashboard
-    (:autoload dashboard-refresh-buffer
-               dashboard-setup-startup-hook))
+  (leaf dashboard
+    :leaf-autoload t
+    :leaf-defun t
+    :commands (dashboard-refresh-buffer
+               dashboard-setup-startup-hook)
+    :init (sup 'dashboard))
 
 
   (defun nasy/-set-dashboard-init-info (&rest _)
@@ -395,78 +398,78 @@ https://github.com/ema2159/centaur-tabs
   (declare-function persistent-scratch-restore "persistent-scratch")
 
 
-  (setup dashboard
-    (:global
-     "<f5>" dashboard-refresh-buffer)
-    (:bind-into dashboard-mode-map
-     "r"              consult-recent-file
-     "b"              consult-bookmark
-     "p"              projectile-switch-project
-     "c"              persistent-scratch-restore
-     "a"              org-agenda
-     "d"              calendar
-     "C"              nasy/-open-custom
-     "s"              nasy/-open-source-page
-     "D"              nasy/-open-document
-     "g"              dashboard-refresh-buffer
-     "<down-mouse-1>" nil
-     "H-p"            dashboard-previous-line
-     "H-n"            dashboard-next-line
-     "H-b"            widget-backward
-     "H-f"            widget-forward
-     "<mouse-1>"      widget-button-click
-     "<mouse-2>"      widget-button-click
-     "<up>"           widget-backward
-     "<down>"         nasy/wfw1)
-    (:hooks
-     dashboard-mode-hook (lambda () (setq-local tab-width 1))
-     after-init-hook     dashboard-setup-startup-hook
-     after-init-hook     dashboard-refresh-buffer
-     nasy/font-change-hook (lambda ()
-                             (progn
-                               (nasy/set-apple-symbol ?🌓)
-                               (nasy/set-apple-symbol ?🔖)
-                               (nasy/set-apple-symbol ?🚀)
-                               (nasy/set-apple-symbol ?📝)
-                               (nasy/set-apple-symbol ?🗓)
-                               (nasy/set-apple-symbol ?📅)
-                               (nasy/set-apple-symbol ?⚙)
-                               (nasy/set-apple-symbol ?🍭)
-                               (nasy/set-apple-symbol ?📖))))
-    (:opt*
-     dashboard-items '((n-items . t))
-                       ;; (bookmarks . t)
-                       ;; (registers . 5)
-                       ;; (agenda    . 5)
-                       ;; (projects  . 7))))
-     dashboard-item-generators '((n-items . nasy/-dashboard-items))
-     dashboard-startup-banner  (concat *nasy-etc* "n_icon.png"))
-    (:opts*
-     ((dashboard-center-content
-       dashboard-set-heading-icons
-       dashboard-set-init-info)
-      . t))
-    (:advice dashboard-refresh-buffer :before nasy/-set-dashboard-init-info))
+  (leaf dashboard
+    :bind
+    ("<f5>" . dashboard-refresh-buffer)
+    (:dashboard-mode-map
+     ("r"              . consult-recent-file)
+     ("b"              . consult-bookmark)
+     ("p"              . projectile-switch-project)
+     ("c"              . persistent-scratch-restore)
+     ("a"              . org-agenda)
+     ("d"              . calendar)
+     ("C"              . nasy/-open-custom)
+     ("s"              . nasy/-open-source-page)
+     ("D"              . nasy/-open-document)
+     ("g"              . dashboard-refresh-buffer)
+     ("<down-mouse-1>" . nil)
+     ("H-p"            . dashboard-previous-line)
+     ("H-n"            . dashboard-next-line)
+     ("H-b"            . widget-backward)
+     ("H-f"            . widget-forward)
+     ("<mouse-1>"      . widget-button-click)
+     ("<mouse-2>"      . widget-button-click)
+     ("<up>"           . widget-backward)
+     ("<down>"         . nasy/wfw1))
+    :hook
+    ((dashboard-mode-hook . (lambda () (setq-local tab-width 1)))
+     (after-init-hook     . dashboard-setup-startup-hook)
+     (after-init-hook     . dashboard-refresh-buffer))
+    (nasy/font-change-hook
+     . (lambda ()
+         (progn
+           (nasy/set-apple-symbol ?🌓)
+           (nasy/set-apple-symbol ?🔖)
+           (nasy/set-apple-symbol ?🚀)
+           (nasy/set-apple-symbol ?📝)
+           (nasy/set-apple-symbol ?🗓)
+           (nasy/set-apple-symbol ?📅)
+           (nasy/set-apple-symbol ?⚙)
+           (nasy/set-apple-symbol ?🍭)
+           (nasy/set-apple-symbol ?📖))))
+    :custom
+    (dashboard-items . '((n-items . t)))
+                         ;; (bookmarks . t)))
+                         ;; (registers . 5)
+                         ;; (agenda    . 5)
+                         ;; (projects  . 7)))
+    (dashboard-item-generators . '((n-items . nasy/-dashboard-items)))
+    ((dashboard-center-content
+      dashboard-set-heading-icons
+      dashboard-set-init-info) . t)
+    `(dashboard-startup-banner
+      . ,(concat *nasy-etc* "n_icon.png"))
+    :advice (:before dashboard-refresh-buffer nasy/-set-dashboard-init-info))
 #+end_src
 
 ** doom Theme
 
 #+begin_src emacs-lisp
-  (setup doom-themes
-    (:after all-the-icons)
-    (:first-key* (require 'doom-themes))
-    (:opt
-     doom-dracula-brighter-comments t
-     doom-dracula-colorful-headers  t
-     doom-dracula-comment-bg        t
-     doom-themes-treemacs-theme "doom-colors"
-     doom-themes-org-fontify-special-tags nil)
-    (:when-loaded
-     (after-x 'treemacs
-       (doom-themes-treemacs-config))
-     ;; (doom-themes-visual-bell-config)
-     (after-x 'org
-       (doom-themes-org-config))))
+  (leaf doom-themes
+    :after all-the-icons
+    :custom
+    ((doom-dracula-brighter-comments
+      doom-dracula-colorful-headers
+      doom-dracula-comment-bg) . t)
+    (doom-themes-treemacs-theme . "doom-colors")
+    (doom-themes-org-fontify-special-tags . nil)
+    :init (sup 'doom-themes)
+    :config
+    (after-x 'treemacs
+      (doom-themes-treemacs-config))
+    ;; (doom-themes-visual-bell-config)
+    (after-x 'org
+      (doom-themes-org-config)))
 #+end_src
 
 ** Pretty Mode                                         :pretty:
@@ -595,32 +598,31 @@ https://github.com/ema2159/centaur-tabs
       ("[^:=]\\(:\\)[^:=]"           #Xe16c)
       ("\\(<=\\)"                    #Xe157))
     "Fira font ligatures and their regexes.")
-#+end_src
 
-#+begin_src emacs-lisp
-  (setup pretty-mode
-    (:with-hook nasy/font-change-hook
-      (:hook
-       (lambda ()
+  (leaf pretty-mode
+    :hook
+    (nasy/font-change-hook
+     . (lambda ()
          (progn
            (when (display-graphic-p)
              (set-fontset-font (frame-parameter nil 'font)
                                '(#Xe100 . #Xe16f)
                                "Fira Code Symbol")
-             (nasy/adjust-fira-code-symbol #Xe126 15))))))
-    (:when-loaded
-      (when (fboundp 'mac-auto-operator-composition-mode)
-        (mac-auto-operator-composition-mode))
-      (after-x 'dash
-        (pretty-fonts-set-kwds
-         '((pretty-fonts-fira-font prog-mode-hook org-mode-hook))))))
+             (nasy/adjust-fira-code-symbol #Xe126 15)))))
+    :init (sup 'pretty-mode)
+    :defer-config
+    (when (fboundp 'mac-auto-operator-composition-mode)
+      (mac-auto-operator-composition-mode))
+    (after-x 'dash
+      (pretty-fonts-set-kwds
+       '((pretty-fonts-fira-font prog-mode-hook org-mode-hook)))))
 #+end_src
 
 #+begin_src emacs-lisp
-  (setup pretty-mode
-    (:with-hook nasy/font-change-hook
-      (:hook
-       (lambda ()
+  (leaf pretty-mode
+    :hook
+    (nasy/font-change-hook
+     . (lambda ()
          (progn
            (nasy/set-symbol ?ℂ 13 'bold)
            (nasy/set-symbol ?𝕔 16)
@@ -637,11 +639,9 @@ https://github.com/ema2159/centaur-tabs
            (nasy/set-symbol ?∑ 11 'bold)
            (nasy/set-symbol ?∏ 11 'bold)
            (nasy/set-symbol ?∅ 11 'bold)
-           (nasy/set-symbol ?⋃ 11 'bold))))))
-  (setup pretty-mode
-    (:with-hook prog-mode-hook
-      (:hook
-       (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
+           (nasy/set-symbol ?⋃ 11 'bold))))
+    (prog-mode-hook
+     . (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
                    '(;; Data Type             P N
                      ("Float"  . #x211d)  ;; ℝxxxx
                      ("float"  . #x211d)  ;; ℝxxx
@@ -692,13 +692,12 @@ https://github.com/ema2159/centaur-tabs
                      ("`notElem`" . (#x2006 (Br . Bl) #x2209 (Br . Bl) #x2009 (Br . Bl) #x2009))  ;;  ∉  
                      ("return" . (#x21d2 (Br . Bl) #x2005 ))  ;; ⇒  x (Br . Bl) #x2006
                      ("yield"  . (#x21d4 (Br . Bl) #x2004))  ;; ⇔ x xxxxxxxxxxxxxxxxx
-                     ("pure"   . (#x21f0 (Br . Bl)))))))))          ;; ⇰ x
-  (setup pretty-mode
-    (:with-hook (prog-mode-hook
-                 emacs-lisp-mode-hook
-                 org-mode-hook)
-      (:hook
-       (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                     ("pure"   . (#x21f0 (Br . Bl)))))))          ;; ⇰ x
+
+    ((prog-mode-hook
+      emacs-lisp-mode-hook
+      org-mode-hook)
+     . (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
                    '(;; Global
                      ;; Pipes
                      ("<|"  . (?\s (Br . Bl) #Xe14d))
@@ -812,34 +811,33 @@ https://github.com/ema2159/centaur-tabs
                      ("~~"  . (?\s (Br . Bl) #Xe168))
                      ("?="  . (?\s (Br . Bl) #Xe127))
                      (":="  . (?\s (Br . Bl) #Xe10c))
-                     ("/>"  . (?\s (Br . Bl) #Xe12e))))))))
-  (setup pretty-mode
-    (:with-hook python-mode-hook
-      (:hook
-       (lambda ()
-         (mapc (lambda (pair) (push pair prettify-symbols-alist))
-               '(;; Syntax
-                 ;;("def"    . (#x1d521 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
-                 ("def"    . (#x1d487 (Br . Bl) #x2006))  ;; 𝒇 1 111
-                 ("List"   . #x1d543)  ;; 𝕃 𝕷
-                 ("list"   . (?𝕝 (Br . Bl) #x2006))  ;; 𝕝   𝖑
-                 ("Dict"   . #x1d53B)  ;; 𝔻 𝕯
-                 ("dict"   . #x1d555)  ;; 𝕕 𝖉
-                 ("Set"    . #x1d61a)  ;; 𝔖 𝘚
-                 ("set"    . #x1d634)  ;; 𝔰 𝘴
-                 ("Tuple"  . #x1d61b)  ;; 𝕋 𝕿 𝘛
-                 ("tuple"  . #x1d635)  ;; 𝕥 𝖙 𝘵
+                     ("/>"  . (?\s (Br . Bl) #Xe12e))))))
 
-                 ("Union"  . #x22c3)  ;; ⋃
-                 ("union"  . #x22c3))))))  ;; ⋃
-    (:with-hook haskell-mode-hook
-      (:hook
-       (lambda ()
-         (mapc (lambda (pair) (push pair prettify-symbols-alist))
-               '(;; Syntax
-                 ("pure" . (#x21f0 (Br . Bl) #x2006)))))) ;; ⇰  x
-      ;; (" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; ∘
-      ))
+    (python-mode-hook
+     . (lambda ()
+        (mapc (lambda (pair) (push pair prettify-symbols-alist))
+              '(;; Syntax
+                ;;("def"    . (#x1d521 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
+                ("def"    . (#x1d487 (Br . Bl) #x2006))  ;; 𝒇 1 111
+                ("List"   . #x1d543)  ;; 𝕃 𝕷
+                ("list"   . (?𝕝 (Br . Bl) #x2006))  ;; 𝕝   𝖑
+                ("Dict"   . #x1d53B)  ;; 𝔻 𝕯
+                ("dict"   . #x1d555)  ;; 𝕕 𝖉
+                ("Set"    . #x1d61a)  ;; 𝔖 𝘚
+                ("set"    . #x1d634)  ;; 𝔰 𝘴
+                ("Tuple"  . #x1d61b)  ;; 𝕋 𝕿 𝘛
+                ("tuple"  . #x1d635)  ;; 𝕥 𝖙 𝘵
+
+                ("Union"  . #x22c3)  ;; ⋃
+                ("union"  . #x22c3)))))  ;; ⋃
+
+    (haskell-mode-hook
+     . (lambda ()
+        (mapc (lambda (pair) (push pair prettify-symbols-alist))
+              '(;; Syntax
+                ("pure" . (#x21f0 (Br . Bl) #x2006)))))) ;; ⇰  x
+                       ;; (" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; ∘
+    :init)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -870,49 +868,104 @@ https://github.com/ema2159/centaur-tabs
 #+end_src
 
 #+begin_src emacs-lisp
-  (setup nyan-mode
-    (:opt
-     nyan-animate-nyancat t
-     nyan-bar-length      16
-     nyan-wavy-trail      t)
-    (:hook-into nasy-first-key-hook))
+  (leaf nyan-mode
+    :custom (nyan-animate-nyancat . t)
+            (nyan-bar-length      . 16)
+            (nyan-wavy-trail      . t)
+    :hook after-init-hook
+    :init (sup 'nyan-mode))
 #+end_src
 
 #+begin_src emacs-lisp
-  (setup minions
-    (:opt
-     minions-mode-line-lighter "✬")
-    (:hook-into nasy-first-key-hook))
+  (leaf minions
+    :custom (minions-mode-line-lighter . "✬")
+    :hook after-init-hook
+    :init (sup 'minions))
 #+end_src
 
 #+begin_src emacs-lisp
-  (setup doom-modeline
-    (:hook-into emacs-startup-hook))
+  (leaf doom-modeline
+    :hook emacs-startup-hook
+    :init (sup 'doom-modeline))
 
-  (setup doom-modeline
-    (:opt
-     inhibit-compacting-font-caches   t
-     doom-modeline-bar-width          5
-     doom-modeline-window-width-limit fill-column
-     doom-modeline-project-detection  'ffip  ;; changed
-     doom-modeline-continuous-word-count-modes
-     '(markdown-mode gfm-mode org-mode text-mode))
-    (:opts
+  (leaf doom-modeline
+    :after doom-modeline
+    :defun doom-modeline-def-modeline doom-modeline-def-segment
+    :custom
+    (inhibit-compacting-font-caches . t)
+    ((doom-modeline-bar-width                   . 5)
+     (doom-modeline-window-width-limit          . fill-column)
+     (doom-modeline-project-detection           . 'ffip)  ;; changed
      ((doom-modeline-icon             ;; changed
        doom-modeline-unicode-fallback ;; changed
        doom-modeline-minor-modes)      ;; changed
        ;; doom-modeline-hud)             ;; changed
-      . t))
-    (:opt
-     doom-modeline-buffer-encoding       nil  ;; changed
-     doom-modeline-checker-simple-format nil  ;; changed
-     doom-modeline-persp-name            nil))  ;; changed
+      . t)
+     (doom-modeline-continuous-word-count-modes . '(markdown-mode gfm-mode org-mode text-mode))
+     (doom-modeline-buffer-encoding             . nil)  ;; changed
+     (doom-modeline-checker-simple-format       . nil)  ;; changed
+     (doom-modeline-persp-name                  . nil))  ;; changed
+    :defer-config)
+   ;;  (doom-modeline-def-modeline 'main
+   ;;    '(bar matches buffer-info "  " hud buffer-position word-count selection-info)
+   ;;    '(misc-info battery grip github debug repl lsp minor-modes input-method major-mode process vcs checker))
+
+   ;;  (doom-modeline-def-modeline 'minimal
+   ;;   '(bar matches buffer-info-simple "  " hud)
+   ;;   '(media-info major-mode))
+
+   ;;  (doom-modeline-def-modeline 'special
+   ;;   '(bar window-number modals matches buffer-info "  " hud buffer-position word-count parrot selection-info)
+   ;;   '(objed-state misc-info battery irc-buffers debug minor-modes input-method indent-info buffer-encoding major-mode process))
+
+   ;; (doom-modeline-def-modeline 'project
+   ;;   '(bar window-number buffer-default-directory "  " hud)
+   ;;   '(misc-info battery irc mu4e gnus github debug minor-modes input-method major-mode process))
+
+   ;; (doom-modeline-def-modeline 'dashboard
+   ;;   '(bar window-number buffer-default-directory-simple)
+   ;;   '(misc-info battery irc mu4e gnus github debug minor-modes input-method major-mode process))
+
+   ;; (doom-modeline-def-modeline 'vcs
+   ;;   '(bar window-number modals matches buffer-info "  " hud buffer-position parrot selection-info)
+   ;;   '(misc-info battery irc mu4e gnus github debug minor-modes buffer-encoding major-mode process))
+
+   ;; (doom-modeline-def-modeline 'package
+   ;;   '(bar window-number package)
+   ;;   '(misc-info major-mode process))
+
+   ;; (doom-modeline-def-modeline 'info
+   ;;   '(bar window-number buffer-info "  " hud info-nodes buffer-position parrot selection-info)
+   ;;   '(misc-info buffer-encoding major-mode))
+
+   ;; (doom-modeline-def-modeline 'media
+   ;;   '(bar window-number buffer-size buffer-info "  " hud)
+   ;;   '(misc-info media-info major-mode process vcs))
+
+   ;; (doom-modeline-def-modeline 'message
+   ;;   '(bar window-number modals matches buffer-info-simple buffer-position word-count parrot selection-info)
+   ;;   '(objed-state misc-info battery debug minor-modes input-method indent-info buffer-encoding major-mode))
+
+   ;; (doom-modeline-def-modeline 'pdf
+   ;;   '(bar window-number matches buffer-info "  " hud pdf-pages)
+   ;;   '(misc-info major-mode process vcs))
+
+   ;; (doom-modeline-def-modeline 'org-src
+   ;;   '(bar window-number modals matches buffer-info-simple "  " hud buffer-position word-count parrot selection-info)
+   ;;   '(objed-state misc-info debug lsp minor-modes input-method indent-info buffer-encoding major-mode process checker))
+
+   ;; (doom-modeline-def-modeline 'timemachine
+   ;;   '(bar window-number matches git-timemachine "  " hud buffer-position word-count parrot selection-info)
+   ;;   '(misc-info minor-modes indent-info buffer-encoding major-mode)))
 #+end_src
 
 ** Nasy Theme
 
 #+begin_src emacs-lisp
-  (setup nasy-theme)
+  (leaf nasy-theme
+    :init
+    (sup `(nasy-theme :local-repo ,(concat *nasy-site* "nasy/nasy-theme")
+                      :files ("nasy-theme.el"))))
 #+end_src
 
 ** Main Theme
@@ -921,7 +974,6 @@ https://github.com/ema2159/centaur-tabs
   (defun nasy/load-theme ()
     "Nasy load theme function"
     (when *theme*
-      (require 'nasy-theme)
       (load-theme *theme* t)))
 
   (add-hook 'after-init-hook #'nasy/load-theme)
@@ -930,20 +982,23 @@ https://github.com/ema2159/centaur-tabs
 ** Tool Bar
 
 #+begin_src emacs-lisp
-  (setup tool-bar
-    (:tag "builtin")
-    (:bind-into tool-bar-map
-      [copy]            nil
-      [cut]             nil
-      [dired]           nil
-      [isearch-forward] nil
-      [new-file]        nil
-      [open-file]       nil
-      [paste]           nil
-      [save-buffer]     nil
-      [undo]            nil
-      [yank]            nil))
-    ;; (:first-key* (tool-bar-mode -1)))
+  (leaf tool-bar
+    :tag "builtin"
+    :bind
+    (:tool-bar-map
+     ([copy]            . nil)
+     ([cut]             . nil)
+     ([dired]           . nil)
+     ([isearch-forward] . nil)
+     ([new-file]        . nil)
+     ([open-file]       . nil)
+     ([paste]           . nil)
+     ([save-buffer]     . nil)
+     ([undo]            . nil)
+     ([yank]            . nil))
+     ;; ([dashboard-refresh-buffer]
+     ;;  . `(menu-item))))
+    :init (tool-bar-mode -1))
 #+end_src
 
 ** Tab Line
@@ -956,8 +1011,8 @@ https://github.com/ema2159/centaur-tabs
 * 結                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
-  (provide '庭燎)
-  ;;; 庭燎.el ends here
+  (provide '庭尞)
+  ;;; 庭尞.el ends here
 #+end_src
 
 # Local Variables:

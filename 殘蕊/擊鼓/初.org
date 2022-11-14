@@ -61,7 +61,7 @@
   (defconst *nasy-site*   (concat user-emacs-directory "木瓜/"))
   (defconst *nasy-dir*    (concat user-emacs-directory "萚兮/"))
   (defconst *nasy-etc*    (concat *nasy-dir* "恆/"))
-  (defconst *nasy-var*    (concat *nasy-dir* "時/"))
+  (defconst *nasy-var*    (concat *nasy-dir* "旹/"))
 
 
   (when (boundp 'native-comp-eln-load-path)
@@ -90,8 +90,6 @@
 
   (defvar nasy-first-key-hook nil
     "The hook to run functions before press first key.")
-
-  (load (locate-user-emacs-file "init.el") nil t)
 
   (provide 'early-init)
   ;;; early-init.el ends here

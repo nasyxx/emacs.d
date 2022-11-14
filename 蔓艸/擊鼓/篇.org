@@ -25,7 +25,7 @@
 * 題                                                :noexport:
 
 #+begin_src emacs-lisp :exports none
-  ;;; 擊鼓.el --- Nasy's emacs.d init bootstrap file.  -*- lexical-binding: t; -*-
+  ;;; 擊鼓.el --- Nasy's emacs.d init bootstrap file.  -*- coding: utf-8; lexical-binding: t; -*-
 
   ;; Copyright (C) 2022  Nasy
 
@@ -44,91 +44,85 @@
   ;; 必要組件之于 Emacs 啓勭
 
   ;;; Code:
+
+  (eval-when-compile
+    (unless (boundp '*nasy*)
+      (load (locate-user-emacs-file"early-init.el"))))
 #+end_src
 
 * 叙
 
 以 raxod502 之 [[https://github.com/raxod502/straight.el][straight.el]] 載入包以 conao3 之 [[https://github.com/conao3/leaf.el][leaf.el]] 引用包
 
-* 初 ~early-init~
-
-#+begin_src emacs-lisp
-  (eval-and-compile
-    (unless (boundp '*nasy*)
-      (load (locate-user-emacs-file"early-init.el") nil 'nomessage)))
-#+end_src
-
-#+include: ./初.org
-
 * 整置文件                                       :convenience:
 
 #+begin_src emacs-lisp
-  (eval-and-compile
-    (with-no-warnings
-      (customize-set-variable
-       'abbrev-file-name
-       (concat *nasy-etc* "abbrev.el") "Customized by Nasy.")
-      (customize-set-variable
-       'auto-save-list-file-prefix
-       (concat *nasy-var* "auto-save/sessions/") "Customized by Nasy.")
-      (customize-set-variable
-       'auto-save-file-name-transforms
-       `((".*" ,(concat *nasy-var* "auto-save/") t))
-        "Customized by Nasy.")
-      (customize-set-variable
-       'bookmark-default-file
-       (concat *nasy-var* "bookmarks.el") "Customized by Nasy.")
-      (customize-set-variable
-       'eshell-aliases-file
-       (concat *nasy-etc* "eshell/aliases") "Customized by Nasy.")
-      (customize-set-variable
-       'eshell-directory-name
-       (concat *nasy-var* "eshell/") "Customized by Nasy.")
-      (customize-set-variable
-       'save-place-file
-       (concat *nasy-var* "save-place.el") "Customized by Nasy.")
-      (customize-set-variable
-       'svg-lib-icons-dir
-       (concat *nasy-var* "svg-lib/") "Customized by Nasy.")
-      (customize-set-variable
-       'tramp-auto-save-directory
-       (concat *nasy-var* "tramp/auto-save/") "Customized by Nasy.")
-      (customize-set-variable
-       'tramp-persistency-file-name
-       (concat *nasy-var* "tramp/persistency.el") "Customized by Nasy.")
-      (customize-set-variable
-       'url-cache-directory
-       (concat *nasy-var* "url/cache/") "Customized by Nasy.")
-      (customize-set-variable
-       'url-configuration-directory
-       (concat *nasy-var* "url/configuration/") "Customized by Nasy.")))
+  (with-no-warnings
+    (customize-set-variable
+     'abbrev-file-name
+     (concat *nasy-etc* "abbrev.el") "Customized by Nasy.")
+    (customize-set-variable
+     'auto-save-list-file-prefix
+     (concat *nasy-var* "auto-save/sessions/") "Customized by Nasy.")
+    (customize-set-variable
+     'auto-save-file-name-transforms
+     `((".*" ,(concat *nasy-var* "auto-save/") t))
+      "Customized by Nasy.")
+    (customize-set-variable
+     'bookmark-default-file
+     (concat *nasy-var* "bookmarks.el") "Customized by Nasy.")
+    (customize-set-variable
+     'dirvish-cache-dir
+     (concat *nasy-var* "dirvish/") "Customized by Nasy.")
+    (customize-set-variable
+     'eshell-aliases-file
+     (concat *nasy-etc* "eshell/aliases") "Customized by Nasy.")
+    (customize-set-variable
+     'eshell-directory-name
+     (concat *nasy-var* "eshell/") "Customized by Nasy.")
+    (customize-set-variable
+     'save-place-file
+     (concat *nasy-var* "save-place.el") "Customized by Nasy.")
+    (customize-set-variable
+     'svg-lib-icons-dir
+     (concat *nasy-var* "svg-lib/") "Customized by Nasy.")
+    (customize-set-variable
+     'tramp-auto-save-directory
+     (concat *nasy-var* "tramp/auto-save/") "Customized by Nasy.")
+    (customize-set-variable
+     'tramp-persistency-file-name
+     (concat *nasy-var* "tramp/persistency.el") "Customized by Nasy.")
+    (customize-set-variable
+     'url-cache-directory
+     (concat *nasy-var* "url/cache/") "Customized by Nasy.")
+    (customize-set-variable
+     'url-configuration-directory
+     (concat *nasy-var* "url/configuration/") "Customized by Nasy."))
 #+end_src
 
 * straight
 
 #+begin_src emacs-lisp
-  (eval-and-compile
-    (with-no-warnings
-      (setq straight-vc-git-default-clone-depth     1
-            straight-repository-branch              "develop"
-            straight-enable-use-package-integration nil
-            straight-check-for-modifications        nil))
-    (defvar bootstrap-version)
+  (setq-default straight-vc-git-default-clone-depth     1
+                straight-repository-branch              "develop"
+                straight-enable-use-package-integration nil
+                straight-enable-package-integration     nil
+                straight-check-for-modifications        nil
+                straight-fix-flycheck                   t)
 
-    (let ((bootstrap-file
-           (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-          (bootstrap-version 5))
-      (unless (file-exists-p bootstrap-file)
-        (with-current-buffer
-            (url-retrieve-synchronously
-             "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-             'silent 'inhibit-cookies)
-          (goto-char (point-max))
-          (eval-print-last-sexp)))
-      (load bootstrap-file nil 'nomessage)))
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 6))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
 
-  (eval-and-compile
-    (require 'cl))
 
   (defun nasy/-s-u-p (package)
     "Handle special PACKAGE var."
@@ -136,7 +130,6 @@
         (when (eval package)
           (straight-use-package (eval package)))
       (straight-use-package package)))
-
 
   (defun nasy/sup (&rest packages-sets)
     "Straight use multiple PACKAGES-SETS."
@@ -152,21 +145,19 @@
                                (nasy/-s-u-p p)))
                             (t (error "???"))))))
 
-
-  (cl-eval-when (compile eval load)
-    (defmacro sup (&rest body)
-      `(progn
-         (cl-eval-when (compile eval load)
-           (straight-use-package ,@body))
-         (if nasy--require
-             (cl-eval-when (compile eval load)
-               (if (symbolp ,@body)
-                   (require ,@body nil t)
-                 (require (car ,@body) nil t)))
-           (cl-eval-when (compile)
-             (if (symbolp ,@body)
-                 (require ,@body nil t)
-               (require (car ,@body) nil t)))))))
+  (defmacro sup (package &optional req)
+    "Straight use PACKAGE and or require it if REQ."
+    (when (and (listp package) (or (eq '\` (car package))
+                                   (eq 'quote (car package))))
+        (setq package (eval package)))
+    (let ((pkg (if (symbolp package) package (car package)))
+          bs)
+      (push `(straight-use-package ',package) bs)
+      (when (eval req)
+        (if (eq (eval req) t)
+            (push `(require ',pkg) bs)
+          (push `(require ,req) bs)))
+      (macroexp-progn (nreverse bs))))
 #+end_src
 
 * Elpaca
@@ -209,17 +200,7 @@ Elpaca is an elisp package manager. It allows users to find, install, update, an
 * 餘
 
 #+begin_src emacs-lisp
-  (sup 'leaf)
-  (sup 'leaf-keywords)
-  (sup 'use-package)
-#+end_src
-
-* Leaf
-
-#+begin_src emacs-lisp
-  (eval-and-compile
-    (setq leaf-defaults '(:leaf-autoload nil :leaf-defun nil :leaf-defer t))
-    (leaf-keywords-init))
+  (sup 'setup)
 
   (defun nasy/-package-filter (name &rest _)
     "Ignore package NAME if *no-packages* is t."
@@ -229,16 +210,212 @@ Elpaca is an elisp package manager. It allows users to find, install, update, an
             (message "Ignore package: %s" name)
             nil)
         t)))
+#+end_src
 
-  (advice-add 'leaf :before-while #'nasy/-package-filter)
+* Leaf
+
+#+begin_src emacs-lisp
+  ;; (eval-and-compile
+  ;;   (setq leaf-defaults '(:leaf-autoload nil :leaf-defun nil :leaf-defer t))
+  ;;   (leaf-keywords-init))
+
+  ;; (advice-add 'leaf :before-while #'nasy/-package-filter)
 #+end_src
 
 * use-package
 
 #+begin_src emacs-lisp
-  (eval-when-compile
-    (require 'use-package)
-    (require 'bind-key))
+  ;; (eval-when-compile
+  ;;   (require 'use-package)
+  ;;   (require 'bind-key)
+
+  ;;   (defalias 'use-package-normalize/:doc 'use-package-normalize-test)
+  ;;   (defun use-package-handler/:doc (name keyword _ rest state)
+  ;;     (use-package-process-keywords name rest state))
+  ;;   (defalias 'use-package-normalize/:tag #'(lambda (&rest _) nil))
+  ;;   (defalias 'use-package-handler/:tag 'use-package-handler/:doc)
+  ;;   (defalias 'use-package-normalize/:url 'use-package-normalize-test)
+  ;;   (defalias 'use-package-handler/:url 'use-package-handler/:doc)
+  ;;   (add-to-list 'use-package-keywords :doc)
+  ;;   (add-to-list 'use-package-keywords :tag)
+  ;;   (add-to-list 'use-package-keywords :url)
+
+  ;;   (unintern "use-package-autoloads/:hook" nil)
+  ;;   (unintern "use-package-autoloads/:bind" nil)
+  ;;   (advice-add 'use-package :before-while #'nasy/-package-filter))
+
+  ;; (customize-set-variable 'use-package-always-defer t "Customized by Nasy.")
+#+end_src
+
+* Setup EL
+
+~setup.el~ provides a macro to ease repetitive configuration patterns in Emacs. This is done by providing context sensitive local macros, that expand to regular, pure EmacsLisp.
+
+The package is available on GnuELPA and is currently maintained by PhilipKaludercic on SourceHut: https://git.sr.ht/~pkal/setup.
+
+Documentation is available at https://www.emacswiki.org/emacs/SetupEl
+
+#+begin_src emacs-lisp
+  (require 'setup)
+  (setup-define :doc
+    (lambda (&rest _) nil)
+    :documentation "The one line doc for the setup package.")
+  (setup-define :tag
+    (lambda (&rest _) nil)
+    :documentation "The one line doc for the setup package.")
+  (setup-define :url
+    (lambda (&rest _) nil)
+    :documentation "The one line doc for the setup package.")
+
+  (setup-define :sup
+    (lambda (name) `(sup ',name))
+    :documentation "Customize variables."
+    :debug '(sexp)
+    :repeatable t)
+
+  (setup-define :opt
+    (lambda (name val) `(customize-set-variable ',name ,val "Customized by Nasy."))
+    :documentation "Customize variables."
+    :after-loaded t
+    :repeatable t)
+
+  (setup-define :opt*
+    (lambda (name val) `(customize-set-variable ',name ,val "Customized by Nasy."))
+    :documentation "Customize variables."
+    :debug '(sexp form)
+    :repeatable t)
+
+  (setup-define :opts
+    (lambda (nsv)
+      (let ((names (car nsv))
+            (val (cdr nsv))
+            bs)
+        (dolist (name (if (listp names) names (list names)))
+          (push `(customize-set-variable ',name ,val "Customized by Nasy.") bs))
+        (macroexp-progn (nreverse bs))))
+    :documentation "Customize variables."
+    :after-loaded t
+    :repeatable t)
+
+  (setup-define :opts*
+    (lambda (nsv)
+      (let ((names (car nsv))
+            (val (cdr nsv))
+            bs)
+        (dolist (name (if (listp names) names (list names)))
+          (push `(customize-set-variable ',name ,val "Customized by Nasy.") bs))
+        (macroexp-progn (nreverse bs))))
+    :documentation "Customize variables."
+    :repeatable t)
+
+  (setup-define :custom
+    (lambda (name val) `(customize-set-variable ',name ,val "Customized by Nasy."))
+    :documentation "Customize variables."
+    :debug '(sexp form)
+    :after-loaded t
+    :repeatable t)
+
+  (setup-define :customs
+    (lambda (nsv)
+      (let ((names (car nsv))
+            (val (cdr nsv))
+            bs)
+        (dolist (name (if (listp names) names (list names)))
+          (push `(customize-set-variable ',name ,val "Customized by Nasy.") bs))
+        (macroexp-progn (nreverse bs))))
+    :documentation "Customize variables."
+    :repeatable t)
+
+  (setup-define :customs*
+    (lambda (names val)
+      (let (bs)
+        (dolist (name names)
+          (push `(customize-set-variable ',name ,val "Customized by Nasy.") bs))
+        (macroexp-progn (nreverse bs))))
+    :documentation "Customize variables."
+    :repeatable t)
+
+  (setup-define :hooks
+    (lambda (hook func)
+      `(add-hook ',hook #',func))
+    :documentation "Add pairs of hooks."
+    :repeatable t)
+
+  (setup-define :init
+    (lambda (&rest body) (macroexp-progn body))
+    :documentation "Init keywords like use-package and leaf.")
+
+  (setup-define :load-after
+    (lambda (&rest features)
+      (let ((body `(require ',(setup-get 'feature))))
+        (dolist (feature (nreverse features))
+          (setq body `(with-eval-after-load ',feature ,body)))
+        body))
+    :documentation "Load the current feature after FEATURES.")
+
+  (setup-define :load-first
+    (lambda (&rest features)
+      `(:first-key*
+        (:load-after ,@features))))
+
+  (setup-define :after
+    (lambda (feature &rest body)
+      `(with-eval-after-load ',feature ,@body))
+    :documentation "Eval BODY after FEATURE."
+    :after-loaded t
+    :indent 1)
+
+  (setup-define :after*
+    (lambda (feature &rest body)
+      `(with-eval-after-load ',feature ,@body))
+    :documentation "Eval BODY after FEATURE."
+    :indent 1)
+
+  (setup-define :quit
+   #'setup-quit
+   :documentation "Unconditionally abort the evaluation of the current body.")
+
+  (setup-define :first-key
+    (lambda (name) `(add-hook 'nasy-first-key-hook #',name))
+    :documentation "Add to `nasy-first-key-hook'."
+    :repeatable t)
+
+  (setup-define :first-key*
+    (lambda (&rest body) `(add-hook 'nasy-first-key-hook #'(lambda () (progn ,@body))))
+    :documentation "Add to `nasy-first-key-hook'.")
+
+  (setup-define :first-org
+    (lambda (name) `(add-hook 'nasy-org-first-key-hook #',name))
+    :documentation "Add to `nasy-first-key-hook'."
+    :repeatable t)
+
+  (setup-define :advice
+    (lambda (symbol where function)
+      `(advice-add ',symbol ,where ,function))
+    :documentation "Add a piece of advice on a function.
+   See `advice-add' for more details."
+    :after-loaded t
+    :debug '(sexp sexp function-form)
+    :ensure '(nil nil func)
+    :repeatable t)
+
+  (setup-define :mode-hook
+    (lambda (&rest body)
+      `(add-hook ',(setup-get 'hook) #'(lambda () (progn ,@body))))
+    :documentation "Add to the mode hook.")
+
+  (setup-define :autoload
+    (lambda (func)
+      (let ((fn (if (memq (car-safe func) '(quote function))
+                    (cadr func)
+                  func)))
+        `(unless (fboundp (quote ,fn))
+           (autoload (function ,fn) ,(symbol-name (setup-get 'feature)) nil t))))
+    :documentation "Autoload COMMAND if not already bound."
+    :repeatable t
+    :signature '(FUNC ...))
+
+  (advice-add 'setup :before-while #'nasy/-package-filter)
 #+end_src
 
 * 包之墬阯 ~load-path~
@@ -286,21 +463,20 @@ Elpaca is an elisp package manager. It allows users to find, install, update, an
 * melpa/elpa 之外
 
 #+begin_src emacs-lisp
-  (cl-eval-when (compile eval load)
-    (straight-register-package
-     '(keytar :type git
-              :host github
-              :repo "emacs-grammarly/keytar"))
+  (straight-register-package
+   '(keytar :type git
+            :host github
+            :repo "emacs-grammarly/keytar"))
 
-    (straight-register-package
-     '(point-history :type git
-                     :host github
-                     :repo "blue0513/point-history"))
+  (straight-register-package
+   '(point-history :type git
+                   :host github
+                   :repo "blue0513/point-history"))
 
-    (straight-register-package
-     '(vundo :type git
-             :host github
-             :repo "casouri/vundo")))
+  (straight-register-package
+   '(vundo :type git
+           :host github
+           :repo "casouri/vundo"))
 #+end_src
 
 * 載入
@@ -319,8 +495,7 @@ Elpaca is an elisp package manager. It allows users to find, install, update, an
 人配置 ~芄蘭~ 之內。
 
 #+begin_src emacs-lisp
-  (cl-eval-when (compile eval load)
-    (add-to-list 'load-path *nasy-custom*))
+  (add-to-list 'load-path *nasy-custom*)
 
   (require '芄蘭)
 #+end_src
@@ -329,43 +504,236 @@ Elpaca is an elisp package manager. It allows users to find, install, update, an
 
 #+include: ./芄蘭之例.org
 
-* 清汙薉                                             :internal:
-
-以 ~gcmh~ 管理汙薉
-
-** GCMH                                              :internal:
-
-Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
-
-https://gitlab.com/koral/gcmh
+** 包
 
 #+begin_src emacs-lisp
-  (leaf gcmh
-    :doc "Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection."
-    :url "https://gitlab.com/koral/gcmh"
-    :tag "internal"
-    :defun gcmh-mode
-    :hook (nasy-first-key-hook . nasy/-start-gcmh)
-    :init (sup 'gcmh))
+  (eval-and-compile
+    (message "載包: %s" (if nasy--require
+                            "是"
+                          "否"))
+    (sup 'org nasy--require)
+    (sup 'org-contrib nasy--require)
+    (sup 'gcmh nasy--require)
+    (sup 'setup nasy--require)
 
-  (defun nasy/-start-gcmh (&rest _)
-    "Start GCMH."
-    (when (and (not noninteractive)
-               (not (and (boundp '*no-gcmh*)
-                       ,*no-gcmh*)))
-      (customize-set-variable
-       'gcmh-verbose t
-       "Customized with leaf in `gcmh' block")
-      (customize-set-variable
-       'gcmh-low-cons-threshold #x2000000  ;; 32MB
-       "Customized with leaf in `gcmh' block")
-      (customize-set-variable
-       'gcmh-high-cons-threshold #x8000000 ;; 128MB
-       "Customized with leaf in `gcmh' block")
-      (customize-set-variable
-       'gcmh-idle-delay 360
-       "Customized with leaf in `gcmh' block")
-      (gcmh-mode 1)))
+    ;; 風雨
+    (sup 'beacon nasy--require)
+    (sup 'expand-region nasy--require)
+    (sup 'flycheck nasy--require)
+    (sup 'org nasy--require)
+    (sup 'treemacs nasy--require)
+    (sup 'avy nasy--require)
+    (sup 'beacon nasy--require)
+    (sup 'dashboard nasy--require)
+    (sup 'doom-modeline nasy--require)
+    (sup 'flycheck nasy--require)
+    (sup 'ibuffer nasy--require)
+    (sup 'projectile nasy--require)
+    (sup 'smartparens nasy--require)
+    (sup `(彩 :local-repo ,(concat *nasy-site* "nasy/nasy-theme")
+              :files ("彩.el"))
+         nasy--require)
+
+    ;; 緑衣
+    (sup 'alert nasy--require)
+    (sup 'all-the-icons-completion nasy--require)
+    (sup 'anzu nasy--require)
+    (sup 'avy nasy--require)
+    (sup 'beginend nasy--require)
+    (sup 'cape nasy--require)
+    (sup 'company nasy--require)
+    (sup 'consult nasy--require)
+    (sup 'consult-dir nasy--require)
+    (sup 'consult-flycheck nasy--require)
+    (sup '(copilot :host github :repo "zerolfx/copilot.el"
+                   :files ("dist" "copilot.el"))
+         nasy--require)
+    (sup 'corfu nasy--require)
+    (sup `(corfu-extensions
+           :local-repo ,(concat (straight--repos-dir "corfu") "extensions"))
+         nasy--require)
+    (sup 'corfu-doc nasy--require)
+    (sup 'easy-kill nasy--require)
+    (sup 'elisp-demos nasy--require)
+    (sup 'embark-consult nasy--require)
+    (sup 'embark nasy--require)
+    (sup 'flycheck nasy--require)
+    (sup 'helpful nasy--require)
+    (sup 'keyfreq nasy--require)
+    (sup 'marginalia nasy--require)
+    (sup 'orderless nasy--require)
+    (sup 'page-break-lines nasy--require)
+    (sup 'projectile nasy--require)
+    (sup '(emacs-session
+           :repo "https://git.sr.ht/~nasy/emacs-session"
+           :type git
+           :host nil)
+         nasy--require)
+    (sup 'savehist nasy--require)
+    (sup 'spatial-navigate nasy--require)
+    (sup 'sudo-edit nasy--require)
+    (sup 'switch-window nasy--require)
+    (sup 'transient nasy--require)
+    (sup 'unfill nasy--require)
+    (sup 'valign nasy--require)
+    (sup '(vertico :files (:defaults "extensions/*")) nasy--require)
+    (sup 'vlf nasy--require)
+    (sup 'wgrep nasy--require)
+    (sup 'which-key nasy--require)
+    (sup 'whitespace-cleanup-mode nasy--require)
+
+    ;; 月出
+    (sup 'abridge-diff nasy--require)
+    (sup 'ansi-color nasy--require)
+    (sup 'async nasy--require)
+    (sup 'beacon nasy--require)
+    (sup 'beacon nasy--require)
+    (sup 'color-identifiers-mode nasy--require)
+    (sup 'corfu nasy--require)
+    (sup 'default-text-scale nasy--require)
+    (sup 'diff-hl nasy--require)
+    (sup 'dired-collapse nasy--require)
+    (sup 'dired-filter nasy--require)
+    (sup 'dired-hacks nasy--require)
+    (sup 'dired-narrow nasy--require)
+    (sup 'dired-rainbow nasy--require)
+    (sup 'dirvish nasy--require)
+    (sup 'eldoc-box nasy--require)
+    (sup 'eldoc-box nasy--require)
+    (sup 'eldoc-overlay nasy--require)
+    (sup 'expand-region nasy--require)
+    (sup 'f nasy--require)
+    (sup 'find-file-in-project nasy--require)
+    (sup 'ftable nasy--require)
+    (sup 'git-gutter nasy--require)
+    (sup 'highlight-indent-guides nasy--require)
+    (sup 'highlight-tail nasy--require)
+    (sup 'imenu-list nasy--require)
+    (sup 'kind-icon nasy--require)
+    (sup 'license-snippets nasy--require)
+    (sup 'mixed-pitch nasy--require)
+    (sup 'mmm-mode nasy--require)
+    (sup 'multiple-cursors nasy--require)
+    (sup 'pcre2el nasy--require)
+    (sup 'persistent-scratch nasy--require)
+    (sup 'point-history nasy--require)
+    (sup 'rainbow-delimiters nasy--require)
+    (sup 'rainbow-mode nasy--require)
+    (sup 'shellcop nasy--require)
+    (sup 'smartparens nasy--require)
+    (sup 'symbol-overlay nasy--require)
+
+    (sup 'treemacs nasy--require)
+    (sup 'treemacs-icons-dired nasy--require)
+    (sup 'treemacs-magit nasy--require)
+    (sup 'treemacs-projectile nasy--require)
+    (sup 'undo-propose nasy--require)
+    (sup 'visual-fill-column nasy--require)
+    (sup 'vundo nasy--require)
+    (sup 'which-key nasy--require)
+    (sup 'winum nasy--require)
+    (sup 'writeroom-mode nasy--require)
+    (sup 'yasnippet nasy--require)
+    (sup 'yasnippet-snippets nasy--require)
+
+    (sup 'tsc nasy--require)
+    (sup 'tree-sitter nasy--require)
+    (sup 'tree-sitter-indent nasy--require)
+    (sup 'tree-sitter-langs nasy--require)
+    (sup '(ts-fold :type git :host github :repo "jcs090218/ts-fold") nasy--require)
+
+    ;; 庭燎
+    (sup 'all-the-icons nasy--require)
+    (sup 'consult nasy--require)
+    (sup 'dash nasy--require)
+    (sup 'projectile nasy--require)
+    (sup 'cal-china-x nasy--require)
+    (sup 'centaur-tabs nasy--require)
+    (sup 'dashboard nasy--require)
+    (sup 'doom-themes nasy--require)
+    (sup 'pretty-mode nasy--require)
+    (sup 'nyan-mode nasy--require)
+    (sup 'minions nasy--require)
+    (sup 'doom-modeline nasy--require)
+    (sup `(nasy-theme :local-repo ,(concat *nasy-site* "nasy/nasy-theme")) nasy--require)
+
+    ;; 日月
+    (sup 'alert nasy--require)
+    (sup 'carbon-now-sh nasy--require)
+    (sup 'cheat-sh nasy--require)
+    (sup 'rime nasy--require)
+    (sup 'esup nasy--require)
+    (sup 'explain-pause-mode nasy--require)
+    (sup 'grab-mac-link nasy--require)
+    (sup 'htmlize nasy--require)
+    (sup 'indent-tools nasy--require)
+    (sup 'list-unicode-display nasy--require)
+    (sup 'magit nasy--require)
+    (sup 'forge nasy--require)
+    (sup 'magit-delta nasy--require)
+    (sup 'magit-org-todos nasy--require)
+    (sup 'magit-todos nasy--require)
+    (sup 'pdf-tools nasy--require)
+    (sup 'prettier nasy--require)
+    (with-no-warnings
+      (setq vterm-always-compile-module t))
+    (sup 'vterm nasy--require)
+    (sup '(vterm-toggle :build (:not native-compile)) nasy--require)
+    (sup 'wakatime-mode nasy--require)
+
+    ;; 麐之趾
+    (sup 'cdlatex nasy--require)
+    (sup 'reformatter nasy--require)
+    (sup `(bibtex-tidy :local-repo ,(concat *nasy-site* "nasy/bibtex-tidy-mode"))
+         nasy--require)
+    (sup 'lsp-mode nasy--require)
+    (sup 'lsp-ui nasy--require)
+    (sup 'lsp-treemacs nasy--require)
+    (sup `(flex-mode :local-repo ,(concat *nasy-site* "villadora")) nasy--require)
+    (sup 'haskell-mode nasy--require)
+    (sup 'lsp-haskell nasy--require)
+    (sup 'elisp-def nasy--require)
+    (sup 'highlight-quoted nasy--require)
+    (sup '(ipretty :type git :repo "https://framagit.org/steckerhalter/ipretty.git")
+         nasy--require)
+    (sup 'macrostep nasy--require)
+    (with-no-warnings
+      (setq parinfer-rust-auto-download nil
+       parinfer-rust-library
+       (concat *nasy-var* "parinfer-rust/parinfer-rust-darwin.so")))
+    (sup 'parinfer-rust-mode nasy--require)
+    (sup `(tex-site
+           :type git :host nil
+           :repo "https://git.savannah.gnu.org/git/auctex.git"
+           :pre-build ,(pcase system-type
+                        (`berkeley-unix '("gmake"))
+                        (_ '(  ;; also for macos
+                             `("bash" "-c" "cd" ,(straight--repos-dir "auctex"))
+                             ("./autogen.sh")
+                             ("./configure" "--without-texmf-dir" "--with-lispdir=.")
+                             ("gmake")))))
+         nasy--require)
+    (sup 'markdown-mode nasy--require)
+    (sup 'nix-mode nasy--require)
+    (sup 'citeproc nasy--require)
+    (sup 'org-appear nasy--require)
+    (sup 'org-fragtog nasy--require)
+    (sup 'org-latex-impatient nasy--require)
+    (sup 'org-modern nasy--require)
+    (sup '(org-rainbow-tags :host github :repo "KaratasFurkan/org-rainbow-tags")
+         nasy--require)
+    (sup 'org-roam nasy--require)
+    (sup 'elpy nasy--require)
+    (sup 'lsp-pyright nasy--require)
+    (sup `(python-isort :local-repo ,(concat *nasy-site* "nasy/python-isort"))
+         nasy--require)
+    (sup 'restclient nasy--require)
+    (sup 'company-restclient nasy--require)
+    (sup 'ob-restclient nasy--require)
+    (sup 'yaml-mode nasy--require)
+    (sup 'ob-elvish nasy--require)
+    (sup 'elvish-mode nasy--require)
+    (sup 'toml-mode nasy--require))
 #+end_src
 
 * 結                                                :noexport:

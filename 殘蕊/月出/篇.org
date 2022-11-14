@@ -1,0 +1,1115 @@
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "月出.el") :lexical t
+#+title: 月出
+
+#+begin_verse
+  月出皎兮、佼人嫽兮
+  舒窈糾兮、勞心悄兮
+
+  月出晧兮、佼人懰兮
+  舒憂受兮、勞心慅兮
+
+  月出照兮、佼人尞兮
+  舒夭綤兮、勞心憯兮
+#+end_verse
+
+非恆用者以 ~*no-xxx*~ 爲 ~t~ 弃用之
+
+Selective packages.  Disabled the ~package~ by setting *no-package* in the custom file.
+
+* 題                                                :noexport:
+
+#+begin_src emacs-lisp :exports none
+  ;;; 月出.el --- Nasy's emacs.d selective file.  -*- lexical-binding: t; -*-
+
+  ;; Copyright (C) 2022  Nasy
+
+  ;; Author: Nasy <nasyxx@gmail.com>
+
+  ;;; Commentary:
+
+  ;; 非恆用者以 `*no-xxx*' 爲 `t' 弃用之
+
+  ;;; Code:
+
+  (cl-eval-when (compile eval) ;;eval-when-compile
+    (setq nasy--require t)
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/擊鼓"))
+    (add-to-list 'load-path (locate-user-emacs-file  "桃夭/風雨"))
+    (require '擊鼓)
+    (require '風雨)
+    (require '風雨旹用)
+    (require 'compile)
+    (sup 'beacon)
+    (sup 'corfu)
+    (sup 'color-identifiers-mode)
+    (sup 'eldoc-box)
+    (sup 'pcre2el)
+    (sup 'rainbow-delimiters)
+    (sup 'winum)
+    (sup 'tsc)
+    (sup 'tree-sitter)
+    (sup 'tree-sitter-langs)
+    (setq nasy--require nil))
+#+end_src
+
+* 章
+
+** abridge-diff                             :diffs:tools:magit:
+
+A simple Emacs package for abridging refined diff hunks (for example in
+magit). Why abridge a diff hunk? Most diffs are line based. If you are working
+on files with very long lines, for example LaTeX files, or text files with full
+paragraphs per line (often using visual-line-mode), line-based diffs can be very
+challenging to read, even with "hunk refining" enabled (highlighting the words
+which changed).
+
+https://github.com/jdtsmith/abridge-diff
+
+#+begin_src emacs-lisp
+  (leaf abridge-diff
+    :doc "Emacs package for refining diff hunks with very long lines (as in LaTeX files)."
+    :url "https://github.com/jdtsmith/abridge-diff"
+    :tag "diffs" "magit" "tools"
+    :after magit
+    :init
+    (sup 'abridge-diff)
+    (abridge-diff-mode 1))
+#+end_src
+
+** Ansi-Color               :comm:processes:terminals:services:
+
+ansi-color.el translates ANSI SGR (Select Graphic Rendition) escape sequences
+like "Esc[30m" into EmacsOverlays, TextProperties, or XEmacsExtents with face
+colours, bold, etc.
+
+https://www.emacswiki.org/emacs/AnsiColor
+
+#+begin_src emacs-lisp
+  (leaf ansi-color
+    :doc "ansi-color.el translates ANSI SGR (Select Graphic Rendition) escape sequences
+  with face colours, bold, etc."
+    :url "https://www.emacswiki.org/emacs/AnsiColor"
+    :tag "comm" "processes" "terminals" "services"
+    :leaf-autoload t
+    :leaf-defun t
+    :commands colourise-compilation-buffer
+    :after compile
+    :hook ((compilation-filter-hook . colourise-compilation-buffer))
+    :init
+    (sup 'ansi-color)
+    :defer-config
+    (defun colourise-compilation-buffer ()
+      (when (eq major-mode 'compilation-mode)
+        (ansi-color-apply-on-region compilation-filter-start
+                                    (point-max)))))
+#+end_src
+
+** beacon                                         :convenience:
+
+A light that follows your cursor around so you don't lose it!
+
+https://github.com/Malabarba/beacon
+
+#+begin_src emacs-lisp
+  (leaf beacon
+    :doc "Never lose your cursor again."
+    :url "https://github.com/Malabarba/beacon"
+    :tag "convenience"
+    :custom
+    (beacon-size . 8)
+    (beacon-blink-delay . 0.1)
+    ((beacon-blink-when-point-moves-vertically
+      beacon-blink-when-point-moves-horizontally)
+     . 1)
+    (blink-cursor-interval . 1)
+    (beacon-dont-blink-commands . nil)
+    :hook
+    (nasy-first-key-hook . (lambda () (require 'beacon)))
+    :init (sup 'beacon))
+#+end_src
+
+** Color Identifiers Mode                     :faces:languages:
+
+Emacs minor mode to highlight each source code identifier uniquely based on its
+name.
+
+https://github.com/ankurdave/color-identifiers-mode
+
+#+begin_src emacs-lisp
+  (leaf color-identifiers-mode
+    :doc "Emacs minor mode to highlight each source code identifier uniquely based
+  on its name."
+    :url "https://github.com/ankurdave/color-identifiers-mode"
+    :tag "faces" "languages"
+    :hook prog-mode-hook
+    :init (sup 'color-identifiers-mode))
+#+end_src
+
+** Default Text Scale                                    :text:
+
+#+begin_src emacs-lisp
+  (leaf default-text-scale
+    :leaf-autoload t
+    :leaf-defun t
+    :commands default-text-scale-mode
+    :hook nasy-first-key-hook
+    :init (sup 'default-text-scale))
+#+end_src
+
+** dired-async                            :dired:async:network:
+
+Simple library for asynchronous processing in Emacs.
+
+https://github.com/jwiegley/emacs-async
+
+#+begin_src emacs-lisp
+  (leaf dired-async
+    :doc "Simple library for asynchronous processing in Emacs."
+    :url "https://github.com/jwiegley/emacs-async"
+    :tag "dired" "async" "network"
+    :leaf-autoload t
+    :leaf-defun t
+    :commands dired-async-mode
+    :hook dired-mode-hook
+    :init (sup 'async))
+#+end_src
+
+** Dired Hack                                           :files:
+
+Collection of useful dired additions
+
+https://github.com/Fuco1/dired-hacks
+
+#+begin_src emacs-lisp
+  (leaf dired-hacks
+    :doc "Collection of useful dired additions"
+    :url "https://github.com/Fuco1/dired-hacks"
+    :tag "files"
+    :init
+    (sup 'f)
+    (sup 'dired-hacks))
+#+end_src
+
+*** Dired Filter
+
+#+begin_src emacs-lisp
+  (leaf dired-filter
+    :after dash
+    :bind
+    (:dired-filter-map
+     ("p" . dired-filter-pop-all))
+    :hook (dired-mode-hook
+           (dired-mode-hook . dired-filter-group-mode))
+    :custom
+    (dired-filter-revert . 'never)
+    (dired-filter-group-saved-groups
+     . '(("default"
+          ("Git"
+           (directory . ".git")
+           (file . ".gitignore"))
+          ("Directory"
+           (directory))
+          ("PDF"
+           (extension . "pdf"))
+          ("LaTeX"
+           (extension "tex" "bib"))
+          ("Source"
+           (extension "c" "cpp" "hs" "rb" "py" "r" "cs" "el" "lisp" "html" "js" "css"))
+          ("Doc"
+           (extension "md" "rst" "txt"))
+          ("Org"
+           (extension . "org"))
+          ("Archives"
+           (extension "zip" "rar" "gz" "bz2" "tar"))
+          ("Images"
+           (extension "jpg" "JPG" "webp" "png" "PNG" "jpeg" "JPEG" "bmp" "BMP" "TIFF" "tiff" "gif" "GIF")))))
+    :init (sup 'dired-filter)
+    :defer-config
+    (define-key dired-filter-map (kbd "/") dired-filter-mark-map))
+
+
+  (leaf dired-filter
+    :leaf-autoload t
+    :leaf-defun t
+    :commands dired-filter-group-mode)
+#+end_src
+
+*** Dired Rainbow
+
+#+begin_src emacs-lisp
+  (leaf dired-rainbow
+    :leaf-autoload t
+    :leaf-defun t
+    :commands (dired nasy/-init-dired-rainbow dired-rainbow-define dired-rainbow-define-chmod)
+    :defun nasy/-init-dired-rainbow
+    :after dired
+    :require t
+    :hook (dired-mode-hook . nasy/-init-dired-rainbow)
+    :init
+    (sup 'dired-rainbow)
+    (defun nasy/-init-dired-rainbow ()
+      "Nasy init dired-rainbow."
+      (require 'dired-rainbow)
+      (dired-rainbow-define html "#eb5286"
+                            ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
+      (dired-rainbow-define xml "#f2d024"
+                            ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
+      (dired-rainbow-define document "#9561e2"
+                            ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
+      (dired-rainbow-define markdown "#705438"
+                            ("org" "etx" "info" "markdown" "md" "mkd" "nfo" "pod" "rst" "tex" "textfile" "txt"))
+      (dired-rainbow-define database "#6574cd"
+                            ("xlsx" "xls" "csv" "accdb" "db" "mdb" "sqlite" "nc"))
+      (dired-rainbow-define media "#de751f"
+                            ("mp3" "mp4" "MP3" "MP4" "avi" "mpeg" "mpg" "flv" "ogg" "mov" "mid" "midi" "wav" "aiff" "flac"))
+      (dired-rainbow-define image "#f66d9b"
+                            ("tiff" "tif" "cdr" "gif" "ico" "jpeg" "jpg" "png" "psd" "eps" "svg"))
+      (dired-rainbow-define log "#c17d11"
+                            ("log"))
+      (dired-rainbow-define shell "#f6993f"
+                            ("awk" "bash" "bat" "sed" "sh" "zsh" "vim"))
+      (dired-rainbow-define interpreted "#38c172"
+                            ("py" "ipynb" "rb" "pl" "t" "msql" "mysql" "pgsql" "sql" "r" "clj" "cljs" "scala" "js"))
+      (dired-rainbow-define compiled "#4dc0b5"
+                            ("asm" "cl" "lisp" "el" "c" "h" "c++" "h++" "hpp" "hxx" "m" "cc" "cs" "cp" "cpp" "go" "f" "for" "ftn" "f90" "f95" "f03" "f08" "s" "rs" "hi" "h
+  s" "pyc" ".java"))
+      (dired-rainbow-define executable "#8cc4ff"
+                            ("exe" "msi"))
+      (dired-rainbow-define compressed "#51d88a"
+                            ("7z" "zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
+      (dired-rainbow-define packaged "#faad63"
+                            ("deb" "rpm" "apk" "jad" "jar" "cab" "pak" "pk3" "vdf" "vpk" "bsp"))
+      (dired-rainbow-define encrypted "#ffed4a"
+                            ("gpg" "pgp" "asc" "bfe" "enc" "signature" "sig" "p12" "pem"))
+      (dired-rainbow-define fonts "#6cb2eb"
+                            ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
+      (dired-rainbow-define partition "#e3342f"
+                            ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
+      (dired-rainbow-define vc "#0074d9"
+                            ("git" "gitignore" "gitattributes" "gitmodules"))
+      (dired-rainbow-define-chmod directory "#6cb2eb" "d.*")
+      (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*")
+      (font-lock-flush)
+      (font-lock-ensure)))
+#+end_src
+
+*** Dired Narrow
+
+#+begin_src emacs-lisp
+  (leaf dired-narrow
+    :after dired
+    :init (sup 'dired-narrow))
+#+end_src
+
+*** Dired Collapse
+
+#+begin_src emacs-lisp
+  (leaf dired-collapse
+    :after dired
+    :hook dired-mode-hook
+    :init (sup 'dired-collapse))
+#+end_src
+
+** Diff-hl (only for dired)                          :vc:diffs:
+
+Emacs package for highlighting uncommitted changes
+
+https://github.com/dgutov/diff-hl
+
+#+begin_src emacs-lisp
+  (leaf diff-hl
+    :doc "Emacs package for highlighting uncommitted changes"
+    :url "https://github.com/dgutov/diff-hl"
+    :tag "vc" "diffs"
+    :hook ((dired-mode-hook         . diff-hl-dired-mode)
+           (magit-pre-refresh-hook  . diff-hl-magit-pre-refresh)
+           (magit-post-refresh-hook . diff-hl-magit-post-refresh)
+           (nasy-first-key-hook     . global-diff-hl-mode)
+           (nasy-first-key-hook     . global-diff-hl-show-hunk-mouse-mode)
+           (nasy-first-key-hook     . diff-hl-margin-mode))
+    :init (sup 'diff-hl))
+#+end_src
+
+** eldoc box                             :docs:extensions:help:
+
+This package displays ElDoc documentations in a childframe.
+
+https://github.com/casouri/eldoc-box
+
+#+begin_src emacs-lisp
+  (leaf eldoc-box
+    :doc "This package displays ElDoc documentations in a childframe."
+    :url "https://github.com/casouri/eldoc-box"
+    :tag "docs" "extensions" "help"
+    :custom
+    (eldoc-box-position-function . #'eldoc-box--default-at-point-position-function)
+    :hook ((eldoc-mode-hook . eldoc-box-hover-mode)
+           (eldoc-mode-hook . eldoc-box-hover-at-point-mode))
+    :init (sup 'eldoc-box))
+#+end_src
+
+** eldoc-overlay                                   :extensions:
+
+Display eldoc doc with contextual documentation overlay for easy to look.
+
+https://github.com/stardiviner/eldoc-overlay
+
+#+begin_src emacs-lisp
+  (leaf eldoc-overlay
+    :doc "Display eldoc doc with contextual documentation overlay for easy to look."
+    :url "https://github.com/stardiviner/eldoc-overlay"
+    :tag "extensions"
+    :hook eldoc-mode-hook
+    :init (sup 'eldoc-overlay))
+#+end_src
+
+** Expand Region                               :marking:region:
+
+Emacs extension to increase selected region by semantic units.
+
+https://github.com/magnars/expand-region.el
+
+#+begin_src emacs-lisp
+  (leaf expand-region
+    :doc "Emacs extension to increase selected region by semantic units."
+    :url "https://github.com/magnars/expand-region.el"
+    :tag "marking" "region"
+    :bind ("C-=" . er/expand-region)
+    :init (sup 'expand-region))
+#+end_src
+
+** Find File in Project                   :project:convenience:
+
+Find file/directory and review Diff/Patch/Commit quickly everywhere.
+
+https://github.com/technomancy/find-file-in-project
+
+#+begin_src emacs-lisp
+  (leaf find-file-in-project
+    :doc "Find file/directory and review Diff/Patch/Commit quickly everywhere."
+    :url "https://github.com/technomancy/find-file-in-project"
+    :tag "project" "convenience"
+    :custom (ffip-use-rust-fd . t)
+    :init (sup 'find-file-in-project))
+#+end_src
+
+** ftables                             :convenience:table:text:
+
+This package provides some convenient commands for filling a table,
+i.e., adjusting the layout of the table so it can fit in n columns.
+
+https://github.com/casouri/ftable
+
+#+begin_src emacs-lisp
+  (leaf ftable
+    :doc "Fill (auto-layout) tables."
+    :url "https://github.com/casouri/ftable"
+    :tag "convenience" "table" "text"
+    :init (sup 'ftable))
+#+end_src
+
+** Git Gutter                                          :vc:git:
+
+*Disabled. Now use diff-hl*
+
+Emacs port of GitGutter which is Sublime Text Plugin [[https://github.com/jisaacks/GitGutter][GitGutter]].
+
+https://github.com/emacsorphanage/git-gutter
+
+#+begin_src emacs-lisp :tangle no
+  (leaf git-gutter
+    :doc "Emacs port of GitGutter which is Sublime Text Plugin."
+    :url "https://github.com/emacsorphanage/git-gutter"
+    :tag "vc" "git"
+    :hook (after-init-hook . global-git-gutter-mode)
+    :custom ((git-gutter:visual-line    . t)
+             (git-gutter:disabled-modes . '(asm-mode image-mode))
+             (git-gutter:modified-sign  . "❚")
+             (git-gutter:added-sign     . "✚")
+             (git-gutter:deleted-sign   . "✘"))
+    :bind (("C-x v =" . git-gutter:popup-hunk)
+           ("C-x p"   . git-gutter:previous-hunk)
+           ("C-x n"   . git-gutter:next-hunk))
+    :init (sup 'git-gutter))
+#+end_src
+
+** Highlight Indent Guides                              :faces:
+
+Emacs minor mode to highlight indentation.
+
+https://github.com/DarthFennec/highlight-indent-guides
+
+#+begin_src emacs-lisp
+  (leaf highlight-indent-guides
+    :doc "Emacs minor mode to highlight indentation."
+    :url "https://github.com/DarthFennec/highlight-indent-guides"
+    :tag "faces"
+    :hook (prog-mode-hook text-mode-hook org-mode-hook)
+    :custom
+    (highlight-indent-guides-delay . 0.5)
+    :init (sup 'highlight-indent-guides))
+#+end_src
+
+** Highlight Tail               :color:effect:highlight:visual:
+
+This minor-mode draws a tail in real time, when you write.
+
+https://www.emacswiki.org/emacs/highlight-tail.el
+
+#+begin_src emacs-lisp
+  (leaf highlight-tail
+    :doc "This minor-mode draws a tail in real time, when you write."
+    :url "https://www.emacswiki.org/emacs/highlight-tail.el"
+    :tag "color" "effect" "highlight" "visual"
+    :disabled t
+    :init (sup 'highlight-tail))
+#+end_src
+
+** hl-line                             :faces:frame:emulations:
+
+Highlight the current line of characters.
+
+https://www.emacswiki.org/emacs/HighlightCurrentLine
+
+#+begin_src emacs-lisp
+  (leaf hl-line
+    :doc "Highlight the current line of characters."
+    :url "https://www.emacswiki.org/emacs/HighlightCurrentLine"
+    :tag "faces" "frames" "emulations"
+    :hook ((after-init-hook . global-hl-line-mode)))
+#+end_src
+
+** imenu list                               :tools:convenience:
+
+Emacs plugin to show the current buffer's imenu entries in a seperate buffer.
+
+https://github.com/bmag/imenu-list
+
+#+begin_src emacs-lisp
+  (leaf imenu-list
+    :doc "Emacs plugin to show the current buffer's imenu entries in a seperate buffer"
+    :url "https://github.com/bmag/imenu-list"
+    :tag "tools" "convenience"
+    :bind (("C-." . imenu-list-smart-toggle))
+    :custom (imenu-list-auto-resize . t)
+    :init (sup 'imenu-list))
+#+end_src
+
+** kind-icon                                       :completion:
+
+kind-icon — colorful icons for completion in Emacs
+
+This emacs package adds configurable icon or text-based completion
+prefixes based on the :company-kind property that many completion
+backends (such as lsp-mode and Emacs 28's elisp-mode) provide.
+
+https://github.com/jdtsmith/kind-icon
+
+#+begin_src emacs-lisp
+  (leaf kind-icon
+    :doc "Completion kind text/icon prefix labelling for emacs in-region completion."
+    :url "https://github.com/jdtsmith/kind-icon"
+    :tag "completion"
+    :after corfu
+    :custom (kind-icon-default-face . 'corfu-default)
+    :require t
+    :init (sup 'kind-icon)
+    :defer-config (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+#+end_src
+
+** mixed-pitch                                          :faces:
+
+Mixed pitch is a minor mode that enables mixing fixed-pitch (also known as
+fixed-width or monospace) and variable-pitch (AKA “proportional”) fonts. It
+tries to be smart about which fonts get which face. Fonts that look like code,
+org-tables, and such remain fixed-pitch and everything else becomes
+variable-pitch.
+
+https://gitlab.com/jabranham/mixed-pitch
+
+#+begin_src emacs-lisp
+  (leaf mixed-pitch
+    :doc "Mix fixed-pitch and variable-pitch fonts in Emacs."
+    :url "https://gitlab.com/jabranham/mixed-pitch"
+    :tag "faces"
+    :custom (mixed-pitch-variable-pitch-cursor . '(hbar . 3))
+    :hook (org-mode-hook)
+    :mode-hook
+    (progn
+      (after-x 'hl-line
+        (unless (boundp 'nasy--hl-line-bold)
+          (setq nasy--hl-line-bold (face-attribute 'hl-line :weight)))
+        (if mixed-pitch-mode
+            (set-face-attribute 'hl-line nil :weight 'unspecified)
+          (set-face-attribute 'hl-line nil :weight nasy--hl-line-bold))))
+    :init (sup 'mixed-pitch)
+    (eval-when-compile
+      (defvar nasy--hl-line-bold nil))
+    :config
+    (setq mixed-pitch-fixed-pitch-faces
+          (append mixed-pitch-fixed-pitch-faces
+                  org-level-faces
+                  '(whitespace-hspace whitespace-space)
+                  '(fixed-pitch fixed-pitch-serif)
+                  '(org-date
+                    org-footnote
+                    org-special-keyword
+                    org-property-value
+                    org-ref-cite-face
+                    org-tag
+                    org-todo-keyword-todo
+                    org-todo-keyword-habt
+                    org-todo-keyword-done
+                    org-todo-keyword-wait
+                    org-todo-keyword-kill
+                    org-todo-keyword-outd
+                    org-todo
+                    org-done
+                    font-lock-comment-face))))
+#+end_src
+
+** mmm-mode                 :convenience:faces:languages:tools:
+
+MMM Mode is a minor mode for Emacs that allows Multiple Major Modes to coexist
+in one buffer.
+
+https://github.com/purcell/mmm-mode
+
+#+begin_src emacs-lisp
+  (leaf mmm-auto
+    :doc "MMM Mode is a minor mode for Emacs that allows Multiple Major Modes
+  to coexist in one buffer."
+    :url "https://github.com/purcell/mmm-mode"
+    :tag "convenience" "faces" "languages" "tools"
+    :require t
+    :custom
+    (mmm-global-mode              . 'maybe)
+    (mmm-submode-decoration-level . 2)
+    :init
+    (sup 'mmm-mode)
+    (when (or nasy--require nasy-pdump)
+      (require 'mmm-mode)))
+#+end_src
+
+** Multiple Cursors                           :cursors:editing:
+
+Multiple cursors for Emacs.
+
+https://github.com/magnars/multiple-cursors.el
+
+#+begin_src emacs-lisp
+  (leaf multiple-cursors
+    :doc "Multiple cursors for Emacs."
+    :url "https://github.com/magnars/multiple-cursors.el"
+    :tag "editing" "cursors"
+    :bind
+    (("C-<"     . mc/mark-previous-like-this)
+     ("C->"     . mc/mark-next-like-this)
+     ("C-+"     . mc/mark-next-like-this)
+     ("C-c C-<" . mc/mark-all-like-this)
+     ("C-c m r" . set=rectangular-region-anchor)
+     ("C-c m c" . mc/edit-lines)
+     ("C-c m e" . mc/edit-ends-of-lines)
+     ("C-c m a" . mc/edit-beginnings-of-lines))
+    :custom `(mc/list-file . ,(concat *nasy-var* "mc-list.el"))
+    :init
+    (sup 'multiple-cursors))
+#+end_src
+
+** Persistent Scratch                     :convenience:history:
+
+~persistent-scratch~ is an Emacs package that preserves the state of
+scratch buffers accross Emacs sessions by saving the state to and
+restoring it from a file.
+
+https://github.com/Fanael/persistent-scratch
+
+#+begin_src emacs-lisp
+  (leaf persistent-scratch
+    :doc "Preserve the scratch buffer across Emacs sessions."
+    :url "https://github.com/Fanael/persistent-scratch"
+    :tag "convenience" "history"
+    :custom `((persistent-scratch-save-file
+               . ,(concat *nasy-var* "persistent-scratch.el"))
+              (persistent-scratch-backup-directory
+               . ,(concat *nasy-var* "persistent-scratch/")))
+    :init (sup 'persistent-scratch)
+    :advice (:after persistent-scratch-restore nasy/scratch))
+#+end_src
+
+** Point History                              :editing:history:
+
+Show the history of points you visited before.
+
+https://github.com/blue0513/point-history
+
+#+begin_src emacs-lisp
+  (leaf point-history
+    :doc "Show the history of points you visited before."
+    :url "https://github.com/blue0513/point-history"
+    :tag "editing"
+    :hook after-init-hook
+    :bind (("C-c C-/" . point-history-show))
+    :custom (point-history-ignore-buffer . "^ \\*Minibuf\\|^ \\*point-history-show*")
+    :init (sup 'point-history))
+#+end_src
+
+** Rainbow-Mode                                         :faces:
+
+This minor mode sets background color to strings that match color names,
+e.g. #0000ff is displayed in white with a blue background.
+
+https://elpa.gnu.org/packages/rainbow-mode.html
+
+#+begin_src emacs-lisp
+  (leaf rainbow-mode
+    :doc "Colorize color names in buffers."
+    :url "https://elpa.gnu.org/packages/rainbow-mode.html"
+    :tag "faces"
+    :leaf-autoload t
+    :leaf-defun t
+    :commands nasy/rainbow-colorize-match
+    :advice (:override rainbow-colorize-match nasy/rainbow-colorize-match)
+    :hook (after-init-hook
+           text-mode-hook
+           org-mode-hook
+           css-mode-hook
+           html-mode-hook
+           prog-mode-hook)
+    :init (sup 'rainbow-mode)
+    :defer-config
+    (eval-when-compile
+      (defvar *font-main-family*))
+    (defun nasy/rainbow-colorize-match (color &optional match)
+      "Return a matched string propertized with a face whose
+  background is COLOR. The foreground is computed using
+  `rainbow-color-luminance', and is either white or black."
+      (let ((match (or match 0)))
+        (put-text-property
+         (match-beginning match) (match-end match)
+         'face `((:foreground ,(if (> 0.5 (rainbow-x-color-luminance color))
+                                   "white" "black"))
+                 (:background ,color)
+                 (:family ,*font-main-family*)))))
+    (when (fboundp 'diminish)
+      (diminish 'rainbow-mode)))
+#+end_src
+
+** Rainbow Delimiters     :convenience:faces:lisp:tools:parens:
+
+rainbow-delimiters is a "rainbow parentheses"-like mode which highlights
+delimiters such as parentheses, brackets or braces according to their
+depth. Each successive level is highlighted in a different color. This makes it
+easy to spot matching delimiters, orient yourself in the code, and tell which
+statements are at a given depth.
+
+https://github.com/Fanael/rainbow-delimiters
+
+#+begin_src emacs-lisp
+  (leaf rainbow-delimiters
+    :doc "Emacs rainbow delimiters mode"
+    :url "https://github.com/Fanael/rainbow-delimiters"
+    :tag "convenience" "faces" "lisp" "tools"
+    :hook prog-mode-hook org-src-mode-hook
+    :init (sup 'rainbow-delimiters))
+#+end_src
+
+** Shellcop                                        :tools:unix:
+
+Analyze errors reported in Emacs builtin shell
+
+https://github.com/redguardtoo/shellcop
+
+#+begin_src emacs-lisp
+  (leaf shellcop
+    :disabled t
+    :doc "Analyze errors reported in Emacs builtin shell."
+    :url "https://github.com/redguardtoo/shellcop"
+    :tag "unix" "tools"
+    :hook (shell-mode-hook . shellcop-start)
+    :init (sup 'shellcop))
+#+end_src
+
+** Smartparens              :abbrev:convenience:editing:parens:
+
+Minor mode for Emacs that deals with parens pairs and tries to be smart about
+it.
+
+https://github.com/Fuco1/smartparens
+
+#+begin_src emacs-lisp
+  (leaf smartparens-config
+    :doc "Minor mode for Emacs that deals with parens pairs and tries to be smart about it."
+    :url "https://github.com/Fuco1/smartparens"
+    :tag "abbrev" "convenience" "editing"
+    :hook (after-init-hook . smartparens-global-mode)
+    :custom ((sp-hybrid-kill-entire-symbol . nil))
+    :init (sup 'smartparens))
+#+end_src
+
+** Symbol Overlay                              :faces:matching:
+
+Highlight symbols with overlays while providing a keymap for various operations
+about highlighted symbols. It was originally inspired by the package
+highlight-symbol. The fundamental difference is that in symbol-overlay every
+symbol is highlighted by the Emacs built-in function overlay-put rather than the
+font-lock mechanism used in highlight-symbol.
+
+https://github.com/wolray/symbol-overlay
+
+#+begin_src emacs-lisp
+  (leaf symbol-overlay
+    :doc "Highlight symbols with keymap-enabled overlays."
+    :url "https://github.com/wolray/symbol-overlay"
+    :tag "faces" "matching"
+    :bind (("M-i"  . symbol-overlay-put)
+           ("M-n"  . symbol-overlay-switch-forward)
+           ("M-p"  . symbol-overlay-switch-backward)
+           ("<f8>" . symbol-overlay-remove-all)
+           ("<f7>" . symbol-overlay-mode))
+    :init (sup 'symbol-overlay))
+#+end_src
+
+** Treemacs                                 :convenience:files:
+
+Treemacs is a file and project explorer similar to NeoTree or vim’s NerdTree, but largely inspired by the Project Explorer in Eclipse. It shows the file system outlines
+ of your projects in a simple tree layout allowing quick navigation and exploration, while also possessing basic file management utilities.
+
+https://github.com/Alexander-Miller/treemacs
+
+#+begin_src emacs-lisp
+  (leaf treemacs
+    :doc "A tree layout file explorer for Emacs"
+    :url "https://github.com/Alexander-Miller/treemacs"
+    :tag "convenience" "files"
+    :init
+    (sup 'treemacs)
+    :defer-config
+    (after-x 'winum
+      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    (setq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
+           treemacs-deferred-git-apply-delay      0.5
+           treemacs-directory-name-transformer    #'identity
+           treemacs-display-in-side-window        t
+           treemacs-eldoc-display                 t
+           treemacs-file-event-delay              5000
+           treemacs-file-extension-regex          treemacs-last-period-regex-value
+           treemacs-file-follow-delay             0.2
+           treemacs-file-name-transformer         #'identity
+           treemacs-follow-after-init             t
+           treemacs-git-command-pipe              ""
+           treemacs-goto-tag-strategy             'refetch-index
+           treemacs-indentation                   2
+           treemacs-indentation-string            " "
+           treemacs-is-never-other-window         nil
+           treemacs-max-git-entries               5000
+           treemacs-missing-project-action        'ask
+           treemacs-move-forward-on-expand        t
+           treemacs-no-png-images                 nil
+           treemacs-no-delete-other-windows       t
+           treemacs-project-follow-cleanup        nil
+           treemacs-persist-file                  (concat *nasy-var* "treemacs-persist")
+           treemacs-position                      'left
+           treemacs-recenter-distance             0.1
+           treemacs-recenter-after-file-follow    nil
+           treemacs-recenter-after-tag-follow     nil
+           treemacs-recenter-after-project-jump   'always
+           treemacs-recenter-after-project-expand 'on-distance
+           treemacs-show-cursor                   nil
+           treemacs-show-hidden-files             t
+           treemacs-silent-filewatch              nil
+           treemacs-silent-refresh                nil
+           treemacs-sorting                       'alphabetic-asc
+           treemacs-space-between-root-nodes      t
+           treemacs-tag-follow-cleanup            t
+           treemacs-tag-follow-delay              1.5
+           treemacs-user-mode-line-format         nil
+           treemacs-user-header-line-format       nil
+           treemacs-width                         35
+           treemacs-workspace-switch-cleanup      nil)
+
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    ;; (treemacs-resize-icons 44)
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode t)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple))))
+
+
+  (leaf treemacs-icons-dired
+    :after treemacs dired
+    :init (sup 'treemacs-icons-dired)
+    :config (treemacs-icons-dired-mode))
+
+  (leaf treemacs-magit
+    :after treemacs magit
+    :init (sup 'treemacs-magit))
+
+  (leaf treemacs-projectile
+    :after treemacs projectile
+    :init (sup 'treemacs-projectile))
+#+end_src
+
+** Tree Sitter                        :languages:parsers:tools:
+
+~emacs-tree-sitter~ is an Emacs binding for tree-sitter, an incremental parsing
+system.
+
+https://ubolonton.github.io/emacs-tree-sitter/
+
+#+begin_src emacs-lisp
+  (leaf tree-sitter
+    :doc "emacs-tree-sitter is an Emacs binding for tree-sitter, an incremental parsing
+   system."
+    :url "https://github.com/ubolonton/emacs-tree-sitter"
+    :tag "languagues" "parsers" "tools"
+    :hook (agda-mode-hook
+           c-mode-hook
+           c++-mode-hook
+           css-mode-hook
+           emacs-lisp-mode-hook
+           html-mode-hook
+           js-mode-hook
+           js2-mode-hook
+           son-mode-hook
+           python-mode-hook
+           ruby-mode-hook
+           rust-mode-hook
+           typescript-mode-hook)
+    :init
+    (sup 'tsc)
+    (sup 'tree-sitter)
+    (sup 'tree-sitter-langs)
+    ;; (nasy/extra-repo tree-sitter-langs
+    ;;                  "emacs-tree-sitter/tree-sitter-langs"
+    ;;                  :files ("*"))
+    :defer-config
+    (require 'tree-sitter-langs)
+    (add-to-list 'tree-sitter-major-mode-language-alist '(mhtml-mode . html))
+    (add-to-list 'tree-sitter-major-mode-language-alist '(emacs-lisp-mode . elisp)))
+
+
+  (leaf tree-sitter-hl
+    :after tree-sitter tree-sitter-langs
+    :hook (css-mode-hook python-mode-hook))
+#+end_src
+
+** Tree Sitter Indent                    :convenience:internal:
+
+https://codeberg.org/FelipeLema/tree-sitter-indent.el.git
+
+#+begin_src emacs-lisp
+  (leaf tree-sitter-indent
+    :doc "Use Tree-sitter as backend to source code indentation."
+    :url "https://codeberg.org/FelipeLema/tree-sitter-indent.el"
+    :tag "convenience" "internal"
+    :hook (tree-sitter-mode-hook)
+    :init (sup 'tree-sitter-indent))
+
+  (leaf tree-sitter-indent
+    :after tree-sitter-indent
+    :custom (c-indent-offset . tree-sitter-indent-offset))
+#+end_src
+
+** Tree Sitter Fold (ts-fold)             :convenience:folding:
+
+ts-fold builds on top of [[https://github.com/emacs-tree-sitter/elisp-tree-sitter][elisp-tree-sitter]] to provide code folding
+base on the tree-sitter syntax tree.
+
+https://github.com/jcs090218/ts-fold
+
+#+begin_src emacs-lisp
+  (leaf ts-fold
+    :doc "Code-folding using tree-sitter."
+    :url "https://github.com/jcs090218/ts-fold"
+    :tag "folding" "convenience"
+    :bind ("C-c @" . ts-fold-toggle)
+    :init (sup '(ts-fold :type git :host github :repo "jcs090218/ts-fold")))
+#+end_src
+
+** Undo Propose           :convenience:files:undo:redo:history:
+
+Navigate the emacs undo history by staging undo's in a temporary buffer.
+
+https://github.com/jackkamm/undo-propose-el
+
+#+begin_src emacs-lisp
+  (leaf undo-propose
+    :doc "Navigate the emacs undo history by staging undo's in a temporary buffer."
+    :url "https://github.com/jackkamm/undo-propose-el"
+    :tag "convenience" "files" "undo" "redo" "history"
+    :bind (("C-c u" . undo-propose))
+    :init (sup 'undo-propose))
+#+end_src
+
+** Visual-fill-column                             :convenience:
+
+Emacs mode for wrapping visual-line-mode buffers at fill-column.
+
+https://github.com/joostkremers/visual-fill-column
+
+#+begin_src emacs-lisp
+  (leaf visual-fill-column
+    :doc "Emacs mode for wrapping visual-line-mode buffers at fill-column."
+    :url "https://github.com/joostkremers/visual-fill-column"
+    :tag "convenience"
+    :advice (:after text-scale-adjust visual-fill-column-adjust)
+    :custom
+    (visual-fill-column-width . 100)
+    :hook
+    ((tex-mode-hook
+      TeX-mode-hook
+      latex-mode-hook
+      LaTeX-mode-hook) . visual-fill-column-mode)
+    :init (sup 'visual-fill-column)
+    :mode-hook
+    (if visual-fill-column-mode
+        (setq split-window-preferred-function #'visual-fill-column-split-window-sensibly)
+      (setq split-window-preferred-function #'split-window-sensibly)))
+#+end_src
+
+** vundo                                            :undo:redo:
+
+Visual undo tree.
+
+https://archive.casouri.cat/note/2021/visual-undo-tree/index.html
+
+https://github.com/casouri/vundo
+
+#+begin_src emacs-lisp
+  (leaf vundo
+    :doc "Visual undo tree."
+    :url "https://github.com/casouri/vundo"
+    :tag "undo" "redo"
+    :custom
+    (vundo-window-side        . 'top)
+    (vundo--window-max-height . 5)
+    ;; :custom-face
+    ;; `(vundo-default   . '((t (:font ,(font-spec
+    ;;                                   :family "PT Mono"
+    ;;                                   :size 22)))))
+    ;; `(vundo-highlight . '((t (:foreground "#057748"
+    ;;                                       :inherit 'vundo-default))))
+    ;; `(vundo-node      . '((t (:foreground "#50616D"
+    ;;                                       :inherit 'vundo-default))))
+    ;; `(vundo-stem      . '((t (:foreground "#50616D"
+    ;;                                       :inherit 'vundo-default))))
+    :bind
+    ("s-/" . vundo)
+    :init (sup 'vundo))
+#+end_src
+
+** Which Key                                             :help:
+
+Emacs package that displays available keybindings in popup.
+
+https://github.com/justbur/emacs-which-key
+
+#+begin_src emacs-lisp
+  (leaf which-key
+    :doc "Emacs package that displays available keybindings in popup."
+    :url "https://github.com/justbur/emacs-which-key"
+    :tag "help"
+    :custom (which-key-allow-imprecise-window-fit . nil)
+    :hook after-init-hook
+    :init (sup 'which-key))
+#+end_src
+
+** Writeroom                                             :text:
+
+~writeroom-mode~ is a minor mode for Emacs that implements a distraction-free
+writing mode similar to the famous Writeroom editor for macOS.
+
+https://github.com/joostkremers/writeroom-mode
+
+#+begin_src emacs-lisp
+  (leaf writeroom-mode
+    :doc "Writeroom-mode: distraction-free writing for Emacs."
+    :url "https://github.com/joostkremers/writeroom-mode"
+    :tag "text"
+    :custom
+    (writeroom-global-effects
+     . '(;; writeroom effects
+         ;; writeroom-set-fullscreen
+         writeroom-set-alpha
+         writeroom-set-menu-bar-lines
+         ;; writeroom-set-tool-bar-lines
+         writeroom-set-vertical-scroll-bars
+         writeroom-set-bottom-divider-width))
+    (writeroom-fullscreen-effect . 'maximized)
+    (writeroom-maximize-window   . nil)
+    (writeroom-width             . 1.0)
+    :init (sup 'writeroom-mode))
+#+end_src
+
+** yank-pulse                                            :text:
+
+#+begin_src emacs-lisp
+  ;; From https://christiantietze.de/posts/2020/12/emacs-pulse-highlight-yanked-text/
+  (defun nasy/-yank-pulse-advice (orig-fn &rest args)
+    ;; Define the variables first
+    (let (begin end)
+      ;; Initialize `begin` to the current point before pasting
+      (setq begin (point))
+      ;; Forward to the decorated function (i.e. `yank`)
+      (apply orig-fn args)
+      ;; Initialize `end` to the current point after pasting
+      (setq end (point))
+      ;; Pulse to highlight!
+      (pulse-momentary-highlight-region begin end)))
+
+  (leaf pulse
+    :advice (:around yank nasy/-yank-pulse-advice))
+#+end_src
+
+** Yasnipeet                            :convenience:emulation:
+
+YASnippet is a template system for Emacs. It allows you to type an abbreviation
+and automatically expand it into function templates. Bundled language templates
+include: C, C++, C#, Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more. The
+snippet syntax is inspired from TextMate's syntax, you can even import most
+TextMate templates to YASnippet. Watch a demo on YouTube.
+
+https://github.com/joaotavora/yasnippet
+
+https://github.com/sei40kr/license-snippets
+
+https://github.com/AndreaCrotti/yasnippet-snippets
+
+#+begin_src emacs-lisp
+  (leaf yasnippet
+    :doc "A template system for Emacs"
+    :url "https://github.com/joaotavora/yasnippet"
+    :tag "convenience" "enmulation"
+    :leaf-autoload t
+    :leaf-defun t
+    :after company
+    :commands (yas-minor-mode
+               yas-reload-all)
+    :custom (yas-snippet-dirs . `(,(concat *nasy-etc* "yasnippet/snippets/")))
+    :hook (((prog-mode-hook text-mode-hook) . yas-minor-mode))
+    :init
+    (sup 'yasnippet)
+    (sup 'license-snippets)
+    (sup 'yasnippet-snippets)
+    :defer-config
+    (license-snippets-init)
+    (yas-reload-all))
+#+end_src
+
+* 結                                                :noexport:
+
+#+begin_src emacs-lisp :exports none
+  (provide '月出)
+  ;;; 月出.el ends here
+#+end_src
+
+# Local Variables:
+# org-src-fontify-natively: nil
+# End:
