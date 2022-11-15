@@ -346,10 +346,11 @@ https://github.com/alexluigit/dirvish
     (:first-key*
      (dirvish-override-dired-mode))
     (:opt delete-by-moving-to-trash t
-          dirvish-default-layout    '(0 0.4 0.6)
+          dirvish-default-layout    '(0 0.3 0.7)
           dirvish-reuse-session     nil
           dirvish-attributes
-          '(vc-state subtree-state all-the-icons collapse git-msg file-time file-size))
+          '(vc-state subtree-state all-the-icons collapse file-time file-size)
+          dirvish-preview-dispatchers nil)  ;; never preview
     (:global "C-c f" dirvish-fd)
     (:bind-into dirvish-mode-map ; Dirvish inherits `dired-mode-map'
       "a"   dirvish-quick-access
