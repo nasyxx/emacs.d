@@ -82,7 +82,7 @@ langs: $(patsubst %,木瓜/emacs-tree-sitter/tree-sitter-langs/bin/%,$(LANGS))
 
 
 ## Generate emacs-lisp files
-generate: $(DS) early-init.el init.el 包.el 譯.el 芄蘭/芄蘭.el 芄蘭/芄蘭之例.el
+generate: $(DS) early-init.el init.el 譯.el 芄蘭/芄蘭.el 芄蘭/芄蘭之例.el
 
 
 芄蘭/build-time: $(wildcard 桃夭/*/*.el)
