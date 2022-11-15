@@ -531,6 +531,8 @@ TeX related works.
 
 *** 自定義                                                 :org:
 
+**** org
+
 #+begin_src emacs-lisp
   (defvar nasy-org-first-key-hook nil)
   (defvar nasy--org-first-key-hook nil)
@@ -558,15 +560,17 @@ TeX related works.
 
 #+begin_src emacs-lisp
   (setup org
-    (:customs
-     (org-ellipsis          . " 略")
-     (org-startup-folded    . 'content)
-     (org-startup-truncated . nil)))
+    (:opt
+     org-ellipsis          " 略"
+     org-startup-folded    'content
+     org-startup-truncated nil))
 #+end_src
+
+**** org agenda
 
 #+begin_src emacs-lisp
   (setup org-agenda
-    (:custom
+    (:opt
      org-agenda-compact-blocks   t
      org-agenda-files            (list (concat *nasy-etc* "standard-agenda.org"))
      org-agenda-start-on-weekday nil
@@ -590,6 +594,8 @@ TeX related works.
      org-agenda-window-setup 'current-window))
 #+end_src
 
+**** org appear
+
 #+begin_src emacs-lisp
   (setup org-appear
     (:opts
@@ -600,8 +606,10 @@ TeX related works.
       . t)))
 #+end_src
 
+**** org appearance
+
 #+begin_src emacs-lisp
-  (setup org-appearance
+  (setup org
     (:opts
      ((org-allow-promoting-top-level-subtree
        org-fontify-todo-headline
@@ -622,115 +630,119 @@ TeX related works.
        (lambda (_) "\\documentclass[preview]{standalone}\n"))))
 #+end_src
 
-#+begin_src emacs-lisp
-  (setup org-capture
-    (:after org)
-    (:custom org-default-notes-file "~/notes/default.org"))
-#+end_src
+**** org capture
 
 #+begin_src emacs-lisp
-  (setup org-export
-    (:after org
-      (:custom
-       ;; general
-       org-export-coding-system         'utf-8
-       org-export-with-broken-links     'mark
-       org-export-with-sub-superscripts '{}
-       org-use-sub-superscripts         '{}
-       org-html-checkbox-type           'unicode)
-      (:custom
-       ;; html
-       org-html-doctype              "html5"
-       org-html-head-include-scripts t
-       org-html-klipsify-src         t
-       org-html-html5-fancy          t
-       org-html-mathjax-options
-       '((path          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML")
-         (scale         "100")
-         (align         "center")
-         (font          "Neo-Euler")
-         (linebreaks    "false")
-         (autonumber    "AMS")
-         (indent        "0em")
-         (multlinewidth "85%")
-         (tagindent     ".8em")
-         (tagside       "right"))
-        org-html-with-latex     'mathjax
-        org-html-wrap-src-lines t)
-
-      (:custom
-       ;; Latex
-       org-latex-compiler "xelatex"
-       org-latex-default-packages-alist
-       '(("AUTO" "inputenc"  t   ("pdflatex"))
-         ("T1"   "fontenc"   t   ("pdflatex"))
-         (""     "graphicx"  t   nil)
-         (""     "grffile"   nil nil)
-         (""     "longtable" nil nil)
-         (""     "booktabs"  nil nil)
-         (""     "wrapfig"   nil nil)
-         (""     "rotating"  nil nil)
-         ("normalem" "ulem"  nil nil)
-         (""     "amsmath"   t   nil)
-         (""     "textcomp"  t   nil)
-         (""     "amssymb"   t   nil)
-         (""     "capt-of"   nil nil)
-         (""     "nicefrac"  t   nil)
-         ("dvipsnames" "xcolor" nil nil)
-         ("colorlinks,unicode,linkcolor=violet,anchorcolor=BlueViolet,citecolor=YellowOrange,filecolor=black,urlcolor=Aquamarine"
-          "hyperref" nil nil)
-         (""            "luatexja-fontspec" t ("lualatex")))
-        ;; (""            "listings"          t nil)))
-        ;; (""            "algorithm"         t nil)
-        ;; (""            "algpseudocode"     t nil)
-        ;; ("cache=false" "minted"            t nil)))
-        org-latex-default-table-environment "longtable"
-        org-latex-listings                  'minted
-        org-latex-pdf-process
-        '("latexmk -f -pdf -%latex -interaction=nonstopmode -shell-escape -output-directory=%o %f")
-        org-latex-tables-booktabs t)
-      (:customs
-       ;; Pandoc
-       ((org-pandoc-options-for-context
-         org-pandoc-options-for-context-pdf)
-        . `((template . ,(concat *nasy-etc* "nasy-context.tex")))))))
+  (setup org
+    (:opt org-default-notes-file "~/notes/default.org"))
 #+end_src
+
+**** org export
+
+#+begin_src emacs-lisp
+  (setup org
+    (:opt
+     ;; general
+     org-export-coding-system         'utf-8
+     org-export-with-broken-links     'mark
+     org-export-with-sub-superscripts '{}
+     org-use-sub-superscripts         '{}
+     org-html-checkbox-type           'unicode)
+    (:opt
+     ;; html
+     org-html-doctype              "html5"
+     org-html-head-include-scripts t
+     org-html-klipsify-src         t
+     org-html-html5-fancy          t
+     org-html-mathjax-options
+     '((path          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML")
+       (scale         "100")
+       (align         "center")
+       (font          "Neo-Euler")
+       (linebreaks    "false")
+       (autonumber    "AMS")
+       (indent        "0em")
+       (multlinewidth "85%")
+       (tagindent     ".8em")
+       (tagside       "right"))
+      org-html-with-latex     'mathjax
+      org-html-wrap-src-lines t)
+    (:opt
+     ;; Latex
+     org-latex-compiler "xelatex"
+     org-latex-default-packages-alist
+     '(("AUTO" "inputenc"  t   ("pdflatex"))
+       ("T1"   "fontenc"   t   ("pdflatex"))
+       (""     "graphicx"  t   nil)
+       (""     "grffile"   nil nil)
+       (""     "longtable" nil nil)
+       (""     "booktabs"  nil nil)
+       (""     "wrapfig"   nil nil)
+       (""     "rotating"  nil nil)
+       ("normalem" "ulem"  nil nil)
+       (""     "amsmath"   t   nil)
+       (""     "textcomp"  t   nil)
+       (""     "amssymb"   t   nil)
+       (""     "capt-of"   nil nil)
+       (""     "nicefrac"  t   nil)
+       ("dvipsnames" "xcolor" nil nil)
+       ("colorlinks,unicode,linkcolor=violet,anchorcolor=BlueViolet,citecolor=YellowOrange,filecolor=black,urlcolor=Aquamarine"
+        "hyperref" nil nil)
+       (""            "luatexja-fontspec" t ("lualatex")))
+      ;; (""            "listings"          t nil)))
+      ;; (""            "algorithm"         t nil)
+      ;; (""            "algpseudocode"     t nil)
+      ;; ("cache=false" "minted"            t nil)))
+      org-latex-default-table-environment "longtable"
+      org-latex-listings                  'minted
+      org-latex-pdf-process
+      '("latexmk -f -pdf -%latex -interaction=nonstopmode -shell-escape -output-directory=%o %f")
+      org-latex-tables-booktabs t)
+    (:opts
+     ;; Pandoc
+     ((org-pandoc-options-for-context
+       org-pandoc-options-for-context-pdf)
+      . `((template . ,(concat *nasy-etc* "nasy-context.tex"))))))
+#+end_src
+
+**** org id
 
 #+begin_src emacs-lisp
   (setup org-id
-    (:after org
-      (:custom org-id-link-to-org-use-id t)))
+    (:opt org-id-link-to-org-use-id t))
 #+end_src
+
+**** org indent
 
 #+begin_src emacs-lisp
   (setup org-indent
-    (:after org
-      (:custom
-       org-indent-mode-turns-on-hiding-stars nil)))
+    (:opt org-indent-mode-turns-on-hiding-stars nil))
 #+end_src
 
+org keywords
+
 #+begin_src emacs-lisp
-  (setup org-keywords
-    (:after org
-      (:custom
-       org-todo-keywords
-       '((sequence
-          "TODO(t)"
-          "WIP(w/!)"
-          "WAIT(W@/!)"
-          "HOLD(h)"
-          "|"
-          "CANCELLED(c@/!)"
-          "DONE(d!/!)")))))
+  (setup org
+    (:opt
+     org-todo-keywords
+     '((sequence
+        "TODO(t)"
+        "WIP(w/!)"
+        "WAIT(W@/!)"
+        "HOLD(h)"
+        "|"
+        "CANCELLED(c@/!)"
+        "DONE(d!/!)"))))
 #+end_src
+
+org latex
 
 #+begin_src emacs-lisp
   ;; LaTeX
   (setup org
-    (:after org
-      (:custom
-       org-preview-latex-default-process 'xesvg
-       org-highlight-latex-and-related   '(native latex script entities)))
+    (:opt
+     org-preview-latex-default-process 'xesvg
+     org-highlight-latex-and-related   '(native latex script entities))
     (:when-loaded
       (defvar
         nasy-luamagick
@@ -791,22 +803,21 @@ TeX related works.
       (add-to-list 'org-preview-latex-process-alist nasy-xesvg)))
 #+end_src
 
+**** org refile
+
 #+begin_src emacs-lisp
   (setup org-refile
-    (:after org
-      (:customs
-       (org-outline-path-complete-in-steps . nil)
-       (org-refile-allow-creating-parent-nodes . 'confirm)
-       ((org-refile-use-outline-path
-         org-refile-use-cache)
-        . t))))
+    (:opts
+     (org-outline-path-complete-in-steps . nil)
+     (org-refile-allow-creating-parent-nodes . 'confirm)
+     ((org-refile-use-outline-path
+       org-refile-use-cache)
+      . t)))
 #+end_src
 
 #+begin_src emacs-lisp
   (setup org-roam
-    (:after org
-      (:custom
-       org-roam-directory "~/orgmode")))
+    (:opt org-roam-directory "~/orgmode"))
 #+end_src
 
 #+begin_src emacs-lisp
