@@ -624,7 +624,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'symbol-overlay nasy--require)
 
     (sup 'treemacs nasy--require)
-    (sup 'treemacs-icons-dired nasy--require)
+    ;; (sup 'treemacs-icons-dired nasy--require)
     (sup 'treemacs-magit nasy--require)
     (sup 'treemacs-projectile nasy--require)
     (sup 'undo-propose nasy--require)

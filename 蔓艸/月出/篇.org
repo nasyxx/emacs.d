@@ -861,9 +861,9 @@ https://github.com/Alexander-Miller/treemacs
             (treemacs-git-mode 'simple))))))
 
 
-  (setup treemacs-icons-dired
-    (:load-first treemacs dired)
-    (:when-loaded (treemacs-icons-dired-mode)))
+  ;; (setup treemacs-icons-dired
+  ;;   (:load-first treemacs dired)
+  ;;   (:when-loaded (treemacs-icons-dired-mode)))
 
   (setup treemacs-magit
     (:load-first treemacs magit))
