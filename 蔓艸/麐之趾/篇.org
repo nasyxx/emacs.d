@@ -660,12 +660,13 @@ TeX related works.
      org-html-klipsify-src         t
      org-html-html5-fancy          t
      org-html-mathjax-options
-     '((path          "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML")
-       (scale         "100")
+     '((path          "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js")
+       (scale         1.0)
        (align         "center")
-       (font          "Neo-Euler")
+       (font          "mathjax-euler")
+       (overflow      "overflow")
        (linebreaks    "false")
-       (autonumber    "AMS")
+       (tags          "ams")
        (indent        "0em")
        (multlinewidth "85%")
        (tagindent     ".8em")
