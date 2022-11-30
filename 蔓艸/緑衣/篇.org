@@ -284,6 +284,14 @@ https://github.com/leoliu/easy-kill
      [remap mark-sexp]      easy-mark))
 #+end_src
 
+** Eldoc                           :builtin:docs:help:
+
+#+begin_src emacs-lisp
+  (setup eldoc
+    (:opt eldoc-documentation-strategy #'eldoc-documentation-compose
+          eldoc-echo-area-use-multiline-p t))
+#+end_src
+
 ** Emacs Spatial Navigate                             :editing:
 
 Spatial navigation in Emacs.
