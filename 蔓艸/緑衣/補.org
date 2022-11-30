@@ -593,22 +593,18 @@ https://github.com/minad/corfu
       (add-to-list 'savehist-additional-variables 'corfu-history))))
 #+end_src
 
-** corfu-doc                     :convenience:corfu:documentation:popup:
+** corfu-popupinfo      :convenience:corfu:documentation:popup:
 
 Display a documentation popup for completion candidate when using
 Corfu. It can be re regarded as company-quickhelp for Corfu.
 
-https://github.com/galeo/corfu-doc
+https://github.com/minad/corfu/blob/main/extensions/corfu-popupinfo.el
 
 #+begin_src emacs-lisp
-  (setup corfu-doc
+  (setup corfu-popupinfo
     (:doc "Documentation popup for Corfu.")
-    (:url "https://github.com/galeo/corfu-doc")
+    (:url "https://github.com/minad/corfu/blob/main/extensions/corfu-popupinfo.el")
     (:tag "convenience" "corfu" "documentation" "popup")
-    (:bind-into corfu-map
-      "M-d" corfu-doc-toggle
-      "M-p" corfu-doc-scroll-down
-      "M-n" corfu-doc-scroll-up)
     (:hook-into corfu-mode-hook))
 #+end_src
 

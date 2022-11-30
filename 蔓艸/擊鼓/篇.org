@@ -552,7 +552,6 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup `(corfu-extensions
            :local-repo ,(concat (straight--repos-dir "corfu") "extensions"))
          nasy--require)
-    (sup 'corfu-doc nasy--require)
     (sup 'easy-kill nasy--require)
     (sup 'elisp-demos nasy--require)
     (sup 'embark-consult nasy--require)
