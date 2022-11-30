@@ -735,7 +735,25 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'yaml-mode nasy--require)
     (sup 'ob-elvish nasy--require)
     (sup 'elvish-mode nasy--require)
-    (sup 'toml-mode nasy--require))
+    (sup 'toml-mode nasy--require)
+
+    ;; 小曐
+    (sup 'git-blamed nasy--require)
+    (sup 'git-messenger nasy--require)
+    (sup 'git-modes nasy--require)
+    (sup 'git-timemachine nasy--require)
+    (sup 'wgrep nasy--require)
+    (sup 'rg nasy--require)
+    (sup 'company-dict nasy--require)
+    (sup 'company-math nasy--require)
+    (sup 'flycheck-package nasy--require)
+    (sup 'ibuffer-vc nasy--require)
+    (sup 'all-the-icons-ibuffer nasy--require)
+    (sup 'nix-buffer nasy--require)
+    (sup 'nix-update nasy--require)
+    (sup 'nixpkgs-fmt nasy--require)
+    (sup 'thingopt nasy--require)
+    (sup 'haskell-snippets nasy--require))
 #+end_src
 
 * 結                                                :noexport:
