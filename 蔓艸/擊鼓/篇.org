@@ -20,7 +20,7 @@
   于嗟洵兮、不我信兮
 #+end_verse
 
-必要組件之于 Emacs 啓勭
+啓勭組件
 
 * 題                                                :noexport:
 
@@ -52,7 +52,7 @@
 
 * 叙
 
-以 raxod502 之 [[https://github.com/raxod502/straight.el][straight.el]] 載入包以 conao3 之 [[https://github.com/conao3/leaf.el][leaf.el]] 引用包
+以 raxod502 之 [[https://github.com/raxod502/straight.el][straight.el]] 載入包以 [[https://www.emacswiki.org/emacs/SetupEl][setup.el]].
 
 * 整置文件                                       :convenience:
 
@@ -636,11 +636,11 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'yasnippet nasy--require)
     (sup 'yasnippet-snippets nasy--require)
 
-    (sup 'tsc nasy--require)
-    (sup 'tree-sitter nasy--require)
-    (sup 'tree-sitter-indent nasy--require)
-    (sup 'tree-sitter-langs nasy--require)
-    (sup '(ts-fold :type git :host github :repo "jcs090218/ts-fold") nasy--require)
+    ;; (sup 'tsc nasy--require)
+    ;; (sup 'tree-sitter nasy--require)
+    ;; (sup 'tree-sitter-indent nasy--require)
+    ;; (sup 'tree-sitter-langs nasy--require)
+    ;; (sup '(ts-fold :type git :host github :repo "jcs090218/ts-fold") nasy--require)
 
     ;; 庭燎
     (sup 'all-the-icons nasy--require)

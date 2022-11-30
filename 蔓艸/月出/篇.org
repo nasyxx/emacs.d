@@ -42,12 +42,13 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
     (sup 'diff-hl t)
     (sup 'dired-filter t)
     (sup 'dired-rainbow t)
+    (sup 'dirvish t)
     (sup 'eldoc-box t)
     (sup 'mixed-pitch t)
     (sup 'multiple-cursors t)
     (sup 'rainbow-mode t)
     (sup 'treemacs t)
-    (sup 'tree-sitter t)
+    ;; (sup 'tree-sitter t)
     (sup 'visual-fill-column t)
     (sup 'winum t)
     (sup 'yasnippet t))
@@ -140,7 +141,7 @@ https://github.com/ankurdave/color-identifiers-mode
     (:tag "faces" "languages")
     (:autoload color-identifiers-mode-maybe)
     (:load-first helpful)
-    (:with-hook python-mode-hook
+    (:with-hook python-base-mode-hook
       (:hook color-identifiers-mode-maybe)))
 #+end_src
 
@@ -881,33 +882,33 @@ system.
 https://ubolonton.github.io/emacs-tree-sitter/
 
 #+begin_src emacs-lisp
-  (setup tree-sitter
-    (:doc "emacs-tree-sitter is an Emacs binding for tree-sitter, an incremental parsing system.")
-    (:url "https://github.com/ubolonton/emacs-tree-sitter")
-    (:tag "languagues" "parsers" "tools")
-    (:hook-into
-     agda-mode-hook
-     c-mode-hook
-     c++-mode-hook
-     css-mode-hook
-     emacs-lisp-mode-hook
-     html-mode-hook
-     js-mode-hook
-     js2-mode-hook
-     son-mode-hook
-     python-mode-hook
-     ruby-mode-hook
-     rust-mode-hook
-     typescript-mode-hook)
-    (:when-loaded
-      (require 'tree-sitter-langs)
-      (add-to-list 'tree-sitter-major-mode-language-alist '(mhtml-mode . html))
-      (add-to-list 'tree-sitter-major-mode-language-alist '(emacs-lisp-mode . elisp))))
+  ;; (setup tree-sitter
+  ;;   (:doc "emacs-tree-sitter is an Emacs binding for tree-sitter, an incremental parsing system.")
+  ;;   (:url "https://github.com/ubolonton/emacs-tree-sitter")
+  ;;   (:tag "languagues" "parsers" "tools")
+  ;;   (:hook-into
+  ;;    agda-mode-hook
+  ;;    c-mode-hook
+  ;;    c++-mode-hook
+  ;;    css-mode-hook
+  ;;    emacs-lisp-mode-hook
+  ;;    html-mode-hook
+  ;;    js-mode-hook
+  ;;    js2-mode-hook
+  ;;    son-mode-hook
+  ;;    python-mode-hook
+  ;;    ruby-mode-hook
+  ;;    rust-mode-hook
+  ;;    typescript-mode-hook)
+  ;;   (:when-loaded
+  ;;     (require 'tree-sitter-langs)
+  ;;     (add-to-list 'tree-sitter-major-mode-language-alist '(mhtml-mode . html))
+  ;;     (add-to-list 'tree-sitter-major-mode-language-alist '(emacs-lisp-mode . elisp))))
 
 
-  (setup tree-sitter-hl
-    (:load-first tree-sitter tree-sitter-langs)
-    (:hook-into css-mode-hook python-mode-hook))
+  ;; (setup tree-sitter-hl
+  ;;   (:load-first tree-sitter tree-sitter-langs)
+  ;;   (:hook-into css-mode-hook python-mode-hook))
 #+end_src
 
 ** Tree Sitter Indent                    :convenience:internal:
@@ -915,15 +916,15 @@ https://ubolonton.github.io/emacs-tree-sitter/
 https://codeberg.org/FelipeLema/tree-sitter-indent.el.git
 
 #+begin_src emacs-lisp
-  (setup tree-sitter-indent
-    (:doc "Use Tree-sitter as backend to source code indentation.")
-    (:url "https://codeberg.org/FelipeLema/tree-sitter-indent.el")
-    (:tag "convenience" "internal")
-    (:hook-into tree-sitter-mode-hook))
+  ;; (setup tree-sitter-indent
+  ;;   (:doc "Use Tree-sitter as backend to source code indentation.")
+  ;;   (:url "https://codeberg.org/FelipeLema/tree-sitter-indent.el")
+  ;;   (:tag "convenience" "internal")
+  ;;   (:hook-into tree-sitter-mode-hook))
 
-  (setup tree-sitter-indent
-    (:load-first tree-sitter-indent)
-    (:custom c-indent-offset tree-sitter-indent-offset))
+  ;; (setup tree-sitter-indent
+  ;;   (:load-first tree-sitter-indent)
+  ;;   (:custom c-indent-offset tree-sitter-indent-offset))
 #+end_src
 
 ** Tree Sitter Fold (ts-fold)             :convenience:folding:
@@ -934,11 +935,11 @@ base on the tree-sitter syntax tree.
 https://github.com/jcs090218/ts-fold
 
 #+begin_src emacs-lisp
-  (setup ts-fold
-    (:doc "Code-folding using tree-sitter.")
-    (:url "https://github.com/jcs090218/ts-fold")
-    (:tag "folding" "convenience")
-    (:global "C-c @" ts-fold-toggle))
+  ;; (setup ts-fold
+  ;;   (:doc "Code-folding using tree-sitter.")
+  ;;   (:url "https://github.com/jcs090218/ts-fold")
+  ;;   (:tag "folding" "convenience")
+  ;;   (:global "C-c @" ts-fold-toggle))
 #+end_src
 
 ** Undo Propose           :convenience:files:undo:redo:history:

@@ -121,7 +121,12 @@
   (add-to-list 'load-path (locate-user-emacs-file  "桃夭/麐之趾"))
   (require '麐之趾)
   (setup 麐之趾
-    (:first-key (lambda () (require '模))))
+    (:first-key*
+     (require '模)
+     (:after python
+       (nasy/tempo-python))
+     (:after haskell
+       (nasy/tempo-haskell))))
 #+end_src
 
 #+include: ./麐之趾/篇.org :lines "3-"

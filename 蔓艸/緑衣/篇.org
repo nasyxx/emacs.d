@@ -369,7 +369,8 @@ https://github.com/oantolin/embark/
       "s" sudo-edit)
     (:after vertico
       (:bind-into vertico-map
-        "M-o" embark-act))
+        "M-o" embark-act)
+      (add-to-list 'embark-indicators #'embark-which-key-indicator))
     (:after 風雨時用
       (:bind-into nasy/active-region-map
         "M-o" embark-act))
@@ -879,6 +880,16 @@ https://github.com/magit/transient
      transient-levels-file  (concat *nasy-etc* "transient/levels.el")
      transient-values-file  (concat *nasy-etc* "transient/values.el"))
     (:init (add-to-list 'nasy--defer-loads 'transient)))
+#+end_src
+
+** Treesit
+
+#+begin_src emacs-lisp
+  (setup treesit
+    (:when-loaded
+      (add-to-list 'treesit-extra-load-path
+                   (expand-file-name "木瓜/casouri/tree-sitter-module/dist"
+                                     user-emacs-directory))))
 #+end_src
 
 ** Unfill                                         :convenience:

@@ -23,8 +23,8 @@
 
   (load (locate-user-emacs-file "桃夭/擊鼓/擊鼓.el"))
 
-  (when (and (eq system-type 'darwin) (executable-find "cargo"))
-    (shell-command (concat "make " (straight--build-dir "tsc") "tsc-dyn.dylib")))
+  ;; (when (and (eq system-type 'darwin) (executable-find "cargo"))
+  ;;   (shell-command (concat "make " (straight--build-dir "tsc") "tsc-dyn.dylib")))
 
   (message "\n\n---------------- Run hooks ----------------\n\n")
 

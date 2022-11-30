@@ -306,7 +306,7 @@ Emacs client/library for the Language Server Protocol
      (interactive-haskell-mode)
      (setq tab-width 4)
      (nasy/tempo-haskell)
-     (stack-exec-path-mode 1)
+     ;; (stack-exec-path-mode 1)
      (progn
        (require 'align)
        (add-to-list 'align-rules-list
@@ -622,12 +622,17 @@ TeX related works.
       . nil)))
 #+end_src
 
+**** org babel
+
 #+begin_src emacs-lisp
   (setup ob-latex
     (:after org
       (:custom
        org-babel-latex-preamble
        (lambda (_) "\\documentclass[preview]{standalone}\n"))))
+
+  (setup ob-core
+    (:opt org-confirm-babel-evaluate nil))
 #+end_src
 
 **** org capture
@@ -798,7 +803,7 @@ org latex
          :image-output-type "svg"
          :image-size-adjust (1.7 . 1.5)
          :latex-compiler ("xelatex -interaction nonstopmode -no-pdf -output-directory %o %f")
-         :image-converter ("dvisvgm %f -n -b min -Z 4 -c %S -o %O")))
+         :image-converter ("dvisvgm %f -n -b min -Z 2 -c %S -o %O")))
         ;; :image-converter ("inkscape --pdf-poppler %f -T -l -o %O")))
       (add-to-list 'org-preview-latex-process-alist nasy-xesvg)))
 #+end_src
@@ -1546,13 +1551,21 @@ https://github.com/org-roam/org-roam
   ;; (leaf python
   ;;   :disabled t
   ;;   :bind
-  ;;   (:python-mode-map
+  ;;   (:python-base-mode-map
   ;;    ("C-b" . nasy/python-send-buffer)
   ;;    ("C-r" . nasy/python-send-region)
   ;;    ("C-r" . nasy/python-send-region)
   ;;    ("C-c" . nasy/python-send-defun)
   ;;    ("C-z" . nasy/python-switch-to-shell)
   ;;    ("<S-return>" . nasy/python-send-region)))
+#+end_src
+
+*** Treesit                                             :python:
+
+#+begin_src emacs-lisp
+  (setup python
+    (:init
+     (add-to-list 'auto-mode-alist '("\\.py[iw]?\\'" . python-ts-mode) 'append)))
 #+end_src
 
 *** python                                              :python:
@@ -1589,7 +1602,7 @@ https://github.com/wbolster/emacs-python-black
     (:doc "Emacs package to reformat Python using black.")
     (:url "https://github.com/wbolster/emacs-python-black")
     (:tag "python" "languages")
-    (:with-hook python-mode-hook
+    (:with-hook python-base-mode-hook
       (:hook (lambda () (require 'python-black)))))
 #+end_src
 
@@ -1606,7 +1619,7 @@ https://github.com/wbolster/emacs-python-black
                                 elpy-module-folding
                                 elpy-module-yasnippet))
     (:advice
-     python-mode :before elpy-enable
+     python-base-mode :before elpy-enable
      elpy-module-folding :after
      (lambda (&rest _)
        (define-key elpy-mode-map (kbd "<mouse-1>") nil))))
@@ -1628,6 +1641,27 @@ https://github.com/wbolster/emacs-python-black
   (defun start-lsp-pyright ()
     "Start lsp pyright."
     (require 'lsp-pyright)
+    (lsp-register-client
+     (make-lsp-client
+      :new-connection (lsp-stdio-connection (lambda ()
+                                              (cons (lsp-package-path 'pyright)
+                                                    lsp-pyright-langserver-command-args)))
+      :major-modes '(python-mode python-ts-mode)
+      :server-id 'pyright
+      :multi-root lsp-pyright-multi-root
+      :priority 3
+      :initialized-fn (lambda (workspace)
+                        (with-lsp-workspace workspace
+                          ;; we send empty settings initially, LSP server will ask for the
+                          ;; configuration of each workspace folder later separately
+                          (lsp--set-configuration
+                           (make-hash-table :test 'equal))))
+      :download-server-fn (lambda (_client callback error-callback _update?)
+                            (lsp-package-ensure 'pyright callback error-callback))
+      :notification-handlers (lsp-ht ("pyright/beginProgress" 'lsp-pyright--begin-progress-callback)
+                                     ("pyright/reportProgress" 'lsp-pyright--report-progress-callback)
+                                     ("pyright/endProgress" 'lsp-pyright--end-progress-callback))))
+    (add-to-list 'lsp-language-id-configuration '(python-ts-mode . "python"))
     (when (zerop (shell-command "pdm info"))
       (setq-local
        lsp-pyright-python-executable-cmd
@@ -1643,10 +1677,10 @@ https://github.com/wbolster/emacs-python-black
 
   (setup lsp-pyright
     (:hooks
-     python-mode-hook          start-lsp-pyright
+     python-base-mode-hook     start-lsp-pyright
      lsp-diagnostics-mode-hook python-setup-lsp-flycheck)
     (:after company
-      (nasy/add-company-backend 'python-mode
+      (nasy/add-company-backend 'python-base-mode
         '(company-capf
           elpy-company-backend
           company-files
@@ -1679,7 +1713,7 @@ https://github.com/wbolster/emacs-python-black
               `("--sp" ,(nasy/find-isort-config))))))
 
   (setup python-isort
-    (:with-hook python-mode-hook
+    (:with-hook python-base-mode-hook
       (:hook (lambda ()
                (progn
                  (require 'python-isort)

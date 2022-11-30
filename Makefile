@@ -138,8 +138,8 @@ regenerate: clean
 
 ## Re-Build Config
 rebuild: clean
-	-make langs -j
-	-make langs -j
+	# -make langs -j
+	# -make langs -j
 	make config -j
 
 

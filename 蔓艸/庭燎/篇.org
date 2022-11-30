@@ -814,7 +814,7 @@ https://github.com/ema2159/centaur-tabs
                      (":="  . (?\s (Br . Bl) #Xe10c))
                      ("/>"  . (?\s (Br . Bl) #Xe12e))))))))
   (setup pretty-mode
-    (:with-hook python-mode-hook
+    (:with-hook python-base-mode-hook
       (:hook
        (lambda ()
          (mapc (lambda (pair) (push pair prettify-symbols-alist))
