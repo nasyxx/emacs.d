@@ -1077,6 +1077,18 @@ https://github.com/sei40kr/license-snippets
 https://github.com/AndreaCrotti/yasnippet-snippets
 
 #+begin_src emacs-lisp
+  (defvar nasy-yas-new-snippet (concat *nasy-etc* "yas-new")
+    "Yasnippet prompt.")
+
+
+  (defun nasy/yas-new-snippet-with-example ()
+    "https://mjdiloreto.github.io/posts/yasnippet-helpful-buffer/"
+    (interactive)
+    (funcall-interactively 'yas-new-snippet)
+    (erase-buffer)
+    (insert-file nasy-yas-new-snippet))
+
+
   (setup yasnippet
     (:doc "A template system for Emacs")
     (:url "https://github.com/joaotavora/yasnippet")
@@ -1087,7 +1099,9 @@ https://github.com/AndreaCrotti/yasnippet-snippets
     (:custom
      yas-snippet-dirs `(,(concat *nasy-etc* "yasnippet/snippets/")))
     (:with-mode yas-minor-mode
-      (:hook-into prog-mode-hook text-mode-hook))
+      (:hook-into prog-mode-hook text-mode-hook)
+      (:bind
+       [remap yas-new-snippet] nasy/yas-new-snippet-with-example))
     (:when-loaded
       (license-snippets-init)
       (yas-reload-all)))

@@ -1443,7 +1443,9 @@
                 "B" #'treemacs-bookmark
                 "f" #'treemacs-find-file)
       "o"     (define-keymap :prefix 'nasy-org-map
-                "b" #'org-tree-to-indirect-buffer)))
+                "b" #'org-tree-to-indirect-buffer)
+      "y"     (define-keymap :prefix 'nasy-yas-map
+                "n" #'yas-new-snippet)))
 
 
   (define-minor-mode nasy-keybinding-mode
