@@ -1,0 +1,55 @@
+# -*- mode: snippet -*-
+
+# key: what the user types to expand this snippet
+# name: what the user sees the snippet listed as
+
+# For more information visit
+# http://joaotavora.github.io/yasnippet/snippet-development.html#org9801aa7
+
+## Embed elisp - back quotes:
+# ifndef ${1:_[backquote](upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))[backquote]_H_}
+
+# NB: DON'T MODIFY THE BUFFER INSIDE BACKQUOTES!
+
+
+## Tab stops - $N
+# $0 is the last, $1 is the first, $2 is second, etc.
+
+
+## Placeholders - ${N:default}
+# ${N:default value}
+
+
+## Mirrors - just reuse a tabstop with placeholder
+# \begin{${1:enumerate}}
+#     $0
+# \end{$1}
+
+
+## Transforming Mirrors - $(
+# ${2:foo}
+# ${2:$(capitalize yas-text)}
+
+
+## Transforming fields - ${N:name:$(elisp)} or ${N:$$(elisp)}
+# #define "${1:$$(upcase yas-text)}"
+
+
+## Choose a value from a list of options
+# <div align="${2:$$(yas-choose-value '("right" "center" "left"))}">
+
+
+## Useful things bound inside evaluated elisp
+# | variable         | description                                             |
+# |------------------+---------------------------------------------------------|
+# | yas-text         | the current text of this field                          |
+# | yas-field-value  | the current text of $1 (or $2, etc.)                    |
+# | yas-modified-p   | whether the field is modified                           |
+# | yas-choose-value | user chooses from a list of options                     |
+# | yas-verify-value | Verify that the current field value is in POSSIBILITIES |
+# --
+
+$0
+${1:default value}
+${1:$(capitalize yas-text)}
+${2:$$(yas-choose-value '("right" "center" "left"))}
