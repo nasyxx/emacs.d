@@ -1,5 +1,5 @@
 EM ?= emacs
-EE ?= $(EM) -Q --batch --eval "(require 'ob-tangle)"
+EE ?= $(EM) -Q --batch --eval "(progn (require 'ob-tangle) (setq org-confirm-babel-evaluate nil))"
 # EL ?= $(EM) -Q --batch -l "init.el" --eval "(setq load-prefer-newer t load-suffixes '(\".el\") nasy--require t)" --eval "(progn (run-hooks 'after-init-hook 'emacs-startup-hook 'nasy-first-key-hook 'pre-command-hook 'prog-mode-hook 'org-mode-hook 'nasy-org-first-key-hook))"
 
 EL ?= $(EM) -Q
@@ -96,7 +96,7 @@ clean-straight:
 
 
 ## Clean all (clean and clean straight)
-clean-all: clean clean-straight clean-tsc
+clean-all: clean clean-straight
 
 
 ## Re-Generate Config
