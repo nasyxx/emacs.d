@@ -33,7 +33,6 @@
     (sup 'corfu t)
     (sup `(corfu-extensions
            :local-repo ,(concat (straight--repos-dir "corfu") "extensions")))
-    (sup 'corfu-doc t)
     (sup 'org t)
 
     (sup 'savehist t))
