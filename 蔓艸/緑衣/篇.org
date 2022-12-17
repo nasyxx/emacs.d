@@ -182,7 +182,6 @@ Include consult & consult-flycheck.
      [remap switch-to-buffer-other-window] consult-buffer-other-window
      [remap switch-to-buffer-other-frame]  consult-buffer-other-frame
 
-     [remap apropos]            consult-apropos
      [remap bookmark-jump]      consult-bookmark
      [remap goto-line]          consult-goto-line
      [remap imenu]              consult-imenu
