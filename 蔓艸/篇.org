@@ -157,6 +157,12 @@
   (run-with-idle-timer 100 nil
                        #'run-hooks 'nasy-first-key-hook)
 
+  (run-with-idle-timer 20 nil
+                       #'(lambda () (progn)
+                           (require 'magit nil t)
+                           (require 'org nil t)
+                           (require 'python nil t)))
+
   (run-with-idle-timer 300 900
                        #'nasy/閒置)
 
