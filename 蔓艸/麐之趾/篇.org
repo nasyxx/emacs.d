@@ -84,6 +84,16 @@ Programming Languages
 
 * 章
 
+** Treesit                                          :languages:
+
+#+begin_src emacs-lisp
+  (setup python
+    (:init
+     (push '(c-mode . c-ts-mode) major-mode-remap-alist)
+     (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+     (push '(python-mode . python-ts-mode) major-mode-remap-alist)))
+#+end_src
+
 ** Bibtex
 
 *** bibtex-tidy
@@ -1561,15 +1571,6 @@ https://github.com/org-roam/org-roam
   ;;    ("<S-return>" . nasy/python-send-region)))
 #+end_src
 
-*** Treesit                                             :python:
-
-#+begin_src emacs-lisp
-  (setup python
-    (:init
-     (add-to-list 'auto-mode-alist (cons (purecopy "\\.py[iw]?\\'") 'python-ts-mode))
-     (add-to-list 'interpreter-mode-alist (cons (purecopy "python[0-9.]*") 'python-ts-mode))))
-#+end_src
-
 *** python                                              :python:
 
 #+begin_src emacs-lisp
@@ -1582,10 +1583,11 @@ https://github.com/org-roam/org-roam
 
   (setup python
     (:opt python-indent-def-block-scale 1)
-    (:mode-hook
-     (python-flycheck-setup)
-     (nasy/tempo-python)
-     (setq-local tab-width (python-indent-guess-indent-offset))))
+    (:with-mode python-base
+      (:mode-hook
+       (python-flycheck-setup)
+       (nasy/tempo-python)
+       (setq-local tab-width (python-indent-guess-indent-offset)))))
 #+end_src
 
 *** black
