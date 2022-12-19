@@ -1086,7 +1086,7 @@ https://github.com/AndreaCrotti/yasnippet-snippets
     (interactive)
     (funcall-interactively 'yas-new-snippet)
     (erase-buffer)
-    (insert-file nasy-yas-new-snippet))
+    (insert-file-contents nasy-yas-new-snippet))
 
 
   (setup yasnippet
