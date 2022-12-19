@@ -130,7 +130,7 @@
       (:doc "字軆初值")
       (:opt*
        ,*font-main-family*   "MonoLisa Nasy"
-       ,*font-symbol-family* "Symbola"
+       ,*font-symbol-family* "SF Pro"
        ,*font-cjk-family*    "STFLGQKJF"
        ,*font-cjk-2-family*  "FZLiuGongQuanKaiShuJF"
        ;; I.Ngaan' font from `http://founder.acgvlyric.org/iu/doku.php/造字:開源字型_i.顏體'.
@@ -310,7 +310,7 @@
         (when (nasy/check-font *font-symbol-family*)
           (set-fontset-font (frame-parameter nil 'font)
                             charset
-                            (font-spec :family "Apple Color Emoji")
+                            (font-spec :family "SF Pro")
                             frame
                             'prepend))))
 
@@ -364,6 +364,13 @@
       (when (nasy/check-font *font-symbol-family*)
         (set-fontset-font (frame-parameter nil 'font)
                           'symbol
+                          (font-spec :family *font-symbol-family*
+                                     :weight *font-symbol-weight*
+                                     :size   *font-symbol-size*)
+                          frame
+                          'append)
+        (set-fontset-font (frame-parameter nil 'font)
+                          'unicode
                           (font-spec :family *font-symbol-family*
                                      :weight *font-symbol-weight*
                                      :size   *font-symbol-size*)
