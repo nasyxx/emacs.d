@@ -584,6 +584,7 @@
                              (ns-appearance           . light)
                              (alpha-background        . 75)
                              (vertical-scroll-bars    . nil)
+                             (undecorated-round       . t)
                              (border-width            . 5)
                              (internal-border-width   . 24)))
       (:global
