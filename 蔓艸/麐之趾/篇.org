@@ -1168,7 +1168,8 @@ individually via the org-modern customization group.
     (:tag "org")
     (:opts
      (org-modern--timestamp . '(" %a, %b %d, %Y " . " %H:%M "))
-     (org-modern-star . ["✿" "❀" "✭" "✫" "✦" "✧" "◈" "◇"])
+     (org-modern-star . ["􁝯" "􀥲" "􁖎" "􁝰" "􁂂" "􀥳" "􁖏" "􀬚"])
+     ;; (org-modern-star . ["✿" "❀" "✭" "✫" "✦" "✧" "◈" "◇"])
      ;; (org-modern-star . ["⚀" "⚁" "⚂" "⚃" "⚄" "⚅"])
      ;; (org-modern-star . ["☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷"])
      (org-modern-hide-stars . 'leading)
@@ -1176,9 +1177,12 @@ individually via the org-modern customization group.
      ;; (org-modern-list . '((?+ . "⊕")
      ;;                      (?- . "⊖")
      ;;                      (?* . "⊛")))
-     (org-modern-list . '((?+ . "✨")
-                          (?- . "💫")
-                          (?* . "💥"))))
+     ;; (org-modern-list . '((?+ . "✨")
+     ;;                      (?- . "💫")
+     ;;                      (?* . "💥"))))
+     (org-modern-list . '((?+ . "􀵵")
+                          (?- . "􀷎")
+                          (?* . "􁜷"))))
     (:hook-into nasy-org-first-key-hook))
 #+end_src
 

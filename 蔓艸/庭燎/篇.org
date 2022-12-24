@@ -297,7 +297,7 @@ https://github.com/ema2159/centaur-tabs
                    :action #'consult-recent-file
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
-                   :button-prefix "🌓 "
+                   :button-prefix "􀯛 "
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open recent files")
@@ -307,7 +307,7 @@ https://github.com/ema2159/centaur-tabs
                    :action #'consult-bookmark
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
-                   :button-prefix "🔖 "
+                   :button-prefix "􀉚 "
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open bookmarks")
@@ -317,17 +317,17 @@ https://github.com/ema2159/centaur-tabs
                    :action #'projectile-switch-project
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
-                   :button-prefix "🚀 "
+                   :button-prefix "􀉹  "
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open projects")
-    (insert "               \n\n")
+    (insert "\n\n")
     (widget-create 'item
                    :tag "草稿 (c)"
                    :action #'persistent-scratch-restore
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
-                   :button-prefix "📝 "
+                   :button-prefix "􀤑 "
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "restore scratch buffer")
@@ -337,7 +337,7 @@ https://github.com/ema2159/centaur-tabs
                    :action #'org-agenda
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
-                   :button-prefix "🗓 "
+                   :button-prefix "􀮝 "
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "Org Agenda")
@@ -347,17 +347,17 @@ https://github.com/ema2159/centaur-tabs
                    :action #'calendar
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
-                   :button-prefix "📅 "
+                   :button-prefix "􀉉 "
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open calendar")
-    (insert "               \n\n")
+    (insert "\n\n")
     (widget-create 'item
                    :tag "芄蘭 (C)"
                    :action #'nasy/-open-custom
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
-                   :button-prefix "⚙ "
+                   :button-prefix "􀍟 "
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open custom file")
@@ -367,7 +367,7 @@ https://github.com/ema2159/centaur-tabs
                    :action #'nasy/-open-source-page
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
-                   :button-prefix "🍭 "
+                   :button-prefix "􀧎 "
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open https://github.com/nasyxx/emacs.d/")
@@ -377,11 +377,11 @@ https://github.com/ema2159/centaur-tabs
                    :action #'nasy/-open-document
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
-                   :button-prefix "📖 "
+                   :button-prefix "􀉅  "
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open https://emacs.nasy.moe")
-    (insert "               \n\n"))
+    (insert "\n\n"))
 
 
   (defun nasy/dashboard-refresh ()
@@ -421,18 +421,18 @@ https://github.com/ema2159/centaur-tabs
     (:hooks
      dashboard-mode-hook (lambda () (setq-local tab-width 1))
      after-init-hook     dashboard-setup-startup-hook
-     after-init-hook     dashboard-refresh-buffer
-     nasy/font-change-hook (lambda ()
-                             (progn
-                               (nasy/set-apple-symbol ?🌓)
-                               (nasy/set-apple-symbol ?🔖)
-                               (nasy/set-apple-symbol ?🚀)
-                               (nasy/set-apple-symbol ?📝)
-                               (nasy/set-apple-symbol ?🗓)
-                               (nasy/set-apple-symbol ?📅)
-                               (nasy/set-apple-symbol ?⚙)
-                               (nasy/set-apple-symbol ?🍭)
-                               (nasy/set-apple-symbol ?📖))))
+     after-init-hook     dashboard-refresh-buffer)
+     ;; nasy/font-change-hook (lambda ()
+     ;;                         (progn
+     ;;                           (nasy/set-apple-symbol ?🌓)
+     ;;                           (nasy/set-apple-symbol ?🔖)
+     ;;                           (nasy/set-apple-symbol ?🚀)
+     ;;                           (nasy/set-apple-symbol ?📝)
+     ;;                           (nasy/set-apple-symbol ?🗓)
+     ;;                           (nasy/set-apple-symbol ?📅)
+     ;;                           (nasy/set-apple-symbol ?⚙)
+     ;;                           (nasy/set-apple-symbol ?🍭)
+     ;;                           (nasy/set-apple-symbol ?📖))))
     (:opt*
      dashboard-items '((n-items . t))
                        ;; (bookmarks . t)
@@ -617,27 +617,27 @@ https://github.com/ema2159/centaur-tabs
 #+end_src
 
 #+begin_src emacs-lisp
-  (setup pretty-mode
-    (:with-hook nasy/font-change-hook
-      (:hook
-       (lambda ()
-         (progn
-           (nasy/set-symbol ?ℂ 13 'bold)
-           (nasy/set-symbol ?𝕔 16)
-           (nasy/set-symbol ?𝔻 13 'bold)
-           (nasy/set-symbol ?𝕕 14)
-           (nasy/set-symbol ?𝕃 13 'bold)
-           (nasy/set-symbol ?𝕝 14) ;; with   (1/4 space)
-           (nasy/set-symbol ?ℝ 12 'bold)
-           (nasy/set-symbol ?𝕣 18)
-           (nasy/set-symbol ?𝕋 14 'bold)
-           (nasy/set-symbol ?𝕥 19)
-           (nasy/set-symbol ?ℤ 13 'bold)
-           (nasy/set-symbol ?𝕫 16)
-           (nasy/set-symbol ?∑ 11 'bold)
-           (nasy/set-symbol ?∏ 11 'bold)
-           (nasy/set-symbol ?∅ 11 'bold)
-           (nasy/set-symbol ?⋃ 11 'bold))))))
+  ;; (setup pretty-mode
+  ;;   (:with-hook nasy/font-change-hook
+  ;;     (:hook
+  ;;      (lambda ()
+  ;;        (progn
+  ;;          (nasy/set-symbol ?ℂ 13 'bold)
+  ;;          (nasy/set-symbol ?𝕔 16)
+  ;;          (nasy/set-symbol ?𝔻 13 'bold)
+  ;;          (nasy/set-symbol ?𝕕 14)
+  ;;          (nasy/set-symbol ?𝕃 13 'bold)
+  ;;          (nasy/set-symbol ?𝕝 14) ;; with   (1/4 space)
+  ;;          (nasy/set-symbol ?ℝ 12 'bold)
+  ;;          (nasy/set-symbol ?𝕣 18)
+  ;;          (nasy/set-symbol ?𝕋 14 'bold)
+  ;;          (nasy/set-symbol ?𝕥 19)
+  ;;          (nasy/set-symbol ?ℤ 13 'bold)
+  ;;          (nasy/set-symbol ?𝕫 16)
+  ;;          (nasy/set-symbol ?∑ 11 'bold)
+  ;;          (nasy/set-symbol ?∏ 11 'bold)
+  ;;          (nasy/set-symbol ?∅ 11 'bold)
+  ;;          (nasy/set-symbol ?⋃ 11 'bold))))))
   (setup pretty-mode
     (:with-hook prog-mode-hook
       (:hook
@@ -942,8 +942,8 @@ https://github.com/ema2159/centaur-tabs
       [paste]           nil
       [save-buffer]     nil
       [undo]            nil
-      [yank]            nil))
-    ;; (:first-key* (tool-bar-mode -1)))
+      [yank]            nil)
+    (:init (tool-bar-mode -1)))
 #+end_src
 
 ** Tab Line

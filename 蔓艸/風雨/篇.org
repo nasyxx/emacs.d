@@ -136,7 +136,8 @@
        ;; I.Ngaan' font from `http://founder.acgvlyric.org/iu/doku.php/造字:開源字型_i.顏體'.
        ,*font-cjk-3-family*  "I.Ngaan"
        ,*font-cjk-4-family*  "Kaiti SC"
-       ,*font-cjk-5-family*  "Kaiti TC")
+       ,*font-cjk-5-family*  "Kaiti TC"
+       ,*font-math-family*   "Euler Math")
       (:opts*
        ((*font-mode-line-family*
          ,*font-header-line-family*
@@ -307,7 +308,7 @@
 
     Font for char like ∷."
       (when (display-graphic-p)
-        (when (nasy/check-font *font-symbol-family*)
+        (when (nasy/check-font "SF Pro")
           (set-fontset-font (frame-parameter nil 'font)
                             charset
                             (font-spec :family "SF Pro")
@@ -353,11 +354,11 @@
                        (setf (alist-get ffn face-font-rescale-alist fss nil 'string=) fss))))))
 
       (when (and *is-a-mac*
-                (nasy/check-font "Apple Color Emoji"))
+                 (nasy/check-font "SF Pro"))
         ;; For NS/Cocoa
         (set-fontset-font (frame-parameter nil 'font)
                           'symbol
-                          (font-spec :family "Apple Color Emoji")
+                          (font-spec :family "SF Pro")
                           frame
                           'prepend))
 
@@ -376,6 +377,30 @@
                                      :size   *font-symbol-size*)
                           frame
                           'append))
+
+      (when (nasy/check-font "Apple Color Emoji")
+        (set-fontset-font (frame-parameter nil 'font)
+                          'symbol
+                          (font-spec :family "Apple Color Emoji")
+                          frame
+                          'append)
+        (set-fontset-font (frame-parameter nil 'font)
+                          'unicode
+                          (font-spec :family "Apple Color Emoji")
+                          frame
+                          'append))
+
+      (when (nasy/check-font *font-math-family*)
+        (set-fontset-font (frame-parameter nil 'font)
+                          (cons #x1D400 #x1D7FF)
+                          (font-spec :family *font-math-family*)
+                          frame
+                          'prepend)
+        (set-fontset-font (frame-parameter nil 'font)
+                          (cons #x2100 #x214f)
+                          (font-spec :family *font-math-family*)
+                          frame
+                          'prepend))
 
       (when (nasy/check-font *font-mode-line-family*)
         (set-face-attribute 'mode-line nil
