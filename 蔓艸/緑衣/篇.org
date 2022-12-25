@@ -177,6 +177,8 @@ Include consult & consult-flycheck.
     (:load-first vertico)
     (:opt
      consult-narrow-key (kbd "C-."))
+    (:with-hook completion-list-mode-hook
+      (:hook consult-preview-at-point-mode))
     (:global
      [remap switch-to-buffer]              consult-buffer
      [remap switch-to-buffer-other-window] consult-buffer-other-window
@@ -185,7 +187,7 @@ Include consult & consult-flycheck.
      [remap bookmark-jump]      consult-bookmark
      [remap goto-line]          consult-goto-line
      [remap imenu]              consult-imenu
-     [remap multi-occur]        consult-multi-occur
+     [remap multi-occur]        consult-line-multi
      [remap recentf-open-files] consult-recent-file
      [remap yank-pop]           consult-yank-replace
 
