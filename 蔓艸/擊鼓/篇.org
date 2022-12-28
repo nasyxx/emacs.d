@@ -674,6 +674,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'magit-todos nasy--require)
     (sup 'pdf-tools nasy--require)
     (sup 'prettier nasy--require)
+    (sup 'svg-clock nasy--require)
     (with-no-warnings
       (setq vterm-always-compile-module t))
     (sup 'vterm nasy--require)
