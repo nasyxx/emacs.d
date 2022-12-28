@@ -949,6 +949,13 @@ https://github.com/casouri/valign
     (:hook-into markdown-mode-hook))
 #+end_src
 
+** vc-mode                                                 :vc:
+
+#+begin_src emacs-lisp
+  (setup vc
+    (:first-key vc-mode))
+#+end_src
+
 ** Vertico                              :completion:extensions:
 
 Vertico provides a performant and minimalistic vertical completion UI
