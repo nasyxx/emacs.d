@@ -1,6 +1,7 @@
 docs/
 木瓜/emacs-tree-sitter
 舊書/
+殘蕊/
 
 init-dont-panic.el
 *.html
