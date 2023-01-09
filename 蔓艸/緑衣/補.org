@@ -519,8 +519,9 @@ https://github.com/zerolfx/copilot.el
     (:opt copilto-idle-delay 0.8)
     (:when-loaded
       (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p))
-    (:hook-into prog-mode-hook python-base-mode-hook org-mode-hook emacs-lisp-mode-hook)
+    (:hook-into prog-mode-hook text-mode org-mode-hook emacs-lisp-mode-hook)
     (:mode-hook
+     (add-to-list 'copilot--indentation-alist '(python-ts-mode python-indent py-indent-offset python-indent-offset))
      (setq copilot-idle-delay 0.8)))
 #+end_src
 
