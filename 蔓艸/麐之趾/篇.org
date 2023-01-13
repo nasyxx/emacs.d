@@ -1566,7 +1566,7 @@ https://github.com/org-roam/org-roam
   ;; (leaf python
   ;;   :disabled t
   ;;   :bind
-  ;;   (:python-base-mode-map
+  ;;   (:python-mode-map
   ;;    ("C-b" . nasy/python-send-buffer)
   ;;    ("C-r" . nasy/python-send-region)
   ;;    ("C-r" . nasy/python-send-region)
@@ -1583,11 +1583,15 @@ https://github.com/org-roam/org-roam
     ;; flake8 already have python-mypy and python-pylint as the next checker
     ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
     (add-to-list 'flycheck-disabled-checkers 'python-pylint)
-    (flycheck-remove-next-checker 'python-flake8 'python-pylint))
+    (flycheck-remove-next-checker 'python-flake8 'python-pylint)
+
+    ;; For treesit
+    (flycheck-add-mode 'python-flake8 'python-ts-mode)
+    (flycheck-add-mode 'python-mypy 'python-ts-mode))
 
   (setup python
     (:opt python-indent-def-block-scale 1)
-    (:with-mode python-base
+    (:with-mode (python-ts-mode python-mode)
       (:mode-hook
        (python-flycheck-setup)
        (nasy/tempo-python)
@@ -1610,7 +1614,7 @@ https://github.com/wbolster/emacs-python-black
     (:doc "Emacs package to reformat Python using black.")
     (:url "https://github.com/wbolster/emacs-python-black")
     (:tag "python" "languages")
-    (:with-hook python-base-mode-hook
+    (:with-hook (python-mode-hook python-ts-mode-hook)
       (:hook (lambda () (require 'python-black)))))
 #+end_src
 
@@ -1627,7 +1631,8 @@ https://github.com/wbolster/emacs-python-black
                                 elpy-module-folding
                                 elpy-module-yasnippet))
     (:advice
-     python-base-mode :before elpy-enable
+     python-mode :before elpy-enable
+     python-ts-mode :before elpy-enable
      elpy-module-folding :after
      (lambda (&rest _)
        (define-key elpy-mode-map (kbd "<mouse-1>") nil))))
@@ -1664,10 +1669,17 @@ https://github.com/wbolster/emacs-python-black
 
   (setup lsp-pyright
     (:hooks
-     python-base-mode-hook     start-lsp-pyright
+     python-mode-hook          start-lsp-pyright
+     python-ts-mode-hook       start-lsp-pyright
      lsp-diagnostics-mode-hook python-setup-lsp-flycheck)
     (:after company
-      (nasy/add-company-backend 'python-base-mode
+      (nasy/add-company-backend 'python-mode
+        '(company-capf
+          elpy-company-backend
+          company-files
+          ;; :with company-tabnine company-yasnippet
+          :with company-yasnippet))
+      (nasy/add-company-backend 'python-ts-mode
         '(company-capf
           elpy-company-backend
           company-files
@@ -1700,7 +1712,7 @@ https://github.com/wbolster/emacs-python-black
               `("--sp" ,(nasy/find-isort-config))))))
 
   (setup python-isort
-    (:with-hook python-base-mode-hook
+    (:with-hook (python-mode-hook python-ts-mode-hook)
       (:hook (lambda ()
                (progn
                  (require 'python-isort)
