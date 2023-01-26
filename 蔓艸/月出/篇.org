@@ -501,7 +501,7 @@ https://www.emacswiki.org/emacs/HighlightCurrentLine
     (:doc "Highlight the current line of characters.")
     (:url "https://www.emacswiki.org/emacs/HighlightCurrentLine")
     (:tag "faces" "frames" "emulations")
-    (:first-key global-hl-line-mode))
+    (:hook-into prog-mode text-mode org-mode))
 #+end_src
 
 ** imenu list                               :tools:convenience:
