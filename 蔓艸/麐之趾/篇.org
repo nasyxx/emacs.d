@@ -84,16 +84,6 @@ Programming Languages
 
 * 章
 
-** Treesit                                          :languages:
-
-#+begin_src emacs-lisp
-  (setup python
-    (:init
-     (push '(c-mode . c-ts-mode) major-mode-remap-alist)
-     (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
-     (push '(python-mode . python-ts-mode) major-mode-remap-alist)))
-#+end_src
-
 ** Bibtex
 
 *** bibtex-tidy
@@ -1750,9 +1740,6 @@ https://github.com/pashky/restclient.el
 #+begin_src emacs-lisp
   (setup elvish-mode
     (:init (add-to-list 'nasy--defer-loads 'elvish-mode)))
-
-  (setup toml-mode
-    (:init (add-to-list 'nasy--defer-loads 'toml-mode)))
 #+end_src
 
 * 結                                                :noexport:

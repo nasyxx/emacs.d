@@ -573,6 +573,8 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'sudo-edit nasy--require)
     (sup 'switch-window nasy--require)
     (sup 'transient nasy--require)
+    (sup '(treesit-auto :host github :repo "renzmann/treesit-auto")
+         nasy--require)
     (sup 'unfill nasy--require)
     (sup 'valign nasy--require)
     (sup '(vertico :files (:defaults "extensions/*")) nasy--require)
@@ -735,7 +737,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'yaml-mode nasy--require)
     (sup 'ob-elvish nasy--require)
     (sup 'elvish-mode nasy--require)
-    (sup 'toml-mode nasy--require)
+    ;; (sup 'toml-mode nasy--require)
 
     ;; 小曐
     (sup 'git-blamed nasy--require)
