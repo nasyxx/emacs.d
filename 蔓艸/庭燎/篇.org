@@ -291,7 +291,7 @@ https://github.com/ema2159/centaur-tabs
 
 
   (defun nasy/-dashboard-items (_)
-    (insert "\n")
+    (insert "\n       ")
     (widget-create 'item
                    :tag "近期 (r)"
                    :action #'consult-recent-file
@@ -321,7 +321,7 @@ https://github.com/ema2159/centaur-tabs
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open projects")
-    (insert "\n\n")
+    (insert "\n\n       ")
     (widget-create 'item
                    :tag "草稿 (c)"
                    :action #'persistent-scratch-restore
@@ -351,7 +351,7 @@ https://github.com/ema2159/centaur-tabs
                    :button-suffix ""
                    :format "%[%t%]"
                    :help-echo "open calendar")
-    (insert "\n\n")
+    (insert "\n\n       ")
     (widget-create 'item
                    :tag "芄蘭 (C)"
                    :action #'nasy/-open-custom
@@ -417,7 +417,9 @@ https://github.com/ema2159/centaur-tabs
      "<mouse-1>"      widget-button-click
      "<mouse-2>"      widget-button-click
      "<up>"           widget-backward
-     "<down>"         nasy/wfw1)
+     "<down>"         nasy/wfw1
+     [remap previous-line] widget-backward
+     [remap next-line]     nasy/wfw1)
     (:hooks
      dashboard-mode-hook (lambda () (setq-local tab-width 1))
      after-init-hook     dashboard-setup-startup-hook
