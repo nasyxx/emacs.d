@@ -947,14 +947,12 @@ https://github.com/magit/transient
      treesit-install-language-grammar :override na/treesit-install-language-grammar))
 
   (setup treesit-auto
+    (:opt treesit-auto-install 'prompt)
     (:first-key*
-     (require 'treesit)
      (require 'treesit-auto)
      (add-to-list 'treesit-auto-fallback-alist '(bash-ts-mode . sh-mode))
      (add-to-list 'treesit-auto-fallback-alist '(toml-ts-mode . conf-toml-mode))
-     (treesit-auto-apply-remap))
-    (:advice
-     treesit-install-language-grammar :after (lambda (&rest _r) (treesit-auto-apply-remap))))
+     (global-treesit-auto-mode)))
 #+end_src
 
 ** Unfill                                         :convenience:
