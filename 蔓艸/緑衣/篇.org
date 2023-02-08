@@ -197,16 +197,16 @@ Include consult & consult-flycheck.
       (:require consult-xref)
       (consult-customize
        consult-theme
-       :preview-key (list (kbd "M-.")
-                          :debounce 3 (kbd "<up>") (kbd "<down>")
-                          :debounce 1 'any)
+       :preview-key '("M-."
+                      :debounce 3 "<up>" "<down>"
+                      :debounce 1 any)
        consult-ripgrep consult-git-grep consult-grep
        consult-bookmark consult-recent-file consult-xref
        consult--source-recent-file consult--source-project-recent-file
        consult--source-bookmark consult-buffer
-       :preview-key (list (kbd "M-.")
-                          :debounce 5 (kbd "<up>") (kbd "<down>")
-                          :debounce 5 'any))))
+       :preview-key '("M-."
+                      :debounce 5 "<up>" "<down>"
+                      :debounce 5 any))))
 #+end_src
 
 *** consult-flycheck
