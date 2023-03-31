@@ -1573,14 +1573,17 @@ https://github.com/org-roam/org-roam
     ;; flake8 already have python-mypy and python-pylint as the next checker
     ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
     (add-to-list 'flycheck-disabled-checkers 'python-pylint)
+    (add-to-list 'flycheck-disabled-checkers 'python-flake8)
     (flycheck-remove-next-checker 'python-flake8 'python-pylint)
 
     ;; For treesit
-    (flycheck-add-mode 'python-flake8 'python-ts-mode)
+    ;; (flycheck-add-mode 'python-flake8 'python-ts-mode)
     (flycheck-add-mode 'python-mypy 'python-ts-mode))
 
   (setup python
-    (:opt python-indent-def-block-scale 1)
+    (:opt python-indent-def-block-scale 1
+          flycheck-python-flake8-executable "python"
+          python-shell-interpreter          "python")
     (:with-mode (python-ts-mode python-mode)
       (:mode-hook
        (python-flycheck-setup)
@@ -1636,28 +1639,32 @@ https://github.com/wbolster/emacs-python-black
     (if lsp-diagnostics-mode
         (progn
           ;; (flycheck-inline-mode -1)
-          (flycheck-add-next-checker 'lsp 'python-flake8))
+          (flycheck-add-next-checker 'lsp 'python-mypy))
       (progn
         ;; (flycheck-inline-mode 1)
-        (flycheck-remove-next-checker 'lsp 'python-flake8))))
+        (flycheck-remove-next-checker 'lsp 'python-mypy))))
 
   (defun start-lsp-pyright ()
-    "Start lsp pyright."
+    "Start lsp pyright with pdm."
     (require 'lsp-pyright)
     (when (zerop (shell-command "pdm info"))
       (setq-local
        lsp-pyright-python-executable-cmd
        (string-trim (shell-command-to-string
                      "pdm info --python")))
-      (setq-local
-       lsp-pyright-extra-paths
-       (vector
-        (concat (string-trim (shell-command-to-string
-                              "pdm info --package"))
-                "/lib"))))
+      ;; (setq-local flycheck-python-flake8-executable lsp-pyright-python-executable-cmd)
+      (setq-local python-shell-interpreter lsp-pyright-python-executable-cmd)
+      (let ((ppath (concat (string-trim (shell-command-to-string
+                                         "pdm info --package"))
+                           "/lib")))
+        (setq-local
+         lsp-pyright-extra-paths
+         (vector ppath)
+         python-shell-extra-pythonpaths (list ppath))))
     (lsp))
 
   (setup lsp-pyright
+    (:after* lsp-mode (:opt* lsp-pyright-multi-root nil))
     (:hooks
      python-mode-hook          start-lsp-pyright
      python-ts-mode-hook       start-lsp-pyright
@@ -1675,6 +1682,22 @@ https://github.com/wbolster/emacs-python-black
           company-files
           ;; :with company-tabnine company-yasnippet
           :with company-yasnippet))))
+#+end_src
+
+*** ruff
+
+#+begin_src emacs-lisp
+  (defun python-setup-lsp-ruff ()
+    "Setup lsp for ruff."
+    (add-to-list 'load-path (concat *nasy-site* "unknow"))
+    (require 'lsp-ruff-lsp)
+    (lsp))
+
+  (setup lsp-ruff-lsp
+    (:opt lsp-ruff-lsp-python-path "python"
+          lsp-ruff-lsp-ruff-path (vector (executable-find "ruff") "ruff"))
+    (:hooks python-mode-hook python-setup-lsp-ruff
+            python-ts-mode-hook python-setup-lsp-ruff))
 #+end_src
 
 *** isort                                               :python:

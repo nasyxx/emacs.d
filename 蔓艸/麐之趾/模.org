@@ -81,8 +81,7 @@
      "py-header"
      '("#!/usr/bin/env python" n>
        "# -*- coding: utf-8 -*-" n n>
-       "r\"\"\"" n>
-       "Python ♡ Nasy." n n>
+       "r\"\"\"Python ♡ Nasy." n n>
        "    |             *         *" n>
        "    |                  .                ." n>
        "    |           .                              登" n>
