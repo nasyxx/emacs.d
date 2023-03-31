@@ -176,7 +176,7 @@ Include consult & consult-flycheck.
     (:tag "extensions")
     (:load-first vertico)
     (:opt
-     consult-narrow-key (kbd "C-."))
+     consult-narrow-key "C-.")
     (:with-hook completion-list-mode-hook
       (:hook consult-preview-at-point-mode))
     (:global

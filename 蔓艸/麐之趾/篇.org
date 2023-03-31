@@ -969,7 +969,7 @@ org latex
   (setup org
     (:bind-into org-src-mode-map
       "C-c _" org-edit-src-exit)
-    (:mode-hook
+    (:first-org*
      ;; (auto-fill-mode 1)
      (visual-line-mode)
      (eldoc-mode 1))
@@ -1110,9 +1110,9 @@ https://github.com/io12/org-fragtog
 
 #+begin_src emacs-lisp
   (setup org-fragtog
-    :doc "Automatically toggle Org mode LaTeX fragment previews as the cursor enters and exits them."
-    :url "https://github.com/io12/org-fragtog"
-    :tag "org" "tex"
+    (:doc "Automatically toggle Org mode LaTeX fragment previews as the cursor enters and exits them.")
+    (:url "https://github.com/io12/org-fragtog")
+    (:tag "org" "tex")
     (:hook-into nasy-org-first-key-hook))
 #+end_src
 
