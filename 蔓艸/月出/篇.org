@@ -384,10 +384,9 @@ https://github.com/casouri/eldoc-box
     (:doc "This package displays ElDoc documentations in a childframe.")
     (:url "https://github.com/casouri/eldoc-box")
     (:tag "docs" "extensions" "help")
-    (:custom
-     eldoc-box-position-function #'eldoc-box--default-at-point-position-function)
+    (:opt eldoc-box-only-multi-line t)
     (:with-hook eldoc-mode-hook
-      (:hook eldoc-box-hover-mode eldoc-box-hover-at-point-mode)))
+      (:hook eldoc-box-hover-at-point-mode)))
 #+end_src
 
 ** eldoc-overlay                                   :extensions:
