@@ -358,7 +358,14 @@ https://github.com/politza/pdf-tools
     (:doc "Emacs support library for PDF files.")
     (:url "https://github.com/politza/pdf-tools")
     (:tag "files" "multimedia")
-    (:custom pdf-view-display-size 'fit-width))
+    (:custom pdf-view-display-size 'fit-page)
+    (:bind-into pdf-view-mode-map
+      "<wheel-up>"    pdf-view-previous-line-or-previous-page
+      "<wheel-down>"  pdf-view-next-line-or-next-page
+      "<wheel-left>"  image-backward-hscroll
+      "<wheel-right>" image-forward-hscroll)
+    (:first-key*
+     (pdf-tools-install t t t)))
 #+end_src
 
 ** Prettier                       :convenience:files:languages:
