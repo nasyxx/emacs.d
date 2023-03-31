@@ -200,8 +200,6 @@ Elpaca is an elisp package manager. It allows users to find, install, update, an
 * 餘
 
 #+begin_src emacs-lisp
-  (sup 'setup)
-
   (defun nasy/-package-filter (name &rest _)
     "Ignore package NAME if *no-packages* is t."
     (let ((sym (intern (format "*no-%s*" name))))
@@ -256,6 +254,7 @@ The package is available on GnuELPA and is currently maintained by PhilipKaluder
 Documentation is available at https://www.emacswiki.org/emacs/SetupEl
 
 #+begin_src emacs-lisp
+  (sup 'setup)
   (require 'setup)
   (setup-define :doc
     (lambda (&rest _) nil)
@@ -388,6 +387,10 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (lambda (name) `(add-hook 'nasy-org-first-key-hook #',name))
     :documentation "Add to `nasy-first-key-hook'."
     :repeatable t)
+
+  (setup-define :first-org*
+    (lambda (&rest body) `(add-hook 'nasy-org-first-key-hook #'(lambda () (progn ,@body))))
+    :documentation "Add to `nasy-first-key-hook'.")
 
   (setup-define :advice
     (lambda (symbol where function)
