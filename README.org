@@ -34,7 +34,7 @@
 # #+latex_header_extra: \setsansjfont{PingFang SC}
 #+latex_header_extra: \usepackage{minted}
 
-[[https://zenodo.org/badge/DOI/10.5281/zenodo.7790390.svg][[DOI]https://doi.org/10.5281/zenodo.7790390]]
+[[https://doi.org/10.5281/zenodo.7790390][file:https://zenodo.org/badge/DOI/10.5281/zenodo.7790390.svg]]
 
 * 新配置文件尙在加工中
 
@@ -92,3 +92,19 @@
 * 配置
 
 #+include: ./蔓艸/篇.org :lines "3-"
+
+* Ref
+
+#+begin_src bibtex
+  @software{naNasyxxEmacs20232023a,
+    title = {Nasyxx/Emacs.d: 2023 03 31 Version},
+    shorttitle = {Nasyxx/Emacs.d},
+    author = {Na, Saiyang and {haasdo95} and Berserk},
+    date = {2023-04-01},
+    doi = {10.5281/zenodo.7790390},
+    url = {https://zenodo.org/record/7790390},
+    urldate = {2023-04-01},
+    abstract = {Nasy's emacs configuration},
+    organization = {{Zenodo}}
+  }
+#+end_src
