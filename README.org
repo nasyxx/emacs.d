@@ -1,10 +1,11 @@
 #+options: ':nil *:t -:t ::t <:t H:6 \n:nil ^:{} arch:headline
 #+options: author:t broken-links:mark c:nil creator:nil
-#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
 #+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+options: timestamp:t title:t toc:t todo:t |:t
 #+title: Nasy Emacs 配置
-#+date: <2021-06-16 Wed>
+#+create_date: <2021-06-16 Wed>
+#+date: <2023-03-31 Fri>
 #+author: Nasy
 #+email: nasyxx@gmail.com
 #+language: en
@@ -24,11 +25,16 @@
 #+html_head:   gtag('config', 'G-10SM1C9F57');
 #+html_head: </script>
 
-#+latex_header: \setmainfont{Cormorant Garamond}
-#+latex_header: \setmainjfont{FandolSong}
-#+latex_header: \setsansfont{Lato}
-#+latex_header: \setsansjfont{PingFang SC}
+#+latex_header_extra: \usepackage{xeCJK}
+#+latex_header_extra: \setmainfont{Cormorant Garamond}
+# #+latex_header_extra: \setCJKfallbackfamilyfont{\CJKfamilydefault}{HanaMinB}
+#+latex_header_extra: \setCJKmainfont[FallBack=HanaMinB]{HanaMinA}
+#+latex_header_extra: \setCJKmainfont[FallBack=HanaMinB]{HanaMinA}
+# #+latex_header_extra: \setsansfont{Lato}
+# #+latex_header_extra: \setsansjfont{PingFang SC}
+#+latex_header_extra: \usepackage{minted}
 
+[[https://zenodo.org/badge/DOI/10.5281/zenodo.7790390.svg][[DOI]https://doi.org/10.5281/zenodo.7790390]]
 
 * 新配置文件尙在加工中
 
