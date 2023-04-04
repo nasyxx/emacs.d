@@ -993,9 +993,10 @@ https://github.com/casouri/vundo
     (:doc "Visual undo tree.")
     (:url "https://github.com/casouri/vundo")
     (:tag "undo" "redo")
-    (:custom
-     vundo-window-side        'top
-     vundo--window-max-height 5)
+    (:opt
+     vundo-window-side        'bottom
+     vundo-window-max-height  5
+     vundo-glyph-alist        vundo-unicode-symbols)
     (:global
      "s-/" vundo))
 #+end_src
