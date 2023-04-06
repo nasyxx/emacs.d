@@ -1591,7 +1591,7 @@ https://github.com/org-roam/org-roam
        (setq-local tab-width (python-indent-guess-indent-offset)))))
 #+end_src
 
-*** black
+*** black                                               :python:
 
 This is an Emacs package to make it easy to reformat Python code using
 black, the uncompromising Python code formatter.
@@ -1607,6 +1607,7 @@ https://github.com/wbolster/emacs-python-black
     (:doc "Emacs package to reformat Python using black.")
     (:url "https://github.com/wbolster/emacs-python-black")
     (:tag "python" "languages")
+    (:opt python-black-command "pyink")
     (:with-hook (python-mode-hook python-ts-mode-hook)
       (:hook (lambda () (require 'python-black)))))
 #+end_src
@@ -1689,7 +1690,6 @@ https://github.com/wbolster/emacs-python-black
 #+begin_src emacs-lisp
   (defun python-setup-lsp-ruff ()
     "Setup lsp for ruff."
-    (add-to-list 'load-path (concat *nasy-site* "unknow"))
     (require 'lsp-ruff-lsp)
     (lsp))
 
