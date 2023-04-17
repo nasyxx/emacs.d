@@ -1581,7 +1581,7 @@ https://github.com/org-roam/org-roam
     (flycheck-add-mode 'python-mypy 'python-ts-mode))
 
   (setup python
-    (:opt python-indent-def-block-scale 1
+    (:opt python-indent-def-block-scale 2
           flycheck-python-flake8-executable "python"
           python-shell-interpreter          "python")
     (:with-mode (python-ts-mode python-mode)
@@ -1607,7 +1607,8 @@ https://github.com/wbolster/emacs-python-black
     (:doc "Emacs package to reformat Python using black.")
     (:url "https://github.com/wbolster/emacs-python-black")
     (:tag "python" "languages")
-    (:opt python-black-command "pyink")
+    (:opt python-black-command "pyink"
+          python-black-extra-args '("--preview"))
     (:with-hook (python-mode-hook python-ts-mode-hook)
       (:hook (lambda () (require 'python-black)))))
 #+end_src
@@ -1665,7 +1666,6 @@ https://github.com/wbolster/emacs-python-black
     (lsp))
 
   (setup lsp-pyright
-    (:after* lsp-mode (:opt* lsp-pyright-multi-root nil))
     (:hooks
      python-mode-hook          start-lsp-pyright
      python-ts-mode-hook       start-lsp-pyright
@@ -1685,7 +1685,7 @@ https://github.com/wbolster/emacs-python-black
           :with company-yasnippet))))
 #+end_src
 
-*** ruff
+*** ruff                                                :python:
 
 #+begin_src emacs-lisp
   (defun python-setup-lsp-ruff ()
