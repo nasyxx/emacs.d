@@ -667,6 +667,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'rime nasy--require)
     (sup 'esup nasy--require)
     (sup 'explain-pause-mode nasy--require)
+    (sup 'gptel nasy--require)
     (sup 'grab-mac-link nasy--require)
     (sup 'htmlize nasy--require)
     (sup 'indent-tools nasy--require)
@@ -676,8 +677,16 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'magit-delta nasy--require)
     (sup 'magit-org-todos nasy--require)
     (sup 'magit-todos nasy--require)
+    ;; (sup
+    ;;  '(mind-wave :type git :host github :repo "manateelazycat/mind-wave"
+    ;;              :files ("*.el" "*.py"))
+    ;;  nasy--require)
+    (sup '(openai :type git :host github :repo "emacs-openai/openai"))
+    (sup '(nasy-emacs-ai :type git :host github :repo "nasyxx/nasy-emacs-ai")
+         nasy--require)
     (sup 'pdf-tools nasy--require)
     (sup 'prettier nasy--require)
+    (sup 'request nasy--require)
     (sup 'svg-clock nasy--require)
     (with-no-warnings
       (setq vterm-always-compile-module t))
@@ -722,6 +731,11 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'nix-mode nasy--require)
     (sup '(nushell-mode :type git :host github :repo "azzamsa/emacs-nushell"))
     (sup 'citeproc nasy--require)
+    (sup
+     '(org-ai :type git :host github :repo "rksm/org-ai"
+              :local-repo "org-ai"
+              :files ("*.el" "README.md" "snippets"))
+     nasy--require)
     (sup 'org-appear nasy--require)
     (sup 'org-fragtog nasy--require)
     (sup 'org-latex-impatient nasy--require)

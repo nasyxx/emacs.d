@@ -45,6 +45,7 @@ Programming Languages
 
     (require 'align)
     (sup 'org t)
+    (sup 'org-ai t)
     (require 'oc-biblatex)
     (require 'org-agenda)
     (require 'org-capture)
@@ -993,6 +994,18 @@ org latex
 
      org-html-paragraph :around
      nasy/org-html-paragraph-advice))
+#+end_src
+
+*** Org AI                                              :ai:org:
+
+#+begin_src emacs-lisp
+  (setup org-ai
+    (:doc "ChatGPT and DALL-E in org-mode using the OpenAI APIs.")
+    (:url "https://github.com/rksm/org-ai")
+    (:tag "org")
+    (:autoload org-ai-explain-code org-ai-refactor-code org-ai-summarize)
+    (:first-org org-ai-mode org-ai-install-yasnippets)
+    (:first-key* (require 'org-ai)))
 #+end_src
 
 *** Org Agenda                                             :org:

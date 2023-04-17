@@ -51,8 +51,13 @@ Applications.
     (require 'vc-git)
 
     (sup 'rime t)
-    (sup 'magit t)(with-no-warnings
-                   (setq vterm-always-compile-module t))
+    (sup 'request t)
+    (sup 'magit t)
+    (sup 'openai t)
+    ;; (sup 'mind-wave t)
+    (sup 'pdf-tools t)
+    (with-no-warnings
+      (setq vterm-always-compile-module t))
     (sup 'vterm t))
 #+end_src
 
@@ -179,6 +184,21 @@ https://github.com/lastquestion/explain-pause-mode
     (:doc "top, but for Emacs.")
     (:url "https://github.com/lastquestion/explain-pause-mode")
     (:tag "performance" "speed" "config"))
+#+end_src
+
+** GPTEL
+
+Openai GPT.
+
+https://github.com/karthink/gptel
+
+#+begin_src emacs-lisp
+  (setup gptel
+    (:doc "A no-frills ChatGPT client for Emacs.")
+    (:url "https://github.com/karthink/gptel")
+    (:tag "convenience")
+    (:opt gptel-default-mode 'org-mode
+          gptel-prompt-string "[Nasy]: "))
 #+end_src
 
 ** Grab Mac Link                                :mac:hyperlink:
@@ -347,6 +367,48 @@ https://github.com/alphapapa/magit-todos
     (:custom magit-todos-exclude-globs '("*.map")))
 #+end_src
 
+** Mind Wave                                        :ai:openai:
+
+The mind-wave is an Emacs AI plugin developed using ChatGPT API, which
+can be deeply integrated into Emacs to improve its efficiency in
+various aspects.
+
+https://github.com/manateelazycat/mind-wave.git
+
+#+begin_src emacs-lisp
+  ;; (setup mind-wave
+  ;;   (:doc "Emacs AI plugin based on ChatGPT API")
+  ;;   (:url "https://github.com/manateelazycat/mind-wave.git")
+  ;;   (:tag "ai")
+  ;;   (:opt mind-wave-python-command "python"
+  ;;         mind-wave-api-key-path (concat *nasy-var* "openai.key")))
+#+end_src
+
+** OpenAI                                      :ai:comm:openai:
+
+The OpenAI Elisp library provides convenient access to the OpenAI API from applications written in the Elips language.
+
+https://github.com/emacs-openai/openai.git
+
+#+begin_src emacs-lisp
+  (setup openai
+    (:doc "Elisp library for the OpenAI API.")
+    (:url "https://github.com/emacs-openai/openai.git")
+    (:tag "comm" "ai" "openai")
+    (:opt openai-key (nasy/api-key-from-auth-source)))
+
+
+  (defun nasy/api-key-from-auth-source (&optional host user)
+    "Lookup api key in the auth source.
+   By default, \"openai.com\" is used as HOST and \"apikey\" as USER."
+   (if-let ((secret (plist-get (car (auth-source-search
+                                     :host (or host "openai.com")
+                                     :user (or user "apikey")))
+                               :secret)))
+       (if (functionp secret) (funcall secret) secret)
+     (user-error "No `gptel-api-key' found in the auth source")))
+#+end_src
+
 ** PDF Tools                                 :files:multimedia:
 
 PDF Tools is, among other things, a replacement of DocView for PDF files.
@@ -380,6 +442,20 @@ https://github.com/jscheid/prettier.el
     (:doc "Prettier code formatting for Emacs.")
     (:url "https://github.com/jscheid/prettier.el")
     (:tag "convenience" "files" "languages"))
+#+end_src
+
+** Request
+
+Request.el -- Easy HTTP request for Emacs Lisp
+
+https://github.com/tkf/emacs-request.git
+
+#+begin_src emacs-lisp
+  (setup request
+    (:doc "Request.el -- Easy HTTP request for Emacs Lisp")
+    (:url "https://github.com/tkf/emacs-request.git")
+    (:tag "http" "tool")
+    (:opt request-storage-directory (concat *nasy-var* "request/storage")))
 #+end_src
 
 ** vterm                                            :terminals:
