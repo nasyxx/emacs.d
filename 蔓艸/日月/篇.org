@@ -122,7 +122,8 @@ https://github.com/DogLooksGood/emacs-rime
 
   (setup rime
     (:global
-     "C-M-¥" toggle-input-method)
+     "C-M-¥" toggle-input-method
+     "C-$"   toggle-input-method)
     (:bind-into rime-mode-map
      "C-`"   rime-send-keybinding
      "C-S-`" rime-send-keybinding
