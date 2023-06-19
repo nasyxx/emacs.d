@@ -1004,7 +1004,8 @@ org latex
     (:tag "org")
     (:autoload org-ai-explain-code org-ai-refactor-code org-ai-summarize)
     (:first-org org-ai-mode org-ai-install-yasnippets)
-    (:first-key* (require 'org-ai)))
+    (:first-key* (require 'org-ai))
+    (:unbind "C-c r"))
 #+end_src
 
 *** Org Agenda                                             :org:

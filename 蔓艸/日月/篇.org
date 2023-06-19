@@ -54,6 +54,7 @@ Applications.
     (sup 'request t)
     (sup 'magit t)
     (sup 'openai t)
+    (sup 'nasy-emacs-ai t)
     ;; (sup 'mind-wave t)
     (sup 'pdf-tools t)
     (with-no-warnings
@@ -396,7 +397,9 @@ https://github.com/emacs-openai/openai.git
     (:doc "Elisp library for the OpenAI API.")
     (:url "https://github.com/emacs-openai/openai.git")
     (:tag "comm" "ai" "openai")
-    (:opt openai-key (nasy/api-key-from-auth-source)))
+    (:opt openai-key (nasy/api-key-from-auth-source)
+          openai-chat-max-tokens 8000
+          nasy-ai-model "gpt-4"))
 
 
   (defun nasy/api-key-from-auth-source (&optional host user)

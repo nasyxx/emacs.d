@@ -670,6 +670,7 @@
     (sup 'avy t)
     (sup 'expand-region t)
     (sup 'flycheck t)
+    (sup 'nasy-emacs-ai t)
     (sup 'org t)
     (sup 'projectile t)
     (sup 'smartparens t)
@@ -1491,6 +1492,10 @@
   (defun nasy/-keymap ()
     "Define nasy key map."
     (define-keymap :parent mode-specific-map
+      "a"     (define-keymap :prefix 'nasy-ai-map
+                "r" #'org-ai-talk-capture-in-org
+                "Z" #'nasy-ai-tozh-at-point
+                "z" #'nasy-ai-tozh)
       "c"     (define-keymap :prefix 'nasy-code-map
                 "c" #'compile
                 "C" #'recompile
