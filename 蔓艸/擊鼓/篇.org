@@ -539,7 +539,6 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
 
     ;; 緑衣
     (sup 'alert nasy--require)
-    (sup 'all-the-icons-completion nasy--require)
     (sup 'anzu nasy--require)
     (sup 'avy nasy--require)
     (sup 'beginend nasy--require)
@@ -646,7 +645,10 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     ;; (sup '(ts-fold :type git :host github :repo "jcs090218/ts-fold") nasy--require)
 
     ;; 庭燎
-    (sup 'all-the-icons nasy--require)
+    (sup 'nerd-icons nasy--require)
+    (sup 'nerd-icons-completion nasy--require)
+    (sup 'nerd-icons-ibuffer nasy--require)
+    (sup 'treemacs-nerd-icons nasy--require)
     (sup 'consult nasy--require)
     (sup 'dash nasy--require)
     (sup 'projectile nasy--require)
@@ -767,7 +769,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'company-math nasy--require)
     (sup 'flycheck-package nasy--require)
     (sup 'ibuffer-vc nasy--require)
-    (sup 'all-the-icons-ibuffer nasy--require)
+    ;; (sup 'all-the-icons-ibuffer nasy--require)
     (sup 'nix-buffer nasy--require)
     (sup 'nix-update nasy--require)
     (sup 'nixpkgs-fmt nasy--require)

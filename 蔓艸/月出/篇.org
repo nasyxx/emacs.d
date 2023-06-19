@@ -46,10 +46,12 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
     (sup 'eldoc-box t)
     (sup 'mixed-pitch t)
     (sup 'multiple-cursors t)
+    (sup 'nerd-icons t)
     (sup 'rainbow-mode t)
     (sup 'treemacs t)
     ;; (sup 'tree-sitter t)
     (sup 'visual-fill-column t)
+    (sup 'vundo t)
     (sup 'winum t)
     (sup 'yasnippet t))
 
@@ -350,7 +352,7 @@ https://github.com/alexluigit/dirvish
           dirvish-default-layout    '(0 0.3 0.7)
           dirvish-reuse-session     nil
           dirvish-attributes
-          '(vc-state subtree-state all-the-icons collapse file-time file-size)
+          '(vc-state subtree-state collapse file-time file-size)
           dirvish-preview-dispatchers nil)  ;; never preview
     (:global "C-c f" dirvish-fd)
     (:bind-into dirvish-mode-map ; Dirvish inherits `dired-mode-map'
@@ -534,7 +536,7 @@ https://github.com/jdtsmith/kind-icon
     (:url "https://github.com/jdtsmith/kind-icon")
     (:tag "completion")
     (:load-first corfu)
-    (:custom kind-icon-default-face 'corfu-default)
+    ;; (:custom kind-icon-default-face 'corfu-default)
     (:when-loaded (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 #+end_src
 

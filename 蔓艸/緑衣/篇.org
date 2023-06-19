@@ -579,9 +579,9 @@ https://github.com/minad/marginalia
 #+end_src
 
 #+begin_src emacs-lisp
-  (setup all-the-icons-completion
-    (:with-mode marginalia-mode
-      (:hook all-the-icons-completion-marginalia-setup)))
+  ;; (setup all-the-icons-completion
+  ;;   (:with-mode marginalia-mode
+  ;;     (:hook all-the-icons-completion-marginalia-setup)))
 #+end_src
 
 ** Orderless                                       :extensions:

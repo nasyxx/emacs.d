@@ -51,7 +51,6 @@ Programming Languages
     (require 'org-capture)
     (require 'org-clock)
 
-    (sup 'all-the-icons t)
     (sup 'haskell-mode t)
     (sup 'lsp-mode t)
     (require 'lsp-diagnostics)
@@ -1016,18 +1015,31 @@ org latex
       "C-," nil)
     (:with-hook org-agenda-finalize-hook
       (:hook nasy/org-agenda-log-mode-colorize-block))
-    (:after all-the-icons
+    (:after nerd-icons
       (setq
        org-agenda-category-icon-alist
        `(("Tasks"
-          ,(list (all-the-icons-faicon "tasks" :height 0.8 :v-adjust 0))
+          ,(list (nerd-icons-faicon "nf-fa-tasks"))
           nil nil :ascent center)
          ("Calendar"
-          ,(list (all-the-icons-octicon "calendar" :height 0.8 :v-adjust 0))
+          ,(list (nerd-icons-faicon "nf-fa-calendar"))
           nil nil :ascent center)
          ("Appointments"
-          ,(list (all-the-icons-faicon "calendar-check-o" :height 0.8 :v-adjust 0))
+          ,(list (nerd-icons-faicon "nf-fa-calendar_o"))
           nil nil :ascent center)))))
+
+    ;; (:after all-the-icons
+    ;;   (setq
+    ;;    org-agenda-category-icon-alist
+    ;;    `(("Tasks"
+    ;;       ,(list (all-the-icons-faicon "tasks" :height 0.8 :v-adjust 0))
+    ;;       nil nil :ascent center)
+    ;;      ("Calendar"
+    ;;       ,(list (all-the-icons-octicon "calendar" :height 0.8 :v-adjust 0))
+    ;;       nil nil :ascent center)
+    ;;      ("Appointments"
+    ;;       ,(list (all-the-icons-faicon "calendar-check-o" :height 0.8 :v-adjust 0))
+    ;;       nil nil :ascent center)))))
 #+end_src
 
 *** Org Appear                                 :convenience:org:

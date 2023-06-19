@@ -114,7 +114,7 @@
            '(progn ,@body)))))
 #+end_src
 
-** 字体
+** 字軆
 
 #+begin_src emacs-lisp
   (defvar nasy/font-change-hook nil
@@ -131,6 +131,7 @@
       (:opt*
        ,*font-main-family*   "MonoLisa Nasy"
        ,*font-symbol-family* "SF Pro"
+       ,*font-nerd-family*   "Symbols Nerd Font Mono"
        ,*font-cjk-family*    "STFLGQKJF"
        ,*font-cjk-2-family*  "FZLiuGongQuanKaiShuJF"
        ;; I.Ngaan' font from `http://founder.acgvlyric.org/iu/doku.php/造字:開源字型_i.顏體'.
@@ -316,6 +317,34 @@
                             'prepend))))
 
 
+  (defun nasy/set-nerd-fonts (&optional font-family frame)
+    "Modify nerd font charsets to use FONT-FAMILY for FRAME."
+    (when (nasy/check-font (or font-family *font-nerd-family*))
+      (let ((font-f (or font-family *font-nerd-family*))
+            (charsets '((#xe5fa . #xe631)  ;; Seti-UI + Custom
+                        (#xe700 . #xe7c5)  ;; Devicons
+                        (#xf000 . #xf2e0)  ;; Font Awesome
+                        (#xe200 . #xe2a9)  ;; Font Awesome Extension
+                        (#xf500 . #xfd46) (#xf0001 . #xf1af0)  ;; Material Design Icons
+                        (#xe300 . #xe3eb)  ;; Weather
+                        (#xf400 . #xf4a9) #x2665 #x26A1  ;; Octicons
+                        (#xe0a0 . #xe0a2) (#xe0b0 . #xe0b3)  ;; Powerline Symbols
+                        #xe0a3 (#xe0b4 . #xe0c8) #xe0ca (#xe0cc . #xe0d4)  ;; Powerline Extra Symbols
+                        (#x23fb . #x23fe) #x2b58  ;; IEC Power Symbols
+                        (#xf300 . #xf32d)  ;; Font Logos
+                        (#xe000 . #xe00a)  ;; Pomicons
+                        (#xea60 . #xebeb))))  ;; Codicons
+        (cl-loop for charset in charsets do
+                 (set-fontset-font
+                  (frame-parameter nil 'font)
+                  charset
+                  (font-spec :family font-f
+                             :weight nil
+                             :size   nil)
+                  frame
+                  'prepend)))))
+
+
   (defun nasy/-set--font (frame)
     "Nasy set font for `FRAME'."
     (unless nasy--cus-font
@@ -353,78 +382,80 @@
                      (let ((ffn (concat ".*" ff ".*")))
                        (setf (alist-get ffn face-font-rescale-alist fss nil 'string=) fss))))))
 
-      (when (and *is-a-mac*
-                 (nasy/check-font "SF Pro"))
-        ;; For NS/Cocoa
-        (set-fontset-font (frame-parameter nil 'font)
-                          'symbol
-                          (font-spec :family "SF Pro")
-                          frame
-                          'prepend))
+     ;; nerd font
+     (nasy/set-nerd-fonts nil frame)
+     (when (and *is-a-mac*
+                (nasy/check-font "SF Pro"))
+       ;; For NS/Cocoa
+       (set-fontset-font (frame-parameter nil 'font)
+                         'symbol
+                         (font-spec :family "SF Pro")
+                         frame
+                         'prepend))
 
-      (when (nasy/check-font *font-symbol-family*)
-        (set-fontset-font (frame-parameter nil 'font)
-                          'symbol
-                          (font-spec :family *font-symbol-family*
-                                     :weight *font-symbol-weight*
-                                     :size   *font-symbol-size*)
-                          frame
-                          'append)
-        (set-fontset-font (frame-parameter nil 'font)
-                          'unicode
-                          (font-spec :family *font-symbol-family*
-                                     :weight *font-symbol-weight*
-                                     :size   *font-symbol-size*)
-                          frame
-                          'append))
+     (when (nasy/check-font *font-symbol-family*)
+       (set-fontset-font (frame-parameter nil 'font)
+                         'symbol
+                         (font-spec :family *font-symbol-family*
+                                    :weight *font-symbol-weight*
+                                    :size   *font-symbol-size*)
+                         frame
+                         'append)
+       (set-fontset-font (frame-parameter nil 'font)
+                         'unicode
+                         (font-spec :family *font-symbol-family*
+                                    :weight *font-symbol-weight*
+                                    :size   *font-symbol-size*)
+                         frame
+                         'append))
 
-      (when (nasy/check-font "Apple Color Emoji")
-        (set-fontset-font (frame-parameter nil 'font)
-                          'symbol
-                          (font-spec :family "Apple Color Emoji")
-                          frame
-                          'append)
-        (set-fontset-font (frame-parameter nil 'font)
-                          'unicode
-                          (font-spec :family "Apple Color Emoji")
-                          frame
-                          'append))
+     (when (nasy/check-font "Apple Color Emoji")
+       (set-fontset-font (frame-parameter nil 'font)
+                         'symbol
+                         (font-spec :family "Apple Color Emoji")
+                         frame
+                         'append)
+       (set-fontset-font (frame-parameter nil 'font)
+                         'unicode
+                         (font-spec :family "Apple Color Emoji")
+                         frame
+                         'append))
 
-      (when (nasy/check-font *font-math-family*)
-        (set-fontset-font (frame-parameter nil 'font)
-                          (cons #x1D400 #x1D7FF)
-                          (font-spec :family *font-math-family*)
-                          frame
-                          'prepend)
-        (set-fontset-font (frame-parameter nil 'font)
-                          (cons #x2100 #x214f)
-                          (font-spec :family *font-math-family*)
-                          frame
-                          'prepend))
+     (when (nasy/check-font *font-math-family*)
+       (set-fontset-font (frame-parameter nil 'font)
+                         (cons #x1D400 #x1D7FF)
+                         (font-spec :family *font-math-family*)
+                         frame
+                         'prepend)
+       (set-fontset-font (frame-parameter nil 'font)
+                         (cons #x2100 #x214f)
+                         (font-spec :family *font-math-family*)
+                         frame
+                         'prepend))
 
-      (when (nasy/check-font *font-mode-line-family*)
-        (set-face-attribute 'mode-line nil
-                            :font (font-spec :family *font-mode-line-family*
-                                             :weight *font-mode-line-weight*
-                                             :size   *font-mode-line-size*))
+     (when (nasy/check-font *font-mode-line-family*)
+       (set-face-attribute 'mode-line nil
+                           :font (font-spec :family *font-mode-line-family*
+                                            :weight *font-mode-line-weight*
+                                            :size   *font-mode-line-size*))
 
-        (set-face-attribute 'mode-line-inactive nil
-                            :font (font-spec :family *font-mode-line-family*
-                                             :weight *font-mode-line-weight*
-                                             :size   *font-mode-line-size*)))
-      (when (nasy/check-font *font-tab-line-family*)
-        (set-face-attribute 'tab-line nil
-                            :font (font-spec :family *font-tab-line-family*
-                                             :weight *font-tab-line-weight*
-                                             :size   *font-tab-line-size*)))
-      (when (nasy/check-font *font-header-line-family*)
-        (set-face-attribute 'header-line nil
-                            :font (font-spec :family *font-header-line-family*
-                                             :weight *font-header-line-weight*
-                                             :size   *font-header-line-size*))))
+       (set-face-attribute 'mode-line-inactive nil
+                           :font (font-spec :family *font-mode-line-family*
+                                            :weight *font-mode-line-weight*
+                                            :size   *font-mode-line-size*)))
+     (when (nasy/check-font *font-tab-line-family*)
+       (set-face-attribute 'tab-line nil
+                           :font (font-spec :family *font-tab-line-family*
+                                            :weight *font-tab-line-weight*
+                                            :size   *font-tab-line-size*)))
+     (when (nasy/check-font *font-header-line-family*)
+       (set-face-attribute 'header-line nil
+                           :font (font-spec :family *font-header-line-family*
+                                            :weight *font-header-line-weight*
+                                            :size   *font-header-line-size*))))
 
       ;; (after-x 'doom-modeline
-          ;;     (doom-modeline--set-char-widths doom-modeline-rhs-icons-alist))
+         ;;     (doom-modeline--set-char-widths doom-modeline-rhs-icons-alist))
 
     (run-hooks 'nasy/font-change-hook))
 

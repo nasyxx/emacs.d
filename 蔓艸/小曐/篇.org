@@ -43,11 +43,11 @@ Library.
 ** all-the-icons
 
 #+begin_src emacs-lisp
-  (setup all-the-icons
-    (:custom all-the-icons-scale-factor 1)
-    (:with-hook nasy--defer-load-hook
-      (:hook (lambda () (require 'all-the-icons))))
-    (:init (add-to-list 'nasy--defer-loads 'all-the-icons)))
+  ;; (setup all-the-icons
+  ;;   (:custom all-the-icons-scale-factor 1)
+  ;;   (:with-hook nasy--defer-load-hook
+  ;;     (:hook (lambda () (require 'all-the-icons))))
+  ;;   (:init (add-to-list 'nasy--defer-loads 'all-the-icons)))
 #+end_src
 
 ** Dash                                                 :lists:
@@ -91,7 +91,7 @@ https://github.com/purcell/emacs-reformatter
 #+begin_src emacs-lisp
   (defvar nasy-misc-packages
     '(git-blamed git-messenger git-modes git-timemachine wgrep rg
-                 company-dict company-math flycheck-package ibuffer-vc all-the-icons-ibuffer
+                 company-dict company-math flycheck-package ibuffer-vc
                  nix-buffer nix-update nixpkgs-fmt thingopt dap-mode haskell-snippets))
 
   (cl-loop for package in nasy-misc-packages
