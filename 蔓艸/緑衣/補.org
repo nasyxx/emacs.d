@@ -322,7 +322,6 @@ https://github.com/minad/cape
         "p k"   cape-keyword
         "p s"   cape-symbol
         "p a"   cape-abbrev
-        "p i"   cape-ispell
         "p l"   cape-line
         "p w"   cape-dict
         "p \\"  cape-tex

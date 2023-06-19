@@ -120,7 +120,8 @@ Emacs client/library for the Language Server Protocol
      lsp-python-ms-dir               (concat *nasy-var* "lsp/lsp-python-ms/")
      lsp-server-install-dir          (concat *nasy-var* "lsp/server/")
      lsp-session-file                (concat *nasy-var* "lsp/session.el")
-     lsp-log-io *debug*)
+     lsp-log-io *debug*
+     lsp-headerline-breadcrumb-icons-enable nil)
     (:hooks
      kill-emacs-hook (lambda () (setq lsp-restart 'ignore))
      lsp-completion-mode-hook nasy/lsp-setup-completion)

@@ -61,6 +61,7 @@ You cannot disable anything here.
            :type git
            :host nil)
          'session)
+    (sup 'treesit-auto t)
     (sup 'vertico t)
     (sup 'which-key t))
 #+end_src
