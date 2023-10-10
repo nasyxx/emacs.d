@@ -548,7 +548,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'consult-dir nasy--require)
     (sup 'consult-flycheck nasy--require)
     (sup '(copilot :host github :repo "zerolfx/copilot.el"
-                   :files ("dist" "copilot.el"))
+                   :files ("dist" "*.el"))
          nasy--require)
     (sup 'corfu nasy--require)
     (sup `(corfu-extensions

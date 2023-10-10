@@ -28,7 +28,7 @@
     (sup 'cape t)
     (sup 'company t)
     (sup '(copilot :host github :repo "zerolfx/copilot.el"
-                   :files ("dist" "copilot.el"))
+                   :files ("dist" "*.el"))
          t)
     (sup 'corfu t)
     (sup `(corfu-extensions
@@ -320,7 +320,7 @@ https://github.com/minad/cape
         "p d"   cape-dabbrev        ;; or dabbrev-completion
         "p f"   cape-file
         "p k"   cape-keyword
-        "p s"   cape-symbol
+        "p s"   cape-elisp-symbol
         "p a"   cape-abbrev
         "p l"   cape-line
         "p w"   cape-dict
