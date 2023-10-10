@@ -697,6 +697,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'wakatime-mode nasy--require)
 
     ;; 麐之趾
+    (sup 'apheleia nasy--require)
     (sup 'cdlatex nasy--require)
     (sup 'reformatter nasy--require)
     (sup `(bibtex-tidy :local-repo ,(concat *nasy-site* "nasy/bibtex-tidy-mode"))
@@ -748,6 +749,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'elpy nasy--require)
     (sup 'python-black nasy--require)
     (sup 'lsp-pyright nasy--require)
+    (sup `(lsp-pylance :local-repo ,(concat *nasy-site* "nasy/lsp-pylance")))
     (sup `(python-isort :local-repo ,(concat *nasy-site* "nasy/python-isort"))
          nasy--require)
     (sup 'restclient nasy--require)

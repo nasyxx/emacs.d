@@ -43,6 +43,8 @@ Programming Languages
     (require '風雨時用)
     (require '模)
 
+    (sup 'apheleia t)
+
     (require 'align)
     (sup 'org t)
     (sup 'org-ai t)
@@ -51,6 +53,7 @@ Programming Languages
     (require 'org-capture)
     (require 'org-clock)
 
+    (require 'flymake-proc)
     (sup 'haskell-mode t)
     (sup 'lsp-mode t)
     (require 'lsp-diagnostics)
@@ -83,6 +86,17 @@ Programming Languages
 #+end_src
 
 * 章
+
+** Apheleia
+
+#+begin_src emacs-lisp
+  (setup apheleia
+    (:doc "Run code formatter on buffer contents without moving point, using RCS patches and dynamic programming.")
+    (:url "https://github.com/radian-software/apheleia")
+    (:tag "languages" "tools")
+    (:with-hook prog-mode-hook
+      (:hook apheleia-mode)))
+#+end_src
 
 ** Bibtex
 
@@ -1541,6 +1555,7 @@ https://github.com/org-roam/org-roam
   made unique when necessary."
       :lighter "n/oxh"
       :global t
+      :group 'nasy
       (if nasy/ox-html-with-useful-ids-mode
           (progn
             (when (featurep 'gcmh)
@@ -1609,13 +1624,21 @@ https://github.com/org-roam/org-roam
 
   (setup python
     (:opt python-indent-def-block-scale 2
+          python-indent-offset 2
           flycheck-python-flake8-executable "python"
           python-shell-interpreter          "python")
     (:with-mode (python-ts-mode python-mode)
       (:mode-hook
        (python-flycheck-setup)
        (nasy/tempo-python)
-       (setq-local tab-width (python-indent-guess-indent-offset)))))
+       (setq-local tab-width (python-indent-guess-indent-offset))))
+    (:after* apheleia
+      (:with-mode (apheleia-mode)
+        (:mode-hook
+         (setf (alist-get 'python-mode apheleia-mode-alist)
+               '(yapf))
+         (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+               '(yapf))))))
 #+end_src
 
 *** black                                               :python:
@@ -1693,6 +1716,7 @@ https://github.com/wbolster/emacs-python-black
     (lsp))
 
   (setup lsp-pyright
+    (:quit)
     (:hooks
      python-mode-hook          start-lsp-pyright
      python-ts-mode-hook       start-lsp-pyright
@@ -1725,6 +1749,65 @@ https://github.com/wbolster/emacs-python-black
           lsp-ruff-lsp-ruff-path (vector (executable-find "ruff") "ruff"))
     (:hooks python-mode-hook python-setup-lsp-ruff
             python-ts-mode-hook python-setup-lsp-ruff))
+#+end_src
+
+*** pylance                                             :python:
+
+#+begin_src emacs-lisp
+  (defun start-lsp-pylance ()
+    "Start lsp pyright with pdm."
+    (require 'lsp-pyright)
+    (require 'lsp-pylance)
+    (when (zerop (shell-command "pdm info"))
+      (setq-local
+       lsp-pyright-python-executable-cmd
+       (string-trim (shell-command-to-string
+                     "pdm info --python")))
+      ;; (setq-local flycheck-python-flake8-executable lsp-pyright-python-executable-cmd)
+      (setq-local python-shell-interpreter lsp-pyright-python-executable-cmd)
+      (let ((ppath (concat (string-trim (shell-command-to-string
+                                         "pdm info --package"))
+                           "/lib")))
+        (setq-local
+         lsp-pyright-extra-paths
+         (vector ppath)
+         python-shell-extra-pythonpaths (list ppath))))
+    (lsp)
+    (lsp-inlay-hints-mode 1))
+
+  (defun nasy/lsp--render-string (str language)
+    "Render STR using `major-mode' corresponding to LANGUAGE.
+   When language is nil render as markup if `markdown-mode' is loaded."
+    (setq str (s-replace "\r" "" (or str "")))
+    (setq str (s-replace-regexp "<!--.*-->" "" (or str "")))
+    (if-let ((mode (-some (-lambda ((mode . lang))
+                            (when (and (equal lang language) (functionp mode))
+                              mode))
+                          lsp-language-id-configuration)))
+        (lsp--fontlock-with-mode str mode)
+      str))
+
+  (setup lsp-pylance
+    (:hooks
+     python-mode-hook          start-lsp-pylance
+     python-ts-mode-hook       start-lsp-pylance
+     lsp-diagnostics-mode-hook python-setup-lsp-flycheck)
+    (:advice
+     lsp--render-string :override
+     nasy/lsp--render-string)
+    (:after company
+      (nasy/add-company-backend 'python-mode
+        '(company-capf
+          elpy-company-backend
+          company-files
+          ;; :with company-tabnine company-yasnippet
+          :with company-yasnippet))
+      (nasy/add-company-backend 'python-ts-mode
+        '(company-capf
+          elpy-company-backend
+          company-files
+          ;; :with company-tabnine company-yasnippet
+          :with company-yasnippet))))
 #+end_src
 
 *** isort                                               :python:
