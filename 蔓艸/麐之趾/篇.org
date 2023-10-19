@@ -1772,8 +1772,8 @@ https://github.com/wbolster/emacs-python-black
          lsp-pyright-extra-paths
          (vector ppath)
          python-shell-extra-pythonpaths (list ppath))))
-    (lsp)
-    (lsp-inlay-hints-mode 1))
+    (lsp))
+    ;; (lsp-inlay-hints-mode 1)
 
   (defun nasy/lsp--render-string (str language)
     "Render STR using `major-mode' corresponding to LANGUAGE.
