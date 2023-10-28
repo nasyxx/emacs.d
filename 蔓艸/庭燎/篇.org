@@ -46,7 +46,8 @@ UI
     (sup 'dashboard t)
     (sup 'dash t)
     (sup 'nerd-icons t)
-    (sup 'treemacs t))
+    (sup 'treemacs t)
+    (sup 'ligature t))
 #+end_src
 
 * 章
@@ -531,377 +532,33 @@ https://github.com/ema2159/centaur-tabs
       (treemacs-load-theme "nerd-icons")))
 #+end_src
 
-** Pretty Mode                                         :pretty:
+** Ligature
+
+This package maps ordinary graphemes (characters) to fancy ligatures, if both your version of Emacs and the font supports it.
+
+With this package you can control where Emacs must display ligatures. That is useful if you only want a subset of the ligatures in certain major modes, for instance, or if you want to ensure that some modes have no ligatures at all.
+
+https://github.com/mickeynp/ligature.el
 
 #+begin_src emacs-lisp
-  ;; https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
-  (defun nasy/adjust-fira-code-symbol (charset &optional size)
-    (let ((size (or size 14)))
-      (set-fontset-font (frame-parameter nil 'font)
-                        charset
-                        (font-spec :family "Fira Code Symbol"
-                                   :weight 'normal
-                                   :size   size))))
-  ;; I haven't found one statement that makes both of the above situations work, so I use both for now
-  (defun pretty-fonts-set-fontsets (CODE-FONT-ALIST)
-    "Utility to associate many unicode points with specified `CODE-FONT-ALIST'."
-    (--each CODE-FONT-ALIST
-      (-let (((font . codes) it))
-        (--each codes
-          (set-fontset-font nil `(,it . ,it) font)
-          (set-fontset-font t `(,it . ,it) font)))))
-
-  (defun pretty-fonts--add-kwds (FONT-LOCK-ALIST)
-    "Exploits `font-lock-add-keywords'(`FONT-LOCK-ALIST') to apply regex-unicode replacements."
-    (font-lock-add-keywords
-     nil (--map (-let (((rgx uni-point) it))
-                 `(,rgx (0 (progn
-                             (compose-region
-                              (match-beginning 1) (match-end 1)
-                              ,(concat "\t" (list uni-point)))
-                             nil))))
-               FONT-LOCK-ALIST)))
-
-  (defmacro pretty-fonts-set-kwds (FONT-LOCK-HOOKS-ALIST)
-    "Set regex-unicode replacements to many modes(`FONT-LOCK-HOOKS-ALIST')."
-    `(--each ,FONT-LOCK-HOOKS-ALIST
-       (-let (((font-locks . mode-hooks) it))
-         (--each mode-hooks
-           (add-hook it (-partial 'pretty-fonts--add-kwds
-                                  (symbol-value font-locks)))))))
-
-  (defconst pretty-fonts-fira-font
-    '(;; OPERATORS
-      ;; Pipes
-      ("\\(<|\\)" #Xe14d) ("\\(<>\\)" #Xe15b) ("\\(<|>\\)" #Xe14e) ("\\(|>\\)" #Xe135)
-
-      ;; Brackets
-      ("\\(<\\*\\)" #Xe14b) ("\\(<\\*>\\)" #Xe14c) ("\\(\\*>\\)" #Xe104)
-      ("\\(<\\$\\)" #Xe14f) ("\\(<\\$>\\)" #Xe150) ("\\(\\$>\\)" #Xe137)
-      ("\\(<\\+\\)" #Xe155) ("\\(<\\+>\\)" #Xe156) ("\\(\\+>\\)" #Xe13a)
-
-      ;; Equality
-      ("\\(!=\\)" #Xe10e) ("\\(!==\\)"         #Xe10f) ("\\(=/=\\)" #Xe143)
-      ("\\(/=\\)" #Xe12c) ("\\(/==\\)"         #Xe12d)
-      ("\\(===\\)" #Xe13d) ("[^!/]\\(==\\)[^>]" #Xe13c)
-
-      ;; Equality Special
-      ("\\(||=\\)"  #Xe133) ("[^|]\\(|=\\)" #Xe134)
-      ("\\(~=\\)"   #Xe166)
-      ("\\(\\^=\\)" #Xe136)
-      ("\\(=:=\\)"  #Xe13b)
-
-      ;; Comparisons
-      ("\\(<=\\)" #Xe141) ("\\(>=\\)" #Xe145)
-      ("\\(</\\)" #Xe162) ("\\(</>\\)" #Xe163)
-
-      ;; Shifts
-      ("[^-=]\\(>>\\)" #Xe147) ("\\(>>>\\)" #Xe14a)
-      ("[^-=]\\(<<\\)" #Xe15c) ("\\(<<<\\)" #Xe15f)
-
-      ;; Dots
-      ("\\(\\.-\\)"    #Xe122) ("\\(\\.=\\)" #Xe123)
-      ("\\(\\.\\.<\\)" #Xe125)
-
-      ;; Hashes
-      ("\\(#{\\)"  #Xe119) ("\\(#(\\)"   #Xe11e) ("\\(#_\\)"   #Xe120)
-      ("\\(#_(\\)" #Xe121) ("\\(#\\?\\)" #Xe11f) ("\\(#\\[\\)" #Xe11a)
-
-      ;; REPEATED CHARACTERS
-      ;; 2-Repeats
-      ("\\(||\\)" #Xe132)
-      ("\\(!!\\)" #Xe10d)
-      ("\\(%%\\)" #Xe16a)
-      ("\\(&&\\)" #Xe131)
-
-      ;; 2+3-Repeats
-      ("\\(##\\)"       #Xe11b) ("\\(###\\)"          #Xe11c) ("\\(####\\)" #Xe11d)
-      ("\\(--\\)"       #Xe111) ("\\(---\\)"          #Xe112)
-      ("\\({-\\)"       #Xe108) ("\\(-}\\)"           #Xe110)
-      ("\\(\\\\\\\\\\)" #Xe106) ("\\(\\\\\\\\\\\\\\)" #Xe107)
-      ("\\(\\.\\.\\)"   #Xe124) ("\\(\\.\\.\\.\\)"    #Xe126)
-      ("\\(\\+\\+\\)"   #Xe138) ("\\(\\+\\+\\+\\)"    #Xe139)
-      ("\\(//\\)"       #Xe12f) ("\\(///\\)"          #Xe130)
-      ("\\(::\\)"       #Xe10a) ("\\(:::\\)"          #Xe10b)
-
-      ;; ARROWS
-      ;; Direct
-      ("[^-]\\(->\\)" #Xe114) ("[^=]\\(=>\\)" #Xe13f)
-      ("\\(<-\\)"     #Xe152)
-      ("\\(-->\\)"    #Xe113) ("\\(->>\\)"    #Xe115)
-      ("\\(==>\\)"    #Xe13e) ("\\(=>>\\)"    #Xe140)
-      ("\\(<--\\)"    #Xe153) ("\\(<<-\\)"    #Xe15d)
-      ("\\(<==\\)"    #Xe158) ("\\(<<=\\)"    #Xe15e)
-      ("\\(<->\\)"    #Xe154) ("\\(<=>\\)"    #Xe159)
-
-      ;; Branches
-      ("\\(-<\\)"  #Xe116) ("\\(-<<\\)" #Xe117)
-      ("\\(>-\\)"  #Xe144) ("\\(>>-\\)" #Xe148)
-      ("\\(=<<\\)" #Xe142) ("\\(>>=\\)" #Xe149)
-      ("\\(>=>\\)" #Xe146) ("\\(<=<\\)" #Xe15a)
-
-      ;; Squiggly
-      ("\\(<~\\)" #Xe160) ("\\(<~~\\)" #Xe161)
-      ("\\(~>\\)" #Xe167) ("\\(~~>\\)" #Xe169)
-      ("\\(-~\\)" #Xe118) ("\\(~-\\)"  #Xe165)
-
-      ;; MISC
-      ("\\(www\\)"                   #Xe100)
-      ("\\(<!--\\)"                  #Xe151)
-      ("\\(~@\\)"                    #Xe164)
-      ("[^<]\\(~~\\)"                #Xe168)
-      ("\\(\\?=\\)"                  #Xe127)
-      ("[^=]\\(:=\\)"                #Xe10c)
-      ("\\(/>\\)"                    #Xe12e)
-      ("[^\\+<>]\\(\\+\\)[^\\+<>]"   #Xe16d)
-      ("[^:=]\\(:\\)[^:=]"           #Xe16c)
-      ("\\(<=\\)"                    #Xe157))
-    "Fira font ligatures and their regexes.")
-#+end_src
-
-#+begin_src emacs-lisp
-  (setup pretty-mode
-    (:with-hook nasy/font-change-hook
-      (:hook
-       (lambda ()
-         (progn
-           (when (display-graphic-p)
-             (set-fontset-font (frame-parameter nil 'font)
-                               '(#Xe100 . #Xe16f)
-                               "Fira Code Symbol")
-             (nasy/adjust-fira-code-symbol #Xe126 15))))))
-    (:when-loaded
-      (when (fboundp 'mac-auto-operator-composition-mode)
-        (mac-auto-operator-composition-mode))
-      (after-x 'dash
-        (pretty-fonts-set-kwds
-         '((pretty-fonts-fira-font prog-mode-hook org-mode-hook))))))
-#+end_src
-
-#+begin_src emacs-lisp
-  ;; (setup pretty-mode
-  ;;   (:with-hook nasy/font-change-hook
-  ;;     (:hook
-  ;;      (lambda ()
-  ;;        (progn
-  ;;          (nasy/set-symbol ?ℂ 13 'bold)
-  ;;          (nasy/set-symbol ?𝕔 16)
-  ;;          (nasy/set-symbol ?𝔻 13 'bold)
-  ;;          (nasy/set-symbol ?𝕕 14)
-  ;;          (nasy/set-symbol ?𝕃 13 'bold)
-  ;;          (nasy/set-symbol ?𝕝 14) ;; with   (1/4 space)
-  ;;          (nasy/set-symbol ?ℝ 12 'bold)
-  ;;          (nasy/set-symbol ?𝕣 18)
-  ;;          (nasy/set-symbol ?𝕋 14 'bold)
-  ;;          (nasy/set-symbol ?𝕥 19)
-  ;;          (nasy/set-symbol ?ℤ 13 'bold)
-  ;;          (nasy/set-symbol ?𝕫 16)
-  ;;          (nasy/set-symbol ?∑ 11 'bold)
-  ;;          (nasy/set-symbol ?∏ 11 'bold)
-  ;;          (nasy/set-symbol ?∅ 11 'bold)
-  ;;          (nasy/set-symbol ?⋃ 11 'bold))))))
-  (setup pretty-mode
-    (:with-hook prog-mode-hook
-      (:hook
-       (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
-                   '(;; Data Type             P N
-                     ("Float"  . #x211d)  ;; ℝxxxx
-                     ("float"  . #x211d)  ;; ℝxxx
-                     ("Int"    . #x2124)  ;; ℤxxx
-                     ("int"    . #x2124)  ;; ℤxxx
-                     ;; ("String" . #x1d57e)  ;; 𝕊 𝕾
-                     ;; ("string" . #x1d598)  ;; 𝕤 𝖘
-                     ;; ("str"    . #x1d598)  ;; 𝕤 𝖘
-                     ("String" . (#x1d54a (Br . Bl) #x2006))  ;; 𝕊 xxxxxx
-                     ("string" . (#x1d54a (Br . Bl) #x2006))  ;; 𝕤 xxxxxx x1d564
-                     ("str"    . (#x1d54a (Br . Bl) #x2006))  ;; 𝕤 xxxx
-                     ("Char"   . #x2102)   ;; ℂx
-                     ("char"   . #x1d554)  ;; 𝕔x
-
-                     ("False"  . #x1d53d)  ;; 𝔽 𝕱
-                     ("True"   . #x1d54b)  ;; 𝕋 𝕿
-
-                     ("Any"    . #x2203)  ;; ∃
-                     ("any"    . #x2203)  ;; ∃
-                     ("any_"   . #x2203)  ;; ∃
-                     ("And"    . (#x2000 (Br . Bl) #x22c0 (Br . Bl) #x2005))  ;; ⋀
-                     ("and"    . (#x2004 (Br . Bl) #x22cf (Br . Bl) #x2004 (Br . Bl) #x2009))  ;; ⋏
-                     ("Or"     . #x22c1)  ;; ⋁
-                     ("or"     . (#x2006 (Br . Bl) #x22cE (Br . Bl) #x2009))  ;; ⋎
-                     ("not"    . #x00ac)  ;; ¬
-                     ("not_"   . #x00ac)  ;; ¬
-
-                     ("All"    . #x2200)  ;; ∀
-                     ("all"    . #x2200)  ;; ∀
-                     ("all_"   . #x2200)  ;; ∀
-                     ("for"    . #x2200)  ;; ∀
-                     ("forall" . #x2200)  ;; ∀
-                     ("forM"   . #x2200)  ;; ∀
-
-                     ("pi"     . #x03c0)  ;; π
-
-                     ("sum"    . #x2211)  ;; ∑
-                     ("Sum"    . #x2211)  ;; ∑
-                     ("Product" . #x220F) ;; ∏
-                     ("product" . #x220F) ;; ∏
-
-                     ("None"   . #x2205)  ;; ∅
-                     ("none"   . #x2205)  ;; ∅
-
-                     ("in"     . (#x2006 (Br . Bl) #x2208 (Br . Bl) #x2009 (Br . Bl) #x2009))  ;;  ∈  
-                     ("`elem`" . (#x2006 (Br . Bl) #x2208 (Br . Bl) #x2009 (Br . Bl) #x2009))  ;;  ∈  
-                     ("not in"    . (#x2006 (Br . Bl) #x2209 (Br . Bl) #x2009 (Br . Bl) #x2009))  ;;  ∉  
-                     ("`notElem`" . (#x2006 (Br . Bl) #x2209 (Br . Bl) #x2009 (Br . Bl) #x2009))  ;;  ∉  
-                     ("return" . (#x21d2 (Br . Bl) #x2005 ))  ;; ⇒  x (Br . Bl) #x2006
-                     ("yield"  . (#x21d4 (Br . Bl) #x2004))  ;; ⇔ x xxxxxxxxxxxxxxxxx
-                     ("pure"   . (#x21f0 (Br . Bl)))))))))          ;; ⇰ x
-  (setup pretty-mode
-    (:with-hook (prog-mode-hook
-                 emacs-lisp-mode-hook
-                 org-mode-hook)
-      (:hook
-       (lambda () (mapc (lambda (pair) (push pair prettify-symbols-alist))
-                   '(;; Global
-                     ;; Pipes
-                     ("<|"  . (?\s (Br . Bl) #Xe14d))
-                     ("<>"  . (?\s (Br . Bl) #Xe15b))
-                     ("<|>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14e))
-                     ("|>"  . (?\s (Br . Bl) #Xe135))
-
-                     ;; Brackets
-                     ("<*"  . (?\s (Br . Bl) #Xe14b))
-                     ("<*>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14c))
-                     ("*>"  . (?\s (Br . Bl) #Xe104))
-                     ("<$"  . (?\s (Br . Bl) #Xe14f))
-                     ("<$>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe150))
-                     ("$>"  . (?\s (Br . Bl) #Xe137))
-                     ("<+"  . (?\s (Br . Bl) #Xe155))
-                     ("<+>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe156))
-                     ("+>"  . (?\s (Br . Bl) #Xe13a))
-                     ("[]"  . (#x2005 (Br . Bl) #x1d731 (Br . Bl) #x2005))
-
-                     ;; Equality
-                     ("=/="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe143))
-                     ("/="   . (?\s (Br . Bl) #Xe12c))
-                     ("/=="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe12d))
-                     ("/==>" . (?\s (Br . Bl) ?\s (Br . Bl) ?\s (Br . Bl) #Xe13c))
-                     ("!==>" . (?\s (Br . Bl) ?\s (Br . Bl) ?\s (Br . Bl) #Xe13c))
-                     ;; Special
-                     ("||="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe133))
-                     ("|="   . (?\s (Br . Bl) #Xe134))
-                     ("~="   . (?\s (Br . Bl) #Xe166))
-                     ("^="   . (?\s (Br . Bl) #Xe136))
-                     ("=:="  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe13b))
-
-                     ;; Comparisons
-                     ("</"   . (?\s (Br . Bl) #Xe162))
-                     ("</>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe163))
-
-                     ;; Shifts
-                     ("=>>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe147))
-                     ("->>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe147))
-                     (">>>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14a))
-                     (">>>"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe14a))
-                     ("=<<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15c))
-                     ("-<<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15c))
-                     ("<<<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15f))
-
-                     ;; Dots
-                     (".-"   . (?\s (Br . Bl) #Xe122))
-                     (".="   . (?\s (Br . Bl) #Xe123))
-                     ("..<"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe125))
-
-                     ;; Hashes
-                     ("#{"   . (?\s (Br . Bl) #Xe119))
-                     ("#("   . (?\s (Br . Bl) #Xe11e))
-                     ("#_"   . (?\s (Br . Bl) #Xe120))
-                     ("#_("  . (?\s (Br . Bl) #Xe121))
-                     ("#?"   . (?\s (Br . Bl) #Xe11f))
-                     ("#["   . (?\s (Br . Bl) #Xe11a))
-
-                     ;; REPEATED CHARACTERS
-                     ;; 2-Repeats
-                     ("!!"   . (?\s (Br . Bl) #Xe10d))
-                     ("%%"   . (?\s (Br . Bl) #Xe16a))
-
-                     ;; 2+3-Repeats
-                     ("##"   . (?\s (Br . Bl) #Xe11b))
-                     ("###"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe11c))
-                     ("####" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe11d))
-                     ("---"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe112))
-                     ("{-"   . (?\s (Br . Bl) #Xe108))
-                     ("-}"   . (?\s (Br . Bl) #Xe110))
-                     ("\\\\" . (?\s (Br . Bl) #Xe106))
-                     ("\\\\\\" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe107))
-                     (".."   . (?\s (Br . Bl) #Xe124))
-                     ("..."  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe126 (Br . Bl) #x200b))
-                     ("+++"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe139))
-                     ("//"   . (?\s (Br . Bl) #Xe12f))
-                     ("///"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe130))
-                     ("::"   . (?\s (Br . Bl) #Xe10a))  ;; 
-                     (":::"  . (?\s (Br . Bl) ?\s (Br . Bl) #Xe10b))
-
-                     ;; Arrows
-                     ;; Direct
-                     ("->"  . (?\s (Br . Bl) #Xe114))  ;; 
-                     ("=>"  . (?\s (Br . Bl) #Xe13f))
-                     ("->>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe115))
-                     ("=>>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe140))
-                     ("<<-" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15d))
-                     ("<<=" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15e))
-                     ("<->" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe154))
-                     ("<=>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe159))
-                     ;; Branches
-                     ("-<"  . (?\s (Br . Bl) #Xe116))
-                     ("-<<" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe117))
-                     (">-"  . (?\s (Br . Bl) #Xe144))
-                     (">>-" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe148))
-                     ("=<<" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe142))
-                     (">=>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe146))
-                     (">>=" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe149))
-                     ("<=<" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe15a))
-                     ;; Squiggly
-                     ("<~"  . (?\s (Br . Bl) #Xe160))
-                     ("<~~" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe161))
-                     ("~>"  . (?\s (Br . Bl) #Xe167))
-                     ("~~>" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe169))
-                     ("-~"  . (?\s (Br . Bl) #Xe118))
-                     ("~-"  . (?\s (Br . Bl) #Xe165))
-
-                     ;; MISC
-                     ("www" . (?\s (Br . Bl) ?\s (Br . Bl) #Xe100))
-                     ("~@"  . (?\s (Br . Bl) #Xe164))
-                     ("~~"  . (?\s (Br . Bl) #Xe168))
-                     ("?="  . (?\s (Br . Bl) #Xe127))
-                     (":="  . (?\s (Br . Bl) #Xe10c))
-                     ("/>"  . (?\s (Br . Bl) #Xe12e))))))))
-  (setup pretty-mode
-    (:with-hook python-base-mode-hook
-      (:hook
-       (lambda ()
-         (mapc (lambda (pair) (push pair prettify-symbols-alist))
-               '(;; Syntax
-                 ;;("def"    . (#x1d521 (Br . Bl) #x1d522 (Br . Bl) #x1d523))
-                 ("def"    . (#x1d487 (Br . Bl) #x2006))  ;; 𝒇 1 111
-                 ("List"   . #x1d543)  ;; 𝕃 𝕷
-                 ("list"   . (?𝕝 (Br . Bl) #x2006))  ;; 𝕝   𝖑
-                 ("Dict"   . #x1d53B)  ;; 𝔻 𝕯
-                 ("dict"   . #x1d555)  ;; 𝕕 𝖉
-                 ("Set"    . #x1d61a)  ;; 𝔖 𝘚
-                 ("set"    . #x1d634)  ;; 𝔰 𝘴
-                 ("Tuple"  . #x1d61b)  ;; 𝕋 𝕿 𝘛
-                 ("tuple"  . #x1d635)  ;; 𝕥 𝖙 𝘵
-
-                 ("Union"  . #x22c3)  ;; ⋃
-                 ("union"  . #x22c3))))))  ;; ⋃
-    (:with-hook haskell-mode-hook
-      (:hook
-       (lambda ()
-         (mapc (lambda (pair) (push pair prettify-symbols-alist))
-               '(;; Syntax
-                 ("pure" . (#x21f0 (Br . Bl) #x2006)))))) ;; ⇰  x
-      ;; (" . "  . (?\s (Br . Bl) #x2218 (Br . Bl) ?\s (Br . Bl) #x2006)) ;; ∘
-      ))
+  (setup ligature
+    (:after ligature
+     (ligature-set-ligatures
+      't
+      '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+        ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+        "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+        "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+        "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+        "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+        "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+        "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+        ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+        "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+        "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+        "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+        "\\\\" "://" "ff" "fi" "ffi")))
+    (:first-key global-ligature-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -914,7 +571,7 @@ https://github.com/ema2159/centaur-tabs
 
   (add-hook 'prog-mode-hook #'nasy/-load-prog-mode)
 
-  (add-hook 'nasy-prog-mode-first-key-hook #'(lambda () (prettify-symbols-mode 1)))
+  (add-hook 'nasy-prog-mode-first-key-hook #'(lambda () (global-ligature-mode 1)))
 #+end_src
 
 ** Mode Line

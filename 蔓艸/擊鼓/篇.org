@@ -657,6 +657,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'dashboard nasy--require)
     (sup 'doom-themes nasy--require)
     (sup 'pretty-mode nasy--require)
+    (sup 'ligature nasy--require)
     (sup 'nyan-mode nasy--require)
     (sup 'minions nasy--require)
     (sup 'doom-modeline nasy--require)
