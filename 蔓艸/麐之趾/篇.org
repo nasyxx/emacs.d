@@ -1620,7 +1620,8 @@ https://github.com/org-roam/org-roam
 
     ;; For treesit
     ;; (flycheck-add-mode 'python-flake8 'python-ts-mode)
-    (flycheck-add-mode 'python-mypy 'python-ts-mode))
+    ;; (flycheck-add-mode 'python-mypy 'python-ts-mode)
+    (add-to-list 'flycheck-disabled-checkers 'python-mypy))
 
   (setup python
     (:opt python-indent-def-block-scale 2
@@ -1689,12 +1690,12 @@ https://github.com/wbolster/emacs-python-black
   (defun python-setup-lsp-flycheck ()
     "Setup python lsp flycheck."
     (if lsp-diagnostics-mode
-        (progn
+        (progn)
           ;; (flycheck-inline-mode -1)
-          (flycheck-add-next-checker 'lsp 'python-mypy))
-      (progn
+          ;; (flycheck-add-next-checker 'lsp 'python-mypy))
+      (progn)))
         ;; (flycheck-inline-mode 1)
-        (flycheck-remove-next-checker 'lsp 'python-mypy))))
+        ;; (flycheck-remove-next-checker 'lsp 'python-mypy))))
 
   (defun start-lsp-pyright ()
     "Start lsp pyright with pdm."
