@@ -1814,35 +1814,35 @@ https://github.com/wbolster/emacs-python-black
 *** isort                                               :python:
 
 #+begin_src emacs-lisp
-  (defun nasy/find-isort-config ()
-    "Find isort config file."
-    (let ((file (expand-file-name "~/.config/python/pyproject.toml")))
-      (when (file-exists-p file)
-        file)))
+  ;; (defun nasy/find-isort-config ()
+  ;;   "Find isort config file."
+  ;;   (let ((file (expand-file-name "~/.config/python/pyproject.toml")))
+  ;;     (when (file-exists-p file)
+  ;;       file)))
 
-  (defun nasy/empty-isort-config ()
-    "Cancel isort extra args."
-    (interactive)
-    (setq python-isort-extra-args nil))
+  ;; (defun nasy/empty-isort-config ()
+  ;;   "Cancel isort extra args."
+  ;;   (interactive)
+  ;;   (setq python-isort-extra-args nil))
 
-  (defun nasy/set-isort-config ()
-    "Set isort extra args."
-    (interactive)
-    (let ((pc (project-current)))
-      (if (and pc
-               (file-exists-p (concat (project-root pc) "/pyproject.toml")))
-          (nasy/empty-isort-config)
-        (setq python-isort-extra-args
-              `("--sp" ,(nasy/find-isort-config))))))
+  ;; (defun nasy/set-isort-config ()
+  ;;   "Set isort extra args."
+  ;;   (interactive)
+  ;;   (let ((pc (project-current)))
+  ;;     (if (and pc
+  ;;              (file-exists-p (concat (project-root pc) "/pyproject.toml")))
+  ;;         (nasy/empty-isort-config)
+  ;;       (setq python-isort-extra-args
+  ;;             `("--sp" ,(nasy/find-isort-config))))))
 
-  (setup python-isort
-    (:with-hook (python-mode-hook python-ts-mode-hook)
-      (:hook (lambda ()
-               (progn
-                 (require 'python-isort)
-                 (nasy/set-isort-config)))))
-    (:when-loaded
-      (add-to-list 'safe-local-variable-values '(python-isort-extra-args))))
+  ;; (setup python-isort
+  ;;   (:with-hook (python-mode-hook python-ts-mode-hook)
+  ;;     (:hook (lambda ()
+  ;;              (progn
+  ;;                (require 'python-isort)
+  ;;                (nasy/set-isort-config)))))
+  ;;   (:when-loaded
+  ;;     (add-to-list 'safe-local-variable-values '(python-isort-extra-args))))
 #+end_src
 
 ** restclient.el                         :restclient:languages:
