@@ -515,13 +515,11 @@ https://github.com/zerolfx/copilot.el
     (:bind-into copilot-mode-map
       "C-<tab>" copilot-accept-completion
       "H-SPC"   nasy/copilot-complete)
-    (:opt copilto-idle-delay 0.8)
+    (:opt copilot-idle-delay 0.8
+          copilot-indent-warning-suppress t)
     (:when-loaded
       (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p))
-    (:hook-into prog-mode-hook text-mode org-mode-hook emacs-lisp-mode-hook)
-    (:mode-hook
-     (add-to-list 'copilot--indentation-alist '(python-ts-mode python-indent py-indent-offset python-indent-offset))
-     (setq copilot-idle-delay 0.8)))
+    (:hook-into prog-mode-hook text-mode org-mode-hook emacs-lisp-mode-hook))
 #+end_src
 
 ** corfu                                            :editing:extensions:
