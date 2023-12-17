@@ -759,6 +759,8 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'yaml-mode nasy--require)
     (sup 'ob-elvish nasy--require)
     (sup 'elvish-mode nasy--require)
+    (sup '(typst-ts-mode :host sourcehut :type git :repo "meow_king/typst-ts-mode")
+         nasy--require)
     ;; (sup 'toml-mode nasy--require)
 
     ;; 小曐

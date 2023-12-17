@@ -892,7 +892,7 @@ https://github.com/magit/transient
     (:init (add-to-list 'nasy--defer-loads 'transient)))
 #+end_src
 
-** Treesit
+** Treesit                                          :languages:
 
 #+begin_src emacs-lisp
   (defun na/treesit-install-language-grammar (lang)
@@ -953,6 +953,15 @@ https://github.com/magit/transient
      (require 'treesit-auto)
      (add-to-list 'treesit-auto-fallback-alist '(bash-ts-mode . sh-mode))
      (add-to-list 'treesit-auto-fallback-alist '(toml-ts-mode . conf-toml-mode))
+     (add-to-list 'treesit-auto-recipe-list
+                  (make-treesit-auto-recipe
+                   :lang 'typst
+                   :ts-mode 'typst-ts-mode
+                   :remap '(typst-mode)
+                   :url "https://github.com/uben0/tree-sitter-typst"
+                   :revision "master"
+                   :source-dir "src"
+                   :ext ".typ"))
      (global-treesit-auto-mode)))
 #+end_src
 
