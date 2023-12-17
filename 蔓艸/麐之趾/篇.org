@@ -80,7 +80,9 @@ Programming Languages
 
     (sup 'elpy t)
     (sup `(python-isort :local-repo ,(concat *nasy-site* "nasy/python-isort")) t)
-    (sup 'page-break-lines t))
+    (sup 'page-break-lines t)
+
+    (sup '(typst-ts-mode :host sourcehut :type git :repo "meow_king/typst-ts-mode") t))
 
   (require '補)
 #+end_src
@@ -1861,6 +1863,35 @@ https://github.com/pashky/restclient.el
     (:after company
       (nasy/add-company-backend 'restclient-mode
         '(company-restclient company-files))))
+#+end_src
+
+** Typst                                      :languages:typst:
+
+Tree Sitter support for Typst.  https://git.sr.ht/~meow_king/typst-ts-mode
+
+#+begin_src emacs-lisp
+  (setup typst-ts-mode
+    (:doc "Tree Sitter support for Typst.")
+    (:url "https://git.sr.ht/~meow_king/typst-ts-mode")
+    (:tag "languages" "grammar" "typst")
+    (:opt typst-ts-markup-header-same-height nil
+          typst-ts-mode-indent-offset 2))
+#+end_src
+
+Typst LSP support.  https://github.com/nvarner/typst-lsp
+
+#+begin_src emacs-lisp
+  (setup typst-lsp
+    (:hook lsp)
+    (:after* typst-ts-mode
+      (require 'lsp-mode)
+      (add-to-list 'lsp-language-id-configuration
+                   '("\\.typ$" . "typst"))
+      (lsp-register-client
+       (make-lsp-client
+        :new-connection (lsp-stdio-connection (lambda () (executable-find "typst-lsp")))
+        :major-modes '(typst-mode typst-ts-mode)
+        :server-id 'typst-lsp))))
 #+end_src
 
 ** Yaml                                        :yaml:languages:
