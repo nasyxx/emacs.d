@@ -94,8 +94,8 @@ Programming Languages
     (:doc "Run code formatter on buffer contents without moving point, using RCS patches and dynamic programming.")
     (:url "https://github.com/radian-software/apheleia")
     (:tag "languages" "tools")
-    (:with-hook prog-mode-hook
-      (:hook apheleia-mode)))
+    (:first-key*
+      (require 'apheleia)))
 #+end_src
 
 ** Bibtex
@@ -1632,14 +1632,19 @@ https://github.com/org-roam/org-roam
       (:mode-hook
        (python-flycheck-setup)
        (nasy/tempo-python)
-       (setq-local tab-width (python-indent-guess-indent-offset))))
+       (python-indent-guess-indent-offset)
+       (setq-local tab-width python-indent-offset)))
     (:after* apheleia
-      (:with-mode (apheleia-mode)
-        (:mode-hook
-         (setf (alist-get 'python-mode apheleia-mode-alist)
-               '(yapf))
-         (setf (alist-get 'python-ts-mode apheleia-mode-alist)
-               '(yapf))))))
+      (add-to-list 'apheleia-formatters
+                   '(pyink . ("pyink"
+                              "--preview"
+                              (when (apheleia-formatters-extension-p "pyi") "--pyi")
+                              (apheleia-formatters-fill-column "--line-length")
+                              "-")))
+      (setf (alist-get 'python-mode apheleia-mode-alist)
+            '(ruff))
+      (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+            '(ruff))))
 #+end_src
 
 *** black                                               :python:

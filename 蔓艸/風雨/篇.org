@@ -667,6 +667,7 @@
     (require 'compile)
     (require 'winner)
 
+    (sup 'apheleia t)
     (sup 'avy t)
     (sup 'expand-region t)
     (sup 'flycheck t)
@@ -1500,7 +1501,8 @@
                 "c" #'compile
                 "C" #'recompile
                 "t" #'vterm-toggle
-                "x" #'flycheck-list-errors)
+                "x" #'flycheck-list-errors
+                "f" #'apheleia-format-buffer)
       "e"     (define-keymap :prefix 'nasy-edit-map
                 "a"   #'avy-goto-char
                 "c"   #'comment-line
