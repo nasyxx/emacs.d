@@ -177,7 +177,6 @@ Emacs client/library for the Language Server Protocol
      lsp-completion-provider  :none
      lsp-diagnostics-provider :auto
      lsp-response-timeout 10))
-
 #+end_src
 
 *** lsp-ui                                     :languages:tools:
@@ -650,6 +649,12 @@ TeX related works.
 
   (setup ob-core
     (:opt org-confirm-babel-evaluate nil))
+
+  (setup org
+    (:opt org-babel-load-languages '((emacs-lisp . t)
+                                     (dot        . t)
+                                     (python     . t)
+                                     (gnuplot    . t))))
 #+end_src
 
 **** org capture
@@ -902,6 +907,14 @@ org latex
   (setup oc-csl
     (:after oc
       (:custom org-cite-csl-styles-dir "~/Zotero/styles")))
+#+end_src
+
+**** org src
+
+#+begin_src emacs-lisp
+  (setup org-src
+    (:when-loaded
+      (push '("python" . python-ts) org-src-lang-modes)))
 #+end_src
 
 *** Basic & Functions                                      :org:
@@ -1607,6 +1620,30 @@ https://github.com/org-roam/org-roam
   ;;    ("C-c" . nasy/python-send-defun)
   ;;    ("C-z" . nasy/python-switch-to-shell)
   ;;    ("<S-return>" . nasy/python-send-region)))
+#+end_src
+
+*** PDM
+
+#+begin_src emacs-lisp
+  (defun pdm-setup-path ()
+    "Setup python path for pdm project."
+    (interactive)
+    (when (zerop (shell-command "pdm info"))
+     (setq-local
+      python-shell-interpreter
+      (string-trim (shell-command-to-string
+                    "pdm info --python")))
+      ;; (setq-local flycheck-python-flake8-executable lsp-pyright-python-executable-cmd)
+     (setq-local lsp-pyright-python-executable-cmd python-shell-interpreter
+                 org-babel-python-command python-shell-interpreter)
+
+     (let ((ppath (concat (string-trim (shell-command-to-string
+                                        "pdm info --package"))
+                          "/lib")))
+       (setq-local
+        python-shell-extra-pythonpaths (list ppath)
+        lsp-pyright-extra-paths
+        (vector ppath)))))
 #+end_src
 
 *** python                                              :python:
