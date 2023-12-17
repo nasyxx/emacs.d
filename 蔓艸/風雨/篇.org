@@ -129,7 +129,7 @@
     (setup nasy-font
       (:doc "字軆初值")
       (:opt*
-       ,*font-main-family*   "MonoLisa Nasy"
+       ,*font-main-family*   "MonoLisa Nasy"  ;; "Monaspace Radon Var"
        ,*font-symbol-family* "SF Pro"
        ,*font-nerd-family*   "Symbols Nerd Font Mono"
        ,*font-cjk-family*    "STFLGQKJF"
