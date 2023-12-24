@@ -53,6 +53,10 @@ You cannot disable anything here.
     (sup 'embark-consult t)
     (sup 'embark t)
     (sup 'flycheck t)
+    (sup '(flx-rs repo "jcs-elpa/flx-rs"
+           :fetcher github
+           :files (:defaults "bin")) t)
+    (sup 'fussy t)
     (sup 'page-break-lines t)
     (sup 'projectile t)
     (sup 'recentf t)
@@ -437,6 +441,40 @@ https://github.com/flycheck/flycheck
      (add-to-list 'flycheck-emacs-lisp-checkdoc-variables 'sentence-end-double-space)))
 #+end_src
 
+** Fussy                                  :completion:matching:
+
+Emacs completion-style leveraging flx.
+
+This is a package to provide a ~completion-style~ to Emacs that is able to leverage flx as well as various other fuzzy matching scoring packages to provide intelligent scoring and sorting.
+
+This package is intended to be used with packages that leverage ~completion-styles~, e.g. ~completing-read~ and ~completion-at-point-functions~.
+
+https://github.com/jojojames/fussy
+
+#+begin_src emacs-lisp
+  (setup fussy
+    (:doc "Emacs completion-style leveraging flx.")
+    (:url "https://github.com/jojojames/fussy")
+    (:tag "completion" "matching")
+    (:first-key*
+     (require 'orderless)
+     (require 'fussy))
+    (:when-loaded (flx-rs-load-dyn))
+    (:opt fussy-score-fn 'fussy-flx-rs-score
+          fussy-use-cache nil
+          fussy-compare-same-score-fn 'fussy-histlen->strlen<
+          ;; completion-styles '(fussy initials basic partial-completion emacs22)
+          ;; completion-category-defaults nil
+          ;; completion-category-overrides nil
+          fussy-filter-fn 'fussy-filter-default)
+    ;; (:after* corfu (:advice corfu--capf-wrapper :before fussy-wipe-cache))
+    (:with-mode corfu-mode
+      (:mode-hook
+        (setq-local fussy-max-candidate-limit 5000
+                    fussy-default-regex-fn 'fussy-pattern-first-letter
+                    fussy-prefer-prefix nil))))
+#+end_src
+
 ** GCMH                                              :internal:
 
 以 ~gcmh~ 管理汙薉
@@ -641,8 +679,8 @@ https://github.com/oantolin/orderless
                                  orderless-literal)
      orderless-style-dispatchers   '(nasy/-orderless-dispatch)
      orderless-component-separator "[ &·]"
-     completion-category-defaults  nil
-     completion-category-overrides '((file (styles partial-completion)))))
+     completion-category-overrides '((file (styles partial-completion)))
+     completion-category-defaults  nil))
 #+end_src
 
 ** Page Break Lines                         :convenience:faces:
