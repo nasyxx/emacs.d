@@ -367,7 +367,7 @@
                    for fpf = (format "*font-cjk%s" fn)
                    for ff  = (eval (intern (concat fpf "-family*")))
                    for fw  = (eval (intern (concat fpf "-weight*")))
-                   for fs  = (eval (intern (concat fpf "-size*")))
+                   ;; for fs  = (eval (intern (concat fpf "-size*")))
                    for fss = (eval (intern (concat fpf "-scale*")))
                    do
                    (progn
@@ -500,8 +500,8 @@
     (when (not (internal-show-cursor-p))
       (when (>= nasy--blink-cursor-count (length nasy-cursor-colors))
         (setq nasy--blink-cursor-count 0))
-      (let ((color (nth nasy--blink-cursor-count nasy-cursor-colors))
-            (hl-color (nth nasy--blink-cursor-count (reverse nasy-cursor-colors))))
+      (let ((color (nth nasy--blink-cursor-count nasy-cursor-colors)))
+            ;; (hl-color (nth nasy--blink-cursor-count (reverse nasy-cursor-colors))))
         (set-cursor-color color)
         (when (featurep 'beacon)
           (setq beacon-color color))
@@ -1282,7 +1282,8 @@
       (delete-other-windows)))
 
   (defun split-window-horizontally-instead ()
-    "Kill any other windows and re-split such that the current window is on the top half of the frame."
+    "Kill any other windows and re-split such that
+        the current window is on the top half of the frame."
     (interactive)
     (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
       (delete-other-windows)
@@ -1291,7 +1292,8 @@
         (set-window-buffer (next-window) other-buffer))))
 
   (defun split-window-vertically-instead ()
-    "Kill any other windows and re-split such that the current window is on the left half of the frame."
+    "Kill any other windows and re-split such that
+        the current window is on the left half of the frame."
     (interactive)
     (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
       (delete-other-windows)
@@ -1494,7 +1496,7 @@
     "Define nasy key map."
     (define-keymap :parent mode-specific-map
       "a"     (define-keymap :prefix 'nasy-ai-map
-                "r" #'org-ai-talk-capture-in-org
+                ;; "r" #'org-ai-talk-capture-in-org
                 "Z" #'nasy-ai-tozh-at-point
                 "z" #'nasy-ai-tozh)
       "c"     (define-keymap :prefix 'nasy-code-map

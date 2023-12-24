@@ -352,7 +352,8 @@ https://github.com/oantolin/embark/
                      (not (string-suffix-p "-argument" (cdr binding))))))))
 
   (defun embark-hide-which-key-indicator (fn &rest args)
-    "Hide the which-key indicator immediately when using the completing-read prompter."
+    "Hide the which-key indicator immediately
+        when using the completing-read prompter."
     (which-key--hide-popup-ignore-command)
     (let ((embark-indicators
            (remq #'embark-which-key-indicator embark-indicators)))

@@ -11,6 +11,7 @@
   ;;; Code:
 
   (require 'comp)
+  (require 'comp-run)
 
   (setq load-prefer-newer t
         native-comp-deferred-compilation nil

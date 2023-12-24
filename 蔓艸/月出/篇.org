@@ -47,6 +47,7 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
     (sup 'mixed-pitch t)
     (sup 'multiple-cursors t)
     (sup 'nerd-icons t)
+    (sup 'org t)
     (sup 'rainbow-mode t)
     (sup 'treemacs t)
     ;; (sup 'tree-sitter t)
@@ -680,7 +681,8 @@ https://elpa.gnu.org/packages/rainbow-mode.html
   (defun nasy/rainbow-colorize-match (color &optional match)
     "Return a matched string propertized with a face whose background is COLOR.
 
-  The foreground is computed using `rainbow-color-luminance', and is either white or black."
+  The foreground is computed using `rainbow-color-luminance',
+  and is either white or black."
     (let ((match (or match 0)))
      (put-text-property
       (match-beginning match) (match-end match)

@@ -64,18 +64,19 @@
   (defun nasy/add-company-backend (modes &rest backends)
     "Prepend BACKENDS (in order) to `company-backends' in MODES.
 
-   MODES should be one symbol or a list of them, representing major or minor modes.
+   MODES should be one symbol or a list of them,
+   representing major or minor modes.
    This will overwrite backends for MODES on consecutive uses.
 
    If the car of BACKENDS is nil, unset the backends for MODES.
    Examples:
-   (nasy/add-company-backend 'js2-mode
-     'company-tide 'company-yasnippet)
-   (nasy/add-company-backend 'sh-mode
-     '(company-shell :with company-yasnippet))
-   (nasy/add-company-backend '(c-mode c++-mode)
-     '(:separate company-irony-c-headers company-irony))
-   (nasy/add-company-backend 'sh-mode nil)  ; unsets backends for `sh-mode'"
+   (nasy/add-company-backend \\='js2-mode
+     \\='company-tide \\='company-yasnippet)
+   (nasy/add-company-backend \\='sh-mode
+     \\='(company-shell :with company-yasnippet))
+   (nasy/add-company-backend \\='(c-mode c++-mode)
+     \\='(:separate company-irony-c-headers company-irony))
+   (nasy/add-company-backend \\='sh-mode nil)  ; unsets backends for `sh-mode'"
    (declare (indent defun))
    (dolist (mode (nasy/enlist modes))
      (if (null (car backends))
@@ -152,7 +153,8 @@
 
   ;;;###autoload
   (defun nasy/company-dabbrev ()
-    "Invokes `company-dabbrev-code' in `prog-mode' buffers and `company-dabbrev' everywhere else."
+    "Invokes `company-dabbrev-code' in `prog-mode' buffers and `company-dabbrev'
+        everywhere else."
     (interactive)
     (call-interactively
      (if (derived-mode-p 'prog-mode)
@@ -161,7 +163,7 @@
 
 
   ;;;###autoload
-  (defun nasy/company-whole-lines (command &optional arg &rest ignored)
+  (defun nasy/company-whole-lines (command &optional arg &rest _)
     "`company-mode' completion backend that completes whole-lines, akin to vim's
         C-x C-l."
     (interactive (list 'interactive))
@@ -518,7 +520,8 @@ https://github.com/zerolfx/copilot.el
     (:opt copilot-idle-delay 0.8
           copilot-indent-warning-suppress t)
     (:when-loaded
-      (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p))
+      (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p)
+      (add-to-list 'warning-suppress-types '(copilot copilot-no-mode-indent)))
     (:hook-into prog-mode-hook text-mode org-mode-hook emacs-lisp-mode-hook))
 #+end_src
 
@@ -587,7 +590,7 @@ https://github.com/minad/corfu
      (corfu-history-mode)
      (corfu-indexed-mode)
      (:after savehist
-      (add-to-list 'savehist-additional-variables 'corfu-history))))
+       (add-to-list 'savehist-additional-variables 'corfu-history))))
 #+end_src
 
 ** corfu-popupinfo      :convenience:corfu:documentation:popup:
