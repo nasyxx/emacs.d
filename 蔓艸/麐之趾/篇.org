@@ -1913,14 +1913,18 @@ Tree Sitter support for Typst.  https://git.sr.ht/~meow_king/typst-ts-mode
     (:url "https://git.sr.ht/~meow_king/typst-ts-mode")
     (:tag "languages" "grammar" "typst")
     (:opt typst-ts-markup-header-same-height nil
-          typst-ts-mode-indent-offset 2))
+          typst-ts-mode-indent-offset 2)
+    (:mode-hook
+     (keymap-local-unset "M-<left>")
+     (keymap-local-unset "M-<right>")))
 #+end_src
 
 Typst LSP support.  https://github.com/nvarner/typst-lsp
 
 #+begin_src emacs-lisp
   (setup typst-lsp
-    (:hook lsp)
+    (:hooks typst-mode-hook    lsp
+            typst-ts-mode-hook lsp)
     (:after* typst-ts-mode
       (require 'lsp-mode)
       (add-to-list 'lsp-language-id-configuration
