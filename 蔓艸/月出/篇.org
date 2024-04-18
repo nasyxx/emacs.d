@@ -39,6 +39,9 @@ Selective packages.  Disabled the ~package~ by setting *no-package* in the custo
 
     (sup 'corfu t)
     (sup 'color-identifiers-mode t)
+    (sup '(colorful-mode
+           :repo "DevelopmentCool2449/colorful-mode"
+           :host github))
     (sup 'diff-hl t)
     (sup 'dired-filter t)
     (sup 'dired-rainbow t)
@@ -146,6 +149,30 @@ https://github.com/ankurdave/color-identifiers-mode
     (:load-first helpful)
     (:with-hook python-base-mode-hook
       (:hook color-identifiers-mode-maybe)))
+#+end_src
+
+** Colorful-Mode                           :faces:matching:tools:
+
+Colorful-mode is a minor mode that allow you preview any color format
+such as color hex and color names, in your current buffer in real time
+and in a user friendly way based on 🌈rainbow-mode.el.
+
+https://github.com/DevelopmentCool2449/colorful-mode
+
+#+begin_src emacs-lisp
+  (setup colorful-mode
+    (:doc "Preview any color in your buffer.")
+    (:url "https://github.com/DevelopmentCool2449/colorful-mode")
+    (:tag "faces" "tools" "matching")
+    (:opt colorful-use-prefix t
+          colorful-prefix-string "􀝦")
+    (:hook-into
+     nasy-first-key-hook
+     text-mode-hook
+     org-mode-hook
+     css-mode-hook
+     html-mode-hook
+     prog-mode-hook))
 #+end_src
 
 ** Default Text Scale                                    :text:
@@ -681,8 +708,8 @@ https://elpa.gnu.org/packages/rainbow-mode.html
   (defun nasy/rainbow-colorize-match (color &optional match)
     "Return a matched string propertized with a face whose background is COLOR.
 
-  The foreground is computed using `rainbow-color-luminance',
-  and is either white or black."
+   The foreground is computed using `rainbow-color-luminance',
+   and is either white or black."
     (let ((match (or match 0)))
      (put-text-property
       (match-beginning match) (match-end match)
@@ -692,6 +719,7 @@ https://elpa.gnu.org/packages/rainbow-mode.html
               (:family ,*font-main-family*)))))
 
   (setup rainbow-mode
+    (:quit)
     (:doc "Colorize color names in buffers.")
     (:url "https://elpa.gnu.org/packages/rainbow-mode.html")
     (:tag "faces")

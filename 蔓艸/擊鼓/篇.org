@@ -597,6 +597,10 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'beacon nasy--require)
     (sup 'beacon nasy--require)
     (sup 'color-identifiers-mode nasy--require)
+    (sup '(colorful-mode
+           :repo "DevelopmentCool2449/colorful-mode"
+           :host github)
+         nasy--require)
     (sup 'corfu nasy--require)
     (sup 'default-text-scale nasy--require)
     (sup 'diff-hl nasy--require)
