@@ -748,6 +748,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'org-appear nasy--require)
     (sup 'org-fragtog nasy--require)
     (sup 'org-latex-impatient nasy--require)
+    (sup '(org-margin :host github :repo "rougier/org-margin") nasy--require)
     (sup 'org-modern nasy--require)
     (sup '(org-rainbow-tags :host github :repo "KaratasFurkan/org-rainbow-tags")
          nasy--require)

@@ -62,6 +62,7 @@ Programming Languages
       (setq parinfer-rust-auto-download nil
        parinfer-rust-library
        (concat *nasy-var* "parinfer-rust/parinfer-rust-darwin.so")))
+    ;; (sup '(org-margin :host github :repo "rougier/org-margin"))
     (sup 'org-roam t)
     (sup 'parinfer-rust-mode t)
     (sup `(tex-site
@@ -1232,6 +1233,19 @@ https://github.com/yangsheng6810/org-latex-impatient
     (:hook-into nasy-org-first-key-hook))
 #+end_src
 
+*** Org Margin                                             :org:
+
+Outdent headlines in emacs org-mode.
+
+https://github.com/rougier/org-margin/tree/master
+
+#+begin_src emacs-lisp
+  (setup org-margin
+    (:doc "Outdent headlines in emacs org-mode")
+    (:tag "org")
+    (:url "https://github.com/rougier/org-margin"))
+#+end_src
+
 *** Org Modern                                             :org:
 
 This package implements a “modern” style for your Org buffers using
@@ -1253,7 +1267,8 @@ individually via the org-modern customization group.
      ;; (org-modern-star . ["✿" "❀" "✭" "✫" "✦" "✧" "◈" "◇"])
      ;; (org-modern-star . ["⚀" "⚁" "⚂" "⚃" "⚄" "⚅"])
      ;; (org-modern-star . ["☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷"])
-     (org-modern-hide-stars . 'leading)
+     ;; (org-modern-hide-stars . 'leading)
+     (org-modern-hide-stars . t)
      (org-modern-table . nil)
      ;; (org-modern-list . '((?+ . "⊕")
      ;;                      (?- . "⊖")
