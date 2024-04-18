@@ -92,13 +92,36 @@
   (add-hook 'nasy-first-key-hook #'nasy/defer-load -1)
 
 
-    ;;;###autoload
+  ;;;###autoload
   (defun stop-minimizing-window ()
     "Stop minimizing window under macOS."
     (interactive)
     (unless (and *is-a-mac*
                  window-system)
       (suspend-frame)))
+
+
+  ;;;###autoload
+  (defun transparency (value)
+    "Sets the transparency of the frame window. 0=transparent/100=opaque"
+    (interactive "nTransparency Value 0 - 100 opaque:")
+    (set-frame-parameter (selected-frame) 'alpha-background value))
+
+
+  ;;;###autolaod
+  (defun toggle-transparency ()
+    "Toggle transparency."
+    (interactive)
+    (let ((alpha-background (frame-parameter nil 'alpha-background)))
+       (set-frame-parameter
+        nil 'alpha-background
+        (if (eql (cond ((numberp alpha-background) alpha-background)
+                       ((numberp (cdr alpha-background)) (cdr alpha-background))
+                       ;; Also handle undocumented (<active> <inactive>) form.
+                       ((numberp (cadr alpha-background)) (cadr alpha-background)))
+                 100)
+            70
+          100))))
 #+end_src
 
 ** 宏
@@ -613,7 +636,7 @@
        mac-right-option-modifier  'alt
        default-frame-alist '((ns-transparent-titlebar . t)
                              (ns-appearance           . light)
-                             (alpha-background        . 75)
+                             (alpha-background        . 70)
                              (vertical-scroll-bars    . nil)
                              (undecorated-round       . t)
                              (border-width            . 5)
