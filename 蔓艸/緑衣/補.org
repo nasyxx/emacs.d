@@ -585,6 +585,8 @@ https://github.com/minad/corfu
        shell-mode-hook
        eshell-mode-hook
        text-mode-hook
+       typst-mode-hook
+       typst-ts-mode-hook
        eval-expression-minibuffer-setup-hook))
     ;; Extensions
     (:mode-hook

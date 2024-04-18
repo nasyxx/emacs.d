@@ -82,7 +82,8 @@ Programming Languages
     (sup `(python-isort :local-repo ,(concat *nasy-site* "nasy/python-isort")) t)
     (sup 'page-break-lines t)
 
-    (sup '(typst-ts-mode :host sourcehut :type git :repo "meow_king/typst-ts-mode") t))
+    (sup '(typst-ts-mode :host sourcehut :type git :repo "meow_king/typst-ts-mode") t)
+    (sup '(typst-preview :host github :repo "havarddj/typst-preview.el") t))
 
   (require '補)
 #+end_src
@@ -1946,17 +1947,52 @@ Tree Sitter support for Typst.  https://git.sr.ht/~meow_king/typst-ts-mode
     (:doc "Tree Sitter support for Typst.")
     (:url "https://git.sr.ht/~meow_king/typst-ts-mode")
     (:tag "languages" "grammar" "typst")
-    (:opt typst-ts-markup-header-same-height nil
-          typst-ts-mode-indent-offset 2)
+    (setq typst-ts-mode-fontification-precision-level 'max
+          typst-ts-markup-header-same-height nil)
+    (:opt
+     typst-ts-mode-fontification-precision-level 'max
+     typst-ts-markup-header-same-height nil
+     typst-ts-mode-indent-offset 2
+     typst-ts-mode-enable-raw-blocks-highlight t
+     typst-ts-mode-highlight-raw-blocks-at-startup t
+     typst-ts-mode-return-autoincrement nil)
     (:mode-hook
      (keymap-local-unset "M-<left>")
-     (keymap-local-unset "M-<right>")))
+     (keymap-local-unset "M-<right>")
+     (keymap-local-unset "<return>")
+     (typst-ts-watch-mode))
+    (:after* apheleia
+      (add-to-list 'apheleia-formatters
+                   '(typstfmt . ("typstfmt"
+                                 "--output"
+                                 "-")))
+      (setf (alist-get 'typst-mode apheleia-mode-alist)
+            '(typstfmt))
+      (setf (alist-get 'typst-ts-mode apheleia-mode-alist)
+            '(typstfmt))))
 #+end_src
 
 Typst LSP support.  https://github.com/nvarner/typst-lsp
 
 #+begin_src emacs-lisp
-  (setup typst-lsp
+  ;; (setup typst-lsp
+  ;;   (:hooks typst-mode-hook    lsp
+  ;;           typst-ts-mode-hook lsp)
+  ;;   (:after* typst-ts-mode
+  ;;     (require 'lsp-mode)
+  ;;     (add-to-list 'lsp-language-id-configuration
+  ;;                  '("\\.typ$" . "typst"))
+  ;;     (lsp-register-client
+  ;;      (make-lsp-client
+  ;;       :new-connection (lsp-stdio-connection (lambda () (executable-find "typst-lsp")))
+  ;;       :major-modes '(typst-mode typst-ts-mode)
+  ;;       :server-id 'typst-lsp))))
+#+end_src
+
+Tinymist https://github.com/Myriad-Dreamin/tinymist
+
+#+begin_src emacs-lisp
+  (setup tinymist
     (:hooks typst-mode-hook    lsp
             typst-ts-mode-hook lsp)
     (:after* typst-ts-mode
@@ -1965,9 +2001,16 @@ Typst LSP support.  https://github.com/nvarner/typst-lsp
                    '("\\.typ$" . "typst"))
       (lsp-register-client
        (make-lsp-client
-        :new-connection (lsp-stdio-connection (lambda () (executable-find "typst-lsp")))
+        :new-connection (lsp-stdio-connection (lambda () (executable-find "tinymist")))
         :major-modes '(typst-mode typst-ts-mode)
-        :server-id 'typst-lsp))))
+        :server-id 'tinymist))))
+#+end_src
+
+Typst Preview. https://github.com/havarddj/typst-preview.el
+
+#+begin_src emacs-lisp
+  (setup typst-preview
+    (:opt typst-preview-browser "xwidget"))
 #+end_src
 
 ** Yaml                                        :yaml:languages:
