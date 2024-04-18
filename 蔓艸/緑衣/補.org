@@ -517,6 +517,7 @@ https://github.com/zerolfx/copilot.el
     (:bind-into copilot-mode-map
       "C-<tab>" copilot-accept-completion
       "H-SPC"   nasy/copilot-complete)
+    (:opt* copilot-install-dir (concat *nasy-var* "copilot"))
     (:opt copilot-idle-delay 0.8
           copilot-indent-warning-suppress t)
     (:when-loaded

@@ -177,6 +177,8 @@ Emacs client/library for the Language Server Protocol
     (:hooks
      kill-emacs-hook (lambda () (setq lsp-restart 'ignore))
      lsp-completion-mode-hook nasy/lsp-setup-completion)
+    (:mode-hook
+     (lsp-enable-which-key-integration t))
     (:opts
      ((
        ;; lsp-auto-configure
@@ -485,14 +487,16 @@ Emacs client/library for the Language Server Protocol
      (:custom
       parinfer-rust-auto-download nil
       parinfer-rust-library (concat *nasy-var* "parinfer-rust/parinfer-rust-darwin.so"))
-     (:init (lisp-modes-hooks-add parinfer-rust-mode))
+     (:init
+      (lisp-modes-hooks-add (lambda () (indent-tabs-mode -1)))
+      (lisp-modes-hooks-add parinfer-rust-mode))
      (:when-loaded
        ;; https://github.com/justinbarclay/parinfer-rust-mode/issues/53
        (add-to-list 'parinfer-rust-treat-command-as
                     '(quoted-insert . "paren"))))
  #+end_src
 
-** TeX                                                    :tex:
+** TeX                                                      :tex:
 
 TeX related works.
 
@@ -767,6 +771,14 @@ TeX related works.
      ((org-pandoc-options-for-context
        org-pandoc-options-for-context-pdf)
       . `((template . ,(concat *nasy-etc* "nasy-context.tex"))))))
+#+end_src
+
+#+begin_src emacs-lisp
+  (setup ox
+    (:when-loaded
+      (nasy/sup '(ox-rst ox-pandoc))
+      (require 'ox-rst)
+      (require 'ox-pandoc)))
 #+end_src
 
 **** org id
@@ -1049,10 +1061,6 @@ org latex
       (progn
        (require 'org-eldoc)
        (org-eldoc-load)))
-    (:after ox
-      (nasy/sup '(ox-rst ox-pandoc))
-      (require 'ox-rst)
-      (require 'ox-pandoc))
     (:advice
      org-refile :after
      (lambda (&rest _) (org-save-all-org-buffers))
