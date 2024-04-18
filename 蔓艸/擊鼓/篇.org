@@ -559,10 +559,11 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'embark-consult nasy--require)
     (sup 'embark nasy--require)
     (sup 'flycheck nasy--require)
-    (sup '(flx-rs repo "jcs-elpa/flx-rs"
-           :fetcher github
-           :files (:defaults "bin"))
-         nasy--require)
+    (sup '(flx-rs :files (:defaults "bin")) nasy--require)
+    ;; (sup '(flx-rs :repo "jcs-elpa/flx-rs"
+    ;;        :host github
+    ;;        :files (:defaults "bin"))
+    ;;      nasy--require)
     (sup 'fussy nasy--require)
     (sup 'helpful nasy--require)
     (sup 'keyfreq nasy--require)

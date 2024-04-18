@@ -53,9 +53,10 @@ You cannot disable anything here.
     (sup 'embark-consult t)
     (sup 'embark t)
     (sup 'flycheck t)
-    (sup '(flx-rs repo "jcs-elpa/flx-rs"
-           :fetcher github
-           :files (:defaults "bin")) t)
+    (sup '(flx-rs :files (:defaults "bin")) t)
+    ;; (sup '(flx-rs repo "jcs-elpa/flx-rs"
+    ;;        :fetcher github
+    ;;        :files (:defaults "bin")) t)
     (sup 'fussy t)
     (sup 'page-break-lines t)
     (sup 'projectile t)
@@ -671,13 +672,15 @@ https://github.com/oantolin/orderless
     (:doc "Emacs completion style that matches multiple regexps in any order.")
     (:url "https://github.com/oantolin/orderless")
     (:tag "extensions")
-    (:first-key* (require 'orderless))
+    (:first-key* (require 'orderless) (require 'orderless-kwd))
     (:opt
      completion-styles '(orderless initials basic)
      orderless-matching-styles '(orderless-regexp
                                  orderless-initialism
                                  orderless-literal)
-     orderless-style-dispatchers   '(nasy/-orderless-dispatch)
+     orderless-style-dispatchers   '(orderless-affix-dispatch
+                                     ;; nasy/-orderless-dispatch
+                                     orderless-kwd-dispatch)
      orderless-component-separator "[ &·]"
      completion-category-overrides '((file (styles partial-completion)))
      completion-category-defaults  nil))
