@@ -52,6 +52,8 @@
   (set-language-environment "UTF-8")
   (setq selection-coding-system 'utf-8)
 
+  (setenv "LSP_USE_PLISTS" "true")
+
 
   (defconst *nasy* "20221109")
 
