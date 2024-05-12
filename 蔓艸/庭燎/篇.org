@@ -401,7 +401,7 @@ https://github.com/ema2159/centaur-tabs
   (setup dashboard
     (:global
      "<f5>" dashboard-refresh-buffer)
-    (:bind-into dashboard-mode-map
+    (:bindm dashboard-mode-map
      "r"              consult-recent-file
      "b"              consult-bookmark
      "p"              projectile-switch-project
@@ -651,7 +651,7 @@ https://github.com/mickeynp/ligature.el
 #+begin_src emacs-lisp
   (setup tool-bar
     (:tag "builtin")
-    (:bind-into tool-bar-map
+    (:bindm tool-bar-map
       [copy]            nil
       [cut]             nil
       [dired]           nil

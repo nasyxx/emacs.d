@@ -418,6 +418,15 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     :repeatable t
     :signature '(FUNC ...))
 
+  (setup-define :bindm
+    (lambda (map &rest rest)
+      `(:with-map ,map (:bind ,@rest)))
+    :documentation "Bind keys in MAP."
+    :debug '(sexp &rest form sexp)
+    :ensure '(nil &rest kbd func)
+    :indent 1)
+
+
   (advice-add 'setup :before-while #'nasy/-package-filter)
 #+end_src
 

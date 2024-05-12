@@ -349,7 +349,7 @@ Emacs client/library for the Language Server Protocol
 
 
   (setup haskell-mode
-    (:bind-into haskell-mode-map
+    (:bindm haskell-mode-map
      "C-x a a" align
      "C-c h"   hoogle
      "C-o"     open-line)
@@ -467,7 +467,7 @@ Emacs client/library for the Language Server Protocol
        (pp-eval-last-sexp prefix)))
 
    (setup lisp-mode
-     (:bind-into emacs-lisp-mode-map
+     (:bindm emacs-lisp-mode-map
       [remap eval-expression] pp-eval-expression
       "C-x C-e"               eval-last-sexp-or-region))
  #+end_src
@@ -476,7 +476,7 @@ Emacs client/library for the Language Server Protocol
 
  #+begin_src emacs-lisp
    (setup macrostep
-     (:bind-into emacs-lisp-mode-map
+     (:bindm emacs-lisp-mode-map
        "C-c e m" macrostep-expand))
  #+end_src
 
@@ -1045,7 +1045,7 @@ org latex
     (setq-default header-line-format nil))
 
   (setup org
-    (:bind-into org-src-mode-map
+    (:bindm org-src-mode-map
       "C-c _" org-edit-src-exit)
     (:first-org*
      ;; (auto-fill-mode 1)
@@ -1086,7 +1086,7 @@ org latex
 
 #+begin_src emacs-lisp
   (setup org-agenda
-    (:bind-into org-mode-map
+    (:bindm org-mode-map
       "C-," nil)
     (:with-hook org-agenda-finalize-hook
       (:hook nasy/org-agenda-log-mode-colorize-block))
@@ -1187,7 +1187,7 @@ https://orgmode.org/manual/CDLaTeX-mode.html
       (:hook nasy/show-org-clock-in-header-line))
     (:with-function nasy/hide-org-clock-from-header-line
       (:hook-into org-clock-out-hook org-clock-cancel))
-    (:bind-into org-clock-mode-line-map
+    (:bindm org-clock-mode-line-map
      [header-line mouse-2] org-clock-goto
      [header-line mouse-1] org-clock-menu)
     (:when-loaded
@@ -1771,7 +1771,7 @@ https://github.com/wbolster/emacs-python-black
 
 #+begin_src emacs-lisp
   (setup elpy
-    (:bind-into elpy-mode-map
+    (:bindm elpy-mode-map
      "M-<left>"  left-word
      "M-<right>" right-word)
     (:custom

@@ -223,8 +223,9 @@ Include consult & consult-flycheck.
     (:url "https://github.com/minad/consult")
     (:tag "extensions")
     (:load-first consult)
-    (:bind-into flycheck-command-map
-      "!" consult-flycheck))
+    (:with-map  flycheck-command-map
+      (:bind
+        "!" consult-flycheck)))
 #+end_src
 
 *** consult-dir                                    :convenience:
@@ -242,13 +243,15 @@ https://github.com/karthink/consult-dir
     (:load-first consult)
     (:global
      "C-x C-d" consult-dir)
-    (:bind-into minibuffer-local-completion-map
-      "C-x C-d" consult-dir
-      "C-x C-j" consult-dir-jump-file)
-    (:after vertico
-      (:bind-into vertico-map
+    (:with-map minibuffer-local-completion-map
+      (:bind
         "C-x C-d" consult-dir
-        "C-x C-j" consult-dir-jump-file)))
+        "C-x C-j" consult-dir-jump-file))
+    (:after vertico
+      (:with-map vertico-map
+        (:bind
+          "C-x C-d" consult-dir
+          "C-x C-j" consult-dir-jump-file))))
 #+end_src
 
 ** Dired                                                :files:
@@ -266,7 +269,7 @@ https://www.emacswiki.org/emacs/DiredMode
     (:doc "DiredMode is the mode of a Dired buffer.")
     (:url "https://www.emacswiki.org/emacs/DiredMode")
     (:tag "files")
-    (:bind-into dired-mode-map
+    (:bindm dired-mode-map
       [mouse-2] dired-find-file
       "C-c C-p" wdired-change-to-wdired-mode)
     (:opt
@@ -381,14 +384,14 @@ https://github.com/oantolin/embark/
     (:global
      [remap describe-bindings] embark-bindings
      "C-," embark-dwim)
-    (:bind-into embark-file-map
+    (:bindm embark-file-map
       "s" sudo-edit)
     (:after vertico
-      (:bind-into vertico-map
+      (:bindm vertico-map
         "M-o" embark-act)
       (add-to-list 'embark-indicators #'embark-which-key-indicator))
     (:after 風雨時用
-      (:bind-into nasy/active-region-map
+      (:bindm nasy/active-region-map
         "M-o" embark-act))
     (:with-mode embark-collect-mode
       (:hook embark-live-vertico))
@@ -424,7 +427,7 @@ https://github.com/flycheck/flycheck
      flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list
      flycheck-check-syntax-automatically '(save idle-change mode-enabled)
      flycheck-display-errors-delay       0.25)
-    (:bind-into flycheck-error-list-mode-map
+    (:bindm flycheck-error-list-mode-map
       "C-n" flycheck-error-list-next-error
       "C-p" flycheck-error-list-previous-error
       "RET" flycheck-error-list-goto-error
@@ -615,7 +618,7 @@ https://github.com/minad/marginalia
     (:tag "extensions")
     (:load-first vertico)
     (:when-loaded (marginalia-mode 1))
-    (:bind-into minibuffer-local-map
+    (:bindm minibuffer-local-map
       "M-a" marginalia-cycle))
 #+end_src
 
@@ -1093,7 +1096,7 @@ https://github.com/minad/vertico
     (:url "https://github.com/minad/vertico")
     (:tag "completion")
     (:advice completing-read-multiple :filter-args crm-indicator)
-    (:bind-into vertico-map
+    (:bindm vertico-map
       "M-<DEL>" vertico-directory-delete-word)
     (:first-key* (vertico-mode 1))
     (:with-hook minibuffer-setup-hook

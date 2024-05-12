@@ -125,11 +125,11 @@ https://github.com/DogLooksGood/emacs-rime
     (:global
      "C-M-¥" toggle-input-method
      "C-$"   toggle-input-method)
-    (:bind-into rime-mode-map
+    (:bindm rime-mode-map
      "C-`"   rime-send-keybinding
      "C-S-`" rime-send-keybinding
      "C-,"   rime-send-keybinding)
-    (:bind-into rime-active-mode-map
+    (:bindm rime-active-mode-map
      "C-;"   rime-send-keybinding
      "C-SPC" rime-send-keybinding)
     (:custom
@@ -295,11 +295,11 @@ https://github.com/magit/magit
      "C-x g"      magit-status
      "C-x M-g"    magit-dispatch
      "C-c M-g"    magit-file-dispatch)
-    (:bind-into magit-mode-map
+    (:bindm magit-mode-map
       "s" magit-stage)
-    (:bind-into magit-status-mode-map
+    (:bindm magit-status-mode-map
       "C-M-<up>" magit-section-up)
-    (:bind-into vc-prefix-map
+    (:bindm vc-prefix-map
       "f" vc-git-grep))
 #+end_src
 
@@ -425,7 +425,7 @@ https://github.com/politza/pdf-tools
     (:url "https://github.com/politza/pdf-tools")
     (:tag "files" "multimedia")
     (:custom pdf-view-display-size 'fit-page)
-    (:bind-into pdf-view-mode-map
+    (:bindm pdf-view-mode-map
       "<wheel-up>"    pdf-view-previous-line-or-previous-page
       "<wheel-down>"  pdf-view-next-line-or-next-page
       "<wheel-left>"  image-backward-hscroll
@@ -492,7 +492,7 @@ https://github.com/jixiuf/vterm-toggle
     (:tag "terminals")
     (:global
      "C-<f2>" vterm-toggle)
-    (:bind-into vterm-mode-map
+    (:bindm vterm-mode-map
      "s-n" vterm-toggle-forward
      "s-p" vterm-toggle-backward)
     (:custom vterm-toggle-fullscreen-p nil)

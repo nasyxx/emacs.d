@@ -236,7 +236,7 @@ https://github.com/Fuco1/dired-hacks
 #+begin_src emacs-lisp
   (setup dired-filter
     (:autoload dired-filter-group-mode)
-    (:bind-into dired-filter-map
+    (:bindm dired-filter-map
        "p" dired-filter-pop-all)
     (:with-hook dired-mode-hook
       (:hook dired-filter-mode dired-filter-group-mode))
@@ -383,7 +383,7 @@ https://github.com/alexluigit/dirvish
           '(vc-state subtree-state collapse file-time file-size)
           dirvish-preview-dispatchers nil)  ;; never preview
     (:global "C-c f" dirvish-fd)
-    (:bind-into dirvish-mode-map ; Dirvish inherits `dired-mode-map'
+    (:bindm dirvish-mode-map ; Dirvish inherits `dired-mode-map'
       "a"   dirvish-quick-access
       "f"   dirvish-file-info-menu
       "y"   dirvish-yank-menu

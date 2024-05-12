@@ -514,7 +514,7 @@ https://github.com/zerolfx/copilot.el
     (:url "https://github.com/zerolfx/copilot.el")
     (:tag "editing" "extensions")
     (:advice keyboard-quit :after copilot-clear-overlay)
-    (:bind-into copilot-mode-map
+    (:bindm copilot-mode-map
       "C-<tab>" copilot-accept-completion
       "H-SPC"   nasy/copilot-complete)
     (:opt* copilot-install-dir (concat *nasy-var* "copilot"))
@@ -562,7 +562,7 @@ https://github.com/minad/corfu
     (:doc "Completion Overlay Region FUnction.")
     (:url "https://github.com/minad/corfu")
     (:tag "editing" "extensions")
-    (:bind-into corfu-map
+    (:bindm corfu-map
       "C-g"       corfu-quit
       "<backtab>" corfu-last)
     (:opts
