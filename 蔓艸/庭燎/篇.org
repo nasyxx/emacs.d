@@ -424,7 +424,7 @@ https://github.com/ema2159/centaur-tabs
      [remap previous-line] widget-backward
      [remap next-line]     nasy/wfw1)
     (:hooks
-     dashboard-mode-hook (lambda () (setq-local tab-width 1))
+     dashboard-mode-hook (lambda () (setq-local tab-width 1 mode-line-format nil))
      after-init-hook     dashboard-setup-startup-hook
      after-init-hook     dashboard-refresh-buffer)
      ;; nasy/font-change-hook (lambda ()
