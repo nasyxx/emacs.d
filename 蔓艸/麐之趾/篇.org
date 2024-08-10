@@ -1891,27 +1891,28 @@ https://github.com/wbolster/emacs-python-black
         (lsp--fontlock-with-mode str mode)
       str))
 
-  (setup lsp-pylance
-    (:hooks
-     python-mode-hook          start-lsp-pylance
-     python-ts-mode-hook       start-lsp-pylance
-     lsp-diagnostics-mode-hook python-setup-lsp-flycheck)
-    (:advice
-     lsp--render-string :override
-     nasy/lsp--render-string)
-    (:after company
-      (nasy/add-company-backend 'python-mode
-        '(company-capf
-          elpy-company-backend
-          company-files
-          ;; :with company-tabnine company-yasnippet
-          :with company-yasnippet))
-      (nasy/add-company-backend 'python-ts-mode
-        '(company-capf
-          elpy-company-backend
-          company-files
-          ;; :with company-tabnine company-yasnippet
-          :with company-yasnippet))))
+  ;; disabled
+  ;; (setup lsp-pylance
+  ;;   (:hooks
+  ;;    python-mode-hook          start-lsp-pylance
+  ;;    python-ts-mode-hook       start-lsp-pylance
+  ;;    lsp-diagnostics-mode-hook python-setup-lsp-flycheck)
+  ;;   (:advice
+  ;;    lsp--render-string :override
+  ;;    nasy/lsp--render-string)
+  ;;   (:after company
+  ;;     (nasy/add-company-backend 'python-mode
+  ;;       '(company-capf
+  ;;         elpy-company-backend
+  ;;         company-files
+  ;;         ;; :with company-tabnine company-yasnippet
+  ;;         :with company-yasnippet))
+  ;;     (nasy/add-company-backend 'python-ts-mode
+  ;;       '(company-capf
+  ;;         elpy-company-backend
+  ;;         company-files
+  ;;         ;; :with company-tabnine company-yasnippet
+  ;;         :with company-yasnippet))))
 #+end_src
 
 *** isort                                               :python:
