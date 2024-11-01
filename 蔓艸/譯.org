@@ -44,7 +44,7 @@
 
   (when (native-comp-available-p)
     (while (or comp-files-queue
-               (> (comp-async-runnings) 0))
+               (> (comp--async-runnings) 0))
       (sleep-for 2)))
 
   (unless (and (boundp 'nasy-first-p)
@@ -64,11 +64,11 @@
                       (locate-user-emacs-file (concat "桃夭/" folder)) "\\.el$"))
           (native-compile elf)
           (while (or comp-files-queue
-                    (> (comp-async-runnings) 0))
+                    (> (comp--async-runnings) 0))
              (sleep-for 2))))
 
       (while (or comp-files-queue
-                 (> (comp-async-runnings) 0))
+                 (> (comp--async-runnings) 0))
         (sleep-for 2))))
 
   (provide '譯)
