@@ -65,17 +65,7 @@ Programming Languages
     ;; (sup '(org-margin :host github :repo "rougier/org-margin"))
     (sup 'org-roam t)
     (sup 'parinfer-rust-mode t)
-    (sup `(tex-site
-           :type git :host nil
-           :repo "https://git.savannah.gnu.org/git/auctex.git"
-           :pre-build ,(pcase system-type
-                        (`berkeley-unix '("gmake"))
-                        (_ '(  ;; also for macos
-                             `("bash" "-c" "cd" ,(straight--repos-dir "auctex"))
-                             ("./autogen.sh")
-                             ("./configure" "--without-texmf-dir" "--with-lispdir=.")
-                             ("gmake")))))
-         t)
+    (sup auctex t)
     (require 'preview)
     (require 'tex)
 
@@ -524,9 +514,6 @@ TeX related works.
      ;; M-x describe-variable RET preview-TeX-style-dir RET
      ;;`(preview-TeX-style-dir ,(concat ".:" (straight--repos-dir "auctex") "latex:"))
      (setq preview-TeX-style-dir (concat ".:" (straight--repos-dir "auctex") "latex:"))
-
-     (load "auctex.el" nil t t)
-     (load "preview-latex.el" nil t t)
 
      (setq TeX-auto-save t)
      (setq TeX-parse-self t)

@@ -742,17 +742,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
        parinfer-rust-library
        (concat *nasy-var* "parinfer-rust/parinfer-rust-darwin.so")))
     (sup 'parinfer-rust-mode nasy--require)
-    (sup `(tex-site
-           :type git :host nil
-           :repo "https://git.savannah.gnu.org/git/auctex.git"
-           :pre-build ,(pcase system-type
-                        (`berkeley-unix '("gmake"))
-                        (_ '(  ;; also for macos
-                             `("bash" "-c" "cd" ,(straight--repos-dir "auctex"))
-                             ("./autogen.sh")
-                             ("./configure" "--without-texmf-dir" "--with-lispdir=.")
-                             ("gmake")))))
-         nasy--require)
+    (sup 'auctex nasy--require)
     (sup 'markdown-mode nasy--require)
     (sup 'nix-mode nasy--require)
     (sup '(nushell-mode :type git :host github :repo "azzamsa/emacs-nushell"))
