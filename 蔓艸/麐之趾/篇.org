@@ -1951,6 +1951,8 @@ https://github.com/pashky/restclient.el
 
 ** Typst                                      :languages:typst:
 
+*** Typst treesit
+
 Tree Sitter support for Typst.  https://git.sr.ht/~meow_king/typst-ts-mode
 
 #+begin_src emacs-lisp
@@ -1974,14 +1976,14 @@ Tree Sitter support for Typst.  https://git.sr.ht/~meow_king/typst-ts-mode
      (typst-ts-watch-mode))
     (:after* apheleia
       (add-to-list 'apheleia-formatters
-                   '(typstfmt . ("typstfmt"
-                                 "--output"
-                                 "-")))
+                   '(typstyle . ("typstyle" filepath)))
       (setf (alist-get 'typst-mode apheleia-mode-alist)
-            '(typstfmt))
+            '(typstyle))
       (setf (alist-get 'typst-ts-mode apheleia-mode-alist)
-            '(typstfmt))))
+            '(typstyle))))
 #+end_src
+
+*** Typst LSP
 
 Typst LSP support.  https://github.com/nvarner/typst-lsp
 
@@ -2017,11 +2019,58 @@ Tinymist https://github.com/Myriad-Dreamin/tinymist
         :server-id 'tinymist))))
 #+end_src
 
+*** Typst Preview
+
 Typst Preview. https://github.com/havarddj/typst-preview.el
 
 #+begin_src emacs-lisp
   (setup typst-preview
     (:opt typst-preview-browser "xwidget"))
+#+end_src
+
+*** Typst Misc
+
+#+begin_src emacs-lisp
+  (defvar typst--initialized-files nil
+    "List of files that have been initialized for the current tangle operation.")
+
+  (defun typst--initialize-file (path)
+    "Initialize a temporary file for the PATH and return the temp file's path."
+    (let ((temp-path (make-temp-file "typst" nil ".tmp")))
+      (push (cons temp-path path) typst--initialized-files)
+      temp-path))
+
+  (defun typst--tangle (node)
+    "Recursively process each raw_blck NODE in the treesit parsed tree."
+    (if (equal (treesit-node-type node) "raw_blck")
+        (let* ((beg (treesit-node-start node))
+               (path-line (treesit-node-text (treesit-node-on (- beg 2) (- beg 1))))
+               (original-path (when (> (length path-line) 2) (string-trim (substring path-line 2))))
+               (temp-path (when original-path
+                            (or (car (rassoc original-path typst--initialized-files))
+                                (typst--initialize-file original-path))))
+               (content-node (car (treesit-filter-child node (lambda (n) (equal (treesit-node-type n) "blob")))))
+               (content (when content-node (string-trim (treesit-node-text content-node)))))
+          (when temp-path
+            (append-to-file content nil temp-path)
+            (append-to-file "\n" nil temp-path)
+            (message "Tangled to temp file: %s." temp-path)))
+      (dolist (child (treesit-node-children node))
+        (typst--tangle child))))
+
+
+  (defun typst-tangle ()
+    "Tangle the current typst file."
+    (interactive)
+    (setq typst--initialized-files nil)
+    (let ((root (treesit-buffer-root-node)))
+      (typst--tangle root)
+      (dolist (pair typst--initialized-files)
+        (let ((temp-path (car pair))
+              (original-path (cdr pair)))
+          (rename-file temp-path original-path t)
+          (message "Moved %s to %s" temp-path original-path)))
+      (setq typst--initialized-files nil)))
 #+end_src
 
 ** Yaml                                        :yaml:languages:
