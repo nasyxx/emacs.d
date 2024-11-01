@@ -369,8 +369,8 @@ https://github.com/oantolin/embark/
 
   (defun embark-live-vertico ()
     "Shrink Vertico minibuffer when `embark-live' is active."
-    (when-let (win (and (string-prefix-p "*Embark Live" (buffer-name))
-                        (active-minibuffer-window)))
+    (when-let* (win (and (string-prefix-p "*Embark Live" (buffer-name))
+                         (active-minibuffer-window)))
       (with-selected-window win
         (when (and (bound-and-true-p vertico--input)
                    (fboundp 'vertico-multiform-unobtrusive))
@@ -957,10 +957,10 @@ https://github.com/magit/transient
                         (completing-read
                          "Language: "
                          (mapcar #'car treesit-language-source-alist)))))
-    (when-let ((recipe
-                (or (assoc lang treesit-language-source-alist)
-                    (treesit--install-language-grammar-build-recipe
-                     lang))))
+    (when-let* ((recipe
+                 (or (assoc lang treesit-language-source-alist)
+                     (treesit--install-language-grammar-build-recipe
+                      lang))))
       (condition-case err
           (apply #'treesit--install-language-grammar-1
                  ;; The nil is OUT-DIR.

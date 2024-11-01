@@ -1023,7 +1023,7 @@
     (or (bufferp buffer-or-name)
         (stringp buffer-or-name)
         (signal 'wrong-type-argument (list '(bufferp stringp) buffer-or-name)))
-    (when-let (buf (get-buffer buffer-or-name))
+    (when-let* (buf (get-buffer buffer-or-name))
       (and (buffer-live-p buf)
            (not (nasy/temp-buffer-p buf))
            (or (buffer-local-value 'nasy/real-buffer-p buf)

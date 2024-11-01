@@ -405,10 +405,10 @@ https://github.com/emacs-openai/openai.git
   (defun nasy/api-key-from-auth-source (&optional host user)
     "Lookup api key in the auth source.
    By default, \"openai.com\" is used as HOST and \"apikey\" as USER."
-   (if-let ((secret (plist-get (car (auth-source-search
-                                     :host (or host "openai.com")
-                                     :user (or user "apikey")))
-                               :secret)))
+   (if-let* ((secret (plist-get (car (auth-source-search
+                                      :host (or host "openai.com")
+                                      :user (or user "apikey")))
+                                :secret)))
        (if (functionp secret) (funcall secret) secret)
      (user-error "No `gptel-api-key' found in the auth source")))
 #+end_src
