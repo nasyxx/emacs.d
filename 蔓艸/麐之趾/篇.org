@@ -1778,6 +1778,11 @@ https://github.com/wbolster/emacs-python-black
 *** lsp-pyright                                         :python:
 
 #+begin_src emacs-lisp
+  (defun pdm-py-path ()
+    "Get the python path from pdm."
+    (when (zerop (shell-command "pdm info"))
+      (string-trim (shell-command-to-string "pdm info --python"))))
+
   (defun python-setup-lsp-flycheck ()
     "Setup python lsp flycheck."
     (if lsp-diagnostics-mode
@@ -1808,7 +1813,7 @@ https://github.com/wbolster/emacs-python-black
     (lsp))
 
   (setup lsp-pyright
-    (:quit)
+    (:opt lsp-pyright-langserver-command "basedpyright")
     (:hooks
      python-mode-hook          start-lsp-pyright
      python-ts-mode-hook       start-lsp-pyright
@@ -1846,10 +1851,10 @@ https://github.com/wbolster/emacs-python-black
 *** basedpyright                                          :python:
 
 #+begin_src emacs-lisp
-  (defun pdm-py-path ()
-    "Get the python path from pdm."
-    (when (zerop (shell-command "pdm info"))
-      (string-trim (shell-command-to-string "pdm info --python"))))
+  ;; (defun pdm-py-path ()
+  ;;   "Get the python path from pdm."
+  ;;   (when (zerop (shell-command "pdm info"))
+  ;;     (string-trim (shell-command-to-string "pdm info --python"))))
 
   (defun start-lsp-basedpyright ()
     "Start lsp pyright with pdm."
@@ -1874,6 +1879,7 @@ https://github.com/wbolster/emacs-python-black
 
 
   (setup lsp-basedpyright
+    (:quit)
     (:hooks
      python-mode-hook          start-lsp-basedpyright
      python-ts-mode-hook       start-lsp-basedpyright)
@@ -2010,6 +2016,7 @@ Tree Sitter support for Typst.  https://git.sr.ht/~meow_king/typst-ts-mode
     (:doc "Tree Sitter support for Typst.")
     (:url "https://git.sr.ht/~meow_king/typst-ts-mode")
     (:tag "languages" "grammar" "typst")
+    (defvar typst-ts-mode-fontification-precision-level 'max)
     (setq typst-ts-mode-fontification-precision-level 'max
           typst-ts-markup-header-same-height nil)
     (:opt

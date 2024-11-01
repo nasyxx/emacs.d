@@ -34,6 +34,7 @@
     (sup '(copilot-chat :host github :repo "chep/copilot-chat.el"
                         :files ("*.el"))
          t)
+    (require 'copilot-chat-shell-maker)
     (sup 'corfu t)
     (sup `(corfu-extensions
            :local-repo ,(concat (straight--repos-dir "corfu") "extensions")))
