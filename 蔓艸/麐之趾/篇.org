@@ -1699,6 +1699,7 @@ https://github.com/org-roam/org-roam
     "Setup python checker."
     ;; flake8 already have python-mypy and python-pylint as the next checker
     ;; (flycheck-add-next-checker 'python-flake8    'python-mypy)))
+    (add-to-list 'flycheck-disabled-checkers 'python-ruff)
     (add-to-list 'flycheck-disabled-checkers 'python-pylint)
     (add-to-list 'flycheck-disabled-checkers 'python-flake8)
     (flycheck-remove-next-checker 'python-flake8 'python-pylint)
@@ -1832,14 +1833,63 @@ https://github.com/wbolster/emacs-python-black
 #+begin_src emacs-lisp
   (defun python-setup-lsp-ruff ()
     "Setup lsp for ruff."
-    (require 'lsp-ruff-lsp)
+    (require 'lsp-ruff)
     (lsp))
 
   (setup lsp-ruff-lsp
-    (:opt lsp-ruff-lsp-python-path "python"
-          lsp-ruff-lsp-ruff-path (vector (executable-find "ruff") "ruff"))
+    (:opt lsp-ruff-python-path "python"
+          lsp-ruff-ruff-path (vector (executable-find "ruff") "ruff"))
     (:hooks python-mode-hook python-setup-lsp-ruff
             python-ts-mode-hook python-setup-lsp-ruff))
+#+end_src
+
+*** basedpyright                                          :python:
+
+#+begin_src emacs-lisp
+  (defun pdm-py-path ()
+    "Get the python path from pdm."
+    (when (zerop (shell-command "pdm info"))
+      (string-trim (shell-command-to-string "pdm info --python"))))
+
+  (defun start-lsp-basedpyright ()
+    "Start lsp pyright with pdm."
+    (require 'lsp-pyright)
+    (require 'lsp-basedpyright)
+    (when (zerop (shell-command "pdm info"))
+      (setq-local
+       lsp-pyright-python-executable-cmd
+       (string-trim (shell-command-to-string
+                     "pdm info --python")))
+      ;; (setq-local flycheck-python-flake8-executable lsp-pyright-python-executable-cmd)
+      (setq-local python-shell-interpreter lsp-pyright-python-executable-cmd)
+      (let ((ppath (concat (string-trim (shell-command-to-string
+                                         "pdm info --package"))
+                           "/lib")))
+        (setq-local
+         lsp-pyright-extra-paths
+         (vector ppath)
+         python-shell-extra-pythonpaths (list ppath))))
+    (lsp))
+  ;; (lsp-inlay-hints-mode 1)
+
+
+  (setup lsp-basedpyright
+    (:hooks
+     python-mode-hook          start-lsp-basedpyright
+     python-ts-mode-hook       start-lsp-basedpyright)
+    (:after company
+      (nasy/add-company-backend 'python-mode
+        '(company-capf
+          elpy-company-backend
+          company-files
+          ;; :with company-tabnine company-yasnippet
+          :with company-yasnippet))
+      (nasy/add-company-backend 'python-ts-mode
+        '(company-capf
+          elpy-company-backend
+          company-files
+          ;; :with company-tabnine company-yasnippet
+          :with company-yasnippet))))
 #+end_src
 
 *** pylance                                             :python:
