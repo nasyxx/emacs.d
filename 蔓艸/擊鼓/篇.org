@@ -559,6 +559,9 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup '(copilot :host github :repo "zerolfx/copilot.el"
                    :files ("dist" "*.el"))
          nasy--require)
+    (sup '(copilot-chat :host github :repo "chep/copilot-chat.el"
+                        :files ("*.el"))
+         nasy--require)
     (sup 'corfu nasy--require)
     (sup `(corfu-extensions
            :local-repo ,(concat (straight--repos-dir "corfu") "extensions"))

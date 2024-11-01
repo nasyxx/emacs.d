@@ -30,6 +30,10 @@
     (sup '(copilot :host github :repo "zerolfx/copilot.el"
                    :files ("dist" "*.el"))
          t)
+    (sup 'shell-maker t)
+    (sup '(copilot-chat :host github :repo "chep/copilot-chat.el"
+                        :files ("*.el"))
+         t)
     (sup 'corfu t)
     (sup `(corfu-extensions
            :local-repo ,(concat (straight--repos-dir "corfu") "extensions")))
@@ -524,6 +528,24 @@ https://github.com/zerolfx/copilot.el
       (add-to-list 'copilot-disable-predicates #'nasy/copilot-disable-p)
       (add-to-list 'warning-suppress-types '(copilot copilot-no-mode-indent)))
     (:hook-into prog-mode-hook text-mode org-mode-hook emacs-lisp-mode-hook))
+#+end_src
+
+** copilot chat                               :convenience:tools:
+
+Chat with Github copilot in Emacs!
+
+https://github.com/chep/copilot-chat.el
+
+#+begin_src emacs-lisp
+  (setup copilot-chat
+    (:doc "Chat with Github copilot in Emacs!")
+    (:url "https://github.com/chep/copilot-chat.el")
+    (:tag "convenience" "tools")
+    (:opt copilot-chat-frontend 'shell-maker)
+    (:when-loaded
+      (require 'copilot-chat-shell-maker)
+      (push '(shell-maker . copilot-chat-shell-maker-init) copilot-chat-frontend-list)
+      (copilot-chat-shell-maker-init)))
 #+end_src
 
 ** corfu                                            :editing:extensions:
