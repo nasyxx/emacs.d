@@ -369,8 +369,8 @@ https://github.com/oantolin/embark/
 
   (defun embark-live-vertico ()
     "Shrink Vertico minibuffer when `embark-live' is active."
-    (when-let* (win (and (string-prefix-p "*Embark Live" (buffer-name))
-                         (active-minibuffer-window)))
+    (when-let* ((win (and (string-prefix-p "*Embark Live" (buffer-name))
+                          (active-minibuffer-window))))
       (with-selected-window win
         (when (and (bound-and-true-p vertico--input)
                    (fboundp 'vertico-multiform-unobtrusive))
@@ -755,7 +755,7 @@ Recentf is a minor mode that builds a list of recently opened files.
 https://www.emacswiki.org/emacs/RecentFiles
 
 #+begin_src emacs-lisp
-  (defvar nasy--recentf-cleaned nil)
+  (defvar nasy--recentf-cleaned t)
 
   (setup recentf
     (:doc "Recentf is a minor mode that builds a list of recently opened files.")
@@ -785,14 +785,14 @@ https://www.emacswiki.org/emacs/RecentFiles
        ;; horizontal space the recentf listing uses to list recent files.
        abbreviate-file-name)
 
-      recentf-auto-cleanup    'never
-      recentf-max-saved-items 1000
+     recentf-auto-cleanup    'never
+     recentf-max-saved-items 1000
 
-      recentf-exclude
-      `(,(abbreviate-file-name
-          (locate-user-emacs-file *nasy-var*))
-        "/tmp/" "/ssh:" "/nix/store" "~/.nix/store" "/private/var/folders"
-        ,(locate-user-emacs-file "straight"))))
+     recentf-exclude
+     `(,(abbreviate-file-name
+         (locate-user-emacs-file *nasy-var*))
+       "/tmp/" "/ssh:" "/nix/store" "~/.nix/store" "/private/var/folders"
+       ,(locate-user-emacs-file "straight"))))
 #+end_src
 
 ** Savehist                                           :history:
