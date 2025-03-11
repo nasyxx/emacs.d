@@ -196,7 +196,7 @@ https://github.com/dgutov/diff-hl
     (:tag "vc" "diffs")
     (:hooks
      dired-mode-hook         diff-hl-dired-mode
-     magit-pre-refresh-hook  diff-hl-magit-pre-refresh
+     magit-pre-refresh-hook  ignore
      magit-post-refresh-hook diff-hl-magit-post-refresh
      nasy-first-key-hook     global-diff-hl-mode
      nasy-first-key-hook     global-diff-hl-show-hunk-mouse-mode
