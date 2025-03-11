@@ -1,0 +1,166 @@
+;;; elesscfg --- Emacs with LESS -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2022  Nasy <nasyxx@gmail.com>
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Emacs with LESS
+(setq
+ ad-redefinition-action            'accept
+ fast-but-imprecise-scrolling      t
+ ffap-machine-p-known              'reject
+ gc-cons-percentage                1.0
+ gc-cons-threshold                 most-positive-fixnum
+ idle-update-delay                 1
+ inhibit-compacting-font-caches    t
+ inhibit-default-init              t
+ inhibit-startup-message           t
+ inhibit-startup-screen            t
+ initial-major-mode                'fundamental-mode
+ load-prefer-newer                 t
+ native-comp-async-jobs-number     10
+ package-enable-at-startup         nil
+ read-process-output-max           #x10000
+ redisplay-skip-fontification-on-input    t
+ native-comp-async-report-warnings-errors 'silent)
+
+(setq initial-scratch-message
+      (concat ";; Happy hacking, "
+              user-login-name " - Emacs ♥ you!\n\n"))
+
+
+(let ((old-file-name-handler-alist file-name-handler-alist))
+
+  (setq-default file-name-handler-alist nil)
+
+  (defun nasy/restore-default ()
+    "Restore gc setting to default."
+    (setq file-name-handler-alist
+          (delete-dups
+           (append file-name-handler-alist
+                   old-file-name-handler-alist))
+          inhibit-trace nil))
+
+  (add-hook 'emacs-startup-hook #'nasy/restore-default))
+
+
+(set-language-environment "UTF-8")
+(setq selection-coding-system 'utf-8)
+
+(setenv "LSP_USE_PLISTS" "true")
+
+
+(defconst *nasy* "20221109")
+
+(defconst *is-a-mac* (eq system-type 'darwin))
+
+(defconst *nasy-custom* (concat (expand-file-name user-emacs-directory) "芄蘭/"))
+(defconst *nasy-site*   (concat (expand-file-name user-emacs-directory) "木瓜/"))
+(defconst *nasy-dir*    (concat (expand-file-name user-emacs-directory) "萚兮/"))
+(defconst *nasy-etc*    (concat *nasy-dir* "恆/"))
+(defconst *nasy-var*    (concat *nasy-dir* "時/"))
+
+(with-no-warnings
+  (customize-set-variable
+   'abbrev-file-name
+   (concat *nasy-etc* "abbrev.el") "Customized by Nasy.")
+  (customize-set-variable
+   'auto-save-list-file-prefix
+   (concat *nasy-var* "auto-save/sessions/") "Customized by Nasy.")
+  (customize-set-variable
+   'auto-save-file-name-transforms
+   `((".*" ,(concat *nasy-var* "auto-save/") t))
+    "Customized by Nasy.")
+  (customize-set-variable
+   'bookmark-default-file
+   (concat *nasy-var* "bookmarks.el") "Customized by Nasy.")
+  (customize-set-variable
+   'dirvish-cache-dir
+   (concat *nasy-var* "dirvish/") "Customized by Nasy.")
+  (customize-set-variable
+   'eshell-aliases-file
+   (concat *nasy-etc* "eshell/aliases") "Customized by Nasy.")
+  (customize-set-variable
+   'eshell-directory-name
+   (concat *nasy-var* "eshell/") "Customized by Nasy.")
+  (customize-set-variable
+   'save-place-file
+   (concat *nasy-var* "save-place.el") "Customized by Nasy.")
+  (customize-set-variable
+   'svg-lib-icons-dir
+   (concat *nasy-var* "svg-lib/") "Customized by Nasy.")
+  (customize-set-variable
+   'tramp-auto-save-directory
+   (concat *nasy-var* "tramp/auto-save/") "Customized by Nasy.")
+  (customize-set-variable
+   'tramp-persistency-file-name
+   (concat *nasy-var* "tramp/persistency.el") "Customized by Nasy.")
+  (customize-set-variable
+   'transient-history-file
+   (concat *nasy-var* "transient/history.el") "Customized by Nasy.")
+  (customize-set-variable
+   'transient-levels-file
+   (concat *nasy-var* "transient/levels.el") "Customized by Nasy.")
+  (customize-set-variable
+   'transient-values-file
+   (concat *nasy-var* "transient/values.el") "Customized by Nasy.")
+  (customize-set-variable
+   'url-cache-directory
+   (concat *nasy-var* "url/cache/") "Customized by Nasy.")
+  (customize-set-variable
+   'url-configuration-directory
+   (concat *nasy-var* "url/configuration/") "Customized by Nasy."))
+
+
+(setq auto-save-list-file-prefix (concat *nasy-var* "auto-save/sessions/"))
+
+
+(when (boundp 'native-comp-eln-load-path)
+  (add-to-list 'native-comp-eln-load-path (concat *nasy-var* "eln/")))
+
+(when (fboundp 'startup-redirect-eln-cache)
+  (startup-redirect-eln-cache
+   (convert-standard-filename
+    (concat *nasy-var* "eln/"))))
+
+(defvar *debug* (or (getenv-internal "DEBUG") init-file-debug))
+(setq inhibit-trace (not *debug*))
+
+(defvar native-comp-deferred-compilation-deny-list nil)
+
+(defvar nasy--require nil
+  "Require all packages.")
+
+(defvar nasy-pdump nil
+  "Use pdump.")
+
+(setq async-byte-compile-log-file (concat *nasy-var* "async-bytecomp.log")
+      debug-on-error    *debug*
+      jka-compr-verbose *debug*)
+
+(defvar nasy-first-key-hook nil
+  "The hook to run functions before press first key.")
+
+(add-to-list 'load-path (expand-file-name "straight/build/nasy-theme" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "straight/build/typst-ts-mode" user-emacs-directory))
+
+(with-no-warnings
+  (require 'nasy-theme nil t)
+  (load-theme 'nasy t)
+  (require 'typst-ts-mode nil t))
+
+(provide 'elesscfg)
+;;; elesscfg ends here
