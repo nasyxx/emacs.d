@@ -930,10 +930,6 @@ https://github.com/magit/transient
     (:doc "Transient commands.")
     (:url "https://github.com/magit/transient")
     (:tag "bindings")
-    (:opt
-     transient-history-file (concat *nasy-var* "transient/history.el")
-     transient-levels-file  (concat *nasy-etc* "transient/levels.el")
-     transient-values-file  (concat *nasy-etc* "transient/values.el"))
     (:init (add-to-list 'nasy--defer-loads 'transient)))
 #+end_src
 

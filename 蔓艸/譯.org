@@ -62,14 +62,15 @@
         (message "\n\n---------------- Build eln of %s ----------------" folder)
         (dolist (elf (directory-files-recursively
                       (locate-user-emacs-file (concat "桃夭/" folder)) "\\.el$"))
-          (native-compile elf)
-          (while (or comp-files-queue
-                    (> (comp--async-runnings) 0))
-             (sleep-for 2))))
+          (unless (string-equal (file-name-nondirectory elf) "seq-test.el")
+            (native-compile elf)
+            (while (or comp-files-queue
+                      (> (comp--async-runnings) 0))
+               (sleep-for 2))))
 
       (while (or comp-files-queue
                  (> (comp--async-runnings) 0))
-        (sleep-for 2))))
+        (sleep-for 2)))))
 
   (provide '譯)
   ;;; 譯.el ends here
