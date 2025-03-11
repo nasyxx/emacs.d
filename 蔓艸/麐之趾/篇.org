@@ -1795,6 +1795,8 @@ https://github.com/wbolster/emacs-python-black
 
   (defun start-lsp-pyright ()
     "Start lsp pyright with pdm."
+    (defvar lsp-pyright-langserver-command "pyright")
+    (setq lsp-pyright-langserver-command "basedpyright")
     (require 'lsp-pyright)
     (when (zerop (shell-command "pdm info"))
       (setq-local
@@ -1813,6 +1815,8 @@ https://github.com/wbolster/emacs-python-black
     (lsp))
 
   (setup lsp-pyright
+    (defvar lsp-pyright-langserver-command "pyright")
+    (setq lsp-pyright-langserver-command "basedpyright")
     (:opt lsp-pyright-langserver-command "basedpyright")
     (:hooks
      python-mode-hook          start-lsp-pyright
