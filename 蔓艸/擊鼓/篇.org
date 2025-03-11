@@ -93,6 +93,15 @@
      'tramp-persistency-file-name
      (concat *nasy-var* "tramp/persistency.el") "Customized by Nasy.")
     (customize-set-variable
+     'transient-history-file
+     (concat *nasy-var* "transient/history.el") "Customized by Nasy.")
+    (customize-set-variable
+     'transient-levels-file
+     (concat *nasy-var* "transient/levels.el") "Customized by Nasy.")
+    (customize-set-variable
+     'transient-values-file
+     (concat *nasy-var* "transient/values.el") "Customized by Nasy.")
+    (customize-set-variable
      'url-cache-directory
      (concat *nasy-var* "url/cache/") "Customized by Nasy.")
     (customize-set-variable
