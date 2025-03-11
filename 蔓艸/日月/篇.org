@@ -133,7 +133,7 @@ https://github.com/DogLooksGood/emacs-rime
      "C-;"   rime-send-keybinding
      "C-SPC" rime-send-keybinding)
     (:custom
-     rime-librime-root  (expand-file-name "~/.macports")
+     rime-librime-root  (expand-file-name "/opt/homebrew/opt/librime")
      rime-user-data-dir (expand-file-name "~/.config/rime")
      rime-cursor         "˰"
      rime-show-candidate 'posframe
