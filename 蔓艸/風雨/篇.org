@@ -153,6 +153,7 @@
       (:doc "字軆初值")
       (:opt*
        ,*font-main-family*   "MonoLisa Nasy"  ;; "Monaspace Radon Var"
+       ,*font-main-family*   "Maple Mono NF"  ;; "Monaspace Radon Var"
        ,*font-symbol-family* "SF Pro"
        ,*font-nerd-family*   "Symbols Nerd Font Mono"
        ,*font-cjk-family*    "STFLGQKJF"
@@ -168,13 +169,13 @@
          ,*font-tab-line-family*)
         . "Recursive Mono Casual Static"))
       (:opt*
-       ,*font-main-size*        14
+       ,*font-main-size*        15
        ,*font-mode-line-size*   14
        ,*font-tab-line-size*    13
        ,*font-symbol-size*      17
        ,*font-header-line-size* 12
 
-       ,*font-main-weight* 'medium)
+       ,*font-main-weight* 'regular)
       (:opts*
        ((*font-cjk-size*
          ,*font-cjk-2-size*
@@ -187,7 +188,7 @@
          ,*font-cjk-3-scale*
          ,*font-cjk-4-scale*
          ,*font-cjk-5-scale*)
-        . 1.3)
+        . 1.25)  ;; (maple-font 15 1.25) (monolisa 14 1.3)
        ((*font-symbol-weight*
          ;; *font-cjk-4-weight*
          ;; *font-cjk-5-weight*
