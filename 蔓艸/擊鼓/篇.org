@@ -117,7 +117,7 @@
                 straight-enable-use-package-integration nil
                 straight-enable-package-integration     nil
                 straight-check-for-modifications        nil
-                straight-fix-flycheck                   t)
+                straight-fix-flycheck                   nil)
 
   (defvar bootstrap-version)
   (let ((bootstrap-file
