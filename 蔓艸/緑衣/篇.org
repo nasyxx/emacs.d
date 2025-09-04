@@ -88,8 +88,8 @@ https://github.com/emacsorphanage/anzu
     (:tag "search" "tools")
     (:first-key global-anzu-mode)
     (:global
-     [remap query-replace]        anzu-query-replace
-     [remap query-replace-regexp] anzu-query-replace-regexp))
+     "<remap> <query-replace>"        anzu-query-replace
+     "<remap> <query-replace-regexp>" anzu-query-replace-regexp))
 #+end_src
 
 ** Avy                                         :point:location:
@@ -156,7 +156,7 @@ https://github.com/DamienCassou/beginend
   (setup compile
     (:tag "builtin")
     (:advice compilation-start :after nasy/save-compilation-buffer)
-    (:global [f6] recompile)
+    (:global "<f6>" recompile)
     (:with-hook compilation-finish-functions (:hook alert-after-compilation-finish)))
 #+end_src
 
@@ -186,16 +186,16 @@ Include consult & consult-flycheck.
     (:with-hook completion-list-mode-hook
       (:hook consult-preview-at-point-mode))
     (:global
-     [remap switch-to-buffer]              consult-buffer
-     [remap switch-to-buffer-other-window] consult-buffer-other-window
-     [remap switch-to-buffer-other-frame]  consult-buffer-other-frame
+     "<remap> <switch-to-buffer>"              consult-buffer
+     "<remap> <switch-to-buffer-other-window>" consult-buffer-other-window
+     "<remap> <switch-to-buffer-other-frame>"  consult-buffer-other-frame
 
-     [remap bookmark-jump]      consult-bookmark
-     [remap goto-line]          consult-goto-line
-     [remap imenu]              consult-imenu
-     [remap multi-occur]        consult-line-multi
-     [remap recentf-open-files] consult-recent-file
-     [remap yank-pop]           consult-yank-replace
+     "<remap> <bookmark-jump>"      consult-bookmark
+     "<remap> <goto-line>"          consult-goto-line
+     "<remap> <imenu>"              consult-imenu
+     "<remap> <multi-occur>"        consult-line-multi
+     "<remap> <recentf-open-files>" consult-recent-file
+     "<remap> <yank-pop>"           consult-yank-replace
 
       "C-s"   consult-line
       "C-S-s" nasy/consult-line-symbol-at-point)
@@ -290,8 +290,8 @@ https://github.com/leoliu/easy-kill
     (:url "https://github.com/leoliu/easy-kill")
     (:tag "killing" "convenience")
     (:global
-     [remap kill-ring-save] easy-kill
-     [remap mark-sexp]      easy-mark))
+     "<remap> <kill-ring-save>" easy-kill
+     "<remap> <mark-sexp>"      easy-mark))
 #+end_src
 
 ** Eldoc                           :builtin:docs:help:
@@ -313,14 +313,14 @@ https://gitlab.com/ideasman42/emacs-spatial-navigate
     (:doc "Spatial navigation in Emacs.")
     (:url "https://gitlab.com/ideasman42/emacs-spatial-navigate")
     (:tag "editing")
-    (:global "<C-p>" spatial-navigate-backward-vertical-bar
-             "<C-n>" spatial-navigate-forward-vertical-bar
-             "<M-b>" spatial-navigate-backward-horizontal-bar
-             "<M-f>" spatial-navigate-forward-horizontal-bar
-             "<M-up>" spatial-navigate-backward-vertical-box
-             "<M-down>" spatial-navigate-forward-vertical-box
-             "<H-left>" spatial-navigate-backward-horizontal-box
-             "<H-right>" spatial-navigate-forward-horizontal-box))
+    (:global "C-p" spatial-navigate-backward-vertical-bar
+               "C-n" spatial-navigate-forward-vertical-bar
+               "M-b" spatial-navigate-backward-horizontal-bar
+               "M-f" spatial-navigate-forward-horizontal-bar
+               "M-<up>" spatial-navigate-backward-vertical-box
+               "M-<down>" spatial-navigate-forward-vertical-box
+               "H-<left>" spatial-navigate-backward-horizontal-box
+               "H-<right>" spatial-navigate-forward-horizontal-box))
 #+end_src
 
 ** embark                                         :convenience:
@@ -382,7 +382,7 @@ https://github.com/oantolin/embark/
     (:tag "convenience")
     (:load-first vertico consult embark-consult)
     (:global
-     [remap describe-bindings] embark-bindings
+     "<remap> <describe-bindings>" embark-bindings
      "C-," embark-dwim)
     (:bindm embark-file-map
       "s" sudo-edit)
@@ -544,9 +544,9 @@ https://github.com/Wilfred/helpful
     (:tag "help" "lisp")
     (:global
      "C-c d" helpful-at-point
-     [remap describe-function] helpful-callable
-     [remap describe-variable] helpful-variable
-     [remap describe-key]      helpful-key))
+     "<remap> <describe-function>" helpful-callable
+     "<remap> <describe-variable>" helpful-variable
+     "<remap> <describe-key>"      helpful-key))
 #+end_src
 
 *** elisp-demos
@@ -735,7 +735,7 @@ https://github.com/bbatsov/projectile
     (:doc "Projectile is a project interaction library for Emacs.")
     (:url "https://github.com/bbatsov/projectile")
     (:tag "project" "convenience")
-    (:global [remap find-tag] projectile-find-tag)
+    (:global "<remap> <find-tag>" projectile-find-tag)
     (:opt
      projectile-known-projects-file (concat *nasy-var* "projectile/known-projects.el")
      projectile-indexing-method          'hybrid

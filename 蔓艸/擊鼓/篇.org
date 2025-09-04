@@ -275,6 +275,16 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (lambda (&rest _) nil)
     :documentation "The one line doc for the setup package.")
 
+  (setup-define :global
+    (lambda (key command)
+      ;; This command doesn't use or set any context, and thus has no
+      ;; need to be a `setup' macro.
+      `(global-set-key ,key ,command))
+    :documentation "Globally bind KEY to COMMAND."
+    :debug '(form sexp)
+    :ensure '(kbd func)
+    :repeatable t)
+
   (setup-define :sup
     (lambda (name) `(sup ',name))
     :documentation "Customize variables."
