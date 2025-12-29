@@ -957,20 +957,6 @@ https://github.com/jcs090218/ts-fold
   ;;   (:global "C-c @" ts-fold-toggle))
 #+end_src
 
-** Undo Propose           :convenience:files:undo:redo:history:
-
-Navigate the emacs undo history by staging undo's in a temporary buffer.
-
-https://github.com/jackkamm/undo-propose-el
-
-#+begin_src emacs-lisp
-  (setup undo-propose
-    (:doc "Navigate the emacs undo history by staging undo's in a temporary buffer.")
-    (:url "https://github.com/jackkamm/undo-propose-el")
-    (:tag "convenience" "files" "undo" "redo" "history")
-    (:global "C-c u" undo-propose))
-#+end_src
-
 ** Visual-fill-column                             :convenience:
 
 Emacs mode for wrapping visual-line-mode buffers at fill-column.
