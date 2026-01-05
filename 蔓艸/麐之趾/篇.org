@@ -382,7 +382,7 @@ Emacs client/library for the Language Server Protocol
     (lsp))
 
   (setup lsp-haskell
-    (:custom lsp-haskell-formatting-provider "brittany")
+    (:custom lsp-haskell-formatting-provider "fourmolu")
     (:with-hook haskell-mode-hook
       (:hook start-lsp-haskell))
     (:after company
