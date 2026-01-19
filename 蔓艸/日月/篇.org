@@ -79,21 +79,6 @@ https://github.com/jwiegley/alert
      alert-default-style 'osx-notifier))
 #+end_src
 
-** Carbon Now sh                                  :convenience:
-
-Emacs to carbon.now.sh integration.
-
-https://github.com/veelenga/carbon-now-sh.el
-
-Try: @@html: <kbd>M-x</kbd> <kbd>carbon-now-sh</kbd> <kbd>RET</kbd>@@
-
-#+begin_src emacs-lisp
-  (setup carbon-now-sh
-    (:doc "Emacs to carbon.now.sh integration.")
-    (:url "https://github.com/veelenga/carbon-now-sh.el")
-    (:tag "convenience"))
-#+end_src
-
 ** Cheat Sh                                         :docs:help:
 
 Simple Emacs interface for cheat.sh.
