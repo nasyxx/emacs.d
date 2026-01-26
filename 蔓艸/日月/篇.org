@@ -160,18 +160,6 @@ https://github.com/jschaf/esup
     (:opt esup-depth 1))
 #+end_src
 
-** explain-pause-mode                :performance:config:speed:
-
-top, but for Emacs.
-
-https://github.com/lastquestion/explain-pause-mode
-
-#+begin_src emacs-lisp
-  (setup explain-pause-mode
-    (:doc "top, but for Emacs.")
-    (:url "https://github.com/lastquestion/explain-pause-mode")
-    (:tag "performance" "speed" "config"))
-#+end_src
 
 ** GPTEL
 
