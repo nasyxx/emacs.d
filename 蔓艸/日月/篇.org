@@ -260,8 +260,6 @@ https://github.com/magit/magit
     (:url "https://github.com/magit/magit")
     (:tag "git" "tools" "vc")
     (:autoload magit-status)
-    (:with-hook magit-popup-mode-hook
-      (:hook no-trailing-whitespace))
     (:mode-hook (nasy/load-magit))
     (:global
      "M-<f12>" magit-status  ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
