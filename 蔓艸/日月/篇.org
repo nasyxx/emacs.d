@@ -370,7 +370,7 @@ https://github.com/emacs-openai/openai.git
     (:tag "comm" "ai" "openai")
     (:opt openai-key (nasy/api-key-from-auth-source)
           openai-chat-max-tokens 8000
-          nasy-ai-model "gpt-4"))
+          nasy-ai-model "gpt-4o"))
 
 
   (defun nasy/api-key-from-auth-source (&optional host user)
