@@ -648,7 +648,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     (sup 'f nasy--require)
     (sup 'find-file-in-project nasy--require)
     (sup 'ftable nasy--require)
-    (sup 'git-gutter nasy--require)
+    ;; git-gutter removed 2026-03-22, use diff-hl
     (sup 'highlight-indent-guides nasy--require)
     (sup 'highlight-tail nasy--require)
     (sup 'imenu-list nasy--require)
@@ -670,7 +670,7 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
     ;; (sup 'treemacs-icons-dired nasy--require)
     (sup 'treemacs-magit nasy--require)
     (sup 'treemacs-projectile nasy--require)
-    (sup 'undo-propose nasy--require)
+    ;; undo-propose removed 2026-03-22, use vundo
     (sup 'visual-fill-column nasy--require)
     (sup 'vundo nasy--require)
     (sup 'which-key nasy--require)
@@ -706,11 +706,11 @@ Documentation is available at https://www.emacswiki.org/emacs/SetupEl
 
     ;; 日月
     (sup 'alert nasy--require)
-    (sup 'carbon-now-sh nasy--require)
+    ;; carbon-now-sh removed 2026-03-22
     (sup 'cheat-sh nasy--require)
     (sup 'rime nasy--require)
     (sup 'esup nasy--require)
-    (sup 'explain-pause-mode nasy--require)
+    ;; explain-pause-mode removed 2026-03-22
     (sup 'gptel nasy--require)
     (sup 'grab-mac-link nasy--require)
     (sup 'htmlize nasy--require)
