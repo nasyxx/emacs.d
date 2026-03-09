@@ -1,0 +1,175 @@
+#+title: 移除的包和配置备份 (2026-03-22)
+
+* git-gutter (月出/篇.org)
+
+*Disabled. Now use diff-hl*
+
+#+begin_src emacs-lisp :tangle no
+  (setup git-gutter
+    (:doc "Emacs port of GitGutter which is Sublime Text Plugin.")
+    (:url "https://github.com/emacsorphanage/git-gutter")
+    (:tag "vc" "git"))
+#+end_src
+
+擊鼓/篇.org 中:
+#+begin_example
+    (sup 'git-gutter nasy--require)
+#+end_example
+
+* undo-propose (月出/篇.org)
+
+Navigate the emacs undo history by staging undo's in a temporary buffer.
+
+https://github.com/jackkamm/undo-propose-el
+
+#+begin_src emacs-lisp :tangle no
+  (setup undo-propose
+    (:doc "Navigate the emacs undo history by staging undo's in a temporary buffer.")
+    (:url "https://github.com/jackkamm/undo-propose-el")
+    (:tag "convenience" "files" "undo" "redo" "history")
+    (:global "C-c u" undo-propose))
+#+end_src
+
+擊鼓/篇.org 中:
+#+begin_example
+    (sup 'undo-propose nasy--require)
+#+end_example
+
+* explain-pause-mode (日月/篇.org)
+
+top, but for Emacs.
+
+https://github.com/lastquestion/explain-pause-mode
+
+#+begin_src emacs-lisp :tangle no
+  (setup explain-pause-mode
+    (:doc "top, but for Emacs.")
+    (:url "https://github.com/lastquestion/explain-pause-mode")
+    (:tag "performance" "speed" "config"))
+#+end_src
+
+擊鼓/篇.org 中:
+#+begin_example
+    (sup 'explain-pause-mode nasy--require)
+#+end_example
+
+* carbon-now-sh (日月/篇.org)
+
+Emacs to carbon.now.sh integration.
+
+https://github.com/veelenga/carbon-now-sh.el
+
+#+begin_src emacs-lisp :tangle no
+  (setup carbon-now-sh
+    (:doc "Emacs to carbon.now.sh integration.")
+    (:url "https://github.com/veelenga/carbon-now-sh.el")
+    (:tag "convenience"))
+#+end_src
+
+擊鼓/篇.org 中:
+#+begin_example
+    (sup 'carbon-now-sh nasy--require)
+#+end_example
+
+* magit-popup-mode-hook (日月/篇.org)
+
+#+begin_src emacs-lisp :tangle no
+    (:with-hook magit-popup-mode-hook
+      (:hook no-trailing-whitespace))
+#+end_src
+
+* company 注释残留代码 (緑衣/補.org)
+
+#+begin_src emacs-lisp :tangle no
+    ;; ;; (:global
+    ;; ;;  "C-;"      nasy/company-complete
+    ;; ;;  "M-/"      company-files
+    ;; ;;  "C-<tab>"  nasy/company-complete
+    ;; ;;  [remap indent-for-tab-command] company-indent-or-complete-common)
+    ;; (:company-mode-map
+    ;;  ([remap indent-for-tab-command]
+    ;;   . company-indent-or-complete-common)
+    ;;  ("M-/" . company-files))
+    ;; (:company-active-map
+    ;;  ("C-o"        . company-search-kill-others)
+    ;;  ("C-n"        . company-select-next)
+    ;;  ("C-p"        . company-select-previous)
+    ;;  ("C-h"        . company-quickhelp-manual-begin)
+    ;;  ("C-S-h"      . company-show-doc-buffer)
+    ;;  ("C-s"        . company-search-candidates)
+    ;;  ("M-s"        . company-filter-candidates)
+    ;;  ([C-tab]      . nasy/company-complete)
+    ;;  ([tab]        . company-complete-common-or-cycle)
+    ;;  ([backtab]    . company-select-previous))
+    ;; (:company-search-map
+    ;;  ("C-n"        . company-search-repeat-forward)
+    ;;  ("C-p"        . company-search-repeat-backward)
+    ;;  ("C-s"        . nasy/company-filter-c))
+    ;; :custom
+    ;; ((company-tooltip-limit       . 10)
+    ;;  (company-dabbrev-downcase    . nil)
+    ;;  (company-dabbrev-ignore-case . t)
+    ;;  (company-global-modes
+    ;;   . '(not erc-mode message-mode help-mode gud-mode eshell-mode))
+    ;;  ;; `(company-frontends
+    ;;  ;;   . ,(if *c-box*
+    ;;  ;;          '(company-box-frontend)
+    ;;  ;;        '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)))
+    ;;  (company-dabbrev-other-buffers     . 'all)
+    ;;  (company-tooltip-align-annotations . t)
+    ;;  (company-minimum-prefix-length     . 2)
+    ;;  (company-idle-delay                . 1)
+    ;;  (company-tooltip-idle-delay        . .2)
+    ;;  (company-require-match             . 'never)
+    ;;  (company-format-margin-function    . #'company-vscode-dark-icons-margin))
+    ;; :hook (nasy--defer-load-hook . (lambda () (require 'company)))
+    ;; :config
+    ;; ;; (add-hook 'after-change-major-mode-hook #'nasy/company-init-backends-h 'append)
+    ;; :defer-config
+    ;; ;; (add-to-list 'completion-styles 'initials t)
+    ;; (setq company-backends '(company-capf))
+    ;; :advice
+    ;; (:before company-pseudo-tooltip-unhide nasy/-pre-popup-draw)
+    ;; (:after  company-pseudo-tooltip-hide   nasy/-post-popup-draw))
+#+end_src
+
+*** Company Quickhelp
+
+#+begin_src emacs-lisp :tangle no
+  ;; (leaf company-quickhelp
+  ;;   :after company
+  ;;   :bind
+  ;;   (:company-active-map
+  ;;    ("C-c h" . company-quickhelp-manual-begin))
+  ;;   :hook company-mode-hook
+  ;;   :custom
+  ;;   (pos-tip-use-relative-coordinates . t))
+#+end_src
+
+*** Company Tabnine
+
+#+begin_src emacs-lisp :tangle no
+  ;; (leaf company-tabnine
+  ;;   :disabled t
+  ;;   :after company
+  ;;   :custom
+  ;;   `(company-tabnine-binaries-folder . ,(concat *nasy-var* "company/tabnine-binaries"))
+  ;;   `(company-tabnine-log-file-path
+  ;;     . ,(concat *nasy-var* "company/tabnine-binaries/log")))
+#+end_src
+
+*** Company Flx
+
+#+begin_src emacs-lisp :tangle no
+  ;; (leaf company-flx
+  ;;   :after company
+  ;;   :disabled t
+  ;;   :hook company-mode-hook)
+#+end_src
+
+*** Company Box
+
+#+begin_src emacs-lisp :tangle no
+  ;; (leaf company-box ...)
+  ;; [大量 all-the-icons 图标定义，见原文件]
+#+end_src
