@@ -25,7 +25,7 @@
    load-prefer-newer                 t
    native-comp-async-jobs-number     10
    package-enable-at-startup         nil
-   read-process-output-max           #x10000
+   read-process-output-max           #x100000
    redisplay-skip-fontification-on-input    t
    native-comp-async-report-warnings-errors 'silent)
 
@@ -78,7 +78,7 @@
   (defvar *debug* (or (getenv-internal "DEBUG") init-file-debug))
   (setq inhibit-trace (not *debug*))
 
-  (defvar native-comp-deferred-compilation-deny-list nil)
+  (defvar native-comp-jit-compilation-deny-list nil)
 
   (defvar nasy--require nil
     "Require all packages.")
