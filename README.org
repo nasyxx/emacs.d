@@ -13,7 +13,7 @@
 #+exclude_tags: noexport
 #+creator: Emacs 28.0.50 (Org mode 9.4.6)
 
-#+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+setupfile: https://fniessen.github.io/org-html-themes/org/html-theme-readtheorg.setup
 
 #+html_head: <link rel="stylesheet" type="text/css" href="style.css">
 #+html_head: <script async src="https://www.googletagmanager.com/gtag/js?id=G-10SM1C9F57"></script>
