@@ -327,7 +327,7 @@ https://github.com/ema2159/centaur-tabs
     (insert "\n\n       ")
     (widget-create 'item
                    :tag "草稿 (c)"
-                   :action #'persistent-scratch-restore
+                   :action (lambda (&rest _) (persistent-scratch-restore))
                    :mouse-face 'highlight
                    :button-face 'dashboard-heading
                    :button-prefix "􀤑 "

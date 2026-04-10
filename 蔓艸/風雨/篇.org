@@ -1268,7 +1268,7 @@
 
 
   ;;;###autoload
-  (defun nasy/scratch ()
+  (defun nasy/scratch (&rest _)
     "Switch buffer to scratch."
     (interactive)
     (switch-to-buffer "*scratch*"))
